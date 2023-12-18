@@ -3,15 +3,13 @@
 	"id": "operation-starcleave",
 	"version": "${version}",
 	"name": "Operation: Starcleave",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "Shatter the Sky",
 	"authors": [
-		"Me!"
+		"Phanastrae"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/Phanastrae/operation_starcleave"
 	},
-	"license": "CC0-1.0",
 	"icon": "assets/operation-starcleave/icon.png",
 	"environment": "*",
 	"entrypoints": {
@@ -39,6 +37,5 @@
 		"fabric-api": "*"
 	},
 	"suggests": {
-		"another-mod": "*"
 	}
 }
