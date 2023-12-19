@@ -22,7 +22,7 @@ loom {
     splitEnvironmentSourceSets()
 
 	mods {
-		"operation-starcleave" {
+		"operation_starcleave" {
 			sourceSet sourceSets.main
 			sourceSet sourceSets.client
 		}

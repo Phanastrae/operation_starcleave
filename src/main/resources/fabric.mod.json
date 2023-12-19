@@ -1,6 +1,6 @@
 {
 	"schemaVersion": 1,
-	"id": "operation-starcleave",
+	"id": "operation_starcleave",
 	"version": "${version}",
 	"name": "Operation: Starcleave",
 	"description": "Shatter the Sky",
@@ -10,7 +10,7 @@
 	"contact": {
 		"sources": "https://github.com/Phanastrae/operation_starcleave"
 	},
-	"icon": "assets/operation-starcleave/icon.png",
+	"icon": "assets/operation_starcleave/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
@@ -24,9 +24,9 @@
 		]
 	},
 	"mixins": [
-		"operation-starcleave.mixins.json",
+		"operation_starcleave.mixins.json",
 		{
-			"config": "operation-starcleave.client.mixins.json",
+			"config": "operation_starcleave.client.mixins.json",
 			"environment": "client"
 		}
 	],
