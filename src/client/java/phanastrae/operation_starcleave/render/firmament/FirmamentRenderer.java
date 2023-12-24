@@ -45,7 +45,7 @@ public class FirmamentRenderer {
         if(e != null) {
             int ex = e.getBlockX();
             int ez = e.getBlockZ();
-            fr.forEachPos((x, z) -> {
+            fr.forEachPosition((x, z) -> {
                 int dx = x - ex;
                 int dz = z - ez;
                 if(dx*dx+dz*dz>96*96) return;

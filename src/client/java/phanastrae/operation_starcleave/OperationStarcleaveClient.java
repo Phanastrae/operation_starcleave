@@ -19,9 +19,7 @@ public class OperationStarcleaveClient implements ClientModInitializer {
 			if(bl) {
 				Profiler profiler = MinecraftClient.getInstance().getProfiler();
 				profiler.push("starcleave_fracture");
-				if(world.getTime() % 2 == 0) {
-					Firmament.getInstance().tick();
-				}
+				Firmament.getInstance().tick(world);
 				profiler.pop();
 			}
 		});

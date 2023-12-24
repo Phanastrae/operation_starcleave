@@ -2,9 +2,10 @@ package phanastrae.operation_starcleave.world.firmament;
 
 import java.util.Random;
 
-public class Actor {
+public class FirmamentActor {
 
-    public Actor(int originX, int originZ, float dx, float dz, float damagePotential) {
+    public FirmamentActor(Firmament firmament, int originX, int originZ, float dx, float dz, float damagePotential) {
+        this.firmament = firmament;
         this.originX = originX;
         this.originZ = originZ;
         this.dx = dx;
@@ -12,6 +13,7 @@ public class Actor {
         this.damagePotential = damagePotential;
     }
 
+    public Firmament firmament;
 
     public int originX;
     public int originZ;
@@ -24,14 +26,14 @@ public class Actor {
 
     public boolean active = true;
 
-    public void tick(FirmamentRegion fr) {
+    public void tick() {
         if (this.damagePotential < 0.0001f) {
             this.discard();
         }
         if(!this.active) return;
 
         if(random.nextFloat() > 0.9f) {
-            split(fr);
+            split();
             discard();
             return;
         }
@@ -48,8 +50,8 @@ public class Actor {
 
         int n = random.nextInt(4, 12);
         for(int i = 0; i < n; i++) {
-            float dFdx = fr.dFdxBigDamage(originX+(int)dx, originZ+(int)dz);
-            float dFdz = fr.dFdzBigDamage(originX+(int)dx, originZ+(int)dz);
+            float dFdx = FirmamentUpdater.dFdxBigDamage(firmament, originX+(int)dx, originZ+(int)dz);
+            float dFdz = FirmamentUpdater.dFdzBigDamage(firmament, originX+(int)dx, originZ+(int)dz);
             float dFSqr = dFdx * dFdx + dFdz * dFdz;
             float dFnorm = dFSqr == 0 ? 0 : 1/(float)Math.sqrt(dFSqr);
             float dot2 = (ddx * dFdx + ddz * dFdz) * dFnorm;
@@ -62,18 +64,18 @@ public class Actor {
             int idx = originX + (int) dx;
             int idz = originZ + (int) dz;
 
-            float damage = fr.getDamage(idx, idz);
+            float damage = firmament.getDamage(idx, idz);
             float addDamage = Math.min(damagePotential, 1 - damage);
             addDamage *= 0.2f;
-            float newDamage = fr.getDamage(idx, idz) + addDamage;
+            float newDamage = firmament.getDamage(idx, idz) + addDamage;
             if(newDamage > 1) newDamage = 1;
-            fr.setDamage(idx, idz, newDamage);
-            fr.markActive(idx, idz);
+            firmament.setDamage(idx, idz, newDamage);
+            firmament.markActive(idx, idz);
 
             float finalAddDamage = addDamage;
-            fr.forEachNeighbor((nx, nz, nWeight) -> {
-                fr.setDrip(idx+nx, idz+nz, fr.getDrip(idx+nx, idz+nz) + (int)(finalAddDamage * nWeight * 16f) / 16f);
-                fr.markActive(idx+nx, idz+nz);
+            FirmamentUpdater.forEachNeighbor((nx, nz, nWeight) -> {
+                firmament.setDrip(idx+nx, idz+nz, firmament.getDrip(idx+nx, idz+nz) + (int)(finalAddDamage * nWeight * 16f) / 16f);
+                firmament.markActive(idx+nx, idz+nz);
             });
             this.damagePotential -= addDamage;
         }
@@ -83,7 +85,7 @@ public class Actor {
         this.active = false;
     }
 
-    public void split(FirmamentRegion fr) {
+    public void split() {
         int hdx = (int)(dx * 0.9f);
         int hdz = (int)(dz * 0.9f);
 
@@ -92,10 +94,10 @@ public class Actor {
         float dx2 = dx - hdx;
         float dz2 = dz - hdz;
 
-        Actor actor1 = new Actor(originX+hdx, originZ+hdz, dx2, dz2, damagePotential - ddp);
-        Actor actor2 = new Actor(originX+hdx, originZ+hdz, dx2, dz2, ddp);
+        FirmamentActor actor1 = new FirmamentActor(firmament, originX+hdx, originZ+hdz, dx2, dz2, damagePotential - ddp);
+        FirmamentActor actor2 = new FirmamentActor(firmament, originX+hdx, originZ+hdz, dx2, dz2, ddp);
 
-        fr.addActor(actor1);
-        fr.addActor(actor2);
+        firmament.addActor(actor1);
+        firmament.addActor(actor2);
     }
 }

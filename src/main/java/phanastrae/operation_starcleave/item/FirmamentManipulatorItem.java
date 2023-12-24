@@ -21,19 +21,10 @@ public class FirmamentManipulatorItem extends Item {
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         if(world.isClient) {
-            FirmamentRegion fr = Firmament.getInstance().firmamentRegion;
+            Firmament firmament = Firmament.getInstance();
 
             if (user.isSneaking()) {
-                for(int i = 0; i < FirmamentRegion.SUBREGIONS; i++) {
-                    for(int j = 0; j < FirmamentRegion.SUBREGIONS; j++) {
-                        fr.subRegions[i][j] = new FirmamentSubRegion();
-                    }
-                }
-                //FirmamentRegionState state = new FirmamentRegionState(512);
-                //FirmamentGenerator.generate(state);
-                //fr.state = state;
-
-                fr.clearActors();
+                firmament.firmamentRegion = new FirmamentRegion(0, 0);
             } else {
 
                 float yaw = Math.toRadians(user.getYaw());
@@ -66,41 +57,17 @@ public class FirmamentManipulatorItem extends Item {
                         float distSqr = i*i + j*j;
 
                         if(distSqr < 8) {
-                            fr.setDamage(x+i, z+j, 1);
+                            firmament.setDamage(x+i, z+j, 1);
                         }
 
 
                         if(distSqr > rad*rad) continue;
                         float fallOff = 1 - (distSqr)/(rad*rad);
-                        //fr.state.drip.addNow(x+i, z+j, 0.2f * fallOff);
-                        fr.setDrip(x+i, z+j, fr.getDrip(x+i, z+j) + (int)(0.01f * fallOff * fallOff * fallOff * 16f) / 16f);
+                        firmament.setDrip(x+i, z+j, firmament.getDrip(x+i, z+j) + (int)(0.01f * fallOff * fallOff * fallOff * 16f) / 16f);
                     }
                 }
 
-                /*
-                net.minecraft.util.math.random.Random random = user.getRandom();
-                for(int k = 0; k < 6; k++) {
-                    float rad = random.nextFloat() * 4 + 2;
-                    float theta = random.nextFloat() * 2 * (float)Math.PI;
-                    float dist = random.nextFloat() * 10 + 10;
-                    int px = (int)(Math.cos(theta) * dist);
-                    int pz = (int)(Math.sin(theta) * dist);
-
-                    int radCap = (int)Math.ceil(Math.abs(rad));
-                    for(int i = -radCap; i <= radCap; i++) {
-                        for(int j = -radCap; j <= radCap; j++) {
-                            float dSqr = i*i + j*j;
-                            if(dSqr > rad*rad) continue;
-
-                            float d = Math.sqrt(i*i + j*j);
-                            float fallOff = (float)Math.exp(-d * 0.5f) * (radCap * radCap - dSqr) / (radCap * radCap);
-                            fr.state.drip.addNow(x+px+i, z+pz+j, 3f * fallOff);
-                        }
-                    }
-                }
-                */
-
-                formCrack(fr, x, z);
+                formCrack(firmament, x, z);
             }
         }
 
@@ -108,14 +75,14 @@ public class FirmamentManipulatorItem extends Item {
         return TypedActionResult.consume(itemStack);
     }
 
-    public void formCrack(FirmamentRegion fr, int x, int z) {
+    public void formCrack(Firmament firmament, int x, int z) {
         Random random = new Random();
 
         float phase = random.nextFloat();
         int count = 10;
         for(int i = 0; i < count; i++) {
             float theta = (phase + i / (float)count) * 2 * (float)Math.PI;
-            fr.addActor(new Actor(x, z, 4 * Math.cos(theta), 4 * Math.sin(theta), 40));
+            firmament.addActor(new FirmamentActor(firmament, x, z, 4 * Math.cos(theta), 4 * Math.sin(theta), 40));
         }
     }
 }

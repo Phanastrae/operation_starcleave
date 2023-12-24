@@ -1,75 +1,13 @@
 package phanastrae.operation_starcleave.world.firmament;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.BiConsumer;
 
-public class FirmamentSubRegion {
-    // the Firmament for a 4x4 Chunk (16x16 Block) subregion of a Region
+public class FirmamentSubRegion implements FirmamentAccess {
+
     public static final int GRID_SIZE = 8;
 
-    public Property velocity;
-    public Property displacement;
-
-    public Property damage;
-    public Property drip;
-    public Property dDrip;
-
-    public FirmamentSubRegion() {
-        this.damage = new Property(GRID_SIZE, GRID_SIZE, 0);
-        this.drip = new Property(GRID_SIZE, GRID_SIZE, 0);
-        this.dDrip = new Property(GRID_SIZE, GRID_SIZE, 0);
-        this.displacement = new Property(GRID_SIZE, GRID_SIZE, 0);
-        this.velocity = new Property(GRID_SIZE, GRID_SIZE, 0);
-    }
-
-    public float getDrip(int x, int z) {
-        return drip.get(x, z);
-    }
-
-    public float getDDrip(int x, int z) {
-        return dDrip.get(x, z);
-    }
-
-    public float getDamage(int x, int z) {
-        return damage.get(x, z);
-    }
-
-    public float getDisplacement(int x, int z) {
-        return displacement.get(x, z);
-    }
-
-    public float getVelocity(int x, int z) {
-        return velocity.get(x, z);
-    }
-
-    public void setDrip(int x, int z, float value) {
-        drip.set(x, z, value);
-    }
-
-    public void setDDrip(int x, int z, float value) {
-        dDrip.set(x, z, value);
-    }
-
-    public void setDamage(int x, int z, float value) {
-        damage.set(x, z, value);
-    }
-
-    public void setDisplacement(int x, int z, float value) {
-        displacement.set(x, z, value);
-    }
-
-    public void setVelocity(int x, int z, float value) {
-        velocity.set(x, z, value);
-    }
-
-    public void forEachPos(BiConsumer<Integer, Integer> method) {
-        for(int i = 0; i < GRID_SIZE; i++) {
-            for(int j = 0; j < GRID_SIZE; j++) {
-                method.accept(i, j);
-            }
-        }
-    }
-
-    boolean[] active = new boolean[9];
     //    x -->
     // z  0 1 2
     // |  3 4 5
@@ -85,14 +23,148 @@ public class FirmamentSubRegion {
             GRID_SIZE, GRID_SIZE, GRID_SIZE
     };
 
+    public float[][] velocity;
+    public float[][] displacement;
+
+    public float[][] damage;
+    public float[][] drip;
+    public float[][] dDrip;
+
+    private final List<FirmamentActor> actors = new ArrayList<>();
+    private final List<FirmamentActor> newActors = new ArrayList<>();
+
+    boolean[] active = new boolean[9];
     boolean shouldUpdate = false;
 
-    public void clearActive() {
-        for(int i = 0; i < 9; i++) {
-            active[i] = false;
+    // world coords of minimum x-z corner
+    final int x;
+    final int z;
+
+    public FirmamentSubRegion(int x, int z) {
+        this.x = x;
+        this.z = z;
+
+        this.damage = new float[GRID_SIZE][GRID_SIZE];
+        this.drip = new float[GRID_SIZE][GRID_SIZE];
+        this.dDrip = new float[GRID_SIZE][GRID_SIZE];
+        this.displacement = new float[GRID_SIZE][GRID_SIZE];
+        this.velocity = new float[GRID_SIZE][GRID_SIZE];
+    }
+
+    public void markShouldUpdate() {
+        this.shouldUpdate = true;
+    }
+
+    @Override
+    public void clearActors() {
+        this.actors.clear();
+        this.newActors.clear();
+    }
+
+    @Override
+    public void addActor(FirmamentActor actor) {
+        this.newActors.add(actor);
+    }
+
+    @Override
+    public void manageActors() {
+        actors.addAll(newActors);
+        newActors.clear();
+
+        actors.removeIf((actor) -> !actor.active);
+    }
+
+    @Override
+    public void tickActors() {
+        for(FirmamentActor actor : actors) {
+            actor.tick();
         }
     }
 
+    @Override
+    public void forEachPosition(BiConsumer<Integer, Integer> method) {
+        for(int i = 0; i < GRID_SIZE; i++) {
+            for(int j = 0; j < GRID_SIZE; j++) {
+                method.accept(i, j);
+            }
+        }
+    }
+
+    @Override
+    public void forEachActivePosition(BiConsumer<Integer, Integer> method) {
+        for(int x = 0; x < GRID_SIZE; x++) {
+            for(int z = 0; z < GRID_SIZE; z++) {
+                method.accept(x, z);
+            }
+        }
+    }
+
+    @Override
+    public float getDrip(int x, int z) {
+        return drip[x][z];
+    }
+
+    @Override
+    public float getDamage(int x, int z) {
+        return damage[x][z];
+    }
+
+    @Override
+    public float getDisplacement(int x, int z) {
+        return displacement[x][z];
+    }
+
+    @Override
+    public float getVelocity(int x, int z) {
+        return velocity[x][z];
+    }
+
+    @Override
+    public float getDDrip(int x, int z) {
+        return dDrip[x][z];
+    }
+
+    @Override
+    public void setDrip(int x, int z, float value) {
+        drip[x][z] = value;
+    }
+
+    @Override
+    public void setDamage(int x, int z, float value) {
+        damage[x][z] = value;
+    }
+
+    @Override
+    public void setDisplacement(int x, int z, float value) {
+        displacement[x][z] = value;
+    }
+
+    @Override
+    public void setVelocity(int x, int z, float value) {
+        velocity[x][z] = value;
+    }
+
+    @Override
+    public void setDDrip(int x, int z, float value) {
+        dDrip[x][z] = value;
+    }
+
+    @Override
+    public void markShouldUpdate(int x, int z) {
+        markShouldUpdate();
+    }
+
+    @Override
+    public void clearShouldUpdate() {
+        shouldUpdate = false;
+    }
+
+    @Override
+    public boolean shouldUpdate() {
+        return shouldUpdate;
+    }
+
+    @Override
     public void markActive(int x, int z) {
         boolean xMin = x == 0;
         boolean zMin = z == GRID_SIZE - 1;
@@ -114,11 +186,19 @@ public class FirmamentSubRegion {
         if(zMax) active[7] = true;
     }
 
-    public void clearShouldUpdate() {
-        shouldUpdate = false;
+    @Override
+    public void clearActive() {
+        for(int i = 0; i < 9; i++) {
+            active[i] = false;
+        }
     }
 
-    public void markShouldUpdate() {
-        shouldUpdate = true;
+    @Override
+    public void markUpdatesFromActivity() {
+        for(int k = 0; k < 9; k++) {
+            if(active[k]) {
+                markShouldUpdate(x + xOffset[k], z + zOffset[k]);
+            }
+        }
     }
 }
