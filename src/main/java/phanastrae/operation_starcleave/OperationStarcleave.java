@@ -5,6 +5,7 @@ import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 
 public class OperationStarcleave implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger("operation_starcleave");
@@ -15,6 +16,6 @@ public class OperationStarcleave implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-
+		OperationStarcleaveItems.init();
 	}
 }
