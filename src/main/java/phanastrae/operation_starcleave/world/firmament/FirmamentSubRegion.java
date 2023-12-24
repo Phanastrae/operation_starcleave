@@ -37,8 +37,8 @@ public class FirmamentSubRegion implements FirmamentAccess {
     boolean shouldUpdate = false;
 
     // world coords of minimum x-z corner
-    final int x;
-    final int z;
+    public final int x;
+    public final int z;
 
     public FirmamentSubRegion(int x, int z) {
         this.x = x;

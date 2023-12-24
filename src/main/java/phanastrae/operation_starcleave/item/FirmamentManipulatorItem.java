@@ -24,7 +24,7 @@ public class FirmamentManipulatorItem extends Item {
             Firmament firmament = Firmament.getInstance();
 
             if (user.isSneaking()) {
-                firmament.firmamentRegion = new FirmamentRegion(0, 0);
+                firmament.init();
             } else {
 
                 float yaw = Math.toRadians(user.getYaw());

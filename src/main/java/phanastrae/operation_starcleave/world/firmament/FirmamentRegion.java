@@ -1,13 +1,15 @@
 package phanastrae.operation_starcleave.world.firmament;
 
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class FirmamentRegion implements FirmamentAccess {
 
-    public static final int GRID_SIZE = 512;
+    public static final int REGION_SIZE = 512;
+    public static final int REGION_MASK = 0x1FF;
+    public static final int REGION_SIZE_BITS = 9;
 
     public static final int SUBREGIONS = 64;
-    public static final int REGION_MASK = 0x1FF;
     public static final int SUBREGION_MASK = 0x7;
     public static final int SUBREGION_SIZE_BITS = 3;
 
@@ -16,8 +18,8 @@ public class FirmamentRegion implements FirmamentAccess {
     boolean active = false;
 
     // world coords of minimum x-z corner
-    final int x;
-    final int z;
+    public final int x;
+    public final int z;
 
     public FirmamentRegion(int x, int z) {
         this.x = x;
@@ -37,19 +39,24 @@ public class FirmamentRegion implements FirmamentAccess {
         return subRegions[x>>SUBREGION_SIZE_BITS][z>>SUBREGION_SIZE_BITS].active[4];
     }
 
-    @Override
-    public void clearActors() {
+    public void forEachSubRegion(Consumer<FirmamentSubRegion> method) {
         for(int i = 0; i < SUBREGIONS; i++) {
             for(int j = 0; j < SUBREGIONS; j++) {
-                subRegions[i][j].clearActors();
+                method.accept(subRegions[i][j]);
             }
         }
+    }
+
+    @Override
+    public void clearActors() {
+        forEachSubRegion(FirmamentSubRegion::clearActors);
     }
 
     @Override
     public void addActor(FirmamentActor actor) {
         int x = actor.originX;
         int z = actor.originZ;
+
         x = x&REGION_MASK;
         z = z&REGION_MASK;
         subRegions[x>>SUBREGION_SIZE_BITS][z>>SUBREGION_SIZE_BITS].addActor(actor);
@@ -57,44 +64,30 @@ public class FirmamentRegion implements FirmamentAccess {
 
     @Override
     public void manageActors() {
-        for(int i = 0; i < SUBREGIONS; i++) {
-            for(int j = 0; j < SUBREGIONS; j++) {
-                subRegions[i][j].manageActors();
-            }
-        }
+        forEachSubRegion(FirmamentSubRegion::manageActors);
     }
 
     @Override
     public void tickActors() {
-        for(int i = 0; i < SUBREGIONS; i++) {
-            for(int j = 0; j < SUBREGIONS; j++) {
-                subRegions[i][j].tickActors();
-            }
-        }
+        forEachSubRegion(FirmamentSubRegion::tickActors);
     }
 
     @Override
     public void forEachPosition(BiConsumer<Integer, Integer> method) {
-        for(int i = 0; i < SUBREGIONS; i++) {
-            for(int j = 0; j < SUBREGIONS; j++) {
-                int finalI = i;
-                int finalJ = j;
-                subRegions[i][j].forEachActivePosition((x, z) -> method.accept(x + finalI * FirmamentSubRegion.GRID_SIZE, z + finalJ * FirmamentSubRegion.GRID_SIZE));
-            }
-        }
+        forEachSubRegion((firmamentSubRegion -> {
+            firmamentSubRegion.forEachActivePosition((x, z) -> method.accept(x + firmamentSubRegion.x - this.x, z + firmamentSubRegion.z - this.z));
+
+        }));
     }
 
     @Override
     public void forEachActivePosition(BiConsumer<Integer, Integer> method) {
-        for(int i = 0; i < SUBREGIONS; i++) {
-            for(int j = 0; j < SUBREGIONS; j++) {
-                if(subRegions[i][j].shouldUpdate) {
-                    int finalI = i;
-                    int finalJ = j;
-                    subRegions[i][j].forEachActivePosition((x, z) -> method.accept(x + finalI * FirmamentSubRegion.GRID_SIZE, z + finalJ * FirmamentSubRegion.GRID_SIZE));
-                }
+        forEachSubRegion((firmamentSubRegion -> {
+            if(firmamentSubRegion.shouldUpdate) {
+                firmamentSubRegion.forEachActivePosition((x, z) -> method.accept(x + firmamentSubRegion.x - this.x, z + firmamentSubRegion.z - this.z));
             }
-        }
+
+        }));
     }
 
     @Override
@@ -177,10 +170,9 @@ public class FirmamentRegion implements FirmamentAccess {
 
     @Override
     public void clearActive() {
-        for(int i = 0; i < SUBREGIONS; i++) {
-            for(int j = 0; j < SUBREGIONS; j++) {
-                subRegions[i][j].clearActive();
-            }
+        if(active) {
+            this.active = false;
+            forEachSubRegion(FirmamentSubRegion::clearActive);
         }
     }
 
@@ -196,22 +188,14 @@ public class FirmamentRegion implements FirmamentAccess {
     public void clearShouldUpdate() {
         if(this.shouldUpdate) {
             this.shouldUpdate = false;
-            for (int i = 0; i < SUBREGIONS; i++) {
-                for (int j = 0; j < SUBREGIONS; j++) {
-                    subRegions[i][j].clearShouldUpdate();
-                }
-            }
+            forEachSubRegion(FirmamentSubRegion::clearShouldUpdate);
         }
     }
 
     @Override
     public void markUpdatesFromActivity() {
         if(active) {
-            for (int i = 0; i < SUBREGIONS; i++) {
-                for (int j = 0; j < SUBREGIONS; j++) {
-                    subRegions[i][j].markUpdatesFromActivity();
-                }
-            }
+            forEachSubRegion(FirmamentSubRegion::markUpdatesFromActivity);
         }
     }
 

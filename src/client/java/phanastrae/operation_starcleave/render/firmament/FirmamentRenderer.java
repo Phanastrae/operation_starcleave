@@ -19,12 +19,15 @@ import org.joml.Matrix4f;
 import org.joml.Vector4f;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
-import phanastrae.operation_starcleave.world.firmament.FirmamentRegion;
 
 public class FirmamentRenderer {
     public static void render(WorldRenderContext worldRenderContext) {
         VertexConsumerProvider vertexConsumerProvider = worldRenderContext.consumers();
         if(vertexConsumerProvider == null) return;
+        Entity e = MinecraftClient.getInstance().cameraEntity;
+        if(e == null) return;
+        int ex = e.getBlockX();
+        int ez = e.getBlockZ();
 
         Profiler profiler = MinecraftClient.getInstance().getProfiler();
         profiler.push("starcleave_fracture");
@@ -39,52 +42,59 @@ public class FirmamentRenderer {
 
         VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderLayer.getSolid());
 
-        FirmamentRegion fr = Firmament.getInstance().firmamentRegion;
-
-        Entity e = MinecraftClient.getInstance().cameraEntity;
-        if(e != null) {
-            int ex = e.getBlockX();
-            int ez = e.getBlockZ();
-            fr.forEachPosition((x, z) -> {
-                int dx = x - ex;
-                int dz = z - ez;
-                if(dx*dx+dz*dz>96*96) return;
-
-                float damage = Math.clamp(0, 1, fr.getDamage(x, z));
-
-                float displacementY = fr.getDisplacement(x, z);
-
-                float weightedDrip = (float)Math.max(java.lang.Math.log1p(Math.abs(fr.getDrip(x, z))), 0);
-
-                boolean updated = fr.getActive(x, z) && MinecraftClient.getInstance().getEntityRenderDispatcher().shouldRenderHitboxes();
-                float f = 0.0625f * damage;
-
-                float r = Math.clamp(0, 1, damage);
-                float g = Math.clamp(0, 1, updated ? 1 : 0);
-                float b = Math.clamp(0, 1, displacementY / -15);
-
-                if(!MinecraftClient.getInstance().getDebugHud().shouldShowDebugHud() || MinecraftClient.getInstance().player == null || !MinecraftClient.getInstance().player.getMainHandStack().isOf(OperationStarcleaveItems.FIRMAMENT_MANIPULATOR)) {
-                    g = r;
-                    b = 0;
-                    f = (1 - damage) * 0.5f;
-                    displacementY = 0;
-                    if (f == 0.5f) return;
+        Firmament firmament = Firmament.getInstance();
+        firmament.forEachRegion((firmamentRegion -> {
+            int rdx = firmamentRegion.x + 256 - ex;
+            int rdz = firmamentRegion.z + 256 - ez;
+            if(rdx*rdx + rdz*rdz > 512*512) {
+                return;
+            }
+            firmamentRegion.forEachSubRegion((firmamentSubRegion -> {
+                int srdx = firmamentSubRegion.x + 4 - ex;
+                int srdz = firmamentSubRegion.z + 4 - ez;
+                if(srdx*srdx + srdz*srdz > 128*128) {
+                    return;
                 }
+                firmamentSubRegion.forEachPosition((x, z) -> {
+                    int worldX = x + firmamentSubRegion.x;
+                    int worldZ = z + firmamentSubRegion.z;
 
-                renderQuad(matrixStack.peek().getPositionMatrix(),
-                        matrixStack.peek().getNormalMatrix(),
-                        vertexConsumer,
-                        x + f, z + f,
-                        x + 1 - f, z + 1 - f,
-                        256 + displacementY,
-                        r,
-                        g,
-                        b,
-                        1,
-                        texture.getMinU(), texture.getMinV(), texture.getMaxU(), texture.getMaxV(),
-                        LightmapTextureManager.MAX_LIGHT_COORDINATE, -1);
-            });
-        }
+                    float damage = Math.clamp(0, 1, firmamentSubRegion.getDamage(x, z));
+
+                    float displacementY = firmamentSubRegion.getDisplacement(x, z);
+
+                    float weightedDrip = (float)Math.max(java.lang.Math.log1p(Math.abs(firmamentSubRegion.getDrip(x, z))), 0);
+
+                    boolean updated = firmamentSubRegion.shouldUpdate() && MinecraftClient.getInstance().getEntityRenderDispatcher().shouldRenderHitboxes();
+                    float f = 0.0625f * damage;
+
+                    float r = Math.clamp(0, 1, damage);
+                    float g = Math.clamp(0, 1, updated ? 1 : 0);
+                    float b = Math.clamp(0, 1, displacementY / -15);
+
+                    if(!MinecraftClient.getInstance().getDebugHud().shouldShowDebugHud() || MinecraftClient.getInstance().player == null || !MinecraftClient.getInstance().player.getMainHandStack().isOf(OperationStarcleaveItems.FIRMAMENT_MANIPULATOR)) {
+                        g = r;
+                        b = 0;
+                        f = (1 - damage) * 0.5f;
+                        displacementY = 0;
+                        if (f == 0.5f) return;
+                    }
+
+                    renderQuad(matrixStack.peek().getPositionMatrix(),
+                            matrixStack.peek().getNormalMatrix(),
+                            vertexConsumer,
+                            worldX + f, worldZ + f,
+                            worldX + 1 - f, worldZ + 1 - f,
+                            256 + displacementY,
+                            r,
+                            g,
+                            b,
+                            1,
+                            texture.getMinU(), texture.getMinV(), texture.getMaxU(), texture.getMaxV(),
+                            LightmapTextureManager.MAX_LIGHT_COORDINATE, -1);
+                });
+            }));
+        }));
 
         matrixStack.pop();
 

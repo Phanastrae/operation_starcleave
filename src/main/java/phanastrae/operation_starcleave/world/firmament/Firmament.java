@@ -1,156 +1,238 @@
 package phanastrae.operation_starcleave.world.firmament;
 
+import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class Firmament implements FirmamentAccess {
 
     private Firmament() {
+        init();
+    }
+
+    public void init() {
+        firmamentRegions.clear();
+        for(int i = -1; i <= 1; i++) {
+            for(int j = -1; j <= 1; j++) {
+                int x = i * FirmamentRegion.REGION_SIZE;
+                int z = j * FirmamentRegion.REGION_SIZE;
+                firmamentRegions.put(getRegionId(x, z), new FirmamentRegion(x, z));
+            }
+        }
     }
 
     private static final Firmament INSTANCE = new Firmament();
+
     public static Firmament getInstance() {
         return INSTANCE;
     }
 
-    public FirmamentRegion firmamentRegion = new FirmamentRegion(0, 0);
+    Long2ObjectLinkedOpenHashMap<FirmamentRegion> firmamentRegions = new Long2ObjectLinkedOpenHashMap<>();
 
     public void tick(World world) {
         long t = world.getTime();
-        if(t % 2 == 0) {
+        if (t % 2 == 0) {
             manageActors();
             tickActors();
 
-            if(t == 8) {
+            if (t % 20 == 0) {
                 clearShouldUpdate();
             }
-            for(int i = 0; i < FirmamentRegion.SUBREGIONS; i++) {
-                for(int j = 0; j < FirmamentRegion.SUBREGIONS; j++) {
-                    FirmamentSubRegion subRegion = firmamentRegion.subRegions[i][j];
 
-                    for(int k = 0; k < 9; k++) {
-                        if(subRegion.active[k]) {
-                            markShouldUpdate(i * FirmamentSubRegion.GRID_SIZE + subRegion.xOffset[k], j * FirmamentSubRegion.GRID_SIZE + subRegion.zOffset[k]);
-                        }
-                    }
-                }
-            }
-            if(t == 8) {
-                firmamentRegion.clearActive();
+            markUpdatesFromActivity();
+
+            if (t % 20 == 0) {
+                clearActive();
             }
 
             FirmamentUpdater.update(this);
         }
     }
 
+    public void forEachRegion(Consumer<FirmamentRegion> method) {
+        this.firmamentRegions.forEach((id, firmamentRegion) -> method.accept(firmamentRegion));
+    }
+
+    public long getRegionId(int x, int z) {
+        int rx = x >> FirmamentRegion.REGION_SIZE_BITS;
+        int rz = z >> FirmamentRegion.REGION_SIZE_BITS;
+        return ChunkPos.toLong(rx, rz);
+    }
+
+    @Nullable
+    public FirmamentRegion getFirmamentRegion(int x, int z) {
+        return getFirmamentRegion(getRegionId(x, z));
+    }
+
+    @Nullable
+    public FirmamentRegion getFirmamentRegion(long id) {
+        return this.firmamentRegions.get(id);
+    }
+
     @Override
     public void clearActors() {
-        firmamentRegion.clearActors();
+        forEachRegion(FirmamentRegion::clearActors);
     }
 
     @Override
     public void addActor(FirmamentActor actor) {
-        firmamentRegion.addActor(actor);
+        FirmamentRegion firmamentRegion = getFirmamentRegion(actor.originX, actor.originZ);
+        if(firmamentRegion != null) {
+            firmamentRegion.addActor(actor);
+        }
     }
 
     @Override
     public void manageActors() {
-        firmamentRegion.manageActors();
+        forEachRegion(FirmamentRegion::manageActors);
     }
 
     @Override
     public void tickActors() {
-        firmamentRegion.tickActors();
+        forEachRegion(FirmamentRegion::tickActors);
     }
 
     @Override
     public void forEachPosition(BiConsumer<Integer, Integer> method) {
-        firmamentRegion.forEachPosition(method);
+        forEachRegion(firmamentRegion -> firmamentRegion.forEachPosition(method));
     }
 
     @Override
     public void forEachActivePosition(BiConsumer<Integer, Integer> method) {
-        firmamentRegion.forEachActivePosition(method);
+        forEachRegion(firmamentRegion -> {
+            if (firmamentRegion.active) {
+                firmamentRegion.forEachActivePosition((x, z) -> method.accept(x + firmamentRegion.x, z + firmamentRegion.z));
+            }
+        });
     }
 
     @Override
     public float getDrip(int x, int z) {
-        return firmamentRegion.getDrip(x, z);
+        FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
+        if(firmamentRegion != null) {
+            return firmamentRegion.getDrip(x, z);
+        } else {
+            return 0;
+        }
     }
 
     @Override
     public float getDamage(int x, int z) {
-        return firmamentRegion.getDamage(x, z);
+        FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
+        if(firmamentRegion != null) {
+            return firmamentRegion.getDamage(x, z);
+        } else {
+            return 0;
+        }
     }
 
     @Override
     public float getDisplacement(int x, int z) {
-        return firmamentRegion.getDisplacement(x, z);
+        FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
+        if(firmamentRegion != null) {
+            return firmamentRegion.getDisplacement(x, z);
+        } else {
+            return 0;
+        }
     }
 
     @Override
     public float getVelocity(int x, int z) {
-        return firmamentRegion.getVelocity(x, z);
+        FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
+        if(firmamentRegion != null) {
+            return firmamentRegion.getVelocity(x, z);
+        } else {
+            return 0;
+        }
     }
 
     @Override
     public float getDDrip(int x, int z) {
-        return firmamentRegion.getDDrip(x, z);
+        FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
+        if(firmamentRegion != null) {
+            return firmamentRegion.getDDrip(x, z);
+        } else {
+            return 0;
+        }
     }
 
     @Override
     public void setDrip(int x, int z, float value) {
-        firmamentRegion.setDrip(x, z, value);
+        FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
+        if(firmamentRegion != null) {
+            firmamentRegion.setDrip(x & FirmamentRegion.REGION_MASK, z & FirmamentRegion.REGION_MASK, value);
+        }
     }
 
     @Override
     public void setDamage(int x, int z, float value) {
-        firmamentRegion.setDamage(x, z, value);
+        FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
+        if(firmamentRegion != null) {
+            firmamentRegion.setDamage(x & FirmamentRegion.REGION_MASK, z & FirmamentRegion.REGION_MASK, value);
+        }
     }
 
     @Override
     public void setDisplacement(int x, int z, float value) {
-        firmamentRegion.setDisplacement(x, z, value);
+        FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
+        if(firmamentRegion != null) {
+            firmamentRegion.setDisplacement(x & FirmamentRegion.REGION_MASK, z & FirmamentRegion.REGION_MASK, value);
+        }
     }
 
     @Override
     public void setVelocity(int x, int z, float value) {
-        firmamentRegion.setVelocity(x, z, value);
+        FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
+        if(firmamentRegion != null) {
+            firmamentRegion.setVelocity(x & FirmamentRegion.REGION_MASK, z & FirmamentRegion.REGION_MASK, value);
+        }
     }
 
     @Override
     public void setDDrip(int x, int z, float value) {
-        firmamentRegion.setDDrip(x, z, value);
+        FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
+        if(firmamentRegion != null) {
+            firmamentRegion.setDDrip(x & FirmamentRegion.REGION_MASK, z & FirmamentRegion.REGION_MASK, value);
+        }
     }
 
     @Override
     public void markActive(int x, int z) {
-        firmamentRegion.markActive(x, z);
+        FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
+        if(firmamentRegion != null) {
+            firmamentRegion.markActive(x & FirmamentRegion.REGION_MASK, z & FirmamentRegion.REGION_MASK);
+        }
     }
 
     @Override
     public void clearActive() {
-        firmamentRegion.clearActive();
+        forEachRegion(FirmamentRegion::clearActive);
     }
 
     @Override
     public void markShouldUpdate(int x, int z) {
-        firmamentRegion.markShouldUpdate(x, z);
+        FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
+        if(firmamentRegion != null) {
+            firmamentRegion.markShouldUpdate(x & FirmamentRegion.REGION_MASK, z & FirmamentRegion.REGION_MASK);
+        }
     }
 
     @Override
     public boolean shouldUpdate() {
-        return firmamentRegion.shouldUpdate();
+        return true;
     }
 
     @Override
     public void clearShouldUpdate() {
-        firmamentRegion.clearShouldUpdate();
+        forEachRegion(FirmamentRegion::clearShouldUpdate);
     }
 
     @Override
     public void markUpdatesFromActivity() {
-        firmamentRegion.markUpdatesFromActivity();
+        forEachRegion(FirmamentRegion::markUpdatesFromActivity);
     }
 }
