@@ -3,9 +3,13 @@ package phanastrae.operation_starcleave.world.firmament;
 import org.apache.logging.log4j.util.TriConsumer;
 import org.joml.Math;
 
+import static phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion.TILE_SIZE;
+
 public class FirmamentUpdater {
 
     public static void update(Firmament firmament) {
+        int TILE_SIZE = FirmamentSubRegion.TILE_SIZE;
+
         // calculate forces
         firmament.forEachActivePosition((x, z) -> {
             float drip = firmament.getDrip(x, z);
@@ -102,8 +106,8 @@ public class FirmamentUpdater {
     }
 
     public static final int nCount = 8;
-    public static final int[] nXs = new int[]{1, -1, 0, 0, 1, 1, -1, -1};
-    public static final int[] nZs = new int[]{0, 0, 1, -1, 1, -1, 1, -1};
+    public static final int[] nXs = new int[]{TILE_SIZE, -TILE_SIZE, 0, 0, TILE_SIZE, TILE_SIZE, -TILE_SIZE, -TILE_SIZE};
+    public static final int[] nZs = new int[]{0, 0, TILE_SIZE, -TILE_SIZE, TILE_SIZE, -TILE_SIZE, TILE_SIZE, -TILE_SIZE};
     static final float aw = 0.1464f;
     static final float dw = 0.1036f;
     public static final float[] nWeights = new float[]{aw, aw, aw, aw, dw, dw, dw, dw};

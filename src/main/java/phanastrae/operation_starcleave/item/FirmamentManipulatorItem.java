@@ -12,6 +12,8 @@ import org.joml.Math;
 import org.joml.Random;
 import phanastrae.operation_starcleave.world.firmament.*;
 
+import static phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion.TILE_SIZE;
+
 public class FirmamentManipulatorItem extends Item {
 
     public FirmamentManipulatorItem(Settings settings) {
@@ -57,13 +59,13 @@ public class FirmamentManipulatorItem extends Item {
                         float distSqr = i*i + j*j;
 
                         if(distSqr < 8) {
-                            firmament.setDamage(x+i, z+j, 1);
+                            firmament.setDamage(x+i*TILE_SIZE, z+j*TILE_SIZE, 1);
                         }
 
 
                         if(distSqr > rad*rad) continue;
                         float fallOff = 1 - (distSqr)/(rad*rad);
-                        firmament.setDrip(x+i, z+j, firmament.getDrip(x+i, z+j) + (int)(0.01f * fallOff * fallOff * fallOff * 16f) / 16f);
+                        firmament.setDrip(x+i*TILE_SIZE, z+j*TILE_SIZE, firmament.getDrip(x+i*TILE_SIZE, z+j*TILE_SIZE) + (int)(0.01f * fallOff * fallOff * fallOff * 16f) / 16f);
                     }
                 }
 
@@ -82,7 +84,7 @@ public class FirmamentManipulatorItem extends Item {
         int count = 10;
         for(int i = 0; i < count; i++) {
             float theta = (phase + i / (float)count) * 2 * (float)Math.PI;
-            firmament.addActor(new FirmamentActor(firmament, x, z, 4 * Math.cos(theta), 4 * Math.sin(theta), 40));
+            firmament.addActor(new FirmamentActor(firmament, x, z, 4 * Math.cos(theta)*TILE_SIZE, 4 * Math.sin(theta)*TILE_SIZE, 40));
         }
     }
 }

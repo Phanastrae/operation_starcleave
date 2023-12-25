@@ -20,6 +20,7 @@ import org.lwjgl.opengl.GL11;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 import phanastrae.operation_starcleave.util.FrameBufferStencilAccess;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
+import phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion;
 
 public class FirmamentRenderer {
     public static void render(WorldRenderContext worldRenderContext) {
@@ -153,6 +154,8 @@ public class FirmamentRenderer {
 
         VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderLayer.getSolid());
 
+        float tileSize = FirmamentSubRegion.TILE_SIZE;
+
         Firmament firmament = Firmament.getInstance();
         firmament.forEachRegion((firmamentRegion -> {
             int rdx = firmamentRegion.x + 256 - ex;
@@ -163,7 +166,7 @@ public class FirmamentRenderer {
             firmamentRegion.forEachSubRegion((firmamentSubRegion -> {
                 int srdx = firmamentSubRegion.x + 4 - ex;
                 int srdz = firmamentSubRegion.z + 4 - ez;
-                if(srdx*srdx + srdz*srdz > 128*128) {
+                if(srdx*srdx + srdz*srdz > 512*512) {
                     return;
                 }
                 firmamentSubRegion.forEachPosition((x, z) -> {
@@ -201,7 +204,7 @@ public class FirmamentRenderer {
                             matrixStack.peek().getNormalMatrix(),
                             vertexConsumer,
                             worldX + f, worldZ + f,
-                            worldX + 1 - f, worldZ + 1 - f,
+                            worldX + tileSize - f, worldZ + tileSize - f,
                             e.getWorld().getTopY() + 65 + displacementY,
                             r,
                             g,

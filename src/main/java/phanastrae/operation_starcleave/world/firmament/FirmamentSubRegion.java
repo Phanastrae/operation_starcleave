@@ -6,21 +6,26 @@ import java.util.function.BiConsumer;
 
 public class FirmamentSubRegion implements FirmamentAccess {
 
-    public static final int GRID_SIZE = 8;
+    public static final int SUBREGION_SIZE = 32;
+
+    public static final int TILES = 8;
+    public static final int TILE_MASK = 0x3;
+    public static final int TILE_SIZE_BITS = 2;
+    public static final int TILE_SIZE = 4;
 
     //    x -->
     // z  0 1 2
     // |  3 4 5
     // \/ 6 7 8
     public final int[] xOffset = new int[]{
-            -1, 0, GRID_SIZE,
-            -1, 0, GRID_SIZE,
-            -1, 0, GRID_SIZE
+            -1, 0, SUBREGION_SIZE,
+            -1, 0, SUBREGION_SIZE,
+            -1, 0, SUBREGION_SIZE
     };
     public final int[] zOffset = new int[]{
             -1, -1, -1,
             0, 0, 0,
-            GRID_SIZE, GRID_SIZE, GRID_SIZE
+            SUBREGION_SIZE, SUBREGION_SIZE, SUBREGION_SIZE
     };
 
     public float[][] velocity;
@@ -44,11 +49,11 @@ public class FirmamentSubRegion implements FirmamentAccess {
         this.x = x;
         this.z = z;
 
-        this.damage = new float[GRID_SIZE][GRID_SIZE];
-        this.drip = new float[GRID_SIZE][GRID_SIZE];
-        this.dDrip = new float[GRID_SIZE][GRID_SIZE];
-        this.displacement = new float[GRID_SIZE][GRID_SIZE];
-        this.velocity = new float[GRID_SIZE][GRID_SIZE];
+        this.damage = new float[TILES][TILES];
+        this.drip = new float[TILES][TILES];
+        this.dDrip = new float[TILES][TILES];
+        this.displacement = new float[TILES][TILES];
+        this.velocity = new float[TILES][TILES];
     }
 
     public void markShouldUpdate() {
@@ -83,70 +88,66 @@ public class FirmamentSubRegion implements FirmamentAccess {
 
     @Override
     public void forEachPosition(BiConsumer<Integer, Integer> method) {
-        for(int i = 0; i < GRID_SIZE; i++) {
-            for(int j = 0; j < GRID_SIZE; j++) {
-                method.accept(i, j);
+        for(int i = 0; i < TILES; i++) {
+            for(int j = 0; j < TILES; j++) {
+                method.accept(i * TILE_SIZE, j * TILE_SIZE);
             }
         }
     }
 
     @Override
     public void forEachActivePosition(BiConsumer<Integer, Integer> method) {
-        for(int x = 0; x < GRID_SIZE; x++) {
-            for(int z = 0; z < GRID_SIZE; z++) {
-                method.accept(x, z);
-            }
-        }
+        forEachPosition(method);
     }
 
     @Override
     public float getDrip(int x, int z) {
-        return drip[x][z];
+        return drip[x >> TILE_SIZE_BITS][z >> TILE_SIZE_BITS];
     }
 
     @Override
     public float getDamage(int x, int z) {
-        return damage[x][z];
+        return damage[x >> TILE_SIZE_BITS][z >> TILE_SIZE_BITS];
     }
 
     @Override
     public float getDisplacement(int x, int z) {
-        return displacement[x][z];
+        return displacement[x >> TILE_SIZE_BITS][z >> TILE_SIZE_BITS];
     }
 
     @Override
     public float getVelocity(int x, int z) {
-        return velocity[x][z];
+        return velocity[x >> TILE_SIZE_BITS][z >> TILE_SIZE_BITS];
     }
 
     @Override
     public float getDDrip(int x, int z) {
-        return dDrip[x][z];
+        return dDrip[x >> TILE_SIZE_BITS][z >> TILE_SIZE_BITS];
     }
 
     @Override
     public void setDrip(int x, int z, float value) {
-        drip[x][z] = value;
+        drip[x >> TILE_SIZE_BITS][z >> TILE_SIZE_BITS] = value;
     }
 
     @Override
     public void setDamage(int x, int z, float value) {
-        damage[x][z] = value;
+        damage[x >> TILE_SIZE_BITS][z >> TILE_SIZE_BITS] = value;
     }
 
     @Override
     public void setDisplacement(int x, int z, float value) {
-        displacement[x][z] = value;
+        displacement[x >> TILE_SIZE_BITS][z >> TILE_SIZE_BITS] = value;
     }
 
     @Override
     public void setVelocity(int x, int z, float value) {
-        velocity[x][z] = value;
+        velocity[x >> TILE_SIZE_BITS][z >> TILE_SIZE_BITS] = value;
     }
 
     @Override
     public void setDDrip(int x, int z, float value) {
-        dDrip[x][z] = value;
+        dDrip[x >> TILE_SIZE_BITS][z >> TILE_SIZE_BITS] = value;
     }
 
     @Override
@@ -166,10 +167,13 @@ public class FirmamentSubRegion implements FirmamentAccess {
 
     @Override
     public void markActive(int x, int z) {
-        boolean xMin = x == 0;
-        boolean zMin = z == GRID_SIZE - 1;
-        boolean xMax = x == 0;
-        boolean zMax = z == GRID_SIZE - 1;
+        int tx = x >> TILE_SIZE_BITS;
+        int tz = z >> TILE_SIZE_BITS;
+
+        boolean xMin = tx == 0;
+        boolean zMin = tz == TILES - 1;
+        boolean xMax = tx == 0;
+        boolean zMax = tz == TILES - 1;
 
         active[4] = true;
         if(xMin) {

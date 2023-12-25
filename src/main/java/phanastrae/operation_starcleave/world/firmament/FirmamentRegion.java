@@ -9,9 +9,9 @@ public class FirmamentRegion implements FirmamentAccess {
     public static final int REGION_MASK = 0x1FF;
     public static final int REGION_SIZE_BITS = 9;
 
-    public static final int SUBREGIONS = 64;
-    public static final int SUBREGION_MASK = 0x7;
-    public static final int SUBREGION_SIZE_BITS = 3;
+    public static final int SUBREGIONS = 16;
+    public static final int SUBREGION_MASK = 0x1F;
+    public static final int SUBREGION_SIZE_BITS = 5;
 
     public FirmamentSubRegion[][] subRegions;
     boolean shouldUpdate = false;
@@ -28,7 +28,7 @@ public class FirmamentRegion implements FirmamentAccess {
         this.subRegions = new FirmamentSubRegion[SUBREGIONS][SUBREGIONS];
         for(int i = 0; i < SUBREGIONS; i++) {
             for(int j = 0; j < SUBREGIONS; j++) {
-                subRegions[i][j] = new FirmamentSubRegion(x + i * FirmamentSubRegion.GRID_SIZE, z + j * FirmamentSubRegion.GRID_SIZE);
+                subRegions[i][j] = new FirmamentSubRegion(x + i * FirmamentSubRegion.SUBREGION_SIZE, z + j * FirmamentSubRegion.SUBREGION_SIZE);
             }
         }
     }

@@ -2,6 +2,8 @@ package phanastrae.operation_starcleave.world.firmament;
 
 import java.util.Random;
 
+import static phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion.TILE_SIZE;
+
 public class FirmamentActor {
 
     public FirmamentActor(Firmament firmament, int originX, int originZ, float dx, float dz, float damagePotential) {
@@ -58,8 +60,8 @@ public class FirmamentActor {
 
             float g = (1 - dot2 * dot2 * dot2) / 2;
 
-            dx += ddx * f * g;
-            dz += ddz * f * g;
+            dx += ddx * f * g * TILE_SIZE;
+            dz += ddz * f * g * TILE_SIZE;
 
             int idx = originX + (int) dx;
             int idz = originZ + (int) dz;
