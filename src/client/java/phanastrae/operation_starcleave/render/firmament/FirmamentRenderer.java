@@ -100,6 +100,7 @@ public class FirmamentRenderer {
                 matrices.pop();
             }
 
+            RenderSystem.enableBlend();
             RenderSystem.blendFuncSeparate(
                     GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO
             );
