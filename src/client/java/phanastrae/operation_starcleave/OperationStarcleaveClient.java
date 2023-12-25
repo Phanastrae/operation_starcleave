@@ -24,6 +24,6 @@ public class OperationStarcleaveClient implements ClientModInitializer {
 			}
 		});
 
-		WorldRenderEvents.BEFORE_ENTITIES.register(FirmamentRenderer::render);
+		WorldRenderEvents.AFTER_SETUP.register(FirmamentRenderer::render);
 	}
 }

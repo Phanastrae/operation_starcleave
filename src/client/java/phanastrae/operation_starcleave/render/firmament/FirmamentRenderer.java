@@ -1,27 +1,137 @@
 package phanastrae.operation_starcleave.render.firmament;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.LightmapTextureManager;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.gl.Framebuffer;
+import net.minecraft.client.render.*;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.profiler.Profiler;
+import org.joml.*;
 import org.joml.Math;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
-import org.joml.Vector4f;
+import org.lwjgl.opengl.GL11;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
+import phanastrae.operation_starcleave.util.FrameBufferStencilAccess;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 
 public class FirmamentRenderer {
     public static void render(WorldRenderContext worldRenderContext) {
+        if(MinecraftClient.getInstance().getDebugHud().shouldShowDebugHud()) {
+            doRender(worldRenderContext);
+            return;
+        }
+
+        Framebuffer frameBuffer = MinecraftClient.getInstance().getFramebuffer();
+        if(!(frameBuffer instanceof FrameBufferStencilAccess FBSA)) return;
+
+        if(!FBSA.operation_starcleave$stencilBufferEnabled()) {
+            FBSA.operation_starcleave$setEnabled(true);
+        }
+
+        if(worldRenderContext.consumers() instanceof VertexConsumerProvider.Immediate immediate) {
+            immediate.draw();
+
+            RenderSystem.enableDepthTest();
+            RenderSystem.depthFunc(GL11.GL_LESS);
+            GL11.glEnable(GL11.GL_STENCIL_TEST);
+            GL11.glStencilFunc(GL11.GL_NOTEQUAL, 1, 0xFF);
+            RenderSystem.stencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
+
+            GL11.glClearStencil(0);
+            GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
+
+            RenderSystem.stencilMask(0);
+
+            RenderSystem.stencilFunc(GL11.GL_ALWAYS, 1, 0xFF);
+            RenderSystem.stencilMask(0xFF);
+            doRender(worldRenderContext);
+            RenderSystem.colorMask(false, false, false, false);
+            RenderSystem.depthMask(false);
+            immediate.draw(RenderLayer.getSolid());
+            RenderSystem.colorMask(true, true, true, true);
+
+            RenderSystem.stencilFunc(GL11.GL_EQUAL, 1, 0xFF);
+            RenderSystem.stencilMask(0);
+            RenderSystem.disableDepthTest();
+
+            MatrixStack matrices = worldRenderContext.matrixStack();
+            RenderSystem.depthMask(false);
+            RenderSystem.setShader(GameRenderer::getPositionTexColorProgram);
+            RenderSystem.setShaderTexture(0, new Identifier("textures/environment/end_sky.png"));
+            Tessellator tessellator = Tessellator.getInstance();
+            BufferBuilder bufferBuilder = tessellator.getBuffer();
+
+            for(int i = 0; i < 6; ++i) {
+                matrices.push();
+                if (i == 1) {
+                    matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90.0F));
+                }
+
+                if (i == 2) {
+                    matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90.0F));
+                }
+
+                if (i == 3) {
+                    matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180.0F));
+                }
+
+                if (i == 4) {
+                    matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(90.0F));
+                }
+
+                if (i == 5) {
+                    matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(-90.0F));
+                }
+
+                Matrix4f matrix4f = matrices.peek().getPositionMatrix();
+                bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
+                bufferBuilder.vertex(matrix4f, -100.0F, -100.0F, -100.0F).texture(0.0F, 0.0F).color(255, 255, 63, 255).next();
+                bufferBuilder.vertex(matrix4f, -100.0F, -100.0F, 100.0F).texture(0.0F, 16.0F).color(255, 255, 63, 255).next();
+                bufferBuilder.vertex(matrix4f, 100.0F, -100.0F, 100.0F).texture(16.0F, 16.0F).color(255, 255, 63, 255).next();
+                bufferBuilder.vertex(matrix4f, 100.0F, -100.0F, -100.0F).texture(16.0F, 0.0F).color(255, 255, 63, 255).next();
+                tessellator.draw();
+                matrices.pop();
+            }
+
+            RenderSystem.blendFuncSeparate(
+                    GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO
+            );
+
+            float k2 = 150.0F;
+            Matrix4f matrix4f2 = matrices.peek().getPositionMatrix();
+            RenderSystem.setShader(GameRenderer::getPositionTexProgram);
+            RenderSystem.setShaderTexture(0, new Identifier("textures/environment/sun.png"));
+            bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+            bufferBuilder.vertex(matrix4f2, -k2, 100.0F, -k2).texture(0.0F, 0.0F).next();
+            bufferBuilder.vertex(matrix4f2, k2, 100.0F, -k2).texture(1.0F, 0.0F).next();
+            bufferBuilder.vertex(matrix4f2, k2, 100.0F, k2).texture(1.0F, 1.0F).next();
+            bufferBuilder.vertex(matrix4f2, -k2, 100.0F, k2).texture(0.0F, 1.0F).next();
+            BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
+
+            RenderSystem.defaultBlendFunc();
+            RenderSystem.depthMask(true);
+            RenderSystem.disableBlend();
+
+            RenderSystem.stencilMask(0xFF);
+            RenderSystem.stencilFunc(GL11.GL_ALWAYS, 1, 0xFF);
+            RenderSystem.enableDepthTest();
+            GL11.glDisable(GL11.GL_STENCIL_TEST);
+
+            doRender(worldRenderContext);
+            RenderSystem.colorMask(false, false, false, true);
+            immediate.draw(RenderLayer.getSolid());
+            RenderSystem.colorMask(true, true, true, true);
+        }
+    }
+
+    public static void doRender(WorldRenderContext worldRenderContext) {
         VertexConsumerProvider vertexConsumerProvider = worldRenderContext.consumers();
         if(vertexConsumerProvider == null) return;
         Entity e = MinecraftClient.getInstance().cameraEntity;
@@ -59,9 +169,15 @@ public class FirmamentRenderer {
                     int worldX = x + firmamentSubRegion.x;
                     int worldZ = z + firmamentSubRegion.z;
 
+                    double dx = worldX - e.getPos().x;
+                    double dz = worldZ - e.getPos().z;
+                    double dist = Math.sqrt(dx*dx + dz*dz);
+
                     float damage = Math.clamp(0, 1, firmamentSubRegion.getDamage(x, z));
 
                     float displacementY = firmamentSubRegion.getDisplacement(x, z);
+
+                    float hOffset = (float)(-dist * dist * dist) / 1000;
 
                     float weightedDrip = (float)Math.max(java.lang.Math.log1p(Math.abs(firmamentSubRegion.getDrip(x, z))), 0);
 
@@ -85,7 +201,7 @@ public class FirmamentRenderer {
                             vertexConsumer,
                             worldX + f, worldZ + f,
                             worldX + 1 - f, worldZ + 1 - f,
-                            256 + displacementY,
+                            e.getWorld().getTopY() + 65 + displacementY,
                             r,
                             g,
                             b,
