@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "operation_starcleave:block/netherite_pumpkin",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "operation_starcleave:block/netherite_pumpkin"
+    },
+    "facing=south": {
+      "model": "operation_starcleave:block/netherite_pumpkin",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "operation_starcleave:block/netherite_pumpkin",
+      "y": 270
+    }
+  }
+}

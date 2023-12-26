@@ -8,6 +8,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.profiler.Profiler;
 import net.minecraft.world.tick.TickManager;
 import phanastrae.operation_starcleave.render.OperationStarcleaveShaders;
+import phanastrae.operation_starcleave.render.entity.OperationStarcleaveEntityRenderers;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 import phanastrae.operation_starcleave.render.firmament.FirmamentRenderer;
 
@@ -30,5 +31,6 @@ public class OperationStarcleaveClient implements ClientModInitializer {
 
 		CoreShaderRegistrationCallback.EVENT.register(OperationStarcleaveShaders::registerShaders);
 
+		OperationStarcleaveEntityRenderers.init();
 	}
 }

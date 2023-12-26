@@ -3,7 +3,9 @@
   "package": "phanastrae.operation_starcleave.mixin.client",
   "compatibilityLevel": "JAVA_17",
   "client": [
-    "FramebufferMixin"
+    "FramebufferMixin",
+    "InGameHudMixin",
+    "SmithingScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

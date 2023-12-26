@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "operation_starcleave:item/firmament_manipulator"
+  }
+}
