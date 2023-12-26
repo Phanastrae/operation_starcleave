@@ -28,6 +28,8 @@ loom {
 		}
 	}
 
+	accessWidenerPath = file("src/main/resources/operation_starcleave.accesswidener")
+
 }
 
 fabricApi {

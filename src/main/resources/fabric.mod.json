@@ -23,6 +23,7 @@
 			"phanastrae.operation_starcleave.OperationStarcleaveDataGenerator"
 		]
 	},
+	"accessWidener": "operation_starcleave.accesswidener",
 	"mixins": [
 		"operation_starcleave.mixins.json",
 		{

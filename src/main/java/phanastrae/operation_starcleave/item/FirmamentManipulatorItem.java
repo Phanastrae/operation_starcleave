@@ -41,7 +41,7 @@ public class FirmamentManipulatorItem extends Item {
 
                 Vec3d pos = user.getPos();
 
-                float skyHeight = world.getTopY() + 64;
+                float skyHeight = world.getTopY() + 16;
                 double t = (skyHeight - pos.y) / lookVec.y;
                 Vec3d target = pos.add(lookVec.multiply(t));
 
