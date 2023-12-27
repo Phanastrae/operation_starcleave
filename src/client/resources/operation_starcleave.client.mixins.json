@@ -3,9 +3,11 @@
   "package": "phanastrae.operation_starcleave.mixin.client",
   "compatibilityLevel": "JAVA_17",
   "client": [
-    "FramebufferMixin",
+    "ClientWorldMixin",
     "InGameHudMixin",
-    "SmithingScreenMixin"
+    "LightmapTextureManagerMixin",
+    "SmithingScreenMixin",
+    "WorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

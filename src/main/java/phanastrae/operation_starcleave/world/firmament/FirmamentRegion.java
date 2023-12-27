@@ -21,14 +21,17 @@ public class FirmamentRegion implements FirmamentAccess {
     public final int x;
     public final int z;
 
-    public FirmamentRegion(int x, int z) {
+    public final Firmament firmament;
+
+    public FirmamentRegion(Firmament firmament, int x, int z) {
+        this.firmament = firmament;
         this.x = x;
         this.z = z;
 
         this.subRegions = new FirmamentSubRegion[SUBREGIONS][SUBREGIONS];
         for(int i = 0; i < SUBREGIONS; i++) {
             for(int j = 0; j < SUBREGIONS; j++) {
-                subRegions[i][j] = new FirmamentSubRegion(x + i * FirmamentSubRegion.SUBREGION_SIZE, z + j * FirmamentSubRegion.SUBREGION_SIZE);
+                subRegions[i][j] = new FirmamentSubRegion(this, x + i * FirmamentSubRegion.SUBREGION_SIZE, z + j * FirmamentSubRegion.SUBREGION_SIZE);
             }
         }
     }

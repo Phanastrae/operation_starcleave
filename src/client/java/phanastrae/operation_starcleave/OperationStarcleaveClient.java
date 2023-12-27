@@ -9,6 +9,7 @@ import net.minecraft.util.profiler.Profiler;
 import net.minecraft.world.tick.TickManager;
 import phanastrae.operation_starcleave.render.OperationStarcleaveShaders;
 import phanastrae.operation_starcleave.render.entity.OperationStarcleaveEntityRenderers;
+import phanastrae.operation_starcleave.world.OperationStarcleaveWorld;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 import phanastrae.operation_starcleave.render.firmament.FirmamentRenderer;
 
@@ -17,12 +18,17 @@ public class OperationStarcleaveClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		ClientTickEvents.START_WORLD_TICK.register((world) -> {
+			OperationStarcleaveWorld opscw = (OperationStarcleaveWorld)world;
+			if(opscw.operation_starcleave$getCleavingFlashTicksLeft() > 0) {
+				opscw.operation_starcleave$setCleavingFlashTicksLeft(opscw.operation_starcleave$getCleavingFlashTicksLeft() - 1);
+			}
+
 			TickManager tickManager = world.getTickManager();
 			boolean bl = tickManager.shouldTick();
 			if(bl) {
 				Profiler profiler = MinecraftClient.getInstance().getProfiler();
 				profiler.push("starcleave_fracture");
-				Firmament.getInstance().tick(world);
+				Firmament.fromWorld(world).tick();
 				profiler.pop();
 			}
 		});

@@ -1,9 +1,19 @@
 {
-  "itemGroup.operation_starcleave.group": "Operation: Starcleave",
-
-  "entity.operation_starcleave.starcleaver_golem": "Starcleaver Golem",
+  "advancements.operation_starcleave.cleave_firmament.description": "Pierce the Heavens",
+  "advancements.operation_starcleave.cleave_firmament.title": "We Have a Problem",
+  "advancements.operation_starcleave.launch_starcleaver_golem.description": "Launch a Starcleaver Golem",
+  "advancements.operation_starcleave.launch_starcleaver_golem.title": "Starcleaver",
+  "advancements.operation_starcleave.root.description": "The Stars Will Be Ours!",
+  "advancements.operation_starcleave.root.title": "Operation: Starcleave",
+  "advancements.operation_starcleave.summon_starcleaver_golem.description": "Crown a block of Crying Obsidian with a Netherite Pumpkin",
+  "advancements.operation_starcleave.summon_starcleaver_golem.title": "An Aspiring Astronaut",
 
   "block.operation_starcleave.netherite_pumpkin": "Netherite Pumpkin",
 
-  "item.operation_starcleave.firmament_manipulator": "Firmament Manipulator"
+  "entity.operation_starcleave.starcleaver_golem": "Starcleaver Golem",
+
+  "item.operation_starcleave.firmament_manipulator": "Firmament Manipulator",
+  "item.operation_starcleave.starcleaver_golem_spawn_egg": "Starcleaver Golem Spawn Egg",
+
+  "itemGroup.operation_starcleave.group": "Operation: Starcleave"
 }

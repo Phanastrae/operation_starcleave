@@ -11,10 +11,14 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Rarity;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
+import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
 
 public class OperationStarcleaveItems {
 
     public static Item NETHERITE_PUMPKIN = new NetheritePumpkinItem(OperationStarcleaveBlocks.NETHERITE_PUMPKIN, new FabricItemSettings().rarity(Rarity.UNCOMMON));
+
+    public static final Item STARCLEAVER_GOLEM_SPAWN_EGG = new SpawnEggItem(OperationStarcleaveEntityTypes.STARCLEAVER_GOLEM, 0x292725, 0x61eddf, new Item.Settings());
+
     public static Item FIRMAMENT_MANIPULATOR = new FirmamentManipulatorItem(new FabricItemSettings().rarity(Rarity.EPIC));
 
     public static final ItemGroup OPERATION_STARCLEAVE_GROUP = FabricItemGroup.builder()
@@ -25,15 +29,23 @@ public class OperationStarcleaveItems {
     public static void init() {
         Registry.register(Registries.ITEM_GROUP, OperationStarcleave.id("operation_starcleave"), OPERATION_STARCLEAVE_GROUP);
 
-        registerWithMenu(NETHERITE_PUMPKIN, "netherite_pumpkin");
-        registerWithMenu(FIRMAMENT_MANIPULATOR, "firmament_manipulator");
+        registerWithIG(NETHERITE_PUMPKIN, "netherite_pumpkin");
+        registerWithIG(STARCLEAVER_GOLEM_SPAWN_EGG, "starcleaver_golem_spawn_egg");
+        registerWithIG(FIRMAMENT_MANIPULATOR, "firmament_manipulator");
 
+        addToVanillaItemGroups();
+    }
+
+    public static void addToVanillaItemGroups() {
         addItemToGroupBefore(NETHERITE_PUMPKIN, ItemGroups.COMBAT, Items.TURTLE_HELMET);
         addItemToGroupAfter(NETHERITE_PUMPKIN, ItemGroups.FUNCTIONAL, Items.DRAGON_HEAD);
+
+        addItemToGroup(STARCLEAVER_GOLEM_SPAWN_EGG, ItemGroups.SPAWN_EGGS);
+
         addItemToGroup(FIRMAMENT_MANIPULATOR, ItemGroups.OPERATOR);
     }
 
-    public static <T extends Item> void registerWithMenu(T item, String name) {
+    public static <T extends Item> void registerWithIG(T item, String name) {
         register(item, name);
         addItemToGroup(item, RegistryKey.of(Registries.ITEM_GROUP.getKey(), OperationStarcleave.id("operation_starcleave")));
     }

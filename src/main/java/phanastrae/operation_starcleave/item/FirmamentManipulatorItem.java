@@ -4,6 +4,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.TypedActionResult;
@@ -11,6 +12,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import org.joml.Math;
+import phanastrae.operation_starcleave.world.OperationStarcleaveWorld;
 import phanastrae.operation_starcleave.world.firmament.*;
 
 import static phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion.TILE_SIZE;
@@ -23,15 +25,17 @@ public class FirmamentManipulatorItem extends Item {
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+        ItemStack itemStack = user.getStackInHand(hand);
+
         if(world.isClient) {
-            Firmament firmament = Firmament.getInstance();
+            Firmament firmament = Firmament.fromWorld(world);
 
             if (user.isSneaking()) {
                 firmament.init();
             } else {
-
-                float yaw = Math.toRadians(user.getYaw());
                 float pitch = Math.toRadians(user.getPitch());
+                if(pitch > 0) return TypedActionResult.fail(itemStack);
+                float yaw = Math.toRadians(user.getYaw());
 
                 float sinYaw = Math.sin(yaw);
                 float cosYaw = Math.cos(yaw);
@@ -57,20 +61,17 @@ public class FirmamentManipulatorItem extends Item {
             }
         }
 
-        ItemStack itemStack = user.getStackInHand(hand);
         return TypedActionResult.success(itemStack);
     }
 
     public static void formCrack(Firmament firmament, int x, int z, Random random) {
+        ((OperationStarcleaveWorld)firmament.getWorld()).operation_starcleave$setCleavingFlashTicksLeft(24);
+
+        firmament.setDamage(x, z, 1);
         int rad = 15;
         for(int i = -rad; i <= rad; i++) {
             for(int j = -rad; j <= rad; j++) {
                 float distSqr = i*i + j*j;
-
-                if(distSqr < 8) {
-                    firmament.setDamage(x+i*TILE_SIZE, z+j*TILE_SIZE, 1);
-                }
-
 
                 if(distSqr > rad*rad) continue;
                 float fallOff = 1 - (distSqr)/(rad*rad);
@@ -82,7 +83,9 @@ public class FirmamentManipulatorItem extends Item {
         int count = 10;
         for(int i = 0; i < count; i++) {
             float theta = (phase + i / (float)count) * 2 * (float)Math.PI;
-            firmament.addActor(new FirmamentActor(firmament, x, z, 4 * Math.cos(theta)*TILE_SIZE, 4 * Math.sin(theta)*TILE_SIZE, 40));
+            FirmamentActor actor = new FirmamentActor(firmament, x, z, Math.cos(theta)*TILE_SIZE, Math.sin(theta)*TILE_SIZE, 40);
+            actor.initialDelay = 12;
+            firmament.addActor(actor);
         }
     }
 

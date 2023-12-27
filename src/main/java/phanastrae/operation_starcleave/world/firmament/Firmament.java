@@ -4,13 +4,18 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import phanastrae.operation_starcleave.OperationStarcleave;
+import phanastrae.operation_starcleave.world.OperationStarcleaveWorld;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class Firmament implements FirmamentAccess {
 
-    private Firmament() {
+    private final World world;
+
+    public Firmament(World world) {
+        this.world = world;
         init();
     }
 
@@ -20,20 +25,14 @@ public class Firmament implements FirmamentAccess {
             for(int j = -1; j <= 1; j++) {
                 int x = i * FirmamentRegion.REGION_SIZE;
                 int z = j * FirmamentRegion.REGION_SIZE;
-                firmamentRegions.put(getRegionId(x, z), new FirmamentRegion(x, z));
+                firmamentRegions.put(getRegionId(x, z), new FirmamentRegion(this, x, z));
             }
         }
     }
 
-    private static final Firmament INSTANCE = new Firmament();
-
-    public static Firmament getInstance() {
-        return INSTANCE;
-    }
-
     Long2ObjectLinkedOpenHashMap<FirmamentRegion> firmamentRegions = new Long2ObjectLinkedOpenHashMap<>();
 
-    public void tick(World world) {
+    public void tick() {
         long t = world.getTime();
         if (t % 2 == 0) {
             manageActors();
@@ -70,7 +69,11 @@ public class Firmament implements FirmamentAccess {
 
     @Nullable
     public FirmamentRegion getFirmamentRegion(long id) {
-        return this.firmamentRegions.get(id);
+        if(this.firmamentRegions.containsKey(id)) {
+            return this.firmamentRegions.get(id);
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -234,5 +237,18 @@ public class Firmament implements FirmamentAccess {
     @Override
     public void markUpdatesFromActivity() {
         forEachRegion(FirmamentRegion::markUpdatesFromActivity);
+    }
+
+    public World getWorld() {
+        return this.world;
+    }
+
+    public static Firmament fromWorld(World world) {
+        if(world instanceof OperationStarcleaveWorld opscw) {
+            return opscw.operation_starcleave$getFirmament();
+        } else {
+            OperationStarcleave.LOGGER.info("World has no Firmament!?");
+            return null;
+        }
     }
 }

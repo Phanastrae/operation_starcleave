@@ -1,12 +1,12 @@
 package phanastrae.operation_starcleave.entity;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
@@ -21,6 +21,7 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
@@ -28,14 +29,30 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+import phanastrae.operation_starcleave.advancement.criterion.OperationStarcleaveAdvancementCriteria;
 import phanastrae.operation_starcleave.item.FirmamentManipulatorItem;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.function.Consumer;
 
 public class StarcleaverGolemEntity extends GolemEntity {
 
     private static final TrackedData<Boolean> IGNITED = DataTracker.registerData(StarcleaverGolemEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     private static final TrackedData<Boolean> PLUMMETING = DataTracker.registerData(StarcleaverGolemEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+
+    public float drillBasePitch = -45;
+    public float prevDrillBasePitch = -45;
+    public float drillHeadAngle = 0;
+    public float prevDrillHeadAngle = 0;
+    public float drillTipAngle = 0;
+    public float prevDrillTipAngle = 0;
+
+    private final List<UUID> launcherUuids = new ArrayList<>();
 
     protected StarcleaverGolemEntity(EntityType<? extends GolemEntity> entityType, World world) {
         super(entityType, world);
@@ -44,7 +61,7 @@ public class StarcleaverGolemEntity extends GolemEntity {
 
     @Override
     protected void initGoals() {
-        this.goalSelector.add(1, new EscapeDangerGoal(this, 1.5));
+        this.goalSelector.add(1, new EscapeDangerGoal(this, 1.2));
         this.goalSelector.add(3, new TemptGoal(this, 1.1, Ingredient.ofItems(Items.GOLD_NUGGET), false));
         this.goalSelector.add(6, new WanderAroundGoal(this, 1.0));
         this.goalSelector.add(7, new LookAtEntityGoal(this, PlayerEntity.class, 12.0F));
@@ -55,7 +72,7 @@ public class StarcleaverGolemEntity extends GolemEntity {
         return MobEntity.createMobAttributes()
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 12.0)
                 .add(EntityAttributes.GENERIC_ARMOR, 8.0)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.4)
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25)
                 .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 40.0)
                 .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, 3.0)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 2.0);
@@ -93,21 +110,15 @@ public class StarcleaverGolemEntity extends GolemEntity {
     public void tick() {
         World world = this.getWorld();
         if(this.isAlive()) {
-            if(!world.isClient) {
-                if(this.isOnFire() && !this.isIgnited()) {
-                    this.setIgnited(true);
-                }
-            }
-
             if(this.isIgnited()) {
-                this.addVelocity(0, 0.1, 0);
+                this.addVelocity(0, 0.09, 0);
 
                 if(world.isClient) {
                     world.addParticle(
                             ParticleTypes.FIREWORK,
-                            this.getX(),
+                            this.getX() + MathHelper.sin((float)Math.toRadians(this.bodyYaw)) * 0.25,
                             this.getY(),
-                            this.getZ(),
+                            this.getZ() - MathHelper.cos((float)Math.toRadians(this.bodyYaw)) * 0.25,
                             this.random.nextGaussian() * 0.05,
                             -this.getVelocity().y * 0.5,
                             this.random.nextGaussian() * 0.05
@@ -126,16 +137,17 @@ public class StarcleaverGolemEntity extends GolemEntity {
                             BlockState state = world.getBlockState(blockPos);
 
                             if(state.getCollisionShape(world, blockPos).isEmpty()) continue;
-                            if(state.isIn(BlockTags.DRAGON_IMMUNE) || state.isIn(BlockTags.WITHER_IMMUNE)) {
-                                collided = true;
-                            } else {
+                            if(this.canDestroy(state, blockPos)) {
                                 world.breakBlock(blockPos, true, this);
+                            } else {
+                                collided = true;
                             }
                         }
                     }
 
                     if(collided) {
                         this.setIgnited(false);
+                        this.clearLaunchers();
                     }
                 }
 
@@ -150,16 +162,73 @@ public class StarcleaverGolemEntity extends GolemEntity {
                 this.wasIgnited = false;
                 if(this.getWorld().isClient) {
                     // TODO make firmament serverside
-                    FirmamentManipulatorItem.formCrack(Firmament.getInstance(), this.getBlockX(), this.getBlockZ(), this.getRandom());
+                    FirmamentManipulatorItem.formCrack(Firmament.fromWorld(world), this.getBlockX(), this.getBlockZ(), this.getRandom());
                 }
             }
 
             if(this.isPlummeting()) {
-                this.addVelocity(0, -0.01, 0);
                 if(!world.isClient) {
                     if(this.isOnGround()) {
                         this.setPlummeting(false);
                         world.createExplosion(this, this.getX(), this.getY(), this.getZ(), 3, World.ExplosionSourceType.MOB);
+                    }
+                }
+
+                if(world.isClient) {
+                    for(int i = 0; i < 8; i++) {
+                        world.addParticle(
+                                ParticleTypes.FLAME,
+                                this.getX(),
+                                this.getY() - 0.25,
+                                this.getZ(),
+                                this.random.nextGaussian() * 0.75,
+                                this.getVelocity().y * -0.95,
+                                this.random.nextGaussian() * 0.75
+                        );
+                    }
+                }
+            }
+
+            if(world.isClient) {
+                prevDrillBasePitch = drillBasePitch;
+                prevDrillTipAngle = drillTipAngle;
+                prevDrillHeadAngle = drillHeadAngle;
+
+                if(this.isIgnited() || this.isPlummeting()) {
+                    drillBasePitch += 5;
+                    if(drillBasePitch > 0) {
+                        drillBasePitch = 0;
+                    }
+                } else {
+                    drillBasePitch -= 5;
+                    if(drillBasePitch < -45) {
+                        drillBasePitch = -45;
+                    }
+                }
+
+                if(this.isIgnited()) {
+                    drillHeadAngle += 15;
+                    if(drillHeadAngle > 360) {
+                        drillHeadAngle %= 360;
+                    }
+
+                    drillTipAngle += 10;
+                    if(drillTipAngle > 360) {
+                        drillTipAngle %= 360;
+                    }
+                } else {
+                    if(drillHeadAngle > 0) {
+                        drillHeadAngle += 6;
+                        if(drillHeadAngle > 360) {
+                            drillHeadAngle = 0;
+                        }
+                    }
+
+                    if(drillTipAngle > 0) {
+                        drillTipAngle += 4;
+                        if(drillTipAngle > 360) {
+                            drillTipAngle = 0;
+                        }
                     }
                 }
             }
@@ -186,16 +255,28 @@ public class StarcleaverGolemEntity extends GolemEntity {
 
     @Override
     protected ActionResult interactMob(PlayerEntity player, Hand hand) {
+        World world = this.getWorld();
         ItemStack itemStack = player.getStackInHand(hand);
         if (!this.isIgnited() && !this.isPlummeting() && itemStack.isIn(ItemTags.CREEPER_IGNITERS)) {
             SoundEvent soundEvent = itemStack.isOf(Items.FIRE_CHARGE) ? SoundEvents.ITEM_FIRECHARGE_USE : SoundEvents.ITEM_FLINTANDSTEEL_USE;
-            this.getWorld().playSound(player, this.getX(), this.getY(), this.getZ(), soundEvent, this.getSoundCategory(), 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
-            if (!this.getWorld().isClient) {
+            world.playSound(player, this.getX(), this.getY(), this.getZ(), soundEvent, this.getSoundCategory(), 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
+            if (!world.isClient) {
                 this.setIgnited(true);
                 if (!itemStack.isDamageable()) {
                     itemStack.decrement(1);
                 } else {
                     itemStack.damage(1, player, playerx -> playerx.sendToolBreakStatus(hand));
+                }
+
+                if(player instanceof ServerPlayerEntity serverPlayerEntity) {
+                    OperationStarcleaveAdvancementCriteria.LAUNCH_STARCLEAVER_GOLEM.trigger(serverPlayerEntity);
+                    this.addLauncher(serverPlayerEntity);
+                }
+                for(ServerPlayerEntity serverPlayerEntity : world.getNonSpectatingEntities(ServerPlayerEntity.class, this.getBoundingBox().expand(5.0))) {
+                    if(serverPlayerEntity != player) {
+                        OperationStarcleaveAdvancementCriteria.LAUNCH_STARCLEAVER_GOLEM.trigger(serverPlayerEntity);
+                        this.addLauncher(serverPlayerEntity);
+                    }
                 }
             }
 
@@ -203,6 +284,11 @@ public class StarcleaverGolemEntity extends GolemEntity {
         } else {
             return super.interactMob(player, hand);
         }
+    }
+
+    @Override
+    public boolean isOnFire() {
+        return this.isPlummeting();
     }
 
     public boolean isIgnited() {
@@ -221,10 +307,41 @@ public class StarcleaverGolemEntity extends GolemEntity {
         this.dataTracker.set(PLUMMETING, val);
     }
 
+    public void addLauncher(ServerPlayerEntity serverPlayerEntity) {
+        this.launcherUuids.add(serverPlayerEntity.getUuid());
+    }
+
+    public void forEachLauncher(Consumer<ServerPlayerEntity> method) {
+        for(UUID uuid : this.launcherUuids) {
+            Entity e = this.getWorld().getPlayerByUuid(uuid);
+            if(e instanceof ServerPlayerEntity spe) {
+                method.accept(spe);
+            }
+        }
+    }
+
+    public void clearLaunchers() {
+        this.launcherUuids.clear();
+    }
+
+    public boolean canDestroy(BlockState blockState, BlockPos blockPos) {
+        if(!this.getWorld().getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING)) {
+            return false;
+        }
+        if(blockState.isIn(BlockTags.WITHER_IMMUNE)) {
+            return false;
+        }
+
+        return true;
+    }
+
     public void cleave() {
         this.getWorld().createExplosion(this, this.getX(), this.getY(), this.getZ(), 7, World.ExplosionSourceType.MOB);
         this.setVelocity(0, -3, 0);
         this.setIgnited(false);
         this.setPlummeting(true);
+
+        this.forEachLauncher((OperationStarcleaveAdvancementCriteria.CLEAVE_FIRMAMENT::trigger));
+        this.clearLaunchers();
     }
 }

@@ -4,6 +4,8 @@ import net.minecraft.client.model.*;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.math.MathHelper;
+import org.joml.Quaternionf;
 import phanastrae.operation_starcleave.entity.StarcleaverGolemEntity;
 
 public class StarcleaverGolemEntityModel extends EntityModel<StarcleaverGolemEntity> {
@@ -11,11 +13,21 @@ public class StarcleaverGolemEntityModel extends EntityModel<StarcleaverGolemEnt
     private final ModelPart body;
     private final ModelPart drill;
     private final ModelPart legs;
+    private final ModelPart drillPivot;
+    private final ModelPart drillHead;
+    private final ModelPart drillTip;
+    private final ModelPart door;
 
     public StarcleaverGolemEntityModel(ModelPart root) {
         this.body = root.getChild("body");
         this.drill = root.getChild("drill");
         this.legs = root.getChild("legs");
+
+        this.drillPivot = drill.getChild("drillpivot");
+        this.drillHead = drillPivot.getChild("drilltop");
+        this.drillTip = drillHead.getChild("tip");
+
+        this.door = body.getChild("door");
     }
 
     public static TexturedModelData getTexturedModelData() {
@@ -60,7 +72,26 @@ public class StarcleaverGolemEntityModel extends EntityModel<StarcleaverGolemEnt
 
     @Override
     public void setAngles(StarcleaverGolemEntity entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
+        float s = (float)entity.getVelocity().lengthSquared();
+        s /= 0.2F;
+        s *= s * s;
 
+        if (s < 1.0F) {
+            s = 1.0F;
+        }
+
+        legs.pitch = MathHelper.cos(limbAngle * 0.6662F) * limbDistance * 0.25F / s;
+        legs.roll = MathHelper.cos(limbAngle * 1.3324F) * limbDistance * 0.125F / s;
+
+        body.pitch = -headPitch * (float) (Math.PI / 180.0) * 0.2f + MathHelper.cos(limbAngle * 0.6662F) * 0.1F / s;
+
+    }
+
+    @Override
+    public void animateModel(StarcleaverGolemEntity entity, float limbAngle, float limbDistance, float tickDelta) {
+        drillPivot.pitch = MathHelper.lerpAngleDegrees(tickDelta, entity.prevDrillBasePitch, entity.drillBasePitch) * (float) (Math.PI / 180.0);
+        drillHead.yaw = -MathHelper.lerpAngleDegrees(tickDelta, entity.prevDrillHeadAngle, entity.drillHeadAngle) * (float) (Math.PI / 180.0);
+        drillTip.yaw = -MathHelper.lerpAngleDegrees(tickDelta, entity.prevDrillTipAngle, entity.drillTipAngle) * (float) (Math.PI / 180.0);
     }
 
     @Override

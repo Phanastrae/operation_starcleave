@@ -34,13 +34,13 @@ public class FirmamentUpdater {
             dv = (int)(dv * 32)/32f;
 
             float velocity = firmament.getVelocity(x, z);
-            if(velocity > -8 || dv > 0) {
+            if(velocity > -4 || dv > 0) {
                 if (dv != 0) {
-                    velocity += dv;
-                    if(velocity < -4) velocity = -4;
-                    if(velocity > 0) velocity = 0;
-                    firmament.setVelocity(x, z, velocity);
-                    firmament.markActive(x, z);
+                    float newVelocity = Math.clamp(-4, 0, velocity + dv);
+                    if(newVelocity != velocity) {
+                        firmament.setVelocity(x, z, velocity);
+                        firmament.markActive(x, z);
+                    }
                 }
             }
         });
@@ -52,11 +52,11 @@ public class FirmamentUpdater {
                 dh = (int) (dh * 1) / 1f;
 
                 if (dh != 0) {
-                    d += dh;
-                    if(d < -15) d = -15;
-                    if(d > 0) d = 0;
-                    firmament.setDisplacement(x, z, d);
-                    firmament.markActive(x, z);
+                    float newDisplacement = Math.clamp(-15, 0, d + dh);
+                    if(newDisplacement != d) {
+                        firmament.setDisplacement(x, z, d);
+                        firmament.markActive(x, z);
+                    }
                 }
             }
 
@@ -90,17 +90,17 @@ public class FirmamentUpdater {
                 t = (int)(t * 32)/32f;
                 if(t > 0) {
                     firmament.setDDrip(x+nx, z+nz, t);
-                    firmament.markActive(x, z);
                 }
             });
         });
         firmament.forEachActivePosition((x, z) -> {
             float drip = firmament.getDrip(x, z);
             float dDrip = firmament.getDDrip(x, z);
-            drip += dDrip;
-            if(drip > 8) drip = 8;
-
-            firmament.setDrip(x, z, drip);
+            float newDrip = Math.min(8, drip + dDrip);
+            if(newDrip != drip) {
+                firmament.setDrip(x, z, drip);
+                firmament.markActive(x, z);
+            }
             firmament.setDDrip(x, z, 0);
         });
     }

@@ -9,7 +9,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import phanastrae.operation_starcleave.OperationStarcleave;
 
-public class OperationStarcleaveEntities {
+public class OperationStarcleaveEntityTypes {
 
     public static final EntityType<StarcleaverGolemEntity> STARCLEAVER_GOLEM = Registry.register(
             Registries.ENTITY_TYPE,

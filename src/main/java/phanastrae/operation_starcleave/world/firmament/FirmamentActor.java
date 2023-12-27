@@ -28,11 +28,18 @@ public class FirmamentActor {
 
     public boolean active = true;
 
+    public int initialDelay = 0;
+
     public void tick() {
         if (this.damagePotential < 0.0001f) {
             this.discard();
         }
         if(!this.active) return;
+
+        if(this.initialDelay > 0) {
+            this.initialDelay--;
+            return;
+        }
 
         if(random.nextFloat() > 0.9f) {
             split();
@@ -76,6 +83,11 @@ public class FirmamentActor {
 
             float finalAddDamage = addDamage;
             FirmamentUpdater.forEachNeighbor((nx, nz, nWeight) -> {
+                float addDamage2 = finalAddDamage * 0.5f * nWeight;
+                float newDamage2 = firmament.getDamage(idx+nx, idz+nz) + addDamage2;
+                if(newDamage2 > 1) newDamage2 = 1;
+                firmament.setDamage(idx+nx, idz+nz, newDamage2);
+
                 firmament.setDrip(idx+nx, idz+nz, firmament.getDrip(idx+nx, idz+nz) + (int)(finalAddDamage * nWeight * 16f) / 16f);
                 firmament.markActive(idx+nx, idz+nz);
             });

@@ -15,7 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
-import phanastrae.operation_starcleave.entity.OperationStarcleaveEntities;
+import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
 import phanastrae.operation_starcleave.entity.StarcleaverGolemEntity;
 
 import java.util.function.Predicate;
@@ -46,7 +46,7 @@ public class NetheritePumpkinBlock extends WearableCarvedPumpkinBlock {
     public void trySpawnEntityNetherite(World world, BlockPos pos) {
         BlockPattern.Result result = this.getStarcleaverGolemPattern().searchAround(world, pos);
         if (result != null) {
-            StarcleaverGolemEntity starcleaverGolemEntity = OperationStarcleaveEntities.STARCLEAVER_GOLEM.create(world);
+            StarcleaverGolemEntity starcleaverGolemEntity = OperationStarcleaveEntityTypes.STARCLEAVER_GOLEM.create(world);
             if (starcleaverGolemEntity != null) {
                 spawnEntity(world, result, starcleaverGolemEntity, result.translate(0, 1, 0).getBlockPos());
             }

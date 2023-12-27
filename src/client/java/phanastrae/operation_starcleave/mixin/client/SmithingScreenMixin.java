@@ -19,7 +19,7 @@ public class SmithingScreenMixin {
     private ArmorStandEntity armorStand;
 
     @Inject(method = "equipArmorStand", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"), cancellable = true)
-    public void operation_starcleave$equipArmorStandPumpkin(ItemStack stack, CallbackInfo ci) {
+    private void operation_starcleave$equipArmorStandPumpkin(ItemStack stack, CallbackInfo ci) {
         ItemStack itemStack = stack.copy();
         Item item = stack.getItem();
         if (item instanceof NetheritePumpkinItem) {

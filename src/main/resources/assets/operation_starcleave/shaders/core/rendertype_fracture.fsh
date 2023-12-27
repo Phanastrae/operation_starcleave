@@ -10,6 +10,7 @@ uniform float FogEnd;
 uniform vec4 FogColor;
 
 uniform float GameTime;
+uniform vec2 ScreenSize;
 
 in float vertexDistance;
 in vec4 vertexColor;
@@ -53,10 +54,11 @@ void main() {
 
             float w = 2. * v1*v1 + v2;
             if(w == 0.) continue;
+            w = sqrt(w);
 
             weight += w;
             float dam = damage[3 * i + j];
-            avgDamage += dam * w;
+            avgDamage += dam * dam * w;
         }
     }
     float damageAmount = avgDamage / weight;
@@ -95,4 +97,8 @@ void main() {
     vec3 color = borderColor + (edgeColor - borderColor) * l;
 
     fragColor = vec4(color, a);
+
+    if(a != 1.) {
+        fragColor = texture(Sampler0, gl_FragCoord.xy / ScreenSize.xy);
+    }
 }

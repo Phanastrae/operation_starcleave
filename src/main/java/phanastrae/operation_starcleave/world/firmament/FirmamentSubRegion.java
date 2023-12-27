@@ -45,7 +45,10 @@ public class FirmamentSubRegion implements FirmamentAccess {
     public final int x;
     public final int z;
 
-    public FirmamentSubRegion(int x, int z) {
+    public final FirmamentRegion firmamentRegion;
+
+    public FirmamentSubRegion(FirmamentRegion firmamentRegion, int x, int z) {
+        this.firmamentRegion = firmamentRegion;
         this.x = x;
         this.z = z;
 
@@ -201,7 +204,7 @@ public class FirmamentSubRegion implements FirmamentAccess {
     public void markUpdatesFromActivity() {
         for(int k = 0; k < 9; k++) {
             if(active[k]) {
-                markShouldUpdate(x + xOffset[k], z + zOffset[k]);
+                this.firmamentRegion.firmament.markShouldUpdate(x + xOffset[k], z + zOffset[k]);
             }
         }
     }

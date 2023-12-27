@@ -1,6 +1,5 @@
 package phanastrae.operation_starcleave.mixin.client;
 
-import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -28,7 +27,7 @@ public class InGameHudMixin {
     private void renderOverlay(DrawContext context, Identifier texture, float opacity){}
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerInventory;getArmorStack(I)Lnet/minecraft/item/ItemStack;", ordinal = 0, shift = At.Shift.BEFORE))
-    public void operation_starcleave$netheritePumpkinOverlay(DrawContext context, float tickDelta, CallbackInfo ci) {
+    private void operation_starcleave$netheritePumpkinOverlay(DrawContext context, float tickDelta, CallbackInfo ci) {
         ItemStack itemStack = this.client.player.getInventory().getArmorStack(3);
         if (itemStack.isOf(OperationStarcleaveBlocks.NETHERITE_PUMPKIN.asItem())) {
             this.renderOverlay(context, PUMPKIN_BLUR, 1.0F);
