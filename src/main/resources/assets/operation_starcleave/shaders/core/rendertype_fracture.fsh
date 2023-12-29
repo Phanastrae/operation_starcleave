@@ -63,6 +63,13 @@ void main() {
     }
     float damageAmount = avgDamage / weight;
 
+    // smooth fade into distance to avoid hard borders
+    if(vertexDistance > 400.) {
+        float v = vertexDistance - 400.;
+        damageAmount -= v / 100.;
+        if(damageAmount < 0.) damageAmount = 0.;
+    }
+
     float threshold = 0.25;
     // distFromBorder ranges from -1 to 1, with 0 at the threshold, -1 outside, -1 inside
     float distFromBorder = 0;

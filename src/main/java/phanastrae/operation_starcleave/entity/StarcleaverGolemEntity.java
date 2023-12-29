@@ -72,7 +72,7 @@ public class StarcleaverGolemEntity extends GolemEntity {
         return MobEntity.createMobAttributes()
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 12.0)
                 .add(EntityAttributes.GENERIC_ARMOR, 8.0)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25)
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.32)
                 .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 40.0)
                 .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, 3.0)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 2.0);
@@ -111,7 +111,7 @@ public class StarcleaverGolemEntity extends GolemEntity {
         World world = this.getWorld();
         if(this.isAlive()) {
             if(this.isIgnited()) {
-                this.addVelocity(0, 0.09, 0);
+                this.addVelocity(0, 0.085 + MathHelper.clamp(this.getVelocity().y - 0.1, 0, 4) * 0.03, 0);
 
                 if(world.isClient) {
                     world.addParticle(
@@ -155,14 +155,6 @@ public class StarcleaverGolemEntity extends GolemEntity {
                     if(this.getPos().y > world.getTopY() + 16) {
                         this.cleave();
                     }
-                }
-
-                this.wasIgnited = true;
-            } else if(this.wasIgnited) {
-                this.wasIgnited = false;
-                if(this.getWorld().isClient) {
-                    // TODO make firmament serverside
-                    FirmamentManipulatorItem.formCrack(Firmament.fromWorld(world), this.getBlockX(), this.getBlockZ(), this.getRandom());
                 }
             }
 
@@ -236,8 +228,6 @@ public class StarcleaverGolemEntity extends GolemEntity {
 
         super.tick();
     }
-
-    private boolean wasIgnited = false; // TODO remove and implement properly
 
     @Override
     protected int getNextAirUnderwater(int air) {
@@ -336,8 +326,14 @@ public class StarcleaverGolemEntity extends GolemEntity {
     }
 
     public void cleave() {
+        Firmament firmament = Firmament.fromWorld(this.getWorld());
+        if(firmament != null) {
+            FirmamentManipulatorItem.formCrack(firmament, this.getBlockX(), this.getBlockZ(), this.getRandom());
+        }
+
         this.getWorld().createExplosion(this, this.getX(), this.getY(), this.getZ(), 7, World.ExplosionSourceType.MOB);
-        this.setVelocity(0, -3, 0);
+        float angle = this.random.nextFloat() * MathHelper.TAU;
+        this.setVelocity(2 * MathHelper.sin(angle), -3, 2 * MathHelper.cos(angle));
         this.setIgnited(false);
         this.setPlummeting(true);
 

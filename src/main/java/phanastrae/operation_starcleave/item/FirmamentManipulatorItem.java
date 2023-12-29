@@ -1,17 +1,19 @@
 package phanastrae.operation_starcleave.item;
 
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Rarity;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import org.joml.Math;
+import phanastrae.operation_starcleave.network.packet.s2c.FirmamentCleavedS2CPacket;
 import phanastrae.operation_starcleave.world.OperationStarcleaveWorld;
 import phanastrae.operation_starcleave.world.firmament.*;
 
@@ -27,11 +29,15 @@ public class FirmamentManipulatorItem extends Item {
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack itemStack = user.getStackInHand(hand);
 
-        if(world.isClient) {
+        if(!world.isClient) {
             Firmament firmament = Firmament.fromWorld(world);
+            if(firmament == null) {
+                return super.use(world, user, hand);
+            }
 
             if (user.isSneaking()) {
-                firmament.init();
+                // TODO don't clear every single subregion in existence
+                firmament.forEachRegion(firmamentRegion -> firmamentRegion.forEachSubRegion(FirmamentSubRegion::clear));
             } else {
                 float pitch = Math.toRadians(user.getPitch());
                 if(pitch > 0) return TypedActionResult.fail(itemStack);
@@ -65,9 +71,18 @@ public class FirmamentManipulatorItem extends Item {
     }
 
     public static void formCrack(Firmament firmament, int x, int z, Random random) {
-        ((OperationStarcleaveWorld)firmament.getWorld()).operation_starcleave$setCleavingFlashTicksLeft(24);
+        if(firmament.getWorld() instanceof ServerWorld world) {
+            for(ServerPlayerEntity player : world.getPlayers()) {
+                ServerPlayNetworking.send(player, new FirmamentCleavedS2CPacket(x, z));
+            }
+        }
 
-        firmament.setDamage(x, z, 1);
+        firmament.setDamage(x, z, (float)Math.clamp(0.6, 1, firmament.getDamage(x, z) + 0.3));
+        firmament.setDamage(x+TILE_SIZE, z, (float)Math.clamp(0.3, 1, firmament.getDamage(x, z) + 0.1));
+        firmament.setDamage(x-TILE_SIZE, z, (float)Math.clamp(0.3, 1, firmament.getDamage(x, z) + 0.1));
+        firmament.setDamage(x, z+TILE_SIZE, (float)Math.clamp(0.3, 1, firmament.getDamage(x, z) + 0.1));
+        firmament.setDamage(x, z-TILE_SIZE, (float)Math.clamp(0.3, 1, firmament.getDamage(x, z) + 0.1));
+
         int rad = 15;
         for(int i = -rad; i <= rad; i++) {
             for(int j = -rad; j <= rad; j++) {

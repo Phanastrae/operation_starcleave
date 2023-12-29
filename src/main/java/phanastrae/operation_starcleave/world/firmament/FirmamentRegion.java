@@ -1,5 +1,7 @@
 package phanastrae.operation_starcleave.world.firmament;
 
+import net.minecraft.nbt.NbtCompound;
+
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -16,12 +18,17 @@ public class FirmamentRegion implements FirmamentAccess {
     public FirmamentSubRegion[][] subRegions;
     boolean shouldUpdate = false;
     boolean active = false;
+    boolean pendingClientUpdate = false;
 
     // world coords of minimum x-z corner
     public final int x;
     public final int z;
 
     public final Firmament firmament;
+
+    public FirmamentRegion(Firmament firmament, RegionPos regionPos) {
+        this(firmament, regionPos.worldX, regionPos.worldZ);
+    }
 
     public FirmamentRegion(Firmament firmament, int x, int z) {
         this.firmament = firmament;
@@ -77,10 +84,7 @@ public class FirmamentRegion implements FirmamentAccess {
 
     @Override
     public void forEachPosition(BiConsumer<Integer, Integer> method) {
-        forEachSubRegion((firmamentSubRegion -> {
-            firmamentSubRegion.forEachActivePosition((x, z) -> method.accept(x + firmamentSubRegion.x - this.x, z + firmamentSubRegion.z - this.z));
-
-        }));
+        forEachSubRegion((firmamentSubRegion -> firmamentSubRegion.forEachActivePosition((x, z) -> method.accept(x + firmamentSubRegion.x - this.x, z + firmamentSubRegion.z - this.z))));
     }
 
     @Override
@@ -147,6 +151,7 @@ public class FirmamentRegion implements FirmamentAccess {
         x = x&REGION_MASK;
         z = z&REGION_MASK;
         subRegions[x>>SUBREGION_SIZE_BITS][z>>SUBREGION_SIZE_BITS].setDamage(x&SUBREGION_MASK, z&SUBREGION_MASK, value);
+        this.pendingClientUpdate = true;
     }
 
     @Override
@@ -205,5 +210,45 @@ public class FirmamentRegion implements FirmamentAccess {
     @Override
     public boolean shouldUpdate() {
         return shouldUpdate;
+    }
+
+    public void flushUpdates() {
+        if(this.pendingClientUpdate) {
+            this.pendingClientUpdate = false;
+            forEachSubRegion(FirmamentSubRegion::flushUpdates);
+        }
+    }
+
+    public void read(NbtCompound nbt) {
+        for(int i = 0; i < SUBREGIONS; i++) {
+            for(int j = 0; j < SUBREGIONS; j++) {
+                this.subRegions[i][j].readFromByteArray(nbt.getByteArray("subregion_"+i+"_"+j));
+            }
+        }
+    }
+
+    public void write(NbtCompound nbt) {
+        for(int i = 0; i < SUBREGIONS; i++) {
+            for(int j = 0; j < SUBREGIONS; j++) {
+                nbt.putByteArray("subregion_"+i+"_"+j, this.subRegions[i][j].getAsByteArray());
+            }
+        }
+    }
+
+    public void readFromData(FirmamentRegionData firmamentRegionData) {
+        FirmamentSubRegionData[][] data = firmamentRegionData.subRegionData;
+        if(data.length != SUBREGIONS) {
+            return;
+        }
+        for(int i = 0; i < SUBREGIONS; i++) {
+            if(data[i] == null || data[i].length != SUBREGIONS)
+                return;
+        }
+
+        for(int i = 0; i < SUBREGIONS; i++) {
+            for(int j = 0; j < SUBREGIONS; j++) {
+                this.subRegions[i][j].readFromData(data[i][j]);
+            }
+        }
     }
 }

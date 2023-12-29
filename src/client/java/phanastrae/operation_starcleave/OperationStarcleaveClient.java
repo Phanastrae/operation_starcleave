@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.profiler.Profiler;
 import net.minecraft.world.tick.TickManager;
+import phanastrae.operation_starcleave.network.OperationStarcleaveClientPacketHandler;
 import phanastrae.operation_starcleave.render.OperationStarcleaveShaders;
 import phanastrae.operation_starcleave.render.entity.OperationStarcleaveEntityRenderers;
 import phanastrae.operation_starcleave.world.OperationStarcleaveWorld;
@@ -26,11 +27,16 @@ public class OperationStarcleaveClient implements ClientModInitializer {
 			TickManager tickManager = world.getTickManager();
 			boolean bl = tickManager.shouldTick();
 			if(bl) {
-				Profiler profiler = MinecraftClient.getInstance().getProfiler();
-				profiler.push("starcleave_fracture");
-				Firmament.fromWorld(world).tick();
-				profiler.pop();
+				//Profiler profiler = world.getProfiler();
+				//profiler.push("starcleave_fracture");
+				//Firmament.fromWorld(world).tick();
+				//profiler.pop();
+				Firmament firmament = Firmament.fromWorld(world);
+				if(firmament != null) {
+					firmament.getFirmamentRegionManager().tick();
+				}
 			}
+
 		});
 
 		WorldRenderEvents.AFTER_SETUP.register(FirmamentRenderer::render);
@@ -38,5 +44,6 @@ public class OperationStarcleaveClient implements ClientModInitializer {
 		CoreShaderRegistrationCallback.EVENT.register(OperationStarcleaveShaders::registerShaders);
 
 		OperationStarcleaveEntityRenderers.init();
+		OperationStarcleaveClientPacketHandler.init();
 	}
 }

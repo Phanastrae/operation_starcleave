@@ -75,7 +75,7 @@ public class FirmamentActor {
 
             float damage = firmament.getDamage(idx, idz);
             float addDamage = Math.min(damagePotential, 1 - damage);
-            addDamage *= 0.2f;
+            addDamage *= 0.5f;
             float newDamage = firmament.getDamage(idx, idz) + addDamage;
             if(newDamage > 1) newDamage = 1;
             firmament.setDamage(idx, idz, newDamage);

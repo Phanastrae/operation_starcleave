@@ -19,7 +19,7 @@ public class OperationStarcleaveItems {
 
     public static final Item STARCLEAVER_GOLEM_SPAWN_EGG = new SpawnEggItem(OperationStarcleaveEntityTypes.STARCLEAVER_GOLEM, 0x292725, 0x61eddf, new Item.Settings());
 
-    public static Item FIRMAMENT_MANIPULATOR = new FirmamentManipulatorItem(new FabricItemSettings().rarity(Rarity.EPIC));
+    public static Item FIRMAMENT_MANIPULATOR = new FirmamentManipulatorItem(new FabricItemSettings().rarity(Rarity.EPIC).maxCount(1));
 
     public static final ItemGroup OPERATION_STARCLEAVE_GROUP = FabricItemGroup.builder()
             .icon(() -> new ItemStack(NETHERITE_PUMPKIN))

@@ -4,6 +4,12 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "EndermanEntityMixin",
+    "MinecraftServerMixin",
+    "ServerChunkManagerMixin",
+    "ServerPlayerEntityMixin",
+    "ServerPlayNetworkHandlerMixin",
+    "ServerWorldMixin",
+    "ThreadedAnvilChunkStorageMixin",
     "WorldMixin"
   ],
   "injectors": {

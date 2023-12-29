@@ -1,11 +1,9 @@
 package phanastrae.operation_starcleave.world.firmament;
 
-import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.OperationStarcleave;
-import phanastrae.operation_starcleave.world.OperationStarcleaveWorld;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -13,24 +11,12 @@ import java.util.function.Consumer;
 public class Firmament implements FirmamentAccess {
 
     private final World world;
+    private final FirmamentRegionManager firmamentRegionManager;
 
-    public Firmament(World world) {
+    public Firmament(World world, FirmamentRegionManager firmamentRegionManager) {
         this.world = world;
-        init();
+        this.firmamentRegionManager = firmamentRegionManager;
     }
-
-    public void init() {
-        firmamentRegions.clear();
-        for(int i = -1; i <= 1; i++) {
-            for(int j = -1; j <= 1; j++) {
-                int x = i * FirmamentRegion.REGION_SIZE;
-                int z = j * FirmamentRegion.REGION_SIZE;
-                firmamentRegions.put(getRegionId(x, z), new FirmamentRegion(this, x, z));
-            }
-        }
-    }
-
-    Long2ObjectLinkedOpenHashMap<FirmamentRegion> firmamentRegions = new Long2ObjectLinkedOpenHashMap<>();
 
     public void tick() {
         long t = world.getTime();
@@ -48,15 +34,17 @@ public class Firmament implements FirmamentAccess {
                 clearActive();
             }
 
+            this.firmamentRegionManager.tick();
+
             FirmamentUpdater.update(this);
         }
     }
 
     public void forEachRegion(Consumer<FirmamentRegion> method) {
-        this.firmamentRegions.forEach((id, firmamentRegion) -> method.accept(firmamentRegion));
+        this.firmamentRegionManager.forEachRegion(method);
     }
 
-    public long getRegionId(int x, int z) {
+    public static long getRegionId(int x, int z) {
         int rx = x >> FirmamentRegion.REGION_SIZE_BITS;
         int rz = z >> FirmamentRegion.REGION_SIZE_BITS;
         return ChunkPos.toLong(rx, rz);
@@ -69,11 +57,7 @@ public class Firmament implements FirmamentAccess {
 
     @Nullable
     public FirmamentRegion getFirmamentRegion(long id) {
-        if(this.firmamentRegions.containsKey(id)) {
-            return this.firmamentRegions.get(id);
-        } else {
-            return null;
-        }
+        return this.firmamentRegionManager.getFirmamentRegion(id);
     }
 
     @Override
@@ -243,12 +227,38 @@ public class Firmament implements FirmamentAccess {
         return this.world;
     }
 
+    public FirmamentRegionManager getFirmamentRegionManager() {
+        return this.firmamentRegionManager;
+    }
+
     public static Firmament fromWorld(World world) {
-        if(world instanceof OperationStarcleaveWorld opscw) {
+        if(world instanceof FirmamentHolder opscw) {
             return opscw.operation_starcleave$getFirmament();
         } else {
-            OperationStarcleave.LOGGER.info("World has no Firmament!?");
+            OperationStarcleave.LOGGER.info("World " + world.asString() + " has no Firmament!?");
             return null;
         }
+    }
+
+    @Nullable
+    public FirmamentSubRegion getSubRegionFromId(long id) {
+        int srx = (int)(id & 4294967295L);
+        int srz = (int)((id >>> 32) & 4294967295L);
+        int x = srx << FirmamentRegion.SUBREGION_SIZE_BITS;
+        int z = srz << FirmamentRegion.SUBREGION_SIZE_BITS;
+        return this.getSubRegion(x, z);
+    }
+
+    @Nullable
+    public FirmamentSubRegion getSubRegion(int x, int z) {
+        FirmamentRegion firmamentRegion = this.getFirmamentRegion(x, z);
+        if(firmamentRegion == null) {
+            return null;
+        }
+        int lx = x & FirmamentRegion.REGION_MASK;
+        int lz = z & FirmamentRegion.REGION_MASK;
+        int lsrx = lx >> FirmamentRegion.SUBREGION_SIZE_BITS;
+        int lsrz = lz >> FirmamentRegion.SUBREGION_SIZE_BITS;
+        return firmamentRegion.subRegions[lsrx][lsrz];
     }
 }

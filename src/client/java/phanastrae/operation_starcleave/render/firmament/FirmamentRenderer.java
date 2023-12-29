@@ -28,6 +28,7 @@ public class FirmamentRenderer {
         boolean debugMode_General = client.getDebugHud().shouldShowDebugHud() && player != null && player.getMainHandStack().isOf(OperationStarcleaveItems.FIRMAMENT_MANIPULATOR);
 
         if(debugMode_General) {
+            // TODO serverside firmament regions broke most of debug, either fix or remove this at some point
             doRender(worldRenderContext, debugMode_General);
             return;
         }
@@ -115,6 +116,9 @@ public class FirmamentRenderer {
     }
 
     public static void doRender(WorldRenderContext worldRenderContext, boolean debugMode_General) {
+        Firmament firmament = Firmament.fromWorld(worldRenderContext.world());
+        if(firmament == null) return;
+
         MinecraftClient client = MinecraftClient.getInstance();
 
         VertexConsumerProvider vertexConsumerProvider = worldRenderContext.consumers();
@@ -135,9 +139,8 @@ public class FirmamentRenderer {
 
         Vec3d camPos = worldRenderContext.camera().getPos();
         matrixStack.push();
-        matrixStack.translate(-camPos.x, -camPos.y, -camPos.z);
+        matrixStack.translate(ex - camPos.x, - camPos.y, ez - camPos.z);
 
-        Firmament firmament = Firmament.fromWorld(worldRenderContext.world());
         int tileSize = FirmamentSubRegion.TILE_SIZE;
         firmament.forEachRegion((firmamentRegion -> {
             int rdx = firmamentRegion.x + 256 - ex;
@@ -201,8 +204,8 @@ public class FirmamentRenderer {
                         renderQuadReal(matrixStack.peek().getPositionMatrix(),
                                 matrixStack.peek().getNormalMatrix(),
                                 vertexConsumer,
-                                worldX, worldZ,
-                                worldX + tileSize, worldZ + tileSize,
+                                (worldX - ex), (worldZ - ez),
+                                (worldX - ex) + tileSize, (worldZ - ez) + tileSize,
                                 e.getWorld().getTopY() + 16,
                                 rbyte / 255f,
                                 gbyte / 255f,

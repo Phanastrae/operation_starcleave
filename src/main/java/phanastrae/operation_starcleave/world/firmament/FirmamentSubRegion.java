@@ -1,5 +1,11 @@
 package phanastrae.operation_starcleave.world.firmament;
 
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.World;
+import phanastrae.operation_starcleave.network.packet.s2c.UpdateFirmamentSubRegionS2CPacket;
+
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -12,6 +18,8 @@ public class FirmamentSubRegion implements FirmamentAccess {
     public static final int TILE_MASK = 0x3;
     public static final int TILE_SIZE_BITS = 2;
     public static final int TILE_SIZE = 4;
+
+    public static final int DATA_SIZE_BYTES = TILES * TILES * 4;
 
     //    x -->
     // z  0 1 2
@@ -41,6 +49,8 @@ public class FirmamentSubRegion implements FirmamentAccess {
     boolean[] active = new boolean[9];
     boolean shouldUpdate = false;
 
+    boolean pendingClientUpdate = false;
+
     // world coords of minimum x-z corner
     public final int x;
     public final int z;
@@ -57,6 +67,21 @@ public class FirmamentSubRegion implements FirmamentAccess {
         this.dDrip = new float[TILES][TILES];
         this.displacement = new float[TILES][TILES];
         this.velocity = new float[TILES][TILES];
+    }
+
+    public void clear() {
+        for(int i = 0; i < FirmamentSubRegion.TILES; i++) {
+            for(int j = 0; j < FirmamentSubRegion.TILES; j++) {
+                this.damage[i][j] = 0;
+                this.drip[i][j] = 0;
+                this.dDrip[i][j] = 0;
+                this.displacement[i][j] = 0;
+                this.velocity[i][j] = 0;
+            }
+        }
+        this.pendingClientUpdate = true;
+        this.firmamentRegion.pendingClientUpdate = true;
+        this.clearActors();
     }
 
     public void markShouldUpdate() {
@@ -135,6 +160,7 @@ public class FirmamentSubRegion implements FirmamentAccess {
 
     @Override
     public void setDamage(int x, int z, float value) {
+        this.pendingClientUpdate = true;
         damage[x >> TILE_SIZE_BITS][z >> TILE_SIZE_BITS] = value;
     }
 
@@ -205,6 +231,53 @@ public class FirmamentSubRegion implements FirmamentAccess {
         for(int k = 0; k < 9; k++) {
             if(active[k]) {
                 this.firmamentRegion.firmament.markShouldUpdate(x + xOffset[k], z + zOffset[k]);
+            }
+        }
+    }
+
+    public long getPosAsLong() {
+        int srx = this.x >> FirmamentRegion.SUBREGION_SIZE_BITS;
+        int srz = this.z >> FirmamentRegion.SUBREGION_SIZE_BITS;
+        return ((long)srx & 4294967295L) | (((long)srz) << 32);
+    }
+
+    public byte[] getAsByteArray() {
+        ByteBuffer byteBuffer = ByteBuffer.allocate(DATA_SIZE_BYTES);
+        for(int i = 0; i < FirmamentSubRegion.TILES; i++) {
+            for(int j = 0; j < FirmamentSubRegion.TILES; j++) {
+                byteBuffer.putFloat(this.damage[i][j]);
+            }
+        }
+        return byteBuffer.array();
+    }
+
+    public void readFromData(FirmamentSubRegionData firmamentSubRegionData) {
+        this.readFromByteArray(firmamentSubRegionData.damageData);
+    }
+
+    public void readFromByteArray(byte[] byteArray) {
+        if(byteArray == null || byteArray.length != DATA_SIZE_BYTES) {
+            this.clear();
+            return;
+        }
+
+        ByteBuffer byteBuffer = ByteBuffer.allocate(DATA_SIZE_BYTES);
+        byteBuffer.put(byteArray);
+        byteBuffer.position(0);
+        for(int i = 0; i < FirmamentSubRegion.TILES; i++) {
+            for(int j = 0; j < FirmamentSubRegion.TILES; j++) {
+                this.damage[i][j] = byteBuffer.getFloat();
+            }
+        }
+    }
+
+    public void flushUpdates() {
+        if(this.pendingClientUpdate) {
+            this.pendingClientUpdate = false;
+            World world = this.firmamentRegion.firmament.getWorld();
+            if(world instanceof ServerWorld serverWorld) {
+                // TODO limit which players get updated
+                serverWorld.getPlayers().forEach(serverPlayerEntity -> ServerPlayNetworking.send(serverPlayerEntity, new UpdateFirmamentSubRegionS2CPacket(this)));
             }
         }
     }
