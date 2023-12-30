@@ -15,6 +15,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.profiler.Profiler;
@@ -22,6 +23,7 @@ import net.minecraft.world.World;
 import org.joml.*;
 import org.joml.Math;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
+import phanastrae.operation_starcleave.mixin.client.WorldRendererAccessor;
 import phanastrae.operation_starcleave.render.OperationStarcleaveRenderLayers;
 import phanastrae.operation_starcleave.render.OperationStarcleaveWorldRenderer;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
@@ -79,7 +81,7 @@ public class FirmamentRenderer {
             if(renderSkybox.get()) {
                 profiler.swap("sky");
                 Framebuffer firmamentFrameBuffer = ((OperationStarcleaveWorldRenderer)worldRenderContext.worldRenderer()).operation_starcleave$getFirmamentFramebuffer();
-                firmamentFrameBuffer.setClearColor(1, 1, 1, 1);
+                firmamentFrameBuffer.setClearColor(0, 0.08f, 0.08f, 1f);
                 firmamentFrameBuffer.clear(MinecraftClient.IS_SYSTEM_MAC);
                 OperationStarcleaveRenderLayers.FIRMAMENT_SKY_TARGET.startDrawing();
                 renderFirmamentSky(worldRenderContext);
@@ -95,64 +97,156 @@ public class FirmamentRenderer {
     }
 
     public static void renderFirmamentSky(WorldRenderContext worldRenderContext) {
-            MatrixStack matrices = worldRenderContext.matrixStack();
+        MatrixStack matrices = worldRenderContext.matrixStack();
+        Matrix4f projectionMatrix = worldRenderContext.projectionMatrix();
+        WorldRenderer worldRenderer = worldRenderContext.worldRenderer();
+        WorldRendererAccessor worldRendererAccessor = (WorldRendererAccessor)worldRenderer;
+        World world = worldRenderContext.world();
+        float tickDelta = worldRenderContext.tickDelta();
+
+        float fogStart = RenderSystem.getShaderFogStart();
+        RenderSystem.setShaderFogStart(Float.MAX_VALUE);
+
+        VertexBuffer vb1 = worldRendererAccessor.getLightSkyBuffer();
+        if(vb1 != null && !vb1.isClosed()) {
+            matrices.push();
+            matrices.translate(0, 20, 0);
+
             RenderSystem.depthMask(false);
-            RenderSystem.setShader(GameRenderer::getPositionTexColorProgram);
-            RenderSystem.setShaderTexture(0, new Identifier("textures/environment/end_sky.png"));
-            Tessellator tessellator = Tessellator.getInstance();
-            BufferBuilder bufferBuilder = tessellator.getBuffer();
-
-            for(int i = 0; i < 6; ++i) {
-                matrices.push();
-                if (i == 1) {
-                    matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90.0F));
-                }
-
-                if (i == 2) {
-                    matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90.0F));
-                }
-
-                if (i == 3) {
-                    matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180.0F));
-                }
-
-                if (i == 4) {
-                    matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(90.0F));
-                }
-
-                if (i == 5) {
-                    matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(-90.0F));
-                }
-
-                Matrix4f matrix4f = matrices.peek().getPositionMatrix();
-                bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
-                bufferBuilder.vertex(matrix4f, -100.0F, -100.0F, -100.0F).texture(0.0F, 0.0F).color(255, 255, 63, 255).next();
-                bufferBuilder.vertex(matrix4f, -100.0F, -100.0F, 100.0F).texture(0.0F, 16.0F).color(255, 255, 63, 255).next();
-                bufferBuilder.vertex(matrix4f, 100.0F, -100.0F, 100.0F).texture(16.0F, 16.0F).color(255, 255, 63, 255).next();
-                bufferBuilder.vertex(matrix4f, 100.0F, -100.0F, -100.0F).texture(16.0F, 0.0F).color(255, 255, 63, 255).next();
-                tessellator.draw();
-                matrices.pop();
-            }
-
             RenderSystem.enableBlend();
             RenderSystem.blendFuncSeparate(
                     GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO
             );
 
-            float k2 = 150.0F;
+            RenderSystem.setShaderColor(0.15f, 0.12f, 0.08f, 1f);
+            vb1.bind();
+            vb1.draw(matrices.peek().getPositionMatrix(), projectionMatrix, GameRenderer.getPositionProgram());
+
+            matrices.translate(0, -30, 0);
+            RenderSystem.setShaderColor(0, 0.08f, 0.08f, 1f);
+            vb1.draw(matrices.peek().getPositionMatrix(), projectionMatrix, GameRenderer.getPositionProgram());
+            VertexBuffer.unbind();
+
+            RenderSystem.setShaderColor(1, 1, 1, 1);
+
+            RenderSystem.defaultBlendFunc();
+            RenderSystem.disableBlend();
+            RenderSystem.depthMask(true);
+
+            matrices.pop();
+        }
+
+        float[] rs = new float[]{0.8f, 1f, 1f};
+        float[] gs = new float[]{1f, 0.8f, 1f};
+        float[] bs = new float[]{1f, 1f, 0.8f};
+
+        VertexBuffer vb = worldRendererAccessor.getStarsBuffer();
+        if(vb != null && !vb.isClosed()) {
+            RenderSystem.depthMask(false);
+            RenderSystem.enableBlend();
+            RenderSystem.blendFuncSeparate(
+                    GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO
+            );
+
+            for(int i = 0; i < 12; i++) {
+                int j = i % 3;
+                int k = i / 3;
+
+                int n = 20000 * (k + 1);
+                matrices.push();
+                float angle = ((System.currentTimeMillis() % n) / (float)(n) + i / 12f) * 2 * MathHelper.PI;
+                matrices.translate(0, Math.sin(angle) * 20 * k, 0);
+                matrices.multiply(new Quaternionf().rotateY(angle).rotateZ(Math.sin(angle) * 0.2f * k));
+
+                RenderSystem.setShaderColor(rs[j], gs[j], bs[j], 0.75f);
+                vb.bind();
+                vb.draw(matrices.peek().getPositionMatrix(), projectionMatrix, GameRenderer.getPositionProgram());
+
+                matrices.pop();
+            }
+            RenderSystem.setShaderColor(1, 1, 1, 1);
+            VertexBuffer.unbind();
+
+            RenderSystem.defaultBlendFunc();
+            RenderSystem.disableBlend();
+            RenderSystem.depthMask(true);
+        }
+
+        RenderSystem.depthMask(false);
+        RenderSystem.setShader(GameRenderer::getPositionTexColorProgram);
+        RenderSystem.setShaderTexture(0, new Identifier("textures/environment/end_sky.png"));
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferBuilder = tessellator.getBuffer();
+
+        /*
+        for(int i = 0; i < 6; ++i) {
+            matrices.push();
+            if (i == 1) {
+                matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90.0F));
+            }
+
+            if (i == 2) {
+                matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90.0F));
+            }
+
+            if (i == 3) {
+                matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180.0F));
+            }
+
+            if (i == 4) {
+                matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(90.0F));
+            }
+
+            if (i == 5) {
+                matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(-90.0F));
+            }
+
+            Matrix4f matrix4f = matrices.peek().getPositionMatrix();
+            bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
+            bufferBuilder.vertex(matrix4f, -100.0F, -100.0F, -100.0F).texture(0.0F, 0.0F).color(255, 255, 63, 255).next();
+            bufferBuilder.vertex(matrix4f, -100.0F, -100.0F, 100.0F).texture(0.0F, 16.0F).color(255, 255, 63, 255).next();
+            bufferBuilder.vertex(matrix4f, 100.0F, -100.0F, 100.0F).texture(16.0F, 16.0F).color(255, 255, 63, 255).next();
+            bufferBuilder.vertex(matrix4f, 100.0F, -100.0F, -100.0F).texture(16.0F, 0.0F).color(255, 255, 63, 255).next();
+            tessellator.draw();
+            matrices.pop();
+        }
+
+         */
+
+        RenderSystem.enableBlend();
+        RenderSystem.blendFuncSeparate(
+                GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO
+        );
+
+        float k2 = 50.0F;
+        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
+        RenderSystem.setShaderTexture(0, new Identifier("textures/environment/sun.png"));
+        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+
+        for(int i = 0; i < 7; i++) {
+            matrices.push();
+            int n = 300000;
+            float angle = ((System.currentTimeMillis() % n) / (float)n + (i / 7f)) * MathHelper.PI * 2;
+            matrices.multiply(new Quaternionf().rotateY(-angle));
+            matrices.translate(13, 0, 0);
+
             Matrix4f matrix4f2 = matrices.peek().getPositionMatrix();
-            RenderSystem.setShader(GameRenderer::getPositionTexProgram);
-            RenderSystem.setShaderTexture(0, new Identifier("textures/environment/sun.png"));
-            bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
             bufferBuilder.vertex(matrix4f2, -k2, 100.0F, -k2).texture(0.0F, 0.0F).next();
             bufferBuilder.vertex(matrix4f2, k2, 100.0F, -k2).texture(1.0F, 0.0F).next();
             bufferBuilder.vertex(matrix4f2, k2, 100.0F, k2).texture(1.0F, 1.0F).next();
             bufferBuilder.vertex(matrix4f2, -k2, 100.0F, k2).texture(0.0F, 1.0F).next();
-            BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
+            matrices.pop();
+        }
 
-            RenderSystem.defaultBlendFunc();
-            RenderSystem.depthMask(true);
-            RenderSystem.disableBlend();
+        RenderSystem.setShaderColor(0.5f, 0.5f, 0.5f, 1);
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
+        RenderSystem.setShaderColor(1, 1, 1, 1);
+
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.depthMask(true);
+        RenderSystem.disableBlend();
+
+        RenderSystem.setShaderFogStart(fogStart);
     }
 
     public static void doRender(WorldRenderContext worldRenderContext, boolean debugMode_General) {

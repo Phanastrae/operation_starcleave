@@ -10,18 +10,26 @@ uniform vec2 ScreenSize;
 in float vertexDistance;
 in vec4 vertexColor;
 in vec2 texCoord0;
+in vec2 localPos;
 
 in float[9] damage;
 
 out vec4 fragColor;
 
+#define PI 3.14159265
+
 float rand(vec2 vec){
     return fract(sin(dot(vec, vec2(12.9898, 78.233))) * 43758.5453);
 }
 
-void main() {
-    float PI = 3.14159265;
+vec3 rainbow(float f) {
+    float r = sin((f) * 2. * PI) * 0.2 + 0.8;
+    float g = sin((f + 1./3.) * 2. * PI) * 0.2 + 0.8;
+    float b = sin((f + 2./3.) * 2. * PI) * 0.2 + 0.8;
+    return vec3(r, g, b);
+}
 
+void main() {
     int TILE_SIZE_PIXELS = 16;
 
     float x = (floor(texCoord0.x * TILE_SIZE_PIXELS) + 0.5) / TILE_SIZE_PIXELS;
@@ -65,7 +73,7 @@ void main() {
     }
 
     float threshold = 0.25;
-    // distFromBorder ranges from -1 to 1, with 0 at the threshold, -1 outside, -1 inside
+    // distFromBorder ranges from -1 to 1, with 0 at the threshold, -1 outside, 1 inside
     float distFromBorder = 0;
     if(damageAmount < threshold) {
         distFromBorder = (damageAmount - threshold) / threshold;
@@ -85,6 +93,7 @@ void main() {
             discard;
         } else {
             absDist += random;
+
             if(absDist > 1) {
                 absDist = 1;
             }
@@ -92,9 +101,12 @@ void main() {
         }
     }
 
-    vec3 borderColor = vec3(1., 1., 0.7);
-    vec3 edgeColor = vec3(0.5, 0.4, 0.1);
-    float l = min(absDist * 2., 1);
+    float f1 = sin(localPos.x * 2. * PI);
+    float f2 = sin(localPos.y * 2. * PI);
+    float f3 = f1*f2 + (GameTime * 100.) * 2. * PI;
+    vec3 borderColor = rainbow(f3) * 0.7 + 0.3;
+    vec3 edgeColor = rainbow(f3 + GameTime * 150 * 2 * PI) * 0.5;
+    float l = min(absDist * 2., 1.);
     vec3 color = borderColor + (edgeColor - borderColor) * l;
 
     if(a != 1.) {

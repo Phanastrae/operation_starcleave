@@ -19,6 +19,7 @@ uniform int FogShape;
 out float vertexDistance;
 out vec4 vertexColor;
 out vec2 texCoord0;
+out vec2 localPos;
 
 out float[9] damage;
 
@@ -45,4 +46,6 @@ void main() {
     damage[8] = (l1Byte & 0x7) / 7.;
 
     vertexColor = vec4(1);
+
+    localPos = vec2(Position.x / 32., Position.z / 32.);
 }

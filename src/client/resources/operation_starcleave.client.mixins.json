@@ -8,6 +8,7 @@
     "InGameHudMixin",
     "LightmapTextureManagerMixin",
     "SmithingScreenMixin",
+    "WorldRendererAccessor",
     "WorldRendererMixin"
   ],
   "injectors": {
