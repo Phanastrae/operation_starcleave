@@ -12,9 +12,9 @@ public class UpdateFirmamentSubRegionS2CPacket implements FabricPacket {
     public final long id;
     public final FirmamentSubRegionData subRegionData;
 
-    public UpdateFirmamentSubRegionS2CPacket(FirmamentSubRegion subRegion) {
-        this.id = subRegion.getPosAsLong();
-        this.subRegionData = new FirmamentSubRegionData(subRegion);
+    public UpdateFirmamentSubRegionS2CPacket(long id, FirmamentSubRegionData data) {
+        this.id = id;
+        this.subRegionData = data;
     }
 
     public UpdateFirmamentSubRegionS2CPacket(PacketByteBuf buf) {

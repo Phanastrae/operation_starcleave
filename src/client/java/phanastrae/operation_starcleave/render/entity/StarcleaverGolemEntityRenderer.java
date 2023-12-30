@@ -35,7 +35,11 @@ public class StarcleaverGolemEntityRenderer extends MobEntityRenderer<Starcleave
 
     @Override
     public boolean shouldRender(StarcleaverGolemEntity mobEntity, Frustum frustum, double d, double e, double f) {
-        if(mobEntity.isIgnited() || mobEntity.isPlummeting()) return true; // TODO
+        if(mobEntity.isIgnited() || mobEntity.isPlummeting()) {
+            if(frustum.isVisible(mobEntity.getVisibilityBoundingBox())) {
+                return true;
+            }
+        }
 
         return super.shouldRender(mobEntity, frustum, d, e, f);
     }

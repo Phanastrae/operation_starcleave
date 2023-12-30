@@ -7,7 +7,9 @@ import net.minecraft.client.render.BufferBuilderStorage;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.resource.ResourceManager;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -15,6 +17,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import phanastrae.operation_starcleave.render.OperationStarcleaveWorldRenderer;
+import phanastrae.operation_starcleave.render.firmament.FirmamentBuiltSubRegionStorage;
+import phanastrae.operation_starcleave.world.firmament.Firmament;
+import phanastrae.operation_starcleave.world.firmament.SubRegionPos;
 
 @Mixin(WorldRenderer.class)
 public class WorldRendererMixin implements OperationStarcleaveWorldRenderer {
@@ -23,6 +28,7 @@ public class WorldRendererMixin implements OperationStarcleaveWorldRenderer {
     @Shadow
     private MinecraftClient client;
 
+    @Shadow private @Nullable ClientWorld world;
     Framebuffer firmamentFramebuffer;
 
     @Inject(method = "<init>", at = @At("RETURN"))
@@ -51,6 +57,11 @@ public class WorldRendererMixin implements OperationStarcleaveWorldRenderer {
         if (this.firmamentFramebuffer != null) {
             this.firmamentFramebuffer.resize(width, height, MinecraftClient.IS_SYSTEM_MAC);
         }
+    }
+
+    @Inject(method = "reload()V", at = @At("RETURN"))
+    private void operation_starcleave$reload(CallbackInfo ci) {
+        FirmamentBuiltSubRegionStorage.getInstance().forEach((firmamentBuiltSubRegionHolder -> firmamentBuiltSubRegionHolder.build(Firmament.fromWorld(this.world), new SubRegionPos(firmamentBuiltSubRegionHolder.id))));
     }
 
     @Override

@@ -6,15 +6,15 @@ public class FirmamentRegionHolder {
 
     private final FirmamentRegion firmamentRegion;
     private long lastAccessTime;
-    private FirmamentRegionState state;
+    volatile private FirmamentRegionState state;
 
     public FirmamentRegionHolder(FirmamentRegion firmamentRegion) {
         this.firmamentRegion = firmamentRegion;
-        setState(FirmamentRegionState.UNINITIALISED);
+        setState(FirmamentRegionState.NOT_STARTED);
     }
 
     public enum FirmamentRegionState {
-        UNINITIALISED,
+        NOT_STARTED,
         LOADING,
         READY_TO_START,
         STARTED

@@ -4,18 +4,12 @@
 
 uniform sampler2D Sampler0;
 
-uniform vec4 ColorModulator;
-uniform float FogStart;
-uniform float FogEnd;
-uniform vec4 FogColor;
-
 uniform float GameTime;
 uniform vec2 ScreenSize;
 
 in float vertexDistance;
 in vec4 vertexColor;
 in vec2 texCoord0;
-in vec4 normal;
 
 in float[9] damage;
 
@@ -103,9 +97,9 @@ void main() {
     float l = min(absDist * 2., 1);
     vec3 color = borderColor + (edgeColor - borderColor) * l;
 
-    fragColor = vec4(color, a);
-
     if(a != 1.) {
         fragColor = texture(Sampler0, gl_FragCoord.xy / ScreenSize.xy);
+    } else {
+        fragColor = vec4(color, a);
     }
 }

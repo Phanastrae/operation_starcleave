@@ -3,6 +3,7 @@ package phanastrae.operation_starcleave.world.firmament;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.util.TriConsumer;
 import phanastrae.operation_starcleave.network.packet.s2c.UpdateFirmamentSubRegionS2CPacket;
 
 import java.nio.ByteBuffer;
@@ -50,6 +51,8 @@ public class FirmamentSubRegion implements FirmamentAccess {
     boolean shouldUpdate = false;
 
     boolean pendingClientUpdate = false;
+
+    boolean hadDamageLastCheck = false;
 
     // world coords of minimum x-z corner
     public final int x;
@@ -119,6 +122,17 @@ public class FirmamentSubRegion implements FirmamentAccess {
         for(int i = 0; i < TILES; i++) {
             for(int j = 0; j < TILES; j++) {
                 method.accept(i * TILE_SIZE, j * TILE_SIZE);
+            }
+        }
+    }
+
+    public void forEachPosition(TriConsumer<Integer, Integer, Boolean> method) {
+        for(int i = 0; i < TILES; i++) {
+            boolean b1 = i == 0 || i == TILES - 1;
+            for(int j = 0; j < TILES; j++) {
+                boolean b2 = j == 0 || j == TILES - 1;
+                boolean onBorder = b1 || b2;
+                method.accept(i * TILE_SIZE, j * TILE_SIZE, onBorder);
             }
         }
     }
@@ -269,6 +283,7 @@ public class FirmamentSubRegion implements FirmamentAccess {
                 this.damage[i][j] = byteBuffer.getFloat();
             }
         }
+        checkDamage();
     }
 
     public void flushUpdates() {
@@ -277,8 +292,26 @@ public class FirmamentSubRegion implements FirmamentAccess {
             World world = this.firmamentRegion.firmament.getWorld();
             if(world instanceof ServerWorld serverWorld) {
                 // TODO limit which players get updated
-                serverWorld.getPlayers().forEach(serverPlayerEntity -> ServerPlayNetworking.send(serverPlayerEntity, new UpdateFirmamentSubRegionS2CPacket(this)));
+                long id = this.getPosAsLong();
+                FirmamentSubRegionData data = new FirmamentSubRegionData(this);
+                serverWorld.getPlayers().forEach(serverPlayerEntity -> ServerPlayNetworking.send(serverPlayerEntity, new UpdateFirmamentSubRegionS2CPacket(id, data)));
             }
         }
+    }
+
+    public void checkDamage() {
+        for(int i = 0; i < TILES; i++) {
+            for(int j = 0; j < TILES; j++) {
+                if(damage[i][j] != 0) {
+                    this.hadDamageLastCheck = true;
+                    return;
+                }
+            }
+        }
+        this.hadDamageLastCheck = false;
+    }
+
+    public boolean hadDamageLastCheck() {
+        return this.hadDamageLastCheck;
     }
 }

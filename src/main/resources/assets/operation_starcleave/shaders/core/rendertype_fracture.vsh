@@ -10,41 +10,23 @@ in ivec2 UV1;
 in ivec2 UV2;
 in vec3 Normal;
 
-uniform sampler2D Sampler1;
-uniform sampler2D Sampler2;
-
 uniform mat4 ModelViewMat;
 uniform mat4 ProjMat;
+uniform vec3 ChunkOffset;
 uniform mat3 IViewRotMat;
 uniform int FogShape;
-
-uniform vec3 Light0_Direction;
-uniform vec3 Light1_Direction;
 
 out float vertexDistance;
 out vec4 vertexColor;
 out vec2 texCoord0;
-out vec4 normal;
 
 out float[9] damage;
 
 void main() {
-    vec4 pos2 = ModelViewMat * vec4(Position, 1.0);
-    vec4 norm2 = ModelViewMat * vec4(Normal, 0.0);
-    vec4 horizontalPosition = pos2 - norm2 * dot(Normal.xyz, Position);
+    gl_Position = ProjMat * ModelViewMat * vec4(Position + ChunkOffset, 1.0);
 
-    vec4 pos = vec4(Position, 1.0);
-    float dh = dot(horizontalPosition, horizontalPosition);
-
-    //pos2 += norm2 * dh / 1024.;
-
-    //pos2 += horizontalPosition;
-
-    gl_Position = ProjMat * pos2;
-
-    vertexDistance = fog_distance(ModelViewMat, IViewRotMat * Position, FogShape);
+    vertexDistance = fog_distance(ModelViewMat, IViewRotMat * (Position + ChunkOffset), FogShape);
     texCoord0 = UV0;
-    normal = ProjMat * ModelViewMat * vec4(Normal, 0.0);
 
     int rByte = int(Color.r * 255f);
     int gByte = int(Color.g * 255f);
@@ -63,6 +45,4 @@ void main() {
     damage[8] = l1Byte / 15.;
 
     vertexColor = vec4(1);
-
-
 }

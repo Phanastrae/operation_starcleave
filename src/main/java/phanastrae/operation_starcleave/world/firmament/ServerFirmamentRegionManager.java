@@ -8,7 +8,6 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.thread.ThreadExecutor;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import phanastrae.operation_starcleave.OperationStarcleave;
 
 import java.util.ArrayList;
 import java.util.List;

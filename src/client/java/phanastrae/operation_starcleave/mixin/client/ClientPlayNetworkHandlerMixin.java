@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import phanastrae.operation_starcleave.network.OperationStarcleaveClientPlayNetworkHandler;
+import phanastrae.operation_starcleave.render.firmament.FirmamentBuiltSubRegionStorage;
 
 @Mixin(ClientPlayNetworkHandler.class)
 public class ClientPlayNetworkHandlerMixin implements OperationStarcleaveClientPlayNetworkHandler {
@@ -21,6 +22,10 @@ public class ClientPlayNetworkHandlerMixin implements OperationStarcleaveClientP
         this.operation_starcleave$firmamentRegionBatchSizeCalculator = new ChunkBatchSizeCalculator();
     }
 
+    @Inject(method = "unloadWorld", at = @At("RETURN"))
+    private void operation_starcleave$unloadWorld(CallbackInfo ci) {
+        FirmamentBuiltSubRegionStorage.getInstance().clear();
+    }
 
     @Override
     public ChunkBatchSizeCalculator operation_starcleave$getFirmamentRegionBatchSizeCalculator() {

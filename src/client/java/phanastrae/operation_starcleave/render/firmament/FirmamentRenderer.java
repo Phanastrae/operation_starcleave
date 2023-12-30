@@ -5,14 +5,20 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
+import net.minecraft.client.gl.GlUniform;
+import net.minecraft.client.gl.ShaderProgram;
+import net.minecraft.client.gl.VertexBuffer;
 import net.minecraft.client.render.*;
+import net.minecraft.client.util.Window;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.profiler.Profiler;
+import net.minecraft.world.World;
 import org.joml.*;
 import org.joml.Math;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
@@ -20,37 +26,71 @@ import phanastrae.operation_starcleave.render.OperationStarcleaveRenderLayers;
 import phanastrae.operation_starcleave.render.OperationStarcleaveWorldRenderer;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 import phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion;
+import phanastrae.operation_starcleave.world.firmament.RegionPos;
+import phanastrae.operation_starcleave.world.firmament.SubRegionPos;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class FirmamentRenderer {
     public static void render(WorldRenderContext worldRenderContext) {
+        Frustum frustum = worldRenderContext.frustum();
+        Camera camera = worldRenderContext.camera();
+        World world = worldRenderContext.world();
+        if(frustum == null || camera == null) return;
+
+        double camx = camera.getPos().x;
+        double camz = camera.getPos().z;
+        double firmHeight = world.getTopY() + 16;
+        Box box = new Box(camx - 512, firmHeight - 1, camz - 512, camx + 512, firmHeight + 1, camz + 512);
+        if(!frustum.isVisible(box)) {
+            return;
+        }
+
         MinecraftClient client = MinecraftClient.getInstance();
+        Profiler profiler = client.getProfiler();
         PlayerEntity player = client.player;
         boolean debugMode_General = client.getDebugHud().shouldShowDebugHud() && player != null && player.getMainHandStack().isOf(OperationStarcleaveItems.FIRMAMENT_MANIPULATOR);
 
         if(debugMode_General) {
+            profiler.push("starcleave_firmament");
+            profiler.push("debug");
             // TODO serverside firmament regions broke most of debug, either fix or remove this at some point
             doRender(worldRenderContext, debugMode_General);
+            profiler.pop();
+            profiler.pop();
             return;
         }
 
         if(worldRenderContext.consumers() instanceof VertexConsumerProvider.Immediate immediate) {
             immediate.draw();
-            Framebuffer firmamentFrameBuffer = ((OperationStarcleaveWorldRenderer)worldRenderContext.worldRenderer()).operation_starcleave$getFirmamentFramebuffer();
-            firmamentFrameBuffer.setClearColor(1, 1, 1, 1);
-            firmamentFrameBuffer.clear(MinecraftClient.IS_SYSTEM_MAC);
+            profiler.push("starcleave_firmament");
+            profiler.push("check");
 
-            OperationStarcleaveRenderLayers.FIRMAMENT_SKY_TARGET.startDrawing();
-            renderFirmamentSky(worldRenderContext);
-            immediate.draw();
-            OperationStarcleaveRenderLayers.FIRMAMENT_SKY_TARGET.endDrawing();
+            AtomicBoolean renderSkybox = new AtomicBoolean(false);
+            FirmamentBuiltSubRegionStorage.getInstance().forEach((firmamentBuiltSubRegionHolder -> {
+                if (!renderSkybox.get()) {
+                    FirmamentBuiltSubRegion builtSubRegion = firmamentBuiltSubRegionHolder.getBuiltSubRegion();
+                    if (builtSubRegion != null && frustum.isVisible(firmamentBuiltSubRegionHolder.box)) {
+                        renderSkybox.set(true);
+                    }
+                }
+            }));
 
-            int firmamentSkyTexID = firmamentFrameBuffer.getColorAttachment();
-            int currentTexID = RenderSystem.getShaderTexture(0);
+            if(renderSkybox.get()) {
+                profiler.swap("sky");
+                Framebuffer firmamentFrameBuffer = ((OperationStarcleaveWorldRenderer)worldRenderContext.worldRenderer()).operation_starcleave$getFirmamentFramebuffer();
+                firmamentFrameBuffer.setClearColor(1, 1, 1, 1);
+                firmamentFrameBuffer.clear(MinecraftClient.IS_SYSTEM_MAC);
+                OperationStarcleaveRenderLayers.FIRMAMENT_SKY_TARGET.startDrawing();
+                renderFirmamentSky(worldRenderContext);
+                immediate.draw();
+                OperationStarcleaveRenderLayers.FIRMAMENT_SKY_TARGET.endDrawing();
 
-            RenderSystem.setShaderTexture(0, firmamentSkyTexID);
-            doRender(worldRenderContext, false);
-            immediate.draw();
-            RenderSystem.setShaderTexture(0, currentTexID);
+                profiler.swap("fracture");
+                renderBakedSubRegions(worldRenderContext);
+            }
+            profiler.pop();
+            profiler.pop();
         }
     }
 
@@ -126,9 +166,6 @@ public class FirmamentRenderer {
         Entity e = client.cameraEntity;
         if(e == null) return;
 
-        Profiler profiler = client.getProfiler();
-        profiler.push("starcleave_fracture");
-
         boolean debugMode_Activity = client.getEntityRenderDispatcher().shouldRenderHitboxes();
 
         MatrixStack matrixStack = worldRenderContext.matrixStack();
@@ -142,20 +179,28 @@ public class FirmamentRenderer {
         matrixStack.translate(ex - camPos.x, - camPos.y, ez - camPos.z);
 
         int tileSize = FirmamentSubRegion.TILE_SIZE;
+        RegionPos camRegionPos = RegionPos.fromWorldCoords(ex, ez);
         firmament.forEachRegion((firmamentRegion -> {
-            int rdx = firmamentRegion.x + 256 - ex;
-            int rdz = firmamentRegion.z + 256 - ez;
-            if(rdx*rdx + rdz*rdz > 1024*1024) {
+            RegionPos regionPos = RegionPos.fromWorldCoords(firmamentRegion.x, firmamentRegion.z);
+            int drx = regionPos.rx - camRegionPos.rx;
+            int drz = regionPos.rz - camRegionPos.rz;
+            if(drx*drx > 1 || drz*drz > 1) {{
+                // only render the 3x3 region are around the player
                 return;
-            }
+            }}
+            int[][] damageArray = new int[3][3];
             firmamentRegion.forEachSubRegion((firmamentSubRegion -> {
+                if(!firmamentSubRegion.hadDamageLastCheck()) {
+                    return;
+                }
+
                 int srdx = firmamentSubRegion.x + 4 - ex;
                 int srdz = firmamentSubRegion.z + 4 - ez;
                 if(srdx*srdx + srdz*srdz > 512*512) {
                     return;
                 }
 
-                firmamentSubRegion.forEachPosition((x, z) -> {
+                firmamentSubRegion.forEachPosition((x, z, onBorder) -> {
                     int worldX = x + firmamentSubRegion.x;
                     int worldZ = z + firmamentSubRegion.z;
 
@@ -174,22 +219,34 @@ public class FirmamentRenderer {
 
                         renderQuadDebug(matrixStack.peek().getPositionMatrix(),
                                 vertexConsumer,
-                                worldX + f, worldZ + f,
-                                worldX + tileSize - f, worldZ + tileSize - f,
+                                worldX - ex + f, worldZ - ez + f,
+                                worldX - ex + tileSize - f, worldZ - ez + tileSize - f,
                                 e.getWorld().getTopY() + 16 + displacementY,
                                 r,
                                 g,
                                 b,
                                 1f);
                     } else {
+                        if(onBorder) {
+                            for (int i = -1; i <= 1; i++) {
+                                for (int j = -1; j <= 1; j++) {
+                                    damageArray[i + 1][j + 1] = (int) (firmament.getDamage(worldX + i * tileSize, worldZ + j * tileSize) * 15);
+                                }
+                            }
+                        } else {
+                            for (int i = -1; i <= 1; i++) {
+                                for (int j = -1; j <= 1; j++) {
+                                    damageArray[i + 1][j + 1] = (int) (firmamentSubRegion.getDamage(x + i * tileSize, z + j * tileSize) * 15);
+                                }
+                            }
+                        }
+
                         boolean dam = false;
-                        int[][] damageArray = new int[3][3];
-                        for(int i = -1; i <= 1; i++) {
-                            for(int j = -1; j <= 1; j++) {
-                                int ldam = (int)(firmament.getDamage(worldX+i*tileSize, worldZ+j*tileSize)*15);
-                                if(ldam != 0) {
-                                    damageArray[i + 1][j + 1] = ldam;
+                        for(int i = 0; i < 3 && !dam; i++) {
+                            for(int j = 0; j < 3; j++) {
+                                if(damageArray[i][j] != 0) {
                                     dam = true;
+                                    break;
                                 }
                             }
                         }
@@ -219,8 +276,6 @@ public class FirmamentRenderer {
         }));
 
         matrixStack.pop();
-
-        profiler.pop();
     }
 
     public static void renderQuadDebug(Matrix4f positionMatrix, VertexConsumer vertexConsumer, float x1, float z1, float x2, float z2, float y, float r, float g, float b, float a) {
@@ -241,5 +296,85 @@ public class FirmamentRenderer {
         vertexConsumer.vertex(vec.x, vec.y, vec.z, r, g, b, a, u2, v1, 0, light, norm.x, norm.y, norm.z);
         vec = new Vector4f(x2, y, z2, 1).mul(positionMatrix);
         vertexConsumer.vertex(vec.x, vec.y, vec.z, r, g, b, a, u2, v2, 0, light, norm.x, norm.y, norm.z);
+    }
+
+    public static void renderBakedSubRegions(WorldRenderContext worldRenderContext) {
+        Frustum frustum = worldRenderContext.frustum();
+        if(frustum == null) return;
+
+        Framebuffer firmamentFrameBuffer = ((OperationStarcleaveWorldRenderer)worldRenderContext.worldRenderer()).operation_starcleave$getFirmamentFramebuffer();
+        int currentTexID = RenderSystem.getShaderTexture(0);
+        int firmamentSkyTexID = firmamentFrameBuffer.getColorAttachment();
+
+        int height = worldRenderContext.world().getTopY() + 16;
+
+        MatrixStack modelViewStack = RenderSystem.getModelViewStack();
+        RenderLayer renderLayer = OperationStarcleaveRenderLayers.getFracture();
+
+        renderLayer.startDrawing();
+        modelViewStack.push();
+        modelViewStack.loadIdentity();
+        modelViewStack.multiplyPositionMatrix(worldRenderContext.matrixStack().peek().getPositionMatrix());
+        Vec3d camPos = worldRenderContext.camera().getPos();
+
+        ShaderProgram shaderProgram = RenderSystem.getShader();
+
+        if(shaderProgram != null) {
+            RenderSystem.setShaderTexture(0, firmamentSkyTexID);
+
+            int n = RenderSystem.getShaderTexture(0);
+            shaderProgram.addSampler("Sampler" + 0, n);
+
+            if (shaderProgram.modelViewMat != null) {
+                shaderProgram.modelViewMat.set(modelViewStack.peek().getPositionMatrix());
+            }
+
+            if (shaderProgram.projectionMat != null) {
+                shaderProgram.projectionMat.set(RenderSystem.getProjectionMatrix());
+            }
+
+            if (shaderProgram.gameTime != null) {
+                shaderProgram.gameTime.set(RenderSystem.getShaderGameTime());
+            }
+
+            if (shaderProgram.screenSize != null) {
+                Window window = MinecraftClient.getInstance().getWindow();
+                shaderProgram.screenSize.set((float)window.getFramebufferWidth(), (float)window.getFramebufferHeight());
+            }
+
+            shaderProgram.bind();
+            GlUniform glUniform = shaderProgram.chunkOffset;
+
+            FirmamentBuiltSubRegionStorage.getInstance().forEach((firmamentBuiltSubRegionHolder -> {
+                FirmamentBuiltSubRegion builtSubRegion = firmamentBuiltSubRegionHolder.getBuiltSubRegion();
+                if(builtSubRegion != null && frustum.isVisible(firmamentBuiltSubRegionHolder.box)) {
+                    SubRegionPos subRegionPos = new SubRegionPos(firmamentBuiltSubRegionHolder.id);
+                    double dx = (subRegionPos.worldX + FirmamentSubRegion.SUBREGION_SIZE / 2f) - camPos.x;
+                    double dz = (subRegionPos.worldZ + FirmamentSubRegion.SUBREGION_SIZE / 2f) - camPos.z;
+                    double distSqr = dx*dx + dz*dz;
+                    if(distSqr < 512*512) {
+                        if (glUniform != null) {
+                            glUniform.set((float)((double)subRegionPos.worldX - camPos.x), (float)((double)height - camPos.y), (float)((double)subRegionPos.worldZ - camPos.z));
+                            glUniform.upload();
+                        }
+
+                        builtSubRegion.bind();
+                        builtSubRegion.draw();
+                    }
+                }
+            }));
+            if (glUniform != null) {
+                glUniform.set(0.0F, 0.0F, 0.0F);
+            }
+
+            VertexBuffer.unbind();
+
+            shaderProgram.unbind();
+        }
+
+        modelViewStack.pop();
+        renderLayer.endDrawing();
+
+        RenderSystem.setShaderTexture(0, currentTexID);
     }
 }

@@ -8,12 +8,12 @@ public class SubRegionPos {
     public final int worldX;
     public final int worldZ;
 
-    public SubRegionPos(int rx, int rz) {
-        this.srx = rx;
-        this.srz = rz;
-        this.id = (long)rx & 4294967295L | ((long)rz & 4294967295L) << 32;
-        this.worldX = rx << FirmamentRegion.SUBREGION_SIZE_BITS;
-        this.worldZ = rz << FirmamentRegion.SUBREGION_SIZE_BITS;
+    public SubRegionPos(int srx, int srz) {
+        this.srx = srx;
+        this.srz = srz;
+        this.id = (long)srx & 4294967295L | ((long)srz & 4294967295L) << 32;
+        this.worldX = srx << FirmamentRegion.SUBREGION_SIZE_BITS;
+        this.worldZ = srz << FirmamentRegion.SUBREGION_SIZE_BITS;
     }
 
     public SubRegionPos(long id) {
