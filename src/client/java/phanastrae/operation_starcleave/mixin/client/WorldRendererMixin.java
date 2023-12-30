@@ -61,7 +61,7 @@ public class WorldRendererMixin implements OperationStarcleaveWorldRenderer {
 
     @Inject(method = "reload()V", at = @At("RETURN"))
     private void operation_starcleave$reload(CallbackInfo ci) {
-        FirmamentBuiltSubRegionStorage.getInstance().forEach((firmamentBuiltSubRegionHolder -> firmamentBuiltSubRegionHolder.build(Firmament.fromWorld(this.world), new SubRegionPos(firmamentBuiltSubRegionHolder.id))));
+        //FirmamentBuiltSubRegionStorage.getInstance().forEach((firmamentBuiltSubRegionHolder -> firmamentBuiltSubRegionHolder.build(Firmament.fromWorld(this.world), new SubRegionPos(firmamentBuiltSubRegionHolder.id))));
     }
 
     @Override

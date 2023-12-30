@@ -24,7 +24,7 @@ public class FirmamentBuiltSubRegion {
             for(int z = 0; z < FirmamentSubRegion.TILES; z++) {
                 for (int i = -1; i <= 1; i++) {
                     for (int j = -1; j <= 1; j++) {
-                        damageArray[i+1][j+1] = (int)((firmamentLocalSubRegionCopy.getDamage((x + i) * FirmamentSubRegion.TILE_SIZE, (z + j) * FirmamentSubRegion.TILE_SIZE)) * 15);
+                        damageArray[i+1][j+1] = firmamentLocalSubRegionCopy.getDamage((x + i) * FirmamentSubRegion.TILE_SIZE, (z + j) * FirmamentSubRegion.TILE_SIZE);
                     }
                 }
 
@@ -39,11 +39,11 @@ public class FirmamentBuiltSubRegion {
                 }
                 if(!dam) continue;
 
-                int rbyte = (damageArray[0][0] & 0xF) | ((damageArray[0][1] & 0xF) << 4);
-                int gbyte = (damageArray[0][2] & 0xF) | ((damageArray[1][0] & 0xF) << 4);
-                int bbyte = (damageArray[1][1] & 0xF) | ((damageArray[1][2] & 0xF) << 4);
-                int abyte = (damageArray[2][0] & 0xF) | ((damageArray[2][1] & 0xF) << 4);
-                int lbyte = (damageArray[2][2] & 0xF);
+                int rbyte = (damageArray[0][0] & 0x7) | ((damageArray[0][1] & 0x7) << 4);
+                int gbyte = (damageArray[0][2] & 0x7) | ((damageArray[1][0] & 0x7) << 4);
+                int bbyte = (damageArray[1][1] & 0x7) | ((damageArray[1][2] & 0x7) << 4);
+                int abyte = (damageArray[2][0] & 0x7) | ((damageArray[2][1] & 0x7) << 4);
+                int lbyte = (damageArray[2][2] & 0x7);
                 drawQuad(bufferBuilder,
                         x*FirmamentSubRegion.TILE_SIZE, z*FirmamentSubRegion.TILE_SIZE,
                         (x+1)*FirmamentSubRegion.TILE_SIZE, (z+1)*FirmamentSubRegion.TILE_SIZE,

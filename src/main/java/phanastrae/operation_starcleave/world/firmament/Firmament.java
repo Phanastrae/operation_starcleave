@@ -98,7 +98,7 @@ public class Firmament implements FirmamentAccess {
     }
 
     @Override
-    public float getDrip(int x, int z) {
+    public int getDrip(int x, int z) {
         FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
         if(firmamentRegion != null) {
             return firmamentRegion.getDrip(x, z);
@@ -108,7 +108,7 @@ public class Firmament implements FirmamentAccess {
     }
 
     @Override
-    public float getDamage(int x, int z) {
+    public int getDamage(int x, int z) {
         FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
         if(firmamentRegion != null) {
             return firmamentRegion.getDamage(x, z);
@@ -118,7 +118,7 @@ public class Firmament implements FirmamentAccess {
     }
 
     @Override
-    public float getDisplacement(int x, int z) {
+    public int getDisplacement(int x, int z) {
         FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
         if(firmamentRegion != null) {
             return firmamentRegion.getDisplacement(x, z);
@@ -128,7 +128,7 @@ public class Firmament implements FirmamentAccess {
     }
 
     @Override
-    public float getVelocity(int x, int z) {
+    public int getVelocity(int x, int z) {
         FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
         if(firmamentRegion != null) {
             return firmamentRegion.getVelocity(x, z);
@@ -148,7 +148,7 @@ public class Firmament implements FirmamentAccess {
     }
 
     @Override
-    public void setDrip(int x, int z, float value) {
+    public void setDrip(int x, int z, int value) {
         FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
         if(firmamentRegion != null) {
             firmamentRegion.setDrip(x & FirmamentRegion.REGION_MASK, z & FirmamentRegion.REGION_MASK, value);
@@ -156,7 +156,7 @@ public class Firmament implements FirmamentAccess {
     }
 
     @Override
-    public void setDamage(int x, int z, float value) {
+    public void setDamage(int x, int z, int value) {
         FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
         if(firmamentRegion != null) {
             firmamentRegion.setDamage(x & FirmamentRegion.REGION_MASK, z & FirmamentRegion.REGION_MASK, value);
@@ -164,7 +164,7 @@ public class Firmament implements FirmamentAccess {
     }
 
     @Override
-    public void setDisplacement(int x, int z, float value) {
+    public void setDisplacement(int x, int z, int value) {
         FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
         if(firmamentRegion != null) {
             firmamentRegion.setDisplacement(x & FirmamentRegion.REGION_MASK, z & FirmamentRegion.REGION_MASK, value);
@@ -172,7 +172,7 @@ public class Firmament implements FirmamentAccess {
     }
 
     @Override
-    public void setVelocity(int x, int z, float value) {
+    public void setVelocity(int x, int z, int value) {
         FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
         if(firmamentRegion != null) {
             firmamentRegion.setVelocity(x & FirmamentRegion.REGION_MASK, z & FirmamentRegion.REGION_MASK, value);

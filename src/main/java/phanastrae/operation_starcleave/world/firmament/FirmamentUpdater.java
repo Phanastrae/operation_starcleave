@@ -3,6 +3,8 @@ package phanastrae.operation_starcleave.world.firmament;
 import org.apache.logging.log4j.util.TriConsumer;
 import org.joml.Math;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 import static phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion.TILE_SIZE;
 
 public class FirmamentUpdater {
@@ -14,31 +16,33 @@ public class FirmamentUpdater {
         firmament.forEachActivePosition((x, z) -> {
             float drip = firmament.getDrip(x, z);
             if(drip == 0) return;
-            float damage = firmament.getDamage(x, z);
+            int damage = firmament.getDamage(x, z);
             float displacement = firmament.getDisplacement(x, z);
 
-            float force = - 16 * drip * drip * (1 + damage);
+            float force = 16 * (damage / 7f);
 
             for(int n = 0; n < nCount; n++) {
                 float displacement2 = firmament.getDisplacement(x+nXs[n], z+nZs[n]);
-                float damage2 = firmament.getDamage(x+nXs[n], z+nZs[n]);
+                int damage2 = firmament.getDamage(x+nXs[n], z+nZs[n]);
                 float dDisplacement = displacement2 - displacement;
 
-                float f = (1-damage2) * (1-damage);
-                force += 256 * dDisplacement * nWeights[n] * f;
+                float f = (1 - damage2/7f) * (1 - damage/7f);
+                force += 16 * (dDisplacement / 15f) * nWeights[n] * f;
             }
 
-            force /= 400;
+            force *= (displacement * displacement / 215f + 1) / 2;
 
-            float dv = force;
-            dv = (int)(dv * 32)/32f;
+            float dv = force * (drip / 7f) * 4;
+            if(dv < 0) {
+                dv *= 0.25f;
+            }
 
-            float velocity = firmament.getVelocity(x, z);
-            if(velocity > -4 || dv > 0) {
+            int velocity = firmament.getVelocity(x, z);
+            if(velocity < 7 || dv < 0) {
                 if (dv != 0) {
-                    float newVelocity = Math.clamp(-4, 0, velocity + dv);
+                    int newVelocity = Math.clamp(0, 7, velocity + (int)dv);
                     if(newVelocity != velocity) {
-                        firmament.setVelocity(x, z, velocity);
+                        firmament.setVelocity(x, z, newVelocity);
                         firmament.markActive(x, z);
                     }
                 }
@@ -46,58 +50,54 @@ public class FirmamentUpdater {
         });
 
         firmament.forEachActivePosition((x, z) -> {
-            float d = firmament.getDisplacement(x, z);
-            if(d > -15) {
-                float dh = firmament.getVelocity(x, z);
-                dh = (int) (dh * 1) / 1f;
+            int d = firmament.getDisplacement(x, z);
+            int dh = (firmament.getVelocity(x, z) / 4);
+            if(d < 15) {
 
                 if (dh != 0) {
-                    float newDisplacement = Math.clamp(-15, 0, d + dh);
+                    int newDisplacement = Math.clamp(0, 15, d + dh);
                     if(newDisplacement != d) {
+                        d = newDisplacement;
                         firmament.setDisplacement(x, z, d);
                         firmament.markActive(x, z);
                     }
                 }
             }
 
-            // update damage and drip
-
-            float threshold = Math.clamp(0, 1, -d / 15);
-            threshold = (int)(threshold * 8)/8f;
-
-            float currentDamage = firmament.getDamage(x, z);
-            if (currentDamage < threshold) {
-                firmament.setDamage(x, z, threshold);
-                firmament.markActive(x, z);
-                currentDamage = threshold;
+            // update damage
+            int threshold = Math.clamp(0, 7, dh / 4);
+            if(d == 15) {
+                threshold = firmament.getDamage(x, z) + 1;
+                if(threshold > 7) threshold = 7;
             }
 
-            if(firmament.getDrip(x, z) < currentDamage) {
-                firmament.setDrip(x, z, currentDamage);
+            int currentDamage = firmament.getDamage(x, z);
+            if (currentDamage < threshold) {
+                firmament.setDamage(x, z, threshold);
                 firmament.markActive(x, z);
             }
         });
 
         // spread drip
         firmament.forEachActivePosition((x, z) -> {
-            float drip = firmament.getDrip(x, z);
+            int drip = firmament.getDrip(x, z);
+            AtomicReference<Integer> maxPotentialDrip = new AtomicReference<>(0);
             forEachNeighbor((nx, nz, nWeight) -> {
-                float drip2 = firmament.getDrip(x+nx, z+nz);
-
-                float threshold = drip - 0.1f * Math.sqrt(nx*nx + nz*nz);
-
-                float t = (threshold - drip2) * nWeight;
-                t = (int)(t * 32)/32f;
-                if(t > 0) {
-                    firmament.setDDrip(x+nx, z+nz, t);
+                int nDrip = firmament.getDrip(x+nx, z+nz);
+                int potentialDrip = nDrip - 1;
+                if(potentialDrip > maxPotentialDrip.get()) {
+                    maxPotentialDrip.set(potentialDrip);
                 }
             });
+            if(maxPotentialDrip.get() > drip) {
+                firmament.setDrip(x, z, Math.clamp(drip, 7, maxPotentialDrip.get()));
+            }
         });
         firmament.forEachActivePosition((x, z) -> {
-            float drip = firmament.getDrip(x, z);
+            int drip = firmament.getDrip(x, z);
             float dDrip = firmament.getDDrip(x, z);
-            float newDrip = Math.min(8, drip + dDrip);
-            if(newDrip != drip) {
+            int newDrip = Math.clamp(0, 7, drip + (int)dDrip);
+            if(newDrip > drip) {
                 firmament.setDrip(x, z, drip);
                 firmament.markActive(x, z);
             }
@@ -122,11 +122,11 @@ public class FirmamentUpdater {
     }
 
     public static float dFdxDamage(Firmament firmament, int x, int z) {
-        return (firmament.getDamage(x+1, z) - firmament.getDamage(x-1, z)) / 2;
+        return (firmament.getDamage(x+1, z) - firmament.getDamage(x-1, z)) / 2f;
     }
 
     public static float dFdzDamage(Firmament firmament, int x, int z) {
-        return (firmament.getDamage(x, z+1) - firmament.getDamage(x, z-1)) / 2;
+        return (firmament.getDamage(x, z+1) - firmament.getDamage(x, z-1)) / 2f;
     }
 
     public static float dFdxBigDamage(Firmament firmament, int x, int z) {

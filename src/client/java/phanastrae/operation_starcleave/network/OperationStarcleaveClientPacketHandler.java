@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.network.ChunkBatchSizeCalculator;
 import net.minecraft.client.network.ClientPlayerEntity;
+import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.network.packet.OperationStarcleavePacketTypes;
 import phanastrae.operation_starcleave.network.packet.c2s.AcknowledgeFirmamentRegionDataC2SPacket;
 import phanastrae.operation_starcleave.network.packet.s2c.*;

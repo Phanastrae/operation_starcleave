@@ -35,35 +35,46 @@ public class FirmamentManipulatorItem extends Item {
                 return super.use(world, user, hand);
             }
 
-            if (user.isSneaking()) {
-                // TODO don't clear every single subregion in existence
-                firmament.forEachRegion(firmamentRegion -> firmamentRegion.forEachSubRegion(FirmamentSubRegion::clear));
-            } else {
-                float pitch = Math.toRadians(user.getPitch());
-                if(pitch > 0) return TypedActionResult.fail(itemStack);
-                float yaw = Math.toRadians(user.getYaw());
+            float pitch = Math.toRadians(user.getPitch());
+            if(pitch > 0) return TypedActionResult.fail(itemStack);
+            float yaw = Math.toRadians(user.getYaw());
 
-                float sinYaw = Math.sin(yaw);
-                float cosYaw = Math.cos(yaw);
-                float sinPitch = Math.sin(pitch);
-                float cosPitch = Math.cos(pitch);
+            float sinYaw = Math.sin(yaw);
+            float cosYaw = Math.cos(yaw);
+            float sinPitch = Math.sin(pitch);
+            float cosPitch = Math.cos(pitch);
 
-                Vec3d lookVec = new Vec3d(-sinYaw * cosPitch, -sinPitch, cosYaw * cosPitch);
+            Vec3d lookVec = new Vec3d(-sinYaw * cosPitch, -sinPitch, cosYaw * cosPitch);
 
-                Vec3d pos = user.getPos();
+            Vec3d pos = user.getPos();
 
-                float skyHeight = world.getTopY() + 16;
-                double t = (skyHeight - pos.y) / lookVec.y;
+            float skyHeight = world.getTopY() + 16;
+            double t = (skyHeight - pos.y) / lookVec.y;
+            if(t > 0) {
                 Vec3d target = pos.add(lookVec.multiply(t));
 
-                Random random = user.getRandom();
-                for(int i = 0; i < 10; i++) {
-                    world.addParticle(ParticleTypes.EXPLOSION, target.x+random.nextFloat() * 4 - 2, target.y+random.nextFloat() * 1 - 0.5f, target.z+random.nextFloat() * 4 - 2, 0, 0, 0);
-                }
+                if (user.isSneaking()) {
+                    SubRegionPos subRegionPos = SubRegionPos.fromWorldCoords((int)target.x, (int)target.z);
+                    for(int i = -1; i <= 1; i++) {
+                        for(int j = -1; j <= 1; j++) {
+                            SubRegionPos subRegionPos2 = new SubRegionPos(subRegionPos.srx+i, subRegionPos.srz+j);
+                            FirmamentSubRegion firmamentSubRegion = firmament.getSubRegionFromId(subRegionPos2.id);
+                            if(firmamentSubRegion != null) {
+                                firmamentSubRegion.clear();
+                            }
+                        }
+                    }
+                } else {
 
-                int x = (int)target.x;
-                int z = (int)target.z;
-                formCrack(firmament, x, z, random);
+                    Random random = user.getRandom();
+                    for (int i = 0; i < 10; i++) {
+                        world.addParticle(ParticleTypes.EXPLOSION, target.x + random.nextFloat() * 4 - 2, target.y + random.nextFloat() * 1 - 0.5f, target.z + random.nextFloat() * 4 - 2, 0, 0, 0);
+                    }
+
+                    int x = (int) target.x;
+                    int z = (int) target.z;
+                    formCrack(firmament, x, z, random);
+                }
             }
         }
 
@@ -77,11 +88,16 @@ public class FirmamentManipulatorItem extends Item {
             }
         }
 
-        firmament.setDamage(x, z, (float)Math.clamp(0.6, 1, firmament.getDamage(x, z) + 0.3));
-        firmament.setDamage(x+TILE_SIZE, z, (float)Math.clamp(0.3, 1, firmament.getDamage(x, z) + 0.1));
-        firmament.setDamage(x-TILE_SIZE, z, (float)Math.clamp(0.3, 1, firmament.getDamage(x, z) + 0.1));
-        firmament.setDamage(x, z+TILE_SIZE, (float)Math.clamp(0.3, 1, firmament.getDamage(x, z) + 0.1));
-        firmament.setDamage(x, z-TILE_SIZE, (float)Math.clamp(0.3, 1, firmament.getDamage(x, z) + 0.1));
+        firmament.setDamage(x, z, Math.clamp(6, 7, firmament.getDamage(x, z) + 6));
+        firmament.setDamage(x+TILE_SIZE, z+TILE_SIZE, Math.clamp(2, 7, firmament.getDamage(x+TILE_SIZE, z+TILE_SIZE) + 2));
+        firmament.setDamage(x-TILE_SIZE, z+TILE_SIZE, Math.clamp(2, 7, firmament.getDamage(x-TILE_SIZE, z+TILE_SIZE) + 2));
+        firmament.setDamage(x+TILE_SIZE, z-TILE_SIZE, Math.clamp(2, 7, firmament.getDamage(x+TILE_SIZE, z-TILE_SIZE) + 2));
+        firmament.setDamage(x-TILE_SIZE, z-TILE_SIZE, Math.clamp(2, 7, firmament.getDamage(x-TILE_SIZE, z-TILE_SIZE) + 2));
+        for(int i = -1; i <= 1; i++) {
+            for(int j = -1; j <= 1; j++) {
+                firmament.markActive(x + i * TILE_SIZE, z + j * TILE_SIZE);
+            }
+        }
 
         int rad = 15;
         for(int i = -rad; i <= rad; i++) {
@@ -90,7 +106,7 @@ public class FirmamentManipulatorItem extends Item {
 
                 if(distSqr > rad*rad) continue;
                 float fallOff = 1 - (distSqr)/(rad*rad);
-                firmament.setDrip(x+i*TILE_SIZE, z+j*TILE_SIZE, firmament.getDrip(x+i*TILE_SIZE, z+j*TILE_SIZE) + (int)(0.01f * fallOff * fallOff * fallOff * 16f) / 16f);
+                firmament.setDrip(x+i*TILE_SIZE, z+j*TILE_SIZE, firmament.getDrip(x+i*TILE_SIZE, z+j*TILE_SIZE) + (int)(0.07f * fallOff * fallOff * fallOff));
             }
         }
 
@@ -98,7 +114,7 @@ public class FirmamentManipulatorItem extends Item {
         int count = 10;
         for(int i = 0; i < count; i++) {
             float theta = (phase + i / (float)count) * 2 * (float)Math.PI;
-            FirmamentActor actor = new FirmamentActor(firmament, x, z, Math.cos(theta)*TILE_SIZE, Math.sin(theta)*TILE_SIZE, 40);
+            FirmamentActor actor = new FirmamentActor(firmament, x, z, Math.cos(theta)*TILE_SIZE, Math.sin(theta)*TILE_SIZE, 1000);
             actor.initialDelay = 12;
             firmament.addActor(actor);
         }

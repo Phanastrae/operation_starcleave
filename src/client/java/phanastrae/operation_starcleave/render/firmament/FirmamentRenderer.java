@@ -156,6 +156,7 @@ public class FirmamentRenderer {
     }
 
     public static void doRender(WorldRenderContext worldRenderContext, boolean debugMode_General) {
+        // TODO tidy up, this is mostly unused now
         Firmament firmament = Firmament.fromWorld(worldRenderContext.world());
         if(firmament == null) return;
 
@@ -204,18 +205,18 @@ public class FirmamentRenderer {
                     int worldX = x + firmamentSubRegion.x;
                     int worldZ = z + firmamentSubRegion.z;
 
-                    float damage = Math.clamp(0, 1, firmamentSubRegion.getDamage(x, z));
+                    float damage = Math.clamp(0, 7, firmamentSubRegion.getDamage(x, z)) / 7f;
                     if(debugMode_General) {
-                        float weightedDrip = (float)Math.max(java.lang.Math.log1p(Math.abs(firmamentSubRegion.getDrip(x, z))), 0);
+                        float drip = Math.clamp(0, 7, firmamentSubRegion.getDrip(x, z)) / 7f;
 
-                        float displacementY = firmamentSubRegion.getDisplacement(x, z);
+                        float displacementY = -firmamentSubRegion.getDisplacement(x, z);
 
                         boolean updated = debugMode_Activity && firmamentSubRegion.shouldUpdate();
                         float f = 0.125f * damage;
 
                         float r = Math.clamp(0, 1, damage);
                         float g = Math.clamp(0, 1, updated ? 1 : 0);
-                        float b = Math.clamp(0, 1, displacementY / -15);
+                        float b = Math.clamp(0, 1, drip);
 
                         renderQuadDebug(matrixStack.peek().getPositionMatrix(),
                                 vertexConsumer,
@@ -230,13 +231,13 @@ public class FirmamentRenderer {
                         if(onBorder) {
                             for (int i = -1; i <= 1; i++) {
                                 for (int j = -1; j <= 1; j++) {
-                                    damageArray[i + 1][j + 1] = (int) (firmament.getDamage(worldX + i * tileSize, worldZ + j * tileSize) * 15);
+                                    damageArray[i + 1][j + 1] = (firmament.getDamage(worldX + i * tileSize, worldZ + j * tileSize) * 15);
                                 }
                             }
                         } else {
                             for (int i = -1; i <= 1; i++) {
                                 for (int j = -1; j <= 1; j++) {
-                                    damageArray[i + 1][j + 1] = (int) (firmamentSubRegion.getDamage(x + i * tileSize, z + j * tileSize) * 15);
+                                    damageArray[i + 1][j + 1] = (firmamentSubRegion.getDamage(x + i * tileSize, z + j * tileSize) * 15);
                                 }
                             }
                         }

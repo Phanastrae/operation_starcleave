@@ -5,7 +5,7 @@ import phanastrae.operation_starcleave.world.firmament.*;
 import java.util.function.BiConsumer;
 
 public class FirmamentLocalSubRegionCopy implements FirmamentView {
-    // all getter functions should only be called with x and z in range (-16, 31)
+    // getter functions should only be called with x and z in range [-16, 31]
 
     private final FirmamentSubRegion[][] subRegionCopies;
     public FirmamentLocalSubRegionCopy(Firmament firmament, SubRegionPos subRegionPos) {
@@ -36,28 +36,28 @@ public class FirmamentLocalSubRegionCopy implements FirmamentView {
     }
 
     @Override
-    public float getDrip(int x, int z) {
+    public int getDrip(int x, int z) {
         int lx = x & FirmamentRegion.SUBREGION_MASK;
         int lz = z & FirmamentRegion.SUBREGION_MASK;
         return getSubregionAt(x, z).getDrip(lx, lz);
     }
 
     @Override
-    public float getDamage(int x, int z) {
+    public int getDamage(int x, int z) {
         int lx = x & FirmamentRegion.SUBREGION_MASK;
         int lz = z & FirmamentRegion.SUBREGION_MASK;
         return getSubregionAt(x, z).getDamage(lx, lz);
     }
 
     @Override
-    public float getDisplacement(int x, int z) {
+    public int getDisplacement(int x, int z) {
         int lx = x & FirmamentRegion.SUBREGION_MASK;
         int lz = z & FirmamentRegion.SUBREGION_MASK;
         return getSubregionAt(x, z).getDisplacement(lx, lz);
     }
 
     @Override
-    public float getVelocity(int x, int z) {
+    public int getVelocity(int x, int z) {
         int lx = x & FirmamentRegion.SUBREGION_MASK;
         int lz = z & FirmamentRegion.SUBREGION_MASK;
         return getSubregionAt(x, z).getVelocity(lx, lz);

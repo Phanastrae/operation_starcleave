@@ -6,6 +6,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class FirmamentRegion implements FirmamentAccess {
+    // getter/setter functions should only be called with x and z in range [0, 511]
 
     public static final int REGION_SIZE = 512;
     public static final int REGION_MASK = 0x1FF;
@@ -98,28 +99,28 @@ public class FirmamentRegion implements FirmamentAccess {
     }
 
     @Override
-    public float getDrip(int x, int z) {
+    public int getDrip(int x, int z) {
         x = x&REGION_MASK;
         z = z&REGION_MASK;
         return subRegions[x>>SUBREGION_SIZE_BITS][z>>SUBREGION_SIZE_BITS].getDrip(x&SUBREGION_MASK, z&SUBREGION_MASK);
     }
 
     @Override
-    public float getDamage(int x, int z) {
+    public int getDamage(int x, int z) {
         x = x&REGION_MASK;
         z = z&REGION_MASK;
         return subRegions[x>>SUBREGION_SIZE_BITS][z>>SUBREGION_SIZE_BITS].getDamage(x&SUBREGION_MASK, z&SUBREGION_MASK);
     }
 
     @Override
-    public float getDisplacement(int x, int z) {
+    public int getDisplacement(int x, int z) {
         x = x&REGION_MASK;
         z = z&REGION_MASK;
         return subRegions[x>>SUBREGION_SIZE_BITS][z>>SUBREGION_SIZE_BITS].getDisplacement(x&SUBREGION_MASK, z&SUBREGION_MASK);
     }
 
     @Override
-    public float getVelocity(int x, int z) {
+    public int getVelocity(int x, int z) {
         x = x&REGION_MASK;
         z = z&REGION_MASK;
         return subRegions[x>>SUBREGION_SIZE_BITS][z>>SUBREGION_SIZE_BITS].getVelocity(x&SUBREGION_MASK, z&SUBREGION_MASK);
@@ -133,7 +134,7 @@ public class FirmamentRegion implements FirmamentAccess {
     }
 
     @Override
-    public void setDrip(int x, int z, float value) {
+    public void setDrip(int x, int z, int value) {
         x = x&REGION_MASK;
         z = z&REGION_MASK;
         subRegions[x>>SUBREGION_SIZE_BITS][z>>SUBREGION_SIZE_BITS].setDrip(x&SUBREGION_MASK, z&SUBREGION_MASK, value);
@@ -147,7 +148,7 @@ public class FirmamentRegion implements FirmamentAccess {
     }
 
     @Override
-    public void setDamage(int x, int z, float value) {
+    public void setDamage(int x, int z, int value) {
         x = x&REGION_MASK;
         z = z&REGION_MASK;
         subRegions[x>>SUBREGION_SIZE_BITS][z>>SUBREGION_SIZE_BITS].setDamage(x&SUBREGION_MASK, z&SUBREGION_MASK, value);
@@ -155,14 +156,14 @@ public class FirmamentRegion implements FirmamentAccess {
     }
 
     @Override
-    public void setDisplacement(int x, int z, float value) {
+    public void setDisplacement(int x, int z, int value) {
         x = x&REGION_MASK;
         z = z&REGION_MASK;
         subRegions[x>>SUBREGION_SIZE_BITS][z>>SUBREGION_SIZE_BITS].setDisplacement(x&SUBREGION_MASK, z&SUBREGION_MASK, value);
     }
 
     @Override
-    public void setVelocity(int x, int z, float value) {
+    public void setVelocity(int x, int z, int value) {
         x = x&REGION_MASK;
         z = z&REGION_MASK;
         subRegions[x>>SUBREGION_SIZE_BITS][z>>SUBREGION_SIZE_BITS].setVelocity(x&SUBREGION_MASK, z&SUBREGION_MASK, value);
@@ -222,7 +223,12 @@ public class FirmamentRegion implements FirmamentAccess {
     public void read(NbtCompound nbt) {
         for(int i = 0; i < SUBREGIONS; i++) {
             for(int j = 0; j < SUBREGIONS; j++) {
-                this.subRegions[i][j].readFromByteArray(nbt.getByteArray("subregion_"+i+"_"+j));
+                NbtCompound subregionNbt = nbt.getCompound("subregion_"+i+"_"+j);
+                FirmamentSubRegion subRegion = this.subRegions[i][j];
+                subRegion.readFromByteArray(subregionNbt.getByteArray("displacement"), subRegion.displacement, 0xF);
+                subRegion.readFromByteArray(subregionNbt.getByteArray("velocity"), subRegion.velocity, 0xF);
+                subRegion.readFromByteArray(subregionNbt.getByteArray("damage"), subRegion.damage, 0x7);
+                subRegion.readFromByteArray(subregionNbt.getByteArray("drip"), subRegion.drip, 0x7);
             }
         }
     }
@@ -230,7 +236,13 @@ public class FirmamentRegion implements FirmamentAccess {
     public void write(NbtCompound nbt) {
         for(int i = 0; i < SUBREGIONS; i++) {
             for(int j = 0; j < SUBREGIONS; j++) {
-                nbt.putByteArray("subregion_"+i+"_"+j, this.subRegions[i][j].getAsByteArray());
+                NbtCompound subregionNbt = new NbtCompound();
+                FirmamentSubRegion subRegion = this.subRegions[i][j];
+                subregionNbt.putByteArray("displacement", subRegion.getAsByteArray(subRegion.displacement));
+                subregionNbt.putByteArray("velocity", subRegion.getAsByteArray(subRegion.velocity));
+                subregionNbt.putByteArray("damage", subRegion.getAsByteArray(subRegion.damage));
+                subregionNbt.putByteArray("drip", subRegion.getAsByteArray(subRegion.drip));
+                nbt.put("subregion_"+i+"_"+j, subregionNbt);
             }
         }
     }

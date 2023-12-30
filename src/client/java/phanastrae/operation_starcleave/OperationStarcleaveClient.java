@@ -52,15 +52,5 @@ public class OperationStarcleaveClient implements ClientModInitializer {
 		OperationStarcleaveClientPacketHandler.init();
 
 		ClientLifecycleEvents.CLIENT_STOPPING.register((c) -> FirmamentBuiltSubRegionStorage.getInstance().close());
-
-		ClientLoginConnectionEvents.DISCONNECT.register(((handler, client) -> {
-			OperationStarcleave.LOGGER.info("zamn");
-		}));
-		ClientConfigurationConnectionEvents.DISCONNECT.register((handler, client) -> {
-			OperationStarcleave.LOGGER.info("zamn2");
-		});
-		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
-			OperationStarcleave.LOGGER.info("zamn3");
-		});
 	}
 }

@@ -1,9 +1,11 @@
 package phanastrae.operation_starcleave.world.firmament;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.util.TriConsumer;
+import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.network.packet.s2c.UpdateFirmamentSubRegionS2CPacket;
 
 import java.nio.ByteBuffer;
@@ -12,6 +14,7 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 public class FirmamentSubRegion implements FirmamentAccess {
+    // getter/setter functions should only be called with x and z in range [0, 15]
 
     public static final int SUBREGION_SIZE = 32;
 
@@ -20,7 +23,7 @@ public class FirmamentSubRegion implements FirmamentAccess {
     public static final int TILE_SIZE_BITS = 2;
     public static final int TILE_SIZE = 4;
 
-    public static final int DATA_SIZE_BYTES = TILES * TILES * 4;
+    public static final int DATA_SIZE_BYTES = TILES * TILES;
 
     //    x -->
     // z  0 1 2
@@ -37,11 +40,11 @@ public class FirmamentSubRegion implements FirmamentAccess {
             SUBREGION_SIZE, SUBREGION_SIZE, SUBREGION_SIZE
     };
 
-    public float[][] velocity;
-    public float[][] displacement;
+    public int[][] velocity;
+    public int[][] displacement;
 
-    public float[][] damage;
-    public float[][] drip;
+    public int[][] damage;
+    public int[][] drip;
     public float[][] dDrip;
 
     private final List<FirmamentActor> actors = new ArrayList<>();
@@ -65,11 +68,11 @@ public class FirmamentSubRegion implements FirmamentAccess {
         this.x = x;
         this.z = z;
 
-        this.damage = new float[TILES][TILES];
-        this.drip = new float[TILES][TILES];
+        this.displacement = new int[TILES][TILES];
+        this.velocity = new int[TILES][TILES];
+        this.damage = new int[TILES][TILES];
+        this.drip = new int[TILES][TILES];
         this.dDrip = new float[TILES][TILES];
-        this.displacement = new float[TILES][TILES];
-        this.velocity = new float[TILES][TILES];
     }
 
     public void clear() {
@@ -143,22 +146,22 @@ public class FirmamentSubRegion implements FirmamentAccess {
     }
 
     @Override
-    public float getDrip(int x, int z) {
+    public int getDrip(int x, int z) {
         return drip[x >> TILE_SIZE_BITS][z >> TILE_SIZE_BITS];
     }
 
     @Override
-    public float getDamage(int x, int z) {
+    public int getDamage(int x, int z) {
         return damage[x >> TILE_SIZE_BITS][z >> TILE_SIZE_BITS];
     }
 
     @Override
-    public float getDisplacement(int x, int z) {
+    public int getDisplacement(int x, int z) {
         return displacement[x >> TILE_SIZE_BITS][z >> TILE_SIZE_BITS];
     }
 
     @Override
-    public float getVelocity(int x, int z) {
+    public int getVelocity(int x, int z) {
         return velocity[x >> TILE_SIZE_BITS][z >> TILE_SIZE_BITS];
     }
 
@@ -168,23 +171,23 @@ public class FirmamentSubRegion implements FirmamentAccess {
     }
 
     @Override
-    public void setDrip(int x, int z, float value) {
+    public void setDrip(int x, int z, int value) {
         drip[x >> TILE_SIZE_BITS][z >> TILE_SIZE_BITS] = value;
     }
 
     @Override
-    public void setDamage(int x, int z, float value) {
+    public void setDamage(int x, int z, int value) {
         this.pendingClientUpdate = true;
         damage[x >> TILE_SIZE_BITS][z >> TILE_SIZE_BITS] = value;
     }
 
     @Override
-    public void setDisplacement(int x, int z, float value) {
+    public void setDisplacement(int x, int z, int value) {
         displacement[x >> TILE_SIZE_BITS][z >> TILE_SIZE_BITS] = value;
     }
 
     @Override
-    public void setVelocity(int x, int z, float value) {
+    public void setVelocity(int x, int z, int value) {
         velocity[x >> TILE_SIZE_BITS][z >> TILE_SIZE_BITS] = value;
     }
 
@@ -255,35 +258,58 @@ public class FirmamentSubRegion implements FirmamentAccess {
         return ((long)srx & 4294967295L) | (((long)srz) << 32);
     }
 
-    public byte[] getAsByteArray() {
+    public byte[] getAsByteArray(int[][] target) {
         ByteBuffer byteBuffer = ByteBuffer.allocate(DATA_SIZE_BYTES);
+        boolean multipleValues = false;
+        byte val = (byte)target[0][0];
         for(int i = 0; i < FirmamentSubRegion.TILES; i++) {
             for(int j = 0; j < FirmamentSubRegion.TILES; j++) {
-                byteBuffer.putFloat(this.damage[i][j]);
+                byte b = (byte)target[i][j];
+                byteBuffer.put(b);
+                if(b != val) {
+                    multipleValues = true;
+                }
             }
         }
-        return byteBuffer.array();
+        if(multipleValues) {
+            return byteBuffer.array();
+        } else {
+            ByteBuffer buffer = ByteBuffer.allocate(1);
+            buffer.put(val);
+            return buffer.array();
+        }
     }
 
     public void readFromData(FirmamentSubRegionData firmamentSubRegionData) {
-        this.readFromByteArray(firmamentSubRegionData.damageData);
+        //this.readFromByteArray(firmamentSubRegionData.displacementData, this.displacement, 0xF);
+        //this.readFromByteArray(firmamentSubRegionData.velocityData, this.velocity, 0xF);
+        this.readFromByteArray(firmamentSubRegionData.damageData, this.damage, 0x7);
+        //this.readFromByteArray(firmamentSubRegionData.dripData, this.drip, 0x7);
+        checkDamage();
     }
 
-    public void readFromByteArray(byte[] byteArray) {
-        if(byteArray == null || byteArray.length != DATA_SIZE_BYTES) {
-            this.clear();
+    public void readFromByteArray(byte[] byteArray, int[][] targetArray, int mask) {
+        if(byteArray == null) {
             return;
         }
 
-        ByteBuffer byteBuffer = ByteBuffer.allocate(DATA_SIZE_BYTES);
-        byteBuffer.put(byteArray);
-        byteBuffer.position(0);
-        for(int i = 0; i < FirmamentSubRegion.TILES; i++) {
-            for(int j = 0; j < FirmamentSubRegion.TILES; j++) {
-                this.damage[i][j] = byteBuffer.getFloat();
+        if(byteArray.length == DATA_SIZE_BYTES) {
+            ByteBuffer byteBuffer = ByteBuffer.allocate(DATA_SIZE_BYTES);
+            byteBuffer.put(byteArray);
+            byteBuffer.position(0);
+            for (int i = 0; i < FirmamentSubRegion.TILES; i++) {
+                for (int j = 0; j < FirmamentSubRegion.TILES; j++) {
+                    targetArray[i][j] = byteBuffer.get() & mask;
+                }
+            }
+        } else if(byteArray.length == 1) {
+            int val = byteArray[0] & mask;
+            for (int i = 0; i < FirmamentSubRegion.TILES; i++) {
+                for (int j = 0; j < FirmamentSubRegion.TILES; j++) {
+                    targetArray[i][j] = val;
+                }
             }
         }
-        checkDamage();
     }
 
     public void flushUpdates() {
@@ -291,10 +317,20 @@ public class FirmamentSubRegion implements FirmamentAccess {
             this.pendingClientUpdate = false;
             World world = this.firmamentRegion.firmament.getWorld();
             if(world instanceof ServerWorld serverWorld) {
-                // TODO limit which players get updated
-                long id = this.getPosAsLong();
-                FirmamentSubRegionData data = new FirmamentSubRegionData(this);
-                serverWorld.getPlayers().forEach(serverPlayerEntity -> ServerPlayNetworking.send(serverPlayerEntity, new UpdateFirmamentSubRegionS2CPacket(id, data)));
+                SubRegionPos subRegionPos = SubRegionPos.fromWorldCoords(this.x, this.z);
+                RegionPos regionPos = RegionPos.fromSubRegion(subRegionPos);
+
+                List<ServerPlayerEntity> nearbyPlayers = new ArrayList<>();
+                serverWorld.getPlayers().forEach(serverPlayerEntity -> {
+                    if(((FirmamentWatcher)serverPlayerEntity).operation_starcleave$getWatchedRegions().watchedRegions.contains(regionPos.id)) {
+                        nearbyPlayers.add(serverPlayerEntity);
+                    }
+                });
+
+                if(!nearbyPlayers.isEmpty()) {
+                    FirmamentSubRegionData data = new FirmamentSubRegionData(this);
+                    nearbyPlayers.forEach(serverPlayerEntity -> ServerPlayNetworking.send(serverPlayerEntity, new UpdateFirmamentSubRegionS2CPacket(subRegionPos.id, data)));
+                }
             }
         }
     }

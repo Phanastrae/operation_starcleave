@@ -3,6 +3,7 @@ package phanastrae.operation_starcleave.render.firmament;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.util.math.Box;
 import org.jetbrains.annotations.Nullable;
+import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 import phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion;
 import phanastrae.operation_starcleave.world.firmament.SubRegionPos;
@@ -64,8 +65,17 @@ public class FirmamentBuiltSubRegionHolder {
             }
         }
         // if subregion is empty, then don't build
-        FirmamentSubRegion firmamentSubRegion = firmament.getSubRegion(subRegionPos.worldX, subRegionPos.worldZ);
-        if(firmamentSubRegion == null || !firmamentSubRegion.hadDamageLastCheck()) {
+        boolean cancel = true;
+        for(int i = -1; i <= 1 && cancel; i++) {
+            for(int j = -1; j <= 1; j++) {
+                FirmamentSubRegion firmamentSubRegion = firmament.getSubRegion(subRegionPos.worldX+i*FirmamentSubRegion.SUBREGION_SIZE, subRegionPos.worldZ+j*FirmamentSubRegion.SUBREGION_SIZE);
+                if(firmamentSubRegion != null && firmamentSubRegion.hadDamageLastCheck()) {
+                    cancel = false;
+                    break;
+                }
+            }
+        }
+        if(cancel) {
             synchronized (this) {
                 this.state = State.READY;
             }

@@ -34,15 +34,15 @@ void main() {
     int aByte = int(Color.a * 255f);
     int l1Byte = UV2.r;
 
-    damage[0] = (rByte & 0xF) / 15.;
-    damage[1] = ((rByte & 0xF0) >> 4) / 15.;
-    damage[2] = (gByte & 0xF) / 15.;
-    damage[3] = ((gByte & 0xF0) >> 4) / 15.;
-    damage[4] = (bByte & 0xF) / 15.;
-    damage[5] = ((bByte & 0xF0) >> 4) / 15.;
-    damage[6] = (aByte & 0xF) / 15.;
-    damage[7] = ((aByte & 0xF0) >> 4) / 15.;
-    damage[8] = l1Byte / 15.;
+    damage[0] = (rByte & 0x7) / 7.;
+    damage[1] = ((rByte & 0x70) >> 4) / 7.;
+    damage[2] = (gByte & 0x7) / 7.;
+    damage[3] = ((gByte & 0x70) >> 4) / 7.;
+    damage[4] = (bByte & 0x7) / 7.;
+    damage[5] = ((bByte & 0x70) >> 4) / 7.;
+    damage[6] = (aByte & 0x7) / 7.;
+    damage[7] = ((aByte & 0x70) >> 4) / 7.;
+    damage[8] = (l1Byte & 0x7) / 7.;
 
     vertexColor = vec4(1);
 }
