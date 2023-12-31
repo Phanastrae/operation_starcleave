@@ -7,8 +7,8 @@ import phanastrae.operation_starcleave.network.packet.OperationStarcleavePacketT
 
 public class FirmamentCleavedS2CPacket implements FabricPacket {
 
-    private final int x;
-    private final int z;
+    public final int x;
+    public final int z;
     public FirmamentCleavedS2CPacket(int x, int z) {
         this.x = x;
         this.z = z;

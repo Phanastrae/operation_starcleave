@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "operation_starcleave:block/stellar_repulsor"
+    },
+    "powered=true": {
+      "model": "operation_starcleave:block/stellar_repulsor_on"
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "operation_starcleave:item/blessed_bed"
+  }
+}

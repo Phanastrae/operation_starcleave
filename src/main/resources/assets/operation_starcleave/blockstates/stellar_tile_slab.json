@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "operation_starcleave:block/stellar_tile_slab"
+    },
+    "type=double": {
+      "model": "operation_starcleave:block/stellar_tiles"
+    },
+    "type=top": {
+      "model": "operation_starcleave:block/stellar_tile_slab_top"
+    }
+  }
+}

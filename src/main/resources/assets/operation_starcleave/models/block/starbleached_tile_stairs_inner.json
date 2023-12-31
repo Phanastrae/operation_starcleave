@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "operation_starcleave:block/starbleached_tiles",
+    "side": "operation_starcleave:block/starbleached_tiles",
+    "top": "operation_starcleave:block/starbleached_tiles"
+  }
+}

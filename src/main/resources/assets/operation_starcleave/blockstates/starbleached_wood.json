@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "operation_starcleave:block/starbleached_wood",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "operation_starcleave:block/starbleached_wood"
+    },
+    "axis=z": {
+      "model": "operation_starcleave:block/starbleached_wood",
+      "x": 90
+    }
+  }
+}

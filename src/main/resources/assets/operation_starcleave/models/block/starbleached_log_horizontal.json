@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column_horizontal",
+  "textures": {
+    "end": "operation_starcleave:block/starbleached_log_top",
+    "side": "operation_starcleave:block/starbleached_log"
+  }
+}

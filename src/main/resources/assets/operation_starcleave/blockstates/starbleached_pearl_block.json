@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "triggered=false": {
+      "model": "operation_starcleave:block/starbleached_pearl_block"
+    },
+    "triggered=true": {
+      "model": "operation_starcleave:block/starbleached_pearl_block_on"
+    }
+  }
+}

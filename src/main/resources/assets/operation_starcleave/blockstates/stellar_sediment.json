@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "operation_starcleave:block/stellar_sediment"
+      },
+      {
+        "model": "operation_starcleave:block/stellar_sediment",
+        "y": 90
+      },
+      {
+        "model": "operation_starcleave:block/stellar_sediment",
+        "y": 180
+      },
+      {
+        "model": "operation_starcleave:block/stellar_sediment",
+        "y": 270
+      }
+    ]
+  }
+}

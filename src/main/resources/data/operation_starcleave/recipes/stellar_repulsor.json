@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": {
+      "item": "operation_starcleave:blessed_cloth"
+    },
+    "P": {
+      "item": "operation_starcleave:starbleached_pearl"
+    },
+    "S": {
+      "item": "operation_starcleave:stellar_tiles"
+    }
+  },
+  "pattern": [
+    "CCC",
+    "CPC",
+    "SSS"
+  ],
+  "result": {
+    "count": 3,
+    "item": "operation_starcleave:stellar_repulsor"
+  }
+}

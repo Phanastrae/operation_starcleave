@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "operation_starcleave:block/starbleached_pearl_block"
+  }
+}

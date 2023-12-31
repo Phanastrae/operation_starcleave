@@ -1,21 +1,30 @@
 package phanastrae.operation_starcleave.item;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
 import phanastrae.operation_starcleave.network.packet.s2c.FirmamentCleavedS2CPacket;
 import phanastrae.operation_starcleave.world.OperationStarcleaveWorld;
 import phanastrae.operation_starcleave.world.firmament.*;
+
+import java.util.List;
 
 import static phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion.TILE_SIZE;
 
@@ -28,6 +37,10 @@ public class FirmamentManipulatorItem extends Item {
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack itemStack = user.getStackInHand(hand);
+        if(!user.getAbilities().allowModifyWorld) {
+            return TypedActionResult.fail(itemStack);
+        }
+
 
         if(!world.isClient) {
             Firmament firmament = Firmament.fromWorld(world);
@@ -123,5 +136,13 @@ public class FirmamentManipulatorItem extends Item {
     @Override
     public boolean hasGlint(ItemStack stack) {
         return true;
+    }
+
+    @Override
+    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+        super.appendTooltip(stack, world, tooltip, context);
+        tooltip.add(Text.translatable("operation_starcleave.tooltip.firmament_manipulator.1").formatted(Formatting.GOLD));
+        tooltip.add(Text.translatable("operation_starcleave.tooltip.firmament_manipulator.2").formatted(Formatting.GOLD));
+        tooltip.add(Text.translatable("operation_starcleave.tooltip.firmament_manipulator.3").formatted(Formatting.DARK_RED));
     }
 }

@@ -5,8 +5,7 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
-import org.joml.Quaternionf;
-import phanastrae.operation_starcleave.entity.StarcleaverGolemEntity;
+import phanastrae.operation_starcleave.entity.mob.StarcleaverGolemEntity;
 
 public class StarcleaverGolemEntityModel extends EntityModel<StarcleaverGolemEntity> {
 
@@ -89,9 +88,11 @@ public class StarcleaverGolemEntityModel extends EntityModel<StarcleaverGolemEnt
 
     @Override
     public void animateModel(StarcleaverGolemEntity entity, float limbAngle, float limbDistance, float tickDelta) {
-        drillPivot.pitch = MathHelper.lerpAngleDegrees(tickDelta, entity.prevDrillBasePitch, entity.drillBasePitch) * (float) (Math.PI / 180.0);
-        drillHead.yaw = -MathHelper.lerpAngleDegrees(tickDelta, entity.prevDrillHeadAngle, entity.drillHeadAngle) * (float) (Math.PI / 180.0);
-        drillTip.yaw = -MathHelper.lerpAngleDegrees(tickDelta, entity.prevDrillTipAngle, entity.drillTipAngle) * (float) (Math.PI / 180.0);
+        drillPivot.pitch = MathHelper.lerpAngleDegrees(tickDelta, entity.prevDrillBasePitch, entity.drillBasePitch) * (float) (MathHelper.PI / 180.0);
+        drillHead.yaw = -MathHelper.lerpAngleDegrees(tickDelta, entity.prevDrillHeadAngle, entity.drillHeadAngle) * (float) (MathHelper.PI / 180.0);
+        drillTip.yaw = -MathHelper.lerpAngleDegrees(tickDelta, entity.prevDrillTipAngle, entity.drillTipAngle) * (float) (MathHelper.PI / 180.0);
+
+        door.pitch = -MathHelper.sin(MathHelper.lerp(tickDelta, entity.prevDoorProgress, entity.doorProgress)) * MathHelper.PI / 2;
     }
 
     @Override

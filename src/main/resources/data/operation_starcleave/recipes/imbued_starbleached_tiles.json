@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "stained_glass",
+  "key": {
+    "#": {
+      "item": "operation_starcleave:starbleached_tiles"
+    },
+    "X": {
+      "item": "operation_starcleave:starbleach_bottle"
+    }
+  },
+  "pattern": [
+    "###",
+    "#X#",
+    "###"
+  ],
+  "result": {
+    "count": 8,
+    "item": "operation_starcleave:imbued_starbleached_tiles"
+  }
+}

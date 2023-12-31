@@ -4,6 +4,12 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.network.ChunkBatchSizeCalculator;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.network.packet.OperationStarcleavePacketTypes;
 import phanastrae.operation_starcleave.network.packet.c2s.AcknowledgeFirmamentRegionDataC2SPacket;
@@ -106,6 +112,20 @@ public class OperationStarcleaveClientPacketHandler {
     }
 
     private static void onFirmamentCleaved(FirmamentCleavedS2CPacket packet, ClientPlayerEntity player, PacketSender responseSender) {
-        ((OperationStarcleaveWorld)player.getWorld()).operation_starcleave$setCleavingFlashTicksLeft(24);
+        World world = player.getWorld();
+        ((OperationStarcleaveWorld)world).operation_starcleave$setCleavingFlashTicksLeft(24);
+        Vec3d pos = new Vec3d(packet.x, world.getTopY() + 16, packet.z);
+        world.playSound(
+                pos.x,
+                pos.y,
+                pos.z,
+                SoundEvents.ITEM_TRIDENT_THUNDER,
+                SoundCategory.BLOCKS,
+                500.0F,
+                1.6F + world.random.nextFloat() * 0.2F,
+                false);
+
+        ParticleEffect particleEffect = ParticleTypes.FLASH;
+        world.addImportantParticle(particleEffect, pos.x, pos.y - 1, pos.z, 0, 0, 0);
     }
 }

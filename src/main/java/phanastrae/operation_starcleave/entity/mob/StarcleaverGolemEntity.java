@@ -1,4 +1,4 @@
-package phanastrae.operation_starcleave.entity;
+package phanastrae.operation_starcleave.entity.mob;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -16,6 +16,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.tag.BlockTags;
@@ -44,6 +45,7 @@ public class StarcleaverGolemEntity extends GolemEntity {
 
     private static final TrackedData<Boolean> IGNITED = DataTracker.registerData(StarcleaverGolemEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     private static final TrackedData<Boolean> PLUMMETING = DataTracker.registerData(StarcleaverGolemEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private static final TrackedData<Integer> GUNPOWDER_TICKS = DataTracker.registerData(StarcleaverGolemEntity.class, TrackedDataHandlerRegistry.INTEGER);
 
     public float drillBasePitch = -45;
     public float prevDrillBasePitch = -45;
@@ -52,9 +54,15 @@ public class StarcleaverGolemEntity extends GolemEntity {
     public float drillTipAngle = 0;
     public float prevDrillTipAngle = 0;
 
+    public int prevGunpowderTicks;
+    public boolean openingDoor;
+    public float doorProgress;
+    public float prevDoorProgress;
+    public boolean wasIgnited = false;
+
     private final List<UUID> launcherUuids = new ArrayList<>();
 
-    protected StarcleaverGolemEntity(EntityType<? extends GolemEntity> entityType, World world) {
+    public StarcleaverGolemEntity(EntityType<? extends GolemEntity> entityType, World world) {
         super(entityType, world);
         this.setStepHeight(1.0F);
     }
@@ -83,6 +91,7 @@ public class StarcleaverGolemEntity extends GolemEntity {
         super.initDataTracker();
         this.dataTracker.startTracking(IGNITED, false);
         this.dataTracker.startTracking(PLUMMETING, false);
+        this.dataTracker.startTracking(GUNPOWDER_TICKS, 0);
     }
 
     @Override
@@ -91,6 +100,7 @@ public class StarcleaverGolemEntity extends GolemEntity {
 
         nbt.putBoolean("ignited", this.isIgnited());
         nbt.putBoolean("plummeting", this.isPlummeting());
+        nbt.putInt("gunpowderTicks", this.getGunpowderTicks());
     }
 
     @Override
@@ -104,14 +114,26 @@ public class StarcleaverGolemEntity extends GolemEntity {
         if (nbt.getBoolean("plummeting")) {
             this.setPlummeting(true);
         }
+
+        if(nbt.contains("gunpowderTicks", NbtElement.INT_TYPE)) {
+            this.setGunpowderTicks(nbt.getInt("gunpowderTicks"));
+        }
     }
 
     @Override
     public void tick() {
         World world = this.getWorld();
         if(this.isAlive()) {
+            this.wasIgnited = this.isIgnited();
+
             if(this.isIgnited()) {
                 this.addVelocity(0, 0.085 + MathHelper.clamp(this.getVelocity().y - 0.1, 0, 4) * 0.03, 0);
+                if(this.getGunpowderTicks() > 0) {
+                    this.setGunpowderTicks(this.getGunpowderTicks() - 1);
+                }
+                if(this.getGunpowderTicks() <= 0) {
+                    this.setIgnited(false);
+                }
 
                 if(world.isClient) {
                     world.addParticle(
@@ -139,6 +161,9 @@ public class StarcleaverGolemEntity extends GolemEntity {
                             if(state.getCollisionShape(world, blockPos).isEmpty()) continue;
                             if(this.canDestroy(state, blockPos)) {
                                 world.breakBlock(blockPos, true, this);
+                                int g = this.getGunpowderTicks() - 10;
+                                if(g < 0) g = 0;
+                                this.setGunpowderTicks(g);
                             } else {
                                 collided = true;
                             }
@@ -223,6 +248,25 @@ public class StarcleaverGolemEntity extends GolemEntity {
                         }
                     }
                 }
+
+                this.prevDoorProgress = this.doorProgress;
+                if(this.openingDoor) {
+                    this.doorProgress += 0.25f;
+                    if(this.doorProgress >= 1) {
+                        this.doorProgress = 1;
+                        this.openingDoor = false;
+                    }
+                } else {
+                    this.doorProgress -= 0.25f;
+                    if(this.doorProgress <= 0) {
+                        this.doorProgress = 0;
+                    }
+                }
+
+                if(this.getGunpowderTicks() != this.prevGunpowderTicks && !this.isIgnited() && !this.wasIgnited) {
+                    this.openingDoor = true;
+                }
+                this.prevGunpowderTicks = this.getGunpowderTicks();
             }
         }
 
@@ -247,7 +291,7 @@ public class StarcleaverGolemEntity extends GolemEntity {
     protected ActionResult interactMob(PlayerEntity player, Hand hand) {
         World world = this.getWorld();
         ItemStack itemStack = player.getStackInHand(hand);
-        if (!this.isIgnited() && !this.isPlummeting() && itemStack.isIn(ItemTags.CREEPER_IGNITERS)) {
+        if (player.getAbilities().allowModifyWorld && this.getGunpowderTicks() > 20 && !this.isIgnited() && !this.isPlummeting() && itemStack.isIn(ItemTags.CREEPER_IGNITERS)) {
             SoundEvent soundEvent = itemStack.isOf(Items.FIRE_CHARGE) ? SoundEvents.ITEM_FIRECHARGE_USE : SoundEvents.ITEM_FLINTANDSTEEL_USE;
             world.playSound(player, this.getX(), this.getY(), this.getZ(), soundEvent, this.getSoundCategory(), 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
             if (!world.isClient) {
@@ -267,6 +311,19 @@ public class StarcleaverGolemEntity extends GolemEntity {
                         OperationStarcleaveAdvancementCriteria.LAUNCH_STARCLEAVER_GOLEM.trigger(serverPlayerEntity);
                         this.addLauncher(serverPlayerEntity);
                     }
+                }
+            }
+
+            return ActionResult.success(this.getWorld().isClient);
+        } else if(itemStack.isOf(Items.GUNPOWDER) && this.getGunpowderTicks() + 60 <= 600) {
+            SoundEvent soundEvent = SoundEvents.BLOCK_SAND_PLACE;
+            world.playSound(player, this.getX(), this.getY(), this.getZ(), soundEvent, this.getSoundCategory(), 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
+            if (!world.isClient) {
+                this.setGunpowderTicks(this.getGunpowderTicks() + 60);
+                if (!itemStack.isDamageable()) {
+                    itemStack.decrement(1);
+                } else {
+                    itemStack.damage(1, player, playerx -> playerx.sendToolBreakStatus(hand));
                 }
             }
 
@@ -295,6 +352,14 @@ public class StarcleaverGolemEntity extends GolemEntity {
 
     public void setPlummeting(boolean val) {
         this.dataTracker.set(PLUMMETING, val);
+    }
+
+    public int getGunpowderTicks() {
+        return this.dataTracker.get(GUNPOWDER_TICKS);
+    }
+
+    public void setGunpowderTicks(int val) {
+        this.dataTracker.set(GUNPOWDER_TICKS, val);
     }
 
     public void addLauncher(ServerPlayerEntity serverPlayerEntity) {

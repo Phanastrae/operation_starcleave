@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "operation_starcleave:block/short_holy_moss"
+  }
+}

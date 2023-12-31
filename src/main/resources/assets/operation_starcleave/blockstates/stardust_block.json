@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "operation_starcleave:block/stardust_block"
+      },
+      {
+        "model": "operation_starcleave:block/stardust_block",
+        "y": 90
+      },
+      {
+        "model": "operation_starcleave:block/stardust_block",
+        "y": 180
+      },
+      {
+        "model": "operation_starcleave:block/stardust_block",
+        "y": 270
+      }
+    ]
+  }
+}

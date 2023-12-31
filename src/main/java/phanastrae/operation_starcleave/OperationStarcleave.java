@@ -5,11 +5,21 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.DispenserBlock;
+import net.minecraft.block.LeveledCauldronBlock;
+import net.minecraft.block.cauldron.CauldronBehavior;
 import net.minecraft.block.dispenser.FallibleItemDispenserBehavior;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
+import net.minecraft.potion.PotionUtil;
+import net.minecraft.potion.Potions;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.stat.Stats;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPointer;
 import net.minecraft.util.math.BlockPos;
@@ -22,9 +32,13 @@ import org.slf4j.LoggerFactory;
 import phanastrae.operation_starcleave.advancement.criterion.OperationStarcleaveAdvancementCriteria;
 import phanastrae.operation_starcleave.block.NetheritePumpkinBlock;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
+import phanastrae.operation_starcleave.block.StarbleachCauldronBlock;
+import phanastrae.operation_starcleave.block.entity.OperationStarcleaveBlockEntityTypes;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
+import phanastrae.operation_starcleave.entity.effect.OperationStarcleaveStatusEffects;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 import phanastrae.operation_starcleave.network.packet.OperationStarcleavePacketTypes;
+import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 import phanastrae.operation_starcleave.server.network.OperationStarcleaveServerPacketHandler;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 import phanastrae.operation_starcleave.world.firmament.FirmamentRegion;
@@ -43,10 +57,16 @@ public class OperationStarcleave implements ModInitializer {
 		OperationStarcleaveBlocks.init();
 		OperationStarcleaveItems.init();
 
+		OperationStarcleaveBlockEntityTypes.init();
+
+		OperationStarcleaveStatusEffects.init();
+
 		OperationStarcleaveAdvancementCriteria.init();
 
 		OperationStarcleavePacketTypes.init();
 		OperationStarcleaveServerPacketHandler.init();
+
+		OperationStarcleaveParticleTypes.init();
 
 		DispenserBlock.registerBehavior(OperationStarcleaveBlocks.NETHERITE_PUMPKIN, new FallibleItemDispenserBehavior() {
 			@Override
@@ -88,5 +108,7 @@ public class OperationStarcleave implements ModInitializer {
 		}));
 
 		ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register(((player, origin, destination) -> ((FirmamentWatcher)player).operation_starcleave$getWatchedRegions().unWatchAll()));
+
+		StarbleachCauldronBlock.init();
 	}
 }

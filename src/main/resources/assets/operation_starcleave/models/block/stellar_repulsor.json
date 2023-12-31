@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "operation_starcleave:block/stellar_tiles",
+    "east": "operation_starcleave:block/stellar_repulsor_side",
+    "north": "operation_starcleave:block/stellar_repulsor_side",
+    "particle": "operation_starcleave:block/stellar_repulsor_side",
+    "south": "operation_starcleave:block/stellar_repulsor_side",
+    "up": "operation_starcleave:block/stellar_repulsor_top",
+    "west": "operation_starcleave:block/stellar_repulsor_side"
+  }
+}

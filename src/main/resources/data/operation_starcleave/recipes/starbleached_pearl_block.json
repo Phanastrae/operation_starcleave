@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "S": {
+      "item": "operation_starcleave:starbleached_tiles"
+    },
+    "P": {
+      "item": "operation_starcleave:starbleached_pearl"
+    }
+  },
+  "pattern": [
+    "SPS",
+    "P P",
+    "SPS"
+  ],
+  "result": {
+    "count": 1,
+    "item": "operation_starcleave:starbleached_pearl_block"
+  }
+}

@@ -29,10 +29,10 @@ void main() {
     vertexDistance = fog_distance(ModelViewMat, IViewRotMat * (Position + ChunkOffset), FogShape);
     texCoord0 = UV0;
 
-    int rByte = int(Color.r * 255f);
-    int gByte = int(Color.g * 255f);
-    int bByte = int(Color.b * 255f);
-    int aByte = int(Color.a * 255f);
+    int rByte = int(Color.r * 255.);
+    int gByte = int(Color.g * 255.);
+    int bByte = int(Color.b * 255.);
+    int aByte = int(Color.a * 255.);
     int l1Byte = UV2.r;
 
     damage[0] = (rByte & 0x7) / 7.;
@@ -45,7 +45,7 @@ void main() {
     damage[7] = ((aByte & 0x70) >> 4) / 7.;
     damage[8] = (l1Byte & 0x7) / 7.;
 
-    vertexColor = vec4(1);
+    vertexColor = vec4(1.);
 
     localPos = vec2(Position.x / 32., Position.z / 32.);
 }

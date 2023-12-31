@@ -47,7 +47,7 @@ void main() {
 
             float dist = abs(dx) + abs(dz);
             float v1 = 1. - dist;
-            if(v1 < 0) v1 = 0;
+            if(v1 < 0.) v1 = 0.;
 
             float distSqr = dx*dx + dz*dz;
             float v2 = 1. - sqrt(distSqr) * 2./3.;
@@ -65,16 +65,19 @@ void main() {
     }
     float damageAmount = avgDamage / weight;
 
+    float g = 0.;
+
     // smooth fade into distance to avoid hard borders
     if(vertexDistance > 400.) {
         float v = vertexDistance - 400.;
-        damageAmount -= v / 100.;
+        g = v / 100.;
+        damageAmount -= g;
         if(damageAmount < 0.) damageAmount = 0.;
     }
 
     float threshold = 0.25;
     // distFromBorder ranges from -1 to 1, with 0 at the threshold, -1 outside, 1 inside
-    float distFromBorder = 0;
+    float distFromBorder = 0.;
     if(damageAmount < threshold) {
         distFromBorder = (damageAmount - threshold) / threshold;
     } else {
@@ -89,13 +92,13 @@ void main() {
     float a = 1.;
     if(absDist > random * 0.75) {
         // make invisible
-        if(distFromBorder < 0) {
+        if(distFromBorder < 0.) {
             discard;
         } else {
             absDist += random;
 
-            if(absDist > 1) {
-                absDist = 1;
+            if(absDist > 1.) {
+                absDist = 1.;
             }
             a = 1. - absDist;
         }
@@ -105,7 +108,8 @@ void main() {
     float f2 = sin(localPos.y * 2. * PI);
     float f3 = f1*f2 + (GameTime * 100.) * 2. * PI;
     vec3 borderColor = rainbow(f3) * 0.7 + 0.3;
-    vec3 edgeColor = rainbow(f3 + GameTime * 150 * 2 * PI) * 0.5;
+    borderColor = borderColor + (1. - borderColor) * sqrt(g);
+    vec3 edgeColor = rainbow(f3 + GameTime * 150. * 2. * PI) * 0.5;
     float l = min(absDist * 2., 1.);
     vec3 color = borderColor + (edgeColor - borderColor) * l;
 

@@ -13,7 +13,7 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "operation_starcleave:netherite_pumpkin"
+          "name": "minecraft:gold_nugget"
         }
       ],
       "rolls": 1.0

@@ -8,7 +8,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import org.joml.Quaternionf;
 import phanastrae.operation_starcleave.OperationStarcleave;
-import phanastrae.operation_starcleave.entity.StarcleaverGolemEntity;
+import phanastrae.operation_starcleave.entity.mob.StarcleaverGolemEntity;
 import phanastrae.operation_starcleave.render.entity.model.StarcleaverGolemEntityModel;
 
 public class StarcleaverGolemEntityRenderer extends MobEntityRenderer<StarcleaverGolemEntity, StarcleaverGolemEntityModel> {

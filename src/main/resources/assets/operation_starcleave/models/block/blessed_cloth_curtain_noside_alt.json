@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/template_glass_pane_noside_alt",
+  "textures": {
+    "pane": "operation_starcleave:block/blessed_cloth_curtain"
+  }
+}

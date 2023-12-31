@@ -24,7 +24,7 @@ public class NetheritePumpkinItem extends BlockItem {
 
         ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
         builder.put(
-                EntityAttributes.GENERIC_ARMOR, new EntityAttributeModifier(HELMET_UUID, "Armor modifier", 6, EntityAttributeModifier.Operation.ADDITION)
+                EntityAttributes.GENERIC_ARMOR, new EntityAttributeModifier(HELMET_UUID, "Armor modifier", 5, EntityAttributeModifier.Operation.ADDITION)
         );
         builder.put(
                 EntityAttributes.GENERIC_ARMOR_TOUGHNESS,
