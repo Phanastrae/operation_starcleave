@@ -10,6 +10,7 @@
 	"contact": {
 		"sources": "https://github.com/Phanastrae/operation_starcleave"
 	},
+	"license": "MIT",
 	"icon": "assets/operation_starcleave/icon.png",
 	"environment": "*",
 	"entrypoints": {
