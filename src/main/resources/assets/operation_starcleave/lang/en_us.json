@@ -41,6 +41,9 @@
 
   "effect.operation_starcleave.starbleached_insides": "Starbleached Insides",
 
+  "entity.operation_starcleave.firmament_rejuvenator": "Firmament Rejuvenator",
+  "entity.operation_starcleave.splash_starbleach_bottle": "Splash Starbleach Bottle",
+  "entity.operation_starcleave.starbleached_pearl": "Starbleached Pearl",
   "entity.operation_starcleave.starcleaver_golem": "Starcleaver Golem",
 
   "item.operation_starcleave.blessed_cloth": "Blessed Cloth",
