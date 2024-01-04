@@ -100,18 +100,8 @@ public class OperationStarcleaveItems {
     }
 
     public static void addToVanillaItemGroups() {
-        addItemToGroupBefore(NETHERITE_PUMPKIN, ItemGroups.COMBAT, Items.TURTLE_HELMET);
-        addItemToGroupAfter(NETHERITE_PUMPKIN, ItemGroups.FUNCTIONAL, Items.DRAGON_HEAD);
-
-        addItemToGroup(STELLAR_SEDIMENT, ItemGroups.NATURAL);
-        addItemToGroup(HOLY_MOSS, ItemGroups.NATURAL);
-        addItemToGroup(SHORT_HOLY_MOSS, ItemGroups.NATURAL);
-        addItemToGroup(STARDUST_BLOCK, ItemGroups.NATURAL);
-        addItemToGroup(STARBLEACHED_LOG, ItemGroups.NATURAL);
-        addItemToGroup(STARBLEACHED_WOOD, ItemGroups.NATURAL);
-        addItemToGroup(STARBLEACHED_LEAVES, ItemGroups.NATURAL);
-
-        addItemToGroup(STARDUST_CLUSTER, ItemGroups.BUILDING_BLOCKS);
+        addItemToGroupAfter(STARBLEACHED_LOG, ItemGroups.BUILDING_BLOCKS, Items.WARPED_BUTTON);
+        addItemToGroupAfter(STARBLEACHED_WOOD, ItemGroups.BUILDING_BLOCKS, STARBLEACHED_LOG);
         addItemToGroup(STARBLEACHED_TILES, ItemGroups.BUILDING_BLOCKS);
         addItemToGroup(STARBLEACHED_TILE_STAIRS, ItemGroups.BUILDING_BLOCKS);
         addItemToGroup(STARBLEACHED_TILE_SLAB, ItemGroups.BUILDING_BLOCKS);
@@ -120,33 +110,40 @@ public class OperationStarcleaveItems {
         addItemToGroup(IMBUED_STARBLEACHED_TILES, ItemGroups.BUILDING_BLOCKS);
         addItemToGroup(STELLAR_TILES, ItemGroups.BUILDING_BLOCKS);
         addItemToGroup(STELLAR_TILE_SLAB, ItemGroups.BUILDING_BLOCKS);
-
         addItemToGroup(STARDUST_CLUSTER, ItemGroups.BUILDING_BLOCKS);
-
         addItemToGroup(BLESSED_CLOTH_BLOCK, ItemGroups.BUILDING_BLOCKS);
         addItemToGroup(BLESSED_CLOTH_CARPET, ItemGroups.BUILDING_BLOCKS);
         addItemToGroup(BLESSED_CLOTH_CURTAIN, ItemGroups.BUILDING_BLOCKS);
 
+        addItemToGroupAfter(STARBLEACHED_LOG, ItemGroups.NATURAL, Items.WARPED_STEM);
+        addItemToGroupAfter(STARBLEACHED_LEAVES, ItemGroups.NATURAL, Items.FLOWERING_AZALEA_LEAVES);
+        addItemToGroupAfter(HOLY_MOSS, ItemGroups.NATURAL, Items.END_STONE);
+        addItemToGroupAfter(STELLAR_SEDIMENT, ItemGroups.NATURAL, HOLY_MOSS);
+        addItemToGroupAfter(STARDUST_BLOCK, ItemGroups.NATURAL, STELLAR_SEDIMENT);
+        addItemToGroupAfter(SHORT_HOLY_MOSS, ItemGroups.NATURAL, Items.HANGING_ROOTS);
+
+        addItemToGroupAfter(NETHERITE_PUMPKIN, ItemGroups.FUNCTIONAL, Items.DRAGON_HEAD);
+        addItemToGroup(STARDUST_CLUSTER, ItemGroups.FUNCTIONAL);
+        addItemToGroup(STARBLEACHED_LEAVES, ItemGroups.FUNCTIONAL);
         addItemToGroup(BLESSED_CLOTH_BLOCK, ItemGroups.FUNCTIONAL);
         addItemToGroup(BLESSED_CLOTH_CARPET, ItemGroups.FUNCTIONAL);
-        addItemToGroup(STARBLEACHED_LEAVES, ItemGroups.FUNCTIONAL);
-
-        addItemToGroup(BLESSED_BED, ItemGroups.FUNCTIONAL);
+        addItemToGroupAfter(BLESSED_BED, ItemGroups.FUNCTIONAL, Items.PINK_BED);
 
         addItemToGroup(STARBLEACHED_PEARL_BLOCK, ItemGroups.REDSTONE);
         addItemToGroup(STELLAR_REPULSOR, ItemGroups.REDSTONE);
 
-        addItemToGroup(STARBLEACH_BOTTLE, ItemGroups.INGREDIENTS);
-        addItemToGroup(STARBLEACH_BOTTLE, ItemGroups.FOOD_AND_DRINK);
-        addItemToGroup(SPLASH_STARBLEACH_BOTTLE, ItemGroups.FOOD_AND_DRINK);
-
         addItemToGroup(STARBLEACHED_PEARL, ItemGroups.TOOLS);
         addItemToGroup(FIRMAMENT_REJUVENATOR, ItemGroups.TOOLS);
 
-        addItemToGroup(STARFRUIT, ItemGroups.FOOD_AND_DRINK);
+        addItemToGroupBefore(NETHERITE_PUMPKIN, ItemGroups.COMBAT, Items.TURTLE_HELMET);
 
-        addItemToGroup(HOLY_STRANDS, ItemGroups.INGREDIENTS);
-        addItemToGroup(BLESSED_CLOTH, ItemGroups.INGREDIENTS);
+        addItemToGroup(STARBLEACH_BOTTLE, ItemGroups.FOOD_AND_DRINK);
+        addItemToGroup(SPLASH_STARBLEACH_BOTTLE, ItemGroups.FOOD_AND_DRINK);
+        addItemToGroupAfter(STARFRUIT, ItemGroups.FOOD_AND_DRINK, Items.CHORUS_FRUIT);
+
+        addItemToGroupAfter(STARBLEACH_BOTTLE, ItemGroups.INGREDIENTS, Items.EXPERIENCE_BOTTLE);
+        addItemToGroupAfter(HOLY_STRANDS, ItemGroups.INGREDIENTS, STARBLEACH_BOTTLE);
+        addItemToGroupAfter(BLESSED_CLOTH, ItemGroups.INGREDIENTS, HOLY_STRANDS);
 
         addItemToGroup(STARCLEAVER_GOLEM_SPAWN_EGG, ItemGroups.SPAWN_EGGS);
 

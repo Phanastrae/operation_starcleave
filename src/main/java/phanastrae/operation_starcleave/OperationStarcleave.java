@@ -40,6 +40,7 @@ import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 import phanastrae.operation_starcleave.network.packet.OperationStarcleavePacketTypes;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 import phanastrae.operation_starcleave.server.network.OperationStarcleaveServerPacketHandler;
+import phanastrae.operation_starcleave.world.OperationStarcleaveGameRules;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 import phanastrae.operation_starcleave.world.firmament.FirmamentRegion;
 import phanastrae.operation_starcleave.world.firmament.FirmamentWatcher;
@@ -62,6 +63,7 @@ public class OperationStarcleave implements ModInitializer {
 		OperationStarcleaveStatusEffects.init();
 
 		OperationStarcleaveAdvancementCriteria.init();
+		OperationStarcleaveGameRules.init();
 
 		OperationStarcleavePacketTypes.init();
 		OperationStarcleaveServerPacketHandler.init();

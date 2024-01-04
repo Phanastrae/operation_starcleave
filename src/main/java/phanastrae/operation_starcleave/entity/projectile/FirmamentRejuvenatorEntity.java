@@ -91,6 +91,9 @@ public class FirmamentRejuvenatorEntity extends ThrownItemEntity {
                     for(int i = -n; i <= n; i++) {
                         for(int j = -n; j <= n; j++) {
                             if(i*i + j*j > n*n) continue;
+                            firmament.setDisplacement(x+i*FirmamentSubRegion.TILE_SIZE, z+j*FirmamentSubRegion.TILE_SIZE, 0);
+                            firmament.setVelocity(x+i*FirmamentSubRegion.TILE_SIZE, z+j*FirmamentSubRegion.TILE_SIZE, 0);
+                            firmament.setDrip(x+i*FirmamentSubRegion.TILE_SIZE, z+j*FirmamentSubRegion.TILE_SIZE, 0);
                             firmament.setDamage(x+i*FirmamentSubRegion.TILE_SIZE, z+j*FirmamentSubRegion.TILE_SIZE, 0);
                         }
                     }

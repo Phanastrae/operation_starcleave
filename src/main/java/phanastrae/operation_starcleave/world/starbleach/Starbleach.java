@@ -17,13 +17,26 @@ import net.minecraft.world.Heightmap;
 import net.minecraft.world.chunk.WorldChunk;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
+import phanastrae.operation_starcleave.block.tag.OperationStarcleaveBlockTags;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
+import phanastrae.operation_starcleave.world.OperationStarcleaveGameRules;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 import phanastrae.operation_starcleave.world.firmament.FirmamentRegion;
 import phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion;
 import phanastrae.operation_starcleave.world.firmament.SubRegionPos;
 
 public class Starbleach {
+
+    public enum StarbleachTarget {
+        ALL, // convert all blocks. default behaviour beneath fractures
+        ONLY_FILLING, // only fill cauldrons. behaviour beneath fractures if fracture starbleaching is disabled
+        NO_FILLING // convert all blocks except cauldrons. behaviour of splash starbleach bottles
+    }
+
+    public static StarbleachTarget getFractureStarbleachTarget(ServerWorld world) {
+        boolean bl = world.getGameRules().getBoolean(OperationStarcleaveGameRules.DO_FRACTURE_STARBLEACHING);
+        return bl ? StarbleachTarget.ALL : StarbleachTarget.ONLY_FILLING;
+    }
 
     public static void starbleachChunk(ServerWorld world, WorldChunk chunk, int randomTickSpeed) {
         Firmament firmament = Firmament.fromWorld(world);
@@ -40,6 +53,8 @@ public class Starbleach {
         FirmamentSubRegion subRegion = firmament.getSubRegionFromId(subRegionPos.id);
         if(subRegion == null) return;
 
+        StarbleachTarget starbleachTarget = getFractureStarbleachTarget(world);
+
         for(int k = 0; k < randomTickSpeed; ++k) {
             if (world.random.nextInt(300) == 0) {
                 BlockPos blockPos = world.getRandomPosInChunk(i, 0, j, 0xF);
@@ -48,18 +63,20 @@ public class Starbleach {
                 if(damage >= 5) {
                     int topY = world.getTopY(Heightmap.Type.MOTION_BLOCKING, blockPos.getX(), blockPos.getZ());
                     BlockPos targetPos = new BlockPos(blockPos.getX(), topY - 1, blockPos.getZ());
-                    starbleach(world, targetPos, true, 150);
+                    starbleach(world, targetPos, starbleachTarget, 150);
                 }
             }
         }
     }
 
-    public static void starbleach(ServerWorld world, BlockPos blockPos, boolean canFillCauldrons, int particleCount) {
+    public static void starbleach(ServerWorld world, BlockPos blockPos, StarbleachTarget starbleachTarget, int particleCount) {
         BlockState blockState = world.getBlockState(blockPos);
         if(isStarbleached(blockState)) {
-            if(world.random.nextInt(5) == 0) {
-                decorate(world, blockPos.add(0, 1, 0));
-                return;
+            if(starbleachTarget == StarbleachTarget.ALL || starbleachTarget == StarbleachTarget.NO_FILLING) {
+                if (world.random.nextInt(5) == 0) {
+                    decorate(world, blockPos.add(0, 1, 0));
+                    return;
+                }
             }
 
             boolean starbleached = true;
@@ -91,7 +108,7 @@ public class Starbleach {
             }
         }
 
-        BlockState newState = getStarbleachResult(blockState, world.random, canFillCauldrons);
+        BlockState newState = getStarbleachResult(blockState, world.random, starbleachTarget);
 
         if(newState != null) {
             if(newState.isAir()) {
@@ -139,50 +156,75 @@ public class Starbleach {
     }
 
     public static boolean isStarbleached(BlockState blockState) {
-        if(blockState.isOf(OperationStarcleaveBlocks.STELLAR_SEDIMENT)) return true;
-        if(blockState.isOf(OperationStarcleaveBlocks.HOLY_MOSS)) return true;
-        if(blockState.isOf(OperationStarcleaveBlocks.STARBLEACHED_LOG)) return true;
-        if(blockState.isOf(OperationStarcleaveBlocks.STARBLEACHED_WOOD)) return true;
-        if(blockState.isOf(OperationStarcleaveBlocks.STARBLEACHED_LEAVES)) return true;
-        return false;
+        return blockState.isIn(OperationStarcleaveBlockTags.STARBLEACHED);
     }
 
     @Nullable
-    public static BlockState getStarbleachResult(BlockState blockState, Random random, boolean canFillCauldrons) {
-        if(canFillCauldrons) {
-            if (blockState.isOf(Blocks.CAULDRON)) {
-                return OperationStarcleaveBlocks.STARBLEACH_CAULDRON.getDefaultState();
+    public static BlockState getStarbleachResult(BlockState blockState, Random random, StarbleachTarget starbleachTarget) {
+        BlockState newBlockstate = null;
+        if(starbleachTarget == StarbleachTarget.ALL || starbleachTarget == StarbleachTarget.ONLY_FILLING) {
+            newBlockstate = getStarbleachCauldronResult(blockState, random);
+            if(newBlockstate != null) {
+                return newBlockstate;
             }
-            if (blockState.isOf(OperationStarcleaveBlocks.STARBLEACH_CAULDRON)) {
-                if (blockState.getProperties().contains(LeveledCauldronBlock.LEVEL)) {
-                    if (blockState.get(LeveledCauldronBlock.LEVEL) != 3) {
-                        return blockState.cycle(LeveledCauldronBlock.LEVEL);
-                    }
+        }
+        if(starbleachTarget == StarbleachTarget.ALL || starbleachTarget == StarbleachTarget.NO_FILLING) {
+            newBlockstate = getStarbleachBlockResult(blockState, random);
+            if(newBlockstate != null) {
+                return newBlockstate;
+            }
+        }
+
+        return newBlockstate;
+    }
+
+
+    @Nullable
+    public static BlockState getStarbleachCauldronResult(BlockState blockState, Random random) {
+        if (blockState.isOf(Blocks.CAULDRON)) {
+            return OperationStarcleaveBlocks.STARBLEACH_CAULDRON.getDefaultState();
+        }
+        if (blockState.isOf(OperationStarcleaveBlocks.STARBLEACH_CAULDRON)) {
+            if (blockState.getProperties().contains(LeveledCauldronBlock.LEVEL)) {
+                if (blockState.get(LeveledCauldronBlock.LEVEL) != 3) {
+                    return blockState.cycle(LeveledCauldronBlock.LEVEL);
                 }
             }
         }
-        if(blockState.isOf(Blocks.GRASS_BLOCK)) {
+
+        return null;
+    }
+
+    @Nullable
+    public static BlockState getStarbleachBlockResult(BlockState blockState, Random random) {
+        // TODO implement proper datapack based system for this instead of hardcoding it all
+        if(blockState.isOf(Blocks.GRASS_BLOCK)
+                || blockState.isOf(Blocks.PODZOL)
+                || blockState.isOf(Blocks.MYCELIUM)) {
             return OperationStarcleaveBlocks.HOLY_MOSS.getDefaultState();
         }
-        if(blockState.isOf(Blocks.DIRT)) {
+        if(blockState.isOf(Blocks.DIRT)
+                || blockState.isOf(Blocks.COARSE_DIRT)
+                || blockState.isOf(Blocks.ROOTED_DIRT)
+                || blockState.isIn(BlockTags.BASE_STONE_OVERWORLD)
+                || blockState.isOf(Blocks.END_STONE)) {
             return OperationStarcleaveBlocks.STELLAR_SEDIMENT.getDefaultState();
         }
-        if(blockState.isOf(Blocks.END_STONE)) {
-            return OperationStarcleaveBlocks.STELLAR_SEDIMENT.getDefaultState();
-        }
-        if(blockState.isIn(BlockTags.BASE_STONE_OVERWORLD)) {
-            return OperationStarcleaveBlocks.STELLAR_SEDIMENT.getDefaultState();
-        }
-        if(blockState.isIn(BlockTags.BASE_STONE_NETHER)) {
+        if(blockState.isOf(Blocks.NETHERRACK)
+                || blockState.isOf(Blocks.SOUL_SAND)
+                || blockState.isOf(Blocks.SOUL_SOIL)
+                || blockState.isOf(Blocks.CRIMSON_NYLIUM)
+                || blockState.isOf(Blocks.WARPED_NYLIUM)) {
             return Blocks.AIR.getDefaultState();
         }
-        if(blockState.isIn(BlockTags.SAND)) {
+        if(blockState.isIn(BlockTags.SAND)
+                || blockState.isOf(Blocks.GRAVEL)) {
             return OperationStarcleaveBlocks.STARDUST_BLOCK.getDefaultState();
         }
-        if(blockState.isOf(Blocks.GRAVEL)) {
-            return OperationStarcleaveBlocks.STARDUST_BLOCK.getDefaultState();
-        }
-        if(blockState.isIn(BlockTags.LEAVES) || blockState.isOf(Blocks.CHORUS_PLANT) || blockState.isOf(Blocks.CHORUS_FLOWER)) {
+        if(blockState.isIn(BlockTags.LEAVES)
+                || blockState.isIn(BlockTags.WART_BLOCKS)
+                || blockState.isOf(Blocks.CHORUS_PLANT)
+                || blockState.isOf(Blocks.CHORUS_FLOWER)) {
             if(random.nextInt(3) == 0) {
                 return OperationStarcleaveBlocks.STARBLEACHED_LEAVES.getDefaultState();
             } else {
@@ -192,9 +234,11 @@ public class Starbleach {
         if(blockState.isIn(BlockTags.LOGS)) {
             if(blockState.getProperties().contains(PillarBlock.AXIS)) {
                 return OperationStarcleaveBlocks.STARBLEACHED_LOG.getDefaultState().with(PillarBlock.AXIS, blockState.get(PillarBlock.AXIS));
+            } else {
+                return OperationStarcleaveBlocks.STARBLEACHED_LOG.getDefaultState();
             }
-            return OperationStarcleaveBlocks.STARBLEACHED_LOG.getDefaultState();
         }
+
         return null;
     }
 }
