@@ -16,7 +16,7 @@ import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
 
 public class OperationStarcleaveItems {
 
-    public static final Item NETHERITE_PUMPKIN = new NetheritePumpkinItem(OperationStarcleaveBlocks.NETHERITE_PUMPKIN, new FabricItemSettings().rarity(Rarity.UNCOMMON));
+    public static final Item NETHERITE_PUMPKIN = new NetheritePumpkinItem(OperationStarcleaveBlocks.NETHERITE_PUMPKIN, new FabricItemSettings().rarity(Rarity.UNCOMMON).fireproof());
 
     public static final Item STELLAR_SEDIMENT = new BlockItem(OperationStarcleaveBlocks.STELLAR_SEDIMENT, new FabricItemSettings());
     public static final Item HOLY_MOSS = new BlockItem(OperationStarcleaveBlocks.HOLY_MOSS, new FabricItemSettings());
@@ -147,7 +147,15 @@ public class OperationStarcleaveItems {
 
         addItemToGroup(STARCLEAVER_GOLEM_SPAWN_EGG, ItemGroups.SPAWN_EGGS);
 
-        addItemToGroup(FIRMAMENT_MANIPULATOR, ItemGroups.OPERATOR);
+        // different method used here to ensure the item is only added if operator tab is present
+        ItemGroup operatorGroup = Registries.ITEM_GROUP.get(ItemGroups.OPERATOR);
+        if(operatorGroup != null) {
+            ItemGroupEvents.MODIFY_ENTRIES_ALL.register((group, entries) -> {
+                if (operatorGroup.equals(group)) {
+                    entries.add(FIRMAMENT_MANIPULATOR);
+                }
+            });
+        }
     }
 
     public static <T extends Item> void registerWithIG(T item, String name) {

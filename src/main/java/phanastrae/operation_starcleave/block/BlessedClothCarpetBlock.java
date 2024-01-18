@@ -13,6 +13,7 @@ public class BlessedClothCarpetBlock extends CarpetBlock {
 
     @Override
     public void onLandedUpon(World world, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
+        // TODO implement properly, this doesn't really work as intended
         entity.handleFallDamage(fallDistance, 0.0F, entity.getDamageSources().fall());
     }
 }

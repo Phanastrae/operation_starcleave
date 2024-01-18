@@ -80,7 +80,6 @@ public class FirmamentUpdater {
 
         // spread drip
         firmament.forEachActivePosition((x, z) -> {
-            int drip = firmament.getDrip(x, z);
             AtomicReference<Integer> maxPotentialDrip = new AtomicReference<>(0);
             forEachNeighbor((nx, nz, nWeight) -> {
                 int nDrip = firmament.getDrip(x+nx, z+nz);
@@ -89,16 +88,13 @@ public class FirmamentUpdater {
                     maxPotentialDrip.set(potentialDrip);
                 }
             });
-            if(maxPotentialDrip.get() > drip) {
-                firmament.setDrip(x, z, Math.clamp(drip, 7, maxPotentialDrip.get()));
-            }
+            firmament.setDDrip(x, z, maxPotentialDrip.get());
         });
         firmament.forEachActivePosition((x, z) -> {
             int drip = firmament.getDrip(x, z);
-            float dDrip = firmament.getDDrip(x, z);
-            int newDrip = Math.clamp(0, 7, drip + (int)dDrip);
+            int newDrip = Math.clamp(0, 7, (int)firmament.getDDrip(x, z));
             if(newDrip > drip) {
-                firmament.setDrip(x, z, drip);
+                firmament.setDrip(x, z, newDrip);
                 firmament.markActive(x, z);
             }
             firmament.setDDrip(x, z, 0);

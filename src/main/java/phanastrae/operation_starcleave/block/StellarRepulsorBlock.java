@@ -56,7 +56,7 @@ public class StellarRepulsorBlock extends Block {
 
     @Override
     public void onLandedUpon(World world, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
-        entity.handleFallDamage(fallDistance, 0.1F, world.getDamageSources().fall());
+        entity.handleFallDamage(fallDistance, 0.0F, world.getDamageSources().fall());
     }
 
     @Override

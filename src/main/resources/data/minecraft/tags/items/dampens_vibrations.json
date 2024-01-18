@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "operation_starcleave:blessed_cloth_block",
+    "operation_starcleave:blessed_cloth_carpet",
+    "operation_starcleave:blessed_cloth_curtain"
+  ]
+}

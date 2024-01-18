@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import phanastrae.operation_starcleave.advancement.criterion.OperationStarcleaveAdvancementCriteria;
 import phanastrae.operation_starcleave.block.NetheritePumpkinBlock;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
+import phanastrae.operation_starcleave.block.OperationStarcleaveDispenserBehavior;
 import phanastrae.operation_starcleave.block.StarbleachCauldronBlock;
 import phanastrae.operation_starcleave.block.entity.OperationStarcleaveBlockEntityTypes;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
@@ -70,27 +71,8 @@ public class OperationStarcleave implements ModInitializer {
 
 		OperationStarcleaveParticleTypes.init();
 
-		DispenserBlock.registerBehavior(OperationStarcleaveBlocks.NETHERITE_PUMPKIN, new FallibleItemDispenserBehavior() {
-			@Override
-			protected ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack) {
-				World world = pointer.world();
-				BlockPos blockPos = pointer.pos().offset(pointer.state().get(DispenserBlock.FACING));
-				NetheritePumpkinBlock netheritePumpkinBlock = (NetheritePumpkinBlock)OperationStarcleaveBlocks.NETHERITE_PUMPKIN;
-				if (world.isAir(blockPos) && netheritePumpkinBlock.canDispense(world, blockPos)) {
-					if (!world.isClient) {
-						world.setBlockState(blockPos, netheritePumpkinBlock.getDefaultState(), Block.NOTIFY_ALL);
-						world.emitGameEvent(null, GameEvent.BLOCK_PLACE, blockPos);
-					}
-
-					stack.decrement(1);
-					this.setSuccess(true);
-				} else {
-					this.setSuccess(ArmorItem.dispenseArmor(pointer, stack));
-				}
-
-				return stack;
-			}
-		});
+		OperationStarcleaveDispenserBehavior.init();
+		StarbleachCauldronBlock.init();
 
 		ServerTickEvents.START_WORLD_TICK.register((world -> {
 			Firmament firmament = Firmament.fromWorld(world);
@@ -110,7 +92,5 @@ public class OperationStarcleave implements ModInitializer {
 		}));
 
 		ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register(((player, origin, destination) -> ((FirmamentWatcher)player).operation_starcleave$getWatchedRegions().unWatchAll()));
-
-		StarbleachCauldronBlock.init();
 	}
 }
