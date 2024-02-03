@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "EndermanEntityMixin",
+    "EntityMixin",
     "LivingEntityMixin",
     "MinecraftServerMixin",
     "ServerChunkManagerMixin",
