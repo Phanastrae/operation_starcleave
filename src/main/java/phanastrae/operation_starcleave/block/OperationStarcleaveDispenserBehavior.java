@@ -4,13 +4,20 @@ import net.minecraft.block.Block;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.block.dispenser.FallibleItemDispenserBehavior;
+import net.minecraft.block.dispenser.ProjectileDispenserBehavior;
+import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.entity.projectile.thrown.SnowballEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPointer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Position;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
+import phanastrae.operation_starcleave.entity.projectile.StarbleachedPearlEntity;
+import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 
 public class OperationStarcleaveDispenserBehavior {
 
@@ -34,6 +41,18 @@ public class OperationStarcleaveDispenserBehavior {
                 }
 
                 return stack;
+            }
+        });
+
+        register(OperationStarcleaveItems.STARBLEACHED_PEARL, new ProjectileDispenserBehavior() {
+            @Override
+            protected StarbleachedPearlEntity createProjectile(World world, Position position, ItemStack stack) {
+                return Util.make(new StarbleachedPearlEntity(world, position.getX(), position.getY(), position.getZ()), entity -> entity.setItem(stack));
+            }
+
+            @Override
+            protected float getForce() {
+                return super.getForce() * 1.5F;
             }
         });
     }
