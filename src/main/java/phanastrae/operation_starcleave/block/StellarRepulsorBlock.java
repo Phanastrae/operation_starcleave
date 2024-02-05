@@ -120,8 +120,6 @@ public class StellarRepulsorBlock extends Block {
             double verticalSpeed = Math.max(vel.y, Math.sqrt(horizontalSpeed) * 0.4);
 
             entity.setVelocity(horizontalSpeed * sinYaw, verticalSpeed, horizontalSpeed * cosYaw);
-
-            entity.setOnGround(false);
         }
 
         entity.getWorld().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 0.6F + 0.4F * entity.getWorld().random.nextFloat(), entity.getWorld().random.nextLong());
