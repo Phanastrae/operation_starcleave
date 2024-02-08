@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.network.ChunkBatchSizeCalculator;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
@@ -11,6 +12,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import phanastrae.operation_starcleave.OperationStarcleave;
+import phanastrae.operation_starcleave.entity.projectile.StarbleachedPearlEntity;
 import phanastrae.operation_starcleave.network.packet.OperationStarcleavePacketTypes;
 import phanastrae.operation_starcleave.network.packet.c2s.AcknowledgeFirmamentRegionDataC2SPacket;
 import phanastrae.operation_starcleave.network.packet.s2c.*;
@@ -29,6 +31,8 @@ public class OperationStarcleaveClientPacketHandler {
         ClientPlayNetworking.registerGlobalReceiver(OperationStarcleavePacketTypes.UNLOAD_FIRMAMENT_REGION_S2C, OperationStarcleaveClientPacketHandler::unloadFirmamentRegion);
 
         ClientPlayNetworking.registerGlobalReceiver(OperationStarcleavePacketTypes.FIRMAMENT_CLEAVED_S2C, OperationStarcleaveClientPacketHandler::onFirmamentCleaved);
+
+        ClientPlayNetworking.registerGlobalReceiver(OperationStarcleavePacketTypes.STARBLEACHED_PEARL_LAUNCH_PACKET_S2C, OperationStarcleaveClientPacketHandler::onStarbleachedPearlLaunch);
     }
 
     private static void startFirmamentRegionSend(StartFirmamentRegionSendS2CPacket packet, ClientPlayerEntity player, PacketSender responseSender) {
@@ -127,5 +131,16 @@ public class OperationStarcleaveClientPacketHandler {
 
         ParticleEffect particleEffect = ParticleTypes.FLASH;
         world.addImportantParticle(particleEffect, pos.x, pos.y - 1, pos.z, 0, 0, 0);
+    }
+
+    public static void onStarbleachedPearlLaunch(StarbleachedPearlLaunchPacketS2C packet, ClientPlayerEntity player, PacketSender responseSender) {
+        Entity except = null;
+        if(packet.exceptExists) {
+            Entity e = player.getWorld().getEntityById(packet.exceptId);
+            if(e != null) {
+                except = e;
+            }
+        }
+        StarbleachedPearlEntity.doRepulsion(packet.pos, packet.radius, packet.maxAddedSpeed, player.getWorld(), except);
     }
 }

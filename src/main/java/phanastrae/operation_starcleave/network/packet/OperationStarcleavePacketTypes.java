@@ -15,6 +15,8 @@ public class OperationStarcleavePacketTypes {
 
     public static final PacketType<FirmamentCleavedS2CPacket> FIRMAMENT_CLEAVED_S2C = PacketType.create(OperationStarcleave.id("firmament_cleaved_s2c"), (FirmamentCleavedS2CPacket::new));
 
+    public static final PacketType<StarbleachedPearlLaunchPacketS2C> STARBLEACHED_PEARL_LAUNCH_PACKET_S2C = PacketType.create(OperationStarcleave.id("starbleached_pearl_launch_packet"), StarbleachedPearlLaunchPacketS2C::new);
+
 
     public static final PacketType<AcknowledgeFirmamentRegionDataC2SPacket> ACKNOWLEDGE_FIRMAMENT_REGION_DATA_C2S = PacketType.create(OperationStarcleave.id("acknowledge_firmament_region_data_c2s"), (AcknowledgeFirmamentRegionDataC2SPacket::new));
 

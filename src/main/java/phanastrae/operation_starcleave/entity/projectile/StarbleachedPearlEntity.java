@@ -1,13 +1,17 @@
 package phanastrae.operation_starcleave.entity.projectile;
 
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityStatuses;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
+import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.item.Item;
 import net.minecraft.particle.ParticleEffect;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.HitResult;
@@ -16,8 +20,10 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
+import phanastrae.operation_starcleave.network.packet.s2c.StarbleachedPearlLaunchPacketS2C;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 
 public class StarbleachedPearlEntity extends ThrownItemEntity {
@@ -84,23 +90,61 @@ public class StarbleachedPearlEntity extends ThrownItemEntity {
     }
 
     public static void repel(Vec3d pos, float radius, float maxAddedSpeed, World world, @Nullable Entity entity, float audioMultiplier) {
-        for (Entity e : world.getOtherEntities(entity, Box.from(pos).expand(radius))) {
-            if(e instanceof PlayerEntity player && player.getAbilities().flying) {
-                continue;
-            }
-            Vec3d pos2 = e.getPos().add(0, e.getHeight() / 2, 0);
-            double dist = pos2.distanceTo(pos);
-            if (dist > radius) continue;
-            double f = (radius - dist) / radius;
-            f = 1 - (1-f)*(1-f);
-            Vec3d offset = pos2.subtract(pos).normalize();
+        if(world instanceof ServerWorld serverWorld) {
+            // send packets to nearby players
+            serverWorld.getPlayers().forEach(playerEntity -> {
+                Entity e = playerEntity;
+                Entity vehicle = playerEntity.getControllingVehicle();
+                if(vehicle != null) {
+                    e = vehicle;
+                }
+                double distance = e.getPos().subtract(pos).length();
 
-            e.addVelocity(offset.multiply(f * maxAddedSpeed));
-            e.velocityModified = true;
-            e.fallDistance = -5;
+                // expand radius to be safe
+                float radiusBig = radius * 1.25f + 4;
+                if(distance < radiusBig) {
+                    ServerPlayNetworking.send(playerEntity, new StarbleachedPearlLaunchPacketS2C(pos, radius, maxAddedSpeed, entity));
+                }
+            });
         }
 
-        Random random = world.getRandom();
-        world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ITEM_TRIDENT_THUNDER, SoundCategory.PLAYERS, audioMultiplier, 0.9f + random.nextFloat() * 0.3f);
+        doRepulsion(pos, radius, maxAddedSpeed, world, entity);
+
+        if(!world.isClient) {
+            Random random = world.getRandom();
+            world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ITEM_TRIDENT_THUNDER, SoundCategory.PLAYERS, audioMultiplier, 0.9f + random.nextFloat() * 0.3f);
+        }
+    }
+
+    public static void doRepulsion(Vec3d pos, float radius, float maxAddedSpeed, World world, @Nullable Entity entity) {
+        for (Entity e : world.getOtherEntities(entity, Box.from(pos).expand(radius))) {
+            boolean doRepel;
+            // update players server side (and sync to client), update anything else on logical side
+            if(e instanceof PlayerEntity) {
+                doRepel = !world.isClient;
+            } else {
+                doRepel = e.isLogicalSideForUpdatingMovement();
+            }
+            if(doRepel) {
+                repelEntity(e, pos, radius, maxAddedSpeed);
+            }
+        }
+    }
+
+    public static void repelEntity(Entity e, Vec3d pos, float radius, float maxAddedSpeed) {
+        if(e instanceof PlayerEntity player && player.getAbilities().flying) {
+            return;
+        }
+
+        Vec3d pos2 = e.getPos().add(0, e.getHeight() / 2, 0);
+        double dist = pos2.distanceTo(pos);
+        if (dist > radius) return;
+        double f = (radius - dist) / radius;
+        f = 1 - (1 - f) * (1 - f);
+        Vec3d offset = pos2.subtract(pos).normalize();
+
+        e.addVelocity(offset.multiply(f * maxAddedSpeed));
+        e.velocityModified = true;
+        e.fallDistance = -5;
     }
 }
