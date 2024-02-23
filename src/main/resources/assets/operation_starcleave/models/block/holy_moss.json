@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/cube_bottom_top",
-  "textures": {
-    "bottom": "operation_starcleave:block/stellar_sediment",
-    "side": "operation_starcleave:block/holy_moss_side",
-    "top": "operation_starcleave:block/holy_moss"
-  }
-}

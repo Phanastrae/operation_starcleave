@@ -1,0 +1,25 @@
+{
+  "parent": "operation_starcleave:operation_starcleave/root",
+  "criteria": {
+    "launched_golem": {
+      "trigger": "operation_starcleave:launch_starcleaver_golem"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.operation_starcleave.launch_starcleaver_golem.description"
+    },
+    "icon": {
+      "item": "minecraft:flint_and_steel",
+      "nbt": "{Damage:0}"
+    },
+    "title": {
+      "translate": "advancements.operation_starcleave.launch_starcleaver_golem.title"
+    }
+  },
+  "requirements": [
+    [
+      "launched_golem"
+    ]
+  ]
+}

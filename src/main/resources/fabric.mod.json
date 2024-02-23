@@ -21,7 +21,7 @@
 			"phanastrae.operation_starcleave.OperationStarcleaveClient"
 		],
 		"fabric-datagen": [
-			"phanastrae.operation_starcleave.OperationStarcleaveDataGenerator"
+          "phanastrae.operation_starcleave.data.OperationStarcleaveDataGenerator"
 		]
 	},
 	"accessWidener": "operation_starcleave.accesswidener",

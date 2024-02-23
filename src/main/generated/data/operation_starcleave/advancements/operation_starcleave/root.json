@@ -1,0 +1,37 @@
+{
+  "criteria": {
+    "summoned_golem": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "operation_starcleave:starcleaver_golem"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:summoned_entity"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "operation_starcleave:textures/gui/advancements/backgrounds/operation_starcleave.png",
+    "description": {
+      "translate": "advancements.operation_starcleave.root.description"
+    },
+    "icon": {
+      "item": "operation_starcleave:netherite_pumpkin"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancements.operation_starcleave.root.title"
+    }
+  },
+  "requirements": [
+    [
+      "summoned_golem"
+    ]
+  ]
+}

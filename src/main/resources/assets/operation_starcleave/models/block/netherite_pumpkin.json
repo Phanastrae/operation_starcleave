@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/orientable",
-  "textures": {
-    "front": "operation_starcleave:block/netherite_pumpkin_face",
-    "side": "operation_starcleave:block/netherite_pumpkin_side",
-    "top": "operation_starcleave:block/netherite_pumpkin_top"
-  }
-}

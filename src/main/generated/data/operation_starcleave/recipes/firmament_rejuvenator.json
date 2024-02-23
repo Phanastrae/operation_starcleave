@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": {
+      "item": "minecraft:ghast_tear"
+    },
+    "H": {
+      "item": "operation_starcleave:holy_strands"
+    },
+    "O": {
+      "item": "minecraft:crying_obsidian"
+    },
+    "P": {
+      "item": "operation_starcleave:starbleached_pearl"
+    },
+    "T": {
+      "item": "minecraft:tnt"
+    }
+  },
+  "pattern": [
+    "PGP",
+    "HTH",
+    "OHO"
+  ],
+  "result": {
+    "count": 4,
+    "item": "operation_starcleave:firmament_rejuvenator"
+  }
+}
