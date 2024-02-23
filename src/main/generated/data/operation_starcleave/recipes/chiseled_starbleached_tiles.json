@@ -1,10 +1,14 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "building",
-  "ingredients": [
-    {
-      "item": "operation_starcleave:starbleached_tiles"
+  "key": {
+    "#": {
+      "item": "operation_starcleave:starbleached_tile_slab"
     }
+  },
+  "pattern": [
+    "#",
+    "#"
   ],
   "result": {
     "item": "operation_starcleave:chiseled_starbleached_tiles"

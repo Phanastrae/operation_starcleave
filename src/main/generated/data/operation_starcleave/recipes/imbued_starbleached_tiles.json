@@ -10,12 +10,12 @@
     }
   },
   "pattern": [
-    "TTT",
+    " T ",
     "TBT",
-    "TTT"
+    " T "
   ],
   "result": {
-    "count": 8,
+    "count": 4,
     "item": "operation_starcleave:imbued_starbleached_tiles"
   }
 }

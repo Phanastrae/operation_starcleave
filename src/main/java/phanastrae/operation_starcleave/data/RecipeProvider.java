@@ -9,7 +9,6 @@ import net.minecraft.data.server.recipe.SmithingTransformRecipeJsonBuilder;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.book.RecipeCategory;
-import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.ItemTags;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
@@ -36,11 +35,12 @@ public class RecipeProvider extends FabricRecipeProvider {
                         conditionsFromItem(OperationStarcleaveItems.STARBLEACHED_LOG))
                 .offerTo(exporter);
 
-        ShapelessRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, OperationStarcleaveItems.CHISELED_STARBLEACHED_TILES)
-                .input(OperationStarcleaveItems.STARBLEACHED_TILES)
+        ShapelessRecipeJsonBuilder.create(RecipeCategory.MISC, OperationStarcleaveItems.SPLASH_STARBLEACH_BOTTLE, 5)
+                .input(Items.GUNPOWDER)
+                .input(OperationStarcleaveItems.STARBLEACH_BOTTLE, 5)
                 .criterion(
-                        hasItem(OperationStarcleaveItems.STARBLEACHED_TILES),
-                        conditionsFromItem(OperationStarcleaveItems.STARBLEACHED_TILES))
+                        hasItem(OperationStarcleaveItems.STARBLEACH_BOTTLE),
+                        conditionsFromItem(OperationStarcleaveItems.STARBLEACH_BOTTLE))
                 .offerTo(exporter);
 
         // shaped
@@ -76,12 +76,21 @@ public class RecipeProvider extends FabricRecipeProvider {
                         conditionsFromItem(OperationStarcleaveItems.STELLAR_SEDIMENT))
                 .offerTo(exporter);
 
+        ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, OperationStarcleaveItems.CHISELED_STARBLEACHED_TILES)
+                .input('#', OperationStarcleaveItems.STARBLEACHED_TILE_SLAB)
+                .pattern("#")
+                .pattern("#")
+                .criterion(
+                        hasItem(OperationStarcleaveItems.STARBLEACHED_TILES),
+                        conditionsFromItem(OperationStarcleaveItems.STARBLEACHED_TILES))
+                .offerTo(exporter);
+
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, OperationStarcleaveItems.BLESSED_CLOTH_CARPET, 3)
-                .input('#', OperationStarcleaveItems.BLESSED_CLOTH)
+                .input('#', OperationStarcleaveItems.BLESSED_CLOTH_BLOCK)
                 .pattern("##")
                 .criterion(
-                        hasItem(OperationStarcleaveItems.BLESSED_CLOTH),
-                        conditionsFromItem(OperationStarcleaveItems.BLESSED_CLOTH))
+                        hasItem(OperationStarcleaveItems.BLESSED_CLOTH_BLOCK),
+                        conditionsFromItem(OperationStarcleaveItems.BLESSED_CLOTH_BLOCK))
                 .offerTo(exporter);
 
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, OperationStarcleaveItems.BLESSED_CLOTH_CURTAIN, 16)
@@ -111,23 +120,12 @@ public class RecipeProvider extends FabricRecipeProvider {
                         conditionsFromItem(OperationStarcleaveItems.BLESSED_CLOTH))
                 .offerTo(exporter);
 
-        ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, OperationStarcleaveItems.IMBUED_STARBLEACHED_TILES, 8)
+        ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, OperationStarcleaveItems.IMBUED_STARBLEACHED_TILES, 4)
                 .input('T', OperationStarcleaveItems.STARBLEACHED_TILES)
                 .input('B', OperationStarcleaveItems.STARBLEACH_BOTTLE)
-                .pattern("TTT")
+                .pattern(" T ")
                 .pattern("TBT")
-                .pattern("TTT")
-                .criterion(
-                        hasItem(OperationStarcleaveItems.STARBLEACH_BOTTLE),
-                        conditionsFromItem(OperationStarcleaveItems.STARBLEACH_BOTTLE))
-                .offerTo(exporter);
-
-        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, OperationStarcleaveItems.SPLASH_STARBLEACH_BOTTLE, 8)
-                .input('B', OperationStarcleaveItems.STARBLEACH_BOTTLE)
-                .input('G', Items.GUNPOWDER)
-                .pattern("BBB")
-                .pattern("BGB")
-                .pattern("BBB")
+                .pattern(" T ")
                 .criterion(
                         hasItem(OperationStarcleaveItems.STARBLEACH_BOTTLE),
                         conditionsFromItem(OperationStarcleaveItems.STARBLEACH_BOTTLE))
@@ -162,11 +160,12 @@ public class RecipeProvider extends FabricRecipeProvider {
                 .input('G', Items.GHAST_TEAR)
                 .input('O', Items.CRYING_OBSIDIAN)
                 .input('T', Items.TNT)
+                .input('E', Items.ENDER_PEARL)
                 .input('P', OperationStarcleaveItems.STARBLEACHED_PEARL)
                 .input('H', OperationStarcleaveItems.HOLY_STRANDS)
-                .pattern("PGP")
-                .pattern("HTH")
-                .pattern("OHO")
+                .pattern("OTP")
+                .pattern("EOH")
+                .pattern("G H")
                 .criterion(
                         hasItem(OperationStarcleaveItems.STARBLEACHED_PEARL),
                         conditionsFromItem(OperationStarcleaveItems.STARBLEACHED_PEARL)

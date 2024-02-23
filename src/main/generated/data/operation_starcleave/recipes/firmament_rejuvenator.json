@@ -2,6 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
+    "E": {
+      "item": "minecraft:ender_pearl"
+    },
     "G": {
       "item": "minecraft:ghast_tear"
     },
@@ -19,9 +22,9 @@
     }
   },
   "pattern": [
-    "PGP",
-    "HTH",
-    "OHO"
+    "OTP",
+    "EOH",
+    "G H"
   ],
   "result": {
     "count": 4,

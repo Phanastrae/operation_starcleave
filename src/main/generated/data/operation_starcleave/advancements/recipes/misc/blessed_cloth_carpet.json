@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_blessed_cloth": {
+    "has_blessed_cloth_block": {
       "conditions": {
         "items": [
           {
             "items": [
-              "operation_starcleave:blessed_cloth"
+              "operation_starcleave:blessed_cloth_block"
             ]
           }
         ]
@@ -23,7 +23,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_blessed_cloth"
+      "has_blessed_cloth_block"
     ]
   ],
   "rewards": {

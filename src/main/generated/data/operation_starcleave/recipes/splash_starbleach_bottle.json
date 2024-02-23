@@ -1,21 +1,28 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "minecraft:crafting_shapeless",
   "category": "misc",
-  "key": {
-    "B": {
+  "ingredients": [
+    {
+      "item": "minecraft:gunpowder"
+    },
+    {
       "item": "operation_starcleave:starbleach_bottle"
     },
-    "G": {
-      "item": "minecraft:gunpowder"
+    {
+      "item": "operation_starcleave:starbleach_bottle"
+    },
+    {
+      "item": "operation_starcleave:starbleach_bottle"
+    },
+    {
+      "item": "operation_starcleave:starbleach_bottle"
+    },
+    {
+      "item": "operation_starcleave:starbleach_bottle"
     }
-  },
-  "pattern": [
-    "BBB",
-    "BGB",
-    "BBB"
   ],
   "result": {
-    "count": 8,
+    "count": 5,
     "item": "operation_starcleave:splash_starbleach_bottle"
   }
 }
