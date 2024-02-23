@@ -1,5 +1,7 @@
 package phanastrae.operation_starcleave.item;
 
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -8,6 +10,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 import phanastrae.operation_starcleave.entity.projectile.FirmamentRejuvenatorEntity;
 
@@ -20,9 +23,18 @@ public class FirmamentRejuvenatorItem extends Item {
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack itemStack = user.getStackInHand(hand);
-        if(!user.getAbilities().allowModifyWorld) {
+        if (!user.getAbilities().allowModifyWorld) {
             return TypedActionResult.fail(itemStack);
+        } else {
+            user.setCurrentHand(hand);
+            return TypedActionResult.consume(itemStack);
         }
+    }
+
+    @Override
+    public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+        int i = this.getMaxUseTime(stack) - remainingUseTicks;
+        if(i < 4) return;
 
         world.playSound(
                 null,
@@ -37,17 +49,30 @@ public class FirmamentRejuvenatorItem extends Item {
 
         if (!world.isClient) {
             FirmamentRejuvenatorEntity entity = new FirmamentRejuvenatorEntity(world, user);
-            entity.setVelocity(user, user.getPitch(), user.getYaw(), -20.0F, 1.5F, 1.0F);
+            float speed = Math.min(6.66F, i / 8f);
+            entity.setVelocity(user, user.getPitch(), user.getYaw(), -20.0F, speed, 1.0F);
             world.spawnEntity(entity);
 
-            user.getItemCooldownManager().set(this, 60);
+            if(user instanceof PlayerEntity player) {
+                player.getItemCooldownManager().set(this, 15);
+            }
         }
 
-        user.incrementStat(Stats.USED.getOrCreateStat(this));
-        if (!user.getAbilities().creativeMode) {
-            itemStack.decrement(1);
+        if(user instanceof PlayerEntity player) {
+            player.incrementStat(Stats.USED.getOrCreateStat(this));
         }
+        if (!(user instanceof PlayerEntity player) || !player.getAbilities().creativeMode) {
+            stack.decrement(1);
+        }
+    }
 
-        return super.use(world, user, hand);
+    @Override
+    public UseAction getUseAction(ItemStack stack) {
+        return UseAction.SPEAR;
+    }
+
+    @Override
+    public int getMaxUseTime(ItemStack stack) {
+        return 72000;
     }
 }

@@ -19,6 +19,8 @@ import phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion;
 
 public class FirmamentRejuvenatorEntity extends ThrownItemEntity {
 
+    public static final int MAX_AGE = 140;
+
     public FirmamentRejuvenatorEntity(EntityType<? extends ThrownItemEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -48,10 +50,15 @@ public class FirmamentRejuvenatorEntity extends ThrownItemEntity {
         }
         super.tick();
         if(!this.isRemoved()) {
-            float firmHeight = this.getWorld().getTopY() + 16;
-            double dy = this.getPos().y - firmHeight;
-            if(dy*dy < 1) {
-                this.explode();
+            if(this.age > MAX_AGE) {
+                this.dropStack(this.getItem());
+                this.discard();
+            } else {
+                float firmHeight = this.getWorld().getTopY() + 16;
+                double dy = this.getPos().y - firmHeight;
+                if (dy * dy < 1) {
+                    this.explode();
+                }
             }
         }
     }
@@ -69,7 +76,8 @@ public class FirmamentRejuvenatorEntity extends ThrownItemEntity {
     @Override
     protected void onCollision(HitResult hitResult) {
         super.onCollision(hitResult);
-        explode();
+        this.dropStack(this.getItem());
+        this.discard();
     }
 
     public void explode() {

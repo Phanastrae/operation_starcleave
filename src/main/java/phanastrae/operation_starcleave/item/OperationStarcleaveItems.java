@@ -49,7 +49,7 @@ public class OperationStarcleaveItems {
     public static final Item STARFRUIT = new StarfruitItem(new FabricItemSettings().food(StarfruitItem.STARFRUIT));
     public static final Item HOLY_STRANDS = new Item(new FabricItemSettings());
     public static final Item BLESSED_CLOTH = new Item(new FabricItemSettings());
-    public static final Item FIRMAMENT_REJUVENATOR = new FirmamentRejuvenatorItem(new FabricItemSettings().rarity(Rarity.RARE).maxCount(1));
+    public static final Item FIRMAMENT_REJUVENATOR = new FirmamentRejuvenatorItem(new FabricItemSettings().rarity(Rarity.RARE).maxCount(8));
     public static final Item FIRMAMENT_MANIPULATOR = new FirmamentManipulatorItem(new FabricItemSettings().rarity(Rarity.EPIC).maxCount(1));
 
     public static final ItemGroup OPERATION_STARCLEAVE_GROUP = FabricItemGroup.builder()
