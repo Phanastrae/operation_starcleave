@@ -74,7 +74,7 @@ public class Starbleach {
         if(isStarbleached(blockState)) {
             if(starbleachTarget == StarbleachTarget.ALL || starbleachTarget == StarbleachTarget.NO_FILLING) {
                 if (world.random.nextInt(5) == 0) {
-                    decorate(world, blockPos.add(0, 1, 0));
+                    decorate(world, blockPos.up(), 5);
                     return;
                 }
             }
@@ -133,7 +133,7 @@ public class Starbleach {
         }
     }
 
-    public static void decorate(ServerWorld world, BlockPos blockPos) {
+    public static void decorate(ServerWorld world, BlockPos blockPos, int threshold) {
         int nearby = 0;
         for(int i = -2; i <= 2; i++) {
             for(int j = -2; j <= 2; j++) {
@@ -146,7 +146,7 @@ public class Starbleach {
                 }
             }
         }
-        if(nearby > 5) {
+        if(nearby > threshold) {
             return;
         }
 

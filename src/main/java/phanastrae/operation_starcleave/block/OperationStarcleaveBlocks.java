@@ -26,7 +26,7 @@ public class OperationStarcleaveBlocks {
     );
 
     public static final Block STELLAR_SEDIMENT = new Block(AbstractBlock.Settings.create().mapColor(MapColor.PURPLE).instrument(Instrument.BASEDRUM).strength(2f, 2f).sounds(BlockSoundGroup.SAND).luminance(b -> 2).allowsSpawning(Blocks::never));
-    public static final Block HOLY_MOSS = new Block(AbstractBlock.Settings.create().mapColor(MapColor.PALE_YELLOW).instrument(Instrument.BASEDRUM).strength(3f, 2f).sounds(BlockSoundGroup.MOSS_BLOCK).luminance(b -> 13).allowsSpawning(Blocks::never));
+    public static final Block HOLY_MOSS = new HolyMossBlock(AbstractBlock.Settings.create().mapColor(MapColor.PALE_YELLOW).instrument(Instrument.BASEDRUM).strength(3f, 2f).sounds(BlockSoundGroup.MOSS_BLOCK).luminance(b -> 13).allowsSpawning(Blocks::never).ticksRandomly());
     public static final Block SHORT_HOLY_MOSS = new ShortHolyMossBlock(AbstractBlock.Settings.create().replaceable().noCollision().breakInstantly().mapColor(MapColor.PALE_YELLOW).sounds(BlockSoundGroup.MOSS_BLOCK).luminance(b -> 13).offset(AbstractBlock.OffsetType.XYZ).pistonBehavior(PistonBehavior.DESTROY));
     public static final Block STARDUST_BLOCK = new ColoredFallingBlock(new ColorCode(0xEF9FCFFF), AbstractBlock.Settings.create().mapColor(MapColor.PALE_PURPLE).instrument(Instrument.BASEDRUM).strength(0.4f, 0.1f).sounds(BlockSoundGroup.SAND).luminance(b -> 9).allowsSpawning(Blocks::never));
     public static final Block STARDUST_CLUSTER = new StardustClusterBlock(AbstractBlock.Settings.create().replaceable().breakInstantly().dropsNothing().nonOpaque().luminance(b -> 15));
