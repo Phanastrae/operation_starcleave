@@ -393,7 +393,7 @@ public class StarcleaverGolemEntity extends GolemEntity {
     public void cleave() {
         Firmament firmament = Firmament.fromWorld(this.getWorld());
         if(firmament != null) {
-            FirmamentManipulatorItem.formCrack(firmament, this.getBlockX(), this.getBlockZ(), this.getRandom());
+            FirmamentManipulatorItem.fractureFirmament(firmament, this.getBlockX(), this.getBlockZ(), this.getRandom());
         }
 
         this.getWorld().createExplosion(this, this.getX(), this.getY(), this.getZ(), 7, World.ExplosionSourceType.MOB);

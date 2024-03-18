@@ -84,6 +84,11 @@ public class FirmamentRegion implements FirmamentAccess {
     }
 
     @Override
+    public void forEachActor(Consumer<FirmamentActor> consumer) {
+        forEachSubRegion(firmamentSubRegion -> firmamentSubRegion.forEachActor(consumer));
+    }
+
+    @Override
     public void forEachPosition(BiConsumer<Integer, Integer> method) {
         forEachSubRegion((firmamentSubRegion -> firmamentSubRegion.forEachActivePosition((x, z) -> method.accept(x + firmamentSubRegion.x - this.x, z + firmamentSubRegion.z - this.z))));
     }

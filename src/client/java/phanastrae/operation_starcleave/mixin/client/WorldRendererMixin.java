@@ -1,8 +1,5 @@
 package phanastrae.operation_starcleave.mixin.client;
 
-import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import com.llamalad7.mixinextras.sugar.Local;
-import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.SimpleFramebuffer;
@@ -11,24 +8,14 @@ import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.resource.ResourceManager;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.render.OperationStarcleaveWorldRenderer;
-import phanastrae.operation_starcleave.render.firmament.FirmamentBuiltSubRegionStorage;
-import phanastrae.operation_starcleave.world.firmament.Firmament;
-import phanastrae.operation_starcleave.world.firmament.SubRegionPos;
 
 @Mixin(WorldRenderer.class)
 public class WorldRendererMixin implements OperationStarcleaveWorldRenderer {

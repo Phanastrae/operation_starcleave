@@ -5,6 +5,7 @@
   "client": [
     "ClientPlayNetworkHandlerMixin",
     "ClientWorldMixin",
+    "GameRendererMixin",
     "InGameHudMixin",
     "LightmapTextureManagerMixin",
     "SmithingScreenMixin",

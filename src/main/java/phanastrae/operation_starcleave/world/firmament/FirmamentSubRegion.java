@@ -12,6 +12,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class FirmamentSubRegion implements FirmamentAccess {
     // getter/setter functions should only be called with x and z in range [0, 15]
@@ -110,13 +111,22 @@ public class FirmamentSubRegion implements FirmamentAccess {
         actors.addAll(newActors);
         newActors.clear();
 
-        actors.removeIf((actor) -> !actor.active);
+        actors.removeIf((actor) -> !actor.isActive());
     }
 
     @Override
     public void tickActors() {
         for(FirmamentActor actor : actors) {
-            actor.tick();
+            if(actor.isActive()) {
+                actor.tick();
+            }
+        }
+    }
+
+    @Override
+    public void forEachActor(Consumer<FirmamentActor> consumer) {
+        for(FirmamentActor actor : actors) {
+            consumer.accept(actor);
         }
     }
 

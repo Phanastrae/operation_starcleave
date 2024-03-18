@@ -18,6 +18,10 @@ public class Firmament implements FirmamentAccess {
         this.firmamentRegionManager = firmamentRegionManager;
     }
 
+    public int getY() {
+        return this.world.getTopY() + 16;
+    }
+
     public void tick() {
         long t = world.getTime();
         if (t % 2 == 0) {
@@ -81,6 +85,11 @@ public class Firmament implements FirmamentAccess {
     @Override
     public void tickActors() {
         forEachRegion(FirmamentRegion::tickActors);
+    }
+
+    @Override
+    public void forEachActor(Consumer<FirmamentActor> consumer) {
+        forEachRegion(firmamentRegion -> firmamentRegion.forEachActor(consumer));
     }
 
     @Override

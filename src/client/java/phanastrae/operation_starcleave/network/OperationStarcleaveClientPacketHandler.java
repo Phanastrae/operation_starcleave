@@ -16,6 +16,7 @@ import phanastrae.operation_starcleave.entity.projectile.StarbleachedPearlEntity
 import phanastrae.operation_starcleave.network.packet.OperationStarcleavePacketTypes;
 import phanastrae.operation_starcleave.network.packet.c2s.AcknowledgeFirmamentRegionDataC2SPacket;
 import phanastrae.operation_starcleave.network.packet.s2c.*;
+import phanastrae.operation_starcleave.render.ScreenShakeManager;
 import phanastrae.operation_starcleave.render.firmament.FirmamentBuiltSubRegionHolder;
 import phanastrae.operation_starcleave.render.firmament.FirmamentBuiltSubRegionStorage;
 import phanastrae.operation_starcleave.world.OperationStarcleaveWorld;
@@ -131,6 +132,12 @@ public class OperationStarcleaveClientPacketHandler {
 
         ParticleEffect particleEffect = ParticleTypes.FLASH;
         world.addImportantParticle(particleEffect, pos.x, pos.y - 1, pos.z, 0, 0, 0);
+
+        ScreenShakeManager.getInstance().setShakeAmount(3);
+        Firmament firmament = Firmament.fromWorld(world);
+        if(firmament != null) {
+            firmament.addActor(new FirmamentDamageGlowActor(firmament, (int)pos.x, (int)pos.z));
+        }
     }
 
     public static void onStarbleachedPearlLaunch(StarbleachedPearlLaunchPacketS2C packet, ClientPlayerEntity player, PacketSender responseSender) {

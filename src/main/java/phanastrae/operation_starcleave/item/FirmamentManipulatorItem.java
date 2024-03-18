@@ -86,7 +86,7 @@ public class FirmamentManipulatorItem extends Item {
 
                     int x = (int) target.x;
                     int z = (int) target.z;
-                    formCrack(firmament, x, z, random);
+                    fractureFirmament(firmament, x, z, random);
                 }
             }
         }
@@ -94,7 +94,7 @@ public class FirmamentManipulatorItem extends Item {
         return TypedActionResult.success(itemStack);
     }
 
-    public static void formCrack(Firmament firmament, int x, int z, Random random) {
+    public static void fractureFirmament(Firmament firmament, int x, int z, Random random) {
         if(firmament.getWorld() instanceof ServerWorld world) {
             for(ServerPlayerEntity player : world.getPlayers()) {
                 ServerPlayNetworking.send(player, new FirmamentCleavedS2CPacket(x, z));
@@ -127,8 +127,8 @@ public class FirmamentManipulatorItem extends Item {
         int count = 10;
         for(int i = 0; i < count; i++) {
             float theta = (phase + i / (float)count) * 2 * (float)Math.PI;
-            FirmamentActor actor = new FirmamentActor(firmament, x, z, Math.cos(theta)*TILE_SIZE, Math.sin(theta)*TILE_SIZE, 1000);
-            actor.initialDelay = 12;
+            FirmamentShatterActor actor = new FirmamentShatterActor(firmament, x, z, Math.cos(theta)*TILE_SIZE, Math.sin(theta)*TILE_SIZE, 1000);
+            actor.initialDelay = 32;
             firmament.addActor(actor);
         }
     }

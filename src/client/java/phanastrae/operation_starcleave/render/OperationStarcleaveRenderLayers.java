@@ -6,6 +6,7 @@ import net.minecraft.client.render.RenderPhase;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
 
+import static net.minecraft.client.render.RenderLayer.of;
 import static net.minecraft.client.render.RenderPhase.*;
 
 public class OperationStarcleaveRenderLayers {
@@ -16,7 +17,7 @@ public class OperationStarcleaveRenderLayers {
         MinecraftClient.getInstance().getFramebuffer().beginWrite(false);
     });
 
-    private static final RenderLayer FRACTURE = RenderLayer.of(
+    private static final RenderLayer FRACTURE = of(
             "operation_starcleave$fracture",
             VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL,
             VertexFormat.DrawMode.QUADS,
@@ -28,8 +29,27 @@ public class OperationStarcleaveRenderLayers {
                     .transparency(TRANSLUCENT_TRANSPARENCY)
                     .build(true));
 
+    private static final RenderLayer SKY_RAY = of(
+            "operation_starcleave$sky_ray",
+            VertexFormats.POSITION_COLOR,
+            VertexFormat.DrawMode.QUADS,
+            1536,
+            false,
+            true,
+            RenderLayer.MultiPhaseParameters.builder()
+                    .program(COLOR_PROGRAM)
+                    .writeMaskState(COLOR_MASK)
+                    .transparency(ADDITIVE_TRANSPARENCY)
+                    .target(MAIN_TARGET)
+                    .build(false)
+    );
+
     public static RenderLayer getFracture() {
         return FRACTURE;
+    }
+
+    public static RenderLayer getSkyRay() {
+        return SKY_RAY;
     }
 
 }
