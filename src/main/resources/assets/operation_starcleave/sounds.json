@@ -1,0 +1,25 @@
+{
+  "entity.starcleaver_golem.ambient": {
+    "subtitle": "subtitles.operation_starcleave.entity.starcleaver_golem.ambient",
+    "sounds": [
+      "operation_starcleave:mob/starcleaver_golem/say1",
+      "operation_starcleave:mob/starcleaver_golem/say2",
+      "operation_starcleave:mob/starcleaver_golem/say3"
+    ]
+  },
+  "entity.starcleaver_golem.death": {
+    "subtitle": "subtitles.operation_starcleave.entity.starcleaver_golem.death",
+    "sounds": [
+      "operation_starcleave:mob/starcleaver_golem/death"
+    ]
+  },
+  "entity.starcleaver_golem.step": {
+    "subtitle": "subtitles.operation_starcleave.entity.starcleaver_golem.step",
+    "sounds": [
+      "operation_starcleave:mob/starcleaver_golem/step1",
+      "operation_starcleave:mob/starcleaver_golem/step2",
+      "operation_starcleave:mob/starcleaver_golem/step3",
+      "operation_starcleave:mob/starcleaver_golem/step4"
+    ]
+  }
+}

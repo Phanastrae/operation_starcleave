@@ -64,5 +64,9 @@
   "operation_starcleave.tooltip.starbleached": "Starbleached",
   "operation_starcleave.tooltip.firmament_manipulator.1": "Use on the sky to Cleave the Firmament",
   "operation_starcleave.tooltip.firmament_manipulator.2": "Use whilst sneaking to repair the Firmament",
-  "operation_starcleave.tooltip.firmament_manipulator.3": "Beware of environmental damage..."
+  "operation_starcleave.tooltip.firmament_manipulator.3": "Beware of environmental damage...",
+
+  "subtitles.operation_starcleave.entity.starcleaver_golem.ambient": "Starcleaver Golem clicks",
+  "subtitles.operation_starcleave.entity.starcleaver_golem.death": "Starcleaver Golem dies",
+  "subtitles.operation_starcleave.entity.starcleaver_golem.step": "Starcleaver Golem skitters"
 }

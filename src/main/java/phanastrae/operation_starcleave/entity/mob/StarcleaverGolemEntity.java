@@ -32,8 +32,10 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.advancement.criterion.OperationStarcleaveAdvancementCriteria;
 import phanastrae.operation_starcleave.item.FirmamentManipulatorItem;
+import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 
 import java.util.ArrayList;
@@ -404,5 +406,22 @@ public class StarcleaverGolemEntity extends GolemEntity {
 
         this.forEachLauncher((OperationStarcleaveAdvancementCriteria.CLEAVE_FIRMAMENT::trigger));
         this.clearLaunchers();
+    }
+
+    @Override
+    protected void playStepSound(BlockPos pos, BlockState state) {
+        this.playSound(OperationStarcleaveSoundEvents.ENTITY_STARCLEAVER_GOLEM_STEP, 0.45F, 0.8F + this.random.nextFloat() * 0.4F);
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return OperationStarcleaveSoundEvents.ENTITY_STARCLEAVER_GOLEM_AMBIENT;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getDeathSound() {
+        return OperationStarcleaveSoundEvents.ENTITY_STARCLEAVER_GOLEM_DEATH;
     }
 }
