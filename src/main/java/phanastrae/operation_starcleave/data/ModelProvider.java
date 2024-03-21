@@ -144,6 +144,7 @@ public class ModelProvider extends FabricModelProvider {
 
     @Override
     public void generateItemModels(ItemModelGenerator itemModelGenerator) {
+        registerGenerated(itemModelGenerator, OperationStarcleaveItems.STARCLEAVER_GOLEM_BUCKET);
         registerGenerated(itemModelGenerator, OperationStarcleaveItems.BLESSED_BED);
         registerGenerated(itemModelGenerator, OperationStarcleaveItems.BLESSED_CLOTH);
         registerGenerated(itemModelGenerator, OperationStarcleaveItems.FIRMAMENT_REJUVENATOR);

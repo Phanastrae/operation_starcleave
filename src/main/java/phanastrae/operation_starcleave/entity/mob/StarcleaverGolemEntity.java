@@ -1,6 +1,8 @@
 package phanastrae.operation_starcleave.entity.mob;
 
+import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.Bucketable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.*;
@@ -14,6 +16,7 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.GolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsage;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -35,15 +38,17 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.advancement.criterion.OperationStarcleaveAdvancementCriteria;
 import phanastrae.operation_starcleave.item.FirmamentManipulatorItem;
+import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-public class StarcleaverGolemEntity extends GolemEntity {
+public class StarcleaverGolemEntity extends GolemEntity implements Bucketable {
 
     private static final TrackedData<Boolean> IGNITED = DataTracker.registerData(StarcleaverGolemEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     private static final TrackedData<Boolean> PLUMMETING = DataTracker.registerData(StarcleaverGolemEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
@@ -293,6 +298,21 @@ public class StarcleaverGolemEntity extends GolemEntity {
     protected ActionResult interactMob(PlayerEntity player, Hand hand) {
         World world = this.getWorld();
         ItemStack itemStack = player.getStackInHand(hand);
+
+        if (itemStack.getItem() == Items.BUCKET && this.isAlive() && !this.isIgnited() && !this.isPlummeting()) {
+            this.playSound(this.getBucketFillSound(), 1.0F, 1.0F);
+            ItemStack itemStack2 = this.getBucketItem();
+            this.copyDataToStack(itemStack2);
+            ItemStack itemStack3 = ItemUsage.exchangeStack(itemStack, player, itemStack2, false);
+            player.setStackInHand(hand, itemStack3);
+            if (!world.isClient) {
+                Criteria.FILLED_BUCKET.trigger((ServerPlayerEntity)player, itemStack2);
+            }
+
+            this.discard();
+            return ActionResult.success(world.isClient);
+        }
+
         if (player.getAbilities().allowModifyWorld && this.getGunpowderTicks() > 20 && !this.isIgnited() && !this.isPlummeting() && itemStack.isIn(ItemTags.CREEPER_IGNITERS)) {
             SoundEvent soundEvent = itemStack.isOf(Items.FIRE_CHARGE) ? SoundEvents.ITEM_FIRECHARGE_USE : SoundEvents.ITEM_FLINTANDSTEEL_USE;
             world.playSound(player, this.getX(), this.getY(), this.getZ(), soundEvent, this.getSoundCategory(), 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
@@ -423,5 +443,40 @@ public class StarcleaverGolemEntity extends GolemEntity {
     @Override
     protected SoundEvent getDeathSound() {
         return OperationStarcleaveSoundEvents.ENTITY_STARCLEAVER_GOLEM_DEATH;
+    }
+
+    @Override
+    public boolean isFromBucket() {
+        return false;
+    }
+
+    @Override
+    public void setFromBucket(boolean fromBucket) {
+        // empty
+    }
+
+    @Override
+    public void copyDataToStack(ItemStack stack) {
+        Bucketable.copyDataToStack(this, stack);
+        NbtCompound nbtCompound = stack.getOrCreateNbt();
+        nbtCompound.putInt("gunpowderTicks", this.getGunpowderTicks());
+    }
+
+    @Override
+    public void copyDataFromNbt(NbtCompound nbt) {
+        Bucketable.copyDataFromNbt(this, nbt);
+        if(nbt.contains("gunpowderTicks", NbtElement.INT_TYPE)) {
+            this.setGunpowderTicks(nbt.getInt("gunpowderTicks"));
+        }
+    }
+
+    @Override
+    public ItemStack getBucketItem() {
+        return OperationStarcleaveItems.STARCLEAVER_GOLEM_BUCKET.getDefaultStack();
+    }
+
+    @Override
+    public SoundEvent getBucketFillSound() {
+        return OperationStarcleaveSoundEvents.ENTITY_STARCLEAVER_GOLEM_AMBIENT;
     }
 }

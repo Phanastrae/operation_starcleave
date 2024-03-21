@@ -42,6 +42,7 @@ public class OperationStarcleaveItems {
 
     public static final Item BLESSED_BED = new BedItem(OperationStarcleaveBlocks.BLESSED_BED, new FabricItemSettings().maxCount(1).rarity(Rarity.RARE));
 
+    public static final Item STARCLEAVER_GOLEM_BUCKET = new StarcleaverGolemBucketItem(new FabricItemSettings().maxCount(1));
     public static final Item STARCLEAVER_GOLEM_SPAWN_EGG = new SpawnEggItem(OperationStarcleaveEntityTypes.STARCLEAVER_GOLEM, 0x292725, 0x61eddf, new Item.Settings());
     public static final Item STARBLEACH_BOTTLE = new StarbleachBottleItem(new FabricItemSettings().recipeRemainder(Items.GLASS_BOTTLE).food(StarbleachBottleItem.STARBLEACH_BOTTLE).maxCount(16));
     public static final Item SPLASH_STARBLEACH_BOTTLE = new SplashStarbleachBottleItem(new FabricItemSettings().maxCount(16));
@@ -61,7 +62,7 @@ public class OperationStarcleaveItems {
         Registry.register(Registries.ITEM_GROUP, OperationStarcleave.id("operation_starcleave"), OPERATION_STARCLEAVE_GROUP);
 
         registerWithIG(NETHERITE_PUMPKIN, "netherite_pumpkin");
-        registerWithIG(STARCLEAVER_GOLEM_SPAWN_EGG, "starcleaver_golem_spawn_egg");
+        registerWithIG(STARCLEAVER_GOLEM_BUCKET, "starcleaver_golem_bucket");
         registerWithIG(STELLAR_SEDIMENT, "stellar_sediment");
         registerWithIG(HOLY_MOSS, "holy_moss");
         registerWithIG(SHORT_HOLY_MOSS, "short_holy_moss");
@@ -95,6 +96,8 @@ public class OperationStarcleaveItems {
         registerWithIG(BLESSED_CLOTH, "blessed_cloth");
         registerWithIG(FIRMAMENT_REJUVENATOR, "firmament_rejuvenator");
         registerWithIG(FIRMAMENT_MANIPULATOR, "firmament_manipulator");
+
+        registerWithIG(STARCLEAVER_GOLEM_SPAWN_EGG, "starcleaver_golem_spawn_egg");
 
         addToVanillaItemGroups();
     }
@@ -146,6 +149,8 @@ public class OperationStarcleaveItems {
         addItemToGroupAfter(BLESSED_CLOTH, ItemGroups.INGREDIENTS, HOLY_STRANDS);
 
         addItemToGroup(STARCLEAVER_GOLEM_SPAWN_EGG, ItemGroups.SPAWN_EGGS);
+
+        addItemToGroup(STARCLEAVER_GOLEM_BUCKET, ItemGroups.TOOLS);
 
         // different method used here to ensure the item is only added if operator tab is present
         ItemGroup operatorGroup = Registries.ITEM_GROUP.get(ItemGroups.OPERATOR);
