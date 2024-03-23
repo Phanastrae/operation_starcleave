@@ -44,6 +44,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.advancement.criterion.OperationStarcleaveAdvancementCriteria;
 import phanastrae.operation_starcleave.entity.ai.goal.FollowFavoriteGoal;
+import phanastrae.operation_starcleave.entity.projectile.SplashStarbleachEntity;
 import phanastrae.operation_starcleave.item.FirmamentManipulatorItem;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
@@ -234,6 +235,10 @@ public class StarcleaverGolemEntity extends GolemEntity implements Bucketable {
                     if(this.isOnGround()) {
                         this.setPlummeting(false);
                         world.createExplosion(this, this.getX(), this.getY(), this.getZ(), 3, World.ExplosionSourceType.MOB);
+                        for(int i = 0; i < 6; i++) {
+                            BlockPos pos = this.getBlockPos().add(random.nextInt(7) - 3, random.nextInt(7) - 3, random.nextInt(7) - 3);
+                            SplashStarbleachEntity.starbleach(pos, this.getWorld());
+                        }
                     }
                 }
 

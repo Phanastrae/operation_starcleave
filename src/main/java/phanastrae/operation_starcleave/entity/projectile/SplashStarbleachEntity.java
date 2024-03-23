@@ -84,15 +84,14 @@ public class SplashStarbleachEntity extends ThrownItemEntity implements FlyingIt
         super.onCollision(hitResult);
         if (!this.getWorld().isClient) {
             if(this.canStarbleach) {
-                starbleach(getBlockPos());
+                starbleach(getBlockPos(), this.getWorld());
             }
             this.discard();
         }
     }
 
-    protected void starbleach(BlockPos blockPos) {
+    public static void starbleach(BlockPos blockPos, World world) {
         BlockPos.Mutable blockPosMutable = new BlockPos.Mutable();
-        World world = this.getWorld();
         if(world instanceof ServerWorld serverWorld) {
             for (int i = -3; i <= 3; i++) {
                 for (int j = -2; j <= 2; j++) {
