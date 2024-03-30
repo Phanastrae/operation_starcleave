@@ -5,9 +5,11 @@
   "client": [
     "ClientPlayNetworkHandlerMixin",
     "ClientWorldMixin",
+    "DebugHudMixin",
     "GameRendererMixin",
     "InGameHudMixin",
     "LightmapTextureManagerMixin",
+    "MinecraftClientMixin",
     "SmithingScreenMixin",
     "WorldRendererAccessor",
     "WorldRendererMixin"

@@ -50,18 +50,10 @@ public class FirmamentManipulatorItem extends Item {
 
             float pitch = Math.toRadians(user.getPitch());
             if(pitch > 0) return TypedActionResult.fail(itemStack);
-            float yaw = Math.toRadians(user.getYaw());
+            Vec3d pos = user.getCameraPosVec(1.0F);
+            Vec3d lookVec = user.getRotationVec(1.0F);
 
-            float sinYaw = Math.sin(yaw);
-            float cosYaw = Math.cos(yaw);
-            float sinPitch = Math.sin(pitch);
-            float cosPitch = Math.cos(pitch);
-
-            Vec3d lookVec = new Vec3d(-sinYaw * cosPitch, -sinPitch, cosYaw * cosPitch);
-
-            Vec3d pos = user.getPos();
-
-            float skyHeight = world.getTopY() + 16;
+            float skyHeight = firmament.getY();
             double t = (skyHeight - pos.y) / lookVec.y;
             if(t > 0) {
                 Vec3d target = pos.add(lookVec.multiply(t));

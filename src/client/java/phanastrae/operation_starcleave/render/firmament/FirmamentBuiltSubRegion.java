@@ -47,7 +47,7 @@ public class FirmamentBuiltSubRegion {
                 drawQuad(bufferBuilder,
                         x*FirmamentSubRegion.TILE_SIZE, z*FirmamentSubRegion.TILE_SIZE,
                         (x+1)*FirmamentSubRegion.TILE_SIZE, (z+1)*FirmamentSubRegion.TILE_SIZE,
-                        1,
+                        0,
                         rbyte / 255f,
                         gbyte / 255f,
                         bbyte / 255f,

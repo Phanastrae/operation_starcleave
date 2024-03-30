@@ -1,46 +1,46 @@
 package phanastrae.operation_starcleave;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.systems.VertexSorter;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
-import net.fabricmc.fabric.api.client.networking.v1.ClientConfigurationConnectionEvents;
-import net.fabricmc.fabric.api.client.networking.v1.ClientLoginConnectionEvents;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.CoreShaderRegistrationCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.minecraft.block.Block;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.ShaderProgram;
-import net.minecraft.client.gl.VertexBuffer;
-import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.RenderLayers;
-import net.minecraft.client.render.RenderPhase;
+import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
-import net.minecraft.util.profiler.Profiler;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.tick.TickManager;
+import org.joml.Math;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
-import phanastrae.operation_starcleave.block.entity.BlessedBedBlockEntity;
 import phanastrae.operation_starcleave.block.entity.OperationStarcleaveBlockEntityTypes;
 import phanastrae.operation_starcleave.item.StarbleachCoating;
 import phanastrae.operation_starcleave.network.OperationStarcleaveClientPacketHandler;
-import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticles;
-import phanastrae.operation_starcleave.render.OperationStarcleaveRenderLayers;
 import phanastrae.operation_starcleave.render.OperationStarcleaveShaders;
 import phanastrae.operation_starcleave.render.ScreenShakeManager;
 import phanastrae.operation_starcleave.render.entity.BlessedBedBlockEntityRenderer;
 import phanastrae.operation_starcleave.render.entity.OperationStarcleaveEntityRenderers;
 import phanastrae.operation_starcleave.render.firmament.FirmamentActorRenderable;
 import phanastrae.operation_starcleave.render.firmament.FirmamentBuiltSubRegionStorage;
+import phanastrae.operation_starcleave.render.firmament.FirmamentOutlineRenderer;
+import phanastrae.operation_starcleave.render.firmament.FirmamentRenderer;
 import phanastrae.operation_starcleave.world.OperationStarcleaveWorld;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
-import phanastrae.operation_starcleave.render.firmament.FirmamentRenderer;
+import phanastrae.operation_starcleave.world.firmament.FirmamentTilePos;
 
 public class OperationStarcleaveClient implements ClientModInitializer {
+
+	public static FirmamentOutlineRenderer FirmamentOutlineRenderer = new FirmamentOutlineRenderer();
 
 	@Override
 	public void onInitializeClient() {
@@ -83,6 +83,13 @@ public class OperationStarcleaveClient implements ClientModInitializer {
 					}
 				});
 			}
+		});
+
+		WorldRenderEvents.BEFORE_BLOCK_OUTLINE.register((worldRenderContext, hitResult) -> {
+			if(!worldRenderContext.blockOutlines()) return true;
+			if(worldRenderContext.consumers() == null) return true;
+			OperationStarcleaveClient.FirmamentOutlineRenderer.renderOutline(worldRenderContext.consumers(), worldRenderContext.camera(), worldRenderContext.matrixStack());
+			return true;
 		});
 
 		CoreShaderRegistrationCallback.EVENT.register(OperationStarcleaveShaders::registerShaders);

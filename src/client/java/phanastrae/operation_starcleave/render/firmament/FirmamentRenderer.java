@@ -401,7 +401,9 @@ public class FirmamentRenderer {
         int currentTexID = RenderSystem.getShaderTexture(0);
         int firmamentSkyTexID = firmamentFrameBuffer.getColorAttachment();
 
-        int height = worldRenderContext.world().getTopY() + 16;
+        Firmament firmament = Firmament.fromWorld(worldRenderContext.world());
+        if(firmament == null) return;
+        int height = firmament.getY();
 
         MatrixStack modelViewStack = RenderSystem.getModelViewStack();
         RenderLayer renderLayer = OperationStarcleaveRenderLayers.getFracture();
