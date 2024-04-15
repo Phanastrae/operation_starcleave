@@ -64,6 +64,11 @@ public class Firmament implements FirmamentAccess {
         return this.firmamentRegionManager.getFirmamentRegion(id);
     }
 
+    @Nullable
+    public FirmamentRegion getFirmamentRegion(RegionPos regionPos) {
+        return getFirmamentRegion(regionPos.id);
+    }
+
     @Override
     public void clearActors() {
         forEachRegion(FirmamentRegion::clearActors);

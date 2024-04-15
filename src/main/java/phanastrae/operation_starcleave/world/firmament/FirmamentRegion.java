@@ -24,6 +24,8 @@ public class FirmamentRegion implements FirmamentAccess {
     // world coords of minimum x-z corner
     public final int x;
     public final int z;
+    // TODO replace x,z usage with regionPos.worldX, regionPos.worldZ
+    public final RegionPos regionPos;
 
     public final Firmament firmament;
 
@@ -35,6 +37,7 @@ public class FirmamentRegion implements FirmamentAccess {
         this.firmament = firmament;
         this.x = x;
         this.z = z;
+        this.regionPos = RegionPos.fromWorldCoords(x, z);
 
         this.subRegions = new FirmamentSubRegion[SUBREGIONS][SUBREGIONS];
         for(int i = 0; i < SUBREGIONS; i++) {

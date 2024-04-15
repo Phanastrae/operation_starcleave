@@ -1,16 +1,14 @@
 #version 150
 
 uniform sampler2D Sampler0;
+uniform sampler2D Sampler1;
 
 uniform float GameTime;
 uniform vec2 ScreenSize;
+uniform float[16] ActiveRegions;
 
-in float vertexDistance;
-in vec4 vertexColor;
 in vec2 texCoord0;
-in vec2 localPos;
-
-in float[9] damage;
+in vec3 pos;
 
 out vec4 fragColor;
 
@@ -27,8 +25,17 @@ vec3 rainbow(float f) {
     return vec3(r, g, b);
 }
 
+vec4 getColor(float x, float z) {
+    vec4 col = textureGrad(Sampler0, vec2(x, z), vec2(0.), vec2(0.));
+    int i = int(floor(mod(x * 4., 4.)));
+    int j = int(floor(mod(z * 4., 4.)));
+    int index = i * 4 + j;
+    float m = ActiveRegions[index];
+    return col * m;
+}
+
 void main() {
-    int TILE_SIZE_PIXELS = 16;
+    int TILE_SIZE_PIXELS = 16 * 128 * 4;
 
     float x = (floor(texCoord0.x * TILE_SIZE_PIXELS) + 0.5) / TILE_SIZE_PIXELS;
     float z = (floor(texCoord0.y * TILE_SIZE_PIXELS) + 0.5) / TILE_SIZE_PIXELS;
@@ -40,8 +47,8 @@ void main() {
             float damx = i - 0.5;
             float damz = j - 0.5;
 
-            float dx = damx - x;
-            float dz = damz - z;
+            float dx = damx - mod(x * 512., 1.);
+            float dz = damz - mod(z * 512., 1.);
 
             float dist = abs(dx) + abs(dz);
             float v1 = 1. - dist;
@@ -57,7 +64,7 @@ void main() {
             w = sqrt(w);
 
             weight += w;
-            float dam = damage[3 * i + j];
+            float dam = getColor(x + float(i-1)/512., z + float(j-1)/512.).r * 255./7.;
             avgDamage += dam * dam * w;
         }
     }
@@ -66,8 +73,9 @@ void main() {
     float g = 0.;
 
     // smooth fade into distance to avoid hard borders
-    if(vertexDistance > 400.) {
-        float v = vertexDistance - 400.;
+    float distance = length(pos);
+    if(distance > 400.) {
+        float v = distance - 400.;
         g = v / 100.;
         damageAmount -= g;
         if(damageAmount < 0.) damageAmount = 0.;
@@ -83,7 +91,7 @@ void main() {
     }
 
     // random value from 0 to 1
-    float random = rand(vec2(x, z + GameTime));
+    float random = rand(vec2(x * 512., z * 512. + GameTime));
 
     float absDist = abs(distFromBorder);
 
@@ -102,8 +110,8 @@ void main() {
         }
     }
 
-    float f1 = sin(localPos.x * 2. * PI);
-    float f2 = sin(localPos.y * 2. * PI);
+    float f1 = sin(texCoord0.x * 64 * 2. * PI);
+    float f2 = sin(texCoord0.y * 64. * 2. * PI);
     float f3 = f1*f2 + (GameTime * 100.) * 2. * PI;
     vec3 borderColor = rainbow(f3) * 0.7 + 0.3;
     borderColor = borderColor + (1. - borderColor) * sqrt(g);
@@ -112,7 +120,7 @@ void main() {
     vec3 color = borderColor + (edgeColor - borderColor) * l;
 
     if(a != 1.) {
-        fragColor = texture(Sampler0, gl_FragCoord.xy / ScreenSize.xy);
+        fragColor = texture(Sampler1, gl_FragCoord.xy / ScreenSize.xy);
     } else {
         fragColor = vec4(color, a);
     }

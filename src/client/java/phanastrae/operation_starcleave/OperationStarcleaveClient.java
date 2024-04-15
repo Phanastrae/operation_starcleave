@@ -1,11 +1,13 @@
 package phanastrae.operation_starcleave;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.CoreShaderRegistrationCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.InvalidateRenderStateCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.block.Block;
 import net.minecraft.client.MinecraftClient;
@@ -21,6 +23,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.tick.TickManager;
 import org.joml.Math;
+import org.joml.Matrix4f;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.block.entity.OperationStarcleaveBlockEntityTypes;
 import phanastrae.operation_starcleave.item.StarbleachCoating;
@@ -30,10 +33,7 @@ import phanastrae.operation_starcleave.render.OperationStarcleaveShaders;
 import phanastrae.operation_starcleave.render.ScreenShakeManager;
 import phanastrae.operation_starcleave.render.entity.BlessedBedBlockEntityRenderer;
 import phanastrae.operation_starcleave.render.entity.OperationStarcleaveEntityRenderers;
-import phanastrae.operation_starcleave.render.firmament.FirmamentActorRenderable;
-import phanastrae.operation_starcleave.render.firmament.FirmamentBuiltSubRegionStorage;
-import phanastrae.operation_starcleave.render.firmament.FirmamentOutlineRenderer;
-import phanastrae.operation_starcleave.render.firmament.FirmamentRenderer;
+import phanastrae.operation_starcleave.render.firmament.*;
 import phanastrae.operation_starcleave.world.OperationStarcleaveWorld;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 import phanastrae.operation_starcleave.world.firmament.FirmamentTilePos;
@@ -73,6 +73,8 @@ public class OperationStarcleaveClient implements ClientModInitializer {
 		});
 
 		WorldRenderEvents.BEFORE_ENTITIES.register(worldRenderContext -> {
+			FirmamentTextureStorage.getInstance().tick();
+
 			FirmamentRenderer.render(worldRenderContext);
 
 			Firmament firmament = Firmament.fromWorld(worldRenderContext.world());
@@ -90,6 +92,10 @@ public class OperationStarcleaveClient implements ClientModInitializer {
 			if(worldRenderContext.consumers() == null) return true;
 			OperationStarcleaveClient.FirmamentOutlineRenderer.renderOutline(worldRenderContext.consumers(), worldRenderContext.camera(), worldRenderContext.matrixStack());
 			return true;
+		});
+
+		InvalidateRenderStateCallback.EVENT.register(() -> {
+			FirmamentTextureStorage.getInstance().clearData();
 		});
 
 		CoreShaderRegistrationCallback.EVENT.register(OperationStarcleaveShaders::registerShaders);
@@ -112,5 +118,6 @@ public class OperationStarcleaveClient implements ClientModInitializer {
 
 	public static void onClientShutdown(MinecraftClient client) {
 		FirmamentBuiltSubRegionStorage.getInstance().close();
+		FirmamentTextureStorage.getInstance().close();
 	}
 }

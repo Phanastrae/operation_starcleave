@@ -45,7 +45,7 @@ public class FirmamentRenderer {
         double firmHeight = world.getTopY() + 16;
         Box box = new Box(camx - 512, firmHeight - 1, camz - 512, camx + 512, firmHeight + 1, camz + 512);
         if(!frustum.isVisible(box)) {
-            return;
+            //return;
         }
 
         MinecraftClient client = MinecraftClient.getInstance();
@@ -77,6 +77,7 @@ public class FirmamentRenderer {
                     }
                 }
             }));
+            renderSkybox.set(true);
 
             if(renderSkybox.get()) {
                 profiler.swap("sky");
@@ -417,10 +418,15 @@ public class FirmamentRenderer {
         ShaderProgram shaderProgram = RenderSystem.getShader();
 
         if(shaderProgram != null) {
-            RenderSystem.setShaderTexture(0, firmamentSkyTexID);
+            int id = FirmamentTextureStorage.getInstance().texture.getGlId();
+            RenderSystem.setShaderTexture(0, id);
 
-            int n = RenderSystem.getShaderTexture(0);
-            shaderProgram.addSampler("Sampler" + 0, n);
+            RenderSystem.setShaderTexture(1, firmamentSkyTexID);
+
+            for(int m = 0; m < 2; ++m) {
+                int n = RenderSystem.getShaderTexture(m);
+                shaderProgram.addSampler("Sampler" + m, n);
+            }
 
             if (shaderProgram.modelViewMat != null) {
                 shaderProgram.modelViewMat.set(modelViewStack.peek().getPositionMatrix());
@@ -440,8 +446,14 @@ public class FirmamentRenderer {
             }
 
             shaderProgram.bind();
-            GlUniform glUniform = shaderProgram.chunkOffset;
+            //GlUniform glUniform = shaderProgram.chunkOffset;
+            GlUniform glUniform = shaderProgram.getUniform("ActiveRegions");
+            if(glUniform != null) {
+                float[] activeRegions = FirmamentTextureStorage.getInstance().getActiveRegions();
+                glUniform.set(activeRegions);
+            }
 
+            /*
             FirmamentBuiltSubRegionStorage.getInstance().forEach((firmamentBuiltSubRegionHolder -> {
                 FirmamentBuiltSubRegion builtSubRegion = firmamentBuiltSubRegionHolder.getBuiltSubRegion();
                 if(builtSubRegion != null && frustum.isVisible(firmamentBuiltSubRegionHolder.box)) {
@@ -463,6 +475,39 @@ public class FirmamentRenderer {
             if (glUniform != null) {
                 glUniform.set(0.0F, 0.0F, 0.0F);
             }
+            */
+
+            Tessellator tessellator = Tessellator.getInstance();
+            BufferBuilder bufferBuilder = tessellator.getBuffer();
+            MatrixStack matrices = worldRenderContext.matrixStack();
+
+            matrices.push();
+
+            Matrix4f matrix4f = matrices.peek().getPositionMatrix();
+            bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL);
+
+            RegionPos regionPos = RegionPos.fromWorldCoords((int)Math.floor(camPos.x), (int)Math.floor(camPos.z));
+
+            matrices.translate(regionPos.worldX-camPos.x, height-camPos.y, regionPos.worldZ-camPos.z);
+            for(int i = -1; i <= 1; i++) {
+                for(int j = -1; j <= 1; j++) {
+                    int ox = 512 * i;
+                    int oz = 512 * j;
+                    float u1 = ((regionPos.rx + i) % 4) / 4f;
+                    float v1 = ((regionPos.rz + j) % 4) / 4f;
+                    float u2 = u1 + 0.25f;
+                    float v2 = v1 + 0.25f;
+                    bufferBuilder.vertex(matrix4f, ox, 0, oz).color(255, 255, 255, 255).texture(u1, v1).light(LightmapTextureManager.MAX_LIGHT_COORDINATE).normal(0, 0, 0).next();
+                    bufferBuilder.vertex(matrix4f, ox + 512, 0, oz).color(255, 255, 255, 255).texture(u2, v1).light(LightmapTextureManager.MAX_LIGHT_COORDINATE).normal(0, 0, 0).next();
+                    bufferBuilder.vertex(matrix4f, ox + 512, 0, oz + 512).color(255, 255, 255, 255).texture(u2, v2).light(LightmapTextureManager.MAX_LIGHT_COORDINATE).normal(0, 0, 0).next();
+                    bufferBuilder.vertex(matrix4f, ox, 0, oz + 512).color(255, 255, 255, 255).texture(u1, v2).light(LightmapTextureManager.MAX_LIGHT_COORDINATE).normal(0, 0, 0).next();
+                }
+            }
+            tessellator.draw();
+            matrices.pop();
+
+
+
 
             VertexBuffer.unbind();
 

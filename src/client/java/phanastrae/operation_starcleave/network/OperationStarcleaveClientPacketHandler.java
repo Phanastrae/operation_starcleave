@@ -11,7 +11,6 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.entity.projectile.StarbleachedPearlEntity;
 import phanastrae.operation_starcleave.network.packet.OperationStarcleavePacketTypes;
 import phanastrae.operation_starcleave.network.packet.c2s.AcknowledgeFirmamentRegionDataC2SPacket;
@@ -19,6 +18,7 @@ import phanastrae.operation_starcleave.network.packet.s2c.*;
 import phanastrae.operation_starcleave.render.ScreenShakeManager;
 import phanastrae.operation_starcleave.render.firmament.FirmamentBuiltSubRegionHolder;
 import phanastrae.operation_starcleave.render.firmament.FirmamentBuiltSubRegionStorage;
+import phanastrae.operation_starcleave.render.firmament.FirmamentTextureStorage;
 import phanastrae.operation_starcleave.world.OperationStarcleaveWorld;
 import phanastrae.operation_starcleave.world.firmament.*;
 
@@ -63,6 +63,7 @@ public class OperationStarcleaveClientPacketHandler {
                         FirmamentBuiltSubRegionStorage.getInstance().add(firmamentBuiltSubRegionHolder);
                     }
                 }
+                FirmamentTextureStorage.getInstance().onRegionAdded(firmamentRegion);
 
                 SubRegionPos subRegionPos = SubRegionPos.fromWorldCoords(regionPos.worldX, regionPos.worldZ);
                 for(int i = -1; i <= FirmamentRegion.SUBREGIONS; i++) {
@@ -103,6 +104,7 @@ public class OperationStarcleaveClientPacketHandler {
                         }
                     }
                 }
+                FirmamentTextureStorage.getInstance().onSubRegionUpdated(firmamentSubRegion);
             }
         }
     }

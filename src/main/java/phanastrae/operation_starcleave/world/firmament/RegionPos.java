@@ -1,5 +1,7 @@
 package phanastrae.operation_starcleave.world.firmament;
 
+import net.minecraft.entity.Entity;
+
 public class RegionPos {
 
     public final long id;
@@ -30,5 +32,9 @@ public class RegionPos {
 
     public static RegionPos fromSubRegion(SubRegionPos subRegionPos) {
         return fromWorldCoords(subRegionPos.worldX, subRegionPos.worldZ);
+    }
+
+    public static RegionPos fromEntity(Entity entity) {
+        return fromWorldCoords(entity.getBlockX(), entity.getBlockZ());
     }
 }

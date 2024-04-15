@@ -5,6 +5,7 @@ import net.minecraft.client.world.ClientWorld;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.render.firmament.FirmamentBuiltSubRegionHolder;
 import phanastrae.operation_starcleave.render.firmament.FirmamentBuiltSubRegionStorage;
+import phanastrae.operation_starcleave.render.firmament.FirmamentTextureStorage;
 
 import java.util.function.Consumer;
 
@@ -76,5 +77,6 @@ public class ClientFirmamentRegionManager extends FirmamentRegionManager {
                 FirmamentBuiltSubRegionStorage.getInstance().remove(subRegionPos.id);
             }
         }
+        FirmamentTextureStorage.getInstance().onRegionRemoved(id);
     }
 }
