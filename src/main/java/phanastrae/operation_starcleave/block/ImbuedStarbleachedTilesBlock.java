@@ -28,9 +28,9 @@ public class ImbuedStarbleachedTilesBlock extends Block {
                 double z = pos.getZ() + 0.5 + 0.5 * v.getZ();
                 for(int k = 0; k < 25; k++) {
                     world.addParticle(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER,
-                            x + (v.getX() == 0 ? random.nextFloat() : 0),
-                            y + (v.getY() == 0 ? random.nextFloat() : 0),
-                            z + (v.getZ() == 0 ? random.nextFloat() : 0),
+                            x + (v.getX() == 0 ? random.nextFloat() - 0.5 : 0),
+                            y + (v.getY() == 0 ? random.nextFloat() - 0.5 : 0),
+                            z + (v.getZ() == 0 ? random.nextFloat() - 0.5 : 0),
                             v.getX() * 0.05 + random.nextFloat() * 0.05 - 0.025,
                             v.getY() * 0.05 + random.nextFloat() * 0.05 - 0.025,
                             v.getZ() * 0.05 + random.nextFloat() * 0.05 - 0.025);
