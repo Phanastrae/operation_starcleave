@@ -3,8 +3,6 @@ package phanastrae.operation_starcleave.world.firmament;
 import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
 import net.minecraft.client.world.ClientWorld;
 import org.jetbrains.annotations.Nullable;
-import phanastrae.operation_starcleave.render.firmament.FirmamentBuiltSubRegionHolder;
-import phanastrae.operation_starcleave.render.firmament.FirmamentBuiltSubRegionStorage;
 import phanastrae.operation_starcleave.render.firmament.FirmamentTextureStorage;
 
 import java.util.function.Consumer;
@@ -70,13 +68,6 @@ public class ClientFirmamentRegionManager extends FirmamentRegionManager {
 
         this.firmamentRegionHolders.remove(id);
 
-        RegionPos regionPos = new RegionPos(id);
-        for(int i = 0; i < FirmamentRegion.SUBREGIONS; i++) {
-            for(int j = 0; j < FirmamentRegion.SUBREGIONS; j++) {
-                SubRegionPos subRegionPos = SubRegionPos.fromWorldCoords(regionPos.worldX + i * FirmamentSubRegion.SUBREGION_SIZE, regionPos.worldZ + j * FirmamentSubRegion.SUBREGION_SIZE);
-                FirmamentBuiltSubRegionStorage.getInstance().remove(subRegionPos.id);
-            }
-        }
         FirmamentTextureStorage.getInstance().onRegionRemoved(id);
     }
 }

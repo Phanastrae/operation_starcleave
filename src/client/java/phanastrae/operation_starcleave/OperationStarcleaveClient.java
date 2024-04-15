@@ -117,7 +117,6 @@ public class OperationStarcleaveClient implements ClientModInitializer {
 	}
 
 	public static void onClientShutdown(MinecraftClient client) {
-		FirmamentBuiltSubRegionStorage.getInstance().close();
 		FirmamentTextureStorage.getInstance().close();
 	}
 }

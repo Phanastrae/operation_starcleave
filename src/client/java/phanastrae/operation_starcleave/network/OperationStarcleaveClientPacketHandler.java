@@ -16,8 +16,6 @@ import phanastrae.operation_starcleave.network.packet.OperationStarcleavePacketT
 import phanastrae.operation_starcleave.network.packet.c2s.AcknowledgeFirmamentRegionDataC2SPacket;
 import phanastrae.operation_starcleave.network.packet.s2c.*;
 import phanastrae.operation_starcleave.render.ScreenShakeManager;
-import phanastrae.operation_starcleave.render.firmament.FirmamentBuiltSubRegionHolder;
-import phanastrae.operation_starcleave.render.firmament.FirmamentBuiltSubRegionStorage;
 import phanastrae.operation_starcleave.render.firmament.FirmamentTextureStorage;
 import phanastrae.operation_starcleave.world.OperationStarcleaveWorld;
 import phanastrae.operation_starcleave.world.firmament.*;
@@ -53,28 +51,7 @@ public class OperationStarcleaveClientPacketHandler {
 
             if(firmamentRegion != null) {
                 firmamentRegion.readFromData(packet.firmamentRegionData);
-
-                RegionPos regionPos = new RegionPos(packet.regionId);
-                for(int i = 0; i < FirmamentRegion.SUBREGIONS; i++) {
-                    for(int j = 0; j < FirmamentRegion.SUBREGIONS; j++) {
-                        SubRegionPos subRegionPos = SubRegionPos.fromWorldCoords(regionPos.worldX + i * FirmamentSubRegion.SUBREGION_SIZE, regionPos.worldZ + j * FirmamentSubRegion.SUBREGION_SIZE);
-                        FirmamentBuiltSubRegionHolder firmamentBuiltSubRegionHolder = new FirmamentBuiltSubRegionHolder(subRegionPos.id, firmament.getWorld().getTopY() + 16);
-
-                        FirmamentBuiltSubRegionStorage.getInstance().add(firmamentBuiltSubRegionHolder);
-                    }
-                }
                 FirmamentTextureStorage.getInstance().onRegionAdded(firmamentRegion);
-
-                SubRegionPos subRegionPos = SubRegionPos.fromWorldCoords(regionPos.worldX, regionPos.worldZ);
-                for(int i = -1; i <= FirmamentRegion.SUBREGIONS; i++) {
-                    for(int j = -1; j <= FirmamentRegion.SUBREGIONS; j++) {
-                        SubRegionPos subRegionPos2 = new SubRegionPos(subRegionPos.srx+i, subRegionPos.srz+j);
-                        FirmamentBuiltSubRegionHolder subRegionHolder = FirmamentBuiltSubRegionStorage.getInstance().get(subRegionPos2.id);
-                        if(subRegionHolder != null) {
-                            subRegionHolder.build(firmament, subRegionPos2);
-                        }
-                    }
-                }
             }
         }
     }
@@ -94,16 +71,6 @@ public class OperationStarcleaveClientPacketHandler {
             if(firmamentSubRegion != null) {
                 firmamentSubRegion.readFromData(packet.subRegionData);
 
-                SubRegionPos subRegionPos = new SubRegionPos(packet.id);
-                for(int i = -1; i <= 1; i++) {
-                    for(int j = -1; j <= 1; j++) {
-                        SubRegionPos subRegionPos2 = new SubRegionPos(subRegionPos.srx+i, subRegionPos.srz+j);
-                        FirmamentBuiltSubRegionHolder subRegionHolder = FirmamentBuiltSubRegionStorage.getInstance().get(subRegionPos2.id);
-                        if(subRegionHolder != null) {
-                            subRegionHolder.build(firmament, subRegionPos2);
-                        }
-                    }
-                }
                 FirmamentTextureStorage.getInstance().onSubRegionUpdated(firmamentSubRegion);
             }
         }

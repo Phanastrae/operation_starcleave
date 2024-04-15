@@ -45,7 +45,7 @@ public class FirmamentRenderer {
         double firmHeight = world.getTopY() + 16;
         Box box = new Box(camx - 512, firmHeight - 1, camz - 512, camx + 512, firmHeight + 1, camz + 512);
         if(!frustum.isVisible(box)) {
-            //return;
+            return;
         }
 
         MinecraftClient client = MinecraftClient.getInstance();
@@ -68,18 +68,16 @@ public class FirmamentRenderer {
             profiler.push("starcleave_firmament");
             profiler.push("check");
 
-            AtomicBoolean renderSkybox = new AtomicBoolean(false);
-            FirmamentBuiltSubRegionStorage.getInstance().forEach((firmamentBuiltSubRegionHolder -> {
-                if (!renderSkybox.get()) {
-                    FirmamentBuiltSubRegion builtSubRegion = firmamentBuiltSubRegionHolder.getBuiltSubRegion();
-                    if (builtSubRegion != null && frustum.isVisible(firmamentBuiltSubRegionHolder.box)) {
-                        renderSkybox.set(true);
-                    }
+            boolean renderSkybox = false;
+            for(int i = 0; i < 4 && !renderSkybox; i++) {
+                for(int j = 0; j < 4 && !renderSkybox; j++) {
+                    FirmamentTextureStorage fts = FirmamentTextureStorage.getInstance();
+                    if(!fts.active[i][j] || !fts.filled[i][j]) continue;
+                    renderSkybox = true;
                 }
-            }));
-            renderSkybox.set(true);
+            }
 
-            if(renderSkybox.get()) {
+            if(renderSkybox) {
                 profiler.swap("sky");
                 Framebuffer firmamentFrameBuffer = ((OperationStarcleaveWorldRenderer)worldRenderContext.worldRenderer()).operation_starcleave$getFirmamentFramebuffer();
                 firmamentFrameBuffer.setClearColor(0, 0.08f, 0.08f, 1f);
@@ -446,36 +444,11 @@ public class FirmamentRenderer {
             }
 
             shaderProgram.bind();
-            //GlUniform glUniform = shaderProgram.chunkOffset;
             GlUniform glUniform = shaderProgram.getUniform("ActiveRegions");
             if(glUniform != null) {
                 float[] activeRegions = FirmamentTextureStorage.getInstance().getActiveRegions();
                 glUniform.set(activeRegions);
             }
-
-            /*
-            FirmamentBuiltSubRegionStorage.getInstance().forEach((firmamentBuiltSubRegionHolder -> {
-                FirmamentBuiltSubRegion builtSubRegion = firmamentBuiltSubRegionHolder.getBuiltSubRegion();
-                if(builtSubRegion != null && frustum.isVisible(firmamentBuiltSubRegionHolder.box)) {
-                    SubRegionPos subRegionPos = new SubRegionPos(firmamentBuiltSubRegionHolder.id);
-                    double dx = (subRegionPos.worldX + FirmamentSubRegion.SUBREGION_SIZE / 2f) - camPos.x;
-                    double dz = (subRegionPos.worldZ + FirmamentSubRegion.SUBREGION_SIZE / 2f) - camPos.z;
-                    double distSqr = dx*dx + dz*dz;
-                    if(distSqr < 512*512) {
-                        if (glUniform != null) {
-                            glUniform.set((float)((double)subRegionPos.worldX - camPos.x), (float)((double)height - camPos.y), (float)((double)subRegionPos.worldZ - camPos.z));
-                            glUniform.upload();
-                        }
-
-                        builtSubRegion.bind();
-                        builtSubRegion.draw();
-                    }
-                }
-            }));
-            if (glUniform != null) {
-                glUniform.set(0.0F, 0.0F, 0.0F);
-            }
-            */
 
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder bufferBuilder = tessellator.getBuffer();

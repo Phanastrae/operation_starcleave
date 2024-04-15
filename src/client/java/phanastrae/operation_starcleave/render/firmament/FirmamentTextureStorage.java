@@ -12,9 +12,6 @@ import phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion;
 import phanastrae.operation_starcleave.world.firmament.RegionPos;
 
 public class FirmamentTextureStorage {
-    // TODO should/can this be multithreaded?
-    // TODO check over and tidy this code if needed
-    // TODO actually implement the active/inactive thing please
 
     private static final FirmamentTextureStorage INSTANCE = new FirmamentTextureStorage();
 
