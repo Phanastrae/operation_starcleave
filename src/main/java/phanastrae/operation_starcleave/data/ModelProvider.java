@@ -3,12 +3,14 @@ package phanastrae.operation_starcleave.data;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.LeveledCauldronBlock;
 import net.minecraft.data.client.*;
 import net.minecraft.item.Item;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import phanastrae.operation_starcleave.OperationStarcleave;
+import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.block.StarbleachedPearlBlock;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 
@@ -139,6 +141,17 @@ public class ModelProvider extends FabricModelProvider {
                     .upload(HOLY_MOSS, blockStateModelGenerator.modelCollector);
             blockStateModelGenerator.blockStateCollector
                     .accept(VariantsBlockStateSupplier.create(HOLY_MOSS, createModelVariantWithRandomHorizontalRotations(identifier2)));
+        }
+
+        {
+            TextureMap textureMap = new TextureMap().put(TextureKey.DIRT, TextureMap.getId(STELLAR_SEDIMENT)).put(TextureKey.TOP, TextureMap.getId(STELLAR_FARMLAND));
+            TextureMap textureMap2 = new TextureMap()
+                    .put(TextureKey.DIRT, TextureMap.getId(STELLAR_SEDIMENT))
+                    .put(TextureKey.TOP, TextureMap.getSubId(STELLAR_FARMLAND, "_moist"));
+            Identifier identifier = Models.TEMPLATE_FARMLAND.upload(STELLAR_FARMLAND, textureMap, blockStateModelGenerator.modelCollector);
+            Identifier identifier2 = Models.TEMPLATE_FARMLAND.upload(TextureMap.getSubId(STELLAR_FARMLAND, "_moist"), textureMap2, blockStateModelGenerator.modelCollector);
+            blockStateModelGenerator.blockStateCollector
+                    .accept(VariantsBlockStateSupplier.create(STELLAR_FARMLAND).coordinate(createValueFencedModelMap(Properties.MOISTURE, 7, identifier2, identifier)));
         }
     }
 

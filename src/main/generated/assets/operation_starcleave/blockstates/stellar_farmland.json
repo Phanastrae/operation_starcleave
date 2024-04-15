@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "moisture=0": {
+      "model": "operation_starcleave:block/stellar_farmland"
+    },
+    "moisture=1": {
+      "model": "operation_starcleave:block/stellar_farmland"
+    },
+    "moisture=2": {
+      "model": "operation_starcleave:block/stellar_farmland"
+    },
+    "moisture=3": {
+      "model": "operation_starcleave:block/stellar_farmland"
+    },
+    "moisture=4": {
+      "model": "operation_starcleave:block/stellar_farmland"
+    },
+    "moisture=5": {
+      "model": "operation_starcleave:block/stellar_farmland"
+    },
+    "moisture=6": {
+      "model": "operation_starcleave:block/stellar_farmland"
+    },
+    "moisture=7": {
+      "model": "operation_starcleave:block/stellar_farmland_moist"
+    }
+  }
+}

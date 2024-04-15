@@ -1,9 +1,6 @@
 package phanastrae.operation_starcleave.world.starbleach;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.LeveledCauldronBlock;
-import net.minecraft.block.PillarBlock;
+import net.minecraft.block.*;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -14,9 +11,11 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.Heightmap;
+import net.minecraft.world.World;
 import net.minecraft.world.chunk.WorldChunk;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
+import phanastrae.operation_starcleave.block.StellarFarmlandBlock;
 import phanastrae.operation_starcleave.block.tag.OperationStarcleaveBlockTags;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 import phanastrae.operation_starcleave.world.OperationStarcleaveGameRules;
@@ -108,7 +107,7 @@ public class Starbleach {
             }
         }
 
-        BlockState newState = getStarbleachResult(blockState, world.random, starbleachTarget);
+        BlockState newState = getStarbleachResult(world, blockPos, blockState, world.random, starbleachTarget);
 
         if(newState != null) {
             if(newState.isAir()) {
@@ -160,7 +159,7 @@ public class Starbleach {
     }
 
     @Nullable
-    public static BlockState getStarbleachResult(BlockState blockState, Random random, StarbleachTarget starbleachTarget) {
+    public static BlockState getStarbleachResult(World world, BlockPos blockPos, BlockState blockState, Random random, StarbleachTarget starbleachTarget) {
         BlockState newBlockstate = null;
         if(starbleachTarget == StarbleachTarget.ALL || starbleachTarget == StarbleachTarget.ONLY_FILLING) {
             newBlockstate = getStarbleachCauldronResult(blockState, random);
@@ -169,7 +168,7 @@ public class Starbleach {
             }
         }
         if(starbleachTarget == StarbleachTarget.ALL || starbleachTarget == StarbleachTarget.NO_FILLING) {
-            newBlockstate = getStarbleachBlockResult(blockState, random);
+            newBlockstate = getStarbleachBlockResult(world, blockPos, blockState, random);
             if(newBlockstate != null) {
                 return newBlockstate;
             }
@@ -196,7 +195,7 @@ public class Starbleach {
     }
 
     @Nullable
-    public static BlockState getStarbleachBlockResult(BlockState blockState, Random random) {
+    public static BlockState getStarbleachBlockResult(World world, BlockPos blockPos, BlockState blockState, Random random) {
         // TODO implement proper datapack based system for this instead of hardcoding it all
         if(blockState.isOf(Blocks.GRASS_BLOCK)
                 || blockState.isOf(Blocks.PODZOL)
@@ -236,6 +235,14 @@ public class Starbleach {
                 return OperationStarcleaveBlocks.STARBLEACHED_LOG.getDefaultState().with(PillarBlock.AXIS, blockState.get(PillarBlock.AXIS));
             } else {
                 return OperationStarcleaveBlocks.STARBLEACHED_LOG.getDefaultState();
+            }
+        }
+        if(blockState.isOf(Blocks.FARMLAND)) {
+            Firmament firmament = Firmament.fromWorld(world);
+            if(firmament != null && StellarFarmlandBlock.isStarlit(world, blockPos, firmament)) {
+                return OperationStarcleaveBlocks.STELLAR_FARMLAND.getDefaultState().with(FarmlandBlock.MOISTURE, 7);
+            } else {
+                return OperationStarcleaveBlocks.STELLAR_FARMLAND.getDefaultState();
             }
         }
 

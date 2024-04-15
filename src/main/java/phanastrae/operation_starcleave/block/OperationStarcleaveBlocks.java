@@ -26,6 +26,7 @@ public class OperationStarcleaveBlocks {
     );
 
     public static final Block STELLAR_SEDIMENT = new Block(AbstractBlock.Settings.create().mapColor(MapColor.PURPLE).instrument(Instrument.BASEDRUM).strength(1.15f, 2f).sounds(BlockSoundGroup.SAND).luminance(b -> 2).allowsSpawning(Blocks::never));
+    public static final Block STELLAR_FARMLAND = new StellarFarmlandBlock(AbstractBlock.Settings.create().mapColor(MapColor.PURPLE).instrument(Instrument.BASEDRUM).strength(1.25f, 2f).sounds(BlockSoundGroup.SAND).luminance(b -> b.get(FarmlandBlock.MOISTURE) == 7 ? 15 : 2).allowsSpawning(Blocks::never).blockVision(Blocks::always).suffocates(Blocks::always).ticksRandomly());
     public static final Block HOLY_MOSS = new HolyMossBlock(AbstractBlock.Settings.create().mapColor(MapColor.PALE_YELLOW).instrument(Instrument.BASEDRUM).strength(1.15f, 2f).sounds(BlockSoundGroup.MOSS_BLOCK).luminance(b -> 13).allowsSpawning(Blocks::never).ticksRandomly());
     public static final Block SHORT_HOLY_MOSS = new ShortHolyMossBlock(AbstractBlock.Settings.create().replaceable().noCollision().breakInstantly().mapColor(MapColor.PALE_YELLOW).sounds(BlockSoundGroup.MOSS_BLOCK).luminance(b -> 13).offset(AbstractBlock.OffsetType.XYZ).pistonBehavior(PistonBehavior.DESTROY));
     public static final Block STARDUST_BLOCK = new ColoredFallingBlock(new ColorCode(0xEF9FCFFF), AbstractBlock.Settings.create().mapColor(MapColor.PALE_PURPLE).instrument(Instrument.BASEDRUM).strength(0.2f, 0.1f).sounds(BlockSoundGroup.SAND).luminance(b -> 9).allowsSpawning(Blocks::never));
@@ -52,6 +53,7 @@ public class OperationStarcleaveBlocks {
     public static void init() {
         register(NETHERITE_PUMPKIN, "netherite_pumpkin");
         register(STELLAR_SEDIMENT, "stellar_sediment");
+        register(STELLAR_FARMLAND, "stellar_farmland");
         register(HOLY_MOSS, "holy_moss");
         register(SHORT_HOLY_MOSS, "short_holy_moss");
         register(STARDUST_BLOCK, "stardust_block");

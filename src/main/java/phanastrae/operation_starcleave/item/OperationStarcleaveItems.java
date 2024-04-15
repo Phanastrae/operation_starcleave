@@ -19,6 +19,7 @@ public class OperationStarcleaveItems {
     public static final Item NETHERITE_PUMPKIN = new NetheritePumpkinItem(OperationStarcleaveBlocks.NETHERITE_PUMPKIN, new FabricItemSettings().rarity(Rarity.UNCOMMON).fireproof());
 
     public static final Item STELLAR_SEDIMENT = new BlockItem(OperationStarcleaveBlocks.STELLAR_SEDIMENT, new FabricItemSettings());
+    public static final Item STELLAR_FARMLAND = new BlockItem(OperationStarcleaveBlocks.STELLAR_FARMLAND, new FabricItemSettings());
     public static final Item HOLY_MOSS = new BlockItem(OperationStarcleaveBlocks.HOLY_MOSS, new FabricItemSettings());
     public static final Item SHORT_HOLY_MOSS = new BlockItem(OperationStarcleaveBlocks.SHORT_HOLY_MOSS, new FabricItemSettings());
     public static final Item STARDUST_BLOCK = new BlockItem(OperationStarcleaveBlocks.STARDUST_BLOCK, new FabricItemSettings());
@@ -64,6 +65,7 @@ public class OperationStarcleaveItems {
         registerWithIG(NETHERITE_PUMPKIN, "netherite_pumpkin");
         registerWithIG(STARCLEAVER_GOLEM_BUCKET, "starcleaver_golem_bucket");
         registerWithIG(STELLAR_SEDIMENT, "stellar_sediment");
+        registerWithIG(STELLAR_FARMLAND, "stellar_farmland");
         registerWithIG(HOLY_MOSS, "holy_moss");
         registerWithIG(SHORT_HOLY_MOSS, "short_holy_moss");
         registerWithIG(STARDUST_BLOCK, "stardust_block");
@@ -122,7 +124,8 @@ public class OperationStarcleaveItems {
         addItemToGroupAfter(STARBLEACHED_LEAVES, ItemGroups.NATURAL, Items.FLOWERING_AZALEA_LEAVES);
         addItemToGroupAfter(HOLY_MOSS, ItemGroups.NATURAL, Items.END_STONE);
         addItemToGroupAfter(STELLAR_SEDIMENT, ItemGroups.NATURAL, HOLY_MOSS);
-        addItemToGroupAfter(STARDUST_BLOCK, ItemGroups.NATURAL, STELLAR_SEDIMENT);
+        addItemToGroupAfter(STELLAR_FARMLAND, ItemGroups.NATURAL, STELLAR_SEDIMENT);
+        addItemToGroupAfter(STARDUST_BLOCK, ItemGroups.NATURAL, STELLAR_FARMLAND);
         addItemToGroupAfter(SHORT_HOLY_MOSS, ItemGroups.NATURAL, Items.HANGING_ROOTS);
 
         addItemToGroupAfter(NETHERITE_PUMPKIN, ItemGroups.FUNCTIONAL, Items.DRAGON_HEAD);

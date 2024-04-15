@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/template_farmland",
+  "textures": {
+    "dirt": "operation_starcleave:block/stellar_sediment",
+    "top": "operation_starcleave:block/stellar_farmland"
+  }
+}

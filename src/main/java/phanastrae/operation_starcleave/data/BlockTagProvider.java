@@ -42,6 +42,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
         getOrCreateTagBuilder(BlockTags.SHOVEL_MINEABLE)
                 .add(OperationStarcleaveBlocks.STELLAR_SEDIMENT)
+                .add(OperationStarcleaveBlocks.STELLAR_FARMLAND)
                 .add(OperationStarcleaveBlocks.HOLY_MOSS)
                 .add(OperationStarcleaveBlocks.STELLAR_TILES)
                 .add(OperationStarcleaveBlocks.STELLAR_REPULSOR)
@@ -78,6 +79,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
         getOrCreateTagBuilder(OperationStarcleaveBlockTags.STARBLEACHED)
                 .add(OperationStarcleaveBlocks.STELLAR_SEDIMENT)
+                .add(OperationStarcleaveBlocks.STELLAR_FARMLAND)
                 .add(OperationStarcleaveBlocks.HOLY_MOSS)
                 .add(OperationStarcleaveBlocks.STARBLEACHED_LOG)
                 .add(OperationStarcleaveBlocks.STARBLEACHED_WOOD)
