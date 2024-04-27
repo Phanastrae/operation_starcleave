@@ -3,6 +3,7 @@
   "package": "phanastrae.operation_starcleave.mixin.client",
   "compatibilityLevel": "JAVA_17",
   "client": [
+    "ChunkBuilderMixin",
     "ClientPlayNetworkHandlerMixin",
     "ClientWorldMixin",
     "DebugHudMixin",

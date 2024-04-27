@@ -39,7 +39,8 @@ public class OperationStarcleaveClientPacketHandler {
     }
 
     private static void receiveFirmamentRegionData(FirmamentRegionDataS2CPacket packet, ClientPlayerEntity player, PacketSender responseSender) {
-        Firmament firmament = Firmament.fromWorld(player.getWorld());
+        World world = player.getWorld();
+        Firmament firmament = Firmament.fromWorld(world);
         if(firmament != null) {
             FirmamentRegion firmamentRegion = firmament.getFirmamentRegion(packet.regionId);
             if(firmamentRegion == null) {
@@ -51,7 +52,7 @@ public class OperationStarcleaveClientPacketHandler {
 
             if(firmamentRegion != null) {
                 firmamentRegion.readFromData(packet.firmamentRegionData);
-                FirmamentTextureStorage.getInstance().onRegionAdded(firmamentRegion);
+                FirmamentTextureStorage.getInstance().onRegionAdded(firmamentRegion, world);
             }
         }
     }
@@ -64,14 +65,15 @@ public class OperationStarcleaveClientPacketHandler {
     }
 
     private static void updateFirmamentSubRegion(UpdateFirmamentSubRegionS2CPacket packet, ClientPlayerEntity player, PacketSender responseSender) {
-        Firmament firmament = Firmament.fromWorld(player.getWorld());
+        World world = player.getWorld();
+        Firmament firmament = Firmament.fromWorld(world);
         if(firmament != null) {
             FirmamentSubRegion firmamentSubRegion = firmament.getSubRegionFromId(packet.id);
 
             if(firmamentSubRegion != null) {
                 firmamentSubRegion.readFromData(packet.subRegionData);
 
-                FirmamentTextureStorage.getInstance().onSubRegionUpdated(firmamentSubRegion);
+                FirmamentTextureStorage.getInstance().onSubRegionUpdated(firmamentSubRegion, world);
             }
         }
     }

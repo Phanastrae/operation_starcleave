@@ -5,6 +5,7 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderPhase;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
+import phanastrae.operation_starcleave.render.shader.OperationStarcleaveShaders;
 
 import static net.minecraft.client.render.RenderLayer.of;
 import static net.minecraft.client.render.RenderPhase.*;

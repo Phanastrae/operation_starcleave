@@ -474,6 +474,11 @@ public class FirmamentRenderer {
                     bufferBuilder.vertex(matrix4f, ox + 512, 0, oz).color(255, 255, 255, 255).texture(u2, v1).light(LightmapTextureManager.MAX_LIGHT_COORDINATE).normal(0, 0, 0).next();
                     bufferBuilder.vertex(matrix4f, ox + 512, 0, oz + 512).color(255, 255, 255, 255).texture(u2, v2).light(LightmapTextureManager.MAX_LIGHT_COORDINATE).normal(0, 0, 0).next();
                     bufferBuilder.vertex(matrix4f, ox, 0, oz + 512).color(255, 255, 255, 255).texture(u1, v2).light(LightmapTextureManager.MAX_LIGHT_COORDINATE).normal(0, 0, 0).next();
+
+                    bufferBuilder.vertex(matrix4f, ox, 0, oz + 512).color(255, 255, 255, 255).texture(u1, v2).light(LightmapTextureManager.MAX_LIGHT_COORDINATE).normal(0, 0, 0).next();
+                    bufferBuilder.vertex(matrix4f, ox + 512, 0, oz + 512).color(255, 255, 255, 255).texture(u2, v2).light(LightmapTextureManager.MAX_LIGHT_COORDINATE).normal(0, 0, 0).next();
+                    bufferBuilder.vertex(matrix4f, ox + 512, 0, oz).color(255, 255, 255, 255).texture(u2, v1).light(LightmapTextureManager.MAX_LIGHT_COORDINATE).normal(0, 0, 0).next();
+                    bufferBuilder.vertex(matrix4f, ox, 0, oz).color(255, 255, 255, 255).texture(u1, v1).light(LightmapTextureManager.MAX_LIGHT_COORDINATE).normal(0, 0, 0).next();
                 }
             }
             tessellator.draw();
