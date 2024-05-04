@@ -1,14 +1,12 @@
 package phanastrae.operation_starcleave.block;
 
 import net.minecraft.block.*;
-import net.minecraft.block.enums.BedPart;
 import net.minecraft.block.enums.Instrument;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.ColorCode;
-import net.minecraft.util.DyeColor;
 import phanastrae.operation_starcleave.OperationStarcleave;
 
 import static net.minecraft.block.Blocks.CAULDRON;
@@ -30,14 +28,14 @@ public class OperationStarcleaveBlocks {
     public static final Block SHORT_HOLY_MOSS = new ShortHolyMossBlock(AbstractBlock.Settings.create().replaceable().noCollision().breakInstantly().mapColor(MapColor.PALE_YELLOW).sounds(BlockSoundGroup.MOSS_BLOCK).luminance(b -> 13).offset(AbstractBlock.OffsetType.XYZ).pistonBehavior(PistonBehavior.DESTROY));
     public static final Block STARDUST_BLOCK = new ColoredFallingBlock(new ColorCode(0xEF9FCFFF), AbstractBlock.Settings.create().mapColor(MapColor.PALE_PURPLE).instrument(Instrument.BASEDRUM).strength(0.4f, 0.1f).sounds(BlockSoundGroup.SAND).luminance(b -> 9).allowsSpawning(Blocks::never));
     public static final Block STARDUST_CLUSTER = new StardustClusterBlock(AbstractBlock.Settings.create().replaceable().breakInstantly().dropsNothing().nonOpaque().luminance(b -> 15));
-    public static final Block STARBLEACHED_LOG = new PillarBlock(AbstractBlock.Settings.create().mapColor(MapColor.GRAY).instrument(Instrument.BASEDRUM).requiresTool().strength(4f, 6f).sounds(BlockSoundGroup.STONE).luminance(b -> 8).allowsSpawning(Blocks::never));
-    public static final Block STARBLEACHED_WOOD = new PillarBlock(AbstractBlock.Settings.create().mapColor(MapColor.GRAY).instrument(Instrument.BASEDRUM).requiresTool().strength(4f, 6f).sounds(BlockSoundGroup.STONE).luminance(b -> 8).allowsSpawning(Blocks::never));
-    public static final Block STARBLEACHED_LEAVES = new StarbleachedLeavesBlock(AbstractBlock.Settings.create().mapColor(MapColor.GRAY).instrument(Instrument.BASEDRUM).requiresTool().strength(0.4f, 2f).sounds(BlockSoundGroup.STONE).luminance(b -> 11).allowsSpawning(Blocks::never).nonOpaque().suffocates(Blocks::never).blockVision(Blocks::never).solidBlock(Blocks::never));
-    public static final Block STARBLEACHED_TILES = new Block(AbstractBlock.Settings.create().mapColor(MapColor.GRAY).instrument(Instrument.BASEDRUM).requiresTool().strength(4f, 6f).sounds(BlockSoundGroup.STONE).luminance(b -> 8).allowsSpawning(Blocks::never));
+    public static final Block STARBLEACHED_LOG = new PillarBlock(AbstractBlock.Settings.create().mapColor(MapColor.TERRACOTTA_MAGENTA).instrument(Instrument.BASEDRUM).requiresTool().strength(4f, 6f).sounds(BlockSoundGroup.STONE).luminance(b -> 8).allowsSpawning(Blocks::never));
+    public static final Block STARBLEACHED_WOOD = new PillarBlock(AbstractBlock.Settings.create().mapColor(MapColor.TERRACOTTA_MAGENTA).instrument(Instrument.BASEDRUM).requiresTool().strength(4f, 6f).sounds(BlockSoundGroup.STONE).luminance(b -> 8).allowsSpawning(Blocks::never));
+    public static final Block STARBLEACHED_LEAVES = new StarbleachedLeavesBlock(AbstractBlock.Settings.create().mapColor(MapColor.TERRACOTTA_PINK).instrument(Instrument.BASEDRUM).requiresTool().strength(0.4f, 2f).sounds(BlockSoundGroup.STONE).luminance(b -> 11).allowsSpawning(Blocks::never).nonOpaque().suffocates(Blocks::never).blockVision(Blocks::never).solidBlock(Blocks::never));
+    public static final Block STARBLEACHED_TILES = new Block(AbstractBlock.Settings.create().mapColor(MapColor.TERRACOTTA_WHITE).instrument(Instrument.BASEDRUM).requiresTool().strength(4f, 6f).sounds(BlockSoundGroup.STONE).luminance(b -> 8).allowsSpawning(Blocks::never));
     public static final Block STARBLEACHED_TILE_STAIRS = new StairsBlock(STARBLEACHED_TILES.getDefaultState(), AbstractBlock.Settings.copyShallow(STARBLEACHED_TILES));
     public static final Block STARBLEACHED_TILE_SLAB = new SlabBlock(AbstractBlock.Settings.copyShallow(STARBLEACHED_TILES));
     public static final Block STARBLEACHED_TILE_WALL = new WallBlock(AbstractBlock.Settings.copyShallow(STARBLEACHED_TILES).solid());
-    public static final Block CHISELED_STARBLEACHED_TILES = new Block(AbstractBlock.Settings.create().mapColor(MapColor.GRAY).instrument(Instrument.BASEDRUM).requiresTool().strength(4f, 6f).sounds(BlockSoundGroup.STONE).luminance(b -> 8).allowsSpawning(Blocks::never));
+    public static final Block CHISELED_STARBLEACHED_TILES = new Block(AbstractBlock.Settings.create().mapColor(MapColor.TERRACOTTA_WHITE).instrument(Instrument.BASEDRUM).requiresTool().strength(4f, 6f).sounds(BlockSoundGroup.STONE).luminance(b -> 8).allowsSpawning(Blocks::never));
     public static final Block IMBUED_STARBLEACHED_TILES = new ImbuedStarbleachedTilesBlock(AbstractBlock.Settings.create().mapColor(MapColor.CYAN).instrument(Instrument.BASEDRUM).requiresTool().strength(3f, 6f).sounds(BlockSoundGroup.STONE).luminance(b -> 15).allowsSpawning(Blocks::never));
     public static final Block STARBLEACHED_PEARL_BLOCK = new StarbleachedPearlBlock(AbstractBlock.Settings.create().mapColor(MapColor.CYAN).instrument(Instrument.BASEDRUM).requiresTool().strength(2f, 6f).sounds(BlockSoundGroup.GLASS).luminance(b -> 12).allowsSpawning(Blocks::never));
     public static final Block STARBLEACH_CAULDRON = new StarbleachCauldronBlock(AbstractBlock.Settings.copyShallow(CAULDRON).luminance(state -> 13));
