@@ -7,10 +7,8 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
-import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.item.Item;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -20,11 +18,12 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 import phanastrae.operation_starcleave.network.packet.s2c.StarbleachedPearlLaunchPacketS2C;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
+
+import java.util.function.Predicate;
 
 public class StarbleachedPearlEntity extends ThrownItemEntity {
     public StarbleachedPearlEntity(EntityType<? extends ThrownItemEntity> entityType, World world) {
@@ -117,7 +116,12 @@ public class StarbleachedPearlEntity extends ThrownItemEntity {
     }
 
     public static void doRepulsion(Vec3d pos, float radius, float maxAddedSpeed, World world, @Nullable Entity entity) {
-        for (Entity e : world.getOtherEntities(entity, Box.from(pos).expand(radius))) {
+        StarbleachedPearlEntity.doRepulsion(pos, radius, maxAddedSpeed, world, entity, EntityPredicates.EXCEPT_SPECTATOR);
+    }
+
+    public static void doRepulsion(Vec3d pos, float radius, float maxAddedSpeed, World world, @Nullable Entity entity, Predicate<? super Entity> predicate) {
+        for (Entity e : world.getOtherEntities(entity, Box.from(pos).expand(radius), predicate)) {
+
             boolean doRepel;
             // update players server side (and sync to client), update anything else on logical side
             if(e instanceof PlayerEntity) {

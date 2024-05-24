@@ -9,12 +9,13 @@ import net.minecraft.util.Identifier;
 import org.joml.Quaternionf;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.entity.mob.StarcleaverGolemEntity;
+import phanastrae.operation_starcleave.render.entity.model.OperationStarcleaveEntityModelLayers;
 import phanastrae.operation_starcleave.render.entity.model.StarcleaverGolemEntityModel;
 
-public class StarcleaverGolemEntityRenderer extends MobEntityRenderer<StarcleaverGolemEntity, StarcleaverGolemEntityModel> {
+public class StarcleaverGolemEntityRenderer extends MobEntityRenderer<StarcleaverGolemEntity, StarcleaverGolemEntityModel<StarcleaverGolemEntity>> {
 
     public StarcleaverGolemEntityRenderer(EntityRendererFactory.Context context) {
-        super(context, new StarcleaverGolemEntityModel(context.getPart(OperationStarcleaveEntityRenderers.MODEL_STARCLEAVER_GOLEM_LAYER)), 0.3f);
+        super(context, new StarcleaverGolemEntityModel<>(context.getPart(OperationStarcleaveEntityModelLayers.STARCLEAVER_GOLEM)), 0.3f);
     }
 
     @Override

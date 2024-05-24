@@ -96,7 +96,7 @@ public class StarcleaverGolemEntity extends GolemEntity implements Bucketable {
         this.goalSelector.add(8, new LookAroundGoal(this));
     }
 
-    public static DefaultAttributeContainer.Builder createStarcleaverGolemAttributes() {
+    public static DefaultAttributeContainer.Builder createAttributes() {
         return MobEntity.createMobAttributes()
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 12.0)
                 .add(EntityAttributes.GENERIC_ARMOR, 8.0)

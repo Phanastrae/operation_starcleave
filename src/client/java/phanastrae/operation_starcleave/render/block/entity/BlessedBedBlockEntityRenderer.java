@@ -1,4 +1,4 @@
-package phanastrae.operation_starcleave.render.entity;
+package phanastrae.operation_starcleave.render.block.entity;
 
 import it.unimi.dsi.fastutil.ints.Int2IntFunction;
 import net.minecraft.block.BedBlock;

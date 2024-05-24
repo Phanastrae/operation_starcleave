@@ -44,7 +44,6 @@ public class OperationStarcleaveItems {
     public static final Item BLESSED_BED = new BedItem(OperationStarcleaveBlocks.BLESSED_BED, new FabricItemSettings().maxCount(1).rarity(Rarity.RARE));
 
     public static final Item STARCLEAVER_GOLEM_BUCKET = new StarcleaverGolemBucketItem(new FabricItemSettings().maxCount(1));
-    public static final Item STARCLEAVER_GOLEM_SPAWN_EGG = new SpawnEggItem(OperationStarcleaveEntityTypes.STARCLEAVER_GOLEM, 0x292725, 0x61eddf, new Item.Settings());
     public static final Item STARBLEACH_BOTTLE = new StarbleachBottleItem(new FabricItemSettings().recipeRemainder(Items.GLASS_BOTTLE).food(StarbleachBottleItem.STARBLEACH_BOTTLE).maxCount(16));
     public static final Item SPLASH_STARBLEACH_BOTTLE = new SplashStarbleachBottleItem(new FabricItemSettings().maxCount(16));
     public static final Item STARBLEACHED_PEARL = new StarbleachedPearlItem(new FabricItemSettings().maxCount(16));
@@ -53,6 +52,9 @@ public class OperationStarcleaveItems {
     public static final Item BLESSED_CLOTH = new Item(new FabricItemSettings());
     public static final Item FIRMAMENT_REJUVENATOR = new FirmamentRejuvenatorItem(new FabricItemSettings().rarity(Rarity.RARE).maxCount(8));
     public static final Item FIRMAMENT_MANIPULATOR = new FirmamentManipulatorItem(new FabricItemSettings().rarity(Rarity.EPIC).maxCount(1));
+    public static final Item STARCLEAVER_GOLEM_SPAWN_EGG = new SpawnEggItem(OperationStarcleaveEntityTypes.STARCLEAVER_GOLEM, 0x292725, 0x61eddf, new Item.Settings());
+    public static final Item SUBCAELIC_TORPEDO_SPAWN_EGG = new SpawnEggItem(OperationStarcleaveEntityTypes.SUBCAELIC_TORPEDO, 0xDFDFDF, 0x1FAF7F, new Item.Settings());
+    public static final Item SUBCAELIC_DUX_SPAWN_EGG = new SpawnEggItem(OperationStarcleaveEntityTypes.SUBCAELIC_DUX, 0xDFEF9F, 0x6FFFDF, new Item.Settings());
 
     public static final ItemGroup OPERATION_STARCLEAVE_GROUP = FabricItemGroup.builder()
             .icon(() -> new ItemStack(NETHERITE_PUMPKIN))
@@ -100,6 +102,8 @@ public class OperationStarcleaveItems {
         registerWithIG(FIRMAMENT_MANIPULATOR, "firmament_manipulator");
 
         registerWithIG(STARCLEAVER_GOLEM_SPAWN_EGG, "starcleaver_golem_spawn_egg");
+        registerWithIG(SUBCAELIC_TORPEDO_SPAWN_EGG, "subcaelic_torpedo_spawn_egg");
+        registerWithIG(SUBCAELIC_DUX_SPAWN_EGG, "subcaelic_dux_spawn_egg");
 
         addToVanillaItemGroups();
     }
@@ -152,6 +156,8 @@ public class OperationStarcleaveItems {
         addItemToGroupAfter(BLESSED_CLOTH, ItemGroups.INGREDIENTS, HOLY_STRANDS);
 
         addItemToGroup(STARCLEAVER_GOLEM_SPAWN_EGG, ItemGroups.SPAWN_EGGS);
+        addItemToGroup(SUBCAELIC_TORPEDO_SPAWN_EGG, ItemGroups.SPAWN_EGGS);
+        addItemToGroup(SUBCAELIC_DUX_SPAWN_EGG, ItemGroups.SPAWN_EGGS);
 
         addItemToGroup(STARCLEAVER_GOLEM_BUCKET, ItemGroups.TOOLS);
 
