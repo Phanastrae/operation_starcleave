@@ -1,6 +1,6 @@
-package phanastrae.operation_starcleave.world;
+package phanastrae.operation_starcleave.duck;
 
-public interface OperationStarcleaveWorld {
+public interface WorldDuck {
     void operation_starcleave$setCleavingFlashTicksLeft(int ticks);
     int operation_starcleave$getCleavingFlashTicksLeft();
 }

@@ -1,6 +1,6 @@
-package phanastrae.operation_starcleave.entity;
+package phanastrae.operation_starcleave.duck;
 
-public interface OperationStarcleaveEntity {
+public interface EntityDuck {
     long operation_starcleave$getLastStellarRepulsorUse();
     void operation_starcleave$setLastStellarRepulsorUse(long time);
     boolean operation_starcleave$isOnPhlogisticFire();

@@ -23,7 +23,7 @@ import phanastrae.operation_starcleave.render.ScreenShakeManager;
 import phanastrae.operation_starcleave.render.block.entity.BlessedBedBlockEntityRenderer;
 import phanastrae.operation_starcleave.render.entity.OperationStarcleaveEntityRenderers;
 import phanastrae.operation_starcleave.render.firmament.*;
-import phanastrae.operation_starcleave.world.OperationStarcleaveWorld;
+import phanastrae.operation_starcleave.duck.WorldDuck;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 
 public class OperationStarcleaveClient implements ClientModInitializer {
@@ -37,7 +37,7 @@ public class OperationStarcleaveClient implements ClientModInitializer {
 		BlockEntityRendererFactories.register(OperationStarcleaveBlockEntityTypes.BLESSED_BED, BlessedBedBlockEntityRenderer::new);
 
 		ClientTickEvents.START_WORLD_TICK.register((world) -> {
-			OperationStarcleaveWorld opscw = (OperationStarcleaveWorld)world;
+			WorldDuck opscw = (WorldDuck)world;
 			if(opscw.operation_starcleave$getCleavingFlashTicksLeft() > 0) {
 				opscw.operation_starcleave$setCleavingFlashTicksLeft(opscw.operation_starcleave$getCleavingFlashTicksLeft() - 1);
 			}

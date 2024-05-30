@@ -15,7 +15,7 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import phanastrae.operation_starcleave.block.PhlogisticFireBlock;
-import phanastrae.operation_starcleave.entity.OperationStarcleaveEntity;
+import phanastrae.operation_starcleave.duck.EntityDuck;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypeTags;
 
 public class PhlogistonSacItem extends Item {
@@ -48,7 +48,7 @@ public class PhlogistonSacItem extends Item {
             World world = entity.getWorld();
             this.playUseSound(world, entity.getPos());
             if (!user.getWorld().isClient) {
-                ((OperationStarcleaveEntity) entity).operation_starcleave$setOnPhlogisticFireFor(5);
+                ((EntityDuck) entity).operation_starcleave$setOnPhlogisticFireFor(5);
                 world.emitGameEvent(user, GameEvent.ENTITY_ACTION, entity.getPos());
                 this.empty(stack);
             }

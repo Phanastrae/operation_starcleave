@@ -4,27 +4,20 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.SimpleFramebuffer;
 import net.minecraft.client.render.BufferBuilderStorage;
-import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
-import net.minecraft.client.render.chunk.ChunkRendererRegionBuilder;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.resource.ResourceManager;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.chunk.light.LightingProvider;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-import phanastrae.operation_starcleave.render.OperationStarcleaveWorldRenderer;
-
-import java.util.List;
+import phanastrae.operation_starcleave.duck.WorldRendererDuck;
 
 @Mixin(WorldRenderer.class)
-public class WorldRendererMixin implements OperationStarcleaveWorldRenderer {
+public class WorldRendererMixin implements WorldRendererDuck {
 
     @Final
     @Shadow

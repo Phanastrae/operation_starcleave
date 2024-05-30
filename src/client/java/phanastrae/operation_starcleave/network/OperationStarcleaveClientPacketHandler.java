@@ -13,14 +13,15 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import phanastrae.operation_starcleave.entity.OperationStarcleaveEntity;
+import phanastrae.operation_starcleave.duck.EntityDuck;
+import phanastrae.operation_starcleave.duck.ClientPlayNetworkHandlerDuck;
 import phanastrae.operation_starcleave.entity.projectile.StarbleachedPearlEntity;
 import phanastrae.operation_starcleave.network.packet.OperationStarcleavePacketTypes;
 import phanastrae.operation_starcleave.network.packet.c2s.AcknowledgeFirmamentRegionDataC2SPacket;
 import phanastrae.operation_starcleave.network.packet.s2c.*;
 import phanastrae.operation_starcleave.render.ScreenShakeManager;
 import phanastrae.operation_starcleave.render.firmament.FirmamentTextureStorage;
-import phanastrae.operation_starcleave.world.OperationStarcleaveWorld;
+import phanastrae.operation_starcleave.duck.WorldDuck;
 import phanastrae.operation_starcleave.world.firmament.*;
 
 public class OperationStarcleaveClientPacketHandler {
@@ -44,7 +45,7 @@ public class OperationStarcleaveClientPacketHandler {
 
 
     private static void startFirmamentRegionSend(StartFirmamentRegionSendS2CPacket packet, ClientPlayerEntity player, PacketSender responseSender) {
-        ((OperationStarcleaveClientPlayNetworkHandler)player.networkHandler).operation_starcleave$getFirmamentRegionBatchSizeCalculator().onStartChunkSend();
+        ((ClientPlayNetworkHandlerDuck)player.networkHandler).operation_starcleave$getFirmamentRegionBatchSizeCalculator().onStartChunkSend();
     }
 
     private static void receiveFirmamentRegionData(FirmamentRegionDataS2CPacket packet, ClientPlayerEntity player, PacketSender responseSender) {
@@ -67,7 +68,7 @@ public class OperationStarcleaveClientPacketHandler {
     }
 
     private static void sentFirmamentRegion(FirmamentRegionSentS2CPacket packet, ClientPlayerEntity player, PacketSender responseSender) {
-        ChunkBatchSizeCalculator firmamentRegionBatchSizeCalculator = ((OperationStarcleaveClientPlayNetworkHandler)player.networkHandler).operation_starcleave$getFirmamentRegionBatchSizeCalculator();
+        ChunkBatchSizeCalculator firmamentRegionBatchSizeCalculator = ((ClientPlayNetworkHandlerDuck)player.networkHandler).operation_starcleave$getFirmamentRegionBatchSizeCalculator();
         firmamentRegionBatchSizeCalculator.onChunkSent(packet.batchSize);
 
         responseSender.sendPacket(new AcknowledgeFirmamentRegionDataC2SPacket(firmamentRegionBatchSizeCalculator.getDesiredChunksPerTick()));
@@ -98,7 +99,7 @@ public class OperationStarcleaveClientPacketHandler {
 
     private static void onFirmamentCleaved(FirmamentCleavedS2CPacket packet, ClientPlayerEntity player, PacketSender responseSender) {
         World world = player.getWorld();
-        ((OperationStarcleaveWorld)world).operation_starcleave$setCleavingFlashTicksLeft(24);
+        ((WorldDuck)world).operation_starcleave$setCleavingFlashTicksLeft(24);
         Vec3d pos = new Vec3d(packet.x, world.getTopY() + 16, packet.z);
         world.playSound(
                 pos.x,
@@ -135,7 +136,7 @@ public class OperationStarcleaveClientPacketHandler {
         World world = player.getWorld();
         Entity entity = world.getEntityById(packet.id);
         if (entity != null) {
-            ((OperationStarcleaveEntity)entity).operation_starcleave$setOnPhlogisticFire(packet.onPhlogisticFire);
+            ((EntityDuck)entity).operation_starcleave$setOnPhlogisticFire(packet.onPhlogisticFire);
         }
     }
 }

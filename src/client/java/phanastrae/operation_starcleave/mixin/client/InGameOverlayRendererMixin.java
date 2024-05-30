@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import phanastrae.operation_starcleave.OperationStarcleave;
-import phanastrae.operation_starcleave.entity.OperationStarcleaveEntity;
+import phanastrae.operation_starcleave.duck.EntityDuck;
 
 @Mixin(InGameOverlayRenderer.class)
 public abstract class InGameOverlayRendererMixin {
@@ -27,7 +27,7 @@ public abstract class InGameOverlayRendererMixin {
     // Render phlogistic fire overlay if player is not on normal fire (and thus not already rendering it)
     @Inject(method = "renderOverlays", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isSpectator()Z", shift = At.Shift.AFTER))
     private static void operation_starcleave$renderPhlogisticFireOverlay(MinecraftClient client, MatrixStack matrices, CallbackInfo ci) {
-        if(client.player instanceof OperationStarcleaveEntity opsce) {
+        if(client.player instanceof EntityDuck opsce) {
             if(!client.player.isOnFire() && opsce.operation_starcleave$isOnPhlogisticFire()) {
                 renderFireOverlay(client, matrices);
             }
@@ -38,7 +38,7 @@ public abstract class InGameOverlayRendererMixin {
     @Inject(method = "renderFireOverlay", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/util/Identifier;)V", ordinal = 0, shift = At.Shift.BEFORE))
     private static void operation_starcleave$renderPhlogisticFireOverlay(MinecraftClient client, MatrixStack matrices, CallbackInfo ci, @Local(ordinal = 0) LocalRef<Sprite> spriteRefFire1) {
         PlayerEntity player = client.player;
-        if(player instanceof OperationStarcleaveEntity operationStarcleaveEntity) {
+        if(player instanceof EntityDuck operationStarcleaveEntity) {
             if(operationStarcleaveEntity.operation_starcleave$isOnPhlogisticFire()) {
                 spriteRefFire1.set(PHLOGISTIC_FIRE_1.getSprite());
             }

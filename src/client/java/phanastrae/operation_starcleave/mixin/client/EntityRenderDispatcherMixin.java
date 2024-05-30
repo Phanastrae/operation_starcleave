@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import phanastrae.operation_starcleave.OperationStarcleave;
-import phanastrae.operation_starcleave.entity.OperationStarcleaveEntity;
+import phanastrae.operation_starcleave.duck.EntityDuck;
 
 @Mixin(EntityRenderDispatcher.class)
 public class EntityRenderDispatcherMixin {
@@ -24,7 +24,7 @@ public class EntityRenderDispatcherMixin {
 
     @Inject(method = "renderFire", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;push()V", ordinal = 0, shift = At.Shift.BEFORE))
     private void operation_starcleave$renderPhlogisticFire(MatrixStack matrices, VertexConsumerProvider vertexConsumers, Entity entity, Quaternionf rotation, CallbackInfo ci, @Local(ordinal = 0) LocalRef<Sprite> spriteRefFire0, @Local(ordinal = 1) LocalRef<Sprite> spriteRefFire1) {
-        if(((OperationStarcleaveEntity)entity).operation_starcleave$isOnPhlogisticFire()) {
+        if(((EntityDuck)entity).operation_starcleave$isOnPhlogisticFire()) {
             spriteRefFire0.set(PHLOGISTIC_FIRE_0.getSprite());
             spriteRefFire1.set(PHLOGISTIC_FIRE_1.getSprite());
         }

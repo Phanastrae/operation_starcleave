@@ -7,9 +7,8 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import phanastrae.operation_starcleave.world.OperationStarcleaveWorld;
+import phanastrae.operation_starcleave.duck.WorldDuck;
 
 @Mixin(LightmapTextureManager.class)
 public class LightmapTextureManagerMixin {
@@ -21,7 +20,7 @@ public class LightmapTextureManagerMixin {
     @ModifyVariable(method = "update", at = @At(value = "STORE"), ordinal = 1)
     private float operation_starcleave$cleavingFlash(float value) {
         ClientWorld clientWorld = this.client.world;
-        if(((OperationStarcleaveWorld)clientWorld).operation_starcleave$getCleavingFlashTicksLeft() > 0) {
+        if(((WorldDuck)clientWorld).operation_starcleave$getCleavingFlashTicksLeft() > 0) {
             return 1.0F;
         }
         return value;

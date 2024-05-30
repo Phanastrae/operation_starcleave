@@ -9,12 +9,12 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import phanastrae.operation_starcleave.world.OperationStarcleaveWorld;
+import phanastrae.operation_starcleave.duck.WorldDuck;
 
 import java.util.function.Supplier;
 
 @Mixin(World.class)
-public class WorldMixin implements OperationStarcleaveWorld {
+public class WorldMixin implements WorldDuck {
     private int operation_starcleave$cleavingFlashTicksLeft;
 
     @Inject(method = "<init>", at = @At("RETURN"))

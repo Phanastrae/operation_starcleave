@@ -10,10 +10,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import phanastrae.operation_starcleave.server.network.FirmamentRegionDataSender;
-import phanastrae.operation_starcleave.server.network.OperationStarcleaveServerPlayNetworkHandler;
+import phanastrae.operation_starcleave.duck.ServerPlayNetworkHandlerDuck;
 
 @Mixin(ServerPlayNetworkHandler.class)
-public class ServerPlayNetworkHandlerMixin implements OperationStarcleaveServerPlayNetworkHandler {
+public class ServerPlayNetworkHandlerMixin implements ServerPlayNetworkHandlerDuck {
 
     FirmamentRegionDataSender firmamentRegionDataSender;
 

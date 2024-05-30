@@ -14,7 +14,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-import phanastrae.operation_starcleave.render.OperationStarcleaveWorldRenderer;
+import phanastrae.operation_starcleave.duck.WorldRendererDuck;
 import phanastrae.operation_starcleave.render.firmament.FirmamentTextureStorage;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 
@@ -23,7 +23,7 @@ import static net.minecraft.util.math.MathHelper.floorMod;
 public class FirmamentPostShader {
     public static void draw() {
         MinecraftClient client = MinecraftClient.getInstance();
-        if(client.worldRenderer instanceof OperationStarcleaveWorldRenderer operationStarcleaveWorldRenderer) {
+        if(client.worldRenderer instanceof WorldRendererDuck operationStarcleaveWorldRenderer) {
             Framebuffer mainBuffer = client.getFramebuffer();
 
             Framebuffer dummyBuffer = operationStarcleaveWorldRenderer.operation_starcleave$getDummyFramebuffer();
@@ -73,7 +73,7 @@ public class FirmamentPostShader {
 
     private static void drawInternal(int width, int height, boolean disableBlend) {
         MinecraftClient client = MinecraftClient.getInstance();
-        if(!(client.worldRenderer instanceof OperationStarcleaveWorldRenderer operationStarcleaveWorldRenderer)) {
+        if(!(client.worldRenderer instanceof WorldRendererDuck operationStarcleaveWorldRenderer)) {
             return;
         }
         Framebuffer dummyBuffer = operationStarcleaveWorldRenderer.operation_starcleave$getDummyFramebuffer();

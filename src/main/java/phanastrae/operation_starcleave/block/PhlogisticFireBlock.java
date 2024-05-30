@@ -24,7 +24,7 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.*;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveDamageTypes;
-import phanastrae.operation_starcleave.entity.OperationStarcleaveEntity;
+import phanastrae.operation_starcleave.duck.EntityDuck;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypeTags;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 
@@ -141,7 +141,7 @@ public class PhlogisticFireBlock extends AbstractFireBlock implements Waterlogga
     @Override
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
         if (!entity.getType().isIn(OperationStarcleaveEntityTypeTags.PHLOGISTIC_FIRE_IMMUNE)) {
-            OperationStarcleaveEntity opsce = (OperationStarcleaveEntity)entity;
+            EntityDuck opsce = (EntityDuck)entity;
             opsce.operation_starcleave$setPhlogisticFireTicks(opsce.operation_starcleave$getPhlogisticFireTicks() + 1);
             if(opsce.operation_starcleave$getPhlogisticFireTicks() == 0) {
                 opsce.operation_starcleave$setOnPhlogisticFireFor(8);

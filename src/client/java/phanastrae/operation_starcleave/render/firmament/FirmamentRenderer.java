@@ -16,7 +16,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.profiler.Profiler;
 import net.minecraft.world.World;
@@ -25,13 +24,10 @@ import org.joml.Math;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 import phanastrae.operation_starcleave.mixin.client.WorldRendererAccessor;
 import phanastrae.operation_starcleave.render.OperationStarcleaveRenderLayers;
-import phanastrae.operation_starcleave.render.OperationStarcleaveWorldRenderer;
+import phanastrae.operation_starcleave.duck.WorldRendererDuck;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 import phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion;
 import phanastrae.operation_starcleave.world.firmament.RegionPos;
-import phanastrae.operation_starcleave.world.firmament.SubRegionPos;
-
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class FirmamentRenderer {
     public static void render(WorldRenderContext worldRenderContext) {
@@ -79,7 +75,7 @@ public class FirmamentRenderer {
 
             if(renderSkybox) {
                 profiler.swap("sky");
-                Framebuffer firmamentFrameBuffer = ((OperationStarcleaveWorldRenderer)worldRenderContext.worldRenderer()).operation_starcleave$getFirmamentFramebuffer();
+                Framebuffer firmamentFrameBuffer = ((WorldRendererDuck)worldRenderContext.worldRenderer()).operation_starcleave$getFirmamentFramebuffer();
                 firmamentFrameBuffer.setClearColor(0, 0.08f, 0.08f, 1f);
                 firmamentFrameBuffer.clear(MinecraftClient.IS_SYSTEM_MAC);
                 OperationStarcleaveRenderLayers.FIRMAMENT_SKY_TARGET.startDrawing();
@@ -396,7 +392,7 @@ public class FirmamentRenderer {
         Frustum frustum = worldRenderContext.frustum();
         if(frustum == null) return;
 
-        Framebuffer firmamentFrameBuffer = ((OperationStarcleaveWorldRenderer)worldRenderContext.worldRenderer()).operation_starcleave$getFirmamentFramebuffer();
+        Framebuffer firmamentFrameBuffer = ((WorldRendererDuck)worldRenderContext.worldRenderer()).operation_starcleave$getFirmamentFramebuffer();
         int currentTexID = RenderSystem.getShaderTexture(0);
         int firmamentSkyTexID = firmamentFrameBuffer.getColorAttachment();
 

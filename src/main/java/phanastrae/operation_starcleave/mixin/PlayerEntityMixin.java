@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import phanastrae.operation_starcleave.entity.OperationStarcleaveEntity;
+import phanastrae.operation_starcleave.duck.EntityDuck;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity {
@@ -20,7 +20,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(method = "onDeath", at = @At("RETURN"))
     private void operation_starcleave$onDeath(DamageSource damageSource, CallbackInfo ci) {
-        ((OperationStarcleaveEntity)this).operation_starcleave$setPhlogisticFireTicks(0);
-        ((OperationStarcleaveEntity)this).operation_starcleave$setOnPhlogisticFire(false);
+        ((EntityDuck)this).operation_starcleave$setPhlogisticFireTicks(0);
+        ((EntityDuck)this).operation_starcleave$setOnPhlogisticFire(false);
     }
 }

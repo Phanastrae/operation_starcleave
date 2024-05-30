@@ -9,7 +9,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
-import phanastrae.operation_starcleave.OperationStarcleave;
+import phanastrae.operation_starcleave.duck.ServerPlayNetworkHandlerDuck;
 import phanastrae.operation_starcleave.network.packet.s2c.FirmamentRegionDataS2CPacket;
 import phanastrae.operation_starcleave.network.packet.s2c.FirmamentRegionSentS2CPacket;
 import phanastrae.operation_starcleave.network.packet.s2c.StartFirmamentRegionSendS2CPacket;
@@ -125,6 +125,6 @@ public class FirmamentRegionDataSender {
     }
 
     public static FirmamentRegionDataSender getFirmamentRegionDataSender(ServerPlayNetworkHandler serverPlayNetworkHandler) {
-        return ((OperationStarcleaveServerPlayNetworkHandler)serverPlayNetworkHandler).operation_starcleave$getFirmamentRegionDataSender();
+        return ((ServerPlayNetworkHandlerDuck)serverPlayNetworkHandler).operation_starcleave$getFirmamentRegionDataSender();
     }
 }

@@ -3,9 +3,7 @@ package phanastrae.operation_starcleave.block;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.RedstoneTorchBlock;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.vehicle.MinecartEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.sound.SoundCategory;
@@ -19,8 +17,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
-import phanastrae.operation_starcleave.OperationStarcleave;
-import phanastrae.operation_starcleave.entity.OperationStarcleaveEntity;
+import phanastrae.operation_starcleave.duck.EntityDuck;
 
 public class StellarRepulsorBlock extends Block {
     public static final MapCodec<StellarRepulsorBlock> CODEC = createCodec(StellarRepulsorBlock::new);
@@ -77,7 +74,7 @@ public class StellarRepulsorBlock extends Block {
     }
 
     public static void launch(Entity entity) {
-        if(!(entity instanceof OperationStarcleaveEntity operationStarcleaveEntity)) {
+        if(!(entity instanceof EntityDuck operationStarcleaveEntity)) {
             return;
         }
         if(!entity.isOnGround()) {

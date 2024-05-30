@@ -26,12 +26,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveDamageTypeTags;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveDamageTypes;
-import phanastrae.operation_starcleave.entity.OperationStarcleaveEntity;
+import phanastrae.operation_starcleave.duck.EntityDuck;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypeTags;
 import phanastrae.operation_starcleave.network.packet.s2c.EntityPhlogisticFireS2CPacket;
 
 @Mixin(Entity.class)
-public abstract class EntityMixin implements OperationStarcleaveEntity {
+public abstract class EntityMixin implements EntityDuck {
     @Shadow private BlockPos blockPos;
     @Shadow public abstract World getWorld();
     @Shadow public abstract boolean isSpectator();
