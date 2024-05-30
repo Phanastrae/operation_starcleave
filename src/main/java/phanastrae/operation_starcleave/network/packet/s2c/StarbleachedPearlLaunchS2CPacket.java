@@ -8,14 +8,14 @@ import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.network.packet.OperationStarcleavePacketTypes;
 
-public class StarbleachedPearlLaunchPacketS2C implements FabricPacket {
+public class StarbleachedPearlLaunchS2CPacket implements FabricPacket {
 
     public final Vec3d pos;
     public final float radius;
     public final float maxAddedSpeed;
     public final boolean exceptExists;
     public final int exceptId;
-    public StarbleachedPearlLaunchPacketS2C(Vec3d pos, float radius, float maxAddedSpeed, @Nullable Entity except) {
+    public StarbleachedPearlLaunchS2CPacket(Vec3d pos, float radius, float maxAddedSpeed, @Nullable Entity except) {
         this.pos = pos;
         this.radius = radius;
         this.maxAddedSpeed = maxAddedSpeed;
@@ -29,7 +29,7 @@ public class StarbleachedPearlLaunchPacketS2C implements FabricPacket {
 
     }
 
-    public StarbleachedPearlLaunchPacketS2C(PacketByteBuf buf) {
+    public StarbleachedPearlLaunchS2CPacket(PacketByteBuf buf) {
         this.pos = buf.readVec3d();
         this.radius = buf.readFloat();
         this.maxAddedSpeed = buf.readFloat();

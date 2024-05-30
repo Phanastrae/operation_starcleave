@@ -1,8 +1,15 @@
 package phanastrae.operation_starcleave.mixin;
 
+import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.sugar.ref.LocalFloatRef;
+import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -21,14 +28,23 @@ import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.block.BlessedBedBlock;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.block.StellarRepulsorBlock;
+import phanastrae.operation_starcleave.entity.OperationStarcleaveDamageTypeTags;
 import phanastrae.operation_starcleave.item.StarbleachCoating;
 
 @Mixin(LivingEntity.class)
-public class LivingEntityMixin {
+public abstract class LivingEntityMixin extends Entity {
 
     @Shadow protected boolean jumping;
 
     @Shadow private int jumpingCooldown;
+
+    @Shadow public abstract boolean hasStatusEffect(StatusEffect effect);
+
+    @Shadow public abstract boolean damage(DamageSource source, float amount);
+
+    LivingEntityMixin(EntityType<?> type, World world) {
+        super(type, world);
+    }
 
     @Inject(method = "eatFood", at = @At("HEAD"))
     private void operation_starcleave$eatStarbleachedFood(World world, ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
@@ -61,6 +77,18 @@ public class LivingEntityMixin {
         BlockState blockState = world.getBlockState(pos);
         if(blockState.isOf(OperationStarcleaveBlocks.BLESSED_BED)) {
             BlessedBedBlock.blessedSleep(livingEntity);
+        }
+    }
+
+    @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LimbAnimator;setSpeed(F)V", ordinal = 0, shift = At.Shift.BEFORE))
+    private void operation_starcleave$handlePhlogisticFireDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir, @Local(ordinal = 0) LocalFloatRef localRef) {
+        if(source.isIn(OperationStarcleaveDamageTypeTags.IS_PHLOGISTIC_FIRE)) {
+            float damage = localRef.get();
+            if(this.isFireImmune() || this.hasStatusEffect(StatusEffects.FIRE_RESISTANCE)) {
+                damage *= 0.5;
+            }
+
+            localRef.set(damage);
         }
     }
 }

@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+    "operation_starcleave:on_phlogistic_fire",
     "operation_starcleave:internal_starbleaching"
   ]
 }

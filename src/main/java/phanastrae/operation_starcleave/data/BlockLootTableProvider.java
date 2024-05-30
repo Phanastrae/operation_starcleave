@@ -52,6 +52,8 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
         addDrop(OperationStarcleaveBlocks.BLESSED_CLOTH_CARPET);
         addDrop(OperationStarcleaveBlocks.BLESSED_CLOTH_CURTAIN);
 
+        addDrop(OperationStarcleaveBlocks.PHLOGISTIC_FIRE, dropsNothing());
+
         addDrop(OperationStarcleaveBlocks.STARBLEACH_CAULDRON, Items.CAULDRON);
         addDrop(OperationStarcleaveBlocks.STELLAR_FARMLAND, OperationStarcleaveItems.STELLAR_SEDIMENT);
 

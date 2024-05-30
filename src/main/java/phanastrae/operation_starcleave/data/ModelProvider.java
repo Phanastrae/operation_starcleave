@@ -14,6 +14,8 @@ import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.block.StarbleachedPearlBlock;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 
+import java.util.List;
+
 import static net.minecraft.data.client.BlockStateModelGenerator.*;
 import static phanastrae.operation_starcleave.block.OperationStarcleaveBlocks.*;
 
@@ -153,6 +155,39 @@ public class ModelProvider extends FabricModelProvider {
             blockStateModelGenerator.blockStateCollector
                     .accept(VariantsBlockStateSupplier.create(STELLAR_FARMLAND).coordinate(createValueFencedModelMap(Properties.MOISTURE, 7, identifier2, identifier)));
         }
+
+        registerFire(blockStateModelGenerator, PHLOGISTIC_FIRE);
+    }
+
+    private void registerFire(BlockStateModelGenerator blockStateModelGenerator, Block block) {
+        When when = When.create()
+                .set(Properties.NORTH, false)
+                .set(Properties.EAST, false)
+                .set(Properties.SOUTH, false)
+                .set(Properties.WEST, false)
+                .set(Properties.UP, false);
+        List<Identifier> list = blockStateModelGenerator.getFireFloorModels(block);
+        List<Identifier> list2 = blockStateModelGenerator.getFireSideModels(block);
+        List<Identifier> list3 = blockStateModelGenerator.getFireUpModels(block);
+        blockStateModelGenerator.blockStateCollector
+                .accept(
+                        MultipartBlockStateSupplier.create(block)
+                                .with(when, buildBlockStateVariants(list, blockStateVariant -> blockStateVariant))
+                                .with(When.anyOf(When.create().set(Properties.NORTH, true), when), buildBlockStateVariants(list2, blockStateVariant -> blockStateVariant))
+                                .with(
+                                        When.anyOf(When.create().set(Properties.EAST, true), when),
+                                        buildBlockStateVariants(list2, blockStateVariant -> blockStateVariant.put(VariantSettings.Y, VariantSettings.Rotation.R90))
+                                )
+                                .with(
+                                        When.anyOf(When.create().set(Properties.SOUTH, true), when),
+                                        buildBlockStateVariants(list2, blockStateVariant -> blockStateVariant.put(VariantSettings.Y, VariantSettings.Rotation.R180))
+                                )
+                                .with(
+                                        When.anyOf(When.create().set(Properties.WEST, true), when),
+                                        buildBlockStateVariants(list2, blockStateVariant -> blockStateVariant.put(VariantSettings.Y, VariantSettings.Rotation.R270))
+                                )
+                                .with(When.create().set(Properties.UP, true), buildBlockStateVariants(list3, blockStateVariant -> blockStateVariant))
+                );
     }
 
     @Override
@@ -167,6 +202,8 @@ public class ModelProvider extends FabricModelProvider {
         registerGenerated(itemModelGenerator, OperationStarcleaveItems.STARBLEACHED_PEARL);
         registerGenerated(itemModelGenerator, OperationStarcleaveItems.STARDUST_CLUSTER);
         registerGenerated(itemModelGenerator, OperationStarcleaveItems.STARFRUIT);
+        registerGenerated(itemModelGenerator, OperationStarcleaveItems.HOLLOWED_SAC);
+        registerGenerated(itemModelGenerator, OperationStarcleaveItems.PHLOGISTON_SAC);
 
         itemModelGenerator.register(OperationStarcleaveItems.FIRMAMENT_MANIPULATOR, Models.HANDHELD);
     }

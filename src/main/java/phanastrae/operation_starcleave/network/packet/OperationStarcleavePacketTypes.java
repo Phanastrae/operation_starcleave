@@ -16,8 +16,9 @@ public class OperationStarcleavePacketTypes {
 
     public static final PacketType<FirmamentCleavedS2CPacket> FIRMAMENT_CLEAVED_S2C = PacketType.create(OperationStarcleave.id("firmament_cleaved_s2c"), (FirmamentCleavedS2CPacket::new));
 
-    public static final PacketType<StarbleachedPearlLaunchPacketS2C> STARBLEACHED_PEARL_LAUNCH_PACKET_S2C = PacketType.create(OperationStarcleave.id("starbleached_pearl_launch_packet"), StarbleachedPearlLaunchPacketS2C::new);
+    public static final PacketType<StarbleachedPearlLaunchS2CPacket> STARBLEACHED_PEARL_LAUNCH_PACKET_S2C = PacketType.create(OperationStarcleave.id("starbleached_pearl_launch_packet"), StarbleachedPearlLaunchS2CPacket::new);
 
+    public static final PacketType<EntityPhlogisticFireS2CPacket> ENTITY_PHLOGISTIC_FIRE_PACKET_S2C = PacketType.create(OperationStarcleave.id("phlogistic_fire_packet"), EntityPhlogisticFireS2CPacket::new);
 
     public static final PacketType<AcknowledgeFirmamentRegionDataC2SPacket> ACKNOWLEDGE_FIRMAMENT_REGION_DATA_C2S = PacketType.create(OperationStarcleave.id("acknowledge_firmament_region_data_c2s"), AcknowledgeFirmamentRegionDataC2SPacket::new);
     public static final PacketType<AttackFirmamentTileC2SPacket> ATTACK_FIRMAMENT_C2S = PacketType.create(OperationStarcleave.id("attack_firmament_c2s"), AttackFirmamentTileC2SPacket::new);

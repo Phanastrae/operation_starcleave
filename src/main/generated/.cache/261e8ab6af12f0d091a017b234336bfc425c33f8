@@ -1,6 +1,7 @@
-// 1.20.4	2024-04-28T03:11:41.0222081	Operation: Starcleave/Tags for minecraft:block
+// 1.20.4	2024-05-26T19:57:04.9656948	Operation: Starcleave/Tags for minecraft:block
 e1fe16980246891dff2d551a3554a84b0c1c97fd data\minecraft\tags\blocks\occludes_vibration_signals.json
 6e22db5e285f53370ec01d87eb783213b952c81a data\minecraft\tags\blocks\replaceable_by_trees.json
+92df0385bc2395295cfd794f38ef476314f79778 data\minecraft\tags\blocks\fire.json
 372339ba060775514e3bed7f0ba357759a1c6910 data\minecraft\tags\blocks\walls.json
 6e22db5e285f53370ec01d87eb783213b952c81a data\minecraft\tags\blocks\replaceable.json
 5ee892117db5a6dbd4873ab55fc020872245c030 data\minecraft\tags\blocks\mineable\pickaxe.json

@@ -167,5 +167,19 @@ public class StarbleachCauldronBlock extends AbstractCauldronBlock {
 
             return ActionResult.success(world.isClient);
         });
+
+        StarbleachCauldronBlock.STARBLEACH_CAULDRON_BEHAVIOR.map().put(Items.INK_SAC, (state, world, pos, player, hand, stack) -> {
+            if (!world.isClient) {
+                Item item = stack.getItem();
+                player.setStackInHand(hand, ItemUsage.exchangeStack(stack, player, new ItemStack(OperationStarcleaveItems.HOLLOWED_SAC)));
+                player.incrementStat(Stats.USE_CAULDRON);
+                player.incrementStat(Stats.USED.getOrCreateStat(item));
+                LeveledCauldronBlock.decrementFluidLevel(state, world, pos);
+                world.playSound(null, pos, SoundEvents.ITEM_GLOW_INK_SAC_USE, SoundCategory.BLOCKS, 0.3F, 1.6F);
+                world.emitGameEvent(null, GameEvent.FLUID_PICKUP, pos);
+            }
+
+            return ActionResult.success(world.isClient);
+        });
     }
 }

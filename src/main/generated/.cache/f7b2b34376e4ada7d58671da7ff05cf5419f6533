@@ -1,3 +1,5 @@
-// 1.20.4	2024-04-28T03:11:41.0311847	Operation: Starcleave/Tags for minecraft:entity_type
-af2b2ed999e46794daa61c28ad78ce1d79bbc868 data\minecraft\tags\entity_types\fall_damage_immune.json
+// 1.20.4	2024-05-26T19:57:04.9726771	Operation: Starcleave/Tags for minecraft:entity_type
+d2074de048b2c8649ed435b5a31f3123efea02b8 data\minecraft\tags\entity_types\fall_damage_immune.json
+d2074de048b2c8649ed435b5a31f3123efea02b8 data\operation_starcleave\tags\entity_types\phlogistic_fire_immune.json
 af2b2ed999e46794daa61c28ad78ce1d79bbc868 data\minecraft\tags\entity_types\freeze_immune_entity_types.json
+585b4212e721b2215d007c8822299bbfbcc40bce data\minecraft\tags\entity_types\frog_food.json

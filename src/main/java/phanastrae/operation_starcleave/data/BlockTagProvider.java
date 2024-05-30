@@ -77,6 +77,9 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         getOrCreateTagBuilder(BlockTags.WALLS)
                 .add(OperationStarcleaveBlocks.STARBLEACHED_TILE_WALL);
 
+        getOrCreateTagBuilder(BlockTags.FIRE)
+                .add(OperationStarcleaveBlocks.PHLOGISTIC_FIRE);
+
         getOrCreateTagBuilder(OperationStarcleaveBlockTags.STARBLEACHED)
                 .add(OperationStarcleaveBlocks.STELLAR_SEDIMENT)
                 .add(OperationStarcleaveBlocks.STELLAR_FARMLAND)

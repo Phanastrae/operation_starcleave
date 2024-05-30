@@ -3,7 +3,6 @@ package phanastrae.operation_starcleave.item;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.minecraft.block.Blocks;
 import net.minecraft.item.*;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -50,6 +49,8 @@ public class OperationStarcleaveItems {
     public static final Item STARFRUIT = new StarfruitItem(new FabricItemSettings().food(StarfruitItem.STARFRUIT));
     public static final Item HOLY_STRANDS = new Item(new FabricItemSettings());
     public static final Item BLESSED_CLOTH = new Item(new FabricItemSettings());
+    public static final Item HOLLOWED_SAC = new HollowedSacItem(new FabricItemSettings());
+    public static final Item PHLOGISTON_SAC = new PhlogistonSacItem(new FabricItemSettings());
     public static final Item FIRMAMENT_REJUVENATOR = new FirmamentRejuvenatorItem(new FabricItemSettings().rarity(Rarity.RARE).maxCount(8));
     public static final Item FIRMAMENT_MANIPULATOR = new FirmamentManipulatorItem(new FabricItemSettings().rarity(Rarity.EPIC).maxCount(1));
     public static final Item STARCLEAVER_GOLEM_SPAWN_EGG = new SpawnEggItem(OperationStarcleaveEntityTypes.STARCLEAVER_GOLEM, 0x292725, 0x61eddf, new Item.Settings());
@@ -98,6 +99,8 @@ public class OperationStarcleaveItems {
         registerWithIG(STARFRUIT, "starfruit");
         registerWithIG(HOLY_STRANDS, "holy_strands");
         registerWithIG(BLESSED_CLOTH, "blessed_cloth");
+        registerWithIG(HOLLOWED_SAC, "hollowed_sac");
+        registerWithIG(PHLOGISTON_SAC, "phlogiston_sac");
         registerWithIG(FIRMAMENT_REJUVENATOR, "firmament_rejuvenator");
         registerWithIG(FIRMAMENT_MANIPULATOR, "firmament_manipulator");
 
@@ -142,9 +145,6 @@ public class OperationStarcleaveItems {
         addItemToGroup(STARBLEACHED_PEARL_BLOCK, ItemGroups.REDSTONE);
         addItemToGroup(STELLAR_REPULSOR, ItemGroups.REDSTONE);
 
-        addItemToGroup(STARBLEACHED_PEARL, ItemGroups.TOOLS);
-        addItemToGroup(FIRMAMENT_REJUVENATOR, ItemGroups.TOOLS);
-
         addItemToGroupBefore(NETHERITE_PUMPKIN, ItemGroups.COMBAT, Items.TURTLE_HELMET);
 
         addItemToGroup(STARBLEACH_BOTTLE, ItemGroups.FOOD_AND_DRINK);
@@ -159,7 +159,11 @@ public class OperationStarcleaveItems {
         addItemToGroup(SUBCAELIC_TORPEDO_SPAWN_EGG, ItemGroups.SPAWN_EGGS);
         addItemToGroup(SUBCAELIC_DUX_SPAWN_EGG, ItemGroups.SPAWN_EGGS);
 
+        addItemToGroup(STARBLEACHED_PEARL, ItemGroups.TOOLS);
+        addItemToGroup(FIRMAMENT_REJUVENATOR, ItemGroups.TOOLS);
         addItemToGroup(STARCLEAVER_GOLEM_BUCKET, ItemGroups.TOOLS);
+        addItemToGroup(HOLLOWED_SAC, ItemGroups.TOOLS);
+        addItemToGroup(PHLOGISTON_SAC, ItemGroups.TOOLS);
 
         // different method used here to ensure the item is only added if operator tab is present
         ItemGroup operatorGroup = Registries.ITEM_GROUP.get(ItemGroups.OPERATOR);

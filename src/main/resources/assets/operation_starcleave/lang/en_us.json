@@ -20,6 +20,7 @@
   "block.operation_starcleave.holy_moss": "Holy Moss",
   "block.operation_starcleave.imbued_starbleached_tiles": "Imbued Starbleached Tiles",
   "block.operation_starcleave.netherite_pumpkin": "Netherite Pumpkin",
+  "block.operation_starcleave.phlogistic_fire": "Phlogistic Fire",
   "block.operation_starcleave.short_holy_moss": "Short Holy Moss",
   "block.operation_starcleave.starbleach_cauldron": "Starbleach Cauldron",
   "block.operation_starcleave.starbleached_leaves": "Starbleached Leaves",
@@ -38,7 +39,13 @@
   "block.operation_starcleave.stellar_tiles": "Stellar Tiles",
   "block.operation_starcleave.stellar_tile_slab": "Stellar Tile Slab",
 
+  "death.attack.operation_starcleave_inPhlogisticFire": "%1$s went up in otherworldly flame",
+  "death.attack.operation_starcleave_inPhlogisticFire.player": "%1$s walked into otherworldly fire while fighting %2$s",
+  "death.attack.operation_starcleave_onPhlogisticFire": "%1$s was cleansed from this world",
+  "death.attack.operation_starcleave_onPhlogisticFire.item": "%1$s was cleansed from this world while fighting %2$s wielding %3$s",
+  "death.attack.operation_starcleave_onPhlogisticFire.player": "%1$s was cleansed from this world while fighting %2$s",
   "death.attack.operation_starcleave_starbleach": "%1$s's insides turned to Stardust",
+  "death.attack.operation_starcleave_starbleach.player": "%1$s's insides turned to Stardust while fighting %2$s",
 
   "effect.operation_starcleave.starbleached_insides": "Starbleached Insides",
 
@@ -54,7 +61,9 @@
   "item.operation_starcleave.blessed_cloth": "Blessed Cloth",
   "item.operation_starcleave.firmament_manipulator": "Creative Firmament Manipulator",
   "item.operation_starcleave.firmament_rejuvenator": "Firmament Rejuvenator",
+  "item.operation_starcleave.hollowed_sac": "Hollowed Sac",
   "item.operation_starcleave.holy_strands": "Holy Strands",
+  "item.operation_starcleave.phlogiston_sac": "Phlogiston Sac",
   "item.operation_starcleave.splash_starbleach_bottle": "Splash Starbleach Bottle",
   "item.operation_starcleave.starbleach_bottle": "Starbleach Bottle",
   "item.operation_starcleave.starbleached_pearl": "Starbleached Pearl",

@@ -49,6 +49,7 @@ public class OperationStarcleaveBlocks {
     public static final Block BLESSED_CLOTH_CARPET = new BlessedClothCarpetBlock(AbstractBlock.Settings.create().mapColor(MapColor.PALE_YELLOW).strength(0.1F).sounds(BlockSoundGroup.WOOL));
     public static final Block BLESSED_CLOTH_CURTAIN = new PaneBlock(AbstractBlock.Settings.create().mapColor(MapColor.PALE_YELLOW).instrument(Instrument.GUITAR).strength(0.8F).sounds(BlockSoundGroup.WOOL).nonOpaque());
     public static final Block BLESSED_BED = new BlessedBedBlock(AbstractBlock.Settings.create().mapColor(MapColor.PALE_YELLOW).sounds(BlockSoundGroup.WOOD).strength(0.2F).nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
+    public static final Block PHLOGISTIC_FIRE = new PhlogisticFireBlock(AbstractBlock.Settings.create().mapColor(MapColor.LIME).replaceable().noCollision().breakInstantly().luminance(state -> 15).sounds(BlockSoundGroup.WOOL).pistonBehavior(PistonBehavior.DESTROY));
 
     public static void init() {
         register(NETHERITE_PUMPKIN, "netherite_pumpkin");
@@ -76,6 +77,7 @@ public class OperationStarcleaveBlocks {
         register(BLESSED_CLOTH_CARPET, "blessed_cloth_carpet");
         register(BLESSED_CLOTH_CURTAIN, "blessed_cloth_curtain");
         register(BLESSED_BED, "blessed_bed");
+        register(PHLOGISTIC_FIRE, "phlogistic_fire");
     }
 
     public static <T extends Block> void register(T item, String name) {
