@@ -1,55 +1,58 @@
 package phanastrae.operation_starcleave.block;
 
 import net.minecraft.block.*;
-import net.minecraft.block.enums.BedPart;
 import net.minecraft.block.enums.Instrument;
-import net.minecraft.block.piston.PistonBehavior;
+import net.minecraft.entity.EntityType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.ColorCode;
-import net.minecraft.util.DyeColor;
 import phanastrae.operation_starcleave.OperationStarcleave;
 
+import java.util.function.ToIntFunction;
+
+import static net.minecraft.block.AbstractBlock.OffsetType.XYZ;
 import static net.minecraft.block.Blocks.CAULDRON;
+import static net.minecraft.block.MapColor.*;
+import static net.minecraft.block.enums.Instrument.BASEDRUM;
+import static net.minecraft.block.enums.Instrument.GUITAR;
+import static net.minecraft.block.piston.PistonBehavior.DESTROY;
+import static net.minecraft.sound.BlockSoundGroup.*;
 
 public class OperationStarcleaveBlocks {
+    protected static final AbstractBlock.ContextPredicate ALWAYS = (blockState, blockView, blockPos) -> true;
+    protected static final AbstractBlock.ContextPredicate NEVER = (blockState, blockView, blockPos) -> false;
+    protected static final AbstractBlock.TypedContextPredicate<EntityType<?>> SPAWN_ALWAYS = (blockState, blockView, blockPos, entityType) -> true;
+    protected static final AbstractBlock.TypedContextPredicate<EntityType<?>> SPAWN_NEVER = (blockState, blockView, blockPos, entityType) -> true;
 
-    public static final Block NETHERITE_PUMPKIN = new NetheritePumpkinBlock(
-            AbstractBlock.Settings.create()
-                    .mapColor(MapColor.BLACK)
-                    .requiresTool()
-                    .strength(10.0F, 1200.0F)
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .allowsSpawning(Blocks::always)
-                    .pistonBehavior(PistonBehavior.DESTROY)
-    );
 
-    public static final Block STELLAR_SEDIMENT = new Block(AbstractBlock.Settings.create().mapColor(MapColor.PURPLE).instrument(Instrument.BASEDRUM).strength(1.15f, 2f).sounds(BlockSoundGroup.SAND).luminance(b -> 2).allowsSpawning(Blocks::never));
-    public static final Block STELLAR_FARMLAND = new StellarFarmlandBlock(AbstractBlock.Settings.create().mapColor(MapColor.PURPLE).instrument(Instrument.BASEDRUM).strength(1.25f, 2f).sounds(BlockSoundGroup.SAND).luminance(b -> b.get(FarmlandBlock.MOISTURE) == 7 ? 15 : 2).allowsSpawning(Blocks::never).blockVision(Blocks::always).suffocates(Blocks::always).ticksRandomly());
-    public static final Block HOLY_MOSS = new HolyMossBlock(AbstractBlock.Settings.create().mapColor(MapColor.PALE_YELLOW).instrument(Instrument.BASEDRUM).strength(1.15f, 2f).sounds(BlockSoundGroup.MOSS_BLOCK).luminance(b -> 13).allowsSpawning(Blocks::never).ticksRandomly());
-    public static final Block SHORT_HOLY_MOSS = new ShortHolyMossBlock(AbstractBlock.Settings.create().replaceable().noCollision().breakInstantly().mapColor(MapColor.PALE_YELLOW).sounds(BlockSoundGroup.MOSS_BLOCK).luminance(b -> 13).offset(AbstractBlock.OffsetType.XYZ).pistonBehavior(PistonBehavior.DESTROY));
-    public static final Block STARDUST_BLOCK = new ColoredFallingBlock(new ColorCode(0xEF9FCFFF), AbstractBlock.Settings.create().mapColor(MapColor.PALE_PURPLE).instrument(Instrument.BASEDRUM).strength(0.2f, 0.1f).sounds(BlockSoundGroup.SAND).luminance(b -> 9).allowsSpawning(Blocks::never));
-    public static final Block STARDUST_CLUSTER = new StardustClusterBlock(AbstractBlock.Settings.create().replaceable().breakInstantly().dropsNothing().nonOpaque().luminance(b -> 15));
-    public static final Block STARBLEACHED_LOG = new PillarBlock(AbstractBlock.Settings.create().mapColor(MapColor.GRAY).instrument(Instrument.BASEDRUM).requiresTool().strength(2f, 6f).sounds(BlockSoundGroup.STONE).luminance(b -> 8).allowsSpawning(Blocks::never));
-    public static final Block STARBLEACHED_WOOD = new PillarBlock(AbstractBlock.Settings.create().mapColor(MapColor.GRAY).instrument(Instrument.BASEDRUM).requiresTool().strength(2f, 6f).sounds(BlockSoundGroup.STONE).luminance(b -> 8).allowsSpawning(Blocks::never));
-    public static final Block STARBLEACHED_LEAVES = new StarbleachedLeavesBlock(AbstractBlock.Settings.create().mapColor(MapColor.GRAY).instrument(Instrument.BASEDRUM).requiresTool().strength(0.25f, 2f).sounds(BlockSoundGroup.STONE).luminance(b -> 11).allowsSpawning(Blocks::never).nonOpaque().suffocates(Blocks::never).blockVision(Blocks::never).solidBlock(Blocks::never));
-    public static final Block STARBLEACHED_TILES = new Block(AbstractBlock.Settings.create().mapColor(MapColor.GRAY).instrument(Instrument.BASEDRUM).requiresTool().strength(1.5f, 6f).sounds(BlockSoundGroup.STONE).luminance(b -> 8).allowsSpawning(Blocks::never));
-    public static final Block STARBLEACHED_TILE_STAIRS = new StairsBlock(STARBLEACHED_TILES.getDefaultState(), AbstractBlock.Settings.copyShallow(STARBLEACHED_TILES));
-    public static final Block STARBLEACHED_TILE_SLAB = new SlabBlock(AbstractBlock.Settings.copyShallow(STARBLEACHED_TILES));
-    public static final Block STARBLEACHED_TILE_WALL = new WallBlock(AbstractBlock.Settings.copyShallow(STARBLEACHED_TILES).solid());
-    public static final Block CHISELED_STARBLEACHED_TILES = new Block(AbstractBlock.Settings.create().mapColor(MapColor.GRAY).instrument(Instrument.BASEDRUM).requiresTool().strength(1.5f, 6f).sounds(BlockSoundGroup.STONE).luminance(b -> 8).allowsSpawning(Blocks::never));
-    public static final Block IMBUED_STARBLEACHED_TILES = new ImbuedStarbleachedTilesBlock(AbstractBlock.Settings.create().mapColor(MapColor.CYAN).instrument(Instrument.BASEDRUM).requiresTool().strength(1.25f, 6f).sounds(BlockSoundGroup.STONE).luminance(b -> 15).allowsSpawning(Blocks::never));
-    public static final Block STARBLEACHED_PEARL_BLOCK = new StarbleachedPearlBlock(AbstractBlock.Settings.create().mapColor(MapColor.CYAN).instrument(Instrument.BASEDRUM).requiresTool().strength(1.3f, 6f).sounds(BlockSoundGroup.GLASS).luminance(b -> 12).allowsSpawning(Blocks::never));
-    public static final Block STARBLEACH_CAULDRON = new StarbleachCauldronBlock(AbstractBlock.Settings.copyShallow(CAULDRON).luminance(state -> 13));
-    public static final Block STELLAR_TILES = new Block(AbstractBlock.Settings.create().mapColor(MapColor.PURPLE).instrument(Instrument.BASEDRUM).strength(1.75f, 6f).sounds(BlockSoundGroup.DEEPSLATE).luminance(b -> 2).allowsSpawning(Blocks::never));
-    public static final Block STELLAR_TILE_SLAB = new SlabBlock(AbstractBlock.Settings.copyShallow(STELLAR_TILES));
-    public static final Block STELLAR_REPULSOR = new StellarRepulsorBlock(AbstractBlock.Settings.create().mapColor(MapColor.PALE_YELLOW).instrument(Instrument.BASEDRUM).strength(1.75f, 6f).sounds(BlockSoundGroup.WOOL).luminance(b -> 13).allowsSpawning(Blocks::never));
-    public static final Block BLESSED_CLOTH_BLOCK = new BlessedClothBlock(AbstractBlock.Settings.create().mapColor(MapColor.PALE_YELLOW).instrument(Instrument.GUITAR).strength(0.8F).sounds(BlockSoundGroup.WOOL));
-    public static final Block BLESSED_CLOTH_CARPET = new BlessedClothCarpetBlock(AbstractBlock.Settings.create().mapColor(MapColor.PALE_YELLOW).strength(0.1F).sounds(BlockSoundGroup.WOOL));
-    public static final Block BLESSED_CLOTH_CURTAIN = new PaneBlock(AbstractBlock.Settings.create().mapColor(MapColor.PALE_YELLOW).instrument(Instrument.GUITAR).strength(0.8F).sounds(BlockSoundGroup.WOOL).nonOpaque());
-    public static final Block BLESSED_BED = new BlessedBedBlock(AbstractBlock.Settings.create().mapColor(MapColor.PALE_YELLOW).sounds(BlockSoundGroup.WOOD).strength(0.2F).nonOpaque().pistonBehavior(PistonBehavior.DESTROY));
-    public static final Block PHLOGISTIC_FIRE = new PhlogisticFireBlock(AbstractBlock.Settings.create().mapColor(MapColor.LIME).replaceable().noCollision().breakInstantly().luminance(state -> 15).sounds(BlockSoundGroup.WOOL).pistonBehavior(PistonBehavior.DESTROY));
+    public static final Block NETHERITE_PUMPKIN = new NetheritePumpkinBlock(settings(BLACK, NETHERITE).requiresTool().strength(10.0F, 1200.0F).allowsSpawning(SPAWN_ALWAYS).pistonBehavior(DESTROY));
+
+    public static final Block STELLAR_SEDIMENT = new Block(settings(PURPLE, SAND, BASEDRUM, 1.15f, 2f, 2).allowsSpawning(SPAWN_NEVER));
+    public static final Block STELLAR_FARMLAND = new StellarFarmlandBlock(settings(PURPLE, SAND, BASEDRUM, 1.25f, 2f).luminance(b -> b.get(FarmlandBlock.MOISTURE) == 7 ? 15 : 2).allowsSpawning(SPAWN_NEVER).blockVision(ALWAYS).suffocates(ALWAYS).ticksRandomly());
+    public static final Block HOLY_MOSS = new HolyMossBlock(settings(PALE_YELLOW, MOSS_BLOCK, BASEDRUM, 1.15f, 2f, 13).allowsSpawning(SPAWN_NEVER).ticksRandomly());
+    public static final Block SHORT_HOLY_MOSS = new ShortHolyMossBlock(settings(PALE_YELLOW, MOSS_BLOCK).luminance(constant(13)).offset(XYZ).pistonBehavior(DESTROY).replaceable().noCollision().breakInstantly());
+    public static final Block STARDUST_BLOCK = new ColoredFallingBlock(new ColorCode(0xEF9FCFFF), settings(PALE_PURPLE, SAND, BASEDRUM, 0.2f, 0.1f, 9).allowsSpawning(SPAWN_NEVER));
+    public static final Block STARDUST_CLUSTER = new StardustClusterBlock(settings().luminance(constant(15)).replaceable().breakInstantly().dropsNothing().nonOpaque());
+    public static final Block STARBLEACHED_LOG = new PillarBlock(settings(GRAY, STONE, BASEDRUM, 2f, 6f, 8, true).allowsSpawning(SPAWN_NEVER));
+    public static final Block STARBLEACHED_WOOD = new PillarBlock(copyShallow(STARBLEACHED_LOG));
+    public static final Block STARBLEACHED_LEAVES = new StarbleachedLeavesBlock(settings(GRAY, STONE, BASEDRUM, 0.25f, 2f, 11, true).allowsSpawning(SPAWN_NEVER).suffocates(NEVER).blockVision(NEVER).solidBlock(NEVER).nonOpaque());
+    public static final Block STARBLEACHED_TILES = new Block(settings(GRAY, STONE, BASEDRUM, 1.5f, 6f, 8, true).allowsSpawning(SPAWN_NEVER));
+    public static final Block STARBLEACHED_TILE_STAIRS = stairsOf(STARBLEACHED_TILES);
+    public static final Block STARBLEACHED_TILE_SLAB = slabOf(STARBLEACHED_TILES);
+    public static final Block STARBLEACHED_TILE_WALL = wallOf(STARBLEACHED_TILES);
+    public static final Block CHISELED_STARBLEACHED_TILES = new Block(settings(GRAY, STONE, BASEDRUM, 1.5f, 6f, 8, true).allowsSpawning(SPAWN_NEVER));
+    public static final Block IMBUED_STARBLEACHED_TILES = new ImbuedStarbleachedTilesBlock(settings(CYAN, STONE, BASEDRUM, 1.25f, 6f, 15, true).allowsSpawning(SPAWN_NEVER));
+    public static final Block STARBLEACHED_PEARL_BLOCK = new StarbleachedPearlBlock(settings(CYAN, GLASS, BASEDRUM, 1.3f, 6f, 12, true).allowsSpawning(SPAWN_NEVER));
+    public static final Block STARBLEACH_CAULDRON = new StarbleachCauldronBlock(copyShallow(CAULDRON).luminance(constant(13)));
+    public static final Block STELLAR_TILES = new Block(settings(PURPLE, DEEPSLATE, BASEDRUM, 1.75f, 6f, 2).allowsSpawning(SPAWN_NEVER));
+    public static final Block STELLAR_TILE_SLAB = slabOf(STELLAR_TILES);
+    public static final Block STELLAR_REPULSOR = new StellarRepulsorBlock(settings(PALE_YELLOW, WOOL, BASEDRUM, 1.75f, 6f, 13).allowsSpawning(SPAWN_NEVER));
+    public static final Block BLESSED_CLOTH_BLOCK = new BlessedClothBlock(settings(PALE_YELLOW, WOOL, GUITAR).strength(0.8F));
+    public static final Block BLESSED_CLOTH_CARPET = new BlessedClothCarpetBlock(settings(PALE_YELLOW, WOOL).strength(0.1F));
+    public static final Block BLESSED_CLOTH_CURTAIN = new PaneBlock(settings(PALE_YELLOW, WOOL, GUITAR).strength(0.8F).nonOpaque());
+    public static final Block BLESSED_BED = new BlessedBedBlock(settings(PALE_YELLOW, WOOD).strength(0.2F).pistonBehavior(DESTROY).nonOpaque());
+    public static final Block PHLOGISTIC_FIRE = new PhlogisticFireBlock(settings(LIME, WOOL).luminance(constant(15)).pistonBehavior(DESTROY).replaceable().noCollision().breakInstantly());
 
     public static void init() {
         register(NETHERITE_PUMPKIN, "netherite_pumpkin");
@@ -80,7 +83,59 @@ public class OperationStarcleaveBlocks {
         register(PHLOGISTIC_FIRE, "phlogistic_fire");
     }
 
-    public static <T extends Block> void register(T item, String name) {
+    protected static <T extends Block> void register(T item, String name) {
         Registry.register(Registries.BLOCK, OperationStarcleave.id(name), item);
+    }
+
+    protected static ToIntFunction<BlockState> constant(int t) {
+        return b -> t;
+    }
+
+    protected static AbstractBlock.Settings copyShallow(AbstractBlock settings) {
+        return AbstractBlock.Settings.copyShallow(settings);
+    }
+
+    protected static AbstractBlock.Settings settings() {
+        return AbstractBlock.Settings.create();
+    }
+
+    protected static AbstractBlock.Settings settings(MapColor mapColor) {
+        return AbstractBlock.Settings.create().mapColor(mapColor);
+    }
+
+    protected static AbstractBlock.Settings settings(MapColor mapColor, BlockSoundGroup soundGroup) {
+        return AbstractBlock.Settings.create().mapColor(mapColor).sounds(soundGroup);
+    }
+
+    protected static AbstractBlock.Settings settings(MapColor mapColor, BlockSoundGroup soundGroup, Instrument instrument) {
+        return AbstractBlock.Settings.create().mapColor(mapColor).sounds(soundGroup).instrument(instrument);
+    }
+
+    protected static AbstractBlock.Settings settings(MapColor mapColor, BlockSoundGroup soundGroup, Instrument instrument, float hardness, float resistance) {
+        return AbstractBlock.Settings.create().mapColor(mapColor).sounds(soundGroup).instrument(instrument).strength(hardness, resistance);
+    }
+
+    protected static AbstractBlock.Settings settings(MapColor mapColor, BlockSoundGroup soundGroup, Instrument instrument, float hardness, float resistance, int luminance) {
+        return AbstractBlock.Settings.create().mapColor(mapColor).sounds(soundGroup).instrument(instrument).strength(hardness, resistance).luminance(constant(luminance));
+    }
+
+    protected static AbstractBlock.Settings settings(MapColor mapColor, BlockSoundGroup soundGroup, Instrument instrument, float hardness, float resistance, int luminance, boolean requiresTool) {
+        AbstractBlock.Settings settings = AbstractBlock.Settings.create().mapColor(mapColor).sounds(soundGroup).instrument(instrument).strength(hardness, resistance).luminance(constant(luminance));
+        if(requiresTool) {
+            settings.requiresTool();
+        }
+        return settings;
+    }
+
+    protected static StairsBlock stairsOf(Block block) {
+        return new StairsBlock(block.getDefaultState(), copyShallow(block));
+    }
+
+    protected static SlabBlock slabOf(AbstractBlock block) {
+        return new SlabBlock(copyShallow(block));
+    }
+
+    protected static WallBlock wallOf(AbstractBlock block) {
+        return new WallBlock(copyShallow(block).solid());
     }
 }
