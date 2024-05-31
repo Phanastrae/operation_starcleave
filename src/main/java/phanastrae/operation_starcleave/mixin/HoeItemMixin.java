@@ -33,7 +33,6 @@ public abstract class HoeItemMixin {
     private static void operation_starcleave$onInit(CallbackInfo ci) {
         Consumer<ItemUsageContext> till = createTillAction(OperationStarcleaveBlocks.STELLAR_FARMLAND.getDefaultState());
 
-        TILLING_ACTIONS.put(OperationStarcleaveBlocks.HOLY_MOSS, Pair.of(HoeItem::canTillFarmland, till));
-        TILLING_ACTIONS.put(OperationStarcleaveBlocks.STELLAR_SEDIMENT, Pair.of(HoeItem::canTillFarmland, till));
+        TILLING_ACTIONS.put(OperationStarcleaveBlocks.STELLAR_MULCH, Pair.of(HoeItem::canTillFarmland, till));
     }
 }

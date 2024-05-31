@@ -55,9 +55,10 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
         addDrop(OperationStarcleaveBlocks.PHLOGISTIC_FIRE, dropsNothing());
 
         addDrop(OperationStarcleaveBlocks.STARBLEACH_CAULDRON, Items.CAULDRON);
-        addDrop(OperationStarcleaveBlocks.STELLAR_FARMLAND, OperationStarcleaveItems.STELLAR_SEDIMENT);
 
         addRandomDrop(OperationStarcleaveBlocks.HOLY_MOSS, silkTouchDrop(OperationStarcleaveItems.HOLY_MOSS, OperationStarcleaveItems.STELLAR_SEDIMENT));
+        addRandomDrop(OperationStarcleaveBlocks.STELLAR_MULCH, silkTouchDrop(OperationStarcleaveItems.STELLAR_MULCH, OperationStarcleaveItems.STELLAR_SEDIMENT));
+        addRandomDrop(OperationStarcleaveBlocks.STELLAR_FARMLAND, silkTouchDrop(OperationStarcleaveItems.STELLAR_MULCH, OperationStarcleaveItems.STELLAR_SEDIMENT));
 
         addRandomDrop(OperationStarcleaveBlocks.STARDUST_BLOCK,
                 silkTouchDrop(
@@ -69,7 +70,15 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                         item(OperationStarcleaveItems.SHORT_HOLY_MOSS),
                         item(OperationStarcleaveItems.HOLY_STRANDS).apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.FORTUNE, 4)).apply(ExplosionDecayLootFunction.builder()).conditionally(RandomChanceLootCondition.builder(0.3F)),
                         WITH_SHEARS
-        ));
+                )
+        );
+
+        addRandomDrop(OperationStarcleaveBlocks.MULCHBORNE_TUFT,
+                conditionalDrop(
+                        item(OperationStarcleaveItems.MULCHBORNE_TUFT),
+                        WITH_SHEARS
+                )
+        );
 
         addDrop(OperationStarcleaveBlocks.BLESSED_BED, LootTable.builder().pool(
                 LootPool.builder().rolls(ConstantLootNumberProvider.create(1))
@@ -93,6 +102,15 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
 
     public static LeafEntry.Builder<?> item(ItemConvertible itemConvertible, float min, float max, boolean add) {
         return item(itemConvertible).apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(min, max), add));
+    }
+
+    public static LootTable.Builder conditionalDrop(LootPoolEntry.Builder<?> withCondition, LootCondition.Builder condition) {
+        LootPoolEntry.Builder<?> withConditionEntry = withCondition.conditionally(condition);
+
+        return LootTable.builder().pool(
+                LootPool.builder().rolls(ConstantLootNumberProvider.create(1))
+                        .with(withConditionEntry)
+        );
     }
 
     public static LootTable.Builder conditionalDrop(LootPoolEntry.Builder<?> withCondition, LootPoolEntry.Builder<?> noCondition, LootCondition.Builder condition) {

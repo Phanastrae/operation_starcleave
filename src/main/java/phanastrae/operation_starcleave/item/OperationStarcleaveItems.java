@@ -23,7 +23,9 @@ public class OperationStarcleaveItems {
     public static final Item NETHERITE_PUMPKIN = new NetheritePumpkinItem(OperationStarcleaveBlocks.NETHERITE_PUMPKIN, settings().rarity(Rarity.UNCOMMON).fireproof());
 
     public static final Item STELLAR_SEDIMENT = blockItem(OperationStarcleaveBlocks.STELLAR_SEDIMENT);
+    public static final Item STELLAR_MULCH = blockItem(OperationStarcleaveBlocks.STELLAR_MULCH);
     public static final Item STELLAR_FARMLAND = blockItem(OperationStarcleaveBlocks.STELLAR_FARMLAND);
+    public static final Item MULCHBORNE_TUFT = blockItem(OperationStarcleaveBlocks.MULCHBORNE_TUFT);
     public static final Item HOLY_MOSS = blockItem(OperationStarcleaveBlocks.HOLY_MOSS);
     public static final Item SHORT_HOLY_MOSS = blockItem(OperationStarcleaveBlocks.SHORT_HOLY_MOSS);
     public static final Item STARDUST_BLOCK = blockItem(OperationStarcleaveBlocks.STARDUST_BLOCK);
@@ -73,7 +75,9 @@ public class OperationStarcleaveItems {
         regWithIG(NETHERITE_PUMPKIN, "netherite_pumpkin");
         regWithIG(STARCLEAVER_GOLEM_BUCKET, "starcleaver_golem_bucket");
         regWithIG(STELLAR_SEDIMENT, "stellar_sediment");
+        regWithIG(STELLAR_MULCH, "stellar_mulch");
         regWithIG(STELLAR_FARMLAND, "stellar_farmland");
+        regWithIG(MULCHBORNE_TUFT, "mulchborne_tuft");
         regWithIG(HOLY_MOSS, "holy_moss");
         regWithIG(SHORT_HOLY_MOSS, "short_holy_moss");
         regWithIG(STARDUST_BLOCK, "stardust_block");
@@ -143,9 +147,12 @@ public class OperationStarcleaveItems {
         addItemsToGroupAfter(ItemGroups.NATURAL, Items.END_STONE,
                 HOLY_MOSS,
                 STELLAR_SEDIMENT,
+                STELLAR_MULCH,
                 STELLAR_FARMLAND,
                 STARDUST_BLOCK);
-        addItemToGroupAfter(ItemGroups.NATURAL, Items.HANGING_ROOTS, SHORT_HOLY_MOSS);
+        addItemsToGroupAfter(ItemGroups.NATURAL, Items.HANGING_ROOTS,
+                MULCHBORNE_TUFT,
+                SHORT_HOLY_MOSS);
 
         // Functional
         addItemToGroupAfter(ItemGroups.FUNCTIONAL, Items.DRAGON_HEAD,

@@ -13,6 +13,7 @@ import java.util.function.ToIntFunction;
 
 import static net.minecraft.block.AbstractBlock.OffsetType.XYZ;
 import static net.minecraft.block.Blocks.CAULDRON;
+import static net.minecraft.block.Blocks.DEAD_BUSH;
 import static net.minecraft.block.MapColor.*;
 import static net.minecraft.block.enums.Instrument.BASEDRUM;
 import static net.minecraft.block.enums.Instrument.GUITAR;
@@ -28,8 +29,10 @@ public class OperationStarcleaveBlocks {
 
     public static final Block NETHERITE_PUMPKIN = new NetheritePumpkinBlock(settings(BLACK, NETHERITE).requiresTool().strength(10.0F, 1200.0F).allowsSpawning(SPAWN_ALWAYS).pistonBehavior(DESTROY));
 
-    public static final Block STELLAR_SEDIMENT = new Block(settings(PURPLE, SAND, BASEDRUM, 1.15f, 2f, 2).allowsSpawning(SPAWN_NEVER));
+    public static final Block STELLAR_SEDIMENT = new StellarSedimentBlock(settings(PURPLE, SAND, BASEDRUM, 1.15f, 2f, 2).allowsSpawning(SPAWN_NEVER));
+    public static final Block STELLAR_MULCH = new StellarMulchBlock(settings(PURPLE, MUD, BASEDRUM, 1.15f, 2f, 4).allowsSpawning(SPAWN_NEVER).ticksRandomly());
     public static final Block STELLAR_FARMLAND = new StellarFarmlandBlock(settings(PURPLE, SAND, BASEDRUM, 1.25f, 2f).luminance(b -> b.get(FarmlandBlock.MOISTURE) == 7 ? 15 : 2).allowsSpawning(SPAWN_NEVER).blockVision(ALWAYS).suffocates(ALWAYS).ticksRandomly());
+    public static final Block MULCHBORNE_TUFT = new MulchborneTuftBlock(settings(MAGENTA, GRASS).luminance(constant(6)).offset(XYZ).pistonBehavior(DESTROY).replaceable().noCollision().breakInstantly());
     public static final Block HOLY_MOSS = new HolyMossBlock(settings(PALE_YELLOW, MOSS_BLOCK, BASEDRUM, 1.15f, 2f, 13).allowsSpawning(SPAWN_NEVER).ticksRandomly());
     public static final Block SHORT_HOLY_MOSS = new ShortHolyMossBlock(settings(PALE_YELLOW, MOSS_BLOCK).luminance(constant(13)).offset(XYZ).pistonBehavior(DESTROY).replaceable().noCollision().breakInstantly());
     public static final Block STARDUST_BLOCK = new ColoredFallingBlock(new ColorCode(0xEF9FCFFF), settings(PALE_PURPLE, SAND, BASEDRUM, 0.2f, 0.1f, 9).allowsSpawning(SPAWN_NEVER));
@@ -57,7 +60,9 @@ public class OperationStarcleaveBlocks {
     public static void init() {
         register(NETHERITE_PUMPKIN, "netherite_pumpkin");
         register(STELLAR_SEDIMENT, "stellar_sediment");
+        register(STELLAR_MULCH, "stellar_mulch");
         register(STELLAR_FARMLAND, "stellar_farmland");
+        register(MULCHBORNE_TUFT, "mulchborne_tuft");
         register(HOLY_MOSS, "holy_moss");
         register(SHORT_HOLY_MOSS, "short_holy_moss");
         register(STARDUST_BLOCK, "stardust_block");

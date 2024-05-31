@@ -1,32 +1,25 @@
 package phanastrae.operation_starcleave.block;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.block.*;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
+import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.BlockState;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import net.minecraft.world.chunk.light.ChunkLightProvider;
-import net.minecraft.world.gen.chunk.ChunkGenerator;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.NetherConfiguredFeatures;
-import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.world.starbleach.Starbleach;
 
-public class HolyMossBlock extends StellarSedimentBlock {
-    public static final MapCodec<StellarSedimentBlock> CODEC = createCodec(StellarSedimentBlock::new);
+public class StellarMulchBlock extends StellarSedimentBlock{
+    public static final MapCodec<StellarSedimentBlock> CODEC = createCodec(StellarMulchBlock::new);
 
     @Override
     public MapCodec<StellarSedimentBlock> getCodec() {
         return CODEC;
     }
 
-    public HolyMossBlock(AbstractBlock.Settings settings) {
+    public StellarMulchBlock(AbstractBlock.Settings settings) {
         super(settings);
     }
 
@@ -52,10 +45,10 @@ public class HolyMossBlock extends StellarSedimentBlock {
             BlockState targetState = world.getBlockState(posMutable);
             if(targetState.isOf(OperationStarcleaveBlocks.STELLAR_SEDIMENT)) {
                 if(world.getBlockState(posMutable.up()).isAir()) {
-                    world.setBlockState(posMutable, OperationStarcleaveBlocks.HOLY_MOSS.getDefaultState());
+                    world.setBlockState(posMutable, OperationStarcleaveBlocks.STELLAR_MULCH.getDefaultState());
                 }
             } else if(targetState.isReplaceable()) {
-                Starbleach.decorate(world, posMutable, 9, OperationStarcleaveBlocks.HOLY_MOSS, OperationStarcleaveBlocks.SHORT_HOLY_MOSS);
+                Starbleach.decorate(world, posMutable, 18, OperationStarcleaveBlocks.STELLAR_MULCH, OperationStarcleaveBlocks.MULCHBORNE_TUFT);
             }
         }
     }

@@ -1,16 +1,16 @@
-// 1.20.4	2024-05-26T19:57:04.9656948	Operation: Starcleave/Tags for minecraft:block
+// 1.20.4	2024-05-31T11:15:19.0290239	Operation: Starcleave/Tags for minecraft:block
 e1fe16980246891dff2d551a3554a84b0c1c97fd data\minecraft\tags\blocks\occludes_vibration_signals.json
-6e22db5e285f53370ec01d87eb783213b952c81a data\minecraft\tags\blocks\replaceable_by_trees.json
+4e56f952fa1ebf99ccbaaa31fce37325d19f603e data\minecraft\tags\blocks\replaceable_by_trees.json
 92df0385bc2395295cfd794f38ef476314f79778 data\minecraft\tags\blocks\fire.json
 372339ba060775514e3bed7f0ba357759a1c6910 data\minecraft\tags\blocks\walls.json
-6e22db5e285f53370ec01d87eb783213b952c81a data\minecraft\tags\blocks\replaceable.json
+4e56f952fa1ebf99ccbaaa31fce37325d19f603e data\minecraft\tags\blocks\replaceable.json
 5ee892117db5a6dbd4873ab55fc020872245c030 data\minecraft\tags\blocks\mineable\pickaxe.json
-7487245aefb07baca0b88652af064506799961a1 data\minecraft\tags\blocks\mineable\shovel.json
-6e22db5e285f53370ec01d87eb783213b952c81a data\minecraft\tags\blocks\enchantment_power_transmitter.json
+19f6ad2dc6962c539d62760a55a72c8f0b573e7c data\minecraft\tags\blocks\mineable\shovel.json
+4e56f952fa1ebf99ccbaaa31fce37325d19f603e data\minecraft\tags\blocks\enchantment_power_transmitter.json
 bad9903abf638696f1cb3c276aabde8124bc3640 data\minecraft\tags\blocks\cauldrons.json
 beb2df9e4d44465db3af2869a0c45a67000e28bc data\minecraft\tags\blocks\needs_diamond_tool.json
-6e22db5e285f53370ec01d87eb783213b952c81a data\minecraft\tags\blocks\mineable\axe.json
 dbd8dec09cfe0633457856ffc004070af3eb09a1 data\minecraft\tags\blocks\mineable\hoe.json
-6a1127565d4cfd79573a9f300e9d5402b9469a33 data\operation_starcleave\tags\blocks\starbleached.json
+4e56f952fa1ebf99ccbaaa31fce37325d19f603e data\minecraft\tags\blocks\mineable\axe.json
+682922faa19b3eb3ff97e0cd657143b722c3bbd5 data\operation_starcleave\tags\blocks\starbleached.json
 e19fe672602ba1f01b91a89f08ab87365b34dea4 data\minecraft\tags\blocks\dampens_vibrations.json
-6e22db5e285f53370ec01d87eb783213b952c81a data\minecraft\tags\blocks\sword_efficient.json
+4e56f952fa1ebf99ccbaaa31fce37325d19f603e data\minecraft\tags\blocks\sword_efficient.json

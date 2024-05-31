@@ -1,17 +1,16 @@
 package phanastrae.operation_starcleave.block;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.block.*;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.PlantBlock;
+import net.minecraft.block.ShapeContext;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldView;
 
-public class ShortHolyMossBlock extends PlantBlock {
-    public static final MapCodec<PlantBlock> CODEC = createCodec(ShortHolyMossBlock::new);
+public class MulchborneTuftBlock extends PlantBlock {
+    public static final MapCodec<PlantBlock> CODEC = createCodec(MulchborneTuftBlock::new);
     protected static final VoxelShape SHAPE = Block.createCuboidShape(2.0, 0.0, 2.0, 14.0, 13.0, 14.0);
 
     @Override
@@ -19,7 +18,7 @@ public class ShortHolyMossBlock extends PlantBlock {
         return CODEC;
     }
 
-    public ShortHolyMossBlock(Settings settings) {
+    public MulchborneTuftBlock(Settings settings) {
         super(settings);
     }
 
@@ -30,6 +29,6 @@ public class ShortHolyMossBlock extends PlantBlock {
 
     @Override
     protected boolean canPlantOnTop(BlockState floor, BlockView world, BlockPos pos) {
-        return floor.isOf(OperationStarcleaveBlocks.HOLY_MOSS);
+        return floor.isOf(OperationStarcleaveBlocks.STELLAR_MULCH);
     }
 }

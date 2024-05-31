@@ -1,0 +1,6 @@
+{
+  "parent": "operation_starcleave:block/uneven_cross_mirrored",
+  "textures": {
+    "cross": "operation_starcleave:block/mulchborne_tuft"
+  }
+}

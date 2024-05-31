@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "operation_starcleave:block/stellar_mulch"
+      },
+      {
+        "model": "operation_starcleave:block/stellar_mulch",
+        "y": 90
+      },
+      {
+        "model": "operation_starcleave:block/stellar_mulch",
+        "y": 180
+      },
+      {
+        "model": "operation_starcleave:block/stellar_mulch",
+        "y": 270
+      }
+    ]
+  }
+}

@@ -34,6 +34,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 .add(OperationStarcleaveBlocks.STELLAR_REPULSOR);
 
         getOrCreateTagBuilder(BlockTags.AXE_MINEABLE)
+                .add(OperationStarcleaveBlocks.MULCHBORNE_TUFT)
                 .add(OperationStarcleaveBlocks.SHORT_HOLY_MOSS);
 
         getOrCreateTagBuilder(BlockTags.HOE_MINEABLE)
@@ -42,6 +43,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
         getOrCreateTagBuilder(BlockTags.SHOVEL_MINEABLE)
                 .add(OperationStarcleaveBlocks.STELLAR_SEDIMENT)
+                .add(OperationStarcleaveBlocks.STELLAR_MULCH)
                 .add(OperationStarcleaveBlocks.STELLAR_FARMLAND)
                 .add(OperationStarcleaveBlocks.HOLY_MOSS)
                 .add(OperationStarcleaveBlocks.STELLAR_TILES)
@@ -57,6 +59,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 .add(OperationStarcleaveBlocks.BLESSED_CLOTH_CURTAIN);
 
         getOrCreateTagBuilder(BlockTags.ENCHANTMENT_POWER_TRANSMITTER)
+                .add(OperationStarcleaveBlocks.MULCHBORNE_TUFT)
                 .add(OperationStarcleaveBlocks.SHORT_HOLY_MOSS);
 
         getOrCreateTagBuilder(BlockTags.NEEDS_DIAMOND_TOOL)
@@ -66,12 +69,15 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 .add(OperationStarcleaveBlocks.BLESSED_CLOTH_BLOCK);
 
         getOrCreateTagBuilder(BlockTags.REPLACEABLE)
+                .add(OperationStarcleaveBlocks.MULCHBORNE_TUFT)
                 .add(OperationStarcleaveBlocks.SHORT_HOLY_MOSS);
 
         getOrCreateTagBuilder(BlockTags.REPLACEABLE_BY_TREES)
+                .add(OperationStarcleaveBlocks.MULCHBORNE_TUFT)
                 .add(OperationStarcleaveBlocks.SHORT_HOLY_MOSS);
 
         getOrCreateTagBuilder(BlockTags.SWORD_EFFICIENT)
+                .add(OperationStarcleaveBlocks.MULCHBORNE_TUFT)
                 .add(OperationStarcleaveBlocks.SHORT_HOLY_MOSS);
 
         getOrCreateTagBuilder(BlockTags.WALLS)
@@ -82,6 +88,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
         getOrCreateTagBuilder(OperationStarcleaveBlockTags.STARBLEACHED)
                 .add(OperationStarcleaveBlocks.STELLAR_SEDIMENT)
+                .add(OperationStarcleaveBlocks.STELLAR_MULCH)
                 .add(OperationStarcleaveBlocks.STELLAR_FARMLAND)
                 .add(OperationStarcleaveBlocks.HOLY_MOSS)
                 .add(OperationStarcleaveBlocks.STARBLEACHED_LOG)

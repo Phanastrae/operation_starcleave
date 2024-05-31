@@ -73,7 +73,8 @@ public class Starbleach {
         if(isStarbleached(blockState)) {
             if(starbleachTarget == StarbleachTarget.ALL || starbleachTarget == StarbleachTarget.NO_FILLING) {
                 if (world.random.nextInt(5) == 0) {
-                    decorate(world, blockPos.up(), 5);
+                    decorate(world, blockPos.up(), 5, OperationStarcleaveBlocks.HOLY_MOSS, OperationStarcleaveBlocks.SHORT_HOLY_MOSS);
+                    decorate(world, blockPos.up(), 10, OperationStarcleaveBlocks.STELLAR_MULCH, OperationStarcleaveBlocks.MULCHBORNE_TUFT);
                     return;
                 }
             }
@@ -132,14 +133,14 @@ public class Starbleach {
         }
     }
 
-    public static void decorate(ServerWorld world, BlockPos blockPos, int threshold) {
+    public static void decorate(ServerWorld world, BlockPos blockPos, int threshold, Block baseBlock, Block decoBlock) {
         int nearby = 0;
         for(int i = -2; i <= 2; i++) {
             for(int j = -2; j <= 2; j++) {
                 for(int k = -2; k <= 2; k++) {
                     if(i*i + j*j + k*k > 6) continue;
 
-                    if(world.getBlockState(blockPos.add(i, j, k)).isOf(OperationStarcleaveBlocks.SHORT_HOLY_MOSS)) {
+                    if(world.getBlockState(blockPos.add(i, j, k)).isOf(decoBlock)) {
                         nearby++;
                     }
                 }
@@ -149,8 +150,8 @@ public class Starbleach {
             return;
         }
 
-        if(world.getBlockState(blockPos).isReplaceable() && world.getBlockState(blockPos.down()).isOf(OperationStarcleaveBlocks.HOLY_MOSS)) {
-            world.setBlockState(blockPos, OperationStarcleaveBlocks.SHORT_HOLY_MOSS.getDefaultState());
+        if(world.getBlockState(blockPos).isAir() && world.getBlockState(blockPos.down()).isOf(baseBlock)) {
+            world.setBlockState(blockPos, decoBlock.getDefaultState());
         }
     }
 
@@ -197,16 +198,59 @@ public class Starbleach {
     @Nullable
     public static BlockState getStarbleachBlockResult(World world, BlockPos blockPos, BlockState blockState, Random random) {
         // TODO implement proper datapack based system for this instead of hardcoding it all
-        if(blockState.isOf(Blocks.GRASS_BLOCK)
-                || blockState.isOf(Blocks.PODZOL)
+        if(blockState.isOf(Blocks.PODZOL)
                 || blockState.isOf(Blocks.MYCELIUM)) {
-            return OperationStarcleaveBlocks.HOLY_MOSS.getDefaultState();
+            return OperationStarcleaveBlocks.STELLAR_MULCH.getDefaultState();
+        }
+        if(blockState.isOf(Blocks.GRASS_BLOCK)) {
+            int steepness = 0;
+            for(Direction direction : Direction.values()) {
+                if(direction.getAxis() != Direction.Axis.Y) {
+                    BlockState state = world.getBlockState(blockPos.add(direction.getOffsetX(), 1, direction.getOffsetZ()));
+                    if(!state.isReplaceable()) {
+                        steepness += 1;
+                    }
+                }
+            }
+            if(random.nextInt(2 + steepness) >= 2) {
+                return OperationStarcleaveBlocks.STELLAR_MULCH.getDefaultState();
+            }
+
+            int nearbyMulch = 0;
+            for(int x = -1; x <= 1; x++) {
+                for(int z = -1; z <= 1; z++) {
+                    BlockState state = world.getBlockState(blockPos.add(x, 0, z));
+                    if(state.isOf(OperationStarcleaveBlocks.STELLAR_MULCH)) {
+                        nearbyMulch += 1;
+                    }
+                }
+            }
+            if(random.nextInt(1 + (9 - nearbyMulch) * (9 - nearbyMulch)) <= 2) {
+                return OperationStarcleaveBlocks.STELLAR_MULCH.getDefaultState();
+            } else {
+                return OperationStarcleaveBlocks.HOLY_MOSS.getDefaultState();
+            }
         }
         if(blockState.isOf(Blocks.DIRT)
                 || blockState.isOf(Blocks.COARSE_DIRT)
                 || blockState.isOf(Blocks.ROOTED_DIRT)
                 || blockState.isIn(BlockTags.BASE_STONE_OVERWORLD)
                 || blockState.isOf(Blocks.END_STONE)) {
+            if(world.getBlockState(blockPos.up()).isAir()) {
+                int nearbyMulch = 0;
+                for(int x = -1; x <= 1; x++) {
+                    for(int z = -1; z <= 1; z++) {
+                        BlockState state = world.getBlockState(blockPos.add(x, 0, z));
+                        if(state.isOf(OperationStarcleaveBlocks.STELLAR_MULCH)) {
+                            nearbyMulch += 1;
+                        }
+                    }
+                }
+                if(random.nextInt(1 + (9 - nearbyMulch) * (9 - nearbyMulch)) <= 30) {
+                    return OperationStarcleaveBlocks.STELLAR_MULCH.getDefaultState();
+                }
+            }
+
             return OperationStarcleaveBlocks.STELLAR_SEDIMENT.getDefaultState();
         }
         if(blockState.isOf(Blocks.NETHERRACK)

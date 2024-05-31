@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "operation_starcleave:stellar_sediment",
+    "operation_starcleave:stellar_mulch",
     "operation_starcleave:stellar_farmland",
     "operation_starcleave:holy_moss",
     "operation_starcleave:starbleached_log",

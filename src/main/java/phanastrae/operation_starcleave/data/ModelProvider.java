@@ -3,14 +3,12 @@ package phanastrae.operation_starcleave.data;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.LeveledCauldronBlock;
 import net.minecraft.data.client.*;
 import net.minecraft.item.Item;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import phanastrae.operation_starcleave.OperationStarcleave;
-import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.block.StarbleachedPearlBlock;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 
@@ -25,36 +23,40 @@ public class ModelProvider extends FabricModelProvider {
     }
 
     @Override
-    public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
-        blockStateModelGenerator.registerCubeAllModelTexturePool(STARBLEACHED_TILES)
+    public void generateBlockStateModels(BlockStateModelGenerator BSMG) {
+        BSMG.registerCubeAllModelTexturePool(STARBLEACHED_TILES)
                 .slab(STARBLEACHED_TILE_SLAB)
                 .stairs(STARBLEACHED_TILE_STAIRS)
                 .wall(STARBLEACHED_TILE_WALL);
 
-        blockStateModelGenerator.registerCubeAllModelTexturePool(STELLAR_TILES)
+        BSMG.registerCubeAllModelTexturePool(STELLAR_TILES)
                 .slab(STELLAR_TILE_SLAB);
 
-        blockStateModelGenerator.registerSimpleCubeAll(CHISELED_STARBLEACHED_TILES);
-        blockStateModelGenerator.registerSimpleCubeAll(IMBUED_STARBLEACHED_TILES);
+        BSMG.registerSimpleCubeAll(CHISELED_STARBLEACHED_TILES);
+        BSMG.registerSimpleCubeAll(IMBUED_STARBLEACHED_TILES);
 
-        blockStateModelGenerator.registerLog(STARBLEACHED_LOG).log(STARBLEACHED_LOG).wood(STARBLEACHED_WOOD);
+        BSMG.registerLog(STARBLEACHED_LOG).log(STARBLEACHED_LOG).wood(STARBLEACHED_WOOD);
 
-        blockStateModelGenerator.registerSingleton(STARBLEACHED_LEAVES, TexturedModel.LEAVES);
+        BSMG.registerSingleton(STARBLEACHED_LEAVES, TexturedModel.LEAVES);
 
-        blockStateModelGenerator.registerRotatable(STELLAR_SEDIMENT);
-        blockStateModelGenerator.registerRotatable(STARDUST_BLOCK);
+        BSMG.registerRotatable(STELLAR_SEDIMENT);
+        BSMG.registerRotatable(STARDUST_BLOCK);
 
-        blockStateModelGenerator.registerTintableCross(SHORT_HOLY_MOSS, BlockStateModelGenerator.TintType.NOT_TINTED);
+        BSMG.registerTintableCross(SHORT_HOLY_MOSS, BlockStateModelGenerator.TintType.NOT_TINTED);
+        registerUnevenCross(BSMG, MULCHBORNE_TUFT);
+
+        registerGrassLikeBlock(BSMG, HOLY_MOSS, STELLAR_SEDIMENT);
+        registerGrassLikeBlock(BSMG, STELLAR_MULCH, STELLAR_SEDIMENT);
 
         {
             TextureMap textureMap = TextureMap.sideEnd(NETHERITE_PUMPKIN);
-            blockStateModelGenerator.registerNorthDefaultHorizontalRotatable(NETHERITE_PUMPKIN, textureMap);
+            BSMG.registerNorthDefaultHorizontalRotatable(NETHERITE_PUMPKIN, textureMap);
         }
 
         {
-            Identifier off = TexturedModel.CUBE_ALL.upload(STARBLEACHED_PEARL_BLOCK, blockStateModelGenerator.modelCollector);
-            Identifier on = blockStateModelGenerator.createSubModel(STARBLEACHED_PEARL_BLOCK, "_on", Models.CUBE_ALL, TextureMap::all);
-            blockStateModelGenerator.blockStateCollector
+            Identifier off = TexturedModel.CUBE_ALL.upload(STARBLEACHED_PEARL_BLOCK, BSMG.modelCollector);
+            Identifier on = BSMG.createSubModel(STARBLEACHED_PEARL_BLOCK, "_on", Models.CUBE_ALL, TextureMap::all);
+            BSMG.blockStateCollector
                     .accept(VariantsBlockStateSupplier.create(STARBLEACHED_PEARL_BLOCK).coordinate(createBooleanModelMap(StarbleachedPearlBlock.TRIGGERED, on, off)));
         }
 
@@ -63,16 +65,16 @@ public class ModelProvider extends FabricModelProvider {
             Block carpet = BLESSED_CLOTH_CARPET;
             Block curtain = BLESSED_CLOTH_CURTAIN;
 
-            blockStateModelGenerator.registerSimpleCubeAll(wool);
+            BSMG.registerSimpleCubeAll(wool);
             TextureMap textureMap = new TextureMap().put(TextureKey.PANE, TextureMap.getId(curtain)).put(TextureKey.EDGE, TextureMap.getId(wool));
-            Identifier identifier = Models.TEMPLATE_GLASS_PANE_POST.upload(curtain, textureMap, blockStateModelGenerator.modelCollector);
-            Identifier identifier2 = Models.TEMPLATE_GLASS_PANE_SIDE.upload(curtain, textureMap, blockStateModelGenerator.modelCollector);
-            Identifier identifier3 = Models.TEMPLATE_GLASS_PANE_SIDE_ALT.upload(curtain, textureMap, blockStateModelGenerator.modelCollector);
-            Identifier identifier4 = Models.TEMPLATE_GLASS_PANE_NOSIDE.upload(curtain, textureMap, blockStateModelGenerator.modelCollector);
-            Identifier identifier5 = Models.TEMPLATE_GLASS_PANE_NOSIDE_ALT.upload(curtain, textureMap, blockStateModelGenerator.modelCollector);
+            Identifier identifier = Models.TEMPLATE_GLASS_PANE_POST.upload(curtain, textureMap, BSMG.modelCollector);
+            Identifier identifier2 = Models.TEMPLATE_GLASS_PANE_SIDE.upload(curtain, textureMap, BSMG.modelCollector);
+            Identifier identifier3 = Models.TEMPLATE_GLASS_PANE_SIDE_ALT.upload(curtain, textureMap, BSMG.modelCollector);
+            Identifier identifier4 = Models.TEMPLATE_GLASS_PANE_NOSIDE.upload(curtain, textureMap, BSMG.modelCollector);
+            Identifier identifier5 = Models.TEMPLATE_GLASS_PANE_NOSIDE_ALT.upload(curtain, textureMap, BSMG.modelCollector);
             Item item = curtain.asItem();
-            Models.GENERATED.upload(ModelIds.getItemModelId(item), TextureMap.layer0(curtain), blockStateModelGenerator.modelCollector);
-            blockStateModelGenerator.blockStateCollector
+            Models.GENERATED.upload(ModelIds.getItemModelId(item), TextureMap.layer0(curtain), BSMG.modelCollector);
+            BSMG.blockStateCollector
                     .accept(
                             MultipartBlockStateSupplier.create(curtain)
                                     .with(BlockStateVariant.create().put(VariantSettings.MODEL, identifier))
@@ -97,10 +99,10 @@ public class ModelProvider extends FabricModelProvider {
                                             BlockStateVariant.create().put(VariantSettings.MODEL, identifier4).put(VariantSettings.Y, VariantSettings.Rotation.R270)
                                     )
                     );
-            Identifier identifier6 = TexturedModel.CARPET.get(wool).upload(carpet, blockStateModelGenerator.modelCollector);
-            blockStateModelGenerator.blockStateCollector.accept(createSingletonBlockState(carpet, identifier6));
+            Identifier identifier6 = TexturedModel.CARPET.get(wool).upload(carpet, BSMG.modelCollector);
+            BSMG.blockStateCollector.accept(createSingletonBlockState(carpet, identifier6));
         }
-        blockStateModelGenerator.blockStateCollector
+        BSMG.blockStateCollector
                 .accept(
                         VariantsBlockStateSupplier.create(STARBLEACH_CAULDRON)
                                 .coordinate(
@@ -111,7 +113,7 @@ public class ModelProvider extends FabricModelProvider {
                                                                 .put(
                                                                         VariantSettings.MODEL,
                                                                         Models.TEMPLATE_CAULDRON_LEVEL1
-                                                                                .upload(STARBLEACH_CAULDRON, "_level1", TextureMap.cauldron(OperationStarcleave.id("block/starbleach_still")), blockStateModelGenerator.modelCollector)
+                                                                                .upload(STARBLEACH_CAULDRON, "_level1", TextureMap.cauldron(OperationStarcleave.id("block/starbleach_still")), BSMG.modelCollector)
                                                                 )
                                                 )
                                                 .register(
@@ -120,7 +122,7 @@ public class ModelProvider extends FabricModelProvider {
                                                                 .put(
                                                                         VariantSettings.MODEL,
                                                                         Models.TEMPLATE_CAULDRON_LEVEL2
-                                                                                .upload(STARBLEACH_CAULDRON, "_level2", TextureMap.cauldron(OperationStarcleave.id("block/starbleach_still")), blockStateModelGenerator.modelCollector)
+                                                                                .upload(STARBLEACH_CAULDRON, "_level2", TextureMap.cauldron(OperationStarcleave.id("block/starbleach_still")), BSMG.modelCollector)
                                                                 )
                                                 )
                                                 .register(
@@ -129,47 +131,35 @@ public class ModelProvider extends FabricModelProvider {
                                                                 .put(
                                                                         VariantSettings.MODEL,
                                                                         Models.TEMPLATE_CAULDRON_FULL
-                                                                                .upload(STARBLEACH_CAULDRON, "_full", TextureMap.cauldron(OperationStarcleave.id("block/starbleach_still")), blockStateModelGenerator.modelCollector)
+                                                                                .upload(STARBLEACH_CAULDRON, "_full", TextureMap.cauldron(OperationStarcleave.id("block/starbleach_still")), BSMG.modelCollector)
                                                                 )
                                                 )
                                 )
                 );
 
         {
-            Identifier identifier = TextureMap.getId(STELLAR_SEDIMENT);
-            Identifier identifier2 = TexturedModel.CUBE_BOTTOM_TOP
-                    .get(HOLY_MOSS)
-                    .textures(textures -> textures.put(TextureKey.BOTTOM, identifier))
-                    .upload(HOLY_MOSS, blockStateModelGenerator.modelCollector);
-            blockStateModelGenerator.blockStateCollector
-                    .accept(VariantsBlockStateSupplier.create(HOLY_MOSS, createModelVariantWithRandomHorizontalRotations(identifier2)));
+            TextureMap dryTextures = new TextureMap().put(TextureKey.DIRT, TextureMap.getId(STELLAR_SEDIMENT)).put(TextureKey.TOP, TextureMap.getId(STELLAR_FARMLAND));
+            TextureMap moistTextures = new TextureMap().put(TextureKey.DIRT, TextureMap.getId(STELLAR_SEDIMENT)).put(TextureKey.TOP, TextureMap.getSubId(STELLAR_FARMLAND, "_moist"));
+            Identifier dryModel = Models.TEMPLATE_FARMLAND.upload(STELLAR_FARMLAND, dryTextures, BSMG.modelCollector);
+            Identifier moistModel = Models.TEMPLATE_FARMLAND.upload(TextureMap.getSubId(STELLAR_FARMLAND, "_moist"), moistTextures, BSMG.modelCollector);
+            BSMG.blockStateCollector
+                    .accept(VariantsBlockStateSupplier.create(STELLAR_FARMLAND).coordinate(createValueFencedModelMap(Properties.MOISTURE, 7, moistModel, dryModel)));
         }
 
-        {
-            TextureMap textureMap = new TextureMap().put(TextureKey.DIRT, TextureMap.getId(STELLAR_SEDIMENT)).put(TextureKey.TOP, TextureMap.getId(STELLAR_FARMLAND));
-            TextureMap textureMap2 = new TextureMap()
-                    .put(TextureKey.DIRT, TextureMap.getId(STELLAR_SEDIMENT))
-                    .put(TextureKey.TOP, TextureMap.getSubId(STELLAR_FARMLAND, "_moist"));
-            Identifier identifier = Models.TEMPLATE_FARMLAND.upload(STELLAR_FARMLAND, textureMap, blockStateModelGenerator.modelCollector);
-            Identifier identifier2 = Models.TEMPLATE_FARMLAND.upload(TextureMap.getSubId(STELLAR_FARMLAND, "_moist"), textureMap2, blockStateModelGenerator.modelCollector);
-            blockStateModelGenerator.blockStateCollector
-                    .accept(VariantsBlockStateSupplier.create(STELLAR_FARMLAND).coordinate(createValueFencedModelMap(Properties.MOISTURE, 7, identifier2, identifier)));
-        }
-
-        registerFire(blockStateModelGenerator, PHLOGISTIC_FIRE);
+        registerFire(BSMG, PHLOGISTIC_FIRE);
     }
 
-    private void registerFire(BlockStateModelGenerator blockStateModelGenerator, Block block) {
+    private void registerFire(BlockStateModelGenerator BSMG, Block block) {
         When when = When.create()
                 .set(Properties.NORTH, false)
                 .set(Properties.EAST, false)
                 .set(Properties.SOUTH, false)
                 .set(Properties.WEST, false)
                 .set(Properties.UP, false);
-        List<Identifier> list = blockStateModelGenerator.getFireFloorModels(block);
-        List<Identifier> list2 = blockStateModelGenerator.getFireSideModels(block);
-        List<Identifier> list3 = blockStateModelGenerator.getFireUpModels(block);
-        blockStateModelGenerator.blockStateCollector
+        List<Identifier> list = BSMG.getFireFloorModels(block);
+        List<Identifier> list2 = BSMG.getFireSideModels(block);
+        List<Identifier> list3 = BSMG.getFireUpModels(block);
+        BSMG.blockStateCollector
                 .accept(
                         MultipartBlockStateSupplier.create(block)
                                 .with(when, buildBlockStateVariants(list, blockStateVariant -> blockStateVariant))
@@ -190,25 +180,50 @@ public class ModelProvider extends FabricModelProvider {
                 );
     }
 
-    @Override
-    public void generateItemModels(ItemModelGenerator itemModelGenerator) {
-        registerGenerated(itemModelGenerator, OperationStarcleaveItems.STARCLEAVER_GOLEM_BUCKET);
-        registerGenerated(itemModelGenerator, OperationStarcleaveItems.BLESSED_BED);
-        registerGenerated(itemModelGenerator, OperationStarcleaveItems.BLESSED_CLOTH);
-        registerGenerated(itemModelGenerator, OperationStarcleaveItems.FIRMAMENT_REJUVENATOR);
-        registerGenerated(itemModelGenerator, OperationStarcleaveItems.HOLY_STRANDS);
-        registerGenerated(itemModelGenerator, OperationStarcleaveItems.SPLASH_STARBLEACH_BOTTLE);
-        registerGenerated(itemModelGenerator, OperationStarcleaveItems.STARBLEACH_BOTTLE);
-        registerGenerated(itemModelGenerator, OperationStarcleaveItems.STARBLEACHED_PEARL);
-        registerGenerated(itemModelGenerator, OperationStarcleaveItems.STARDUST_CLUSTER);
-        registerGenerated(itemModelGenerator, OperationStarcleaveItems.STARFRUIT);
-        registerGenerated(itemModelGenerator, OperationStarcleaveItems.HOLLOWED_SAC);
-        registerGenerated(itemModelGenerator, OperationStarcleaveItems.PHLOGISTON_SAC);
-
-        itemModelGenerator.register(OperationStarcleaveItems.FIRMAMENT_MANIPULATOR, Models.HANDHELD);
+    private void registerGrassLikeBlock(BlockStateModelGenerator BSMG, Block block, Block baseBlock) {
+        Identifier baseBlockIdentifier = TextureMap.getId(baseBlock);
+        Identifier modelId = TexturedModel.CUBE_BOTTOM_TOP
+                .get(block)
+                .textures(textures -> textures.put(TextureKey.BOTTOM, baseBlockIdentifier))
+                .upload(block, BSMG.modelCollector);
+        BSMG.blockStateCollector
+                .accept(VariantsBlockStateSupplier.create(block, createModelVariantWithRandomHorizontalRotations(modelId)));
     }
 
-    public static void registerGenerated(ItemModelGenerator itemModelGenerator, Item item) {
-        itemModelGenerator.register(item, Models.GENERATED);
+    private void registerUnevenCross(BlockStateModelGenerator BSMG, Block block) {
+        BSMG.registerItemModel(block);
+
+        TextureMap textureMap = TextureMap.cross(block);
+        Identifier modelId = OperationStarcleaveModels.UNEVEN_CROSS.upload(block, textureMap, BSMG.modelCollector);
+        Identifier modelId2 = OperationStarcleaveModels.UNEVEN_CROSS_MIRRORED.upload(block, textureMap, BSMG.modelCollector);
+        BSMG.blockStateCollector.accept(VariantsBlockStateSupplier.create(
+                block,
+                BlockStateVariant.create().put(VariantSettings.MODEL, modelId),
+                BlockStateVariant.create().put(VariantSettings.MODEL, modelId2),
+                BlockStateVariant.create().put(VariantSettings.MODEL, modelId).put(VariantSettings.Y, VariantSettings.Rotation.R90),
+                BlockStateVariant.create().put(VariantSettings.MODEL, modelId2).put(VariantSettings.Y, VariantSettings.Rotation.R90)
+        ));
+    }
+
+    @Override
+    public void generateItemModels(ItemModelGenerator IMG) {
+        registerGenerated(IMG, OperationStarcleaveItems.STARCLEAVER_GOLEM_BUCKET);
+        registerGenerated(IMG, OperationStarcleaveItems.BLESSED_BED);
+        registerGenerated(IMG, OperationStarcleaveItems.BLESSED_CLOTH);
+        registerGenerated(IMG, OperationStarcleaveItems.FIRMAMENT_REJUVENATOR);
+        registerGenerated(IMG, OperationStarcleaveItems.HOLY_STRANDS);
+        registerGenerated(IMG, OperationStarcleaveItems.SPLASH_STARBLEACH_BOTTLE);
+        registerGenerated(IMG, OperationStarcleaveItems.STARBLEACH_BOTTLE);
+        registerGenerated(IMG, OperationStarcleaveItems.STARBLEACHED_PEARL);
+        registerGenerated(IMG, OperationStarcleaveItems.STARDUST_CLUSTER);
+        registerGenerated(IMG, OperationStarcleaveItems.STARFRUIT);
+        registerGenerated(IMG, OperationStarcleaveItems.HOLLOWED_SAC);
+        registerGenerated(IMG, OperationStarcleaveItems.PHLOGISTON_SAC);
+
+        IMG.register(OperationStarcleaveItems.FIRMAMENT_MANIPULATOR, Models.HANDHELD);
+    }
+
+    private static void registerGenerated(ItemModelGenerator IMG, Item item) {
+        IMG.register(item, Models.GENERATED);
     }
 }
