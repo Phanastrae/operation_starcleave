@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:block/template_cauldron_full",
+  "parent": "operation_starcleave:block/template_cauldron_7_level5",
   "textures": {
     "bottom": "minecraft:block/cauldron_bottom",
     "content": "operation_starcleave:block/starbleach_still",

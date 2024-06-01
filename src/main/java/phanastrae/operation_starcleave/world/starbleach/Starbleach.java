@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.WorldChunk;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
+import phanastrae.operation_starcleave.block.StarbleachCauldronBlock;
 import phanastrae.operation_starcleave.block.StellarFarmlandBlock;
 import phanastrae.operation_starcleave.block.tag.OperationStarcleaveBlockTags;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
@@ -163,7 +164,7 @@ public class Starbleach {
     public static BlockState getStarbleachResult(World world, BlockPos blockPos, BlockState blockState, Random random, StarbleachTarget starbleachTarget) {
         BlockState newBlockstate = null;
         if(starbleachTarget == StarbleachTarget.ALL || starbleachTarget == StarbleachTarget.ONLY_FILLING) {
-            newBlockstate = getStarbleachCauldronResult(blockState, random);
+            newBlockstate = getStarbleachCauldronResult(blockState);
             if(newBlockstate != null) {
                 return newBlockstate;
             }
@@ -180,15 +181,13 @@ public class Starbleach {
 
 
     @Nullable
-    public static BlockState getStarbleachCauldronResult(BlockState blockState, Random random) {
+    public static BlockState getStarbleachCauldronResult(BlockState blockState) {
         if (blockState.isOf(Blocks.CAULDRON)) {
             return OperationStarcleaveBlocks.STARBLEACH_CAULDRON.getDefaultState();
         }
         if (blockState.isOf(OperationStarcleaveBlocks.STARBLEACH_CAULDRON)) {
-            if (blockState.getProperties().contains(LeveledCauldronBlock.LEVEL)) {
-                if (blockState.get(LeveledCauldronBlock.LEVEL) != 3) {
-                    return blockState.cycle(LeveledCauldronBlock.LEVEL);
-                }
+            if (blockState.get(StarbleachCauldronBlock.LEVEL_7) != StarbleachCauldronBlock.MAX_STARBLEACH_LEVEL) {
+                return blockState.cycle(StarbleachCauldronBlock.LEVEL_7);
             }
         }
 

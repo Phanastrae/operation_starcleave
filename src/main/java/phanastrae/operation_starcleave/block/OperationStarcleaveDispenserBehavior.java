@@ -9,10 +9,7 @@ import net.minecraft.block.entity.BeehiveBlockEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.thrown.PotionEntity;
 import net.minecraft.entity.projectile.thrown.SnowballEntity;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.item.*;
 import net.minecraft.potion.PotionUtil;
 import net.minecraft.potion.Potions;
 import net.minecraft.registry.tag.BlockTags;
@@ -51,6 +48,35 @@ public class OperationStarcleaveDispenserBehavior {
                 }
 
                 return stack;
+            }
+        });
+
+        register(OperationStarcleaveItems.STARBLEACH_BOTTLE, new ItemDispenserBehavior() {
+            private final ItemDispenserBehavior fallbackBehavior = new ItemDispenserBehavior();
+
+            @Override
+            public ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack) {
+                World world = pointer.world();
+                BlockPos blockPos = pointer.pos().offset(pointer.state().get(DispenserBlock.FACING));
+                if(StarbleachCauldronBlock.canFillCauldron(world, blockPos)) {
+                    if (!world.isClient) {
+                        StarbleachCauldronBlock.fillCauldron(world, blockPos);
+                    }
+
+                    stack.decrement(1);
+                    Item item = Items.GLASS_BOTTLE;
+                    if(stack.isEmpty()) {
+                        return new ItemStack(item);
+                    } else {
+                        if (pointer.blockEntity().addToFirstFreeSlot(new ItemStack(item)) < 0) {
+                            this.fallbackBehavior.dispense(pointer, new ItemStack(item));
+                        }
+
+                        return stack;
+                    }
+                } else {
+                    return super.dispenseSilently(pointer, stack);
+                }
             }
         });
 

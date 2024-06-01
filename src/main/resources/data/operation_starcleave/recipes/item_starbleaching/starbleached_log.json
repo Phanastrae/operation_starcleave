@@ -1,0 +1,9 @@
+{
+  "type": "operation_starcleave:item_starbleaching",
+  "ingredient": {
+    "tag": "minecraft:logs"
+  },
+  "starbleach_cost": 0.125,
+  "result": "operation_starcleave:starbleached_log",
+  "count": 1
+}

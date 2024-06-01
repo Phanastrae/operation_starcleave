@@ -18,6 +18,8 @@ import phanastrae.operation_starcleave.entity.effect.OperationStarcleaveStatusEf
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 import phanastrae.operation_starcleave.network.packet.OperationStarcleavePacketTypes;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
+import phanastrae.operation_starcleave.recipe.OperationStarcleaveRecipeSerializers;
+import phanastrae.operation_starcleave.recipe.OperationStarcleaveRecipeTypes;
 import phanastrae.operation_starcleave.server.network.OperationStarcleaveServerPacketHandler;
 import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
 import phanastrae.operation_starcleave.world.OperationStarcleaveGameRules;
@@ -50,6 +52,9 @@ public class OperationStarcleave implements ModInitializer {
 
 		OperationStarcleaveParticleTypes.init();
 		OperationStarcleaveSoundEvents.init();
+
+		OperationStarcleaveRecipeTypes.init();
+		OperationStarcleaveRecipeSerializers.init();
 
 		OperationStarcleaveDispenserBehavior.init();
 		StarbleachCauldronBlock.init();

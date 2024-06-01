@@ -3,12 +3,13 @@ package phanastrae.operation_starcleave.data;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 import net.minecraft.block.Block;
-import net.minecraft.block.LeveledCauldronBlock;
+import net.minecraft.block.Blocks;
 import net.minecraft.data.client.*;
 import net.minecraft.item.Item;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import phanastrae.operation_starcleave.OperationStarcleave;
+import phanastrae.operation_starcleave.block.StarbleachCauldronBlock;
 import phanastrae.operation_starcleave.block.StarbleachedPearlBlock;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 
@@ -102,40 +103,6 @@ public class ModelProvider extends FabricModelProvider {
             Identifier identifier6 = TexturedModel.CARPET.get(wool).upload(carpet, BSMG.modelCollector);
             BSMG.blockStateCollector.accept(createSingletonBlockState(carpet, identifier6));
         }
-        BSMG.blockStateCollector
-                .accept(
-                        VariantsBlockStateSupplier.create(STARBLEACH_CAULDRON)
-                                .coordinate(
-                                        BlockStateVariantMap.create(LeveledCauldronBlock.LEVEL)
-                                                .register(
-                                                        1,
-                                                        BlockStateVariant.create()
-                                                                .put(
-                                                                        VariantSettings.MODEL,
-                                                                        Models.TEMPLATE_CAULDRON_LEVEL1
-                                                                                .upload(STARBLEACH_CAULDRON, "_level1", TextureMap.cauldron(OperationStarcleave.id("block/starbleach_still")), BSMG.modelCollector)
-                                                                )
-                                                )
-                                                .register(
-                                                        2,
-                                                        BlockStateVariant.create()
-                                                                .put(
-                                                                        VariantSettings.MODEL,
-                                                                        Models.TEMPLATE_CAULDRON_LEVEL2
-                                                                                .upload(STARBLEACH_CAULDRON, "_level2", TextureMap.cauldron(OperationStarcleave.id("block/starbleach_still")), BSMG.modelCollector)
-                                                                )
-                                                )
-                                                .register(
-                                                        3,
-                                                        BlockStateVariant.create()
-                                                                .put(
-                                                                        VariantSettings.MODEL,
-                                                                        Models.TEMPLATE_CAULDRON_FULL
-                                                                                .upload(STARBLEACH_CAULDRON, "_full", TextureMap.cauldron(OperationStarcleave.id("block/starbleach_still")), BSMG.modelCollector)
-                                                                )
-                                                )
-                                )
-                );
 
         {
             TextureMap dryTextures = new TextureMap().put(TextureKey.DIRT, TextureMap.getId(STELLAR_SEDIMENT)).put(TextureKey.TOP, TextureMap.getId(STELLAR_FARMLAND));
@@ -147,6 +114,7 @@ public class ModelProvider extends FabricModelProvider {
         }
 
         registerFire(BSMG, PHLOGISTIC_FIRE);
+        registerStarbleachCauldron(BSMG, STARBLEACH_CAULDRON);
     }
 
     private void registerFire(BlockStateModelGenerator BSMG, Block block) {
@@ -178,6 +146,22 @@ public class ModelProvider extends FabricModelProvider {
                                 )
                                 .with(When.create().set(Properties.UP, true), buildBlockStateVariants(list3, blockStateVariant -> blockStateVariant))
                 );
+    }
+
+    private void registerStarbleachCauldron(BlockStateModelGenerator BSMG, Block block) {
+        BlockStateVariantMap.SingleProperty<Integer> map = BlockStateVariantMap.create(StarbleachCauldronBlock.LEVEL_7);
+        for(int i = 1; i <= 7; i++) {
+            map = map.register(
+                    i,
+                    BlockStateVariant.create()
+                            .put(
+                                    VariantSettings.MODEL,
+                                    OperationStarcleaveModels.getSevenLevelCauldron(i)
+                                            .upload(block, "_level" + i, TextureMap.cauldron(OperationStarcleave.id("block/starbleach_still")), BSMG.modelCollector)
+                            )
+            );
+        }
+        BSMG.blockStateCollector.accept(VariantsBlockStateSupplier.create(block).coordinate(map));
     }
 
     private void registerGrassLikeBlock(BlockStateModelGenerator BSMG, Block block, Block baseBlock) {

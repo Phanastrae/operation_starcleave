@@ -1,0 +1,8 @@
+{
+  "type": "operation_starcleave:item_starbleaching",
+  "ingredient": {
+    "item": "minecraft:chorus_fruit"
+  },
+  "result": "operation_starcleave:starfruit",
+  "count": 1
+}
