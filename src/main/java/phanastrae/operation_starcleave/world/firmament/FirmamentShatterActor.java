@@ -1,6 +1,10 @@
 package phanastrae.operation_starcleave.world.firmament;
 
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.Heightmap;
+import net.minecraft.world.World;
 import org.joml.Math;
+import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 
 import java.util.Random;
 
@@ -36,6 +40,8 @@ public class FirmamentShatterActor extends FirmamentActor {
 
     @Override
     public void tick() {
+        World world = firmament.getWorld();
+
         if (this.damagePotential < 0.0001f) {
             discard();
             return;
@@ -82,13 +88,43 @@ public class FirmamentShatterActor extends FirmamentActor {
             this.damagePotential -= addDamage;
 
             int damage = firmament.getDamage(idx, idz);
-            firmament.setDamage(idx, idz, Math.clamp(0, 7, damage + (int)addDamage));
+            if(damage < 7) {
+                int d = Math.clamp(0, 7, damage + (int) addDamage);
+                firmament.setDamage(idx, idz, d);
+                /*
+                if(d == 7) {
+                    for(int x = 0; x < 4; x++) {
+                        for(int z = 0; z < 4; z++) {
+                            int xPos = x + idx;
+                            int zPos = z + idz;
+                            int yPos = world.getTopY(Heightmap.Type.WORLD_SURFACE, xPos, zPos);
+                            world.setBlockState(new BlockPos(xPos, yPos + 1, zPos), OperationStarcleaveBlocks.PETRICHORIC_PLASMA.getDefaultState());
+                        }
+                    }
+                }
+                */
+            }
             firmament.markActive(idx, idz);
 
             FirmamentUpdater.forEachNeighbor((nx, nz, nWeight) -> {
                 float addDamage2 = addDamage * 0.5f * nWeight;
                 int damage2 = firmament.getDamage(idx+nx, idz+nz);
-                firmament.setDamage(idx+nx, idz+nz, Math.clamp(0, 7, damage2 + (int)addDamage2));
+                if(damage2 < 7) {
+                    int d2 = Math.clamp(0, 7, damage2 + (int) addDamage2);
+                    firmament.setDamage(idx + nx, idz + nz, d2);
+                    /*
+                    if(d2 == 7) {
+                        for(int x = 0; x < 4; x++) {
+                            for(int z = 0; z < 4; z++) {
+                                int xPos = x + (idx + nx);
+                                int zPos = z + (idz + nz);
+                                int yPos = world.getTopY(Heightmap.Type.WORLD_SURFACE, xPos, zPos);
+                                world.setBlockState(new BlockPos(xPos, yPos + 1, zPos), OperationStarcleaveBlocks.PETRICHORIC_PLASMA.getDefaultState());
+                            }
+                        }
+                    }
+                    */
+                }
             });
 
             int maxNearDrip = 0;

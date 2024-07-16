@@ -99,6 +99,7 @@ public class OperationStarcleaveClient implements ClientModInitializer {
 		BlockRenderLayerMap.INSTANCE.putBlock(OperationStarcleaveBlocks.SHORT_HOLY_MOSS, RenderLayer.getCutout());
 		BlockRenderLayerMap.INSTANCE.putBlock(OperationStarcleaveBlocks.BLESSED_BED, RenderLayer.getCutout());
 		BlockRenderLayerMap.INSTANCE.putBlock(OperationStarcleaveBlocks.PHLOGISTIC_FIRE, RenderLayer.getCutout());
+		BlockRenderLayerMap.INSTANCE.putBlock(OperationStarcleaveBlocks.PETRICHORIC_VAPOR, RenderLayer.getTranslucent());
 
 		ItemTooltipCallback.EVENT.register(((stack, context, lines) -> {
 			if(StarbleachCoating.hasStarbleachCoating(stack)) {

@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "operation_starcleave:block/petrichoric_vapor"
+      },
+      {
+        "model": "operation_starcleave:block/petrichoric_vapor",
+        "y": 90
+      },
+      {
+        "model": "operation_starcleave:block/petrichoric_vapor",
+        "y": 180
+      },
+      {
+        "model": "operation_starcleave:block/petrichoric_vapor",
+        "y": 270
+      }
+    ]
+  }
+}

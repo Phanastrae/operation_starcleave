@@ -2,6 +2,7 @@ package phanastrae.operation_starcleave.block;
 
 import net.minecraft.block.*;
 import net.minecraft.block.enums.Instrument;
+import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.EntityType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -56,6 +57,8 @@ public class OperationStarcleaveBlocks {
     public static final Block BLESSED_CLOTH_CURTAIN = new PaneBlock(settings(PALE_YELLOW, WOOL, GUITAR).strength(0.8F).nonOpaque());
     public static final Block BLESSED_BED = new BlessedBedBlock(settings(PALE_YELLOW, WOOD).strength(0.2F).pistonBehavior(DESTROY).nonOpaque());
     public static final Block PHLOGISTIC_FIRE = new PhlogisticFireBlock(settings(LIME, WOOL).luminance(constant(15)).pistonBehavior(DESTROY).replaceable().noCollision().breakInstantly());
+    public static final Block PETRICHORIC_PLASMA = new PetrichoricPlasmaBlock(settings(LIME, INTENTIONALLY_EMPTY).strength(100F).luminance(constant(15)).pistonBehavior(DESTROY).emissiveLighting(Blocks::always).dropsNothing().nonOpaque().noCollision());
+    public static final Block PETRICHORIC_VAPOR = new PetrichoricVaporBlock(settings(LIME, INTENTIONALLY_EMPTY).strength(100F).luminance(constant(15)).pistonBehavior(DESTROY).emissiveLighting(Blocks::always).dropsNothing().nonOpaque().noCollision());
 
     public static void init() {
         register(NETHERITE_PUMPKIN, "netherite_pumpkin");
@@ -86,6 +89,8 @@ public class OperationStarcleaveBlocks {
         register(BLESSED_CLOTH_CURTAIN, "blessed_cloth_curtain");
         register(BLESSED_BED, "blessed_bed");
         register(PHLOGISTIC_FIRE, "phlogistic_fire");
+        register(PETRICHORIC_PLASMA, "petrichoric_plasma");
+        register(PETRICHORIC_VAPOR, "petrichoric_vapor");
     }
 
     protected static <T extends Block> void register(T item, String name) {

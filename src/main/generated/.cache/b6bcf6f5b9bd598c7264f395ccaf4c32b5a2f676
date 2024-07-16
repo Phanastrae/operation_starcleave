@@ -1,4 +1,4 @@
-// 1.20.4	2024-06-01T18:02:37.8324122	Operation: Starcleave/Block Loot Tables
+// 1.20.4	2024-07-15T16:24:27.717737	Operation: Starcleave/Block Loot Tables
 a5188142fa95a1ce50f4593e1657727866f53816 data\operation_starcleave\loot_tables\blocks\stellar_tiles.json
 548d115eeb79b74d3fbe03951bdc179110ed6f8a data\operation_starcleave\loot_tables\blocks\starbleach_cauldron.json
 ce456597e3faf744d7d93fe226398261bf7a36d2 data\operation_starcleave\loot_tables\blocks\stellar_mulch.json
@@ -19,8 +19,8 @@ b812bb1f963993d44be1d449d60290b359a6152e data\operation_starcleave\loot_tables\b
 4c2ed9f7329971e7966d3928bf2c4f1fb562016f data\operation_starcleave\loot_tables\blocks\stellar_sediment.json
 f2212789dc85bbc9f305884173a360a9b18d0d2a data\operation_starcleave\loot_tables\blocks\short_holy_moss.json
 8a3ee122d0aca10d50e7e119e45fb50d44406a96 data\operation_starcleave\loot_tables\blocks\starbleached_tiles.json
-af2b5288ca978d704073265d958a4c427c81031c data\operation_starcleave\loot_tables\blocks\starbleached_pearl_block.json
 c3cac6116589e3cc9961eca866c1e7c5ba4b08fe data\operation_starcleave\loot_tables\blocks\holy_moss.json
+af2b5288ca978d704073265d958a4c427c81031c data\operation_starcleave\loot_tables\blocks\starbleached_pearl_block.json
 468c1af1977032a786eabc59e104c2ef8942f523 data\operation_starcleave\loot_tables\blocks\stellar_farmland.json
 aaf184c73634ee39225ab1809509354331ae9692 data\operation_starcleave\loot_tables\blocks\starbleached_log.json
 400e0c602e01d1b00b86780530c311497ed45a4c data\operation_starcleave\loot_tables\blocks\imbued_starbleached_tiles.json

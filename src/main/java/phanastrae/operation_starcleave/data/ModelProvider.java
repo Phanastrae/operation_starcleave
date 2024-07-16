@@ -42,6 +42,8 @@ public class ModelProvider extends FabricModelProvider {
 
         BSMG.registerRotatable(STELLAR_SEDIMENT);
         BSMG.registerRotatable(STARDUST_BLOCK);
+        BSMG.registerRotatable(PETRICHORIC_PLASMA);
+        BSMG.registerRotatable(PETRICHORIC_VAPOR);
 
         BSMG.registerTintableCross(SHORT_HOLY_MOSS, BlockStateModelGenerator.TintType.NOT_TINTED);
         registerUnevenCross(BSMG, MULCHBORNE_TUFT);
