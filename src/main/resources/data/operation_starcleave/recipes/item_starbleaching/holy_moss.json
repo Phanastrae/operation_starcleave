@@ -1,7 +1,7 @@
 {
   "type": "operation_starcleave:item_starbleaching",
   "ingredient": {
-    "item": "minecraft:grass"
+    "item": "minecraft:grass_block"
   },
   "starbleach_cost": 0.125,
   "result": "operation_starcleave:holy_moss",
