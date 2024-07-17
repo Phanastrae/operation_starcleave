@@ -15,6 +15,7 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldEvents;
@@ -24,9 +25,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
+import phanastrae.operation_starcleave.duck.EntityDuck;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveDamageTypeTags;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveDamageTypes;
-import phanastrae.operation_starcleave.duck.EntityDuck;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypeTags;
 import phanastrae.operation_starcleave.network.packet.s2c.EntityPhlogisticFireS2CPacket;
 
@@ -44,6 +46,8 @@ public abstract class EntityMixin implements EntityDuck {
     @Shadow private boolean invulnerable;
 
     @Shadow public abstract EntityType<?> getType();
+
+    @Shadow public abstract Box getBoundingBox();
 
     private long operation_starcleave$lastRepulsorUse = Long.MIN_VALUE;
     private boolean operation_starcleave$onPhlogisticFire = false;
@@ -145,10 +149,14 @@ public abstract class EntityMixin implements EntityDuck {
         }
     }
 
-    @Inject(method = "move", at = @At(value = "INVOKE", target = "Ljava/util/stream/Stream;noneMatch(Ljava/util/function/Predicate;)Z", shift = At.Shift.BY, by = 2))
+    @Inject(method = "move", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;setVelocity(Lnet/minecraft/util/math/Vec3d;)V", ordinal = 1,  shift = At.Shift.AFTER))
     private void operation_starcleave$resetPhlogisticFireTicks(MovementType movementType, Vec3d movement, CallbackInfo ci) {
         if (this.operation_starcleave$phlogisticFireTicks <= 0) {
-            this.operation_starcleave$setPhlogisticFireTicks(-1);
+            if (this.getWorld()
+                    .getStatesInBoxIfLoaded(this.getBoundingBox().contract(1.0E-6))
+                    .noneMatch(state -> state.isOf(OperationStarcleaveBlocks.PHLOGISTIC_FIRE))) {
+                this.operation_starcleave$setPhlogisticFireTicks(-1);
+            }
         }
     }
 
