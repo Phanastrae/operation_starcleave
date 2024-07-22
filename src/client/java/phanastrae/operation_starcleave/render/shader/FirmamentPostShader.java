@@ -63,8 +63,8 @@ public class FirmamentPostShader {
     }
 
     public static void draw2(int width, int height, boolean disableBlend) {
-        RenderSystem.assertOnGameThreadOrInit();
-        if (!RenderSystem.isInInitPhase()) {
+        RenderSystem.assertOnRenderThreadOrInit();
+        if (!RenderSystem.isOnRenderThread()) {
             RenderSystem.recordRenderCall(() -> drawInternal(width, height, disableBlend));
         } else {
             drawInternal(width, height, disableBlend);
@@ -161,12 +161,11 @@ public class FirmamentPostShader {
         float i = (float)dummyBuffer.viewportHeight / (float)dummyBuffer.textureHeight;
 
         Tessellator tessellator = RenderSystem.renderThreadTesselator();
-        BufferBuilder bufferBuilder = tessellator.getBuffer();
-        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
-        bufferBuilder.vertex(0.0, (double)g, 0.0).texture(0.0F, 0.0F).color(255, 255, 255, 255).next();
-        bufferBuilder.vertex((double)f, (double)g, 0.0).texture(h, 0.0F).color(255, 255, 255, 255).next();
-        bufferBuilder.vertex((double)f, 0.0, 0.0).texture(h, i).color(255, 255, 255, 255).next();
-        bufferBuilder.vertex(0.0, 0.0, 0.0).texture(0.0F, i).color(255, 255, 255, 255).next();
+        BufferBuilder bufferBuilder = tessellator.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
+        bufferBuilder.vertex(0F, g, 0F).texture(0.0F, 0.0F).color(255, 255, 255, 255);
+        bufferBuilder.vertex(f, g, 0F).texture(h, 0.0F).color(255, 255, 255, 255);
+        bufferBuilder.vertex(f, 0F, 0F).texture(h, i).color(255, 255, 255, 255);
+        bufferBuilder.vertex(0F, 0F, 0F).texture(0.0F, i).color(255, 255, 255, 255);
         BufferRenderer.draw(bufferBuilder.end());
         shaderProgram.unbind();
         GlStateManager._depthMask(true);

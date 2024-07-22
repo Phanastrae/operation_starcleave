@@ -12,6 +12,7 @@ import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.render.entity.model.EntityModelLoader;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.MathHelper;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.entity.mob.SubcaelicTorpedoEntity;
@@ -58,7 +59,8 @@ public class SubcaelicTorpedoOverlayFeatureRenderer<T extends SubcaelicTorpedoEn
             torpedo.getRandom().setSeed((long)(fl * 0x10000));
             matrixStack.translate(f * (torpedo.getRandom().nextDouble() * 2.0 - 1.0), f * (torpedo.getRandom().nextDouble() * 2.0 - 1.0), f * (torpedo.getRandom().nextDouble() * 2.0 - 1.0));
 
-            this.model.render(matrixStack, vertexConsumer, LightmapTextureManager.MAX_LIGHT_COORDINATE, LivingEntityRenderer.getOverlay(torpedo, 0.0F), red, green, blue, 1.0F);
+            int color = ColorHelper.Argb.fromFloats(red, green, blue, 1.0F);
+            this.model.render(matrixStack, vertexConsumer, LightmapTextureManager.MAX_LIGHT_COORDINATE, LivingEntityRenderer.getOverlay(torpedo, 0.0F), color);
             matrixStack.pop();
         }
     }

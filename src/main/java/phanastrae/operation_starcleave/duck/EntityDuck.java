@@ -7,5 +7,6 @@ public interface EntityDuck {
     void operation_starcleave$setOnPhlogisticFire(boolean onPhlogisticFire);
     int operation_starcleave$getPhlogisticFireTicks();
     void operation_starcleave$setPhlogisticFireTicks(int phlogisticFireTicks);
-    void operation_starcleave$setOnPhlogisticFireFor(int seconds);
+    void operation_starcleave$setOnPhlogisticFireFor(float seconds);
+    void operation_starcleave$setOnPhlogisticFireForTicks(int ticks);
 }

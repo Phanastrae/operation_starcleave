@@ -58,11 +58,11 @@ public class SubcaelicTorpedoEntity extends AbstractSubcaelicEntity {
     }
 
     @Override
-    protected void initDataTracker() {
-        super.initDataTracker();
-        this.dataTracker.startTracking(FUSE_SPEED, -1);
-        this.dataTracker.startTracking(PRIMED, false);
-        this.dataTracker.startTracking(SPEED_MODIFIER, 1F);
+    protected void initDataTracker(DataTracker.Builder builder) {
+        super.initDataTracker(builder);
+        builder.add(FUSE_SPEED, -1);
+        builder.add(PRIMED, false);
+        builder.add(SPEED_MODIFIER, 1F);
     }
 
     @Override

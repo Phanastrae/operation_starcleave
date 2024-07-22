@@ -1,9 +1,0 @@
-{
-  "type": "operation_starcleave:item_starbleaching",
-  "is_filling_recipe" : true,
-  "ingredient": {
-    "item": "minecraft:glass_bottle"
-  },
-  "result": "operation_starcleave:starbleach_bottle",
-  "count": 1
-}

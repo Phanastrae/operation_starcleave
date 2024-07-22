@@ -1,8 +1,7 @@
 package phanastrae.operation_starcleave.block;
 
 import net.minecraft.block.*;
-import net.minecraft.block.enums.Instrument;
-import net.minecraft.block.piston.PistonBehavior;
+import net.minecraft.block.enums.NoteBlockInstrument;
 import net.minecraft.entity.EntityType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -14,10 +13,9 @@ import java.util.function.ToIntFunction;
 
 import static net.minecraft.block.AbstractBlock.OffsetType.XYZ;
 import static net.minecraft.block.Blocks.CAULDRON;
-import static net.minecraft.block.Blocks.DEAD_BUSH;
 import static net.minecraft.block.MapColor.*;
-import static net.minecraft.block.enums.Instrument.BASEDRUM;
-import static net.minecraft.block.enums.Instrument.GUITAR;
+import static net.minecraft.block.enums.NoteBlockInstrument.BASEDRUM;
+import static net.minecraft.block.enums.NoteBlockInstrument.GUITAR;
 import static net.minecraft.block.piston.PistonBehavior.DESTROY;
 import static net.minecraft.sound.BlockSoundGroup.*;
 
@@ -117,19 +115,19 @@ public class OperationStarcleaveBlocks {
         return AbstractBlock.Settings.create().mapColor(mapColor).sounds(soundGroup);
     }
 
-    protected static AbstractBlock.Settings settings(MapColor mapColor, BlockSoundGroup soundGroup, Instrument instrument) {
+    protected static AbstractBlock.Settings settings(MapColor mapColor, BlockSoundGroup soundGroup, NoteBlockInstrument instrument) {
         return AbstractBlock.Settings.create().mapColor(mapColor).sounds(soundGroup).instrument(instrument);
     }
 
-    protected static AbstractBlock.Settings settings(MapColor mapColor, BlockSoundGroup soundGroup, Instrument instrument, float hardness, float resistance) {
+    protected static AbstractBlock.Settings settings(MapColor mapColor, BlockSoundGroup soundGroup, NoteBlockInstrument instrument, float hardness, float resistance) {
         return AbstractBlock.Settings.create().mapColor(mapColor).sounds(soundGroup).instrument(instrument).strength(hardness, resistance);
     }
 
-    protected static AbstractBlock.Settings settings(MapColor mapColor, BlockSoundGroup soundGroup, Instrument instrument, float hardness, float resistance, int luminance) {
+    protected static AbstractBlock.Settings settings(MapColor mapColor, BlockSoundGroup soundGroup, NoteBlockInstrument instrument, float hardness, float resistance, int luminance) {
         return AbstractBlock.Settings.create().mapColor(mapColor).sounds(soundGroup).instrument(instrument).strength(hardness, resistance).luminance(constant(luminance));
     }
 
-    protected static AbstractBlock.Settings settings(MapColor mapColor, BlockSoundGroup soundGroup, Instrument instrument, float hardness, float resistance, int luminance, boolean requiresTool) {
+    protected static AbstractBlock.Settings settings(MapColor mapColor, BlockSoundGroup soundGroup, NoteBlockInstrument instrument, float hardness, float resistance, int luminance, boolean requiresTool) {
         AbstractBlock.Settings settings = AbstractBlock.Settings.create().mapColor(mapColor).sounds(soundGroup).instrument(instrument).strength(hardness, resistance).luminance(constant(luminance));
         if(requiresTool) {
             settings.requiresTool();

@@ -5,6 +5,7 @@
   "mixins": [
     "AttachedStemBlockMixin",
     "CropBlockMixin",
+    "EnchantmentMixin",
     "EndermanEntityMixin",
     "EntityMixin",
     "EntityTrackerEntryMixin",
@@ -15,13 +16,12 @@
     "PlantBlockMixin",
     "PlayerEntityMixin",
     "PotionEntityMixin",
-    "ProtectionEnchantmentMixin",
+    "ServerChunkLoadingManagerMixin",
     "ServerChunkManagerMixin",
     "ServerPlayerEntityMixin",
     "ServerPlayNetworkHandlerMixin",
     "ServerWorldMixin",
     "StemBlockMixin",
-    "ThreadedAnvilChunkStorageMixin",
     "WorldMixin"
   ],
   "injectors": {

@@ -1,11 +1,15 @@
 package phanastrae.operation_starcleave.item;
 
 import net.minecraft.advancement.criterion.Criteria;
-import net.minecraft.client.item.TooltipContext;
+import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsage;
+import net.minecraft.item.Items;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
@@ -15,7 +19,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.entity.effect.OperationStarcleaveStatusEffects;
 
 import java.util.List;
@@ -49,7 +52,7 @@ public class StarbleachBottleItem extends Item {
     }
 
     @Override
-    public int getMaxUseTime(ItemStack stack) {
+    public int getMaxUseTime(ItemStack stack, LivingEntity user) {
         return 100;
     }
 
@@ -74,10 +77,10 @@ public class StarbleachBottleItem extends Item {
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+    public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
         tooltip.add(StarbleachCoating.getText("operation_starcleave.tooltip.starbleach"));
-        super.appendTooltip(stack, world, tooltip, context);
+        super.appendTooltip(stack, context, tooltip, type);
     }
 
-    public static final FoodComponent STARBLEACH_BOTTLE = new FoodComponent.Builder().hunger(12).saturationModifier(5F).statusEffect(new StatusEffectInstance(OperationStarcleaveStatusEffects.STARBLEACHED_INSIDES, 6000, 5), 1).alwaysEdible().build();
+    public static final FoodComponent STARBLEACH_BOTTLE = new FoodComponent.Builder().nutrition(12).saturationModifier(5F).statusEffect(new StatusEffectInstance(OperationStarcleaveStatusEffects.STARBLEACHED_INSIDES_ENTRY, 6000, 5), 1).alwaysEdible().build();
 }

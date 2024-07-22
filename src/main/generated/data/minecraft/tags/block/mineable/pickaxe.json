@@ -1,0 +1,19 @@
+{
+  "values": [
+    "operation_starcleave:netherite_pumpkin",
+    "operation_starcleave:starbleached_log",
+    "operation_starcleave:starbleached_wood",
+    "operation_starcleave:starbleached_leaves",
+    "operation_starcleave:starbleached_tiles",
+    "operation_starcleave:starbleached_tile_slab",
+    "operation_starcleave:starbleached_tile_stairs",
+    "operation_starcleave:starbleached_tile_wall",
+    "operation_starcleave:chiseled_starbleached_tiles",
+    "operation_starcleave:imbued_starbleached_tiles",
+    "operation_starcleave:starbleach_cauldron",
+    "operation_starcleave:starbleached_pearl_block",
+    "operation_starcleave:stellar_tiles",
+    "operation_starcleave:stellar_tile_slab",
+    "operation_starcleave:stellar_repulsor"
+  ]
+}

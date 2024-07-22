@@ -14,7 +14,7 @@ public class StarbleachedInsidesStatusEffect extends StatusEffect {
     }
 
     @Override
-    public void applyUpdateEffect(LivingEntity entity, int amplifier) {
+    public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
         World world = entity.getWorld();
         if(world != null) {
             entity.damage(OperationStarcleaveDamageTypes.of(world, OperationStarcleaveDamageTypes.INTERNAL_STARBLEACHING), 0.5f * (amplifier + 1));
@@ -28,6 +28,8 @@ public class StarbleachedInsidesStatusEffect extends StatusEffect {
                         0.05);
             }
         }
+
+        return true;
     }
 
     @Override

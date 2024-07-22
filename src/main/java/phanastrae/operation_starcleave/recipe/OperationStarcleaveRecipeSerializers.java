@@ -8,7 +8,7 @@ import phanastrae.operation_starcleave.OperationStarcleave;
 
 public class OperationStarcleaveRecipeSerializers {
 
-    public static RecipeSerializer<ItemStarbleachingRecipe> ITEM_STARBLEACHING = new ItemStarbleachingRecipe.Serializer();
+    public static RecipeSerializer<ItemStarbleachingRecipe> ITEM_STARBLEACHING = new ItemStarbleachingRecipe.Serializer<>(ItemStarbleachingRecipe::new);
 
     public static void init() {
         register(ITEM_STARBLEACHING, "item_starbleaching");

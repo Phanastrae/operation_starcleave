@@ -1,7 +1,6 @@
 package phanastrae.operation_starcleave.entity.mob;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MovementType;
@@ -83,11 +82,6 @@ public abstract class AbstractSubcaelicEntity extends MobEntity implements Monst
     @Override
     public boolean isClimbing() {
         return false;
-    }
-
-    @Override
-    public EntityGroup getGroup() {
-        return EntityGroup.AQUATIC;
     }
 
     @Override

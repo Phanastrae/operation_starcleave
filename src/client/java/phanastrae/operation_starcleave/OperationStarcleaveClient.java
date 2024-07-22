@@ -11,19 +11,24 @@ import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.world.tick.TickManager;
+import org.joml.Quaternionf;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.block.entity.OperationStarcleaveBlockEntityTypes;
+import phanastrae.operation_starcleave.duck.WorldDuck;
 import phanastrae.operation_starcleave.item.StarbleachCoating;
 import phanastrae.operation_starcleave.network.OperationStarcleaveClientPacketHandler;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticles;
-import phanastrae.operation_starcleave.render.entity.model.OperationStarcleaveEntityModelLayers;
-import phanastrae.operation_starcleave.render.shader.OperationStarcleaveShaders;
 import phanastrae.operation_starcleave.render.ScreenShakeManager;
 import phanastrae.operation_starcleave.render.block.entity.BlessedBedBlockEntityRenderer;
 import phanastrae.operation_starcleave.render.entity.OperationStarcleaveEntityRenderers;
-import phanastrae.operation_starcleave.render.firmament.*;
-import phanastrae.operation_starcleave.duck.WorldDuck;
+import phanastrae.operation_starcleave.render.entity.model.OperationStarcleaveEntityModelLayers;
+import phanastrae.operation_starcleave.render.firmament.FirmamentActorRenderable;
+import phanastrae.operation_starcleave.render.firmament.FirmamentOutlineRenderer;
+import phanastrae.operation_starcleave.render.firmament.FirmamentRenderer;
+import phanastrae.operation_starcleave.render.firmament.FirmamentTextureStorage;
+import phanastrae.operation_starcleave.render.shader.OperationStarcleaveShaders;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 
 public class OperationStarcleaveClient implements ClientModInitializer {
@@ -61,15 +66,21 @@ public class OperationStarcleaveClient implements ClientModInitializer {
 		});
 
 		WorldRenderEvents.BEFORE_ENTITIES.register(worldRenderContext -> {
+			Quaternionf quaternionf = worldRenderContext.camera().getRotation().conjugate(new Quaternionf());
+			MatrixStack matrixStack = new MatrixStack();
+			matrixStack.multiply(quaternionf);
+
 			FirmamentTextureStorage.getInstance().tick();
 
-			FirmamentRenderer.render(worldRenderContext);
+			FirmamentRenderer.render(matrixStack, worldRenderContext);
+		});
 
+		WorldRenderEvents.AFTER_ENTITIES.register(worldRenderContext -> {
 			Firmament firmament = Firmament.fromWorld(worldRenderContext.world());
 			if(firmament != null) {
 				firmament.forEachActor(firmamentActor -> {
 					if(firmamentActor instanceof FirmamentActorRenderable far) {
-						far.render(worldRenderContext.matrixStack(), worldRenderContext.consumers(), worldRenderContext.tickDelta(), worldRenderContext.camera());
+						far.render(worldRenderContext.matrixStack(), worldRenderContext.consumers(), worldRenderContext.tickCounter().getTickDelta(false), worldRenderContext.camera());
 					}
 				});
 			}
@@ -101,9 +112,9 @@ public class OperationStarcleaveClient implements ClientModInitializer {
 		BlockRenderLayerMap.INSTANCE.putBlock(OperationStarcleaveBlocks.PHLOGISTIC_FIRE, RenderLayer.getCutout());
 		BlockRenderLayerMap.INSTANCE.putBlock(OperationStarcleaveBlocks.PETRICHORIC_VAPOR, RenderLayer.getTranslucent());
 
-		ItemTooltipCallback.EVENT.register(((stack, context, lines) -> {
+		ItemTooltipCallback.EVENT.register(((stack, context, tooltipType, list) -> {
 			if(StarbleachCoating.hasStarbleachCoating(stack)) {
-				lines.add(StarbleachCoating.getText());
+				list.add(StarbleachCoating.getText());
 			}
 		}));
 	}

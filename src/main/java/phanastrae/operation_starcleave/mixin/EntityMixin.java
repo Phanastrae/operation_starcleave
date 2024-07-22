@@ -2,11 +2,11 @@ package phanastrae.operation_starcleave.mixin;
 
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.enchantment.ProtectionEnchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MovementType;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
@@ -16,6 +16,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldEvents;
@@ -30,7 +31,7 @@ import phanastrae.operation_starcleave.duck.EntityDuck;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveDamageTypeTags;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveDamageTypes;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypeTags;
-import phanastrae.operation_starcleave.network.packet.s2c.EntityPhlogisticFireS2CPacket;
+import phanastrae.operation_starcleave.network.packet.EntityPhlogisticFirePayload;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin implements EntityDuck {
@@ -77,15 +78,15 @@ public abstract class EntityMixin implements EntityDuck {
             if (!this.getWorld().isClient && this.getWorld() instanceof ServerWorld) {
                 Entity entity = (Entity)(Object)this;
 
-                EntityPhlogisticFireS2CPacket packet = new EntityPhlogisticFireS2CPacket(entity, onPhlogisticFire);
+                EntityPhlogisticFirePayload payload = new EntityPhlogisticFirePayload(entity.getId(), onPhlogisticFire);
 
                 for (ServerPlayerEntity player : PlayerLookup.tracking(entity)) {
                     if(player != entity) {
-                        ServerPlayNetworking.send(player, packet);
+                        ServerPlayNetworking.send(player, payload);
                     }
                 }
                 if(entity instanceof ServerPlayerEntity player) {
-                    ServerPlayNetworking.send(player, packet);
+                    ServerPlayNetworking.send(player, payload);
                 }
             }
         }
@@ -108,24 +109,27 @@ public abstract class EntityMixin implements EntityDuck {
     }
 
     @Override
-    public void operation_starcleave$setOnPhlogisticFireFor(int seconds) {
+    public void operation_starcleave$setOnPhlogisticFireFor(float seconds) {
+        this.operation_starcleave$setOnPhlogisticFireForTicks(MathHelper.floor(seconds * 20.0F));
+    }
+
+    @Override
+    public void operation_starcleave$setOnPhlogisticFireForTicks(int ticks) {
         Entity entity = (Entity)(Object)this;
+        if(entity instanceof LivingEntity livingEntity) {
+            ticks = MathHelper.ceil((double)ticks * livingEntity.getAttributeValue(EntityAttributes.GENERIC_BURNING_TIME));
 
-        int i = seconds * 20;
-        if (entity instanceof LivingEntity) {
-            i = ProtectionEnchantment.transformFireDuration((LivingEntity)entity, i);
-
-            if(((LivingEntity)entity).hasStatusEffect(StatusEffects.FIRE_RESISTANCE)) {
-                i /= 3;
+            if((livingEntity).hasStatusEffect(StatusEffects.FIRE_RESISTANCE)) {
+                ticks /= 3;
             }
         }
 
         if(entity.isFireImmune()) {
-            i /= 2;
+            ticks /= 2;
         }
 
-        if (this.operation_starcleave$phlogisticFireTicks < i) {
-            this.operation_starcleave$setPhlogisticFireTicks(i);
+        if (this.operation_starcleave$phlogisticFireTicks < ticks) {
+            this.operation_starcleave$setPhlogisticFireTicks(ticks);
         }
     }
 

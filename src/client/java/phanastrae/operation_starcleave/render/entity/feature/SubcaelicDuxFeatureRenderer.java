@@ -11,6 +11,7 @@ import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.MathHelper;
 import phanastrae.operation_starcleave.entity.mob.SubcaelicDuxEntity;
 import phanastrae.operation_starcleave.render.entity.model.SubcaelicDuxEntityModel;
@@ -51,16 +52,14 @@ public class SubcaelicDuxFeatureRenderer<T extends SubcaelicDuxEntity, M extends
 
             float alpha = this.animationAngleAdjuster.apply(dux, tickDelta, animationProgress);
 
+            int color = ColorHelper.Argb.fromFloats(red * alpha, green * alpha, blue * alpha, alpha * alpha * alpha * 0.85f);
             this.getContextModel()
                     .render(
                             matrixStack,
                             vertexConsumer,
                             LightmapTextureManager.MAX_LIGHT_COORDINATE,
                             LivingEntityRenderer.getOverlay(dux, 0.0F),
-                            red * alpha,
-                            green * alpha,
-                            blue * alpha,
-                            alpha * alpha * alpha * 0.85f
+                            color
                     );
             this.unhideAllModelParts();
         }

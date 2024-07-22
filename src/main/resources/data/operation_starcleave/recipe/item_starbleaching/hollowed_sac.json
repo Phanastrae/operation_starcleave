@@ -1,0 +1,10 @@
+{
+  "type": "operation_starcleave:item_starbleaching",
+  "ingredient": {
+    "item": "minecraft:ink_sac"
+  },
+  "result": {
+    "id": "operation_starcleave:hollowed_sac",
+    "count": 1
+  }
+}

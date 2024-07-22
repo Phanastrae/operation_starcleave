@@ -11,6 +11,7 @@ import net.minecraft.advancement.criterion.SummonedEntityCriterion;
 import net.minecraft.advancement.criterion.TickCriterion;
 import net.minecraft.item.Items;
 import net.minecraft.predicate.entity.EntityPredicate;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import phanastrae.operation_starcleave.OperationStarcleave;
@@ -19,15 +20,16 @@ import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public class AdvancementProvider extends FabricAdvancementProvider {
-    protected AdvancementProvider(FabricDataOutput output) {
-        super(output);
+    protected AdvancementProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
+        super(output, registryLookup);
     }
 
     @Override
-    public void generateAdvancement(Consumer<AdvancementEntry> consumer) {
+    public void generateAdvancement(RegistryWrapper.WrapperLookup registryLookup, Consumer<AdvancementEntry> consumer) {
         AdvancementEntry summonStarcleaverGolem = Advancement.Builder.createUntelemetered()
                 .display(
                         OperationStarcleaveItems.NETHERITE_PUMPKIN,
@@ -39,7 +41,7 @@ public class AdvancementProvider extends FabricAdvancementProvider {
                         true,
                         false
                 )
-                .parent(new AdvancementEntry(new Identifier("nether/obtain_ancient_debris"), null))
+                .parent(new AdvancementEntry(Identifier.of("nether/obtain_ancient_debris"), null))
                 .criterion("summoned_golem", SummonedEntityCriterion.Conditions
                         .create(EntityPredicate.Builder
                                 .create().type(OperationStarcleaveEntityTypes.STARCLEAVER_GOLEM)))

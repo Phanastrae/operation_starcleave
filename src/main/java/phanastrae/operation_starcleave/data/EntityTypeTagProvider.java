@@ -16,6 +16,10 @@ public class EntityTypeTagProvider extends FabricTagProvider.EntityTypeTagProvid
 
     @Override
     protected void configure(RegistryWrapper.WrapperLookup arg) {
+        getOrCreateTagBuilder(EntityTypeTags.AQUATIC)
+                .add(OperationStarcleaveEntityTypes.SUBCAELIC_DUX)
+                .add(OperationStarcleaveEntityTypes.SUBCAELIC_TORPEDO);
+
         getOrCreateTagBuilder(EntityTypeTags.FALL_DAMAGE_IMMUNE)
                 .add(OperationStarcleaveEntityTypes.STARCLEAVER_GOLEM)
                 .add(OperationStarcleaveEntityTypes.SUBCAELIC_TORPEDO)
@@ -31,6 +35,5 @@ public class EntityTypeTagProvider extends FabricTagProvider.EntityTypeTagProvid
                 .add(OperationStarcleaveEntityTypes.STARCLEAVER_GOLEM)
                 .add(OperationStarcleaveEntityTypes.SUBCAELIC_TORPEDO)
                 .add(OperationStarcleaveEntityTypes.SUBCAELIC_DUX);
-
     }
 }

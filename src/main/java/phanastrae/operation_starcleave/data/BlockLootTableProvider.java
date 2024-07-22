@@ -5,15 +5,13 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 import net.minecraft.block.BedBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.enums.BedPart;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.Items;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
-import net.minecraft.loot.condition.BlockStatePropertyLootCondition;
-import net.minecraft.loot.condition.LootCondition;
-import net.minecraft.loot.condition.RandomChanceLootCondition;
-import net.minecraft.loot.condition.SurvivesExplosionLootCondition;
+import net.minecraft.loot.condition.*;
 import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.entry.LeafEntry;
 import net.minecraft.loot.entry.LootPoolEntry;
@@ -22,17 +20,29 @@ import net.minecraft.loot.function.ExplosionDecayLootFunction;
 import net.minecraft.loot.function.SetCountLootFunction;
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
 import net.minecraft.loot.provider.number.UniformLootNumberProvider;
+import net.minecraft.predicate.NumberRange;
 import net.minecraft.predicate.StatePredicate;
+import net.minecraft.predicate.item.EnchantmentPredicate;
+import net.minecraft.predicate.item.EnchantmentsPredicate;
+import net.minecraft.predicate.item.ItemPredicate;
+import net.minecraft.predicate.item.ItemSubPredicateTypes;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.RegistryWrapper;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
 public class BlockLootTableProvider extends FabricBlockLootTableProvider {
-    protected BlockLootTableProvider(FabricDataOutput dataOutput) {
-        super(dataOutput);
+    protected BlockLootTableProvider(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
+        super(dataOutput, registryLookup);
     }
 
     @Override
     public void generate() {
+        RegistryWrapper.Impl<Enchantment> impl = this.registryLookup.getWrapperOrThrow(RegistryKeys.ENCHANTMENT);
+
         addDrop(OperationStarcleaveBlocks.NETHERITE_PUMPKIN);
         addDrop(OperationStarcleaveBlocks.STELLAR_SEDIMENT);
         addDrop(OperationStarcleaveBlocks.STARBLEACHED_LOG);
@@ -68,7 +78,7 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
         addRandomDrop(OperationStarcleaveBlocks.SHORT_HOLY_MOSS,
                 conditionalDrop(
                         item(OperationStarcleaveItems.SHORT_HOLY_MOSS),
-                        item(OperationStarcleaveItems.HOLY_STRANDS).apply(ApplyBonusLootFunction.uniformBonusCount(Enchantments.FORTUNE, 4)).apply(ExplosionDecayLootFunction.builder()).conditionally(RandomChanceLootCondition.builder(0.3F)),
+                        item(OperationStarcleaveItems.HOLY_STRANDS).apply(ApplyBonusLootFunction.uniformBonusCount(impl.getOrThrow(Enchantments.FORTUNE), 4)).apply(ExplosionDecayLootFunction.builder()).conditionally(RandomChanceLootCondition.builder(0.3F)),
                         WITH_SHEARS
                 )
         );
@@ -93,7 +103,7 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
     }
 
     public void addRandomDrop(Block block, LootTable.Builder builder) {
-        addDrop(block, builder.randomSequenceId(block.getLootTableId()));
+        addDrop(block, builder.randomSequenceId(block.getLootTableKey().getValue()));
     }
 
     public static LeafEntry.Builder<?> item(ItemConvertible itemConvertible) {
@@ -123,11 +133,22 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
         );
     }
 
-    public static LootTable.Builder silkTouchDrop(LootPoolEntry.Builder<?> withSilkTouch, LootPoolEntry.Builder<?> noSilkTouch) {
-        return conditionalDrop(withSilkTouch, noSilkTouch, WITH_SILK_TOUCH);
+    public LootTable.Builder silkTouchDrop(LootPoolEntry.Builder<?> withSilkTouch, LootPoolEntry.Builder<?> noSilkTouch) {
+        return conditionalDrop(withSilkTouch, noSilkTouch, createSilkTouchCondition());
     }
 
-    public static LootTable.Builder silkTouchDrop(ItemConvertible withSilkTouch, ItemConvertible noSilkTouch) {
+    public LootTable.Builder silkTouchDrop(ItemConvertible withSilkTouch, ItemConvertible noSilkTouch) {
         return silkTouchDrop(item(withSilkTouch), item(noSilkTouch));
+    }
+
+    public LootCondition.Builder createSilkTouchCondition() {
+        RegistryWrapper.Impl<Enchantment> impl = this.registryLookup.getWrapperOrThrow(RegistryKeys.ENCHANTMENT);
+        return MatchToolLootCondition.builder(
+                ItemPredicate.Builder.create()
+                        .subPredicate(
+                                ItemSubPredicateTypes.ENCHANTMENTS,
+                                EnchantmentsPredicate.enchantments(List.of(new EnchantmentPredicate(impl.getOrThrow(Enchantments.SILK_TOUCH), NumberRange.IntRange.atLeast(1))))
+                        )
+        );
     }
 }

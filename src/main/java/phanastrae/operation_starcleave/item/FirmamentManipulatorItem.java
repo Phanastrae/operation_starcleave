@@ -1,10 +1,10 @@
 package phanastrae.operation_starcleave.item;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -15,10 +15,12 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
-import phanastrae.operation_starcleave.network.packet.s2c.FirmamentCleavedS2CPacket;
-import phanastrae.operation_starcleave.world.firmament.*;
+import phanastrae.operation_starcleave.network.packet.FirmamentCleavedPayload;
+import phanastrae.operation_starcleave.world.firmament.Firmament;
+import phanastrae.operation_starcleave.world.firmament.FirmamentShatterActor;
+import phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion;
+import phanastrae.operation_starcleave.world.firmament.SubRegionPos;
 
 import java.util.List;
 
@@ -85,7 +87,7 @@ public class FirmamentManipulatorItem extends Item {
     public static void fractureFirmament(Firmament firmament, int x, int z, Random random) {
         if(firmament.getWorld() instanceof ServerWorld world) {
             for(ServerPlayerEntity player : world.getPlayers()) {
-                ServerPlayNetworking.send(player, new FirmamentCleavedS2CPacket(x, z));
+                ServerPlayNetworking.send(player, new FirmamentCleavedPayload(x, z));
             }
         }
 
@@ -127,8 +129,8 @@ public class FirmamentManipulatorItem extends Item {
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        super.appendTooltip(stack, world, tooltip, context);
+    public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
+        super.appendTooltip(stack, context, tooltip, type);
         tooltip.add(Text.translatable("operation_starcleave.tooltip.firmament_manipulator.1").formatted(Formatting.GOLD));
         tooltip.add(Text.translatable("operation_starcleave.tooltip.firmament_manipulator.2").formatted(Formatting.GOLD));
         tooltip.add(Text.translatable("operation_starcleave.tooltip.firmament_manipulator.3").formatted(Formatting.DARK_RED));

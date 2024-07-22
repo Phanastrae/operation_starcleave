@@ -1,28 +1,27 @@
 package phanastrae.operation_starcleave.block;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.block.*;
+import net.minecraft.block.AbstractCauldronBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.cauldron.CauldronBehavior;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsage;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.RecipeEntry;
-import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ItemActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -35,6 +34,7 @@ import phanastrae.operation_starcleave.item.StarbleachCoating;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 import phanastrae.operation_starcleave.recipe.ItemStarbleachingRecipe;
 import phanastrae.operation_starcleave.recipe.OperationStarcleaveRecipeTypes;
+import phanastrae.operation_starcleave.recipe.input.ItemStarbleachingRecipeInput;
 
 import java.util.Optional;
 
@@ -119,7 +119,7 @@ public class StarbleachCauldronBlock extends AbstractCauldronBlock {
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    protected ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         ItemStack itemStack = player.getStackInHand(hand);
 
         boolean creativeMode = player.getAbilities().creativeMode;
@@ -142,7 +142,7 @@ public class StarbleachCauldronBlock extends AbstractCauldronBlock {
                 }
             }
 
-            return ActionResult.success(world.isClient);
+            return ItemActionResult.success(world.isClient);
         }
 
         CauldronBehavior cauldronBehavior = this.behaviorMap.map().get(itemStack.getItem());
@@ -196,9 +196,8 @@ public class StarbleachCauldronBlock extends AbstractCauldronBlock {
 
     @Nullable
     public static ItemStarbleachingRecipe getRecipe(World world, ItemStack stack) {
-        Inventory inventory = new SimpleInventory(1);
-        inventory.setStack(0, stack);
-        Optional<RecipeEntry<ItemStarbleachingRecipe>> recipeEntryOptional = world.getRecipeManager().getFirstMatch(OperationStarcleaveRecipeTypes.ITEM_STARBLEACHING, inventory, world);
+        ItemStarbleachingRecipeInput input = new ItemStarbleachingRecipeInput(stack);
+        Optional<RecipeEntry<ItemStarbleachingRecipe>> recipeEntryOptional = world.getRecipeManager().getFirstMatch(OperationStarcleaveRecipeTypes.ITEM_STARBLEACHING, input, world);
         return recipeEntryOptional.map(RecipeEntry::value).orElse(null);
     }
 
@@ -223,9 +222,9 @@ public class StarbleachCauldronBlock extends AbstractCauldronBlock {
                     player.setStackInHand(hand, ItemUsage.exchangeStack(stack, player, outputStack));
                 }
 
-                return ActionResult.success(world.isClient);
+                return ItemActionResult.success(world.isClient);
             } else {
-                return ActionResult.PASS;
+                return ItemActionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
             }
         };
     }

@@ -1,9 +1,7 @@
 package phanastrae.operation_starcleave.entity;
 
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.registry.Registries;
@@ -20,32 +18,32 @@ public class OperationStarcleaveEntityTypes {
 
     public static final EntityType<StarcleaverGolemEntity> STARCLEAVER_GOLEM = register(
             "starcleaver_golem",
-            FabricEntityTypeBuilder.create(SpawnGroup.MISC, StarcleaverGolemEntity::new).dimensions(EntityDimensions.fixed(0.6f, 0.6f)).trackRangeChunks(10).fireImmune().build()
+            EntityType.Builder.create(StarcleaverGolemEntity::new, SpawnGroup.MISC).dimensions(0.6f, 0.6f).maxTrackingRange(10).makeFireImmune().build()
     );
 
     public static final EntityType<SubcaelicTorpedoEntity> SUBCAELIC_TORPEDO = register(
             "subcaelic_torpedo",
-            FabricEntityTypeBuilder.create(SpawnGroup.MISC, SubcaelicTorpedoEntity::new).dimensions(EntityDimensions.fixed(1f, 1f)).trackRangeChunks(10).build()
+            EntityType.Builder.create(SubcaelicTorpedoEntity::new, SpawnGroup.MISC).dimensions(1f, 1f).maxTrackingRange(10).build()
     );
 
     public static final EntityType<SubcaelicDuxEntity> SUBCAELIC_DUX = register(
             "subcaelic_dux",
-            FabricEntityTypeBuilder.create(SpawnGroup.MISC, SubcaelicDuxEntity::new).dimensions(EntityDimensions.fixed(7f, 7f)).trackRangeChunks(10).build()
+            EntityType.Builder.create(SubcaelicDuxEntity::new, SpawnGroup.MISC).dimensions(7f, 7f).maxTrackingRange(10).build()
     );
 
     public static final EntityType<SplashStarbleachEntity> SPLASH_STARBLEACH = register(
             "splash_starbleach_bottle",
-            FabricEntityTypeBuilder.<SplashStarbleachEntity>create(SpawnGroup.MISC, SplashStarbleachEntity::new).dimensions(new EntityDimensions(0.25F, 0.25F, true)).trackRangeChunks(4).trackedUpdateRate(10).build()
+            EntityType.Builder.<SplashStarbleachEntity>create(SplashStarbleachEntity::new, SpawnGroup.MISC).dimensions(0.25F, 0.25F).maxTrackingRange(4).trackingTickInterval(10).build()
     );
 
     public static final EntityType<StarbleachedPearlEntity> STARBLEACHED_PEARL = register(
             "starbleached_pearl",
-            FabricEntityTypeBuilder.<StarbleachedPearlEntity>create(SpawnGroup.MISC, StarbleachedPearlEntity::new).dimensions(new EntityDimensions(0.25F, 0.25F, true)).trackRangeChunks(4).trackedUpdateRate(10).build()
+            EntityType.Builder.<StarbleachedPearlEntity>create(StarbleachedPearlEntity::new, SpawnGroup.MISC).dimensions(0.25F, 0.25F).maxTrackingRange(4).trackingTickInterval(10).build()
     );
 
     public static final EntityType<FirmamentRejuvenatorEntity> FIRMAMENT_REJUVENATOR = register(
             "firmament_rejuvenator",
-            FabricEntityTypeBuilder.<FirmamentRejuvenatorEntity>create(SpawnGroup.MISC, FirmamentRejuvenatorEntity::new).dimensions(new EntityDimensions(0.25F, 0.25F, true)).trackRangeChunks(4).trackedUpdateRate(10).build()
+            EntityType.Builder.<FirmamentRejuvenatorEntity>create(FirmamentRejuvenatorEntity::new, SpawnGroup.MISC).dimensions(0.25F, 0.25F).maxTrackingRange(4).trackingTickInterval(10).build()
     );
 
     public static void init() {

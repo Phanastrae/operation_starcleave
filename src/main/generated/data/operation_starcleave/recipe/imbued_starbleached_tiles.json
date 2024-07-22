@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "B": {
+      "item": "operation_starcleave:starbleach_bottle"
+    },
+    "T": {
+      "item": "operation_starcleave:starbleached_tiles"
+    }
+  },
+  "pattern": [
+    " T ",
+    "TBT",
+    " T "
+  ],
+  "result": {
+    "count": 4,
+    "id": "operation_starcleave:imbued_starbleached_tiles"
+  }
+}

@@ -51,7 +51,7 @@ public class FirmamentRejuvenatorEntity extends ThrownItemEntity {
         super.tick();
         if(!this.isRemoved()) {
             if(this.age > MAX_AGE) {
-                this.dropStack(this.getItem());
+                this.dropStack(this.getStack());
                 this.discard();
             } else {
                 float firmHeight = this.getWorld().getTopY() + 16;
@@ -69,14 +69,14 @@ public class FirmamentRejuvenatorEntity extends ThrownItemEntity {
     }
 
     @Override
-    protected float getGravity() {
+    protected double getGravity() {
         return 0.01F;
     }
 
     @Override
     protected void onCollision(HitResult hitResult) {
         super.onCollision(hitResult);
-        this.dropStack(this.getItem());
+        this.dropStack(this.getStack());
         this.discard();
     }
 
@@ -113,7 +113,7 @@ public class FirmamentRejuvenatorEntity extends ThrownItemEntity {
     }
 
     @Override
-    protected ItemStack getItem() {
+    public ItemStack getStack() {
         return OperationStarcleaveItems.FIRMAMENT_REJUVENATOR.getDefaultStack();
     }
 }

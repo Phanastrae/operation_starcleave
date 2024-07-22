@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
-import phanastrae.operation_starcleave.network.packet.s2c.StarbleachedPearlLaunchS2CPacket;
+import phanastrae.operation_starcleave.network.packet.StarbleachedPearlLaunchPayload;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 
 import java.util.function.Predicate;
@@ -102,7 +102,7 @@ public class StarbleachedPearlEntity extends ThrownItemEntity {
                 // expand radius to be safe
                 float radiusBig = radius * 1.25f + 4;
                 if(distance < radiusBig) {
-                    ServerPlayNetworking.send(playerEntity, new StarbleachedPearlLaunchS2CPacket(pos, radius, maxAddedSpeed, entity));
+                    ServerPlayNetworking.send(playerEntity, new StarbleachedPearlLaunchPayload(pos, radius, maxAddedSpeed, entity != null, entity == null ? -1 : entity.getId()));
                 }
             });
         }

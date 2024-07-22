@@ -8,6 +8,8 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -26,13 +28,28 @@ public class FirmamentOutlineRenderer {
     public static final VoxelShape TILE_SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 64.0, 4.0, 64.0);
 
     public void updateHitTile(float tickDelta) {
+        this.hitTile = getHitTile(tickDelta);
+    }
+
+    @Nullable
+    public FirmamentTilePos getHitTile(float tickDelta) {
         MinecraftClient client = MinecraftClient.getInstance();
         Entity entity = client.cameraEntity;
-        if(entity == null) return;
+        if(!(entity instanceof PlayerEntity player)) {
+            return null;
+        }
+        if(!player.getAbilities().creativeMode) {
+            return null;
+        }
+
         World world = client.world;
-        if(world == null) return;
+        if(world == null) {
+            return null;
+        }
         Firmament firmament = Firmament.fromWorld(world);
-        if(firmament == null) return;
+        if(firmament == null) {
+            return null;
+        }
 
         Vec3d camPos = entity.getCameraPosVec(tickDelta);
         Vec3d lookVec = entity.getRotationVec(tickDelta);
@@ -41,37 +58,37 @@ public class FirmamentOutlineRenderer {
         double t = (skyHeight - camPos.y) / lookVec.y;
         if(t <= 0) {
             // firmament is behind camera
-            this.hitTile = null;
+            return null;
         } else {
             Vec3d target = camPos.add(lookVec.multiply(t));
             FirmamentTilePos tilePos = FirmamentTilePos.fromBlockCoords((int)Math.floor(target.x), (int)Math.floor(target.z), firmament);
             int damage = firmament.getDamage(tilePos.blockX, tilePos.blockZ);
             if(damage == 0) {
                 // tile empty
-                this.hitTile = null;
+                return null;
             } else {
                 // damage present
                 double distance = lookVec.length() * t;
-                double reachDistance = client.interactionManager.getReachDistance();
+                double reachDistance = player.getAttributeValue(EntityAttributes.PLAYER_BLOCK_INTERACTION_RANGE);
                 if(distance > reachDistance) {
                     // tile too far away
-                    this.hitTile = null;
+                    return null;
                 } else {
                     // tile in range of getting hit
                     HitResult crosshairTarget = client.crosshairTarget;
                     if(crosshairTarget == null) {
                         // no interruptions, can hit tile
-                        this.hitTile = tilePos;
+                        return tilePos;
                     } else {
                         // potential interruption
                         Vec3d hitPos = crosshairTarget.getPos();
                         double crosshairTargetDistance = hitPos.subtract(camPos).length();
                         if(distance < crosshairTargetDistance) {
                             // tile is closer than crosshair target
-                            this.hitTile = tilePos;
+                            return tilePos;
                         } else {
                             // tile is behind crosshair target
-                            this.hitTile = null;
+                            return null;
                         }
                     }
                 }
@@ -106,12 +123,10 @@ public class FirmamentOutlineRenderer {
                     m /= n;
                     vertexConsumer.vertex(entry.getPositionMatrix(), (float)(minX + offsetX), (float)(minY + offsetY), (float)(minZ + offsetZ))
                             .color(red, green, blue, alpha)
-                            .normal(entry.getNormalMatrix(), k, l, m)
-                            .next();
+                            .normal(entry, k, l, m);
                     vertexConsumer.vertex(entry.getPositionMatrix(), (float)(maxX + offsetX), (float)(maxY + offsetY), (float)(maxZ + offsetZ))
                             .color(red, green, blue, alpha)
-                            .normal(entry.getNormalMatrix(), k, l, m)
-                            .next();
+                            .normal(entry, k, l, m);
                 }
         );
     }

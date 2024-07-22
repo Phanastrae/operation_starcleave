@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_stardust_cluster": {
+      "conditions": {
+        "items": [
+          {
+            "items": "operation_starcleave:stardust_cluster"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "operation_starcleave:stardust_block"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_stardust_cluster"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "operation_starcleave:stardust_block"
+    ]
+  }
+}

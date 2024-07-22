@@ -16,7 +16,7 @@ import phanastrae.operation_starcleave.block.entity.OperationStarcleaveBlockEnti
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
 import phanastrae.operation_starcleave.entity.effect.OperationStarcleaveStatusEffects;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
-import phanastrae.operation_starcleave.network.packet.OperationStarcleavePacketTypes;
+import phanastrae.operation_starcleave.network.packet.OperationStarcleavePackets;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 import phanastrae.operation_starcleave.recipe.OperationStarcleaveRecipeSerializers;
 import phanastrae.operation_starcleave.recipe.OperationStarcleaveRecipeTypes;
@@ -31,23 +31,23 @@ public class OperationStarcleave implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger("operation_starcleave");
 
     public static Identifier id(String path) {
-    	return new Identifier("operation_starcleave", path);
+    	return Identifier.of("operation_starcleave", path);
 	}
 
 	@Override
 	public void onInitialize() {
+		OperationStarcleaveStatusEffects.init();
+
 		OperationStarcleaveEntityTypes.init();
 		OperationStarcleaveBlocks.init();
 		OperationStarcleaveItems.init();
 
 		OperationStarcleaveBlockEntityTypes.init();
 
-		OperationStarcleaveStatusEffects.init();
-
 		OperationStarcleaveAdvancementCriteria.init();
 		OperationStarcleaveGameRules.init();
 
-		OperationStarcleavePacketTypes.init();
+		OperationStarcleavePackets.init();
 		OperationStarcleaveServerPacketHandler.init();
 
 		OperationStarcleaveParticleTypes.init();

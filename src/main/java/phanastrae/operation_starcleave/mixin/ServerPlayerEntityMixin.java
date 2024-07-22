@@ -8,13 +8,14 @@ import net.minecraft.network.packet.c2s.common.SyncedClientOptions;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.TeleportTarget;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import phanastrae.operation_starcleave.duck.EntityDuck;
-import phanastrae.operation_starcleave.network.packet.s2c.EntityPhlogisticFireS2CPacket;
+import phanastrae.operation_starcleave.network.packet.EntityPhlogisticFirePayload;
 import phanastrae.operation_starcleave.world.firmament.FirmamentRegionsWatched;
 import phanastrae.operation_starcleave.world.firmament.FirmamentWatcher;
 
@@ -34,11 +35,12 @@ public class ServerPlayerEntityMixin implements FirmamentWatcher {
         return this.operation_starcleave$watched_regions;
     }
 
-    @Inject(method = "moveToWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayNetworkHandler;sendPacket(Lnet/minecraft/network/packet/Packet;)V", ordinal = 5, shift = At.Shift.BEFORE))
-    private void operation_starcleave$onPlayerWorldMove(ServerWorld destination, CallbackInfoReturnable<Entity> cir) {
+    @Inject(method = "teleportTo", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/PlayerManager;sendStatusEffects(Lnet/minecraft/server/network/ServerPlayerEntity;)V", shift = At.Shift.AFTER))
+    private void operation_starcleave$onPlayerWorldMove(TeleportTarget teleportTarget, CallbackInfoReturnable<Entity> cir) {
         ServerPlayerEntity player = (ServerPlayerEntity)(Object)this;
-        if(((EntityDuck)player).operation_starcleave$getPhlogisticFireTicks() > 0)
-        ServerPlayNetworking.send(player, new EntityPhlogisticFireS2CPacket(player, true));
+        if(((EntityDuck)player).operation_starcleave$getPhlogisticFireTicks() > 0) {
+            ServerPlayNetworking.send(player, new EntityPhlogisticFirePayload(player.getId(), true));
+        }
     }
 
     @Inject(method = "onDeath", at = @At("RETURN"))

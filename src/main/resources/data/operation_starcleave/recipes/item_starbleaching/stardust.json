@@ -1,9 +1,0 @@
-{
-  "type": "operation_starcleave:item_starbleaching",
-  "ingredient": {
-    "item": "minecraft:sand"
-  },
-  "starbleach_cost": 0.01,
-  "result": "operation_starcleave:stardust_block",
-  "count": 1
-}

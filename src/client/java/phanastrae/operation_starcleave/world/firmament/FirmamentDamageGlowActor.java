@@ -99,18 +99,18 @@ public class FirmamentDamageGlowActor extends FirmamentActor implements Firmamen
 
 
     private static void putDeathLightSourceVertex(VertexConsumer buffer, Matrix4f matrix, int r, int g, int b) {
-        buffer.vertex(matrix, 0.0F, 0.0F, 0.0F).color(r, g, b, 255).next();
+        buffer.vertex(matrix, 0.0F, 0.0F, 0.0F).color(r, g, b, 255);
     }
 
     private static void putDeathLightNegativeXTerminalVertex(VertexConsumer buffer, Matrix4f matrix, float radius, float width) {
-        buffer.vertex(matrix, -HALF_SQRT_3 * width, radius, -0.5F * width).color(0, 0, 0, 0).next();
+        buffer.vertex(matrix, -HALF_SQRT_3 * width, radius, -0.5F * width).color(0, 0, 0, 0);
     }
 
     private static void putDeathLightPositiveXTerminalVertex(VertexConsumer buffer, Matrix4f matrix, float radius, float width) {
-        buffer.vertex(matrix, HALF_SQRT_3 * width, radius, -0.5F * width).color(0, 0, 0, 0).next();
+        buffer.vertex(matrix, HALF_SQRT_3 * width, radius, -0.5F * width).color(0, 0, 0, 0);
     }
 
     private static void putDeathLightPositiveZTerminalVertex(VertexConsumer buffer, Matrix4f matrix, float radius, float width) {
-        buffer.vertex(matrix, 0.0F, radius, 1.0F * width).color(0, 0, 0, 0).next();
+        buffer.vertex(matrix, 0.0F, radius, 1.0F * width).color(0, 0, 0, 0);
     }
 }

@@ -1,6 +1,9 @@
 package phanastrae.operation_starcleave.entity.mob;
 
-import net.minecraft.entity.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ExperienceOrbEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.ai.goal.Goal;
@@ -17,6 +20,7 @@ import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
+import net.minecraft.registry.tag.EntityTypeTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -75,9 +79,9 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Anger
     }
 
     @Override
-    protected void initDataTracker() {
-        super.initDataTracker();
-        this.dataTracker.startTracking(HOLLOW, false);
+    protected void initDataTracker(DataTracker.Builder builder) {
+        super.initDataTracker(builder);
+        builder.add(HOLLOW, false);
     }
 
     @Override
@@ -89,7 +93,7 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Anger
         this.goalSelector.add(5, new AbstractSubcaelicEntity.SwimWanderGoal(this));
         this.targetSelector.add(1, new SubcaelicDuxEntity.TargetAttackerGoal(this, SubcaelicDuxEntity.class, SubcaelicTorpedoEntity.class));
         this.targetSelector.add(2, new ActiveTargetGoal<>(this, PlayerEntity.class, 10, true, false, this::shouldAngerAt));
-        this.targetSelector.add(3, new ActiveTargetGoal<>(this, MobEntity.class, 30, true, false, entity -> entity.getGroup().equals(EntityGroup.UNDEAD)));
+        this.targetSelector.add(3, new ActiveTargetGoal<>(this, MobEntity.class, 30, true, false, entity -> entity.getType().isIn(EntityTypeTags.UNDEAD)));
     }
 
     @Override
@@ -196,7 +200,7 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Anger
 
         if(this.getWorld().isClient && this.getRandom().nextInt(8) == 0) {
             this.spawnSmokeBurst();
-            this.getWorld().playSoundFromEntity(this, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.NEUTRAL, 6f, 0.7F + 0.5F * this.getRandom().nextFloat());
+            this.getWorld().playSoundFromEntity(this, SoundEvents.ENTITY_GENERIC_EXPLODE.value(), SoundCategory.NEUTRAL, 6f, 0.7F + 0.5F * this.getRandom().nextFloat());
         }
 
         if(!this.isRemoved() && (this.ticksSinceDeath >= 400 || (this.ticksSinceDeath >= 240 && this.isOnGround()))) {

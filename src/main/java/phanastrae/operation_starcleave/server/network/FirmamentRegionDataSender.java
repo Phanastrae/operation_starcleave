@@ -10,11 +10,14 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import phanastrae.operation_starcleave.duck.ServerPlayNetworkHandlerDuck;
-import phanastrae.operation_starcleave.network.packet.s2c.FirmamentRegionDataS2CPacket;
-import phanastrae.operation_starcleave.network.packet.s2c.FirmamentRegionSentS2CPacket;
-import phanastrae.operation_starcleave.network.packet.s2c.StartFirmamentRegionSendS2CPacket;
-import phanastrae.operation_starcleave.network.packet.s2c.UnloadFirmamentRegionS2CPacket;
-import phanastrae.operation_starcleave.world.firmament.*;
+import phanastrae.operation_starcleave.network.packet.FirmamentRegionDataPayload;
+import phanastrae.operation_starcleave.network.packet.FirmamentRegionSentPayload;
+import phanastrae.operation_starcleave.network.packet.StartFirmamentRegionSendPayload;
+import phanastrae.operation_starcleave.network.packet.UnloadFirmamentRegionPayload;
+import phanastrae.operation_starcleave.world.firmament.Firmament;
+import phanastrae.operation_starcleave.world.firmament.FirmamentRegion;
+import phanastrae.operation_starcleave.world.firmament.FirmamentRegionData;
+import phanastrae.operation_starcleave.world.firmament.RegionPos;
 
 import java.util.Comparator;
 import java.util.List;
@@ -39,7 +42,7 @@ public class FirmamentRegionDataSender {
     public void unload(ServerPlayerEntity player, RegionPos regionPos) {
         this.regions.remove(regionPos.id);
         if(player.isAlive()) {
-            ServerPlayNetworking.send(player, new UnloadFirmamentRegionS2CPacket(regionPos.id));
+            ServerPlayNetworking.send(player, new UnloadFirmamentRegionPayload(regionPos.id));
         }
     }
 
@@ -56,13 +59,13 @@ public class FirmamentRegionDataSender {
                     if (!list.isEmpty()) {
                         ServerPlayNetworkHandler serverPlayNetworkHandler = player.networkHandler;
                         ++this.unacknowledgedBatches;
-                        ServerPlayNetworking.send(player, new StartFirmamentRegionSendS2CPacket());
+                        ServerPlayNetworking.send(player, new StartFirmamentRegionSendPayload());
 
                         for(FirmamentRegion region : list) {
                             sendChunkData(serverPlayNetworkHandler, serverWorld, region);
                         }
 
-                        ServerPlayNetworking.send(player, new FirmamentRegionSentS2CPacket(list.size()));
+                        ServerPlayNetworking.send(player, new FirmamentRegionSentPayload(list.size()));
                         this.pending -= (float)list.size();
                     }
                 }
@@ -71,7 +74,7 @@ public class FirmamentRegionDataSender {
     }
 
     private static void sendChunkData(ServerPlayNetworkHandler handler, ServerWorld world, FirmamentRegion region) {
-        ServerPlayNetworking.send(handler.player, new FirmamentRegionDataS2CPacket(region));
+        ServerPlayNetworking.send(handler.player, new FirmamentRegionDataPayload(region.regionPos.id, new FirmamentRegionData(region)));
     }
 
     private List<FirmamentRegion> makeBatch(Firmament firmament, ChunkPos playerPos) {

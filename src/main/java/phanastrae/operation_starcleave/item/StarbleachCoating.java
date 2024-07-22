@@ -1,5 +1,7 @@
 package phanastrae.operation_starcleave.item;
 
+import net.minecraft.component.type.FoodComponent;
+import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.ItemStack;
@@ -11,7 +13,12 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import phanastrae.operation_starcleave.entity.effect.OperationStarcleaveStatusEffects;
 
+import static net.minecraft.component.DataComponentTypes.CUSTOM_DATA;
+import static net.minecraft.component.DataComponentTypes.FOOD;
+
 public class StarbleachCoating {
+    // TODO create custom component for this
+
     public static final String KEY = "operation_starcleave_Starbleached";
 
     public static void onEat(LivingEntity livingEntity, World world, ItemStack itemStack) {
@@ -20,12 +27,14 @@ public class StarbleachCoating {
         }
 
         if(hasStarbleachCoating(itemStack)) {
-            livingEntity.addStatusEffect(new StatusEffectInstance(OperationStarcleaveStatusEffects.STARBLEACHED_INSIDES, 200, 1));
+            livingEntity.addStatusEffect(new StatusEffectInstance(OperationStarcleaveStatusEffects.STARBLEACHED_INSIDES_ENTRY, 200, 1));
         }
     }
 
     public static boolean hasStarbleachCoating(ItemStack itemStack) {
-        NbtCompound nbt = itemStack.getNbt();
+        NbtComponent customData = itemStack.get(CUSTOM_DATA);
+        if(customData == null) return false;
+        NbtCompound nbt = customData.copyNbt();
         if(nbt == null || nbt.isEmpty()) return false;
 
         if(nbt.contains(KEY, NbtElement.BYTE_TYPE)) {
@@ -36,20 +45,19 @@ public class StarbleachCoating {
     }
 
     public static void addStarbleach(ItemStack itemStack) {
-        itemStack.getOrCreateNbt().putBoolean(KEY, true);
+        NbtComponent customData = itemStack.get(CUSTOM_DATA);
+        NbtCompound nbt = customData != null ? customData.copyNbt() : new NbtCompound();
+        nbt.putBoolean(KEY, true);
+        itemStack.set(CUSTOM_DATA, NbtComponent.of(nbt));
     }
 
     public static boolean canAddStarbleach(ItemStack itemStack) {
-        if(!itemStack.isFood()) {
+        FoodComponent foodComponent = itemStack.get(FOOD);
+        if(foodComponent == null) {
             return false;
         }
 
-        boolean hasStarbleach = false;
-        NbtCompound nbt = itemStack.getNbt();
-        if(nbt != null && !nbt.isEmpty() && nbt.contains(KEY, NbtElement.BYTE_TYPE)) {
-            hasStarbleach = nbt.getBoolean(KEY);
-        }
-        if(hasStarbleach) {
+        if(hasStarbleachCoating(itemStack)) {
             return false;
         }
 

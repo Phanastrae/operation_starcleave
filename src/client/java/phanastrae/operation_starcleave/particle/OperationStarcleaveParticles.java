@@ -3,8 +3,7 @@ package phanastrae.operation_starcleave.particle;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.minecraft.client.particle.*;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.particle.DefaultParticleType;
-import net.minecraft.particle.DustParticleEffect;
+import net.minecraft.particle.SimpleParticleType;
 import net.minecraft.util.math.MathHelper;
 
 public class OperationStarcleaveParticles {
@@ -21,8 +20,8 @@ public class OperationStarcleaveParticles {
             super(spriteProvider);
         }
 
-        public Particle createParticle(DefaultParticleType defaultParticleType, ClientWorld clientWorld, double d, double e, double f, double g, double h, double i) {
-            Particle particle = super.createParticle(defaultParticleType, clientWorld, d, e, f, g, h, i);
+        public Particle createParticle(SimpleParticleType simpleParticleType, ClientWorld clientWorld, double d, double e, double f, double g, double h, double i) {
+            Particle particle = super.createParticle(simpleParticleType, clientWorld, d, e, f, g, h, i);
             if(particle != null) {
                 float ang = clientWorld.random.nextFloat();
                 float red = MathHelper.sin(ang * MathHelper.TAU) * 0.2f + 0.8f;
@@ -41,8 +40,8 @@ public class OperationStarcleaveParticles {
             super(spriteProvider);
         }
 
-        public Particle createParticle(DefaultParticleType defaultParticleType, ClientWorld clientWorld, double d, double e, double f, double g, double h, double i) {
-            Particle particle = super.createParticle(defaultParticleType, clientWorld, d, e, f, g, h, i);
+        public Particle createParticle(SimpleParticleType simpleParticleType, ClientWorld clientWorld, double d, double e, double f, double g, double h, double i) {
+            Particle particle = super.createParticle(simpleParticleType, clientWorld, d, e, f, g, h, i);
             if(particle != null) {
                 float ang = clientWorld.random.nextFloat();
                 float baseBrightness = 0.6f + 0.2f * clientWorld.random.nextFloat();
@@ -63,8 +62,8 @@ public class OperationStarcleaveParticles {
             super(spriteProvider);
         }
 
-        public Particle createParticle(DefaultParticleType defaultParticleType, ClientWorld clientWorld, double d, double e, double f, double g, double h, double i) {
-            Particle particle = super.createParticle(defaultParticleType, clientWorld, d, e, f, g, h, i);
+        public Particle createParticle(SimpleParticleType simpleParticleType, ClientWorld clientWorld, double d, double e, double f, double g, double h, double i) {
+            Particle particle = super.createParticle(simpleParticleType, clientWorld, d, e, f, g, h, i);
             if(particle != null) {
                 float ang = clientWorld.random.nextFloat();
                 float baseBrightness = 0.6f + 0.2f * clientWorld.random.nextFloat();
