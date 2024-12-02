@@ -1,9 +1,9 @@
 package phanastrae.operation_starcleave.world.firmament;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.util.TriConsumer;
 import phanastrae.operation_starcleave.network.packet.UpdateFirmamentSubRegionPayload;
 
@@ -324,13 +324,13 @@ public class FirmamentSubRegion implements FirmamentAccess {
     public void flushUpdates() {
         if(this.pendingClientUpdate) {
             this.pendingClientUpdate = false;
-            World world = this.firmamentRegion.firmament.getWorld();
-            if(world instanceof ServerWorld serverWorld) {
+            Level world = this.firmamentRegion.firmament.getWorld();
+            if(world instanceof ServerLevel serverWorld) {
                 SubRegionPos subRegionPos = SubRegionPos.fromWorldCoords(this.x, this.z);
                 RegionPos regionPos = RegionPos.fromSubRegion(subRegionPos);
 
-                List<ServerPlayerEntity> nearbyPlayers = new ArrayList<>();
-                serverWorld.getPlayers().forEach(serverPlayerEntity -> {
+                List<ServerPlayer> nearbyPlayers = new ArrayList<>();
+                serverWorld.players().forEach(serverPlayerEntity -> {
                     if(((FirmamentWatcher)serverPlayerEntity).operation_starcleave$getWatchedRegions().watchedRegions.contains(regionPos.id)) {
                         nearbyPlayers.add(serverPlayerEntity);
                     }

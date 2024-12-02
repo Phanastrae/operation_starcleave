@@ -3,28 +3,31 @@ package phanastrae.operation_starcleave.block;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.MapCodec;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
-import net.minecraft.block.*;
-import net.minecraft.entity.Entity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.registry.tag.FluidTags;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.IntProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.*;
-import phanastrae.operation_starcleave.entity.OperationStarcleaveDamageTypes;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.*;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import phanastrae.operation_starcleave.duck.EntityDuck;
+import phanastrae.operation_starcleave.entity.OperationStarcleaveDamageTypes;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypeTags;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 
@@ -32,115 +35,115 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class PhlogisticFireBlock extends AbstractFireBlock implements Waterloggable {
-    public static final MapCodec<PhlogisticFireBlock> CODEC = createCodec(PhlogisticFireBlock::new);
-    public static final IntProperty AGE = Properties.AGE_7;
-    public static final BooleanProperty NORTH = ConnectingBlock.NORTH;
-    public static final BooleanProperty EAST = ConnectingBlock.EAST;
-    public static final BooleanProperty SOUTH = ConnectingBlock.SOUTH;
-    public static final BooleanProperty WEST = ConnectingBlock.WEST;
-    public static final BooleanProperty UP = ConnectingBlock.UP;
-    public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
-    private static final Map<Direction, BooleanProperty> DIRECTION_PROPERTIES = ConnectingBlock.FACING_PROPERTIES
+public class PhlogisticFireBlock extends BaseFireBlock implements SimpleWaterloggedBlock {
+    public static final MapCodec<PhlogisticFireBlock> CODEC = simpleCodec(PhlogisticFireBlock::new);
+    public static final IntegerProperty AGE = BlockStateProperties.AGE_7;
+    public static final BooleanProperty NORTH = PipeBlock.NORTH;
+    public static final BooleanProperty EAST = PipeBlock.EAST;
+    public static final BooleanProperty SOUTH = PipeBlock.SOUTH;
+    public static final BooleanProperty WEST = PipeBlock.WEST;
+    public static final BooleanProperty UP = PipeBlock.UP;
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+    private static final Map<Direction, BooleanProperty> DIRECTION_PROPERTIES = PipeBlock.PROPERTY_BY_DIRECTION
             .entrySet()
             .stream()
             .filter(entry -> entry.getKey() != Direction.DOWN)
             .collect(Util.toMap());
-    private static final VoxelShape UP_SHAPE = Block.createCuboidShape(0.0, 15.0, 0.0, 16.0, 16.0, 16.0);
-    private static final VoxelShape WEST_SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 1.0, 16.0, 16.0);
-    private static final VoxelShape EAST_SHAPE = Block.createCuboidShape(15.0, 0.0, 0.0, 16.0, 16.0, 16.0);
-    private static final VoxelShape NORTH_SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 1.0);
-    private static final VoxelShape SOUTH_SHAPE = Block.createCuboidShape(0.0, 0.0, 15.0, 16.0, 16.0, 16.0);
+    private static final VoxelShape UP_SHAPE = Block.box(0.0, 15.0, 0.0, 16.0, 16.0, 16.0);
+    private static final VoxelShape WEST_SHAPE = Block.box(0.0, 0.0, 0.0, 1.0, 16.0, 16.0);
+    private static final VoxelShape EAST_SHAPE = Block.box(15.0, 0.0, 0.0, 16.0, 16.0, 16.0);
+    private static final VoxelShape NORTH_SHAPE = Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 1.0);
+    private static final VoxelShape SOUTH_SHAPE = Block.box(0.0, 0.0, 15.0, 16.0, 16.0, 16.0);
     private final Map<BlockState, VoxelShape> shapesByState;
 
     @Override
-    public MapCodec<PhlogisticFireBlock> getCodec() {
+    public MapCodec<PhlogisticFireBlock> codec() {
         return CODEC;
     }
 
-    public PhlogisticFireBlock(AbstractBlock.Settings settings) {
+    public PhlogisticFireBlock(BlockBehaviour.Properties settings) {
         super(settings, 3.0F);
-        this.setDefaultState(
-                this.stateManager
-                        .getDefaultState()
-                        .with(AGE, 0)
-                        .with(NORTH, false)
-                        .with(EAST, false)
-                        .with(SOUTH, false)
-                        .with(WEST, false)
-                        .with(UP, false)
-                        .with(WATERLOGGED, false)
+        this.registerDefaultState(
+                this.stateDefinition
+                        .any()
+                        .setValue(AGE, 0)
+                        .setValue(NORTH, false)
+                        .setValue(EAST, false)
+                        .setValue(SOUTH, false)
+                        .setValue(WEST, false)
+                        .setValue(UP, false)
+                        .setValue(WATERLOGGED, false)
         );
         this.shapesByState = ImmutableMap.copyOf(
-                this.stateManager
-                        .getStates()
+                this.stateDefinition
+                        .getPossibleStates()
                         .stream()
-                        .filter(state -> state.get(AGE) == 0 && !state.get(WATERLOGGED))
+                        .filter(state -> state.getValue(AGE) == 0 && !state.getValue(WATERLOGGED))
                         .collect(Collectors.toMap(Function.identity(), PhlogisticFireBlock::getShapeForState))
         );
     }
 
     private static VoxelShape getShapeForState(BlockState state) {
-        VoxelShape voxelShape = VoxelShapes.empty();
-        if (state.get(UP)) voxelShape = UP_SHAPE;
-        if (state.get(NORTH)) voxelShape = VoxelShapes.union(voxelShape, NORTH_SHAPE);
-        if (state.get(SOUTH)) voxelShape = VoxelShapes.union(voxelShape, SOUTH_SHAPE);
-        if (state.get(EAST)) voxelShape = VoxelShapes.union(voxelShape, EAST_SHAPE);
-        if (state.get(WEST)) voxelShape = VoxelShapes.union(voxelShape, WEST_SHAPE);
-        return voxelShape.isEmpty() ? BASE_SHAPE : voxelShape;
+        VoxelShape voxelShape = Shapes.empty();
+        if (state.getValue(UP)) voxelShape = UP_SHAPE;
+        if (state.getValue(NORTH)) voxelShape = Shapes.or(voxelShape, NORTH_SHAPE);
+        if (state.getValue(SOUTH)) voxelShape = Shapes.or(voxelShape, SOUTH_SHAPE);
+        if (state.getValue(EAST)) voxelShape = Shapes.or(voxelShape, EAST_SHAPE);
+        if (state.getValue(WEST)) voxelShape = Shapes.or(voxelShape, WEST_SHAPE);
+        return voxelShape.isEmpty() ? DOWN_AABB : voxelShape;
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(AGE, NORTH, EAST, SOUTH, WEST, UP, WATERLOGGED);
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        return this.shapesByState.get(state.with(AGE, 0).with(WATERLOGGED, false));
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+        return this.shapesByState.get(state.setValue(AGE, 0).setValue(WATERLOGGED, false));
     }
 
     @Override
-    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+    public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
         return this.areBlocksAroundValidSupports(world, pos);
     }
 
     @Override
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return this.getStateForPosition(ctx.getWorld(), ctx.getBlockPos());
+    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+        return this.getStateForPosition(ctx.getLevel(), ctx.getClickedPos());
     }
 
     @Override
     public FluidState getFluidState(BlockState state) {
-        return state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Override
-    public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
-        super.onBlockAdded(state, world, pos, oldState, notify);
-        int age = state.get(AGE);
-        boolean waterlogged = state.get(WATERLOGGED);
-        world.scheduleBlockTick(pos, this, getFireTickDelay(world.random, age, waterlogged));
+    public void onPlace(BlockState state, Level world, BlockPos pos, BlockState oldState, boolean notify) {
+        super.onPlace(state, world, pos, oldState, notify);
+        int age = state.getValue(AGE);
+        boolean waterlogged = state.getValue(WATERLOGGED);
+        world.scheduleTick(pos, this, getFireTickDelay(world.random, age, waterlogged));
     }
 
     @Override
-    public BlockState getStateForNeighborUpdate(
-            BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos
+    public BlockState updateShape(
+            BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos
     ) {
-        boolean canPlaceAt = this.canPlaceAt(state, world, pos);
+        boolean canPlaceAt = this.canSurvive(state, world, pos);
         if(canPlaceAt) {
-            if (state.get(WATERLOGGED)) {
-                world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+            if (state.getValue(WATERLOGGED)) {
+                world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
             }
-            return this.getStateWithAge(world, pos, state.get(AGE));
+            return this.getStateWithAge(world, pos, state.getValue(AGE));
         } else {
-            return Blocks.AIR.getDefaultState();
+            return Blocks.AIR.defaultBlockState();
         }
     }
 
     @Override
-    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
-        if (!entity.getType().isIn(OperationStarcleaveEntityTypeTags.PHLOGISTIC_FIRE_IMMUNE)) {
+    public void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
+        if (!entity.getType().is(OperationStarcleaveEntityTypeTags.PHLOGISTIC_FIRE_IMMUNE)) {
             EntityDuck opsce = (EntityDuck)entity;
             opsce.operation_starcleave$setPhlogisticFireTicks(opsce.operation_starcleave$getPhlogisticFireTicks() + 1);
             if(opsce.operation_starcleave$getPhlogisticFireTicks() == 0) {
@@ -148,32 +151,32 @@ public class PhlogisticFireBlock extends AbstractFireBlock implements Waterlogga
             }
         }
 
-        entity.damage(OperationStarcleaveDamageTypes.of(world, OperationStarcleaveDamageTypes.IN_PHLOGISTIC_FIRE), 3.0F);
+        entity.hurt(OperationStarcleaveDamageTypes.of(world, OperationStarcleaveDamageTypes.IN_PHLOGISTIC_FIRE), 3.0F);
     }
 
     @Override
-    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        int age = state.get(AGE);
-        boolean waterlogged = state.get(WATERLOGGED);
-        world.scheduleBlockTick(pos, this, getFireTickDelay(world.random, age, waterlogged));
-        if (world.getGameRules().getBoolean(GameRules.DO_FIRE_TICK)) {
-            if (!state.canPlaceAt(world, pos)) {
+    public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+        int age = state.getValue(AGE);
+        boolean waterlogged = state.getValue(WATERLOGGED);
+        world.scheduleTick(pos, this, getFireTickDelay(world.random, age, waterlogged));
+        if (world.getGameRules().getBoolean(GameRules.RULE_DOFIRETICK)) {
+            if (!state.canSurvive(world, pos)) {
                 world.removeBlock(pos, false);
                 return;
             }
 
             int newAge = Math.min(7, age + random.nextInt(4) / 3);
             if (age != newAge) {
-                state = state.with(AGE, newAge);
-                world.setBlockState(pos, state, Block.NO_REDRAW);
+                state = state.setValue(AGE, newAge);
+                world.setBlock(pos, state, Block.UPDATE_INVISIBLE);
             }
 
-            boolean worldInfiniburn = state.isIn(world.getDimension().infiniburn());
+            boolean worldInfiniburn = state.is(world.dimensionType().infiniburn());
             if (!worldInfiniburn) {
-                BlockPos floorPos = pos.down();
+                BlockPos floorPos = pos.below();
 
                 if (age > 2 && !this.areBlocksAroundFlammable(world, pos)) {
-                    if (!world.getBlockState(floorPos).isSideSolidFullSquare(world, floorPos, Direction.UP)) {
+                    if (!world.getBlockState(floorPos).isFaceSturdy(world, floorPos, Direction.UP)) {
                         world.removeBlock(pos, false);
                         return;
                     }
@@ -181,14 +184,14 @@ public class PhlogisticFireBlock extends AbstractFireBlock implements Waterlogga
 
                 if(random.nextInt(age + 7) > 9) {
                     int nearbyFire = 0;
-                    BlockPos.Mutable mutable = pos.mutableCopy();
+                    BlockPos.MutableBlockPos mutable = pos.mutable();
                     for(int x = -1; x <= 1; x++) {
                         for(int z = -1; z <= 1; z++) {
                             for(int y = -1; y <= 1; y++) {
                                 if(x == 0 && y == 0 && z == 0) continue;
-                                mutable.set(pos, x, y, z);
+                                mutable.setWithOffset(pos, x, y, z);
 
-                                if(world.getBlockState(mutable).isOf(this.asBlock())) {
+                                if(world.getBlockState(mutable).is(this.asBlock())) {
                                     nearbyFire++;
                                 }
                             }
@@ -205,20 +208,20 @@ public class PhlogisticFireBlock extends AbstractFireBlock implements Waterlogga
         }
     }
 
-    protected void spread(World world, BlockPos pos, Random random, int age) {
-        for(Direction direction : DIRECTIONS) {
+    protected void spread(Level world, BlockPos pos, RandomSource random, int age) {
+        for(Direction direction : UPDATE_SHAPE_ORDER) {
             int spreadFactor = direction.getAxis() == Direction.Axis.Y ? 125 : 150;
-            this.trySpreadingFire(world, pos.offset(direction), spreadFactor, random, age);
+            this.trySpreadingFire(world, pos.relative(direction), spreadFactor, random, age);
         }
     }
 
-    protected void burn(World world, BlockPos pos, Random random, int age) {
-        BlockPos.Mutable mutable = new BlockPos.Mutable();
+    protected void burn(Level world, BlockPos pos, RandomSource random, int age) {
+        BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
         for(int x = -1; x <= 1; ++x) {
             for(int z = -1; z <= 1; ++z) {
                 for(int y = -1; y <= 4; ++y) {
                     if(x == 0 && y == 0 && z == 0) continue;
-                    mutable.set(pos, x, y, z);
+                    mutable.setWithOffset(pos, x, y, z);
 
                     int o = 100;
                     if (y > 1) {
@@ -231,7 +234,7 @@ public class PhlogisticFireBlock extends AbstractFireBlock implements Waterlogga
 
                         if (modifiedBurnChance > 0 && random.nextInt(o) <= modifiedBurnChance) {
                             int newAge = Math.min(7, age + random.nextInt(4) / 3);
-                            world.setBlockState(mutable, withWaterlogged(this.getStateWithAge(world, mutable, newAge), shouldWaterlog(world, mutable)), Block.NOTIFY_ALL);
+                            world.setBlock(mutable, withWaterlogged(this.getStateWithAge(world, mutable, newAge), shouldWaterlog(world, mutable)), Block.UPDATE_ALL);
                         }
                     }
                 }
@@ -240,14 +243,14 @@ public class PhlogisticFireBlock extends AbstractFireBlock implements Waterlogga
     }
 
     @Override
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+    public void animateTick(BlockState state, Level world, BlockPos pos, RandomSource random) {
         if (random.nextInt(24) == 0) {
-            world.playSound(
+            world.playLocalSound(
                     (double) pos.getX() + 0.5,
                     (double) pos.getY() + 0.5,
                     (double) pos.getZ() + 0.5,
-                    SoundEvents.BLOCK_FIRE_AMBIENT,
-                    SoundCategory.BLOCKS,
+                    SoundEvents.FIRE_AMBIENT,
+                    SoundSource.BLOCKS,
                     1.0F + random.nextFloat(),
                     random.nextFloat() * 0.7F + 0.3F,
                     false
@@ -262,19 +265,19 @@ public class PhlogisticFireBlock extends AbstractFireBlock implements Waterlogga
                 world.addParticle(OperationStarcleaveParticleTypes.LARGE_GLIMMER_SMOKE, x, y, z, 0.0, 0.0, 0.0);
             }
         } else {
-            for(Direction direction : DIRECTIONS) {
+            for(Direction direction : UPDATE_SHAPE_ORDER) {
                 if(this.isValidSupport(world, pos, direction)) {
                     double dx = random.nextDouble();
                     double dy = random.nextDouble();
                     double dz = random.nextDouble();
                     if(direction.getAxis() == Direction.Axis.X) {
-                        dx = 0.5 + direction.getOffsetX() * (0.1 * dx + 0.4);
+                        dx = 0.5 + direction.getStepX() * (0.1 * dx + 0.4);
                     }
                     if(direction.getAxis() == Direction.Axis.Y) {
-                        dy = 0.5 + direction.getOffsetY() * (0.1 * dy + 0.4);
+                        dy = 0.5 + direction.getStepY() * (0.1 * dy + 0.4);
                     }
                     if(direction.getAxis() == Direction.Axis.Z) {
-                        dz = 0.5 + direction.getOffsetZ() * (0.1 * dz + 0.4);
+                        dz = 0.5 + direction.getStepZ() * (0.1 * dz + 0.4);
                     }
 
                     world.addParticle(OperationStarcleaveParticleTypes.LARGE_GLIMMER_SMOKE,
@@ -286,19 +289,19 @@ public class PhlogisticFireBlock extends AbstractFireBlock implements Waterlogga
     }
 
     @Override
-    protected boolean isFlammable(BlockState state) {
+    protected boolean canBurn(BlockState state) {
         return this.getBurnChance(state) > 0;
     }
 
-    protected boolean isValidSupport(BlockView world, BlockPos blockPos, Direction direction) {
-        BlockPos groundPos = blockPos.offset(direction);
+    protected boolean isValidSupport(BlockGetter world, BlockPos blockPos, Direction direction) {
+        BlockPos groundPos = blockPos.relative(direction);
         BlockState groundState = world.getBlockState(groundPos);
-        return this.isFlammable(groundState) || groundState.isSideSolidFullSquare(world, blockPos, direction.getOpposite());
+        return this.canBurn(groundState) || groundState.isFaceSturdy(world, blockPos, direction.getOpposite());
     }
 
-    protected boolean areBlocksAroundFlammable(BlockView world, BlockPos pos) {
+    protected boolean areBlocksAroundFlammable(BlockGetter world, BlockPos pos) {
         for(Direction direction : Direction.values()) {
-            if (this.isFlammable(world.getBlockState(pos.offset(direction)))) {
+            if (this.canBurn(world.getBlockState(pos.relative(direction)))) {
                 return true;
             }
         }
@@ -306,7 +309,7 @@ public class PhlogisticFireBlock extends AbstractFireBlock implements Waterlogga
         return false;
     }
 
-    protected boolean areBlocksAroundValidSupports(BlockView world, BlockPos pos) {
+    protected boolean areBlocksAroundValidSupports(BlockGetter world, BlockPos pos) {
         for(Direction direction : Direction.values()) {
             if (this.isValidSupport(world, pos, direction)) {
                 return true;
@@ -316,14 +319,14 @@ public class PhlogisticFireBlock extends AbstractFireBlock implements Waterlogga
         return false;
     }
 
-    private int getBurnChance(WorldView world, BlockPos pos) {
-        if (!(world.isAir(pos) || world.isWater(pos))) {
+    private int getBurnChance(LevelReader world, BlockPos pos) {
+        if (!(world.isEmptyBlock(pos) || world.isWaterAt(pos))) {
             return 0;
         } else {
             int maxBurnChance = 0;
 
             for(Direction direction : Direction.values()) {
-                BlockState blockState = world.getBlockState(pos.offset(direction));
+                BlockState blockState = world.getBlockState(pos.relative(direction));
                 maxBurnChance = Math.max(this.getBurnChance(blockState), maxBurnChance);
             }
 
@@ -339,38 +342,38 @@ public class PhlogisticFireBlock extends AbstractFireBlock implements Waterlogga
         return FlammableBlockRegistry.getDefaultInstance().get(state.getBlock()).getBurnChance();
     }
 
-    private void trySpreadingFire(World world, BlockPos pos, int spreadFactor, Random random, int currentAge) {
+    private void trySpreadingFire(Level world, BlockPos pos, int spreadFactor, RandomSource random, int currentAge) {
         int spreadChance = this.getSpreadChance(world.getBlockState(pos));
         if (random.nextInt(spreadFactor) < spreadChance) {
             BlockState blockState = world.getBlockState(pos);
             if (random.nextInt(currentAge + 5) < 13) {
                 int newAge = Math.min(7, currentAge + random.nextInt(5) / 2);
-                world.setBlockState(pos, withWaterlogged(this.getStateWithAge(world, pos, newAge), shouldWaterlog(world, pos)), Block.NOTIFY_ALL);
+                world.setBlock(pos, withWaterlogged(this.getStateWithAge(world, pos, newAge), shouldWaterlog(world, pos)), Block.UPDATE_ALL);
             } else {
-                world.setBlockState(pos, withWaterlogged(Blocks.AIR.getDefaultState(), shouldWaterlog(world, pos)), Block.NOTIFY_ALL);
+                world.setBlock(pos, withWaterlogged(Blocks.AIR.defaultBlockState(), shouldWaterlog(world, pos)), Block.UPDATE_ALL);
             }
 
             if (blockState.getBlock() instanceof TntBlock) {
-                TntBlock.primeTnt(world, pos);
+                TntBlock.explode(world, pos);
             }
         }
     }
 
     protected BlockState withWaterlogged(BlockState state, boolean waterlogged) {
-        if(state.contains(WATERLOGGED)) {
-            return state.with(WATERLOGGED, waterlogged);
+        if(state.hasProperty(WATERLOGGED)) {
+            return state.setValue(WATERLOGGED, waterlogged);
         } else if(state.isAir() && waterlogged) {
-            return Blocks.WATER.getDefaultState();
+            return Blocks.WATER.defaultBlockState();
         } else {
             return state;
         }
     }
 
-    protected boolean shouldWaterlog(BlockView world, BlockPos pos) {
+    protected boolean shouldWaterlog(BlockGetter world, BlockPos pos) {
         int adjWater = 0;
-        for(Direction direction : DIRECTIONS) {
+        for(Direction direction : UPDATE_SHAPE_ORDER) {
             if(direction.getAxis() != Direction.Axis.Y) {
-                boolean water = world.getFluidState(pos.offset(direction)).isOf(Fluids.WATER);
+                boolean water = world.getFluidState(pos.relative(direction)).is(Fluids.WATER);
                 if(water) adjWater++;
 
                 if(adjWater >= 2) {
@@ -382,44 +385,44 @@ public class PhlogisticFireBlock extends AbstractFireBlock implements Waterlogga
         return false;
     }
 
-    protected BlockState getStateForPosition(BlockView world, BlockPos pos) {
-        boolean isWet = world.getFluidState(pos).isIn(FluidTags.WATER);
+    protected BlockState getStateForPosition(BlockGetter world, BlockPos pos) {
+        boolean isWet = world.getFluidState(pos).is(FluidTags.WATER);
 
-        BlockState newState = this.getDefaultState();
+        BlockState newState = this.defaultBlockState();
         if (!this.isValidSupport(world, pos, Direction.DOWN)) {
             for(Direction direction : Direction.values()) {
                 BooleanProperty booleanProperty = DIRECTION_PROPERTIES.get(direction);
                 if (booleanProperty != null) {
-                    newState = newState.with(booleanProperty, this.isValidSupport(world, pos, direction));
+                    newState = newState.setValue(booleanProperty, this.isValidSupport(world, pos, direction));
                 }
             }
         }
 
         if(isWet) {
-            newState = newState.with(WATERLOGGED, true);
+            newState = newState.setValue(WATERLOGGED, true);
         }
         return newState;
     }
 
-    private BlockState getStateWithAge(WorldAccess world, BlockPos pos, int age) {
+    private BlockState getStateWithAge(LevelAccessor world, BlockPos pos, int age) {
         BlockState blockState = getStateForPosition(world, pos);
-        return blockState.isOf(OperationStarcleaveBlocks.PHLOGISTIC_FIRE) ? blockState.with(AGE, age) : blockState;
+        return blockState.is(OperationStarcleaveBlocks.PHLOGISTIC_FIRE) ? blockState.setValue(AGE, age) : blockState;
     }
 
-    public static BlockState getState(BlockView world, BlockPos pos) {
+    public static BlockState getState(BlockGetter world, BlockPos pos) {
         return ((PhlogisticFireBlock)OperationStarcleaveBlocks.PHLOGISTIC_FIRE).getStateForPosition(world, pos);
     }
 
-    public static boolean canPlaceAt(World world, BlockPos pos) {
+    public static boolean canPlaceAt(Level world, BlockPos pos) {
         BlockState blockState = world.getBlockState(pos);
-        if (!(blockState.isAir() || world.isWater(pos))) {
+        if (!(blockState.isAir() || world.isWaterAt(pos))) {
             return false;
         } else {
-            return getState(world, pos).canPlaceAt(world, pos);
+            return getState(world, pos).canSurvive(world, pos);
         }
     }
 
-    private static int getFireTickDelay(Random random, int age, boolean waterlogged) {
+    private static int getFireTickDelay(RandomSource random, int age, boolean waterlogged) {
         if(waterlogged) {
             return 2 + age * 2 + random.nextInt(2 + age * 2) + (age == 7 ? 140 : 0);
         } else {

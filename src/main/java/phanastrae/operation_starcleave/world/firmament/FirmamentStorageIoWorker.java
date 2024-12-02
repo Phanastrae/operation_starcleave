@@ -1,13 +1,12 @@
 package phanastrae.operation_starcleave.world.firmament;
 
-import net.minecraft.world.storage.StorageIoWorker;
-import net.minecraft.world.storage.StorageKey;
-
 import java.nio.file.Path;
+import net.minecraft.world.level.chunk.storage.IOWorker;
+import net.minecraft.world.level.chunk.storage.RegionStorageInfo;
 
-public class FirmamentStorageIoWorker extends StorageIoWorker {
+public class FirmamentStorageIoWorker extends IOWorker {
     // StorageIoWorker's constructor is protected
-    public FirmamentStorageIoWorker(StorageKey storageKey, Path directory, boolean dsync) {
+    public FirmamentStorageIoWorker(RegionStorageInfo storageKey, Path directory, boolean dsync) {
         super(storageKey, directory, dsync);
     }
 }

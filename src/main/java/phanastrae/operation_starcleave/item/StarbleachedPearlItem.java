@@ -1,65 +1,65 @@
 package phanastrae.operation_starcleave.item;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ProjectileItem;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Position;
-import net.minecraft.world.World;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Position;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ProjectileItem;
+import net.minecraft.world.level.Level;
 import phanastrae.operation_starcleave.entity.projectile.StarbleachedPearlEntity;
 
 public class StarbleachedPearlItem extends Item implements ProjectileItem {
-    public StarbleachedPearlItem(Item.Settings settings) {
+    public StarbleachedPearlItem(Item.Properties settings) {
         super(settings);
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        ItemStack itemStack = user.getStackInHand(hand);
+    public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
+        ItemStack itemStack = user.getItemInHand(hand);
         world.playSound(
                 null,
                 user.getX(),
                 user.getY(),
                 user.getZ(),
-                SoundEvents.ENTITY_ENDER_PEARL_THROW,
-                SoundCategory.NEUTRAL,
+                SoundEvents.ENDER_PEARL_THROW,
+                SoundSource.NEUTRAL,
                 0.5F,
                 0.8F / (world.getRandom().nextFloat() * 0.4F + 0.8F)
         );
-        user.getItemCooldownManager().set(this, 10);
-        if (!world.isClient) {
+        user.getCooldowns().addCooldown(this, 10);
+        if (!world.isClientSide) {
             StarbleachedPearlEntity entity = new StarbleachedPearlEntity(world, user);
             entity.setItem(itemStack);
-            entity.setVelocity(user, user.getPitch(), user.getYaw(), 0.0F, 2.5F, 1.0F);
-            world.spawnEntity(entity);
+            entity.shootFromRotation(user, user.getXRot(), user.getYRot(), 0.0F, 2.5F, 1.0F);
+            world.addFreshEntity(entity);
         }
 
-        user.incrementStat(Stats.USED.getOrCreateStat(this));
-        if (!user.getAbilities().creativeMode) {
-            itemStack.decrement(1);
+        user.awardStat(Stats.ITEM_USED.get(this));
+        if (!user.getAbilities().instabuild) {
+            itemStack.shrink(1);
         }
 
-        return TypedActionResult.success(itemStack, world.isClient());
+        return InteractionResultHolder.sidedSuccess(itemStack, world.isClientSide());
     }
 
     @Override
-    public ProjectileEntity createEntity(World world, Position pos, ItemStack stack, Direction direction) {
-        StarbleachedPearlEntity entity = new StarbleachedPearlEntity(world, pos.getX(), pos.getY(), pos.getZ());
+    public Projectile asProjectile(Level world, Position pos, ItemStack stack, Direction direction) {
+        StarbleachedPearlEntity entity = new StarbleachedPearlEntity(world, pos.x(), pos.y(), pos.z());
         entity.setItem(stack);
         return entity;
     }
 
     @Override
-    public ProjectileItem.Settings getProjectileSettings() {
-        return ProjectileItem.Settings.builder()
-                .power(ProjectileItem.Settings.DEFAULT.power() * 1.5F)
+    public ProjectileItem.DispenseConfig createDispenseConfig() {
+        return ProjectileItem.DispenseConfig.builder()
+                .power(ProjectileItem.DispenseConfig.DEFAULT.power() * 1.5F)
                 .build();
     }
 }

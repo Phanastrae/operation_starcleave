@@ -2,16 +2,16 @@ package phanastrae.operation_starcleave.client.network;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.minecraft.client.network.ChunkBatchSizeCalculator;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.client.multiplayer.ChunkBatchSizeCalculator;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import phanastrae.operation_starcleave.client.world.firmament.ClientFirmamentRegionManager;
 import phanastrae.operation_starcleave.client.world.firmament.FirmamentDamageGlowActor;
 import phanastrae.operation_starcleave.client.duck.ClientPlayNetworkHandlerDuck;
@@ -38,19 +38,19 @@ public class OperationStarcleaveClientPacketHandler {
         register(EntityPhlogisticFirePayload.PACKET_ID, OperationStarcleaveClientPacketHandler::handleEntityPhlogisticFire);
     }
 
-    public static <T extends CustomPayload> boolean register(CustomPayload.Id<T> type, ClientPlayNetworking.PlayPayloadHandler<T> handler) {
+    public static <T extends CustomPacketPayload> boolean register(CustomPacketPayload.Type<T> type, ClientPlayNetworking.PlayPayloadHandler<T> handler) {
         return ClientPlayNetworking.registerGlobalReceiver(type, handler);
     }
 
 
     private static void startFirmamentRegionSend(StartFirmamentRegionSendPayload packet, ClientPlayNetworking.Context context) {
-        ClientPlayerEntity player = context.player();
-        ((ClientPlayNetworkHandlerDuck)player.networkHandler).operation_starcleave$getFirmamentRegionBatchSizeCalculator().onStartChunkSend();
+        LocalPlayer player = context.player();
+        ((ClientPlayNetworkHandlerDuck)player.connection).operation_starcleave$getFirmamentRegionBatchSizeCalculator().onBatchStart();
     }
 
     private static void receiveFirmamentRegionData(FirmamentRegionDataPayload packet, ClientPlayNetworking.Context context) {
-        ClientPlayerEntity player = context.player();
-        World world = player.getWorld();
+        LocalPlayer player = context.player();
+        Level world = player.level();
         Firmament firmament = Firmament.fromWorld(world);
         if(firmament != null) {
             FirmamentRegion firmamentRegion = firmament.getFirmamentRegion(packet.regionId());
@@ -69,17 +69,17 @@ public class OperationStarcleaveClientPacketHandler {
     }
 
     private static void sentFirmamentRegion(FirmamentRegionSentPayload packet, ClientPlayNetworking.Context context) {
-        ClientPlayerEntity player = context.player();
+        LocalPlayer player = context.player();
         PacketSender responseSender = context.responseSender();
-        ChunkBatchSizeCalculator firmamentRegionBatchSizeCalculator = ((ClientPlayNetworkHandlerDuck)player.networkHandler).operation_starcleave$getFirmamentRegionBatchSizeCalculator();
-        firmamentRegionBatchSizeCalculator.onChunkSent(packet.batchSize());
+        ChunkBatchSizeCalculator firmamentRegionBatchSizeCalculator = ((ClientPlayNetworkHandlerDuck)player.connection).operation_starcleave$getFirmamentRegionBatchSizeCalculator();
+        firmamentRegionBatchSizeCalculator.onBatchFinished(packet.batchSize());
 
         responseSender.sendPacket(new AcknowledgeFirmamentRegionDataPayload(firmamentRegionBatchSizeCalculator.getDesiredChunksPerTick()));
     }
 
     private static void updateFirmamentSubRegion(UpdateFirmamentSubRegionPayload packet, ClientPlayNetworking.Context context) {
-        ClientPlayerEntity player = context.player();
-        World world = player.getWorld();
+        LocalPlayer player = context.player();
+        Level world = player.level();
         Firmament firmament = Firmament.fromWorld(world);
         if(firmament != null) {
             FirmamentSubRegion firmamentSubRegion = firmament.getSubRegionFromId(packet.id());
@@ -93,8 +93,8 @@ public class OperationStarcleaveClientPacketHandler {
     }
 
     private static void unloadFirmamentRegion(UnloadFirmamentRegionPayload packet, ClientPlayNetworking.Context context) {
-        ClientPlayerEntity player = context.player();
-        Firmament firmament = Firmament.fromWorld(player.getWorld());
+        LocalPlayer player = context.player();
+        Firmament firmament = Firmament.fromWorld(player.level());
         if(firmament != null) {
             if(firmament.getFirmamentRegionManager() instanceof ClientFirmamentRegionManager clientFirmamentRegionManager) {
                 clientFirmamentRegionManager.unloadRegion(packet.regionId());
@@ -103,22 +103,22 @@ public class OperationStarcleaveClientPacketHandler {
     }
 
     private static void onFirmamentCleaved(FirmamentCleavedPayload packet, ClientPlayNetworking.Context context) {
-        ClientPlayerEntity player = context.player();
-        World world = player.getWorld();
+        LocalPlayer player = context.player();
+        Level world = player.level();
         ((WorldDuck)world).operation_starcleave$setCleavingFlashTicksLeft(24);
-        Vec3d pos = new Vec3d(packet.x(), world.getTopY() + 16, packet.z());
-        world.playSound(
+        Vec3 pos = new Vec3(packet.x(), world.getMaxBuildHeight() + 16, packet.z());
+        world.playLocalSound(
                 pos.x,
                 pos.y,
                 pos.z,
-                SoundEvents.ITEM_TRIDENT_THUNDER.value(),
-                SoundCategory.BLOCKS,
+                SoundEvents.TRIDENT_THUNDER.value(),
+                SoundSource.BLOCKS,
                 500.0F,
                 1.6F + world.random.nextFloat() * 0.2F,
                 false);
 
-        ParticleEffect particleEffect = ParticleTypes.FLASH;
-        world.addImportantParticle(particleEffect, pos.x, pos.y - 1, pos.z, 0, 0, 0);
+        ParticleOptions particleEffect = ParticleTypes.FLASH;
+        world.addAlwaysVisibleParticle(particleEffect, pos.x, pos.y - 1, pos.z, 0, 0, 0);
 
         ScreenShakeManager.getInstance().setShakeAmount(3);
         Firmament firmament = Firmament.fromWorld(world);
@@ -128,21 +128,21 @@ public class OperationStarcleaveClientPacketHandler {
     }
 
     public static void onStarbleachedPearlLaunch(StarbleachedPearlLaunchPayload packet, ClientPlayNetworking.Context context) {
-        ClientPlayerEntity player = context.player();
+        LocalPlayer player = context.player();
         Entity except = null;
         if(packet.exceptExists()) {
-            Entity e = player.getWorld().getEntityById(packet.exceptId());
+            Entity e = player.level().getEntity(packet.exceptId());
             if(e != null) {
                 except = e;
             }
         }
-        StarbleachedPearlEntity.doRepulsion(packet.pos(), packet.radius(), packet.maxAddedSpeed(), player.getWorld(), except);
+        StarbleachedPearlEntity.doRepulsion(packet.pos(), packet.radius(), packet.maxAddedSpeed(), player.level(), except);
     }
 
     public static void handleEntityPhlogisticFire(EntityPhlogisticFirePayload packet, ClientPlayNetworking.Context context) {
-        ClientPlayerEntity player = context.player();
-        World world = player.getWorld();
-        Entity entity = world.getEntityById(packet.id());
+        LocalPlayer player = context.player();
+        Level world = player.level();
+        Entity entity = world.getEntity(packet.id());
         if (entity != null) {
             ((EntityDuck)entity).operation_starcleave$setOnPhlogisticFire(packet.onPhlogisticFire());
         }

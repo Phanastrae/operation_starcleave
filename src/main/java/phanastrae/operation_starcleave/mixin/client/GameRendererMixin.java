@@ -1,9 +1,9 @@
 package phanastrae.operation_starcleave.mixin.client;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.render.RenderTickCounter;
-import net.minecraft.client.util.math.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.renderer.GameRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -14,19 +14,19 @@ import phanastrae.operation_starcleave.client.render.shader.FirmamentPostShader;
 
 @Mixin(GameRenderer.class)
 public class GameRendererMixin {
-    @Inject(method = "renderWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/GameRenderer;tiltViewWhenHurt(Lnet/minecraft/client/util/math/MatrixStack;F)V", shift = At.Shift.AFTER))
-    private void operation_starcleave$screenShake(RenderTickCounter tickCounter, CallbackInfo ci,
-                                                  @Local(ordinal = 0) MatrixStack matrices) {
-        ScreenShakeManager.getInstance().updateScreenMatrices(matrices, tickCounter.getTickDelta(false));
+    @Inject(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;bobHurt(Lcom/mojang/blaze3d/vertex/PoseStack;F)V", shift = At.Shift.AFTER))
+    private void operation_starcleave$screenShake(DeltaTracker tickCounter, CallbackInfo ci,
+                                                  @Local(ordinal = 0) PoseStack matrices) {
+        ScreenShakeManager.getInstance().updateScreenMatrices(matrices, tickCounter.getGameTimeDeltaPartialTick(false));
     }
 
-    @Inject(method = "updateCrosshairTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;pop()V", shift = At.Shift.BEFORE))
+    @Inject(method = "pick(F)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiling/ProfilerFiller;pop()V", shift = At.Shift.BEFORE))
     private void operation_starcleave$updateFirmamentTarget(float tickDelta, CallbackInfo ci) {
         OperationStarcleaveClient.firmamentOutlineRenderer.updateHitTile(tickDelta);
     }
 
-    @Inject(method = "renderWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/WorldRenderer;render(Lnet/minecraft/client/render/RenderTickCounter;ZLnet/minecraft/client/render/Camera;Lnet/minecraft/client/render/GameRenderer;Lnet/minecraft/client/render/LightmapTextureManager;Lorg/joml/Matrix4f;Lorg/joml/Matrix4f;)V", shift = At.Shift.AFTER))
-    private void operation_starcleave$applyPostShaders(RenderTickCounter tickCounter, CallbackInfo ci) {
+    @Inject(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LevelRenderer;renderLevel(Lnet/minecraft/client/DeltaTracker;ZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;Lorg/joml/Matrix4f;)V", shift = At.Shift.AFTER))
+    private void operation_starcleave$applyPostShaders(DeltaTracker tickCounter, CallbackInfo ci) {
         FirmamentPostShader.draw();
     }
 }

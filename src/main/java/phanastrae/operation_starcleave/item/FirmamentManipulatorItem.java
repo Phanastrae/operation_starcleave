@@ -1,20 +1,20 @@
 package phanastrae.operation_starcleave.item;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.joml.Math;
 import phanastrae.operation_starcleave.network.packet.FirmamentCleavedPayload;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
@@ -28,35 +28,35 @@ import static phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion
 
 public class FirmamentManipulatorItem extends Item {
 
-    public FirmamentManipulatorItem(Settings settings) {
+    public FirmamentManipulatorItem(Properties settings) {
         super(settings);
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        ItemStack itemStack = user.getStackInHand(hand);
-        if(!user.getAbilities().allowModifyWorld) {
-            return TypedActionResult.fail(itemStack);
+    public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
+        ItemStack itemStack = user.getItemInHand(hand);
+        if(!user.getAbilities().mayBuild) {
+            return InteractionResultHolder.fail(itemStack);
         }
 
 
-        if(!world.isClient) {
+        if(!world.isClientSide) {
             Firmament firmament = Firmament.fromWorld(world);
             if(firmament == null) {
                 return super.use(world, user, hand);
             }
 
-            float pitch = Math.toRadians(user.getPitch());
-            if(pitch > 0) return TypedActionResult.fail(itemStack);
-            Vec3d pos = user.getCameraPosVec(1.0F);
-            Vec3d lookVec = user.getRotationVec(1.0F);
+            float pitch = Math.toRadians(user.getXRot());
+            if(pitch > 0) return InteractionResultHolder.fail(itemStack);
+            Vec3 pos = user.getEyePosition(1.0F);
+            Vec3 lookVec = user.getViewVector(1.0F);
 
             float skyHeight = firmament.getY();
             double t = (skyHeight - pos.y) / lookVec.y;
             if(t > 0) {
-                Vec3d target = pos.add(lookVec.multiply(t));
+                Vec3 target = pos.add(lookVec.scale(t));
 
-                if (user.isSneaking()) {
+                if (user.isShiftKeyDown()) {
                     SubRegionPos subRegionPos = SubRegionPos.fromWorldCoords((int)target.x, (int)target.z);
                     for(int i = -1; i <= 1; i++) {
                         for(int j = -1; j <= 1; j++) {
@@ -69,7 +69,7 @@ public class FirmamentManipulatorItem extends Item {
                     }
                 } else {
 
-                    Random random = user.getRandom();
+                    RandomSource random = user.getRandom();
                     for (int i = 0; i < 10; i++) {
                         world.addParticle(ParticleTypes.EXPLOSION, target.x + random.nextFloat() * 4 - 2, target.y + random.nextFloat() * 1 - 0.5f, target.z + random.nextFloat() * 4 - 2, 0, 0, 0);
                     }
@@ -81,12 +81,12 @@ public class FirmamentManipulatorItem extends Item {
             }
         }
 
-        return TypedActionResult.success(itemStack);
+        return InteractionResultHolder.success(itemStack);
     }
 
-    public static void fractureFirmament(Firmament firmament, int x, int z, Random random) {
-        if(firmament.getWorld() instanceof ServerWorld world) {
-            for(ServerPlayerEntity player : world.getPlayers()) {
+    public static void fractureFirmament(Firmament firmament, int x, int z, RandomSource random) {
+        if(firmament.getWorld() instanceof ServerLevel world) {
+            for(ServerPlayer player : world.players()) {
                 ServerPlayNetworking.send(player, new FirmamentCleavedPayload(x, z));
             }
         }
@@ -124,15 +124,15 @@ public class FirmamentManipulatorItem extends Item {
     }
 
     @Override
-    public boolean hasGlint(ItemStack stack) {
+    public boolean isFoil(ItemStack stack) {
         return true;
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
-        super.appendTooltip(stack, context, tooltip, type);
-        tooltip.add(Text.translatable("operation_starcleave.tooltip.firmament_manipulator.1").formatted(Formatting.GOLD));
-        tooltip.add(Text.translatable("operation_starcleave.tooltip.firmament_manipulator.2").formatted(Formatting.GOLD));
-        tooltip.add(Text.translatable("operation_starcleave.tooltip.firmament_manipulator.3").formatted(Formatting.DARK_RED));
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag type) {
+        super.appendHoverText(stack, context, tooltip, type);
+        tooltip.add(Component.translatable("operation_starcleave.tooltip.firmament_manipulator.1").withStyle(ChatFormatting.GOLD));
+        tooltip.add(Component.translatable("operation_starcleave.tooltip.firmament_manipulator.2").withStyle(ChatFormatting.GOLD));
+        tooltip.add(Component.translatable("operation_starcleave.tooltip.firmament_manipulator.3").withStyle(ChatFormatting.DARK_RED));
     }
 }

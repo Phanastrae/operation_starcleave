@@ -1,75 +1,74 @@
 package phanastrae.operation_starcleave.block;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FarmlandBlock;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.LightType;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldView;
-import net.minecraft.world.event.GameEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.FarmBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 
-public class StellarFarmlandBlock extends FarmlandBlock {
-    public static final MapCodec<FarmlandBlock> CODEC = createCodec(StellarFarmlandBlock::new);
+public class StellarFarmlandBlock extends FarmBlock {
+    public static final MapCodec<FarmBlock> CODEC = simpleCodec(StellarFarmlandBlock::new);
 
     @Override
-    public MapCodec<FarmlandBlock> getCodec() {
+    public MapCodec<FarmBlock> codec() {
         return CODEC;
     }
 
-    public StellarFarmlandBlock(Settings settings) {
+    public StellarFarmlandBlock(Properties settings) {
         super(settings);
     }
 
     @Override
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return !this.getDefaultState().canPlaceAt(ctx.getWorld(), ctx.getBlockPos()) ? OperationStarcleaveBlocks.STELLAR_SEDIMENT.getDefaultState() : this.getDefaultState();
+    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+        return !this.defaultBlockState().canSurvive(ctx.getLevel(), ctx.getClickedPos()) ? OperationStarcleaveBlocks.STELLAR_SEDIMENT.defaultBlockState() : this.defaultBlockState();
     }
 
     @Override
-    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        if (!state.canPlaceAt(world, pos)) {
+    public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+        if (!state.canSurvive(world, pos)) {
             setToSediment(null, state, world, pos);
         }
     }
 
     @Override
-    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
         Firmament firmament = Firmament.fromWorld(world);
         if(firmament == null) return;
 
-        int i = state.get(MOISTURE);
+        int i = state.getValue(MOISTURE);
         if (!isStarlit(world, pos, firmament)) {
             if (i > 0) {
-                world.setBlockState(pos, state.with(MOISTURE, i - 1), Block.NOTIFY_LISTENERS);
+                world.setBlock(pos, state.setValue(MOISTURE, i - 1), Block.UPDATE_CLIENTS);
             }
         } else if (i < 7) {
-            world.setBlockState(pos, state.with(MOISTURE, 7), Block.NOTIFY_LISTENERS);
+            world.setBlock(pos, state.setValue(MOISTURE, 7), Block.UPDATE_CLIENTS);
             hydrationParticles(world, pos);
         }
     }
 
     @Override
-    public void onLandedUpon(World world, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
+    public void fallOn(Level world, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
         // no trampling
-        entity.handleFallDamage(fallDistance, 1.0F, entity.getDamageSources().fall());
+        entity.causeFallDamage(fallDistance, 1.0F, entity.damageSources().fall());
     }
 
     @Override
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
-        if(state.get(MOISTURE) < 7) return;
+    public void animateTick(BlockState state, Level world, BlockPos pos, RandomSource random) {
+        if(state.getValue(MOISTURE) < 7) return;
 
         double x = pos.getX() + 0.5;
         double y = pos.getY() + 0.5 + 0.5;
@@ -85,12 +84,12 @@ public class StellarFarmlandBlock extends FarmlandBlock {
         }
 
         for(Direction d : Direction.values()) {
-            if(d.getVector().getY() != 0) continue;
+            if(d.getNormal().getY() != 0) continue;
 
-            Vec3i v = d.getVector();
-            BlockPos adjPos = pos.add(v);
+            Vec3i v = d.getNormal();
+            BlockPos adjPos = pos.offset(v);
             BlockState adjState = world.getBlockState(adjPos);
-            if(adjState.isOf(this.asBlock()) && adjState.getProperties().contains(MOISTURE) && adjState.get(MOISTURE) == 7) continue;
+            if(adjState.is(this.asBlock()) && adjState.getProperties().contains(MOISTURE) && adjState.getValue(MOISTURE) == 7) continue;
 
             for(int k = 0; k < 12; k++) {
                 world.addParticle(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER,
@@ -104,8 +103,8 @@ public class StellarFarmlandBlock extends FarmlandBlock {
         }
     }
 
-    public static void hydrationParticles(ServerWorld world, BlockPos pos) {
-        world.spawnParticles(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER,
+    public static void hydrationParticles(ServerLevel world, BlockPos pos) {
+        world.sendParticles(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER,
                 pos.getX() + 0.5,
                 pos.getY() + 1.125,
                 pos.getZ() + 0.5,
@@ -116,15 +115,15 @@ public class StellarFarmlandBlock extends FarmlandBlock {
                 0.01);
     }
 
-    public static void setToSediment(@Nullable Entity entity, BlockState state, World world, BlockPos pos) {
-        BlockState blockState = pushEntitiesUpBeforeBlockChange(state, OperationStarcleaveBlocks.STELLAR_SEDIMENT.getDefaultState(), world, pos);
-        world.setBlockState(pos, blockState);
-        world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(entity, blockState));
+    public static void setToSediment(@Nullable Entity entity, BlockState state, Level world, BlockPos pos) {
+        BlockState blockState = pushEntitiesUp(state, OperationStarcleaveBlocks.STELLAR_SEDIMENT.defaultBlockState(), world, pos);
+        world.setBlockAndUpdate(pos, blockState);
+        world.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(entity, blockState));
     }
 
-    public static boolean isStarlit(WorldView worldView, BlockPos pos, Firmament firmament) {
+    public static boolean isStarlit(LevelReader worldView, BlockPos pos, Firmament firmament) {
         // starlit if skylight > 7 and there is firmament with >6 damage within 9x9 area
-        int skyLight = worldView.getLightLevel(LightType.SKY, pos.up());
+        int skyLight = worldView.getBrightness(LightLayer.SKY, pos.above());
         if(skyLight <= 7) return false;
 
         int x = pos.getX();

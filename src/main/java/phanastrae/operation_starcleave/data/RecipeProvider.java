@@ -2,15 +2,15 @@ package phanastrae.operation_starcleave.data;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-import net.minecraft.data.server.recipe.RecipeExporter;
-import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
-import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder;
-import net.minecraft.data.server.recipe.SmithingTransformRecipeJsonBuilder;
-import net.minecraft.item.Items;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.book.RecipeCategory;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.data.recipes.SmithingTransformRecipeBuilder;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
@@ -18,168 +18,168 @@ import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 import java.util.concurrent.CompletableFuture;
 
 public class RecipeProvider extends FabricRecipeProvider {
-    public RecipeProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+    public RecipeProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, registriesFuture);
     }
 
     @Override
-    public void generate(RecipeExporter exporter) {
-        offerSlabRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, OperationStarcleaveItems.STARBLEACHED_TILE_SLAB, OperationStarcleaveItems.STARBLEACHED_TILES);
-        offerWallRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, OperationStarcleaveItems.STARBLEACHED_TILE_WALL, OperationStarcleaveItems.STARBLEACHED_TILES);
-        offerSlabRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, OperationStarcleaveItems.STELLAR_TILE_SLAB, OperationStarcleaveItems.STELLAR_TILES);
-        offerBarkBlockRecipe(exporter, OperationStarcleaveBlocks.STARBLEACHED_WOOD, OperationStarcleaveBlocks.STARBLEACHED_LOG);
+    public void buildRecipes(RecipeOutput exporter) {
+        slab(exporter, RecipeCategory.BUILDING_BLOCKS, OperationStarcleaveItems.STARBLEACHED_TILE_SLAB, OperationStarcleaveItems.STARBLEACHED_TILES);
+        wall(exporter, RecipeCategory.BUILDING_BLOCKS, OperationStarcleaveItems.STARBLEACHED_TILE_WALL, OperationStarcleaveItems.STARBLEACHED_TILES);
+        slab(exporter, RecipeCategory.BUILDING_BLOCKS, OperationStarcleaveItems.STELLAR_TILE_SLAB, OperationStarcleaveItems.STELLAR_TILES);
+        woodFromLogs(exporter, OperationStarcleaveBlocks.STARBLEACHED_WOOD, OperationStarcleaveBlocks.STARBLEACHED_LOG);
 
         // shapeless
-        ShapelessRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, OperationStarcleaveItems.STARBLEACHED_TILES, 4)
-                .input(OperationStarcleaveItems.STARBLEACHED_LOG)
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, OperationStarcleaveItems.STARBLEACHED_TILES, 4)
+                .requires(OperationStarcleaveItems.STARBLEACHED_LOG)
                 .group("planks")
-                .criterion(
-                        hasItem(OperationStarcleaveItems.STARBLEACHED_LOG),
-                        conditionsFromItem(OperationStarcleaveItems.STARBLEACHED_LOG))
-                .offerTo(exporter);
+                .unlockedBy(
+                        getHasName(OperationStarcleaveItems.STARBLEACHED_LOG),
+                        has(OperationStarcleaveItems.STARBLEACHED_LOG))
+                .save(exporter);
 
-        ShapelessRecipeJsonBuilder.create(RecipeCategory.MISC, OperationStarcleaveItems.SPLASH_STARBLEACH_BOTTLE, 5)
-                .input(Items.GUNPOWDER)
-                .input(OperationStarcleaveItems.STARBLEACH_BOTTLE, 5)
-                .criterion(
-                        hasItem(OperationStarcleaveItems.STARBLEACH_BOTTLE),
-                        conditionsFromItem(OperationStarcleaveItems.STARBLEACH_BOTTLE))
-                .offerTo(exporter);
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OperationStarcleaveItems.SPLASH_STARBLEACH_BOTTLE, 5)
+                .requires(Items.GUNPOWDER)
+                .requires(OperationStarcleaveItems.STARBLEACH_BOTTLE, 5)
+                .unlockedBy(
+                        getHasName(OperationStarcleaveItems.STARBLEACH_BOTTLE),
+                        has(OperationStarcleaveItems.STARBLEACH_BOTTLE))
+                .save(exporter);
 
         // shaped
-        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, OperationStarcleaveItems.BLESSED_CLOTH)
-                .input('#', OperationStarcleaveItems.HOLY_STRANDS)
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OperationStarcleaveItems.BLESSED_CLOTH)
+                .define('#', OperationStarcleaveItems.HOLY_STRANDS)
                 .pattern("##").pattern("##")
-                .criterion(
-                        hasItem(OperationStarcleaveItems.HOLY_STRANDS),
-                        conditionsFromItem(OperationStarcleaveItems.HOLY_STRANDS))
-                .offerTo(exporter);
+                .unlockedBy(
+                        getHasName(OperationStarcleaveItems.HOLY_STRANDS),
+                        has(OperationStarcleaveItems.HOLY_STRANDS))
+                .save(exporter);
 
-        ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, OperationStarcleaveItems.BLESSED_CLOTH_BLOCK, 2)
-                .input('#', OperationStarcleaveItems.BLESSED_CLOTH)
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, OperationStarcleaveItems.BLESSED_CLOTH_BLOCK, 2)
+                .define('#', OperationStarcleaveItems.BLESSED_CLOTH)
                 .pattern("##").pattern("##")
-                .criterion(
-                        hasItem(OperationStarcleaveItems.BLESSED_CLOTH),
-                        conditionsFromItem(OperationStarcleaveItems.BLESSED_CLOTH))
-                .offerTo(exporter);
+                .unlockedBy(
+                        getHasName(OperationStarcleaveItems.BLESSED_CLOTH),
+                        has(OperationStarcleaveItems.BLESSED_CLOTH))
+                .save(exporter);
 
-        ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, OperationStarcleaveItems.STARDUST_BLOCK)
-                .input('#', OperationStarcleaveItems.STARDUST_CLUSTER)
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, OperationStarcleaveItems.STARDUST_BLOCK)
+                .define('#', OperationStarcleaveItems.STARDUST_CLUSTER)
                 .pattern("##").pattern("##")
-                .criterion(
-                        hasItem(OperationStarcleaveItems.STARDUST_CLUSTER),
-                        conditionsFromItem(OperationStarcleaveItems.STARDUST_CLUSTER))
-                .offerTo(exporter);
+                .unlockedBy(
+                        getHasName(OperationStarcleaveItems.STARDUST_CLUSTER),
+                        has(OperationStarcleaveItems.STARDUST_CLUSTER))
+                .save(exporter);
 
-        ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, OperationStarcleaveItems.STELLAR_TILES, 4)
-                .input('#', OperationStarcleaveItems.STELLAR_SEDIMENT)
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, OperationStarcleaveItems.STELLAR_TILES, 4)
+                .define('#', OperationStarcleaveItems.STELLAR_SEDIMENT)
                 .pattern("##").pattern("##")
-                .criterion(
-                        hasItem(OperationStarcleaveItems.STELLAR_SEDIMENT),
-                        conditionsFromItem(OperationStarcleaveItems.STELLAR_SEDIMENT))
-                .offerTo(exporter);
+                .unlockedBy(
+                        getHasName(OperationStarcleaveItems.STELLAR_SEDIMENT),
+                        has(OperationStarcleaveItems.STELLAR_SEDIMENT))
+                .save(exporter);
 
-        ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, OperationStarcleaveItems.CHISELED_STARBLEACHED_TILES)
-                .input('#', OperationStarcleaveItems.STARBLEACHED_TILE_SLAB)
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, OperationStarcleaveItems.CHISELED_STARBLEACHED_TILES)
+                .define('#', OperationStarcleaveItems.STARBLEACHED_TILE_SLAB)
                 .pattern("#")
                 .pattern("#")
-                .criterion(
-                        hasItem(OperationStarcleaveItems.STARBLEACHED_TILES),
-                        conditionsFromItem(OperationStarcleaveItems.STARBLEACHED_TILES))
-                .offerTo(exporter);
+                .unlockedBy(
+                        getHasName(OperationStarcleaveItems.STARBLEACHED_TILES),
+                        has(OperationStarcleaveItems.STARBLEACHED_TILES))
+                .save(exporter);
 
-        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, OperationStarcleaveItems.BLESSED_CLOTH_CARPET, 3)
-                .input('#', OperationStarcleaveItems.BLESSED_CLOTH_BLOCK)
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OperationStarcleaveItems.BLESSED_CLOTH_CARPET, 3)
+                .define('#', OperationStarcleaveItems.BLESSED_CLOTH_BLOCK)
                 .pattern("##")
-                .criterion(
-                        hasItem(OperationStarcleaveItems.BLESSED_CLOTH_BLOCK),
-                        conditionsFromItem(OperationStarcleaveItems.BLESSED_CLOTH_BLOCK))
-                .offerTo(exporter);
+                .unlockedBy(
+                        getHasName(OperationStarcleaveItems.BLESSED_CLOTH_BLOCK),
+                        has(OperationStarcleaveItems.BLESSED_CLOTH_BLOCK))
+                .save(exporter);
 
-        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, OperationStarcleaveItems.BLESSED_CLOTH_CURTAIN, 16)
-                .input('#', OperationStarcleaveItems.BLESSED_CLOTH)
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OperationStarcleaveItems.BLESSED_CLOTH_CURTAIN, 16)
+                .define('#', OperationStarcleaveItems.BLESSED_CLOTH)
                 .pattern("###")
                 .pattern("###")
-                .criterion(
-                        hasItem(OperationStarcleaveItems.BLESSED_CLOTH),
-                        conditionsFromItem(OperationStarcleaveItems.BLESSED_CLOTH))
-                .offerTo(exporter);
+                .unlockedBy(
+                        getHasName(OperationStarcleaveItems.BLESSED_CLOTH),
+                        has(OperationStarcleaveItems.BLESSED_CLOTH))
+                .save(exporter);
 
-        createStairsRecipe(OperationStarcleaveItems.STARBLEACHED_TILE_STAIRS, Ingredient.ofItems(OperationStarcleaveItems.STARBLEACHED_TILES))
-                .criterion(
-                        hasItem(OperationStarcleaveItems.STARBLEACHED_TILES),
-                        conditionsFromItem(OperationStarcleaveItems.STARBLEACHED_TILES))
-                .offerTo(exporter);
+        stairBuilder(OperationStarcleaveItems.STARBLEACHED_TILE_STAIRS, Ingredient.of(OperationStarcleaveItems.STARBLEACHED_TILES))
+                .unlockedBy(
+                        getHasName(OperationStarcleaveItems.STARBLEACHED_TILES),
+                        has(OperationStarcleaveItems.STARBLEACHED_TILES))
+                .save(exporter);
 
         // complex shaped
-        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, OperationStarcleaveItems.BLESSED_BED)
-                .input('B', OperationStarcleaveItems.BLESSED_CLOTH)
-                .input('P', ItemTags.PLANKS)
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OperationStarcleaveItems.BLESSED_BED)
+                .define('B', OperationStarcleaveItems.BLESSED_CLOTH)
+                .define('P', ItemTags.PLANKS)
                 .pattern("BBB")
                 .pattern("PPP")
                 .group("bed")
-                .criterion(
-                        hasItem(OperationStarcleaveItems.BLESSED_CLOTH),
-                        conditionsFromItem(OperationStarcleaveItems.BLESSED_CLOTH))
-                .offerTo(exporter);
+                .unlockedBy(
+                        getHasName(OperationStarcleaveItems.BLESSED_CLOTH),
+                        has(OperationStarcleaveItems.BLESSED_CLOTH))
+                .save(exporter);
 
-        ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, OperationStarcleaveItems.IMBUED_STARBLEACHED_TILES, 4)
-                .input('T', OperationStarcleaveItems.STARBLEACHED_TILES)
-                .input('B', OperationStarcleaveItems.STARBLEACH_BOTTLE)
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, OperationStarcleaveItems.IMBUED_STARBLEACHED_TILES, 4)
+                .define('T', OperationStarcleaveItems.STARBLEACHED_TILES)
+                .define('B', OperationStarcleaveItems.STARBLEACH_BOTTLE)
                 .pattern(" T ")
                 .pattern("TBT")
                 .pattern(" T ")
-                .criterion(
-                        hasItem(OperationStarcleaveItems.STARBLEACH_BOTTLE),
-                        conditionsFromItem(OperationStarcleaveItems.STARBLEACH_BOTTLE))
-                .offerTo(exporter);
+                .unlockedBy(
+                        getHasName(OperationStarcleaveItems.STARBLEACH_BOTTLE),
+                        has(OperationStarcleaveItems.STARBLEACH_BOTTLE))
+                .save(exporter);
 
-        ShapedRecipeJsonBuilder.create(RecipeCategory.REDSTONE, OperationStarcleaveItems.STARBLEACHED_PEARL_BLOCK)
-                .input('T', OperationStarcleaveItems.STARBLEACHED_TILES)
-                .input('P', OperationStarcleaveItems.STARBLEACHED_PEARL)
+        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, OperationStarcleaveItems.STARBLEACHED_PEARL_BLOCK)
+                .define('T', OperationStarcleaveItems.STARBLEACHED_TILES)
+                .define('P', OperationStarcleaveItems.STARBLEACHED_PEARL)
                 .pattern("TPT")
                 .pattern("P P")
                 .pattern("TPT")
-                .criterion(
-                        hasItem(OperationStarcleaveItems.STARBLEACHED_PEARL),
-                        conditionsFromItem(OperationStarcleaveItems.STARBLEACHED_PEARL)
+                .unlockedBy(
+                        getHasName(OperationStarcleaveItems.STARBLEACHED_PEARL),
+                        has(OperationStarcleaveItems.STARBLEACHED_PEARL)
                 )
-                .offerTo(exporter);
+                .save(exporter);
 
-        ShapedRecipeJsonBuilder.create(RecipeCategory.REDSTONE, OperationStarcleaveItems.STELLAR_REPULSOR, 3)
-                .input('T', OperationStarcleaveItems.STELLAR_TILES)
-                .input('P', OperationStarcleaveItems.STARBLEACHED_PEARL)
-                .input('C', OperationStarcleaveItems.BLESSED_CLOTH)
+        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, OperationStarcleaveItems.STELLAR_REPULSOR, 3)
+                .define('T', OperationStarcleaveItems.STELLAR_TILES)
+                .define('P', OperationStarcleaveItems.STARBLEACHED_PEARL)
+                .define('C', OperationStarcleaveItems.BLESSED_CLOTH)
                 .pattern("CCC")
                 .pattern("CPC")
                 .pattern("TTT")
-                .criterion(
-                        hasItem(OperationStarcleaveItems.STARBLEACHED_PEARL),
-                        conditionsFromItem(OperationStarcleaveItems.STARBLEACHED_PEARL)
+                .unlockedBy(
+                        getHasName(OperationStarcleaveItems.STARBLEACHED_PEARL),
+                        has(OperationStarcleaveItems.STARBLEACHED_PEARL)
                 )
-                .offerTo(exporter);
+                .save(exporter);
 
-        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, OperationStarcleaveItems.FIRMAMENT_REJUVENATOR, 4)
-                .input('G', Items.GHAST_TEAR)
-                .input('O', Items.CRYING_OBSIDIAN)
-                .input('T', Items.TNT)
-                .input('E', Items.ENDER_PEARL)
-                .input('P', OperationStarcleaveItems.STARBLEACHED_PEARL)
-                .input('H', OperationStarcleaveItems.HOLY_STRANDS)
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OperationStarcleaveItems.FIRMAMENT_REJUVENATOR, 4)
+                .define('G', Items.GHAST_TEAR)
+                .define('O', Items.CRYING_OBSIDIAN)
+                .define('T', Items.TNT)
+                .define('E', Items.ENDER_PEARL)
+                .define('P', OperationStarcleaveItems.STARBLEACHED_PEARL)
+                .define('H', OperationStarcleaveItems.HOLY_STRANDS)
                 .pattern("OTP")
                 .pattern("EOH")
                 .pattern("G H")
-                .criterion(
-                        hasItem(OperationStarcleaveItems.STARBLEACHED_PEARL),
-                        conditionsFromItem(OperationStarcleaveItems.STARBLEACHED_PEARL)
+                .unlockedBy(
+                        getHasName(OperationStarcleaveItems.STARBLEACHED_PEARL),
+                        has(OperationStarcleaveItems.STARBLEACHED_PEARL)
                 )
-                .offerTo(exporter);
+                .save(exporter);
 
-        SmithingTransformRecipeJsonBuilder.create(Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), Ingredient.ofItems(Items.CARVED_PUMPKIN), Ingredient.ofItems(Items.NETHERITE_INGOT), RecipeCategory.TOOLS, OperationStarcleaveItems.NETHERITE_PUMPKIN)
-                .criterion(
-                        hasItem(Items.NETHERITE_INGOT),
-                        conditionsFromItem(Items.NETHERITE_INGOT)
+        SmithingTransformRecipeBuilder.smithing(Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), Ingredient.of(Items.CARVED_PUMPKIN), Ingredient.of(Items.NETHERITE_INGOT), RecipeCategory.TOOLS, OperationStarcleaveItems.NETHERITE_PUMPKIN)
+                .unlocks(
+                        getHasName(Items.NETHERITE_INGOT),
+                        has(Items.NETHERITE_INGOT)
                 )
-                .offerTo(exporter, OperationStarcleave.id("netherite_pumpkin_smithing"));
+                .save(exporter, OperationStarcleave.id("netherite_pumpkin_smithing"));
     }
 }

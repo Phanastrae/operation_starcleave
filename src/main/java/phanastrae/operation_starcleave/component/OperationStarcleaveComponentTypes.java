@@ -1,22 +1,22 @@
 package phanastrae.operation_starcleave.component;
 
-import net.minecraft.component.ComponentType;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.component.type.StarbleachComponent;
 
 public class OperationStarcleaveComponentTypes {
 
-    public static final ComponentType<StarbleachComponent> STARBLEACH_COMPONENT =
-            ComponentType.<StarbleachComponent>builder().codec(StarbleachComponent.CODEC).packetCodec(StarbleachComponent.PACKET_CODEC).cache().build();
+    public static final DataComponentType<StarbleachComponent> STARBLEACH_COMPONENT =
+            DataComponentType.<StarbleachComponent>builder().persistent(StarbleachComponent.CODEC).networkSynchronized(StarbleachComponent.PACKET_CODEC).cacheEncoding().build();
 
     public static void init() {
-        Registry.register(Registries.DATA_COMPONENT_TYPE, id("starbleach"), STARBLEACH_COMPONENT);
+        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, id("starbleach"), STARBLEACH_COMPONENT);
     }
 
-    public static Identifier id(String key) {
+    public static ResourceLocation id(String key) {
         return OperationStarcleave.id(key);
     }
 }

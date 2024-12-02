@@ -1,55 +1,55 @@
 package phanastrae.operation_starcleave.block;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.IntProperty;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
 public class PetrichoricPlasmaBlock extends AbstractPetrichoricBlock {
-    public static final MapCodec<PetrichoricPlasmaBlock> CODEC = createCodec(PetrichoricPlasmaBlock::new);
+    public static final MapCodec<PetrichoricPlasmaBlock> CODEC = simpleCodec(PetrichoricPlasmaBlock::new);
 
-    public static final IntProperty IMPURITY = IntProperty.of("impurity", 0, 7);
+    public static final IntegerProperty IMPURITY = IntegerProperty.create("impurity", 0, 7);
 
     @Override
-    protected MapCodec<? extends PetrichoricPlasmaBlock> getCodec() {
+    protected MapCodec<? extends PetrichoricPlasmaBlock> codec() {
         return CODEC;
     }
 
-    public PetrichoricPlasmaBlock(Settings settings) {
+    public PetrichoricPlasmaBlock(Properties settings) {
         super(settings);
-        this.setDefaultState(this.getDefaultState().with(IMPURITY, 0));
+        this.registerDefaultState(this.defaultBlockState().setValue(IMPURITY, 0));
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(IMPURITY);
     }
 
     @Override
-    public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
-        world.scheduleBlockTick(pos, this, getDelay(world.getRandom(), world, pos));
-        super.onBlockAdded(state, world, pos, oldState, notify);
+    public void onPlace(BlockState state, Level world, BlockPos pos, BlockState oldState, boolean notify) {
+        world.scheduleTick(pos, this, getDelay(world.getRandom(), world, pos));
+        super.onPlace(state, world, pos, oldState, notify);
     }
 
     @Override
-    public BlockState getStateForNeighborUpdate(
-            BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos
+    public BlockState updateShape(
+            BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos
     ) {
-        world.scheduleBlockTick(pos, this, getDelay(world.getRandom(), world, pos));
-        return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+        world.scheduleTick(pos, this, getDelay(world.getRandom(), world, pos));
+        return super.updateShape(state, direction, neighborState, world, pos, neighborPos);
     }
 
-    public static int getDelay(Random random, WorldAccess world, BlockPos pos) {
-        BlockState downState = world.getBlockState(pos.down());
-        if(downState.isOf(OperationStarcleaveBlocks.PETRICHORIC_PLASMA) || downState.isOf(OperationStarcleaveBlocks.PETRICHORIC_VAPOR)) {
+    public static int getDelay(RandomSource random, LevelAccessor world, BlockPos pos) {
+        BlockState downState = world.getBlockState(pos.below());
+        if(downState.is(OperationStarcleaveBlocks.PETRICHORIC_PLASMA) || downState.is(OperationStarcleaveBlocks.PETRICHORIC_VAPOR)) {
             return 1 + random.nextInt(2);
         } else {
             return 4 + random.nextInt(18);
@@ -57,7 +57,7 @@ public class PetrichoricPlasmaBlock extends AbstractPetrichoricBlock {
     }
 
     @Override
-    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
         absorbWater(world, pos);
 
         int impurity = getImpurity(state);
@@ -65,16 +65,16 @@ public class PetrichoricPlasmaBlock extends AbstractPetrichoricBlock {
         int adjPlasma = 0;
         int adjGaps = 0;
         int adjVapor = 0;
-        for(Direction direction : DIRECTIONS) {
+        for(Direction direction : UPDATE_SHAPE_ORDER) {
             if(direction == Direction.UP) continue;
 
-            BlockPos adjPos = pos.offset(direction);
+            BlockPos adjPos = pos.relative(direction);
             BlockState adjState = world.getBlockState(adjPos);
-            if(adjState.isReplaceable()) {
+            if(adjState.canBeReplaced()) {
                 adjGaps++;
-            } else if(adjState.isOf(this)) {
+            } else if(adjState.is(this)) {
                 adjPlasma++;
-            } else if(adjState.isOf(OperationStarcleaveBlocks.PETRICHORIC_VAPOR)) {
+            } else if(adjState.is(OperationStarcleaveBlocks.PETRICHORIC_VAPOR)) {
                 if(PetrichoricVaporBlock.getDistance(adjState) <= (random.nextBoolean() ? 1 : 2)) {
                     adjVapor++;
                 } else {
@@ -84,14 +84,14 @@ public class PetrichoricPlasmaBlock extends AbstractPetrichoricBlock {
         }
         boolean gapAdjacent = (adjGaps > 0) || (adjVapor > 0 && adjPlasma < 2);
 
-        for (Direction direction : DIRECTIONS) {
+        for (Direction direction : UPDATE_SHAPE_ORDER) {
             if (direction == Direction.UP) continue;
 
-            BlockPos adjPos = pos.offset(direction);
+            BlockPos adjPos = pos.relative(direction);
             BlockState adjState = world.getBlockState(adjPos);
 
             boolean horizontal = direction.getAxis().isHorizontal();
-            boolean replaceable = adjState.isReplaceable() || (adjState.isOf(OperationStarcleaveBlocks.PETRICHORIC_VAPOR) && !horizontal);
+            boolean replaceable = adjState.canBeReplaced() || (adjState.is(OperationStarcleaveBlocks.PETRICHORIC_VAPOR) && !horizontal);
 
             int newImpurity = impurity + (((horizontal || !replaceable) && random.nextInt(4) == 0) ? 1 : 0);
 
@@ -99,8 +99,8 @@ public class PetrichoricPlasmaBlock extends AbstractPetrichoricBlock {
                 if (replaceable || canDestroy(adjState)) {
                     if (!horizontal || random.nextInt(8) == 0) {
                         BlockState newState = getStateForImpurity(newImpurity);
-                        world.setBlockState(adjPos, newState);
-                        world.setBlockState(pos, newState);
+                        world.setBlockAndUpdate(adjPos, newState);
+                        world.setBlockAndUpdate(pos, newState);
 
                         impurity = newImpurity; // TODO fix bias
                     }
@@ -108,29 +108,29 @@ public class PetrichoricPlasmaBlock extends AbstractPetrichoricBlock {
             }
         }
 
-        BlockPos downPos = pos.down();
+        BlockPos downPos = pos.below();
         BlockState downState = world.getBlockState(downPos);
-        if(downState.isOf(this)) {
-            world.setBlockState(pos, OperationStarcleaveBlocks.PETRICHORIC_VAPOR.getDefaultState());
+        if(downState.is(this)) {
+            world.setBlockAndUpdate(pos, OperationStarcleaveBlocks.PETRICHORIC_VAPOR.defaultBlockState());
             int downImpurity = getImpurity(downState);
             if(impurity > downImpurity) {
-                world.setBlockState(downPos, state);
+                world.setBlockAndUpdate(downPos, state);
             }
         }
     }
 
     public BlockState getStateForImpurity(int impurity) {
         if(impurity < 0) {
-            return Blocks.AIR.getDefaultState();
+            return Blocks.AIR.defaultBlockState();
         } else {
             if(impurity > 7) impurity = 7;
-            return this.getDefaultState().with(IMPURITY, impurity);
+            return this.defaultBlockState().setValue(IMPURITY, impurity);
         }
     }
 
     public static int getImpurity(BlockState state) {
-        if(state.contains(IMPURITY)) {
-            return state.get(IMPURITY);
+        if(state.hasProperty(IMPURITY)) {
+            return state.getValue(IMPURITY);
         } else {
             return 0;
         }

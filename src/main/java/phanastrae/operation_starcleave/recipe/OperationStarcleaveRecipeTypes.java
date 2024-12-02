@@ -1,9 +1,9 @@
 package phanastrae.operation_starcleave.recipe;
 
-import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeType;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeType;
 import phanastrae.operation_starcleave.OperationStarcleave;
 
 public class OperationStarcleaveRecipeTypes {
@@ -15,7 +15,7 @@ public class OperationStarcleaveRecipeTypes {
     }
 
     static <T extends RecipeType<?>> void register(T recipeType) {
-        Registry.register(Registries.RECIPE_TYPE, OperationStarcleave.id(recipeType.toString()), recipeType);
+        Registry.register(BuiltInRegistries.RECIPE_TYPE, OperationStarcleave.id(recipeType.toString()), recipeType);
     }
 
     static <T extends Recipe<?>> RecipeType<T> create(String id) {

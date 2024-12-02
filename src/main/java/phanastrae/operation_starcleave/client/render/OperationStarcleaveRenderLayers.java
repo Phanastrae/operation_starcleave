@@ -1,53 +1,53 @@
 package phanastrae.operation_starcleave.client.render;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.RenderPhase;
-import net.minecraft.client.render.VertexFormat;
-import net.minecraft.client.render.VertexFormats;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderStateShard;
+import net.minecraft.client.renderer.RenderType;
 import phanastrae.operation_starcleave.client.duck.WorldRendererDuck;
 import phanastrae.operation_starcleave.client.render.shader.OperationStarcleaveShaders;
 
 public class OperationStarcleaveRenderLayers {
 
-    public static final RenderPhase.Target FIRMAMENT_SKY_TARGET = new RenderPhase.Target("operation_starcleave$firmament_sky_target", () -> {
-        ((WorldRendererDuck)MinecraftClient.getInstance().worldRenderer).operation_starcleave$getFirmamentFramebuffer().beginWrite(false);
+    public static final RenderStateShard.OutputStateShard FIRMAMENT_SKY_TARGET = new RenderStateShard.OutputStateShard("operation_starcleave$firmament_sky_target", () -> {
+        ((WorldRendererDuck)Minecraft.getInstance().levelRenderer).operation_starcleave$getFirmamentFramebuffer().bindWrite(false);
     }, () -> {
-        MinecraftClient.getInstance().getFramebuffer().beginWrite(false);
+        Minecraft.getInstance().getMainRenderTarget().bindWrite(false);
     });
 
-    private static final RenderLayer FRACTURE = RenderLayer.of(
+    private static final RenderType FRACTURE = RenderType.create(
             "operation_starcleave$fracture",
-            VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL,
-            VertexFormat.DrawMode.QUADS,
+            DefaultVertexFormat.BLOCK,
+            VertexFormat.Mode.QUADS,
             131072,
             true,
             true,
-            RenderLayer.MultiPhaseParameters.builder()
-                    .program(OperationStarcleaveShaders.FRACTURE_PROGRAM)
-                    .transparency(RenderPhase.TRANSLUCENT_TRANSPARENCY)
-                    .build(true));
+            RenderType.CompositeState.builder()
+                    .setShaderState(OperationStarcleaveShaders.FRACTURE_PROGRAM)
+                    .setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY)
+                    .createCompositeState(true));
 
-    private static final RenderLayer SKY_RAY = RenderLayer.of(
+    private static final RenderType SKY_RAY = RenderType.create(
             "operation_starcleave$sky_ray",
-            VertexFormats.POSITION_COLOR,
-            VertexFormat.DrawMode.QUADS,
+            DefaultVertexFormat.POSITION_COLOR,
+            VertexFormat.Mode.QUADS,
             1536,
             false,
             true,
-            RenderLayer.MultiPhaseParameters.builder()
-                    .program(RenderPhase.COLOR_PROGRAM)
-                    .writeMaskState(RenderPhase.COLOR_MASK)
-                    .transparency(RenderPhase.ADDITIVE_TRANSPARENCY)
-                    .target(RenderPhase.MAIN_TARGET)
-                    .build(false)
+            RenderType.CompositeState.builder()
+                    .setShaderState(RenderStateShard.POSITION_COLOR_SHADER)
+                    .setWriteMaskState(RenderStateShard.COLOR_WRITE)
+                    .setTransparencyState(RenderStateShard.ADDITIVE_TRANSPARENCY)
+                    .setOutputState(RenderStateShard.MAIN_TARGET)
+                    .createCompositeState(false)
     );
 
-    public static RenderLayer getFracture() {
+    public static RenderType getFracture() {
         return FRACTURE;
     }
 
-    public static RenderLayer getSkyRay() {
+    public static RenderType getSkyRay() {
         return SKY_RAY;
     }
 

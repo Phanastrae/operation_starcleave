@@ -1,20 +1,20 @@
 package phanastrae.operation_starcleave.client.render.firmament;
 
-import net.minecraft.block.Block;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.World;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.Camera;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
@@ -25,7 +25,7 @@ public class FirmamentOutlineRenderer {
     @Nullable
     public FirmamentTilePos hitTile = null;
 
-    public static final VoxelShape TILE_SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 64.0, 4.0, 64.0);
+    public static final VoxelShape TILE_SHAPE = Block.box(0.0, 0.0, 0.0, 64.0, 4.0, 64.0);
 
     public void updateHitTile(float tickDelta) {
         this.hitTile = getHitTile(tickDelta);
@@ -33,16 +33,16 @@ public class FirmamentOutlineRenderer {
 
     @Nullable
     public FirmamentTilePos getHitTile(float tickDelta) {
-        MinecraftClient client = MinecraftClient.getInstance();
+        Minecraft client = Minecraft.getInstance();
         Entity entity = client.cameraEntity;
-        if(!(entity instanceof PlayerEntity player)) {
+        if(!(entity instanceof Player player)) {
             return null;
         }
-        if(!player.getAbilities().creativeMode) {
+        if(!player.getAbilities().instabuild) {
             return null;
         }
 
-        World world = client.world;
+        Level world = client.level;
         if(world == null) {
             return null;
         }
@@ -51,8 +51,8 @@ public class FirmamentOutlineRenderer {
             return null;
         }
 
-        Vec3d camPos = entity.getCameraPosVec(tickDelta);
-        Vec3d lookVec = entity.getRotationVec(tickDelta);
+        Vec3 camPos = entity.getEyePosition(tickDelta);
+        Vec3 lookVec = entity.getViewVector(tickDelta);
         float skyHeight = firmament.getY();
 
         double t = (skyHeight - camPos.y) / lookVec.y;
@@ -60,7 +60,7 @@ public class FirmamentOutlineRenderer {
             // firmament is behind camera
             return null;
         } else {
-            Vec3d target = camPos.add(lookVec.multiply(t));
+            Vec3 target = camPos.add(lookVec.scale(t));
             FirmamentTilePos tilePos = FirmamentTilePos.fromBlockCoords((int)Math.floor(target.x), (int)Math.floor(target.z), firmament);
             int damage = firmament.getDamage(tilePos.blockX, tilePos.blockZ);
             if(damage == 0) {
@@ -69,19 +69,19 @@ public class FirmamentOutlineRenderer {
             } else {
                 // damage present
                 double distance = lookVec.length() * t;
-                double reachDistance = player.getAttributeValue(EntityAttributes.PLAYER_BLOCK_INTERACTION_RANGE);
+                double reachDistance = player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE);
                 if(distance > reachDistance) {
                     // tile too far away
                     return null;
                 } else {
                     // tile in range of getting hit
-                    HitResult crosshairTarget = client.crosshairTarget;
+                    HitResult crosshairTarget = client.hitResult;
                     if(crosshairTarget == null) {
                         // no interruptions, can hit tile
                         return tilePos;
                     } else {
                         // potential interruption
-                        Vec3d hitPos = crosshairTarget.getPos();
+                        Vec3 hitPos = crosshairTarget.getLocation();
                         double crosshairTargetDistance = hitPos.subtract(camPos).length();
                         if(distance < crosshairTargetDistance) {
                             // tile is closer than crosshair target
@@ -96,37 +96,37 @@ public class FirmamentOutlineRenderer {
         }
     }
 
-    public void renderOutline(VertexConsumerProvider consumers, Camera camera, MatrixStack matrices) {
+    public void renderOutline(MultiBufferSource consumers, Camera camera, PoseStack matrices) {
         FirmamentTilePos tile = hitTile;
         if(tile == null) return;
 
-        VertexConsumer vertexConsumer = consumers.getBuffer(RenderLayer.getLines());
-        MatrixStack.Entry entry = matrices.peek();
+        VertexConsumer vertexConsumer = consumers.getBuffer(RenderType.lines());
+        PoseStack.Pose entry = matrices.last();
 
         float red = 0f;
         float green = 0f;
         float blue = 0f;
         float alpha = 0.4f;
 
-        double offsetX = tile.blockX - camera.getPos().x;
-        double offsetY = tile.y - camera.getPos().y;
-        double offsetZ = tile.blockZ - camera.getPos().z;
+        double offsetX = tile.blockX - camera.getPosition().x;
+        double offsetY = tile.y - camera.getPosition().y;
+        double offsetZ = tile.blockZ - camera.getPosition().z;
 
-        FirmamentOutlineRenderer.TILE_SHAPE.forEachEdge(
+        FirmamentOutlineRenderer.TILE_SHAPE.forAllEdges(
                 (minX, minY, minZ, maxX, maxY, maxZ) -> {
                     float k = (float)(maxX - minX);
                     float l = (float)(maxY - minY);
                     float m = (float)(maxZ - minZ);
-                    float n = MathHelper.sqrt(k * k + l * l + m * m);
+                    float n = Mth.sqrt(k * k + l * l + m * m);
                     k /= n;
                     l /= n;
                     m /= n;
-                    vertexConsumer.vertex(entry.getPositionMatrix(), (float)(minX + offsetX), (float)(minY + offsetY), (float)(minZ + offsetZ))
-                            .color(red, green, blue, alpha)
-                            .normal(entry, k, l, m);
-                    vertexConsumer.vertex(entry.getPositionMatrix(), (float)(maxX + offsetX), (float)(maxY + offsetY), (float)(maxZ + offsetZ))
-                            .color(red, green, blue, alpha)
-                            .normal(entry, k, l, m);
+                    vertexConsumer.addVertex(entry.pose(), (float)(minX + offsetX), (float)(minY + offsetY), (float)(minZ + offsetZ))
+                            .setColor(red, green, blue, alpha)
+                            .setNormal(entry, k, l, m);
+                    vertexConsumer.addVertex(entry.pose(), (float)(maxX + offsetX), (float)(maxY + offsetY), (float)(maxZ + offsetZ))
+                            .setColor(red, green, blue, alpha)
+                            .setNormal(entry, k, l, m);
                 }
         );
     }

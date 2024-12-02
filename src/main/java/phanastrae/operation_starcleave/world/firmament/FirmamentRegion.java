@@ -1,9 +1,8 @@
 package phanastrae.operation_starcleave.world.firmament;
 
-import net.minecraft.nbt.NbtCompound;
-
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import net.minecraft.nbt.CompoundTag;
 
 public class FirmamentRegion implements FirmamentAccess {
     // getter/setter functions should only be called with x and z in range [0, 511]
@@ -228,10 +227,10 @@ public class FirmamentRegion implements FirmamentAccess {
         }
     }
 
-    public void read(NbtCompound nbt) {
+    public void read(CompoundTag nbt) {
         for(int i = 0; i < SUBREGIONS; i++) {
             for(int j = 0; j < SUBREGIONS; j++) {
-                NbtCompound subregionNbt = nbt.getCompound("subregion_"+i+"_"+j);
+                CompoundTag subregionNbt = nbt.getCompound("subregion_"+i+"_"+j);
                 FirmamentSubRegion subRegion = this.subRegions[i][j];
                 subRegion.readFromByteArray(subregionNbt.getByteArray("displacement"), subRegion.displacement, 0xF);
                 subRegion.readFromByteArray(subregionNbt.getByteArray("velocity"), subRegion.velocity, 0xF);
@@ -241,10 +240,10 @@ public class FirmamentRegion implements FirmamentAccess {
         }
     }
 
-    public void write(NbtCompound nbt) {
+    public void write(CompoundTag nbt) {
         for(int i = 0; i < SUBREGIONS; i++) {
             for(int j = 0; j < SUBREGIONS; j++) {
-                NbtCompound subregionNbt = new NbtCompound();
+                CompoundTag subregionNbt = new CompoundTag();
                 FirmamentSubRegion subRegion = this.subRegions[i][j];
                 subregionNbt.putByteArray("displacement", subRegion.getAsByteArray(subRegion.displacement));
                 subregionNbt.putByteArray("velocity", subRegion.getAsByteArray(subRegion.velocity));

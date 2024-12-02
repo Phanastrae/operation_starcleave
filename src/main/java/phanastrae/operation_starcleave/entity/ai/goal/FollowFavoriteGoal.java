@@ -1,20 +1,20 @@
 package phanastrae.operation_starcleave.entity.ai.goal;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.pathing.BirdNavigation;
-import net.minecraft.entity.ai.pathing.EntityNavigation;
-import net.minecraft.entity.ai.pathing.MobNavigation;
-import net.minecraft.entity.ai.pathing.PathNodeType;
 import phanastrae.operation_starcleave.entity.mob.StarcleaverGolemEntity;
 
 import java.util.EnumSet;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.level.pathfinder.PathType;
 
 public class FollowFavoriteGoal extends Goal {
     private final StarcleaverGolemEntity golem;
     private LivingEntity favorite;
     private final double speed;
-    private final EntityNavigation navigation;
+    private final PathNavigation navigation;
     private int updateCountdownTicks;
     private final float startFollowingPast;
     private final float stopFollowingWithin;
@@ -28,14 +28,14 @@ public class FollowFavoriteGoal extends Goal {
         this.startFollowingPast = startFollowingPast;
         this.stopFollowingWithin = stopFollowingWithin;
         this.stopFollowingPast = stopFollowingPast;
-        this.setControls(EnumSet.of(Goal.Control.MOVE, Goal.Control.LOOK));
-        if (!(golem.getNavigation() instanceof MobNavigation) && !(golem.getNavigation() instanceof BirdNavigation)) {
+        this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+        if (!(golem.getNavigation() instanceof GroundPathNavigation) && !(golem.getNavigation() instanceof FlyingPathNavigation)) {
             throw new IllegalArgumentException("Unsupported mob type for FollowOwnerGoal");
         }
     }
 
     @Override
-    public boolean canStart() {
+    public boolean canUse() {
         LivingEntity livingEntity = this.golem.getFavorite();
         if (livingEntity == null) {
             return false;
@@ -43,8 +43,8 @@ public class FollowFavoriteGoal extends Goal {
             return false;
         } else if (this.cannotFollow()) {
             return false;
-        } else if (this.golem.squaredDistanceTo(livingEntity) < (double)(this.startFollowingPast * this.startFollowingPast)
-        || this.golem.squaredDistanceTo(livingEntity) >= (double)(this.stopFollowingPast * this.stopFollowingPast)) {
+        } else if (this.golem.distanceToSqr(livingEntity) < (double)(this.startFollowingPast * this.startFollowingPast)
+        || this.golem.distanceToSqr(livingEntity) >= (double)(this.stopFollowingPast * this.stopFollowingPast)) {
             return false;
         } else {
             this.favorite = livingEntity;
@@ -53,41 +53,41 @@ public class FollowFavoriteGoal extends Goal {
     }
 
     @Override
-    public boolean shouldContinue() {
-        if (this.navigation.isIdle()) {
+    public boolean canContinueToUse() {
+        if (this.navigation.isDone()) {
             return false;
         } else if (this.cannotFollow()) {
             return false;
         } else {
-            return !(this.golem.squaredDistanceTo(this.favorite) <= (double)(this.stopFollowingWithin * this.stopFollowingWithin)
-                    || this.golem.squaredDistanceTo(this.favorite) >= (double)(this.stopFollowingPast * this.stopFollowingPast));
+            return !(this.golem.distanceToSqr(this.favorite) <= (double)(this.stopFollowingWithin * this.stopFollowingWithin)
+                    || this.golem.distanceToSqr(this.favorite) >= (double)(this.stopFollowingPast * this.stopFollowingPast));
         }
     }
 
     private boolean cannotFollow() {
-        return this.golem.isIgnited() || this.golem.isPlummeting() || this.golem.hasVehicle() || this.golem.isLeashed();
+        return this.golem.isIgnited() || this.golem.isPlummeting() || this.golem.isPassenger() || this.golem.isLeashed();
     }
 
     @Override
     public void start() {
         this.updateCountdownTicks = 0;
-        this.oldWaterPathfindingPenalty = this.golem.getPathfindingPenalty(PathNodeType.WATER);
-        this.golem.setPathfindingPenalty(PathNodeType.WATER, 0.0F);
+        this.oldWaterPathfindingPenalty = this.golem.getPathfindingMalus(PathType.WATER);
+        this.golem.setPathfindingMalus(PathType.WATER, 0.0F);
     }
 
     @Override
     public void stop() {
         this.favorite = null;
         this.navigation.stop();
-        this.golem.setPathfindingPenalty(PathNodeType.WATER, this.oldWaterPathfindingPenalty);
+        this.golem.setPathfindingMalus(PathType.WATER, this.oldWaterPathfindingPenalty);
     }
 
     @Override
     public void tick() {
-        this.golem.getLookControl().lookAt(this.favorite, 10.0F, (float)this.golem.getMaxLookPitchChange());
+        this.golem.getLookControl().setLookAt(this.favorite, 10.0F, (float)this.golem.getMaxHeadXRot());
         if (--this.updateCountdownTicks <= 0) {
-            this.updateCountdownTicks = this.getTickCount(10);
-            this.navigation.startMovingTo(this.favorite, this.speed);
+            this.updateCountdownTicks = this.adjustedTickDelay(10);
+            this.navigation.moveTo(this.favorite, this.speed);
         }
     }
 }

@@ -1,37 +1,37 @@
 package phanastrae.operation_starcleave.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.DispenserBlock;
-import net.minecraft.block.dispenser.DispenserBehavior;
-import net.minecraft.block.dispenser.FallibleItemDispenserBehavior;
-import net.minecraft.block.dispenser.ItemDispenserBehavior;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPointer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.dispenser.BlockSource;
+import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
+import net.minecraft.core.dispenser.DispenseItemBehavior;
+import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.level.gameevent.GameEvent;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 
 public class OperationStarcleaveDispenserBehavior {
 
     public static void init() {
-        register(OperationStarcleaveBlocks.NETHERITE_PUMPKIN, new FallibleItemDispenserBehavior() {
+        register(OperationStarcleaveBlocks.NETHERITE_PUMPKIN, new OptionalDispenseItemBehavior() {
             @Override
-            protected ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack) {
-                World world = pointer.world();
-                BlockPos blockPos = pointer.pos().offset(pointer.state().get(DispenserBlock.FACING));
+            protected ItemStack execute(BlockSource pointer, ItemStack stack) {
+                Level world = pointer.level();
+                BlockPos blockPos = pointer.pos().relative(pointer.state().getValue(DispenserBlock.FACING));
                 NetheritePumpkinBlock netheritePumpkinBlock = (NetheritePumpkinBlock)OperationStarcleaveBlocks.NETHERITE_PUMPKIN;
-                if (world.isAir(blockPos) && netheritePumpkinBlock.canDispense(world, blockPos)) {
-                    if (!world.isClient) {
-                        world.setBlockState(blockPos, netheritePumpkinBlock.getDefaultState(), Block.NOTIFY_ALL);
-                        world.emitGameEvent(null, GameEvent.BLOCK_PLACE, blockPos);
+                if (world.isEmptyBlock(blockPos) && netheritePumpkinBlock.canSpawnGolem(world, blockPos)) {
+                    if (!world.isClientSide) {
+                        world.setBlock(blockPos, netheritePumpkinBlock.defaultBlockState(), Block.UPDATE_ALL);
+                        world.gameEvent(null, GameEvent.BLOCK_PLACE, blockPos);
                     }
 
-                    stack.decrement(1);
+                    stack.shrink(1);
                     this.setSuccess(true);
                 } else {
                     this.setSuccess(ArmorItem.dispenseArmor(pointer, stack));
@@ -41,24 +41,24 @@ public class OperationStarcleaveDispenserBehavior {
             }
         });
 
-        register(OperationStarcleaveItems.STARBLEACH_BOTTLE, new FallibleItemDispenserBehavior() {
-            private final ItemDispenserBehavior fallbackBehavior = new ItemDispenserBehavior();
+        register(OperationStarcleaveItems.STARBLEACH_BOTTLE, new OptionalDispenseItemBehavior() {
+            private final DefaultDispenseItemBehavior fallbackBehavior = new DefaultDispenseItemBehavior();
 
-            private ItemStack replace(BlockPointer pointer, ItemStack oldStack, ItemStack newStack) {
-                pointer.world().emitGameEvent(null, GameEvent.FLUID_PICKUP, pointer.pos());
-                return this.decrementStackWithRemainder(pointer, oldStack, newStack);
+            private ItemStack replace(BlockSource pointer, ItemStack oldStack, ItemStack newStack) {
+                pointer.level().gameEvent(null, GameEvent.FLUID_PICKUP, pointer.pos());
+                return this.consumeWithRemainder(pointer, oldStack, newStack);
             }
 
             @Override
-            public ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack) {
-                ServerWorld world = pointer.world();
-                BlockPos blockPos = pointer.pos().offset(pointer.state().get(DispenserBlock.FACING));
+            public ItemStack execute(BlockSource pointer, ItemStack stack) {
+                ServerLevel world = pointer.level();
+                BlockPos blockPos = pointer.pos().relative(pointer.state().getValue(DispenserBlock.FACING));
                 if(StarbleachCauldronBlock.canFillCauldron(world, blockPos)) {
                     StarbleachCauldronBlock.fillCauldron(world, blockPos);
                     this.setSuccess(true);
                     return this.replace(pointer, stack, new ItemStack(Items.GLASS_BOTTLE));
                 } else {
-                    return super.dispenseSilently(pointer, stack);
+                    return super.execute(pointer, stack);
                 }
             }
         });
@@ -68,7 +68,7 @@ public class OperationStarcleaveDispenserBehavior {
         DispenserBlock.registerProjectileBehavior(OperationStarcleaveItems.FIRMAMENT_REJUVENATOR);
     }
 
-    public static void register(ItemConvertible provider, DispenserBehavior behavior) {
+    public static void register(ItemLike provider, DispenseItemBehavior behavior) {
         DispenserBlock.registerBehavior(provider, behavior);
     }
 }

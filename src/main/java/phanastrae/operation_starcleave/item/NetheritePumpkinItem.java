@@ -1,27 +1,27 @@
 package phanastrae.operation_starcleave.item;
 
 import com.google.common.base.Suppliers;
-import net.minecraft.block.Block;
-import net.minecraft.component.type.AttributeModifierSlot;
-import net.minecraft.component.type.AttributeModifiersComponent;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.item.*;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.level.block.Block;
 
 import java.util.function.Supplier;
 
-public class NetheritePumpkinItem extends BlockItem implements Equipment {
+public class NetheritePumpkinItem extends BlockItem implements Equipable {
 
     protected final ArmorItem.Type type;
-    protected final RegistryEntry<ArmorMaterial> material;
+    protected final Holder<ArmorMaterial> material;
 
-    private final Supplier<AttributeModifiersComponent> attributeModifiers;
+    private final Supplier<ItemAttributeModifiers> attributeModifiers;
 
-    public NetheritePumpkinItem(Block block, Settings settings) {
+    public NetheritePumpkinItem(Block block, Properties settings) {
         super(block, settings);
         this.material = ArmorMaterials.NETHERITE;
         this.type = ArmorItem.Type.HELMET;
@@ -31,22 +31,22 @@ public class NetheritePumpkinItem extends BlockItem implements Equipment {
                     float toughness = material.value().toughness();
                     float knockbackResistance = material.value().knockbackResistance();
 
-                    AttributeModifiersComponent.Builder builder = AttributeModifiersComponent.builder();
-                    AttributeModifierSlot attributeModifierSlot = AttributeModifierSlot.forEquipmentSlot(this.type.getEquipmentSlot());
-                    Identifier identifier = Identifier.ofVanilla("armor." + this.type.getName());
+                    ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
+                    EquipmentSlotGroup attributeModifierSlot = EquipmentSlotGroup.bySlot(this.type.getSlot());
+                    ResourceLocation identifier = ResourceLocation.withDefaultNamespace("armor." + this.type.getName());
 
                     builder.add(
-                            EntityAttributes.GENERIC_ARMOR, new EntityAttributeModifier(identifier, protection, EntityAttributeModifier.Operation.ADD_VALUE), attributeModifierSlot
+                            Attributes.ARMOR, new AttributeModifier(identifier, protection, AttributeModifier.Operation.ADD_VALUE), attributeModifierSlot
                     );
                     builder.add(
-                            EntityAttributes.GENERIC_ARMOR_TOUGHNESS,
-                            new EntityAttributeModifier(identifier, toughness, EntityAttributeModifier.Operation.ADD_VALUE),
+                            Attributes.ARMOR_TOUGHNESS,
+                            new AttributeModifier(identifier, toughness, AttributeModifier.Operation.ADD_VALUE),
                             attributeModifierSlot
                     );
                     if (knockbackResistance > 0.0F) {
                         builder.add(
-                                EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE,
-                                new EntityAttributeModifier(identifier, knockbackResistance, EntityAttributeModifier.Operation.ADD_VALUE),
+                                Attributes.KNOCKBACK_RESISTANCE,
+                                new AttributeModifier(identifier, knockbackResistance, AttributeModifier.Operation.ADD_VALUE),
                                 attributeModifierSlot
                         );
                     }
@@ -57,7 +57,7 @@ public class NetheritePumpkinItem extends BlockItem implements Equipment {
     }
 
     @Override
-    public AttributeModifiersComponent getAttributeModifiers() {
+    public ItemAttributeModifiers getDefaultAttributeModifiers() {
         return this.attributeModifiers.get();
     }
 
@@ -65,17 +65,17 @@ public class NetheritePumpkinItem extends BlockItem implements Equipment {
         return this.type;
     }
 
-    public RegistryEntry<ArmorMaterial> getMaterial() {
+    public Holder<ArmorMaterial> getMaterial() {
         return this.material;
     }
 
     @Override
-    public EquipmentSlot getSlotType() {
-        return this.type.getEquipmentSlot();
+    public EquipmentSlot getEquipmentSlot() {
+        return this.type.getSlot();
     }
 
     @Override
-    public RegistryEntry<SoundEvent> getEquipSound() {
+    public Holder<SoundEvent> getEquipSound() {
         return this.getMaterial().value().equipSound();
     }
 }

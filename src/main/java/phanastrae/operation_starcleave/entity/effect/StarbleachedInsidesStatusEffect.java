@@ -1,27 +1,27 @@
 package phanastrae.operation_starcleave.entity.effect;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectCategory;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveDamageTypes;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 
-public class StarbleachedInsidesStatusEffect extends StatusEffect {
+public class StarbleachedInsidesStatusEffect extends MobEffect {
     protected StarbleachedInsidesStatusEffect() {
-        super(StatusEffectCategory.HARMFUL, 0x63f2e2);
+        super(MobEffectCategory.HARMFUL, 0x63f2e2);
     }
 
     @Override
-    public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
-        World world = entity.getWorld();
+    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
+        Level world = entity.level();
         if(world != null) {
-            entity.damage(OperationStarcleaveDamageTypes.of(world, OperationStarcleaveDamageTypes.INTERNAL_STARBLEACHING), 0.5f * (amplifier + 1));
-            if(world instanceof ServerWorld serverWorld) {
-                float h = entity.getHeight();
-                float w = entity.getWidth();
-                serverWorld.spawnParticles(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER, entity.getX(), entity.getY() + h / 2, entity.getZ(), 350,
+            entity.hurt(OperationStarcleaveDamageTypes.of(world, OperationStarcleaveDamageTypes.INTERNAL_STARBLEACHING), 0.5f * (amplifier + 1));
+            if(world instanceof ServerLevel serverWorld) {
+                float h = entity.getBbHeight();
+                float w = entity.getBbWidth();
+                serverWorld.sendParticles(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER, entity.getX(), entity.getY() + h / 2, entity.getZ(), 350,
                         w / 2,
                         h / 2,
                         w / 2,
@@ -33,7 +33,7 @@ public class StarbleachedInsidesStatusEffect extends StatusEffect {
     }
 
     @Override
-    public boolean canApplyUpdateEffect(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         int i = 5;
         return duration % i == 0;
     }

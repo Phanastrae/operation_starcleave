@@ -1,8 +1,8 @@
 package phanastrae.operation_starcleave.mixin.client;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.LightmapTextureManager;
-import net.minecraft.client.world.ClientWorld;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.LightTexture;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -10,16 +10,14 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import phanastrae.operation_starcleave.duck.WorldDuck;
 
-@Mixin(LightmapTextureManager.class)
-public class LightmapTextureManagerMixin {
+@Mixin(LightTexture.class)
+public class LightTextureMixin {
 
-    @Final
-    @Shadow
-    private MinecraftClient client;
+    @Shadow @Final private Minecraft minecraft;
 
-    @ModifyVariable(method = "update", at = @At(value = "STORE"), ordinal = 1)
+    @ModifyVariable(method = "updateLightTexture", at = @At(value = "STORE"), ordinal = 1)
     private float operation_starcleave$cleavingFlash(float value) {
-        ClientWorld clientWorld = this.client.world;
+        ClientLevel clientWorld = this.minecraft.level;
         if(((WorldDuck)clientWorld).operation_starcleave$getCleavingFlashTicksLeft() > 0) {
             return 1.0F;
         }

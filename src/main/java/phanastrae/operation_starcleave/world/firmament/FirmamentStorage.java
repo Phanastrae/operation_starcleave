@@ -1,46 +1,45 @@
 package phanastrae.operation_starcleave.world.firmament;
 
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.server.world.ServerChunkLoadingManager;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.World;
-import net.minecraft.world.level.storage.LevelStorage;
-import net.minecraft.world.storage.StorageIoWorker;
-import net.minecraft.world.storage.StorageKey;
-
 import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ChunkMap;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.chunk.storage.IOWorker;
+import net.minecraft.world.level.chunk.storage.RegionStorageInfo;
+import net.minecraft.world.level.storage.LevelStorageSource;
 
 public class FirmamentStorage {
 
-    private final StorageIoWorker worker;
+    private final IOWorker worker;
 
-    public FirmamentStorage(World world, LevelStorage.Session session, boolean dsync) {
+    public FirmamentStorage(Level world, LevelStorageSource.LevelStorageAccess session, boolean dsync) {
         this.worker = new FirmamentStorageIoWorker(
-                new StorageKey(session.getDirectoryName(), world.getRegistryKey(), "chunk"),
-                session.getWorldDirectory(world.getRegistryKey()).resolve("operation_starcleave"),
+                new RegionStorageInfo(session.getLevelId(), world.dimension(), "chunk"),
+                session.getDimensionPath(world.dimension()).resolve("operation_starcleave"),
                 dsync);
     }
 
-    public CompletableFuture<Optional<NbtCompound>> getNbt(ChunkPos chunkPos) {
-        return this.worker.readChunkData(chunkPos);
+    public CompletableFuture<Optional<CompoundTag>> getNbt(ChunkPos chunkPos) {
+        return this.worker.loadAsync(chunkPos);
     }
 
-    public void setNbt(ChunkPos chunkPos, NbtCompound nbt) {
-        this.worker.setResult(chunkPos, nbt);
+    public void setNbt(ChunkPos chunkPos, CompoundTag nbt) {
+        this.worker.store(chunkPos, nbt);
     }
 
     public void close() throws IOException {
         this.worker.close();
     }
 
-    public static FirmamentStorage getFrom(ServerChunkLoadingManager threadedAnvilChunkStorage) {
+    public static FirmamentStorage getFrom(ChunkMap threadedAnvilChunkStorage) {
         return ((FirmamentStorageHolder)threadedAnvilChunkStorage).operation_starcleave$getFirmamentStorage();
     }
 
-    public static FirmamentStorage getFrom(ServerWorld serverWorld) {
-         return FirmamentStorage.getFrom(serverWorld.getChunkManager().chunkLoadingManager);
+    public static FirmamentStorage getFrom(ServerLevel serverWorld) {
+         return FirmamentStorage.getFrom(serverWorld.getChunkSource().chunkMap);
     }
 }

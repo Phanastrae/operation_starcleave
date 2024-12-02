@@ -1,25 +1,25 @@
 package phanastrae.operation_starcleave.network.packet;
 
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.packet.CustomPayload;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import phanastrae.operation_starcleave.OperationStarcleave;
 
-public record UnloadFirmamentRegionPayload(long regionId) implements CustomPayload {
-    public static final PacketCodec<RegistryByteBuf, UnloadFirmamentRegionPayload> PACKET_CODEC = CustomPayload.codecOf(UnloadFirmamentRegionPayload::write, UnloadFirmamentRegionPayload::new);
-    public static final CustomPayload.Id<UnloadFirmamentRegionPayload> PACKET_ID = new CustomPayload.Id<>(OperationStarcleave.id("unload_firmament_region"));
+public record UnloadFirmamentRegionPayload(long regionId) implements CustomPacketPayload {
+    public static final StreamCodec<RegistryFriendlyByteBuf, UnloadFirmamentRegionPayload> PACKET_CODEC = CustomPacketPayload.codec(UnloadFirmamentRegionPayload::write, UnloadFirmamentRegionPayload::new);
+    public static final CustomPacketPayload.Type<UnloadFirmamentRegionPayload> PACKET_ID = new CustomPacketPayload.Type<>(OperationStarcleave.id("unload_firmament_region"));
 
-    public UnloadFirmamentRegionPayload(PacketByteBuf buf) {
+    public UnloadFirmamentRegionPayload(FriendlyByteBuf buf) {
         this(buf.readLong());
     }
 
-    public void write(PacketByteBuf buf) {
+    public void write(FriendlyByteBuf buf) {
         buf.writeLong(this.regionId);
     }
 
     @Override
-    public CustomPayload.Id<? extends CustomPayload> getId() {
+    public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
         return PACKET_ID;
     }
 }

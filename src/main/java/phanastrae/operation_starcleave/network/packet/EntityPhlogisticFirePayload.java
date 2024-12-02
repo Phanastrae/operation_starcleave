@@ -1,26 +1,26 @@
 package phanastrae.operation_starcleave.network.packet;
 
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.packet.CustomPayload;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import phanastrae.operation_starcleave.OperationStarcleave;
 
-public record EntityPhlogisticFirePayload(int id, boolean onPhlogisticFire) implements CustomPayload {
-    public static final PacketCodec<RegistryByteBuf, EntityPhlogisticFirePayload> PACKET_CODEC = CustomPayload.codecOf(EntityPhlogisticFirePayload::write, EntityPhlogisticFirePayload::new);
-    public static final Id<EntityPhlogisticFirePayload> PACKET_ID = new Id<>(OperationStarcleave.id("entity_phlogistic_fire"));
+public record EntityPhlogisticFirePayload(int id, boolean onPhlogisticFire) implements CustomPacketPayload {
+    public static final StreamCodec<RegistryFriendlyByteBuf, EntityPhlogisticFirePayload> PACKET_CODEC = CustomPacketPayload.codec(EntityPhlogisticFirePayload::write, EntityPhlogisticFirePayload::new);
+    public static final Type<EntityPhlogisticFirePayload> PACKET_ID = new Type<>(OperationStarcleave.id("entity_phlogistic_fire"));
 
-    public EntityPhlogisticFirePayload(PacketByteBuf buf) {
+    public EntityPhlogisticFirePayload(FriendlyByteBuf buf) {
         this(buf.readInt(), buf.readBoolean());
     }
 
-    public void write(PacketByteBuf buf) {
+    public void write(FriendlyByteBuf buf) {
         buf.writeInt(this.id);
         buf.writeBoolean(this.onPhlogisticFire);
     }
 
     @Override
-    public Id<? extends CustomPayload> getId() {
+    public Type<? extends CustomPacketPayload> type() {
         return PACKET_ID;
     }
 }

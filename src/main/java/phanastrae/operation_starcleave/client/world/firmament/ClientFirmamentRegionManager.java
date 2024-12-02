@@ -1,7 +1,6 @@
 package phanastrae.operation_starcleave.client.world.firmament;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
-import net.minecraft.client.world.ClientWorld;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.client.render.firmament.FirmamentTextureStorage;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
@@ -10,13 +9,14 @@ import phanastrae.operation_starcleave.world.firmament.FirmamentRegionHolder;
 import phanastrae.operation_starcleave.world.firmament.FirmamentRegionManager;
 
 import java.util.function.Consumer;
+import net.minecraft.client.multiplayer.ClientLevel;
 
 public class ClientFirmamentRegionManager extends FirmamentRegionManager {
 
     Long2ObjectLinkedOpenHashMap<FirmamentRegionHolder> firmamentRegionHolders = new Long2ObjectLinkedOpenHashMap<>();
 
-    private final ClientWorld clientWorld;
-    public ClientFirmamentRegionManager(ClientWorld clientWorld) {
+    private final ClientLevel clientWorld;
+    public ClientFirmamentRegionManager(ClientLevel clientWorld) {
         this.clientWorld = clientWorld;
     }
 

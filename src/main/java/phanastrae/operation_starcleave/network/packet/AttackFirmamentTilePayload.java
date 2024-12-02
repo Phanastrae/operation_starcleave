@@ -1,26 +1,26 @@
 package phanastrae.operation_starcleave.network.packet;
 
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.packet.CustomPayload;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import phanastrae.operation_starcleave.OperationStarcleave;
 
-public record AttackFirmamentTilePayload(int tileX, int tileZ) implements CustomPayload {
-    public static final PacketCodec<RegistryByteBuf, AttackFirmamentTilePayload> PACKET_CODEC = CustomPayload.codecOf(AttackFirmamentTilePayload::write, AttackFirmamentTilePayload::new);
-    public static final CustomPayload.Id<AttackFirmamentTilePayload> PACKET_ID = new CustomPayload.Id<>(OperationStarcleave.id("attack_firmament_tile"));
+public record AttackFirmamentTilePayload(int tileX, int tileZ) implements CustomPacketPayload {
+    public static final StreamCodec<RegistryFriendlyByteBuf, AttackFirmamentTilePayload> PACKET_CODEC = CustomPacketPayload.codec(AttackFirmamentTilePayload::write, AttackFirmamentTilePayload::new);
+    public static final CustomPacketPayload.Type<AttackFirmamentTilePayload> PACKET_ID = new CustomPacketPayload.Type<>(OperationStarcleave.id("attack_firmament_tile"));
 
-    public AttackFirmamentTilePayload(PacketByteBuf buf) {
+    public AttackFirmamentTilePayload(FriendlyByteBuf buf) {
         this(buf.readInt(), buf.readInt());
     }
 
-    public void write(PacketByteBuf buf) {
+    public void write(FriendlyByteBuf buf) {
         buf.writeInt(this.tileX);
         buf.writeInt(this.tileZ);
     }
 
     @Override
-    public CustomPayload.Id<? extends CustomPayload> getId() {
+    public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
         return PACKET_ID;
     }
 }

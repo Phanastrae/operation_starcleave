@@ -3,15 +3,15 @@ package phanastrae.operation_starcleave;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.minecraft.component.ComponentType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipAppender;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.profiler.Profiler;
-import net.minecraft.world.tick.TickManager;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.TickRateManager;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import phanastrae.operation_starcleave.advancement.criterion.OperationStarcleaveAdvancementCriteria;
@@ -39,8 +39,8 @@ import java.util.function.Consumer;
 public class OperationStarcleave implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger("operation_starcleave");
 
-    public static Identifier id(String path) {
-    	return Identifier.of("operation_starcleave", path);
+    public static ResourceLocation id(String path) {
+    	return ResourceLocation.fromNamespaceAndPath("operation_starcleave", path);
 	}
 
 	@Override
@@ -72,11 +72,11 @@ public class OperationStarcleave implements ModInitializer {
 		ServerTickEvents.START_WORLD_TICK.register((world -> {
 			Firmament firmament = Firmament.fromWorld(world);
 			if(firmament != null) {
-				TickManager tickManager = world.getTickManager();
-				boolean shouldTick = tickManager.shouldTick();
+				TickRateManager tickManager = world.tickRateManager();
+				boolean shouldTick = tickManager.runsNormally();
 				world.getProfiler().push("");
 				if (shouldTick) {
-					Profiler profiler = world.getProfiler();
+					ProfilerFiller profiler = world.getProfiler();
 					profiler.push("starcleave_fracture");
 					firmament.tick();
 					profiler.pop();
@@ -89,16 +89,16 @@ public class OperationStarcleave implements ModInitializer {
 		ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register(((player, origin, destination) -> ((FirmamentWatcher)player).operation_starcleave$getWatchedRegions().unWatchAll()));
 	}
 
-	public static void addTooltips(ItemStack stack, Item.TooltipContext tooltipContext, Consumer<Text> componentConsumer, TooltipType tooltipFlag) {
+	public static void addTooltips(ItemStack stack, Item.TooltipContext tooltipContext, Consumer<Component> componentConsumer, TooltipFlag tooltipFlag) {
 		addToTooltip(stack, OperationStarcleaveComponentTypes.STARBLEACH_COMPONENT, tooltipContext, componentConsumer, tooltipFlag);
 	}
 
-	private static <T extends TooltipAppender> void addToTooltip(
-			ItemStack stack, ComponentType<T> component, Item.TooltipContext context, Consumer<Text> tooltipAdder, TooltipType tooltipFlag
+	private static <T extends TooltipProvider> void addToTooltip(
+			ItemStack stack, DataComponentType<T> component, Item.TooltipContext context, Consumer<Component> tooltipAdder, TooltipFlag tooltipFlag
 	) {
 		T tooltipProvider = stack.get(component);
 		if (tooltipProvider != null) {
-			tooltipProvider.appendTooltip(context, tooltipAdder, tooltipFlag);
+			tooltipProvider.addToTooltip(context, tooltipAdder, tooltipFlag);
 		}
 	}
 }

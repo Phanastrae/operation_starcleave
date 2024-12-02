@@ -1,19 +1,19 @@
 package phanastrae.operation_starcleave.world.firmament;
 
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
-import net.minecraft.server.network.ServerPlayerEntity;
 import phanastrae.operation_starcleave.server.network.FirmamentRegionDataSender;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import net.minecraft.server.level.ServerPlayer;
 
 public class FirmamentRegionsWatched {
 
     Collection<Long> watchedRegions;
-    private final ServerPlayerEntity player;
+    private final ServerPlayer player;
 
-    public FirmamentRegionsWatched(ServerPlayerEntity player) {
+    public FirmamentRegionsWatched(ServerPlayer player) {
         this.player = player;
         this.watchedRegions = new LongOpenHashSet();
     }
@@ -41,14 +41,14 @@ public class FirmamentRegionsWatched {
         regionsToAdd.forEach(id -> {
             if(watch(id)) {
                 RegionPos regionPos = new RegionPos(id);
-                FirmamentRegionDataSender.getFirmamentRegionDataSender(player.networkHandler).add(regionPos);
+                FirmamentRegionDataSender.getFirmamentRegionDataSender(player.connection).add(regionPos);
             }
         });
 
         regionsToRemove.forEach(id -> {
             if(unWatch(id)) {
                 RegionPos regionPos = new RegionPos(id);
-                FirmamentRegionDataSender.getFirmamentRegionDataSender(player.networkHandler).unload(player, regionPos);
+                FirmamentRegionDataSender.getFirmamentRegionDataSender(player.connection).unload(player, regionPos);
             }
         });
     }
@@ -75,7 +75,7 @@ public class FirmamentRegionsWatched {
         watchedRegions.forEach(id -> {
             if(unWatch(id)) {
                 RegionPos regionPos = new RegionPos(id);
-                FirmamentRegionDataSender.getFirmamentRegionDataSender(player.networkHandler).unload(player, regionPos);
+                FirmamentRegionDataSender.getFirmamentRegionDataSender(player.connection).unload(player, regionPos);
             }
         });
     }

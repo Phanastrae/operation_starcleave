@@ -3,17 +3,17 @@ package phanastrae.operation_starcleave.recipe;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.RecipeType;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 import phanastrae.operation_starcleave.recipe.input.ItemStarbleachingRecipeInput;
 
@@ -41,28 +41,28 @@ public class ItemStarbleachingRecipe implements Recipe<ItemStarbleachingRecipeIn
     }
 
     @Override
-    public ItemStack createIcon() {
-        return OperationStarcleaveItems.STARBLEACH_BOTTLE.getDefaultStack();
+    public ItemStack getToastSymbol() {
+        return OperationStarcleaveItems.STARBLEACH_BOTTLE.getDefaultInstance();
     }
 
     @Override
-    public boolean fits(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
         return true;
     }
 
     @Override
-    public boolean matches(ItemStarbleachingRecipeInput input, World world) {
-        ItemStack stack = input.getStackInSlot(0);
+    public boolean matches(ItemStarbleachingRecipeInput input, Level world) {
+        ItemStack stack = input.getItem(0);
         return ingredient.test(stack);
     }
 
     @Override
-    public ItemStack getResult(RegistryWrapper.WrapperLookup registriesLookup) {
+    public ItemStack getResultItem(HolderLookup.Provider registriesLookup) {
         return this.result;
     }
 
     @Override
-    public ItemStack craft(ItemStarbleachingRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
+    public ItemStack assemble(ItemStarbleachingRecipeInput input, HolderLookup.Provider lookup) {
         // do not use
         return ItemStack.EMPTY;
     }
@@ -84,7 +84,7 @@ public class ItemStarbleachingRecipe implements Recipe<ItemStarbleachingRecipeIn
         return this.starbleachCost;
     }
 
-    public static int getConsumedStarbleach(Random random, float cost) {
+    public static int getConsumedStarbleach(RandomSource random, float cost) {
         if(cost <= 0) return 0;
 
         // return randomly either floor(cost) or ceil(cost), with expectation equal to cost
@@ -111,26 +111,26 @@ public class ItemStarbleachingRecipe implements Recipe<ItemStarbleachingRecipeIn
     public static class Serializer<T extends ItemStarbleachingRecipe> implements RecipeSerializer<T> {
         final ItemStarbleachingRecipe.RecipeFactory<T> recipeFactory;
         private final MapCodec<T> codec;
-        private final PacketCodec<RegistryByteBuf, T> packetCodec;
+        private final StreamCodec<RegistryFriendlyByteBuf, T> packetCodec;
 
         protected Serializer(ItemStarbleachingRecipe.RecipeFactory<T> recipeFactory) {
             this.recipeFactory = recipeFactory;
             this.codec = RecordCodecBuilder.mapCodec(
                     instance -> instance.group(
-                            Ingredient.DISALLOW_EMPTY_CODEC.fieldOf("ingredient").forGetter(recipe -> recipe.ingredient),
+                            Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(recipe -> recipe.ingredient),
                             Codec.FLOAT.optionalFieldOf("starbleach_cost", 1F).forGetter(recipe -> recipe.starbleachCost),
-                            ItemStack.VALIDATED_CODEC.fieldOf("result").forGetter(recipe -> recipe.result),
+                            ItemStack.STRICT_CODEC.fieldOf("result").forGetter(recipe -> recipe.result),
                             Codec.BOOL.optionalFieldOf("is_filling_recipe", false).forGetter(recipe -> recipe.isFillingRecipe)
                     ).apply(instance, recipeFactory::create)
             );
-            this.packetCodec = PacketCodec.tuple(
-                    Ingredient.PACKET_CODEC,
+            this.packetCodec = StreamCodec.composite(
+                    Ingredient.CONTENTS_STREAM_CODEC,
                     recipe -> recipe.ingredient,
-                    PacketCodecs.FLOAT,
+                    ByteBufCodecs.FLOAT,
                     recipe -> recipe.starbleachCost,
-                    ItemStack.PACKET_CODEC,
+                    ItemStack.STREAM_CODEC,
                     recipe -> recipe.result,
-                    PacketCodecs.BOOL,
+                    ByteBufCodecs.BOOL,
                     recipe -> recipe.isFillingRecipe,
                     recipeFactory::create
             );
@@ -142,7 +142,7 @@ public class ItemStarbleachingRecipe implements Recipe<ItemStarbleachingRecipeIn
         }
 
         @Override
-        public PacketCodec<RegistryByteBuf, T> packetCodec() {
+        public StreamCodec<RegistryFriendlyByteBuf, T> streamCodec() {
             return this.packetCodec;
         }
     }

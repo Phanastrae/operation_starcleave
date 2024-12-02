@@ -1,45 +1,45 @@
 package phanastrae.operation_starcleave.block;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.phys.Vec3;
 import phanastrae.operation_starcleave.entity.projectile.StarbleachedPearlEntity;
 
 public class StarbleachedPearlBlock extends Block {
-    public static final MapCodec<StarbleachedPearlBlock> CODEC = createCodec(StarbleachedPearlBlock::new);
-    public static final BooleanProperty TRIGGERED = Properties.TRIGGERED;
+    public static final MapCodec<StarbleachedPearlBlock> CODEC = simpleCodec(StarbleachedPearlBlock::new);
+    public static final BooleanProperty TRIGGERED = BlockStateProperties.TRIGGERED;
 
     @Override
-    public MapCodec<? extends StarbleachedPearlBlock> getCodec() {
+    public MapCodec<? extends StarbleachedPearlBlock> codec() {
         return CODEC;
     }
 
-    public StarbleachedPearlBlock(Settings settings) {
+    public StarbleachedPearlBlock(Properties settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(TRIGGERED, Boolean.valueOf(false)));
+        this.registerDefaultState(this.stateDefinition.any().setValue(TRIGGERED, Boolean.valueOf(false)));
     }
 
     @Override
-    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify) {
-        boolean redstone = world.isReceivingRedstonePower(pos);
-        boolean triggered = state.get(TRIGGERED);
+    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify) {
+        boolean redstone = world.hasNeighborSignal(pos);
+        boolean triggered = state.getValue(TRIGGERED);
         if (redstone && !triggered) {
             int neighboringPearlBlocks = 0;
             int neighboringDampners = 0;
-            for(Direction direction : DIRECTIONS) {
-                BlockState state1 = world.getBlockState(pos.add(direction.getVector()));
-                if(state1.isOf(OperationStarcleaveBlocks.STARBLEACHED_PEARL_BLOCK)) {
+            for(Direction direction : UPDATE_SHAPE_ORDER) {
+                BlockState state1 = world.getBlockState(pos.offset(direction.getNormal()));
+                if(state1.is(OperationStarcleaveBlocks.STARBLEACHED_PEARL_BLOCK)) {
                     neighboringPearlBlocks++;
                 }
-                if(state1.isIn(BlockTags.DAMPENS_VIBRATIONS)) {
+                if(state1.is(BlockTags.DAMPENS_VIBRATIONS)) {
                     neighboringDampners++;
                 }
             }
@@ -47,16 +47,16 @@ public class StarbleachedPearlBlock extends Block {
             float dampenMultiplier = (1 - neighboringDampners / 7f);
             float audioMultiplier = 0.7f * pearlMultiplier * dampenMultiplier;
 
-            int rstone = world.getReceivedRedstonePower(pos);
-            StarbleachedPearlEntity.repel(new Vec3d(pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5), 0.5f * (rstone + 4) * 15/19f, 0.125f * (rstone + 8) * 15/23f, world, null, audioMultiplier);
-            world.setBlockState(pos, state.with(TRIGGERED, Boolean.valueOf(true)), Block.NOTIFY_LISTENERS);
+            int rstone = world.getBestNeighborSignal(pos);
+            StarbleachedPearlEntity.repel(new Vec3(pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5), 0.5f * (rstone + 4) * 15/19f, 0.125f * (rstone + 8) * 15/23f, world, null, audioMultiplier);
+            world.setBlock(pos, state.setValue(TRIGGERED, Boolean.valueOf(true)), Block.UPDATE_CLIENTS);
         } else if (!redstone && triggered) {
-            world.setBlockState(pos, state.with(TRIGGERED, Boolean.valueOf(false)), Block.NOTIFY_LISTENERS);
+            world.setBlock(pos, state.setValue(TRIGGERED, Boolean.valueOf(false)), Block.UPDATE_CLIENTS);
         }
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(TRIGGERED);
     }
 }

@@ -1,9 +1,9 @@
 package phanastrae.operation_starcleave.mixin.client;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.util.Hand;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.InteractionHand;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -14,17 +14,17 @@ import phanastrae.operation_starcleave.client.OperationStarcleaveClient;
 import phanastrae.operation_starcleave.network.packet.AttackFirmamentTilePayload;
 import phanastrae.operation_starcleave.world.firmament.FirmamentTilePos;
 
-@Mixin(MinecraftClient.class)
-public class MinecraftClientMixin {
+@Mixin(Minecraft.class)
+public class MinecraftMixin {
 
-    @Shadow @Nullable public ClientPlayerEntity player;
+    @Shadow @Nullable public LocalPlayer player;
 
-    @Inject(method = "doAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/hit/HitResult;getType()Lnet/minecraft/util/hit/HitResult$Type;", shift = At.Shift.BEFORE), cancellable = true)
+    @Inject(method = "startAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/phys/HitResult;getType()Lnet/minecraft/world/phys/HitResult$Type;", shift = At.Shift.BEFORE), cancellable = true)
     private void operation_starcleave$handleFirmamentHit(CallbackInfoReturnable<Boolean> cir) {
         FirmamentTilePos tile = OperationStarcleaveClient.firmamentOutlineRenderer.hitTile;
         if(tile != null) {
             ClientPlayNetworking.send(new AttackFirmamentTilePayload(tile.tileX, tile.tileZ));
-            this.player.swingHand(Hand.MAIN_HAND);
+            this.player.swing(InteractionHand.MAIN_HAND);
             cir.setReturnValue(false);
         }
     }

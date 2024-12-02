@@ -1,29 +1,29 @@
 package phanastrae.operation_starcleave.world.firmament;
 
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.OperationStarcleave;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
 
 public class Firmament implements FirmamentAccess {
 
-    private final World world;
+    private final Level world;
     private final FirmamentRegionManager firmamentRegionManager;
 
-    public Firmament(World world, FirmamentRegionManager firmamentRegionManager) {
+    public Firmament(Level world, FirmamentRegionManager firmamentRegionManager) {
         this.world = world;
         this.firmamentRegionManager = firmamentRegionManager;
     }
 
     public int getY() {
-        return this.world.getTopY() + 16;
+        return this.world.getMaxBuildHeight() + 16;
     }
 
     public void tick() {
-        long t = world.getTime();
+        long t = world.getGameTime();
         if (t % 2 == 0) {
             manageActors();
             tickActors();
@@ -51,7 +51,7 @@ public class Firmament implements FirmamentAccess {
     public static long getRegionId(int x, int z) {
         int rx = x >> FirmamentRegion.REGION_SIZE_BITS;
         int rz = z >> FirmamentRegion.REGION_SIZE_BITS;
-        return ChunkPos.toLong(rx, rz);
+        return ChunkPos.asLong(rx, rz);
     }
 
     @Nullable
@@ -237,7 +237,7 @@ public class Firmament implements FirmamentAccess {
         forEachRegion(FirmamentRegion::markUpdatesFromActivity);
     }
 
-    public World getWorld() {
+    public Level getWorld() {
         return this.world;
     }
 
@@ -245,11 +245,11 @@ public class Firmament implements FirmamentAccess {
         return this.firmamentRegionManager;
     }
 
-    public static Firmament fromWorld(World world) {
+    public static Firmament fromWorld(Level world) {
         if(world instanceof FirmamentHolder opscw) {
             return opscw.operation_starcleave$getFirmament();
         } else {
-            OperationStarcleave.LOGGER.info("World " + world.asString() + " has no Firmament!?");
+            OperationStarcleave.LOGGER.info("World " + world.gatherChunkSourceStats() + " has no Firmament!?");
             return null;
         }
     }

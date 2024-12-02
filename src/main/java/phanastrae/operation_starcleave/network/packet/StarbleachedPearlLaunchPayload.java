@@ -1,22 +1,22 @@
 package phanastrae.operation_starcleave.network.packet;
 
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.world.phys.Vec3;
 import phanastrae.operation_starcleave.OperationStarcleave;
 
-public record StarbleachedPearlLaunchPayload(Vec3d pos, float radius, float maxAddedSpeed, boolean exceptExists, int exceptId) implements CustomPayload {
-    public static final PacketCodec<RegistryByteBuf, StarbleachedPearlLaunchPayload> PACKET_CODEC = CustomPayload.codecOf(StarbleachedPearlLaunchPayload::write, StarbleachedPearlLaunchPayload::new);
-    public static final CustomPayload.Id<StarbleachedPearlLaunchPayload> PACKET_ID = new CustomPayload.Id<>(OperationStarcleave.id("starbleached_pearl_launch"));
+public record StarbleachedPearlLaunchPayload(Vec3 pos, float radius, float maxAddedSpeed, boolean exceptExists, int exceptId) implements CustomPacketPayload {
+    public static final StreamCodec<RegistryFriendlyByteBuf, StarbleachedPearlLaunchPayload> PACKET_CODEC = CustomPacketPayload.codec(StarbleachedPearlLaunchPayload::write, StarbleachedPearlLaunchPayload::new);
+    public static final CustomPacketPayload.Type<StarbleachedPearlLaunchPayload> PACKET_ID = new CustomPacketPayload.Type<>(OperationStarcleave.id("starbleached_pearl_launch"));
 
-    public StarbleachedPearlLaunchPayload(PacketByteBuf buf) {
-        this(buf.readVec3d(), buf.readFloat(), buf.readFloat(), buf.readBoolean(), buf.readInt());
+    public StarbleachedPearlLaunchPayload(FriendlyByteBuf buf) {
+        this(buf.readVec3(), buf.readFloat(), buf.readFloat(), buf.readBoolean(), buf.readInt());
     }
 
-    public void write(PacketByteBuf buf) {
-        buf.writeVec3d(this.pos);
+    public void write(FriendlyByteBuf buf) {
+        buf.writeVec3(this.pos);
         buf.writeFloat(this.radius);
         buf.writeFloat(this.maxAddedSpeed);
         buf.writeBoolean(this.exceptExists);
@@ -24,7 +24,7 @@ public record StarbleachedPearlLaunchPayload(Vec3d pos, float radius, float maxA
     }
 
     @Override
-    public CustomPayload.Id<? extends CustomPayload> getId() {
+    public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
         return PACKET_ID;
     }
 }

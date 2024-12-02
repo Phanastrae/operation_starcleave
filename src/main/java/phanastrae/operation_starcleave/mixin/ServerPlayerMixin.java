@@ -2,13 +2,13 @@ package phanastrae.operation_starcleave.mixin;
 
 import com.mojang.authlib.GameProfile;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.network.packet.c2s.common.SyncedClientOptions;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.world.TeleportTarget;
+import net.minecraft.server.level.ClientInformation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.portal.DimensionTransition;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -19,15 +19,15 @@ import phanastrae.operation_starcleave.network.packet.EntityPhlogisticFirePayloa
 import phanastrae.operation_starcleave.world.firmament.FirmamentRegionsWatched;
 import phanastrae.operation_starcleave.world.firmament.FirmamentWatcher;
 
-@Mixin(ServerPlayerEntity.class)
-public class ServerPlayerEntityMixin implements FirmamentWatcher {
+@Mixin(ServerPlayer.class)
+public class ServerPlayerMixin implements FirmamentWatcher {
 
     private FirmamentRegionsWatched operation_starcleave$watched_regions;
 
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void operation_starcleave$onInit(MinecraftServer server, ServerWorld world, GameProfile profile, SyncedClientOptions clientOptions, CallbackInfo ci) {
-        this.operation_starcleave$watched_regions = new FirmamentRegionsWatched((ServerPlayerEntity)(Object)this);
+    private void operation_starcleave$onInit(MinecraftServer server, ServerLevel world, GameProfile profile, ClientInformation clientOptions, CallbackInfo ci) {
+        this.operation_starcleave$watched_regions = new FirmamentRegionsWatched((ServerPlayer)(Object)this);
     }
 
     @Override
@@ -35,15 +35,15 @@ public class ServerPlayerEntityMixin implements FirmamentWatcher {
         return this.operation_starcleave$watched_regions;
     }
 
-    @Inject(method = "teleportTo", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/PlayerManager;sendStatusEffects(Lnet/minecraft/server/network/ServerPlayerEntity;)V", shift = At.Shift.AFTER))
-    private void operation_starcleave$onPlayerWorldMove(TeleportTarget teleportTarget, CallbackInfoReturnable<Entity> cir) {
-        ServerPlayerEntity player = (ServerPlayerEntity)(Object)this;
+    @Inject(method = "changeDimension", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;sendActivePlayerEffects(Lnet/minecraft/server/level/ServerPlayer;)V", shift = At.Shift.AFTER))
+    private void operation_starcleave$onPlayerWorldMove(DimensionTransition teleportTarget, CallbackInfoReturnable<Entity> cir) {
+        ServerPlayer player = (ServerPlayer)(Object)this;
         if(((EntityDuck)player).operation_starcleave$getPhlogisticFireTicks() > 0) {
             ServerPlayNetworking.send(player, new EntityPhlogisticFirePayload(player.getId(), true));
         }
     }
 
-    @Inject(method = "onDeath", at = @At("RETURN"))
+    @Inject(method = "die", at = @At("RETURN"))
     private void operation_starcleave$onDeath(DamageSource damageSource, CallbackInfo ci) {
         ((EntityDuck)this).operation_starcleave$setPhlogisticFireTicks(0);
         ((EntityDuck)this).operation_starcleave$setOnPhlogisticFire(false);

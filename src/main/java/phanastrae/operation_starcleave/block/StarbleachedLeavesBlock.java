@@ -1,106 +1,106 @@
 package phanastrae.operation_starcleave.block;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.FallingBlock;
-import net.minecraft.block.Waterloggable;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.FallingBlock;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
-public class StarbleachedLeavesBlock extends FallingBlock implements Waterloggable {
-    public static final MapCodec<StarbleachedLeavesBlock> CODEC = createCodec(StarbleachedLeavesBlock::new);
-    public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
+public class StarbleachedLeavesBlock extends FallingBlock implements SimpleWaterloggedBlock {
+    public static final MapCodec<StarbleachedLeavesBlock> CODEC = simpleCodec(StarbleachedLeavesBlock::new);
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    public StarbleachedLeavesBlock(Settings settings) {
+    public StarbleachedLeavesBlock(Properties settings) {
         super(settings);
-        this.setDefaultState(this.getDefaultState().with(WATERLOGGED, Boolean.valueOf(false)));
+        this.registerDefaultState(this.defaultBlockState().setValue(WATERLOGGED, Boolean.valueOf(false)));
     }
 
     @Override
-    protected MapCodec<? extends StarbleachedLeavesBlock> getCodec() {
+    protected MapCodec<? extends StarbleachedLeavesBlock> codec() {
         return CODEC;
     }
 
     @Override
-    public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
+    public void onPlace(BlockState state, Level world, BlockPos pos, BlockState oldState, boolean notify) {
     }
 
     @Override
-    protected int getFallDelay() {
+    protected int getDelayAfterPlace() {
         return 4;
     }
 
     @Override
-    public BlockState getStateForNeighborUpdate(
-            BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos
+    public BlockState updateShape(
+            BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos
     ) {
-        if (state.get(WATERLOGGED)) {
-            world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+        if (state.getValue(WATERLOGGED)) {
+            world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
         }
 
-        return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+        return super.updateShape(state, direction, neighborState, world, pos, neighborPos);
     }
 
     @Override
-    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
         int connectedNeighbors = 0;
         for(Direction direction : Direction.values()) {
-            BlockState blockState = world.getBlockState(pos.add(direction.getVector()));
-            if(blockState.isOf(OperationStarcleaveBlocks.STARBLEACHED_LEAVES)) {
+            BlockState blockState = world.getBlockState(pos.offset(direction.getNormal()));
+            if(blockState.is(OperationStarcleaveBlocks.STARBLEACHED_LEAVES)) {
                 connectedNeighbors += 1;
-            } else if(blockState.isOf(OperationStarcleaveBlocks.STARBLEACHED_LOG) || blockState.isOf(OperationStarcleaveBlocks.STARBLEACHED_WOOD)) {
+            } else if(blockState.is(OperationStarcleaveBlocks.STARBLEACHED_LOG) || blockState.is(OperationStarcleaveBlocks.STARBLEACHED_WOOD)) {
                 connectedNeighbors += 2;
             }
         }
         if(connectedNeighbors < 2) {
-            super.scheduledTick(state, world, pos, random);
+            super.tick(state, world, pos, random);
         }
     }
 
     @Nullable
     @Override
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        FluidState fluidState = ctx.getWorld().getFluidState(ctx.getBlockPos());
-        return super.getPlacementState(ctx).with(WATERLOGGED, Boolean.valueOf(fluidState.isOf(Fluids.WATER)));
+    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+        FluidState fluidState = ctx.getLevel().getFluidState(ctx.getClickedPos());
+        return super.getStateForPlacement(ctx).setValue(WATERLOGGED, Boolean.valueOf(fluidState.is(Fluids.WATER)));
     }
 
     @Override
     public FluidState getFluidState(BlockState state) {
-        return state.get(WATERLOGGED) ? Fluids.WATER.getStill(true) : super.getFluidState(state);
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(true) : super.getFluidState(state);
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(WATERLOGGED);
     }
 
     @Override
-    public VoxelShape getSidesShape(BlockState state, BlockView world, BlockPos pos) {
-        return VoxelShapes.empty();
+    public VoxelShape getBlockSupportShape(BlockState state, BlockGetter world, BlockPos pos) {
+        return Shapes.empty();
     }
 
     @Override
-    public int getOpacity(BlockState state, BlockView world, BlockPos pos) {
+    public int getLightBlock(BlockState state, BlockGetter world, BlockPos pos) {
         return 1;
     }
 
     @Override
-    public int getColor(BlockState state, BlockView world, BlockPos pos) {
+    public int getDustColor(BlockState state, BlockGetter world, BlockPos pos) {
         return 0xEF9FCFFF;
     }
 }

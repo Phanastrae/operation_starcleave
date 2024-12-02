@@ -2,12 +2,14 @@ package phanastrae.operation_starcleave.data;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.client.*;
-import net.minecraft.item.Item;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.Identifier;
+import net.minecraft.data.models.BlockModelGenerators;
+import net.minecraft.data.models.ItemModelGenerators;
+import net.minecraft.data.models.blockstates.*;
+import net.minecraft.data.models.model.*;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.block.StarbleachCauldronBlock;
 import phanastrae.operation_starcleave.block.StarbleachedPearlBlock;
@@ -15,7 +17,7 @@ import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 
 import java.util.List;
 
-import static net.minecraft.data.client.BlockStateModelGenerator.*;
+import static net.minecraft.data.models.BlockModelGenerators.*;
 import static phanastrae.operation_starcleave.block.OperationStarcleaveBlocks.*;
 
 public class ModelProvider extends FabricModelProvider {
@@ -24,43 +26,43 @@ public class ModelProvider extends FabricModelProvider {
     }
 
     @Override
-    public void generateBlockStateModels(BlockStateModelGenerator BSMG) {
-        BSMG.registerCubeAllModelTexturePool(STARBLEACHED_TILES)
+    public void generateBlockStateModels(BlockModelGenerators BSMG) {
+        BSMG.family(STARBLEACHED_TILES)
                 .slab(STARBLEACHED_TILE_SLAB)
                 .stairs(STARBLEACHED_TILE_STAIRS)
                 .wall(STARBLEACHED_TILE_WALL);
 
-        BSMG.registerCubeAllModelTexturePool(STELLAR_TILES)
+        BSMG.family(STELLAR_TILES)
                 .slab(STELLAR_TILE_SLAB);
 
-        BSMG.registerSimpleCubeAll(CHISELED_STARBLEACHED_TILES);
-        BSMG.registerSimpleCubeAll(IMBUED_STARBLEACHED_TILES);
+        BSMG.createTrivialCube(CHISELED_STARBLEACHED_TILES);
+        BSMG.createTrivialCube(IMBUED_STARBLEACHED_TILES);
 
-        BSMG.registerLog(STARBLEACHED_LOG).log(STARBLEACHED_LOG).wood(STARBLEACHED_WOOD);
+        BSMG.woodProvider(STARBLEACHED_LOG).logWithHorizontal(STARBLEACHED_LOG).wood(STARBLEACHED_WOOD);
 
-        BSMG.registerSingleton(STARBLEACHED_LEAVES, TexturedModel.LEAVES);
+        BSMG.createTrivialBlock(STARBLEACHED_LEAVES, TexturedModel.LEAVES);
 
-        BSMG.registerRotatable(STELLAR_SEDIMENT);
-        BSMG.registerRotatable(STARDUST_BLOCK);
-        BSMG.registerRotatable(PETRICHORIC_PLASMA);
-        BSMG.registerRotatable(PETRICHORIC_VAPOR);
+        BSMG.createRotatedVariantBlock(STELLAR_SEDIMENT);
+        BSMG.createRotatedVariantBlock(STARDUST_BLOCK);
+        BSMG.createRotatedVariantBlock(PETRICHORIC_PLASMA);
+        BSMG.createRotatedVariantBlock(PETRICHORIC_VAPOR);
 
-        BSMG.registerTintableCross(SHORT_HOLY_MOSS, BlockStateModelGenerator.TintType.NOT_TINTED);
+        BSMG.createCrossBlockWithDefaultItem(SHORT_HOLY_MOSS, BlockModelGenerators.TintState.NOT_TINTED);
         registerUnevenCross(BSMG, MULCHBORNE_TUFT);
 
         registerGrassLikeBlock(BSMG, HOLY_MOSS, STELLAR_SEDIMENT);
         registerGrassLikeBlock(BSMG, STELLAR_MULCH, STELLAR_SEDIMENT);
 
         {
-            TextureMap textureMap = TextureMap.sideEnd(NETHERITE_PUMPKIN);
-            BSMG.registerNorthDefaultHorizontalRotatable(NETHERITE_PUMPKIN, textureMap);
+            TextureMapping textureMap = TextureMapping.column(NETHERITE_PUMPKIN);
+            BSMG.createPumpkinVariant(NETHERITE_PUMPKIN, textureMap);
         }
 
         {
-            Identifier off = TexturedModel.CUBE_ALL.upload(STARBLEACHED_PEARL_BLOCK, BSMG.modelCollector);
-            Identifier on = BSMG.createSubModel(STARBLEACHED_PEARL_BLOCK, "_on", Models.CUBE_ALL, TextureMap::all);
-            BSMG.blockStateCollector
-                    .accept(VariantsBlockStateSupplier.create(STARBLEACHED_PEARL_BLOCK).coordinate(createBooleanModelMap(StarbleachedPearlBlock.TRIGGERED, on, off)));
+            ResourceLocation off = TexturedModel.CUBE.create(STARBLEACHED_PEARL_BLOCK, BSMG.modelOutput);
+            ResourceLocation on = BSMG.createSuffixedVariant(STARBLEACHED_PEARL_BLOCK, "_on", ModelTemplates.CUBE_ALL, TextureMapping::cube);
+            BSMG.blockStateOutput
+                    .accept(MultiVariantGenerator.multiVariant(STARBLEACHED_PEARL_BLOCK).with(createBooleanModelDispatch(StarbleachedPearlBlock.TRIGGERED, on, off)));
         }
 
         {
@@ -68,131 +70,131 @@ public class ModelProvider extends FabricModelProvider {
             Block carpet = BLESSED_CLOTH_CARPET;
             Block curtain = BLESSED_CLOTH_CURTAIN;
 
-            BSMG.registerSimpleCubeAll(wool);
-            TextureMap textureMap = new TextureMap().put(TextureKey.PANE, TextureMap.getId(curtain)).put(TextureKey.EDGE, TextureMap.getId(wool));
-            Identifier identifier = Models.TEMPLATE_GLASS_PANE_POST.upload(curtain, textureMap, BSMG.modelCollector);
-            Identifier identifier2 = Models.TEMPLATE_GLASS_PANE_SIDE.upload(curtain, textureMap, BSMG.modelCollector);
-            Identifier identifier3 = Models.TEMPLATE_GLASS_PANE_SIDE_ALT.upload(curtain, textureMap, BSMG.modelCollector);
-            Identifier identifier4 = Models.TEMPLATE_GLASS_PANE_NOSIDE.upload(curtain, textureMap, BSMG.modelCollector);
-            Identifier identifier5 = Models.TEMPLATE_GLASS_PANE_NOSIDE_ALT.upload(curtain, textureMap, BSMG.modelCollector);
+            BSMG.createTrivialCube(wool);
+            TextureMapping textureMap = new TextureMapping().put(TextureSlot.PANE, TextureMapping.getBlockTexture(curtain)).put(TextureSlot.EDGE, TextureMapping.getBlockTexture(wool));
+            ResourceLocation identifier = ModelTemplates.STAINED_GLASS_PANE_POST.create(curtain, textureMap, BSMG.modelOutput);
+            ResourceLocation identifier2 = ModelTemplates.STAINED_GLASS_PANE_SIDE.create(curtain, textureMap, BSMG.modelOutput);
+            ResourceLocation identifier3 = ModelTemplates.STAINED_GLASS_PANE_SIDE_ALT.create(curtain, textureMap, BSMG.modelOutput);
+            ResourceLocation identifier4 = ModelTemplates.STAINED_GLASS_PANE_NOSIDE.create(curtain, textureMap, BSMG.modelOutput);
+            ResourceLocation identifier5 = ModelTemplates.STAINED_GLASS_PANE_NOSIDE_ALT.create(curtain, textureMap, BSMG.modelOutput);
             Item item = curtain.asItem();
-            Models.GENERATED.upload(ModelIds.getItemModelId(item), TextureMap.layer0(curtain), BSMG.modelCollector);
-            BSMG.blockStateCollector
+            ModelTemplates.FLAT_ITEM.create(ModelLocationUtils.getModelLocation(item), TextureMapping.layer0(curtain), BSMG.modelOutput);
+            BSMG.blockStateOutput
                     .accept(
-                            MultipartBlockStateSupplier.create(curtain)
-                                    .with(BlockStateVariant.create().put(VariantSettings.MODEL, identifier))
-                                    .with(When.create().set(Properties.NORTH, true), BlockStateVariant.create().put(VariantSettings.MODEL, identifier2))
+                            MultiPartGenerator.multiPart(curtain)
+                                    .with(Variant.variant().with(VariantProperties.MODEL, identifier))
+                                    .with(Condition.condition().term(BlockStateProperties.NORTH, true), Variant.variant().with(VariantProperties.MODEL, identifier2))
                                     .with(
-                                            When.create().set(Properties.EAST, true),
-                                            BlockStateVariant.create().put(VariantSettings.MODEL, identifier2).put(VariantSettings.Y, VariantSettings.Rotation.R90)
+                                            Condition.condition().term(BlockStateProperties.EAST, true),
+                                            Variant.variant().with(VariantProperties.MODEL, identifier2).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90)
                                     )
-                                    .with(When.create().set(Properties.SOUTH, true), BlockStateVariant.create().put(VariantSettings.MODEL, identifier3))
+                                    .with(Condition.condition().term(BlockStateProperties.SOUTH, true), Variant.variant().with(VariantProperties.MODEL, identifier3))
                                     .with(
-                                            When.create().set(Properties.WEST, true),
-                                            BlockStateVariant.create().put(VariantSettings.MODEL, identifier3).put(VariantSettings.Y, VariantSettings.Rotation.R90)
+                                            Condition.condition().term(BlockStateProperties.WEST, true),
+                                            Variant.variant().with(VariantProperties.MODEL, identifier3).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90)
                                     )
-                                    .with(When.create().set(Properties.NORTH, false), BlockStateVariant.create().put(VariantSettings.MODEL, identifier4))
-                                    .with(When.create().set(Properties.EAST, false), BlockStateVariant.create().put(VariantSettings.MODEL, identifier5))
+                                    .with(Condition.condition().term(BlockStateProperties.NORTH, false), Variant.variant().with(VariantProperties.MODEL, identifier4))
+                                    .with(Condition.condition().term(BlockStateProperties.EAST, false), Variant.variant().with(VariantProperties.MODEL, identifier5))
                                     .with(
-                                            When.create().set(Properties.SOUTH, false),
-                                            BlockStateVariant.create().put(VariantSettings.MODEL, identifier5).put(VariantSettings.Y, VariantSettings.Rotation.R90)
+                                            Condition.condition().term(BlockStateProperties.SOUTH, false),
+                                            Variant.variant().with(VariantProperties.MODEL, identifier5).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90)
                                     )
                                     .with(
-                                            When.create().set(Properties.WEST, false),
-                                            BlockStateVariant.create().put(VariantSettings.MODEL, identifier4).put(VariantSettings.Y, VariantSettings.Rotation.R270)
+                                            Condition.condition().term(BlockStateProperties.WEST, false),
+                                            Variant.variant().with(VariantProperties.MODEL, identifier4).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270)
                                     )
                     );
-            Identifier identifier6 = TexturedModel.CARPET.get(wool).upload(carpet, BSMG.modelCollector);
-            BSMG.blockStateCollector.accept(createSingletonBlockState(carpet, identifier6));
+            ResourceLocation identifier6 = TexturedModel.CARPET.get(wool).create(carpet, BSMG.modelOutput);
+            BSMG.blockStateOutput.accept(createSimpleBlock(carpet, identifier6));
         }
 
         {
-            TextureMap dryTextures = new TextureMap().put(TextureKey.DIRT, TextureMap.getId(STELLAR_SEDIMENT)).put(TextureKey.TOP, TextureMap.getId(STELLAR_FARMLAND));
-            TextureMap moistTextures = new TextureMap().put(TextureKey.DIRT, TextureMap.getId(STELLAR_SEDIMENT)).put(TextureKey.TOP, TextureMap.getSubId(STELLAR_FARMLAND, "_moist"));
-            Identifier dryModel = Models.TEMPLATE_FARMLAND.upload(STELLAR_FARMLAND, dryTextures, BSMG.modelCollector);
-            Identifier moistModel = Models.TEMPLATE_FARMLAND.upload(TextureMap.getSubId(STELLAR_FARMLAND, "_moist"), moistTextures, BSMG.modelCollector);
-            BSMG.blockStateCollector
-                    .accept(VariantsBlockStateSupplier.create(STELLAR_FARMLAND).coordinate(createValueFencedModelMap(Properties.MOISTURE, 7, moistModel, dryModel)));
+            TextureMapping dryTextures = new TextureMapping().put(TextureSlot.DIRT, TextureMapping.getBlockTexture(STELLAR_SEDIMENT)).put(TextureSlot.TOP, TextureMapping.getBlockTexture(STELLAR_FARMLAND));
+            TextureMapping moistTextures = new TextureMapping().put(TextureSlot.DIRT, TextureMapping.getBlockTexture(STELLAR_SEDIMENT)).put(TextureSlot.TOP, TextureMapping.getBlockTexture(STELLAR_FARMLAND, "_moist"));
+            ResourceLocation dryModel = ModelTemplates.FARMLAND.create(STELLAR_FARMLAND, dryTextures, BSMG.modelOutput);
+            ResourceLocation moistModel = ModelTemplates.FARMLAND.create(TextureMapping.getBlockTexture(STELLAR_FARMLAND, "_moist"), moistTextures, BSMG.modelOutput);
+            BSMG.blockStateOutput
+                    .accept(MultiVariantGenerator.multiVariant(STELLAR_FARMLAND).with(createEmptyOrFullDispatch(BlockStateProperties.MOISTURE, 7, moistModel, dryModel)));
         }
 
         registerFire(BSMG, PHLOGISTIC_FIRE);
         registerStarbleachCauldron(BSMG, STARBLEACH_CAULDRON);
     }
 
-    private void registerFire(BlockStateModelGenerator BSMG, Block block) {
-        When when = When.create()
-                .set(Properties.NORTH, false)
-                .set(Properties.EAST, false)
-                .set(Properties.SOUTH, false)
-                .set(Properties.WEST, false)
-                .set(Properties.UP, false);
-        List<Identifier> list = BSMG.getFireFloorModels(block);
-        List<Identifier> list2 = BSMG.getFireSideModels(block);
-        List<Identifier> list3 = BSMG.getFireUpModels(block);
-        BSMG.blockStateCollector
+    private void registerFire(BlockModelGenerators BSMG, Block block) {
+        Condition when = Condition.condition()
+                .term(BlockStateProperties.NORTH, false)
+                .term(BlockStateProperties.EAST, false)
+                .term(BlockStateProperties.SOUTH, false)
+                .term(BlockStateProperties.WEST, false)
+                .term(BlockStateProperties.UP, false);
+        List<ResourceLocation> list = BSMG.createFloorFireModels(block);
+        List<ResourceLocation> list2 = BSMG.createSideFireModels(block);
+        List<ResourceLocation> list3 = BSMG.createTopFireModels(block);
+        BSMG.blockStateOutput
                 .accept(
-                        MultipartBlockStateSupplier.create(block)
-                                .with(when, buildBlockStateVariants(list, blockStateVariant -> blockStateVariant))
-                                .with(When.anyOf(When.create().set(Properties.NORTH, true), when), buildBlockStateVariants(list2, blockStateVariant -> blockStateVariant))
+                        MultiPartGenerator.multiPart(block)
+                                .with(when, wrapModels(list, blockStateVariant -> blockStateVariant))
+                                .with(Condition.or(Condition.condition().term(BlockStateProperties.NORTH, true), when), wrapModels(list2, blockStateVariant -> blockStateVariant))
                                 .with(
-                                        When.anyOf(When.create().set(Properties.EAST, true), when),
-                                        buildBlockStateVariants(list2, blockStateVariant -> blockStateVariant.put(VariantSettings.Y, VariantSettings.Rotation.R90))
+                                        Condition.or(Condition.condition().term(BlockStateProperties.EAST, true), when),
+                                        wrapModels(list2, blockStateVariant -> blockStateVariant.with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90))
                                 )
                                 .with(
-                                        When.anyOf(When.create().set(Properties.SOUTH, true), when),
-                                        buildBlockStateVariants(list2, blockStateVariant -> blockStateVariant.put(VariantSettings.Y, VariantSettings.Rotation.R180))
+                                        Condition.or(Condition.condition().term(BlockStateProperties.SOUTH, true), when),
+                                        wrapModels(list2, blockStateVariant -> blockStateVariant.with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180))
                                 )
                                 .with(
-                                        When.anyOf(When.create().set(Properties.WEST, true), when),
-                                        buildBlockStateVariants(list2, blockStateVariant -> blockStateVariant.put(VariantSettings.Y, VariantSettings.Rotation.R270))
+                                        Condition.or(Condition.condition().term(BlockStateProperties.WEST, true), when),
+                                        wrapModels(list2, blockStateVariant -> blockStateVariant.with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270))
                                 )
-                                .with(When.create().set(Properties.UP, true), buildBlockStateVariants(list3, blockStateVariant -> blockStateVariant))
+                                .with(Condition.condition().term(BlockStateProperties.UP, true), wrapModels(list3, blockStateVariant -> blockStateVariant))
                 );
     }
 
-    private void registerStarbleachCauldron(BlockStateModelGenerator BSMG, Block block) {
-        BlockStateVariantMap.SingleProperty<Integer> map = BlockStateVariantMap.create(StarbleachCauldronBlock.LEVEL_7);
+    private void registerStarbleachCauldron(BlockModelGenerators BSMG, Block block) {
+        PropertyDispatch.C1<Integer> map = PropertyDispatch.property(StarbleachCauldronBlock.LEVEL_7);
         for(int i = 1; i <= 7; i++) {
-            map = map.register(
+            map = map.select(
                     i,
-                    BlockStateVariant.create()
-                            .put(
-                                    VariantSettings.MODEL,
+                    Variant.variant()
+                            .with(
+                                    VariantProperties.MODEL,
                                     OperationStarcleaveModels.getSevenLevelCauldron(i)
-                                            .upload(block, "_level" + i, TextureMap.cauldron(OperationStarcleave.id("block/starbleach_still")), BSMG.modelCollector)
+                                            .createWithSuffix(block, "_level" + i, TextureMapping.cauldron(OperationStarcleave.id("block/starbleach_still")), BSMG.modelOutput)
                             )
             );
         }
-        BSMG.blockStateCollector.accept(VariantsBlockStateSupplier.create(block).coordinate(map));
+        BSMG.blockStateOutput.accept(MultiVariantGenerator.multiVariant(block).with(map));
     }
 
-    private void registerGrassLikeBlock(BlockStateModelGenerator BSMG, Block block, Block baseBlock) {
-        Identifier baseBlockIdentifier = TextureMap.getId(baseBlock);
-        Identifier modelId = TexturedModel.CUBE_BOTTOM_TOP
+    private void registerGrassLikeBlock(BlockModelGenerators BSMG, Block block, Block baseBlock) {
+        ResourceLocation baseBlockIdentifier = TextureMapping.getBlockTexture(baseBlock);
+        ResourceLocation modelId = TexturedModel.CUBE_TOP_BOTTOM
                 .get(block)
-                .textures(textures -> textures.put(TextureKey.BOTTOM, baseBlockIdentifier))
-                .upload(block, BSMG.modelCollector);
-        BSMG.blockStateCollector
-                .accept(VariantsBlockStateSupplier.create(block, createModelVariantWithRandomHorizontalRotations(modelId)));
+                .updateTextures(textures -> textures.put(TextureSlot.BOTTOM, baseBlockIdentifier))
+                .create(block, BSMG.modelOutput);
+        BSMG.blockStateOutput
+                .accept(MultiVariantGenerator.multiVariant(block, createRotatedVariants(modelId)));
     }
 
-    private void registerUnevenCross(BlockStateModelGenerator BSMG, Block block) {
-        BSMG.registerItemModel(block);
+    private void registerUnevenCross(BlockModelGenerators BSMG, Block block) {
+        BSMG.createSimpleFlatItemModel(block);
 
-        TextureMap textureMap = TextureMap.cross(block);
-        Identifier modelId = OperationStarcleaveModels.UNEVEN_CROSS.upload(block, textureMap, BSMG.modelCollector);
-        Identifier modelId2 = OperationStarcleaveModels.UNEVEN_CROSS_MIRRORED.upload(block, textureMap, BSMG.modelCollector);
-        BSMG.blockStateCollector.accept(VariantsBlockStateSupplier.create(
+        TextureMapping textureMap = TextureMapping.cross(block);
+        ResourceLocation modelId = OperationStarcleaveModels.UNEVEN_CROSS.create(block, textureMap, BSMG.modelOutput);
+        ResourceLocation modelId2 = OperationStarcleaveModels.UNEVEN_CROSS_MIRRORED.create(block, textureMap, BSMG.modelOutput);
+        BSMG.blockStateOutput.accept(MultiVariantGenerator.multiVariant(
                 block,
-                BlockStateVariant.create().put(VariantSettings.MODEL, modelId),
-                BlockStateVariant.create().put(VariantSettings.MODEL, modelId2),
-                BlockStateVariant.create().put(VariantSettings.MODEL, modelId).put(VariantSettings.Y, VariantSettings.Rotation.R90),
-                BlockStateVariant.create().put(VariantSettings.MODEL, modelId2).put(VariantSettings.Y, VariantSettings.Rotation.R90)
+                Variant.variant().with(VariantProperties.MODEL, modelId),
+                Variant.variant().with(VariantProperties.MODEL, modelId2),
+                Variant.variant().with(VariantProperties.MODEL, modelId).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90),
+                Variant.variant().with(VariantProperties.MODEL, modelId2).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90)
         ));
     }
 
     @Override
-    public void generateItemModels(ItemModelGenerator IMG) {
+    public void generateItemModels(ItemModelGenerators IMG) {
         registerGenerated(IMG, OperationStarcleaveItems.STARCLEAVER_GOLEM_BUCKET);
         registerGenerated(IMG, OperationStarcleaveItems.BLESSED_BED);
         registerGenerated(IMG, OperationStarcleaveItems.BLESSED_CLOTH);
@@ -206,10 +208,10 @@ public class ModelProvider extends FabricModelProvider {
         registerGenerated(IMG, OperationStarcleaveItems.HOLLOWED_SAC);
         registerGenerated(IMG, OperationStarcleaveItems.PHLOGISTON_SAC);
 
-        IMG.register(OperationStarcleaveItems.FIRMAMENT_MANIPULATOR, Models.HANDHELD);
+        IMG.generateFlatItem(OperationStarcleaveItems.FIRMAMENT_MANIPULATOR, ModelTemplates.FLAT_HANDHELD_ITEM);
     }
 
-    private static void registerGenerated(ItemModelGenerator IMG, Item item) {
-        IMG.register(item, Models.GENERATED);
+    private static void registerGenerated(ItemModelGenerators IMG, Item item) {
+        IMG.generateFlatItem(item, ModelTemplates.FLAT_ITEM);
     }
 }

@@ -4,11 +4,11 @@ import com.google.common.collect.Comparators;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.server.network.ServerPlayNetworkHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.ChunkPos;
 import phanastrae.operation_starcleave.duck.ServerPlayNetworkHandlerDuck;
 import phanastrae.operation_starcleave.network.packet.FirmamentRegionDataPayload;
 import phanastrae.operation_starcleave.network.packet.FirmamentRegionSentPayload;
@@ -39,25 +39,25 @@ public class FirmamentRegionDataSender {
         this.regions.add(regionPos.id);
     }
 
-    public void unload(ServerPlayerEntity player, RegionPos regionPos) {
+    public void unload(ServerPlayer player, RegionPos regionPos) {
         this.regions.remove(regionPos.id);
         if(player.isAlive()) {
             ServerPlayNetworking.send(player, new UnloadFirmamentRegionPayload(regionPos.id));
         }
     }
 
-    public void sendChunkBatches(ServerPlayerEntity player) {
+    public void sendChunkBatches(ServerPlayer player) {
         if (this.unacknowledgedBatches < this.maxUnacknowledgedBatches) {
             float f = Math.max(1.0F, this.desiredBatchSize);
             this.pending = Math.min(this.pending + this.desiredBatchSize, f);
             if (!(this.pending < 1.0F)) {
                 if (!this.regions.isEmpty()) {
-                    ServerWorld serverWorld = player.getServerWorld();
+                    ServerLevel serverWorld = player.serverLevel();
 
                     Firmament firmament = Firmament.fromWorld(serverWorld);
-                    List<FirmamentRegion> list = this.makeBatch(firmament, player.getChunkPos());
+                    List<FirmamentRegion> list = this.makeBatch(firmament, player.chunkPosition());
                     if (!list.isEmpty()) {
-                        ServerPlayNetworkHandler serverPlayNetworkHandler = player.networkHandler;
+                        ServerGamePacketListenerImpl serverPlayNetworkHandler = player.connection;
                         ++this.unacknowledgedBatches;
                         ServerPlayNetworking.send(player, new StartFirmamentRegionSendPayload());
 
@@ -73,12 +73,12 @@ public class FirmamentRegionDataSender {
         }
     }
 
-    private static void sendChunkData(ServerPlayNetworkHandler handler, ServerWorld world, FirmamentRegion region) {
+    private static void sendChunkData(ServerGamePacketListenerImpl handler, ServerLevel world, FirmamentRegion region) {
         ServerPlayNetworking.send(handler.player, new FirmamentRegionDataPayload(region.regionPos.id, new FirmamentRegionData(region)));
     }
 
     private List<FirmamentRegion> makeBatch(Firmament firmament, ChunkPos playerPos) {
-        int i = MathHelper.floor(this.pending);
+        int i = Mth.floor(this.pending);
         List<FirmamentRegion> list;
         if (!this.local && this.regions.size() > i) {
             list = this.regions.stream().collect(Comparators.least(i, Comparator.comparingInt(id -> getSquaredDistance(id, playerPos))))
@@ -109,7 +109,7 @@ public class FirmamentRegionDataSender {
 
     public static int getSquaredDistance(long id, ChunkPos playerPos) {
         RegionPos r1 = new RegionPos(id);
-        RegionPos r2 = RegionPos.fromWorldCoords(playerPos.getStartX(), playerPos.getStartZ());
+        RegionPos r2 = RegionPos.fromWorldCoords(playerPos.getMinBlockX(), playerPos.getMinBlockZ());
 
         int dx = r1.rx - r2.rx;
         int dz = r1.rz - r2.rz;
@@ -119,7 +119,7 @@ public class FirmamentRegionDataSender {
 
     public void onAcknowledgeRegions(float desiredBatchSize) {
         --this.unacknowledgedBatches;
-        this.desiredBatchSize = Double.isNaN(desiredBatchSize) ? 0.01F : MathHelper.clamp(desiredBatchSize, 0.01F, 64.0F);
+        this.desiredBatchSize = Double.isNaN(desiredBatchSize) ? 0.01F : Mth.clamp(desiredBatchSize, 0.01F, 64.0F);
         if (this.unacknowledgedBatches == 0) {
             this.pending = 1.0F;
         }
@@ -127,7 +127,7 @@ public class FirmamentRegionDataSender {
         this.maxUnacknowledgedBatches = 10;
     }
 
-    public static FirmamentRegionDataSender getFirmamentRegionDataSender(ServerPlayNetworkHandler serverPlayNetworkHandler) {
+    public static FirmamentRegionDataSender getFirmamentRegionDataSender(ServerGamePacketListenerImpl serverPlayNetworkHandler) {
         return ((ServerPlayNetworkHandlerDuck)serverPlayNetworkHandler).operation_starcleave$getFirmamentRegionDataSender();
     }
 }

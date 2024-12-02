@@ -1,6 +1,6 @@
 package phanastrae.operation_starcleave.world.firmament;
 
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion;
 
 public class FirmamentSubRegionData {
@@ -17,14 +17,14 @@ public class FirmamentSubRegionData {
         //this.dripData = firmamentSubRegion.getAsByteArray(firmamentSubRegion.drip);
     }
 
-    public FirmamentSubRegionData(PacketByteBuf packetByteBuf) {
+    public FirmamentSubRegionData(FriendlyByteBuf packetByteBuf) {
         //this.displacementData = packetByteBuf.readByteArray();
         //this.velocityData = packetByteBuf.readByteArray();
         this.damageData = packetByteBuf.readByteArray();
         //this.dripData = packetByteBuf.readByteArray();
     }
 
-    public void write(PacketByteBuf packetByteBuf) {
+    public void write(FriendlyByteBuf packetByteBuf) {
         //packetByteBuf.writeByteArray(this.displacementData);
         //packetByteBuf.writeByteArray(this.velocityData);
         packetByteBuf.writeByteArray(this.damageData);

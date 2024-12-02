@@ -2,19 +2,21 @@ package phanastrae.operation_starcleave.client.render.entity.model;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.entity.model.EntityModel;
-import net.minecraft.client.render.entity.model.EntityModelPartNames;
-import net.minecraft.client.render.entity.model.SinglePartEntityModel;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartNames;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.util.Mth;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.entity.mob.SubcaelicDuxEntity;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class SubcaelicDuxEntityModel<T extends SubcaelicDuxEntity> extends SinglePartEntityModel<T> {
+public class SubcaelicDuxEntityModel<T extends SubcaelicDuxEntity> extends HierarchicalModel<T> {
     public static final String BASE_TENTACLES = "base_tentacles";
     public static final String OUTER_TENTACLES = "outer_tentacles";
     public static final String HALO = "halo";
@@ -32,7 +34,7 @@ public class SubcaelicDuxEntityModel<T extends SubcaelicDuxEntity> extends Singl
 
     public SubcaelicDuxEntityModel(ModelPart root) {
         this.root = root;
-        this.body = root.getChild(EntityModelPartNames.BODY);
+        this.body = root.getChild(PartNames.BODY);
         this.baseTentacleRoot = body.getChild(BASE_TENTACLES);
         Arrays.setAll(this.baseTentacles, index -> baseTentacleRoot.getChild(getBaseTentacleName(index)));
         this.outerTentacleRoot = body.getChild(OUTER_TENTACLES);
@@ -64,125 +66,125 @@ public class SubcaelicDuxEntityModel<T extends SubcaelicDuxEntity> extends Singl
         return "rightWing" + index;
     }
 
-    public static TexturedModelData getTexturedModelData() {
-        ModelData modelData = new ModelData();
-        ModelPartData root = modelData.getRoot();
+    public static LayerDefinition getTexturedModelData() {
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition root = modelData.getRoot();
 
-        ModelPartData body = root.addChild(
-                EntityModelPartNames.BODY,
-                ModelPartBuilder.create().uv(0, 0).cuboid(-7.0F, -12.0F, -7.0F, 14.0F, 25.0F, 14.0F)
-                .uv(56, 0).cuboid(-8.0F, -16.0F, 2.0F, 16.0F, 20.0F, 6.0F)
-                .uv(100, 0).cuboid(-4.0F, -13.5F, -4.0F, 8.0F, 3.0F, 6.0F)
-                .uv(100, 9).cuboid(5.5F, -14.0F, -6.0F, 2.0F, 14.0F, 8.0F)
-                .uv(100, 9).mirrored().cuboid(-7.5F, -14.0F, -6.0F, 2.0F, 14.0F, 8.0F).mirrored(false),
-                ModelTransform.pivot(0.0F, 11.0F, 0.0F));
+        PartDefinition body = root.addOrReplaceChild(
+                PartNames.BODY,
+                CubeListBuilder.create().texOffs(0, 0).addBox(-7.0F, -12.0F, -7.0F, 14.0F, 25.0F, 14.0F)
+                .texOffs(56, 0).addBox(-8.0F, -16.0F, 2.0F, 16.0F, 20.0F, 6.0F)
+                .texOffs(100, 0).addBox(-4.0F, -13.5F, -4.0F, 8.0F, 3.0F, 6.0F)
+                .texOffs(100, 9).addBox(5.5F, -14.0F, -6.0F, 2.0F, 14.0F, 8.0F)
+                .texOffs(100, 9).mirror().addBox(-7.5F, -14.0F, -6.0F, 2.0F, 14.0F, 8.0F).mirror(false),
+                PartPose.offset(0.0F, 11.0F, 0.0F));
 
-        ModelPartData halo = body.addChild(
+        PartDefinition halo = body.addOrReplaceChild(
                 HALO,
-                ModelPartBuilder.create().uv(0, 39).cuboid(-10.0F, -10.0F, -0.5F, 20.0F, 20.0F, 1.0F),
-                ModelTransform.pivot(0.0F, -11.0F, 13.5F));
+                CubeListBuilder.create().texOffs(0, 39).addBox(-10.0F, -10.0F, -0.5F, 20.0F, 20.0F, 1.0F),
+                PartPose.offset(0.0F, -11.0F, 13.5F));
 
-        ModelPartData leftDoor = body.addChild(
+        PartDefinition leftDoor = body.addOrReplaceChild(
                 "leftDoor",
-                ModelPartBuilder.create().uv(42, 39).cuboid(-5.5F, -10.5F, -0.75F, 6.0F, 21.0F, 1.0F),
-                ModelTransform.pivot(5.5F, 0.5F, -7.0F));
-        ModelPartData rightDoor = body.addChild(
+                CubeListBuilder.create().texOffs(42, 39).addBox(-5.5F, -10.5F, -0.75F, 6.0F, 21.0F, 1.0F),
+                PartPose.offset(5.5F, 0.5F, -7.0F));
+        PartDefinition rightDoor = body.addOrReplaceChild(
                 "rightDoor",
-                ModelPartBuilder.create().uv(42, 39).mirrored().cuboid(-0.5F, -10.5F, -0.75F, 6.0F, 21.0F, 1.0F).mirrored(false),
-                ModelTransform.pivot(-5.5F, 0.5F, -7.0F));
+                CubeListBuilder.create().texOffs(42, 39).mirror().addBox(-0.5F, -10.5F, -0.75F, 6.0F, 21.0F, 1.0F).mirror(false),
+                PartPose.offset(-5.5F, 0.5F, -7.0F));
 
-        ModelPartData leftWing0 = body.addChild(
+        PartDefinition leftWing0 = body.addOrReplaceChild(
                 getLeftWingName(0),
-                ModelPartBuilder.create().uv(72, 34).cuboid(-1.5F, -11.5F, -0.5F, 9.0F, 23.0F, 1.0F),
-                ModelTransform.pivot(7.5F, 2.5F, 2.0F));
-        ModelPartData leftWing1 = leftWing0.addChild(
+                CubeListBuilder.create().texOffs(72, 34).addBox(-1.5F, -11.5F, -0.5F, 9.0F, 23.0F, 1.0F),
+                PartPose.offset(7.5F, 2.5F, 2.0F));
+        PartDefinition leftWing1 = leftWing0.addOrReplaceChild(
                 getLeftWingName(1),
-                ModelPartBuilder.create().uv(92, 33).cuboid(0.0F, -13.75F, -0.5F, 8.0F, 24.0F, 1.0F),
-                ModelTransform.pivot(7.5F, 5.25F, 0.0F));
-        ModelPartData leftWing2 = leftWing1.addChild(
+                CubeListBuilder.create().texOffs(92, 33).addBox(0.0F, -13.75F, -0.5F, 8.0F, 24.0F, 1.0F),
+                PartPose.offset(7.5F, 5.25F, 0.0F));
+        PartDefinition leftWing2 = leftWing1.addOrReplaceChild(
                 getLeftWingName(2),
-                ModelPartBuilder.create().uv(110, 32).cuboid(0.0F, -12.5F, -0.5F, 8.0F, 25.0F, 1.0F),
-                ModelTransform.pivot(8.0F, 1.75F, 0.0F));
+                CubeListBuilder.create().texOffs(110, 32).addBox(0.0F, -12.5F, -0.5F, 8.0F, 25.0F, 1.0F),
+                PartPose.offset(8.0F, 1.75F, 0.0F));
 
-        ModelPartData rightWing0 = body.addChild(
+        PartDefinition rightWing0 = body.addOrReplaceChild(
                 getRightWingName(0),
-                ModelPartBuilder.create().uv(72, 34).mirrored().cuboid(-7.5F, -11.5F, -0.5F, 9.0F, 23.0F, 1.0F).mirrored(false),
-                ModelTransform.pivot(-7.5F, 2.5F, 2.0F));
-        ModelPartData rightWing1 = rightWing0.addChild(
+                CubeListBuilder.create().texOffs(72, 34).mirror().addBox(-7.5F, -11.5F, -0.5F, 9.0F, 23.0F, 1.0F).mirror(false),
+                PartPose.offset(-7.5F, 2.5F, 2.0F));
+        PartDefinition rightWing1 = rightWing0.addOrReplaceChild(
                 getRightWingName(1),
-                ModelPartBuilder.create().uv(92, 33).mirrored().cuboid(-8.0F, -13.75F, -0.5F, 8.0F, 24.0F, 1.0F).mirrored(false),
-                ModelTransform.pivot(-7.5F, 5.25F, 0.0F));
-        ModelPartData rightWing2 = rightWing1.addChild(
+                CubeListBuilder.create().texOffs(92, 33).mirror().addBox(-8.0F, -13.75F, -0.5F, 8.0F, 24.0F, 1.0F).mirror(false),
+                PartPose.offset(-7.5F, 5.25F, 0.0F));
+        PartDefinition rightWing2 = rightWing1.addOrReplaceChild(
                 getRightWingName(2),
-                ModelPartBuilder.create().uv(110, 32).mirrored().cuboid(-8.0F, -12.5F, -0.5F, 8.0F, 25.0F, 1.0F).mirrored(false),
-                ModelTransform.pivot(-8.0F, 1.75F, 0.0F));
+                CubeListBuilder.create().texOffs(110, 32).mirror().addBox(-8.0F, -12.5F, -0.5F, 8.0F, 25.0F, 1.0F).mirror(false),
+                PartPose.offset(-8.0F, 1.75F, 0.0F));
 
-        ModelPartData baseTentacles = body.addChild(
+        PartDefinition baseTentacles = body.addOrReplaceChild(
                 BASE_TENTACLES,
-                ModelPartBuilder.create(),
-                ModelTransform.pivot(0.0F, 13.0F, 0.0F));
+                CubeListBuilder.create(),
+                PartPose.offset(0.0F, 13.0F, 0.0F));
 
-        ModelPartData outerTentacles = body.addChild(
+        PartDefinition outerTentacles = body.addOrReplaceChild(
                 OUTER_TENTACLES,
-                ModelPartBuilder.create(),
-                ModelTransform.pivot(0.0F, 13.0F, 0.0F));
+                CubeListBuilder.create(),
+                PartPose.offset(0.0F, 13.0F, 0.0F));
 
-        ModelPartBuilder modelPartBuilder = ModelPartBuilder.create().uv(56, 26).cuboid(-1.5F, 0.0F, -1.5F, 3.0F, 26.0F, 3.0F);
+        CubeListBuilder modelPartBuilder = CubeListBuilder.create().texOffs(56, 26).addBox(-1.5F, 0.0F, -1.5F, 3.0F, 26.0F, 3.0F);
         for(int k = 0; k < 7; ++k) {
             double angle = Math.PI * 2.0 * k / 7.0;
             float x = (float)Math.sin(angle) * -6.0F;
             float z = (float)Math.cos(angle) * -6.0F;
 
             double angle2 = Math.PI * 2.0 * k / 7.0;
-            baseTentacles.addChild(
+            baseTentacles.addOrReplaceChild(
                     getBaseTentacleName(k),
                     modelPartBuilder,
-                    ModelTransform.of(x, 0.0F, z, 0.0F, (float)angle2, 0.0F));
+                    PartPose.offsetAndRotation(x, 0.0F, z, 0.0F, (float)angle2, 0.0F));
         }
 
-        modelPartBuilder = ModelPartBuilder.create().uv(120, 9).cuboid(-1.0F, -2.0F, -1.0F, 2.0F, 21.0F, 2.0F);
+        modelPartBuilder = CubeListBuilder.create().texOffs(120, 9).addBox(-1.0F, -2.0F, -1.0F, 2.0F, 21.0F, 2.0F);
         for(int k = 0; k < 7; ++k) {
             double angle = Math.PI * 2.0 * k / 7.0;
             float x = (float)Math.sin(angle) * 9.5F;
             float z = (float)Math.cos(angle) * 9.5F;
 
             double angle2 = Math.PI * 2.0 * k / 7.0;
-            outerTentacles.addChild(
+            outerTentacles.addOrReplaceChild(
                     getOuterTentacleName(k),
                     modelPartBuilder,
-                    ModelTransform.of(x, 0.0F, z, 0.0F, (float)angle2, 0.0F));
+                    PartPose.offsetAndRotation(x, 0.0F, z, 0.0F, (float)angle2, 0.0F));
         }
 
-        return TexturedModelData.of(modelData, 128, 64);
+        return LayerDefinition.create(modelData, 128, 64);
     }
 
     @Override
-    public void setAngles(SubcaelicDuxEntity entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
+    public void setupAnim(SubcaelicDuxEntity entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
         for(ModelPart tentacle : this.baseTentacles) {
-            tentacle.pitch = -0.15f * animationProgress;
+            tentacle.xRot = -0.15f * animationProgress;
         }
         for(ModelPart tentacle : this.outerTentacles) {
-            tentacle.pitch = 0.3f * animationProgress;
+            tentacle.xRot = 0.3f * animationProgress;
         }
     }
 
     @Override
-    public void animateModel(SubcaelicDuxEntity entity, float limbAngle, float limbDistance, float tickDelta) {
-        float f = (float)Math.toRadians(MathHelper.lerpAngleDegrees(tickDelta, entity.prevTentacleRollAngle, entity.tentacleRollAngle));
-        this.baseTentacleRoot.yaw = -f;
-        this.outerTentacleRoot.yaw = 2f * f;
+    public void prepareMobModel(SubcaelicDuxEntity entity, float limbAngle, float limbDistance, float tickDelta) {
+        float f = (float)Math.toRadians(Mth.rotLerp(tickDelta, entity.prevTentacleRollAngle, entity.tentacleRollAngle));
+        this.baseTentacleRoot.yRot = -f;
+        this.outerTentacleRoot.yRot = 2f * f;
 
         float g = 0.4f * (float)Math.sin(f);
         for(int i = 0; i < 3; i++) {
-            this.leftWing[i].yaw = g;
-            this.rightWing[i].yaw = -g;
+            this.leftWing[i].yRot = g;
+            this.rightWing[i].yRot = -g;
         }
 
-        this.halo.roll = (float)Math.toRadians(MathHelper.lerpAngleDegrees(tickDelta, entity.prevHaloAngle, entity.haloAngle));
+        this.halo.zRot = (float)Math.toRadians(Mth.rotLerp(tickDelta, entity.prevHaloAngle, entity.haloAngle));
     }
 
     @Override
-    public ModelPart getPart() {
+    public ModelPart root() {
         return this.root;
     }
 

@@ -2,21 +2,21 @@ package phanastrae.operation_starcleave.data;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.tags.BlockTags;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.block.tag.OperationStarcleaveBlockTags;
 
 import java.util.concurrent.CompletableFuture;
 
 public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
-    public BlockTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+    public BlockTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, registriesFuture);
     }
 
     @Override
-    protected void configure(RegistryWrapper.WrapperLookup arg) {
-        getOrCreateTagBuilder(BlockTags.PICKAXE_MINEABLE)
+    protected void addTags(HolderLookup.Provider arg) {
+        getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_PICKAXE)
                 .add(OperationStarcleaveBlocks.NETHERITE_PUMPKIN)
                 .add(OperationStarcleaveBlocks.STARBLEACHED_LOG)
                 .add(OperationStarcleaveBlocks.STARBLEACHED_WOOD)
@@ -33,15 +33,15 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 .add(OperationStarcleaveBlocks.STELLAR_TILE_SLAB)
                 .add(OperationStarcleaveBlocks.STELLAR_REPULSOR);
 
-        getOrCreateTagBuilder(BlockTags.AXE_MINEABLE)
+        getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_AXE)
                 .add(OperationStarcleaveBlocks.MULCHBORNE_TUFT)
                 .add(OperationStarcleaveBlocks.SHORT_HOLY_MOSS);
 
-        getOrCreateTagBuilder(BlockTags.HOE_MINEABLE)
+        getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_HOE)
                 .add(OperationStarcleaveBlocks.NETHERITE_PUMPKIN)
                 .add(OperationStarcleaveBlocks.STARBLEACHED_LEAVES);
 
-        getOrCreateTagBuilder(BlockTags.SHOVEL_MINEABLE)
+        getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_SHOVEL)
                 .add(OperationStarcleaveBlocks.STELLAR_SEDIMENT)
                 .add(OperationStarcleaveBlocks.STELLAR_MULCH)
                 .add(OperationStarcleaveBlocks.STELLAR_FARMLAND)

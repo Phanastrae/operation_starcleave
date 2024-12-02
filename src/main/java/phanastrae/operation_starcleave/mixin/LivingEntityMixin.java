@@ -2,18 +2,18 @@ package phanastrae.operation_starcleave.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalFloatRef;
-import net.minecraft.block.BlockState;
-import net.minecraft.component.type.FoodComponent;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -31,54 +31,54 @@ public abstract class LivingEntityMixin extends Entity {
 
     @Shadow protected boolean jumping;
 
-    @Shadow private int jumpingCooldown;
+    @Shadow public abstract boolean hurt(DamageSource source, float amount);
 
-    @Shadow public abstract boolean hasStatusEffect(RegistryEntry<StatusEffect> effect);
+    @Shadow public abstract boolean hasEffect(Holder<MobEffect> effect);
 
-    @Shadow public abstract boolean damage(DamageSource source, float amount);
+    @Shadow private int noJumpDelay;
 
-    LivingEntityMixin(EntityType<?> type, World world) {
+    LivingEntityMixin(EntityType<?> type, Level world) {
         super(type, world);
     }
 
-    @Inject(method = "eatFood", at = @At("HEAD"))
-    private void operation_starcleave$eatStarbleachedFood(World world, ItemStack stack, FoodComponent foodComponent, CallbackInfoReturnable<ItemStack> cir) {
+    @Inject(method = "eat(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/food/FoodProperties;)Lnet/minecraft/world/item/ItemStack;", at = @At("HEAD"))
+    private void operation_starcleave$eatStarbleachedFood(Level world, ItemStack stack, FoodProperties foodComponent, CallbackInfoReturnable<ItemStack> cir) {
         StarbleachCoating.onEat((LivingEntity)(Object)this, world, stack);
     }
 
-    @Inject(method = "tickMovement", at = @At("HEAD"))
+    @Inject(method = "aiStep", at = @At("HEAD"))
     private void operation_starcleave$repulsorVehicleJump(CallbackInfo ci) {
-        if(this.jumping && this.jumpingCooldown == 0) {
+        if(this.jumping && this.noJumpDelay == 0) {
             LivingEntity livingEntity = (LivingEntity)(Object)this;
-            Entity controllingVehicle = livingEntity.getControllingVehicle();
-            if(controllingVehicle != null && controllingVehicle.getVelocity().y < 0.01) {
+            Entity controllingVehicle = livingEntity.getControlledVehicle();
+            if(controllingVehicle != null && controllingVehicle.getDeltaMovement().y < 0.01) {
                 StellarRepulsorBlock.tryLaunch(controllingVehicle);
-                this.jumpingCooldown = 10;
+                this.noJumpDelay = 10;
             }
         }
     }
 
-    @Inject(method = "jump", at = @At("RETURN"))
+    @Inject(method = "jumpFromGround", at = @At("RETURN"))
     private void operation_starcleave$repulsorJump(CallbackInfo ci) {
         LivingEntity livingEntity = (LivingEntity)(Object)this;
         StellarRepulsorBlock.tryLaunch(livingEntity);
     }
 
-    @Inject(method = "sleep", at = @At("HEAD"))
+    @Inject(method = "startSleeping", at = @At("HEAD"))
     private void operation_starcleave$blessedBed(BlockPos pos, CallbackInfo ci) {
         LivingEntity livingEntity = (LivingEntity)(Object)this;
-        World world = livingEntity.getWorld();
+        Level world = livingEntity.level();
         BlockState blockState = world.getBlockState(pos);
-        if(blockState.isOf(OperationStarcleaveBlocks.BLESSED_BED)) {
+        if(blockState.is(OperationStarcleaveBlocks.BLESSED_BED)) {
             BlessedBedBlock.blessedSleep(livingEntity);
         }
     }
 
-    @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LimbAnimator;setSpeed(F)V", ordinal = 0, shift = At.Shift.BEFORE))
+    @Inject(method = "hurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/WalkAnimationState;setSpeed(F)V", ordinal = 0, shift = At.Shift.BEFORE))
     private void operation_starcleave$handlePhlogisticFireDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir, @Local(ordinal = 0) LocalFloatRef localRef) {
-        if(source.isIn(OperationStarcleaveDamageTypeTags.IS_PHLOGISTIC_FIRE)) {
+        if(source.is(OperationStarcleaveDamageTypeTags.IS_PHLOGISTIC_FIRE)) {
             float damage = localRef.get();
-            if(this.isFireImmune() || this.hasStatusEffect(StatusEffects.FIRE_RESISTANCE)) {
+            if(this.fireImmune() || this.hasEffect(MobEffects.FIRE_RESISTANCE)) {
                 damage *= 0.5F;
             }
 

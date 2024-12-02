@@ -1,6 +1,6 @@
 package phanastrae.operation_starcleave.world.firmament;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 
 public class RegionPos {
 

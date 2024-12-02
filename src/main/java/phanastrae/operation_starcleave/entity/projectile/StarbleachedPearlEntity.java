@@ -1,22 +1,22 @@
 package phanastrae.operation_starcleave.entity.projectile;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityStatuses;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
-import net.minecraft.item.Item;
-import net.minecraft.predicate.entity.EntityPredicates;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityEvent;
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
@@ -25,16 +25,16 @@ import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes
 
 import java.util.function.Predicate;
 
-public class StarbleachedPearlEntity extends ThrownItemEntity {
-    public StarbleachedPearlEntity(EntityType<? extends ThrownItemEntity> entityType, World world) {
+public class StarbleachedPearlEntity extends ThrowableItemProjectile {
+    public StarbleachedPearlEntity(EntityType<? extends ThrowableItemProjectile> entityType, Level world) {
         super(entityType, world);
     }
 
-    public StarbleachedPearlEntity(World world, LivingEntity owner) {
+    public StarbleachedPearlEntity(Level world, LivingEntity owner) {
         super(OperationStarcleaveEntityTypes.STARBLEACHED_PEARL, owner, world);
     }
 
-    public StarbleachedPearlEntity(World world, double x, double y, double z) {
+    public StarbleachedPearlEntity(Level world, double x, double y, double z) {
         super(OperationStarcleaveEntityTypes.STARBLEACHED_PEARL, x, y, z, world);
     }
 
@@ -44,10 +44,10 @@ public class StarbleachedPearlEntity extends ThrownItemEntity {
     }
 
     @Override
-    public void handleStatus(byte status) {
-        if (status == EntityStatuses.PLAY_DEATH_SOUND_OR_ADD_PROJECTILE_HIT_PARTICLES) {
+    public void handleEntityEvent(byte status) {
+        if (status == EntityEvent.DEATH) {
             for(int i = 0; i < 1000; ++i) {
-                this.getWorld()
+                this.level()
                         .addParticle(
                                 OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER,
                                 this.getX(), this.getY(), this.getZ(),
@@ -57,28 +57,28 @@ public class StarbleachedPearlEntity extends ThrownItemEntity {
     }
 
     @Override
-    protected void onCollision(HitResult hitResult) {
-        super.onCollision(hitResult);
+    protected void onHit(HitResult hitResult) {
+        super.onHit(hitResult);
 
-        Vec3d pos = hitResult.getPos();
+        Vec3 pos = hitResult.getLocation();
         if(hitResult.getType() == HitResult.Type.ENTITY) {
             // hitresult position is at hit entity's feet, offset slightly to avoid launching hit entity directly upwards
-            pos = pos.add(this.getPos().subtract(pos).multiply(0.3));
+            pos = pos.add(this.position().subtract(pos).scale(0.3));
         }
 
-        if(!this.getWorld().isClient && !this.isRemoved()) {
-            repel(pos, 8, 1.5f, getWorld(), this, 0.6f);
-            this.getWorld().sendEntityStatus(this, EntityStatuses.PLAY_DEATH_SOUND_OR_ADD_PROJECTILE_HIT_PARTICLES);
+        if(!this.level().isClientSide && !this.isRemoved()) {
+            repel(pos, 8, 1.5f, level(), this, 0.6f);
+            this.level().broadcastEntityEvent(this, EntityEvent.DEATH);
             this.discard();
         }
     }
 
     @Override
     public void tick() {
-        World world = this.getWorld();
-        if(world != null && world.isClient) {
-            Vec3d vel = this.getVelocity();
-            Random random = this.random;
+        Level world = this.level();
+        if(world != null && world.isClientSide) {
+            Vec3 vel = this.getDeltaMovement();
+            RandomSource random = this.random;
             for(int i = 0; i < 18; i++) {
                 world.addParticle(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER,
                         this.getX(), this.getY(), this.getZ(),
@@ -88,16 +88,16 @@ public class StarbleachedPearlEntity extends ThrownItemEntity {
         super.tick();
     }
 
-    public static void repel(Vec3d pos, float radius, float maxAddedSpeed, World world, @Nullable Entity entity, float audioMultiplier) {
-        if(world instanceof ServerWorld serverWorld) {
+    public static void repel(Vec3 pos, float radius, float maxAddedSpeed, Level world, @Nullable Entity entity, float audioMultiplier) {
+        if(world instanceof ServerLevel serverWorld) {
             // send packets to nearby players
-            serverWorld.getPlayers().forEach(playerEntity -> {
+            serverWorld.players().forEach(playerEntity -> {
                 Entity e = playerEntity;
-                Entity vehicle = playerEntity.getControllingVehicle();
+                Entity vehicle = playerEntity.getControlledVehicle();
                 if(vehicle != null) {
                     e = vehicle;
                 }
-                double distance = e.getPos().subtract(pos).length();
+                double distance = e.position().subtract(pos).length();
 
                 // expand radius to be safe
                 float radiusBig = radius * 1.25f + 4;
@@ -109,25 +109,25 @@ public class StarbleachedPearlEntity extends ThrownItemEntity {
 
         doRepulsion(pos, radius, maxAddedSpeed, world, entity);
 
-        if(!world.isClient) {
-            Random random = world.getRandom();
-            world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ITEM_TRIDENT_THUNDER, SoundCategory.PLAYERS, audioMultiplier, 0.9f + random.nextFloat() * 0.3f);
+        if(!world.isClientSide) {
+            RandomSource random = world.getRandom();
+            world.playSound(null, pos.x(), pos.y(), pos.z(), SoundEvents.TRIDENT_THUNDER, SoundSource.PLAYERS, audioMultiplier, 0.9f + random.nextFloat() * 0.3f);
         }
     }
 
-    public static void doRepulsion(Vec3d pos, float radius, float maxAddedSpeed, World world, @Nullable Entity entity) {
-        StarbleachedPearlEntity.doRepulsion(pos, radius, maxAddedSpeed, world, entity, EntityPredicates.EXCEPT_SPECTATOR);
+    public static void doRepulsion(Vec3 pos, float radius, float maxAddedSpeed, Level world, @Nullable Entity entity) {
+        StarbleachedPearlEntity.doRepulsion(pos, radius, maxAddedSpeed, world, entity, EntitySelector.NO_SPECTATORS);
     }
 
-    public static void doRepulsion(Vec3d pos, float radius, float maxAddedSpeed, World world, @Nullable Entity entity, Predicate<? super Entity> predicate) {
-        for (Entity e : world.getOtherEntities(entity, Box.from(pos).expand(radius), predicate)) {
+    public static void doRepulsion(Vec3 pos, float radius, float maxAddedSpeed, Level world, @Nullable Entity entity, Predicate<? super Entity> predicate) {
+        for (Entity e : world.getEntities(entity, AABB.unitCubeFromLowerCorner(pos).inflate(radius), predicate)) {
 
             boolean doRepel;
             // update players server side (and sync to client), update anything else on logical side
-            if(e instanceof PlayerEntity) {
-                doRepel = !world.isClient;
+            if(e instanceof Player) {
+                doRepel = !world.isClientSide;
             } else {
-                doRepel = e.isLogicalSideForUpdatingMovement();
+                doRepel = e.isControlledByLocalInstance();
             }
             if(doRepel) {
                 repelEntity(e, pos, radius, maxAddedSpeed);
@@ -135,20 +135,20 @@ public class StarbleachedPearlEntity extends ThrownItemEntity {
         }
     }
 
-    public static void repelEntity(Entity e, Vec3d pos, float radius, float maxAddedSpeed) {
-        if(e instanceof PlayerEntity player && player.getAbilities().flying) {
+    public static void repelEntity(Entity e, Vec3 pos, float radius, float maxAddedSpeed) {
+        if(e instanceof Player player && player.getAbilities().flying) {
             return;
         }
 
-        Vec3d pos2 = e.getPos().add(0, e.getHeight() / 2, 0);
+        Vec3 pos2 = e.position().add(0, e.getBbHeight() / 2, 0);
         double dist = pos2.distanceTo(pos);
         if (dist > radius) return;
         double f = (radius - dist) / radius;
         f = 1 - (1 - f) * (1 - f);
-        Vec3d offset = pos2.subtract(pos).normalize();
+        Vec3 offset = pos2.subtract(pos).normalize();
 
-        e.addVelocity(offset.multiply(f * maxAddedSpeed));
-        e.velocityModified = true;
+        e.push(offset.scale(f * maxAddedSpeed));
+        e.hurtMarked = true;
         e.fallDistance = -5;
     }
 }

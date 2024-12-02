@@ -1,13 +1,12 @@
 package phanastrae.operation_starcleave.mixin;
 
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.HoeItem;
-import net.minecraft.item.ItemUsageContext;
+import net.minecraft.world.item.HoeItem;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -21,18 +20,16 @@ import java.util.function.Predicate;
 @Mixin(HoeItem.class)
 public abstract class HoeItemMixin {
 
-    @Mutable
-    @Shadow @Final protected static Map<Block, Pair<Predicate<ItemUsageContext>, Consumer<ItemUsageContext>>> TILLING_ACTIONS;
+    @Shadow @Final protected static Map<Block, Pair<Predicate<UseOnContext>, Consumer<UseOnContext>>> TILLABLES;
 
-    @Shadow
-    public static Consumer<ItemUsageContext> createTillAction(BlockState result) {
-        return null;
-    }
+    @Shadow public static Consumer<UseOnContext> changeIntoState(BlockState state) {
+        throw new AssertionError();
+    };
 
     @Inject(method = "<clinit>", at = @At("RETURN"))
     private static void operation_starcleave$onInit(CallbackInfo ci) {
-        Consumer<ItemUsageContext> till = createTillAction(OperationStarcleaveBlocks.STELLAR_FARMLAND.getDefaultState());
+        Consumer<UseOnContext> till = changeIntoState(OperationStarcleaveBlocks.STELLAR_FARMLAND.defaultBlockState());
 
-        TILLING_ACTIONS.put(OperationStarcleaveBlocks.STELLAR_MULCH, Pair.of(HoeItem::canTillFarmland, till));
+        TILLABLES.put(OperationStarcleaveBlocks.STELLAR_MULCH, Pair.of(HoeItem::onlyIfAirAbove, till));
     }
 }

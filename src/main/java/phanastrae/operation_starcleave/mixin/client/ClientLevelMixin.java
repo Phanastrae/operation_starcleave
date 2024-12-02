@@ -1,14 +1,6 @@
 package phanastrae.operation_starcleave.mixin.client;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.client.render.WorldRenderer;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -22,20 +14,25 @@ import phanastrae.operation_starcleave.world.firmament.Firmament;
 import phanastrae.operation_starcleave.client.world.starbleach.StarbleachParticles;
 
 import java.util.function.Supplier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
-@Mixin(ClientWorld.class)
-public class ClientWorldMixin implements FirmamentHolder {
+@Mixin(ClientLevel.class)
+public class ClientLevelMixin implements FirmamentHolder {
 
-    @Final
-    @Shadow
-    private MinecraftClient client;
-
+    @Shadow @Final private Minecraft minecraft;
     private Firmament operation_starcleave$firmament;
 
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void operation_starcleave$onInit(ClientPlayNetworkHandler networkHandler, ClientWorld.Properties properties, RegistryKey registryRef, RegistryEntry dimensionTypeEntry, int loadDistance, int simulationDistance, Supplier profiler, WorldRenderer worldRenderer, boolean debugWorld, long seed, CallbackInfo ci) {
-        this.operation_starcleave$firmament = new Firmament((World)(Object)this, new ClientFirmamentRegionManager((ClientWorld)(Object)this));
+    private void operation_starcleave$onInit(ClientPacketListener networkHandler, ClientLevel.ClientLevelData properties, ResourceKey registryRef, Holder dimensionTypeEntry, int loadDistance, int simulationDistance, Supplier profiler, LevelRenderer worldRenderer, boolean debugWorld, long seed, CallbackInfo ci) {
+        this.operation_starcleave$firmament = new Firmament((Level)(Object)this, new ClientFirmamentRegionManager((ClientLevel)(Object)this));
     }
 
     @Override
@@ -44,8 +41,8 @@ public class ClientWorldMixin implements FirmamentHolder {
     }
 
     @ModifyReturnValue(method = "getSkyColor", at = @At("RETURN"))
-    private Vec3d operation_starcleave$doCleavingFlash(Vec3d original, Vec3d cameraPos, float tickDelta) {
-        int flashTicks = this.client.options.getHideLightningFlashes().getValue() ? 0 : ((WorldDuck)this).operation_starcleave$getCleavingFlashTicksLeft();
+    private Vec3 operation_starcleave$doCleavingFlash(Vec3 original, Vec3 cameraPos, float tickDelta) {
+        int flashTicks = this.minecraft.options.hideLightningFlash().get() ? 0 : ((WorldDuck)this).operation_starcleave$getCleavingFlashTicksLeft();
         if (flashTicks > 0) {
             float flashAmount = (float)flashTicks - tickDelta;
             if (flashAmount > 1.0F) {
@@ -56,14 +53,14 @@ public class ClientWorldMixin implements FirmamentHolder {
             double r = original.x * (1.0F - flashAmount) + 1.0F * flashAmount;
             double g = original.y * (1.0F - flashAmount) + 0.8F * flashAmount;
             double b = original.z * (1.0F - flashAmount) + 0.3F * flashAmount;
-            return new Vec3d(r, g, b);
+            return new Vec3(r, g, b);
         }
         return original;
     }
 
-    @Inject(method = "doRandomBlockDisplayTicks", at = @At("RETURN"))
+    @Inject(method = "animateTick", at = @At("RETURN"))
     private void operation_starcleave$firmamentParticles(int centerX, int centerY, int centerZ, CallbackInfo ci) {
-        ClientWorld clientWorld = (ClientWorld)(Object)this;
+        ClientLevel clientWorld = (ClientLevel)(Object)this;
         StarbleachParticles.spawnParticles(clientWorld, centerX, centerY, centerZ);
     }
 }

@@ -1,28 +1,27 @@
 package phanastrae.operation_starcleave.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 
 public class ImbuedStarbleachedTilesBlock extends Block {
 
-    public ImbuedStarbleachedTilesBlock(Settings settings) {
+    public ImbuedStarbleachedTilesBlock(Properties settings) {
         super(settings);
     }
 
     @Override
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+    public void animateTick(BlockState state, Level world, BlockPos pos, RandomSource random) {
         if(random.nextInt(5) != 0) return;
 
         for(Direction direction : Direction.values()) {
-            Vec3i v = direction.getVector();
-            if (world.getBlockState(pos.add(v)).isReplaceable()) {
+            Vec3i v = direction.getNormal();
+            if (world.getBlockState(pos.offset(v)).canBeReplaced()) {
                 double x = pos.getX() + 0.5 + 0.5 * v.getX();
                 double y = pos.getY() + 0.5 + 0.5 * v.getY();
                 double z = pos.getZ() + 0.5 + 0.5 * v.getZ();

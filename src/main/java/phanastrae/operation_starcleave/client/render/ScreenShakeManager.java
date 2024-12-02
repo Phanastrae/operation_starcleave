@@ -1,9 +1,9 @@
 package phanastrae.operation_starcleave.client.render;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.RotationAxis;
-import net.minecraft.world.World;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.level.Level;
 
 public class ScreenShakeManager {
     private static final ScreenShakeManager instance = new ScreenShakeManager();
@@ -34,20 +34,20 @@ public class ScreenShakeManager {
         return this.prevShakeAmount + (this.shakeAmount - this.prevShakeAmount) * tickDelta;
     }
 
-    public void updateScreenMatrices(MatrixStack matrixStack, float tickDelta) {
+    public void updateScreenMatrices(PoseStack matrixStack, float tickDelta) {
         float shake = this.getCurrentShakeAmount(tickDelta);
         if(shake > 0) {
             float t2 = getTime() / 20f + tickDelta;
             double tpi = 2 * Math.PI;
-            matrixStack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees((float)Math.sin(3 * t2 * tpi) * shake));
-            matrixStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees((float)Math.sin(2 * t2 * tpi + 0.5) * shake));
+            matrixStack.mulPose(Axis.ZP.rotationDegrees((float)Math.sin(3 * t2 * tpi) * shake));
+            matrixStack.mulPose(Axis.XP.rotationDegrees((float)Math.sin(2 * t2 * tpi + 0.5) * shake));
         }
 
     }
 
     public long getTime() {
-        World world = MinecraftClient.getInstance().world;
+        Level world = Minecraft.getInstance().level;
         if(world == null) return 0;
-        return world.getTime();
+        return world.getGameTime();
     }
 }

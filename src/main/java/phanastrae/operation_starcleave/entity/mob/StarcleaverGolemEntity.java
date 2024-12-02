@@ -1,44 +1,44 @@
 package phanastrae.operation_starcleave.entity.mob;
 
-import net.minecraft.advancement.criterion.Criteria;
-import net.minecraft.block.BlockState;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.NbtComponent;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.ai.pathing.PathNodeType;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.passive.GolemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsage;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.registry.tag.DamageTypeTags;
-import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.animal.AbstractGolem;
+import net.minecraft.world.entity.animal.Bucketable;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUtils;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.pathfinder.PathType;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.advancement.criterion.OperationStarcleaveAdvancementCriteria;
 import phanastrae.operation_starcleave.entity.ai.goal.FollowFavoriteGoal;
@@ -54,12 +54,12 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-public class StarcleaverGolemEntity extends GolemEntity implements Bucketable {
+public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable {
 
-    private static final TrackedData<Boolean> IGNITED = DataTracker.registerData(StarcleaverGolemEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    private static final TrackedData<Boolean> PLUMMETING = DataTracker.registerData(StarcleaverGolemEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    private static final TrackedData<Integer> GUNPOWDER_TICKS = DataTracker.registerData(StarcleaverGolemEntity.class, TrackedDataHandlerRegistry.INTEGER);
-    protected static final TrackedData<Optional<UUID>> FAVORITE_UUID = DataTracker.registerData(StarcleaverGolemEntity.class, TrackedDataHandlerRegistry.OPTIONAL_UUID);
+    private static final EntityDataAccessor<Boolean> IGNITED = SynchedEntityData.defineId(StarcleaverGolemEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> PLUMMETING = SynchedEntityData.defineId(StarcleaverGolemEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> GUNPOWDER_TICKS = SynchedEntityData.defineId(StarcleaverGolemEntity.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Optional<UUID>> FAVORITE_UUID = SynchedEntityData.defineId(StarcleaverGolemEntity.class, EntityDataSerializers.OPTIONAL_UUID);
 
     public float drillBasePitch = -45;
     public float prevDrillBasePitch = -45;
@@ -74,61 +74,61 @@ public class StarcleaverGolemEntity extends GolemEntity implements Bucketable {
 
     private final List<UUID> launcherUuids = new ArrayList<>();
 
-    public StarcleaverGolemEntity(EntityType<? extends GolemEntity> entityType, World world) {
+    public StarcleaverGolemEntity(EntityType<? extends AbstractGolem> entityType, Level world) {
         super(entityType, world);
-        this.setPathfindingPenalty(PathNodeType.WATER, 0.0F);
-        this.setPathfindingPenalty(PathNodeType.LAVA, 0.0F);
-        this.setPathfindingPenalty(PathNodeType.DANGER_FIRE, 0.0F);
-        this.setPathfindingPenalty(PathNodeType.DAMAGE_FIRE, 0.0F);
+        this.setPathfindingMalus(PathType.WATER, 0.0F);
+        this.setPathfindingMalus(PathType.LAVA, 0.0F);
+        this.setPathfindingMalus(PathType.DANGER_FIRE, 0.0F);
+        this.setPathfindingMalus(PathType.DAMAGE_FIRE, 0.0F);
     }
 
     @Override
-    protected void initGoals() {
-        this.goalSelector.add(1, new EscapeDangerGoal(this, 1.3));
-        this.goalSelector.add(2, new TemptGoal(this, 1.2, Ingredient.ofItems(Items.GOLD_NUGGET), false));
-        this.goalSelector.add(3, new TemptGoal(this, 1.2, Ingredient.ofItems(Items.GUNPOWDER), false));
-        this.goalSelector.add(4, new FollowFavoriteGoal(this, 1.2, 8, 4, 64));
-        this.goalSelector.add(6, new WanderAroundGoal(this, 1.0));
-        this.goalSelector.add(7, new LookAtEntityGoal(this, PlayerEntity.class, 12.0F));
-        this.goalSelector.add(8, new LookAroundGoal(this));
+    protected void registerGoals() {
+        this.goalSelector.addGoal(1, new PanicGoal(this, 1.3));
+        this.goalSelector.addGoal(2, new TemptGoal(this, 1.2, Ingredient.of(Items.GOLD_NUGGET), false));
+        this.goalSelector.addGoal(3, new TemptGoal(this, 1.2, Ingredient.of(Items.GUNPOWDER), false));
+        this.goalSelector.addGoal(4, new FollowFavoriteGoal(this, 1.2, 8, 4, 64));
+        this.goalSelector.addGoal(6, new RandomStrollGoal(this, 1.0));
+        this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 12.0F));
+        this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
     }
 
-    public static DefaultAttributeContainer.Builder createAttributes() {
-        return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 12.0)
-                .add(EntityAttributes.GENERIC_ARMOR, 8.0)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.32)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 40.0)
-                .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, 3.0)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 2.0)
-                .add(EntityAttributes.GENERIC_STEP_HEIGHT, 1.0);
-    }
-
-    @Override
-    protected void initDataTracker(DataTracker.Builder builder) {
-        super.initDataTracker(builder);
-        builder.add(IGNITED, false);
-        builder.add(PLUMMETING, false);
-        builder.add(GUNPOWDER_TICKS, 0);
-        builder.add(FAVORITE_UUID, Optional.empty());
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, 12.0)
+                .add(Attributes.ARMOR, 8.0)
+                .add(Attributes.MOVEMENT_SPEED, 0.32)
+                .add(Attributes.FOLLOW_RANGE, 40.0)
+                .add(Attributes.ARMOR_TOUGHNESS, 3.0)
+                .add(Attributes.ATTACK_DAMAGE, 2.0)
+                .add(Attributes.STEP_HEIGHT, 1.0);
     }
 
     @Override
-    public void writeCustomDataToNbt(NbtCompound nbt) {
-        super.writeCustomDataToNbt(nbt);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(IGNITED, false);
+        builder.define(PLUMMETING, false);
+        builder.define(GUNPOWDER_TICKS, 0);
+        builder.define(FAVORITE_UUID, Optional.empty());
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag nbt) {
+        super.addAdditionalSaveData(nbt);
 
         nbt.putBoolean("Ignited", this.isIgnited());
         nbt.putBoolean("Plummeting", this.isPlummeting());
         nbt.putInt("GunpowderTicks", this.getGunpowderTicks());
 
         if (this.getFavoriteUuid() != null) {
-            nbt.putUuid("Favorite", this.getFavoriteUuid());
+            nbt.putUUID("Favorite", this.getFavoriteUuid());
         }
     }
 
     @Override
-    public void readCustomDataFromNbt(NbtCompound nbt) {
-        super.readCustomDataFromNbt(nbt);
+    public void readAdditionalSaveData(CompoundTag nbt) {
+        super.readAdditionalSaveData(nbt);
 
         readLegacy(nbt);
 
@@ -140,12 +140,12 @@ public class StarcleaverGolemEntity extends GolemEntity implements Bucketable {
             this.setPlummeting(true);
         }
 
-        if(nbt.contains("GunpowderTicks", NbtElement.INT_TYPE)) {
+        if(nbt.contains("GunpowderTicks", Tag.TAG_INT)) {
             this.setGunpowderTicks(nbt.getInt("GunpowderTicks"));
         }
 
-        if (nbt.containsUuid("Favorite")) {
-            UUID uUID = nbt.getUuid("Favorite");
+        if (nbt.hasUUID("Favorite")) {
+            UUID uUID = nbt.getUUID("Favorite");
             try {
                 this.setFavoriteUuid(uUID);
             } catch (Throwable var4) {
@@ -154,7 +154,7 @@ public class StarcleaverGolemEntity extends GolemEntity implements Bucketable {
         }
     }
 
-    public void readLegacy(NbtCompound nbt) {
+    public void readLegacy(CompoundTag nbt) {
         // consider removing in some distant future update, backwards compatability here isn't really that important
         if (nbt.getBoolean("ignited")) {
             this.setIgnited(true);
@@ -162,17 +162,17 @@ public class StarcleaverGolemEntity extends GolemEntity implements Bucketable {
         if (nbt.getBoolean("plummeting")) {
             this.setPlummeting(true);
         }
-        if(nbt.contains("gunpowderTicks", NbtElement.INT_TYPE)) {
+        if(nbt.contains("gunpowderTicks", Tag.TAG_INT)) {
             this.setGunpowderTicks(nbt.getInt("gunpowderTicks"));
         }
     }
 
     @Override
     public void tick() {
-        World world = this.getWorld();
+        Level world = this.level();
         if(this.isAlive()) {
             if(this.isIgnited()) {
-                this.addVelocity(0, 0.085 + MathHelper.clamp(this.getVelocity().y - 0.1, 0, 4) * 0.03, 0);
+                this.push(0, 0.085 + Mth.clamp(this.getDeltaMovement().y - 0.1, 0, 4) * 0.03, 0);
                 if(this.getGunpowderTicks() > 0) {
                     this.setGunpowderTicks(this.getGunpowderTicks() - 1);
                 }
@@ -180,32 +180,32 @@ public class StarcleaverGolemEntity extends GolemEntity implements Bucketable {
                     this.setIgnited(false);
                 }
 
-                if(world.isClient) {
+                if(world.isClientSide) {
                     world.addParticle(
                             ParticleTypes.FIREWORK,
-                            this.getX() + MathHelper.sin((float)Math.toRadians(this.bodyYaw)) * 0.25,
+                            this.getX() + Mth.sin((float)Math.toRadians(this.yBodyRot)) * 0.25,
                             this.getY(),
-                            this.getZ() - MathHelper.cos((float)Math.toRadians(this.bodyYaw)) * 0.25,
+                            this.getZ() - Mth.cos((float)Math.toRadians(this.yBodyRot)) * 0.25,
                             this.random.nextGaussian() * 0.05,
-                            -this.getVelocity().y * 0.5,
+                            -this.getDeltaMovement().y * 0.5,
                             this.random.nextGaussian() * 0.05
                     );
                 }
 
-                if(!world.isClient) {
+                if(!world.isClientSide) {
                     boolean collided = false;
 
                     for(int i = -1; i <= 1; i++) {
                         for(int j = -1; j <= 1; j++) {
-                            float hw = this.getWidth() * 0.501f;
+                            float hw = this.getBbWidth() * 0.501f;
 
-                            Vec3d drillTarget = this.getPos().add(hw * i, this.getHeight() + 0.125, hw * j);
-                            BlockPos blockPos = new BlockPos(MathHelper.floor(drillTarget.x), MathHelper.floor(drillTarget.y), MathHelper.floor(drillTarget.z));
+                            Vec3 drillTarget = this.position().add(hw * i, this.getBbHeight() + 0.125, hw * j);
+                            BlockPos blockPos = new BlockPos(Mth.floor(drillTarget.x), Mth.floor(drillTarget.y), Mth.floor(drillTarget.z));
                             BlockState state = world.getBlockState(blockPos);
 
                             if(state.getCollisionShape(world, blockPos).isEmpty()) continue;
                             if(this.canDestroy(state, blockPos)) {
-                                world.breakBlock(blockPos, true, this);
+                                world.destroyBlock(blockPos, true, this);
                                 int g = this.getGunpowderTicks() - 10;
                                 if(g < 0) g = 0;
                                 this.setGunpowderTicks(g);
@@ -221,26 +221,26 @@ public class StarcleaverGolemEntity extends GolemEntity implements Bucketable {
                     }
                 }
 
-                if(!world.isClient) {
-                    if(this.getPos().y > world.getTopY() + 16) {
+                if(!world.isClientSide) {
+                    if(this.position().y > world.getMaxBuildHeight() + 16) {
                         this.cleave();
                     }
                 }
             }
 
             if(this.isPlummeting()) {
-                if(!world.isClient) {
-                    if(this.isOnGround()) {
+                if(!world.isClientSide) {
+                    if(this.onGround()) {
                         this.setPlummeting(false);
-                        world.createExplosion(this, this.getX(), this.getY(), this.getZ(), 3, World.ExplosionSourceType.MOB);
+                        world.explode(this, this.getX(), this.getY(), this.getZ(), 3, Level.ExplosionInteraction.MOB);
                         for(int i = 0; i < 6; i++) {
-                            BlockPos pos = this.getBlockPos().add(random.nextInt(7) - 3, random.nextInt(7) - 3, random.nextInt(7) - 3);
-                            SplashStarbleachEntity.starbleach(pos, this.getWorld());
+                            BlockPos pos = this.blockPosition().offset(random.nextInt(7) - 3, random.nextInt(7) - 3, random.nextInt(7) - 3);
+                            SplashStarbleachEntity.starbleach(pos, this.level());
                         }
                     }
                 }
 
-                if(world.isClient) {
+                if(world.isClientSide) {
                     for(int i = 0; i < 8; i++) {
                         world.addParticle(
                                 ParticleTypes.FLAME,
@@ -248,14 +248,14 @@ public class StarcleaverGolemEntity extends GolemEntity implements Bucketable {
                                 this.getY() - 0.25,
                                 this.getZ(),
                                 this.random.nextGaussian() * 0.75,
-                                this.getVelocity().y * -0.95,
+                                this.getDeltaMovement().y * -0.95,
                                 this.random.nextGaussian() * 0.75
                         );
                     }
                 }
             }
 
-            if(world.isClient) {
+            if(world.isClientSide) {
                 updateAnimations();
             }
         }
@@ -322,13 +322,13 @@ public class StarcleaverGolemEntity extends GolemEntity implements Bucketable {
     }
 
     @Override
-    protected int getNextAirUnderwater(int air) {
+    protected int decreaseAirSupply(int air) {
         return air;
     }
 
     @Override
     public boolean isInvulnerableTo(DamageSource damageSource) {
-        if(damageSource.isIn(DamageTypeTags.IS_EXPLOSION)) {
+        if(damageSource.is(DamageTypeTags.IS_EXPLOSION)) {
             return true;
         }
 
@@ -336,29 +336,29 @@ public class StarcleaverGolemEntity extends GolemEntity implements Bucketable {
     }
 
     @Override
-    protected ActionResult interactMob(PlayerEntity player, Hand hand) {
+    protected InteractionResult mobInteract(Player player, InteractionHand hand) {
         if(!this.isAlive()) {
-            return ActionResult.FAIL;
+            return InteractionResult.FAIL;
         }
 
-        World world = this.getWorld();
-        ItemStack itemStack = player.getStackInHand(hand);
+        Level world = this.level();
+        ItemStack itemStack = player.getItemInHand(hand);
 
-        if (itemStack.isOf(Items.BUCKET) && !this.isIgnited() && !this.isPlummeting()) {
-            this.playSound(this.getBucketFillSound(), 1.0F, 1.0F);
-            ItemStack itemStack2 = this.getBucketItem();
-            this.copyDataToStack(itemStack2);
-            ItemStack itemStack3 = ItemUsage.exchangeStack(itemStack, player, itemStack2, false);
-            player.setStackInHand(hand, itemStack3);
-            if (!world.isClient) {
-                Criteria.FILLED_BUCKET.trigger((ServerPlayerEntity)player, itemStack2);
+        if (itemStack.is(Items.BUCKET) && !this.isIgnited() && !this.isPlummeting()) {
+            this.playSound(this.getPickupSound(), 1.0F, 1.0F);
+            ItemStack itemStack2 = this.getBucketItemStack();
+            this.saveToBucketTag(itemStack2);
+            ItemStack itemStack3 = ItemUtils.createFilledResult(itemStack, player, itemStack2, false);
+            player.setItemInHand(hand, itemStack3);
+            if (!world.isClientSide) {
+                CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayer)player, itemStack2);
             }
 
             this.discard();
-            return ActionResult.success(world.isClient);
+            return InteractionResult.sidedSuccess(world.isClientSide);
         }
 
-        if(itemStack.isOf(Items.GOLD_NUGGET)) {
+        if(itemStack.is(Items.GOLD_NUGGET)) {
             boolean consumeItem = false;
             if(!this.isFavorite(player)) {
                 this.setFavorite(player);
@@ -372,50 +372,50 @@ public class StarcleaverGolemEntity extends GolemEntity implements Bucketable {
             }
 
             if (!consumeItem) {
-                return ActionResult.PASS;
+                return InteractionResult.PASS;
             } else {
                 float g = 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F;
                 this.playSound(this.getAmbientSound(), 1.0F, g);
-                if (!player.getAbilities().creativeMode) {
-                    itemStack.decrement(1);
+                if (!player.getAbilities().instabuild) {
+                    itemStack.shrink(1);
                 }
 
-                this.getWorld().sendEntityStatus(this, EntityStatuses.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
+                this.level().broadcastEntityEvent(this, EntityEvent.TAMING_SUCCEEDED);
                 sendOpenDoor();
-                return ActionResult.success(this.getWorld().isClient);
+                return InteractionResult.sidedSuccess(this.level().isClientSide);
             }
         }
 
-        if(itemStack.isOf(Items.GUNPOWDER) && this.getGunpowderTicks() + 60 <= 600) {
-            SoundEvent soundEvent = SoundEvents.BLOCK_SAND_PLACE;
-            world.playSound(player, this.getX(), this.getY(), this.getZ(), soundEvent, this.getSoundCategory(), 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
-            if (!world.isClient) {
+        if(itemStack.is(Items.GUNPOWDER) && this.getGunpowderTicks() + 60 <= 600) {
+            SoundEvent soundEvent = SoundEvents.SAND_PLACE;
+            world.playSound(player, this.getX(), this.getY(), this.getZ(), soundEvent, this.getSoundSource(), 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
+            if (!world.isClientSide) {
                 this.setGunpowderTicks(this.getGunpowderTicks() + 60);
             }
-            if (!player.getAbilities().creativeMode) {
-                itemStack.decrement(1);
+            if (!player.getAbilities().instabuild) {
+                itemStack.shrink(1);
             }
 
             sendOpenDoor();
-            return ActionResult.success(this.getWorld().isClient);
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
 
-        if (player.getAbilities().allowModifyWorld && this.getGunpowderTicks() > 20 && !this.isIgnited() && !this.isPlummeting() && itemStack.isIn(ItemTags.CREEPER_IGNITERS)) {
-            SoundEvent soundEvent = itemStack.isOf(Items.FIRE_CHARGE) ? SoundEvents.ITEM_FIRECHARGE_USE : SoundEvents.ITEM_FLINTANDSTEEL_USE;
-            world.playSound(player, this.getX(), this.getY(), this.getZ(), soundEvent, this.getSoundCategory(), 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
-            if (!world.isClient) {
+        if (player.getAbilities().mayBuild && this.getGunpowderTicks() > 20 && !this.isIgnited() && !this.isPlummeting() && itemStack.is(ItemTags.CREEPER_IGNITERS)) {
+            SoundEvent soundEvent = itemStack.is(Items.FIRE_CHARGE) ? SoundEvents.FIRECHARGE_USE : SoundEvents.FLINTANDSTEEL_USE;
+            world.playSound(player, this.getX(), this.getY(), this.getZ(), soundEvent, this.getSoundSource(), 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
+            if (!world.isClientSide) {
                 this.setIgnited(true);
-                if (!itemStack.isDamageable()) {
-                    itemStack.decrement(1);
+                if (!itemStack.isDamageableItem()) {
+                    itemStack.shrink(1);
                 } else {
-                    itemStack.damage(1, player, getSlotForHand(hand));
+                    itemStack.hurtAndBreak(1, player, getSlotForHand(hand));
                 }
 
-                if(player instanceof ServerPlayerEntity serverPlayerEntity) {
+                if(player instanceof ServerPlayer serverPlayerEntity) {
                     OperationStarcleaveAdvancementCriteria.LAUNCH_STARCLEAVER_GOLEM.trigger(serverPlayerEntity);
                     this.addLauncher(serverPlayerEntity);
                 }
-                for(ServerPlayerEntity serverPlayerEntity : world.getNonSpectatingEntities(ServerPlayerEntity.class, this.getBoundingBox().expand(5.0))) {
+                for(ServerPlayer serverPlayerEntity : world.getEntitiesOfClass(ServerPlayer.class, this.getBoundingBox().inflate(5.0))) {
                     if(serverPlayerEntity != player) {
                         OperationStarcleaveAdvancementCriteria.LAUNCH_STARCLEAVER_GOLEM.trigger(serverPlayerEntity);
                         this.addLauncher(serverPlayerEntity);
@@ -423,10 +423,10 @@ public class StarcleaverGolemEntity extends GolemEntity implements Bucketable {
                 }
             }
 
-            return ActionResult.success(this.getWorld().isClient);
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
 
-        return super.interactMob(player, hand);
+        return super.mobInteract(player, hand);
     }
 
     @Override
@@ -435,60 +435,60 @@ public class StarcleaverGolemEntity extends GolemEntity implements Bucketable {
     }
 
     public boolean isIgnited() {
-        return this.dataTracker.get(IGNITED);
+        return this.entityData.get(IGNITED);
     }
 
     public void setIgnited(boolean val) {
-        this.dataTracker.set(IGNITED, val);
+        this.entityData.set(IGNITED, val);
     }
 
     public boolean isPlummeting() {
-        return this.dataTracker.get(PLUMMETING);
+        return this.entityData.get(PLUMMETING);
     }
 
     public void setPlummeting(boolean val) {
-        this.dataTracker.set(PLUMMETING, val);
+        this.entityData.set(PLUMMETING, val);
     }
 
     public int getGunpowderTicks() {
-        return this.dataTracker.get(GUNPOWDER_TICKS);
+        return this.entityData.get(GUNPOWDER_TICKS);
     }
 
     public void setGunpowderTicks(int val) {
-        this.dataTracker.set(GUNPOWDER_TICKS, val);
+        this.entityData.set(GUNPOWDER_TICKS, val);
     }
 
     @Nullable
     public UUID getFavoriteUuid() {
-        return (UUID)((Optional)this.dataTracker.get(FAVORITE_UUID)).orElse(null);
+        return (UUID)((Optional)this.entityData.get(FAVORITE_UUID)).orElse(null);
     }
 
     public void setFavoriteUuid(@Nullable UUID uuid) {
-        this.dataTracker.set(FAVORITE_UUID, Optional.ofNullable(uuid));
+        this.entityData.set(FAVORITE_UUID, Optional.ofNullable(uuid));
     }
 
-    public void setFavorite(@Nullable PlayerEntity player) {
-        this.setFavoriteUuid(player == null ? null : player.getUuid());
+    public void setFavorite(@Nullable Player player) {
+        this.setFavoriteUuid(player == null ? null : player.getUUID());
     }
 
     @Nullable
     public LivingEntity getFavorite() {
         UUID uUID = this.getFavoriteUuid();
-        return uUID == null ? null : this.getWorld().getPlayerByUuid(uUID);
+        return uUID == null ? null : this.level().getPlayerByUUID(uUID);
     }
 
     public boolean isFavorite(LivingEntity entity) {
         return entity == this.getFavorite();
     }
 
-    public void addLauncher(ServerPlayerEntity serverPlayerEntity) {
-        this.launcherUuids.add(serverPlayerEntity.getUuid());
+    public void addLauncher(ServerPlayer serverPlayerEntity) {
+        this.launcherUuids.add(serverPlayerEntity.getUUID());
     }
 
-    public void forEachLauncher(Consumer<ServerPlayerEntity> method) {
+    public void forEachLauncher(Consumer<ServerPlayer> method) {
         for(UUID uuid : this.launcherUuids) {
-            Entity e = this.getWorld().getPlayerByUuid(uuid);
-            if(e instanceof ServerPlayerEntity spe) {
+            Entity e = this.level().getPlayerByUUID(uuid);
+            if(e instanceof ServerPlayer spe) {
                 method.accept(spe);
             }
         }
@@ -499,10 +499,10 @@ public class StarcleaverGolemEntity extends GolemEntity implements Bucketable {
     }
 
     public boolean canDestroy(BlockState blockState, BlockPos blockPos) {
-        if(!this.getWorld().getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING)) {
+        if(!this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
             return false;
         }
-        if(blockState.isIn(BlockTags.WITHER_IMMUNE)) {
+        if(blockState.is(BlockTags.WITHER_IMMUNE)) {
             return false;
         }
 
@@ -510,14 +510,14 @@ public class StarcleaverGolemEntity extends GolemEntity implements Bucketable {
     }
 
     public void cleave() {
-        Firmament firmament = Firmament.fromWorld(this.getWorld());
+        Firmament firmament = Firmament.fromWorld(this.level());
         if(firmament != null) {
             FirmamentManipulatorItem.fractureFirmament(firmament, this.getBlockX(), this.getBlockZ(), this.getRandom());
         }
 
-        this.getWorld().createExplosion(this, this.getX(), this.getY(), this.getZ(), 7, World.ExplosionSourceType.MOB);
-        float angle = this.random.nextFloat() * MathHelper.TAU;
-        this.setVelocity(2 * MathHelper.sin(angle), -3, 2 * MathHelper.cos(angle));
+        this.level().explode(this, this.getX(), this.getY(), this.getZ(), 7, Level.ExplosionInteraction.MOB);
+        float angle = this.random.nextFloat() * Mth.TWO_PI;
+        this.setDeltaMovement(2 * Mth.sin(angle), -3, 2 * Mth.cos(angle));
         this.setIgnited(false);
         this.setPlummeting(true);
 
@@ -543,7 +543,7 @@ public class StarcleaverGolemEntity extends GolemEntity implements Bucketable {
     }
 
     @Override
-    public boolean isFromBucket() {
+    public boolean fromBucket() {
         return false;
     }
 
@@ -553,24 +553,24 @@ public class StarcleaverGolemEntity extends GolemEntity implements Bucketable {
     }
 
     @Override
-    public void copyDataToStack(ItemStack stack) {
-        Bucketable.copyDataToStack(this, stack);
-        NbtComponent.set(DataComponentTypes.BUCKET_ENTITY_DATA, stack, nbt -> {
+    public void saveToBucketTag(ItemStack stack) {
+        Bucketable.saveDefaultDataToBucketTag(this, stack);
+        CustomData.update(DataComponents.BUCKET_ENTITY_DATA, stack, nbt -> {
             nbt.putInt("GunpowderTicks", this.getGunpowderTicks());
             if (this.getFavoriteUuid() != null) {
-                nbt.putUuid("Favorite", this.getFavoriteUuid());
+                nbt.putUUID("Favorite", this.getFavoriteUuid());
             }
         });
     }
 
     @Override
-    public void copyDataFromNbt(NbtCompound nbt) {
-        Bucketable.copyDataFromNbt(this, nbt);
-        if(nbt.contains("GunpowderTicks", NbtElement.INT_TYPE)) {
+    public void loadFromBucketTag(CompoundTag nbt) {
+        Bucketable.loadDefaultDataFromBucketTag(this, nbt);
+        if(nbt.contains("GunpowderTicks", Tag.TAG_INT)) {
             this.setGunpowderTicks(nbt.getInt("GunpowderTicks"));
         }
-        if (nbt.containsUuid("Favorite")) {
-            UUID uUID = nbt.getUuid("Favorite");
+        if (nbt.hasUUID("Favorite")) {
+            UUID uUID = nbt.getUUID("Favorite");
             try {
                 this.setFavoriteUuid(uUID);
             } catch (Throwable var4) {
@@ -580,34 +580,34 @@ public class StarcleaverGolemEntity extends GolemEntity implements Bucketable {
     }
 
     @Override
-    public ItemStack getBucketItem() {
-        return OperationStarcleaveItems.STARCLEAVER_GOLEM_BUCKET.getDefaultStack();
+    public ItemStack getBucketItemStack() {
+        return OperationStarcleaveItems.STARCLEAVER_GOLEM_BUCKET.getDefaultInstance();
     }
 
     @Override
-    public SoundEvent getBucketFillSound() {
+    public SoundEvent getPickupSound() {
         return OperationStarcleaveSoundEvents.ENTITY_STARCLEAVER_GOLEM_AMBIENT;
     }
 
     @Override
-    public void handleStatus(byte status) {
-        if (status == EntityStatuses.ADD_POSITIVE_PLAYER_REACTION_PARTICLES) {
+    public void handleEntityEvent(byte status) {
+        if (status == EntityEvent.TAMING_SUCCEEDED) {
             this.showEmoteParticle(true);
-        } else if (status == EntityStatuses.ADD_NEGATIVE_PLAYER_REACTION_PARTICLES) {
+        } else if (status == EntityEvent.TAMING_FAILED) {
             this.showEmoteParticle(false);
-        } else if (status == EntityStatuses.CONSUME_ITEM) {
+        } else if (status == EntityEvent.USE_ITEM_COMPLETE) {
             this.openingDoor = true;
         } else {
-            super.handleStatus(status);
+            super.handleEntityEvent(status);
         }
     }
 
     public void sendOpenDoor() {
-        this.getWorld().sendEntityStatus(this, EntityStatuses.CONSUME_ITEM);
+        this.level().broadcastEntityEvent(this, EntityEvent.USE_ITEM_COMPLETE);
     }
 
     protected void showEmoteParticle(boolean positive) {
-        ParticleEffect particleEffect = ParticleTypes.HEART;
+        ParticleOptions particleEffect = ParticleTypes.HEART;
         if (!positive) {
             particleEffect = ParticleTypes.SMOKE;
         }
@@ -616,25 +616,25 @@ public class StarcleaverGolemEntity extends GolemEntity implements Bucketable {
             double d = this.random.nextGaussian() * 0.02;
             double e = this.random.nextGaussian() * 0.02;
             double f = this.random.nextGaussian() * 0.02;
-            this.getWorld().addParticle(particleEffect, this.getParticleX(1.0), this.getRandomBodyY() + 0.5, this.getParticleZ(1.0), d, e, f);
+            this.level().addParticle(particleEffect, this.getRandomX(1.0), this.getRandomY() + 0.5, this.getRandomZ(1.0), d, e, f);
         }
     }
 
     @Override
-    public boolean canWalkOnFluid(FluidState state) {
+    public boolean canStandOnFluid(FluidState state) {
         return !state.isEmpty();
     }
 
     @Override
-    public void setAttacker(@Nullable LivingEntity attacker) {
-        if (attacker != null && this.getWorld() instanceof ServerWorld) {
-            if (this.isAlive() && attacker instanceof PlayerEntity) {
+    public void setLastHurtByMob(@Nullable LivingEntity attacker) {
+        if (attacker != null && this.level() instanceof ServerLevel) {
+            if (this.isAlive() && attacker instanceof Player) {
                 if(this.isFavorite(attacker)) {
-                    this.getWorld().sendEntityStatus(this, EntityStatuses.ADD_NEGATIVE_PLAYER_REACTION_PARTICLES);
+                    this.level().broadcastEntityEvent(this, EntityEvent.TAMING_FAILED);
                     this.setFavorite(null);
                 }
             }
         }
-        super.setAttacker(attacker);
+        super.setLastHurtByMob(attacker);
     }
 }

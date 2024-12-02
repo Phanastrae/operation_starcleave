@@ -1,44 +1,44 @@
 package phanastrae.operation_starcleave.entity.projectile;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 import phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion;
 
-public class FirmamentRejuvenatorEntity extends ThrownItemEntity {
+public class FirmamentRejuvenatorEntity extends ThrowableItemProjectile {
 
     public static final int MAX_AGE = 140;
 
-    public FirmamentRejuvenatorEntity(EntityType<? extends ThrownItemEntity> entityType, World world) {
+    public FirmamentRejuvenatorEntity(EntityType<? extends ThrowableItemProjectile> entityType, Level world) {
         super(entityType, world);
     }
 
-    public FirmamentRejuvenatorEntity(World world, LivingEntity owner) {
+    public FirmamentRejuvenatorEntity(Level world, LivingEntity owner) {
         super(OperationStarcleaveEntityTypes.FIRMAMENT_REJUVENATOR, owner, world);
     }
 
-    public FirmamentRejuvenatorEntity(World world, double x, double y, double z) {
+    public FirmamentRejuvenatorEntity(Level world, double x, double y, double z) {
         super(OperationStarcleaveEntityTypes.FIRMAMENT_REJUVENATOR, x, y, z, world);
     }
 
     @Override
     public void tick() {
-        World world = this.getWorld();
-        if(world != null && world.isClient) {
-            Vec3d vel = this.getVelocity();
-            Random random = this.random;
+        Level world = this.level();
+        if(world != null && world.isClientSide) {
+            Vec3 vel = this.getDeltaMovement();
+            RandomSource random = this.random;
             for(int i = 0; i < 6; i++) {
                 world.addParticle(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER,
                         this.getX(), this.getY(), this.getZ(),
@@ -50,12 +50,12 @@ public class FirmamentRejuvenatorEntity extends ThrownItemEntity {
         }
         super.tick();
         if(!this.isRemoved()) {
-            if(this.age > MAX_AGE) {
-                this.dropStack(this.getStack());
+            if(this.tickCount > MAX_AGE) {
+                this.spawnAtLocation(this.getItem());
                 this.discard();
             } else {
-                float firmHeight = this.getWorld().getTopY() + 16;
-                double dy = this.getPos().y - firmHeight;
+                float firmHeight = this.level().getMaxBuildHeight() + 16;
+                double dy = this.position().y - firmHeight;
                 if (dy * dy < 1) {
                     this.explode();
                 }
@@ -69,29 +69,29 @@ public class FirmamentRejuvenatorEntity extends ThrownItemEntity {
     }
 
     @Override
-    protected double getGravity() {
+    protected double getDefaultGravity() {
         return 0.01F;
     }
 
     @Override
-    protected void onCollision(HitResult hitResult) {
-        super.onCollision(hitResult);
-        this.dropStack(this.getStack());
+    protected void onHit(HitResult hitResult) {
+        super.onHit(hitResult);
+        this.spawnAtLocation(this.getItem());
         this.discard();
     }
 
     public void explode() {
-        if (!this.getWorld().isClient) {
-            this.getWorld().createExplosion(this.getOwner(), this.getX(), this.getY(), this.getZ(), 4, World.ExplosionSourceType.NONE);
-            if(this.getWorld() instanceof ServerWorld serverWorld) {
-                Vec3d pos = this.getPos();
-                serverWorld.spawnParticles(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER, pos.getX(), pos.getY(), pos.getZ(), 400, 2, 1, 2, 0.01);
+        if (!this.level().isClientSide) {
+            this.level().explode(this.getOwner(), this.getX(), this.getY(), this.getZ(), 4, Level.ExplosionInteraction.NONE);
+            if(this.level() instanceof ServerLevel serverWorld) {
+                Vec3 pos = this.position();
+                serverWorld.sendParticles(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER, pos.x(), pos.y(), pos.z(), 400, 2, 1, 2, 0.01);
             }
 
-            float firmHeight = this.getWorld().getTopY() + 16;
-            double dy = this.getPos().y - firmHeight;
+            float firmHeight = this.level().getMaxBuildHeight() + 16;
+            double dy = this.position().y - firmHeight;
             if(dy*dy < 1) {
-                Firmament firmament = Firmament.fromWorld(this.getWorld());
+                Firmament firmament = Firmament.fromWorld(this.level());
                 if(firmament != null) {
                     int x = this.getBlockX();
                     int z = this.getBlockZ();
@@ -113,7 +113,7 @@ public class FirmamentRejuvenatorEntity extends ThrownItemEntity {
     }
 
     @Override
-    public ItemStack getStack() {
-        return OperationStarcleaveItems.FIRMAMENT_REJUVENATOR.getDefaultStack();
+    public ItemStack getItem() {
+        return OperationStarcleaveItems.FIRMAMENT_REJUVENATOR.getDefaultInstance();
     }
 }

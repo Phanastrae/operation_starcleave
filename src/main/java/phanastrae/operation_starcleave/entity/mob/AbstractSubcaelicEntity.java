@@ -1,32 +1,32 @@
 package phanastrae.operation_starcleave.entity.mob;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MovementType;
-import net.minecraft.entity.ai.control.MoveControl;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.mob.Monster;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.Heightmap;
-import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 
 import java.util.EnumSet;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.MoveControl;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.Vec3;
 
-public abstract class AbstractSubcaelicEntity extends MobEntity implements Monster {
+public abstract class AbstractSubcaelicEntity extends Mob implements Enemy {
 
     public float tiltAngle;
     public float prevTiltAngle;
@@ -35,37 +35,37 @@ public abstract class AbstractSubcaelicEntity extends MobEntity implements Monst
     public float tentacleRollAngle;
     public float prevTentacleRollAngle;
 
-    protected AbstractSubcaelicEntity(EntityType<? extends AbstractSubcaelicEntity> entityType, World world) {
+    protected AbstractSubcaelicEntity(EntityType<? extends AbstractSubcaelicEntity> entityType, Level world) {
         super(entityType, world);
         this.moveControl = new SubcaelicMoveControl(this);
     }
 
     @Override
-    public void travel(Vec3d movementInput) {
-        this.move(MovementType.SELF, this.getVelocity());
+    public void travel(Vec3 movementInput) {
+        this.move(MoverType.SELF, this.getDeltaMovement());
     }
 
     @Override
-    public void tickMovement() {
-        super.tickMovement();
+    public void aiStep() {
+        super.aiStep();
         this.prevTiltAngle = this.tiltAngle;
         this.prevRollAngle = this.rollAngle;
         this.prevTentacleRollAngle = this.tentacleRollAngle;
 
         if(this.shouldTickAngles()) {
-            Vec3d velocity = this.getVelocity();
-            double horizontalSpeed = velocity.horizontalLength();
+            Vec3 velocity = this.getDeltaMovement();
+            double horizontalSpeed = velocity.horizontalDistance();
             if (horizontalSpeed > 0.01) {
-                double targetYaw = Math.toDegrees(-MathHelper.atan2(velocity.x, velocity.z));
-                this.bodyYaw = (float)MathHelper.lerpAngleDegrees(0.2, this.bodyYaw, targetYaw);
-                this.setYaw(this.bodyYaw);
+                double targetYaw = Math.toDegrees(-Mth.atan2(velocity.x, velocity.z));
+                this.yBodyRot = (float)Mth.rotLerp(0.2, this.yBodyRot, targetYaw);
+                this.setYRot(this.yBodyRot);
             }
             this.rollAngle += (float) Math.PI * 1.5F;
             this.tentacleRollAngle += (float) Math.PI * 1.75F;
-            this.tiltAngle += (Math.toDegrees(-MathHelper.atan2(horizontalSpeed, velocity.y)) - this.tiltAngle) * 0.1F;
-            this.setPitch( - this.tiltAngle - 90);
+            this.tiltAngle += (Math.toDegrees(-Mth.atan2(horizontalSpeed, velocity.y)) - this.tiltAngle) * 0.1F;
+            this.setXRot( - this.tiltAngle - 90);
 
-            if (this.getWorld().isClient) {
+            if (this.level().isClientSide) {
                 spawnTrailParticles();
             }
         }
@@ -76,32 +76,32 @@ public abstract class AbstractSubcaelicEntity extends MobEntity implements Monst
     }
 
     @Override
-    protected void fall(double heightDifference, boolean onGround, BlockState state, BlockPos landedPosition) {
+    protected void checkFallDamage(double heightDifference, boolean onGround, BlockState state, BlockPos landedPosition) {
     }
 
     @Override
-    public boolean isClimbing() {
+    public boolean onClimbable() {
         return false;
     }
 
     @Override
-    public SoundCategory getSoundCategory() {
-        return SoundCategory.HOSTILE;
+    public SoundSource getSoundSource() {
+        return SoundSource.HOSTILE;
     }
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.ENTITY_GLOW_SQUID_AMBIENT;
+        return SoundEvents.GLOW_SQUID_AMBIENT;
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return SoundEvents.ENTITY_GLOW_SQUID_HURT;
+        return SoundEvents.GLOW_SQUID_HURT;
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.ENTITY_GLOW_SQUID_DEATH;
+        return SoundEvents.GLOW_SQUID_DEATH;
     }
 
     @Override
@@ -110,17 +110,17 @@ public abstract class AbstractSubcaelicEntity extends MobEntity implements Monst
     }
 
     public void spawnTrailParticles() {
-        Vec3d spawnCenter = this.getPos().add(0.0, this.getHeight()*0.5, 0.0).subtract(this.getRotationVector().multiply(this.getWidth()*0.5));
-        double f = this.getWidth() * 0.2;
-        int count = (int)(this.getWidth() * 10 * Math.min(1.0, 2.0 * this.getVelocity().length()));
+        Vec3 spawnCenter = this.position().add(0.0, this.getBbHeight()*0.5, 0.0).subtract(this.getLookAngle().scale(this.getBbWidth()*0.5));
+        double f = this.getBbWidth() * 0.2;
+        int count = (int)(this.getBbWidth() * 10 * Math.min(1.0, 2.0 * this.getDeltaMovement().length()));
         for(int i = 0; i < count; ++i) {
             double x = spawnCenter.x + (this.random.nextDouble() - 0.5) * f;
             double y = spawnCenter.y + (this.random.nextDouble() - 0.5) * f;
             double z = spawnCenter.z + (this.random.nextDouble() - 0.5) * f;
-            this.getWorld().addParticle(OperationStarcleaveParticleTypes.GLIMMER_SMOKE, x, y, z,
-                    this.getVelocity().x * - 1.5,
-                    this.getVelocity().y * - 1.5,
-                    this.getVelocity().z * - 1.5);
+            this.level().addParticle(OperationStarcleaveParticleTypes.GLIMMER_SMOKE, x, y, z,
+                    this.getDeltaMovement().x * - 1.5,
+                    this.getDeltaMovement().y * - 1.5,
+                    this.getDeltaMovement().z * - 1.5);
         }
     }
 
@@ -141,29 +141,29 @@ public abstract class AbstractSubcaelicEntity extends MobEntity implements Monst
 
         @Override
         public void tick() {
-            if (this.state == MoveControl.State.MOVE_TO) {
-                double movementSpeed = this.entity.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED) * this.getSpeed();
+            if (this.operation == MoveControl.Operation.MOVE_TO) {
+                double movementSpeed = this.entity.getAttributeValue(Attributes.MOVEMENT_SPEED) * this.getSpeedModifier();
                 this.tickAim(this.entity.getTurnFactor(), movementSpeed);
 
                 double lerpFactor = getLerpFactor(movementSpeed);
                 double dragFactor = 0.98;
-                Firmament firmament = Firmament.fromWorld(this.entity.getWorld());
+                Firmament firmament = Firmament.fromWorld(this.entity.level());
                 if(this.entity.isAlive() && firmament != null) {
                     int damage = firmament.getDamage(this.entity.getBlockX(), this.entity.getBlockZ());
                     dragFactor *= 0.7 + 0.3 * damage/7.0;
                 }
-                Vec3d velocity = this.entity.getVelocity();
-                double vX = MathHelper.lerp(lerpFactor, velocity.x, this.aimX * movementSpeed);
-                double vY = MathHelper.lerp(lerpFactor, velocity.y, this.aimY * movementSpeed);
-                double vZ = MathHelper.lerp(lerpFactor, velocity.z, this.aimZ * movementSpeed);
-                this.entity.setVelocity(vX * dragFactor, vY * dragFactor, vZ * dragFactor);
+                Vec3 velocity = this.entity.getDeltaMovement();
+                double vX = Mth.lerp(lerpFactor, velocity.x, this.aimX * movementSpeed);
+                double vY = Mth.lerp(lerpFactor, velocity.y, this.aimY * movementSpeed);
+                double vZ = Mth.lerp(lerpFactor, velocity.z, this.aimZ * movementSpeed);
+                this.entity.setDeltaMovement(vX * dragFactor, vY * dragFactor, vZ * dragFactor);
             }
         }
 
         private void tickAim(double turnFactor, double movementSpeed) {
-            double targetAimX = this.targetX - this.entity.getX();
-            double targetAimY = this.targetY - this.entity.getY();
-            double targetAimZ = this.targetZ - this.entity.getZ();
+            double targetAimX = this.wantedX - this.entity.getX();
+            double targetAimY = this.wantedY - this.entity.getY();
+            double targetAimZ = this.wantedZ - this.entity.getZ();
             double targetAimSqr = targetAimX*targetAimX + targetAimY*targetAimY + targetAimZ*targetAimZ;
             if(targetAimSqr > movementSpeed * movementSpeed) {
                 double targetAimLength = Math.sqrt(targetAimSqr);
@@ -176,9 +176,9 @@ public abstract class AbstractSubcaelicEntity extends MobEntity implements Monst
                 targetAimZ /= movementSpeed;
             }
 
-            double aX = MathHelper.lerp(turnFactor, this.aimX, targetAimX);
-            double aY = MathHelper.lerp(turnFactor, this.aimY, targetAimY);
-            double aZ = MathHelper.lerp(turnFactor, this.aimZ, targetAimZ);
+            double aX = Mth.lerp(turnFactor, this.aimX, targetAimX);
+            double aY = Mth.lerp(turnFactor, this.aimY, targetAimY);
+            double aZ = Mth.lerp(turnFactor, this.aimZ, targetAimZ);
             double aSqr = aX*aX + aY*aY + aZ*aZ;
             if (aSqr > 1) {
                 double aLength = Math.sqrt(aSqr);
@@ -192,8 +192,8 @@ public abstract class AbstractSubcaelicEntity extends MobEntity implements Monst
         }
 
         private double getLerpFactor(double movementSpeed) {
-            Vec3d velocity = this.entity.getVelocity();
-            double vSqr = velocity.lengthSquared();
+            Vec3 velocity = this.entity.getDeltaMovement();
+            double vSqr = velocity.lengthSqr();
             double dot = this.aimX * velocity.x + this.aimY * velocity.y + this.aimZ * velocity.z;
             if (vSqr > movementSpeed * movementSpeed) {
                 dot = dot / Math.sqrt(vSqr);
@@ -215,45 +215,45 @@ public abstract class AbstractSubcaelicEntity extends MobEntity implements Monst
 
         public SwimWanderGoal(AbstractSubcaelicEntity entity) {
             this.entity = entity;
-            this.setControls(EnumSet.of(Goal.Control.MOVE));
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE));
         }
 
         @Override
-        public boolean canStart() {
+        public boolean canUse() {
             return true;
         }
 
         @Override
         public void tick() {
-            if(needsNewTarget() || this.entity.getRandom().nextInt(toGoalTicks(40)) == 0) {
-                Vec3d target = pickTargetPosition();
+            if(needsNewTarget() || this.entity.getRandom().nextInt(reducedTickDelay(40)) == 0) {
+                Vec3 target = pickTargetPosition();
                 if(target != null) {
-                    this.entity.moveControl.moveTo(target.x, target.y, target.z, 1.0);
+                    this.entity.moveControl.setWantedPosition(target.x, target.y, target.z, 1.0);
                 }
             }
         }
 
         protected boolean needsNewTarget() {
             MoveControl moveControl = this.entity.moveControl;
-            if(!moveControl.isMoving()) {
+            if(!moveControl.hasWanted()) {
                 return true;
             }
-            return !isTargetValid(moveControl.getTargetX(), moveControl.getTargetY(), moveControl.getTargetZ());
+            return !isTargetValid(moveControl.getWantedX(), moveControl.getWantedY(), moveControl.getWantedZ());
         }
 
         protected boolean isTargetValid(double x, double y, double z) {
-            return this.entity.getPos().subtract(x, y, z).horizontalLengthSquared() > TARGET_ACHIEVED_DISTANCE * TARGET_ACHIEVED_DISTANCE;
+            return this.entity.position().subtract(x, y, z).horizontalDistanceSqr() > TARGET_ACHIEVED_DISTANCE * TARGET_ACHIEVED_DISTANCE;
         }
 
         @Nullable
-        protected Vec3d pickTargetPosition() {
+        protected Vec3 pickTargetPosition() {
             MoveControl moveControl = this.entity.moveControl;
-            double leastBadness = !moveControl.isMoving() ? Double.POSITIVE_INFINITY : getTargetBadness(new Vec3d(moveControl.getTargetX(), moveControl.getTargetY(), moveControl.getTargetZ()));
-            Vec3d bestTarget = null;
+            double leastBadness = !moveControl.hasWanted() ? Double.POSITIVE_INFINITY : getTargetBadness(new Vec3(moveControl.getWantedX(), moveControl.getWantedY(), moveControl.getWantedZ()));
+            Vec3 bestTarget = null;
 
             int ATTEMPTS = 7;
             for(int i = 0; i < ATTEMPTS; i++) {
-                Vec3d candidatePosition = getCandidatePosition();
+                Vec3 candidatePosition = getCandidatePosition();
                 double badness = getTargetBadness(candidatePosition);
                 if(badness < leastBadness) {
                     leastBadness = badness;
@@ -264,8 +264,8 @@ public abstract class AbstractSubcaelicEntity extends MobEntity implements Monst
             return bestTarget;
         }
 
-        protected Vec3d getCandidatePosition() {
-            Random random = this.entity.getRandom();
+        protected Vec3 getCandidatePosition() {
+            RandomSource random = this.entity.getRandom();
             double radius = SEARCH_RADIUS_MIN + (SEARCH_RADIUS_MAX - SEARCH_RADIUS_MIN) * random.nextFloat();
             double angle = Math.PI * 2 * random.nextFloat();
             double cos = Math.cos(angle);
@@ -274,28 +274,28 @@ public abstract class AbstractSubcaelicEntity extends MobEntity implements Monst
             double targetX = this.entity.getX() + radius * cos;
             double targetZ = this.entity.getZ() + radius * sin;
 
-            double targetY = getTargetY(targetX, targetZ, this.entity.getWorld().getBottomY(), this.entity.getWorld().getTopY());
-            return new Vec3d(targetX, targetY, targetZ);
+            double targetY = getTargetY(targetX, targetZ, this.entity.level().getMinBuildHeight(), this.entity.level().getMaxBuildHeight());
+            return new Vec3(targetX, targetY, targetZ);
         }
 
         protected double getTargetY(double x, double z, double bottomY, double topY) {
-            World world = entity.getWorld();
-            int heightStart = world.getTopY(Heightmap.Type.MOTION_BLOCKING, (int)this.entity.getX(), (int)this.entity.getZ());
-            int heightEnd = world.getTopY(Heightmap.Type.MOTION_BLOCKING, (int)x, (int)z);
+            Level world = entity.level();
+            int heightStart = world.getHeight(Heightmap.Types.MOTION_BLOCKING, (int)this.entity.getX(), (int)this.entity.getZ());
+            int heightEnd = world.getHeight(Heightmap.Types.MOTION_BLOCKING, (int)x, (int)z);
             int height = Math.min(Math.max(heightStart, heightEnd), (int)this.entity.getY() + 12);
-            double h = (height == world.getBottomY()) ? this.entity.getY() : height + 16;
-            return MathHelper.clamp(h, bottomY, topY);
+            double h = (height == world.getMinBuildHeight()) ? this.entity.getY() : height + 16;
+            return Mth.clamp(h, bottomY, topY);
         }
 
-        protected double getTargetBadness(Vec3d target) {
-            Vec3d offset = target.subtract(this.entity.getPos()).multiply(1.,0.25,1.);
-            if(offset.lengthSquared() > 1) {
+        protected double getTargetBadness(Vec3 target) {
+            Vec3 offset = target.subtract(this.entity.position()).multiply(1.,0.25,1.);
+            if(offset.lengthSqr() > 1) {
                 offset = offset.normalize();
             }
-            double dot = offset.dotProduct(this.entity.getRotationVec(1F));
+            double dot = offset.dot(this.entity.getViewVector(1F));
 
-            Firmament firmament = Firmament.fromWorld(this.entity.getWorld());
-            int damage = firmament == null ? 0 : firmament.getDamage((int)target.getX(), (int)target.getZ());
+            Firmament firmament = Firmament.fromWorld(this.entity.level());
+            int damage = firmament == null ? 0 : firmament.getDamage((int)target.x(), (int)target.z());
 
             double dotFactor = 0.5 - 0.5 * dot;
             double damageFactor = 1.0 - (damage / 7.0) * (damage / 7.0);
@@ -317,7 +317,7 @@ public abstract class AbstractSubcaelicEntity extends MobEntity implements Monst
         }
 
         @Override
-        public boolean canStart() {
+        public boolean canUse() {
             LivingEntity target = this.entity.getTarget();
             if(isEntityValid(target)) {
                 this.targetEntity = target;
@@ -328,7 +328,7 @@ public abstract class AbstractSubcaelicEntity extends MobEntity implements Monst
         }
 
         @Override
-        public boolean shouldContinue() {
+        public boolean canContinueToUse() {
             return isEntityValid(this.targetEntity);
         }
 
@@ -343,45 +343,45 @@ public abstract class AbstractSubcaelicEntity extends MobEntity implements Monst
             } else if (!target.isAlive()) {
                 return false;
             } else {
-                return !(target instanceof PlayerEntity) || !target.isSpectator() && !((PlayerEntity)target).isCreative();
+                return !(target instanceof Player) || !target.isSpectator() && !((Player)target).isCreative();
             }
         }
 
         @Override
-        protected Vec3d getCandidatePosition() {
-            if(targetEntity == null) return this.entity.getPos();
+        protected Vec3 getCandidatePosition() {
+            if(targetEntity == null) return this.entity.position();
 
-            Random random = this.entity.getRandom();
+            RandomSource random = this.entity.getRandom();
             double radius = SEARCH_RADIUS_MIN + (SEARCH_RADIUS_MAX - SEARCH_RADIUS_MIN) * random.nextFloat();
             double angle = Math.PI * 2 * random.nextFloat();
             double cos = Math.cos(angle);
             double sin = Math.sin(angle);
 
             float l = random.nextFloat();
-            double targetX = MathHelper.lerp(l, this.entity.getX(), this.targetEntity.getX()) + radius * cos;
-            double targetZ = MathHelper.lerp(l, this.entity.getZ(), this.targetEntity.getZ()) + radius * sin;
+            double targetX = Mth.lerp(l, this.entity.getX(), this.targetEntity.getX()) + radius * cos;
+            double targetZ = Mth.lerp(l, this.entity.getZ(), this.targetEntity.getZ()) + radius * sin;
 
-            double targetY = getTargetY(targetX, targetZ, this.targetEntity.getY() + 12, this.entity.getWorld().getTopY());
-            return new Vec3d(targetX, targetY, targetZ);
+            double targetY = getTargetY(targetX, targetZ, this.targetEntity.getY() + 12, this.entity.level().getMaxBuildHeight());
+            return new Vec3(targetX, targetY, targetZ);
         }
 
         @Override
-        protected double getTargetBadness(Vec3d target) {
+        protected double getTargetBadness(Vec3 target) {
             if(targetEntity == null) return 0.;
 
-            Vec3d offset = target.subtract(this.targetEntity.getPos());
-            double offsetFactor = 1.0 - Math.exp(-offset.lengthSquared() * 0.01);
+            Vec3 offset = target.subtract(this.targetEntity.position());
+            double offsetFactor = 1.0 - Math.exp(-offset.lengthSqr() * 0.01);
 
-            Vec3d offset2 = target.subtract(this.entity.getPos());
-            if(offset2.lengthSquared() > 1) {
+            Vec3 offset2 = target.subtract(this.entity.position());
+            if(offset2.lengthSqr() > 1) {
                 offset2 = offset2.normalize();
             }
-            Vec3d offset3 = this.targetEntity.getPos().subtract(this.entity.getPos());
-            if(offset3.lengthSquared() > 1) {
+            Vec3 offset3 = this.targetEntity.position().subtract(this.entity.position());
+            if(offset3.lengthSqr() > 1) {
                 offset3 = offset3.normalize();
             }
 
-            double dot = offset2.dotProduct(offset3);
+            double dot = offset2.dot(offset3);
             double dotFactor = 0.5 - 0.5 * dot;
 
             return super.getTargetBadness(target) + offsetFactor + dotFactor * 0.7;

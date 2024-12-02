@@ -1,40 +1,40 @@
 package phanastrae.operation_starcleave.entity.mob;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ExperienceOrbEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.TargetPredicate;
-import net.minecraft.entity.ai.goal.ActiveTargetGoal;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.TrackTargetGoal;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.mob.Angerable;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.mob.Monster;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.registry.tag.EntityTypeTags;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.TimeHelper;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.intprovider.UniformIntProvider;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.EntityTypeTags;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.util.TimeUtil;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.Heightmap;
-import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.NeutralMob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.block.StellarFarmlandBlock;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
@@ -46,12 +46,12 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.UUID;
 
-public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Angerable {
-    private static final UniformIntProvider ANGER_TIME_RANGE = TimeHelper.betweenSeconds(15, 25);
+public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements NeutralMob {
+    private static final UniformInt ANGER_TIME_RANGE = TimeUtil.rangeOfSeconds(15, 25);
     public static final int MAX_ADOPTED_GROUP_SIZE = 14;
     public static final int MAX_NATURAL_GROUP_SIZE = 7;
 
-    private static final TrackedData<Boolean> HOLLOW = DataTracker.registerData(SubcaelicDuxEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> HOLLOW = SynchedEntityData.defineId(SubcaelicDuxEntity.class, EntityDataSerializers.BOOLEAN);
 
     public float haloAngle;
     public float prevHaloAngle;
@@ -64,56 +64,56 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Anger
     @Nullable
     private UUID angryAt;
 
-    public SubcaelicDuxEntity(EntityType<? extends SubcaelicDuxEntity> entityType, World world) {
+    public SubcaelicDuxEntity(EntityType<? extends SubcaelicDuxEntity> entityType, Level world) {
         super(entityType, world);
-        this.experiencePoints = Monster.STRONGER_MONSTER_XP;
+        this.xpReward = Enemy.XP_REWARD_HUGE;
     }
 
-    public static DefaultAttributeContainer.Builder createAttributes() {
-        return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 100.0)
-                .add(EntityAttributes.GENERIC_ARMOR, 8.0)
-                .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, 4.0)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.9)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 192.0);
-    }
-
-    @Override
-    protected void initDataTracker(DataTracker.Builder builder) {
-        super.initDataTracker(builder);
-        builder.add(HOLLOW, false);
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, 100.0)
+                .add(Attributes.ARMOR, 8.0)
+                .add(Attributes.ARMOR_TOUGHNESS, 4.0)
+                .add(Attributes.MOVEMENT_SPEED, 0.9)
+                .add(Attributes.FOLLOW_RANGE, 192.0);
     }
 
     @Override
-    protected void initGoals() {
-        this.goalSelector.add(1, new SubcaelicDuxEntity.AscendGoal(this));
-        this.goalSelector.add(2, new SubcaelicDuxEntity.SendTorpedoGoal(this));
-        this.goalSelector.add(3, new SubcaelicDuxEntity.SpawnTorpedoGoal(this));
-        this.goalSelector.add(4, new AbstractSubcaelicEntity.SwimNearTargetGoal(this));
-        this.goalSelector.add(5, new AbstractSubcaelicEntity.SwimWanderGoal(this));
-        this.targetSelector.add(1, new SubcaelicDuxEntity.TargetAttackerGoal(this, SubcaelicDuxEntity.class, SubcaelicTorpedoEntity.class));
-        this.targetSelector.add(2, new ActiveTargetGoal<>(this, PlayerEntity.class, 10, true, false, this::shouldAngerAt));
-        this.targetSelector.add(3, new ActiveTargetGoal<>(this, MobEntity.class, 30, true, false, entity -> entity.getType().isIn(EntityTypeTags.UNDEAD)));
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(HOLLOW, false);
     }
 
     @Override
-    public void writeCustomDataToNbt(NbtCompound nbt) {
-        super.writeCustomDataToNbt(nbt);
-        this.writeAngerToNbt(nbt);
+    protected void registerGoals() {
+        this.goalSelector.addGoal(1, new SubcaelicDuxEntity.AscendGoal(this));
+        this.goalSelector.addGoal(2, new SubcaelicDuxEntity.SendTorpedoGoal(this));
+        this.goalSelector.addGoal(3, new SubcaelicDuxEntity.SpawnTorpedoGoal(this));
+        this.goalSelector.addGoal(4, new AbstractSubcaelicEntity.SwimNearTargetGoal(this));
+        this.goalSelector.addGoal(5, new AbstractSubcaelicEntity.SwimWanderGoal(this));
+        this.targetSelector.addGoal(1, new SubcaelicDuxEntity.TargetAttackerGoal(this, SubcaelicDuxEntity.class, SubcaelicTorpedoEntity.class));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::isAngryAt));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Mob.class, 30, true, false, entity -> entity.getType().is(EntityTypeTags.UNDEAD)));
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag nbt) {
+        super.addAdditionalSaveData(nbt);
+        this.addPersistentAngerSaveData(nbt);
 
         nbt.putInt("DuxDeathTime", this.ticksSinceDeath);
         nbt.putBoolean("Hollow", this.isHollow());
     }
 
     @Override
-    public void readCustomDataFromNbt(NbtCompound nbt) {
-        super.readCustomDataFromNbt(nbt);
-        this.readAngerFromNbt(this.getWorld(), nbt);
+    public void readAdditionalSaveData(CompoundTag nbt) {
+        super.readAdditionalSaveData(nbt);
+        this.readPersistentAngerSaveData(this.level(), nbt);
 
-        if(nbt.contains("DuxDeathTime", NbtElement.INT_TYPE)) {
+        if(nbt.contains("DuxDeathTime", Tag.TAG_INT)) {
             this.ticksSinceDeath = nbt.getInt("DuxDeathTime");
         }
-        if(nbt.contains("Hollow", NbtElement.BYTE_TYPE)) {
+        if(nbt.contains("Hollow", Tag.TAG_BYTE)) {
             this.setHollow(nbt.getBoolean("Hollow"));
         }
     }
@@ -122,29 +122,29 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Anger
     public void tick() {
         super.tick();
         if(this.getTarget() != null) {
-            if(this.getWorld().getDifficulty().equals(Difficulty.PEACEFUL)) {
+            if(this.level().getDifficulty().equals(Difficulty.PEACEFUL)) {
                 this.setTarget(null);
-            } else if(this.getTarget().isRemoved() || this.getTarget().isDead() || this.distanceTo(this.getTarget()) > 128) {
+            } else if(this.getTarget().isRemoved() || this.getTarget().isDeadOrDying() || this.distanceTo(this.getTarget()) > 128) {
                 this.setTarget(null);
             }
         }
 
-        if(this.getWorld().isClient) {
-            Firmament firmament = Firmament.fromWorld(this.getWorld());
+        if(this.level().isClientSide) {
+            Firmament firmament = Firmament.fromWorld(this.level());
             if(firmament != null) {
-                boolean starlit = StellarFarmlandBlock.isStarlit(this.getWorld(), this.getBlockPos(), firmament);
+                boolean starlit = StellarFarmlandBlock.isStarlit(this.level(), this.blockPosition(), firmament);
                 if(starlit) {
-                    Vec3d spawnCenter = this.getPos().add(0.0, this.getHeight()*0.5, 0.0);
-                    double f = this.getWidth();
-                    int count = (int)(this.getWidth() * 8);
+                    Vec3 spawnCenter = this.position().add(0.0, this.getBbHeight()*0.5, 0.0);
+                    double f = this.getBbWidth();
+                    int count = (int)(this.getBbWidth() * 8);
                     for(int i = 0; i < count; ++i) {
                         double x = spawnCenter.x + (this.random.nextDouble() - 0.5) * f;
-                        double y = spawnCenter.y + (this.random.nextDouble() - 0.5) * this.getHeight();
+                        double y = spawnCenter.y + (this.random.nextDouble() - 0.5) * this.getBbHeight();
                         double z = spawnCenter.z + (this.random.nextDouble() - 0.5) * f;
-                        this.getWorld().addParticle(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER, x, y, z,
-                                this.getVelocity().x,
-                                this.getVelocity().y + 0.2,
-                                this.getVelocity().z);
+                        this.level().addParticle(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER, x, y, z,
+                                this.getDeltaMovement().x,
+                                this.getDeltaMovement().y + 0.2,
+                                this.getDeltaMovement().z);
                     }
                 }
             }
@@ -152,11 +152,11 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Anger
     }
 
     @Override
-    public void tickMovement() {
-        super.tickMovement();
+    public void aiStep() {
+        super.aiStep();
 
-        if (!this.getWorld().isClient) {
-            this.tickAngerLogic((ServerWorld)this.getWorld(), false);
+        if (!this.level().isClientSide) {
+            this.updatePersistentAnger((ServerLevel)this.level(), false);
         } else {
             this.prevHaloAngle = this.haloAngle;
 
@@ -164,7 +164,7 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Anger
             this.haloAngle += 2.5f + 40f * (1f - h * h);
         }
 
-        if(this.isDead()) {
+        if(this.isDeadOrDying()) {
             float d = this.getExplosionGlowProgress();
 
             this.rollAngle += (float) Math.PI * d * 5F;
@@ -174,17 +174,17 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Anger
         if(this.isHollow()) {
             this.tiltAngle += (180.0 - this.tiltAngle) * 0.05;
 
-            this.setVelocity(this.getVelocity().x * 0.8, this.getVelocity().y * 0.98 - 0.05, this.getVelocity().z * 0.8);
+            this.setDeltaMovement(this.getDeltaMovement().x * 0.8, this.getDeltaMovement().y * 0.98 - 0.05, this.getDeltaMovement().z * 0.8);
         }
     }
 
     @Override
-    protected void mobTick() {
-        Firmament firmament = Firmament.fromWorld(this.getWorld());
+    protected void customServerAiStep() {
+        Firmament firmament = Firmament.fromWorld(this.level());
         if(firmament != null) {
-            boolean starlit = StellarFarmlandBlock.isStarlit(this.getWorld(), this.getBlockPos(), firmament);
+            boolean starlit = StellarFarmlandBlock.isStarlit(this.level(), this.blockPosition(), firmament);
             if(starlit) {
-                if (this.age % 20 == 0) {
+                if (this.tickCount % 20 == 0) {
                     this.heal(1.0F);
                 }
             }
@@ -192,28 +192,28 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Anger
     }
 
     @Override
-    protected void updatePostDeath() {
+    protected void tickDeath() {
         ++this.ticksSinceDeath;
         if(this.ticksSinceDeath >= 200 && !this.isHollow()) {
             this.becomeHollow();
         }
 
-        if(this.getWorld().isClient && this.getRandom().nextInt(8) == 0) {
+        if(this.level().isClientSide && this.getRandom().nextInt(8) == 0) {
             this.spawnSmokeBurst();
-            this.getWorld().playSoundFromEntity(this, SoundEvents.ENTITY_GENERIC_EXPLODE.value(), SoundCategory.NEUTRAL, 6f, 0.7F + 0.5F * this.getRandom().nextFloat());
+            this.level().playLocalSound(this, SoundEvents.GENERIC_EXPLODE.value(), SoundSource.NEUTRAL, 6f, 0.7F + 0.5F * this.getRandom().nextFloat());
         }
 
-        if(!this.isRemoved() && (this.ticksSinceDeath >= 400 || (this.ticksSinceDeath >= 240 && this.isOnGround()))) {
-            boolean doMobLoot = this.getWorld().getGameRules().getBoolean(GameRules.DO_MOB_LOOT);
+        if(!this.isRemoved() && (this.ticksSinceDeath >= 400 || (this.ticksSinceDeath >= 240 && this.onGround()))) {
+            boolean doMobLoot = this.level().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT);
 
-            if (this.getWorld() instanceof ServerWorld serverWorld) {
+            if (this.level() instanceof ServerLevel serverWorld) {
                 if (doMobLoot) {
-                    ExperienceOrbEntity.spawn(serverWorld, this.getPos(), this.getXpToDrop());
+                    ExperienceOrb.award(serverWorld, this.position(), this.getBaseExperienceReward());
                 }
 
-                this.emitGameEvent(GameEvent.ENTITY_DIE);
+                this.gameEvent(GameEvent.ENTITY_DIE);
 
-                serverWorld.createExplosion(this, this.getX(), this.getY(), this.getZ(), 10, true, World.ExplosionSourceType.MOB);
+                serverWorld.explode(this, this.getX(), this.getY(), this.getZ(), 10, true, Level.ExplosionInteraction.MOB);
             }
             this.remove(RemovalReason.KILLED);
         }
@@ -225,11 +225,11 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Anger
     }
 
     @Override
-    public boolean damage(DamageSource source, float amount) {
-        if(source.getAttacker() instanceof AbstractSubcaelicEntity) {
+    public boolean hurt(DamageSource source, float amount) {
+        if(source.getEntity() instanceof AbstractSubcaelicEntity) {
             return false;
         }
-        return super.damage(source, amount);
+        return super.hurt(source, amount);
     }
 
     @Override
@@ -238,38 +238,38 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Anger
     }
 
     @Override
-    public void chooseRandomAngerTime() {
-        this.setAngerTime(ANGER_TIME_RANGE.get(this.random));
+    public void startPersistentAngerTimer() {
+        this.setRemainingPersistentAngerTime(ANGER_TIME_RANGE.sample(this.random));
     }
 
     @Override
-    public void setAngerTime(int angerTime) {
+    public void setRemainingPersistentAngerTime(int angerTime) {
         this.angerTime = angerTime;
     }
 
     @Override
-    public int getAngerTime() {
+    public int getRemainingPersistentAngerTime() {
         return this.angerTime;
     }
 
     @Override
-    public void setAngryAt(@Nullable UUID angryAt) {
+    public void setPersistentAngerTarget(@Nullable UUID angryAt) {
         this.angryAt = angryAt;
     }
 
     @Nullable
     @Override
-    public UUID getAngryAt() {
+    public UUID getPersistentAngerTarget() {
         return this.angryAt;
     }
 
     @Override
-    public boolean isUniversallyAngry(World world) {
-        return this.hasAngerTime() && this.getAngryAt() == null;
+    public boolean isAngryAtAllPlayers(Level world) {
+        return this.isAngry() && this.getPersistentAngerTarget() == null;
     }
 
     @Override
-    public void forgive(PlayerEntity player) {
+    public void playerDied(Player player) {
         //
     }
 
@@ -282,12 +282,12 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Anger
     @Override
     public void kill() {
         this.remove(Entity.RemovalReason.KILLED);
-        this.emitGameEvent(GameEvent.ENTITY_DIE);
+        this.gameEvent(GameEvent.ENTITY_DIE);
     }
 
     @Override
-    public Box getVisibilityBoundingBox() {
-        return super.getVisibilityBoundingBox().expand(this.getWidth() * 0.6);
+    public AABB getBoundingBoxForCulling() {
+        return super.getBoundingBoxForCulling().inflate(this.getBbWidth() * 0.6);
     }
 
     @Override
@@ -302,46 +302,46 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Anger
 
     @Override
     public void spawnTrailParticles() {
-        Vec3d spawnCenter = this.getPos().add(0.0, this.getHeight()*0.5, 0.0).subtract(this.getRotationVector().multiply(this.getWidth()*0.5));
-        double f = this.getWidth() * 0.2;
-        int count = (int)(this.getWidth() * 4 * Math.min(1.0, 2.0 * this.getVelocity().length()));
+        Vec3 spawnCenter = this.position().add(0.0, this.getBbHeight()*0.5, 0.0).subtract(this.getLookAngle().scale(this.getBbWidth()*0.5));
+        double f = this.getBbWidth() * 0.2;
+        int count = (int)(this.getBbWidth() * 4 * Math.min(1.0, 2.0 * this.getDeltaMovement().length()));
         for(int i = 0; i < count; ++i) {
             double x = spawnCenter.x + (this.random.nextDouble() - 0.5) * f;
             double y = spawnCenter.y + (this.random.nextDouble() - 0.5) * f;
             double z = spawnCenter.z + (this.random.nextDouble() - 0.5) * f;
-            this.getWorld().addParticle(OperationStarcleaveParticleTypes.LARGE_GLIMMER_SMOKE, true, x, y, z,
-                    this.getVelocity().x * - 1.5,
-                    this.getVelocity().y * - 1.5,
-                    this.getVelocity().z * - 1.5);
+            this.level().addParticle(OperationStarcleaveParticleTypes.LARGE_GLIMMER_SMOKE, true, x, y, z,
+                    this.getDeltaMovement().x * - 1.5,
+                    this.getDeltaMovement().y * - 1.5,
+                    this.getDeltaMovement().z * - 1.5);
         }
     }
 
     public void spawnSmokeBurst() {
-        Random random = this.getRandom();
-        float height = this.getHeight();
-        float width = this.getWidth();
+        RandomSource random = this.getRandom();
+        float height = this.getBbHeight();
+        float width = this.getBbWidth();
 
-        Vec3d offset = new Vec3d(random.nextFloat() - 0.5, random.nextFloat() - 0.5, random.nextFloat() - 0.5).normalize().multiply(width, height, width);
+        Vec3 offset = new Vec3(random.nextFloat() - 0.5, random.nextFloat() - 0.5, random.nextFloat() - 0.5).normalize().multiply(width, height, width);
 
         for(int i = 0; i < 240; ++i) {
             double speed = 0.15F + random.nextFloat() * 0.15F;
             double variation = 0.3F;
-            this.getWorld().addParticle(OperationStarcleaveParticleTypes.LARGE_GLIMMER_SMOKE, false,
+            this.level().addParticle(OperationStarcleaveParticleTypes.LARGE_GLIMMER_SMOKE, false,
                     this.getX(),
                     this.getY(),
                     this.getZ(),
-                    this.getVelocity().x + offset.x * speed + random.nextGaussian() * variation,
-                    this.getVelocity().y + offset.y * speed + random.nextGaussian() * variation,
-                    this.getVelocity().z + offset.z * speed + random.nextGaussian() * variation);
+                    this.getDeltaMovement().x + offset.x * speed + random.nextGaussian() * variation,
+                    this.getDeltaMovement().y + offset.y * speed + random.nextGaussian() * variation,
+                    this.getDeltaMovement().z + offset.z * speed + random.nextGaussian() * variation);
         }
     }
 
     public boolean isHollow() {
-        return this.dataTracker.get(HOLLOW);
+        return this.entityData.get(HOLLOW);
     }
 
     private void setHollow(boolean value) {
-        this.dataTracker.set(HOLLOW, value);
+        this.entityData.set(HOLLOW, value);
     }
 
     public void becomeHollow() {
@@ -350,7 +350,7 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Anger
     }
 
     public float getExplosionGlowProgress() {
-        if(this.isDead()) {
+        if(this.isDeadOrDying()) {
             return this.ticksSinceDeath / 400f;
         } else {
             return 0;
@@ -380,7 +380,7 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Anger
     public float getHealthFraction() {
         if(this.getMaxHealth() == 0) return 0f;
         float f = this.getHealth() / this.getMaxHealth();
-        return MathHelper.clamp(f, 0f, 1f);
+        return Mth.clamp(f, 0f, 1f);
     }
 
     static class SendTorpedoGoal extends Goal {
@@ -394,16 +394,16 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Anger
         }
 
         @Override
-        public boolean canStart() {
+        public boolean canUse() {
             if(this.dux.torpedos.isEmpty()) {
                 return false;
             } else if(this.cooldown > 0) {
                 this.cooldown--;
                 return false;
-            } else if(this.dux.getWorld().getDifficulty().equals(Difficulty.PEACEFUL)) {
+            } else if(this.dux.level().getDifficulty().equals(Difficulty.PEACEFUL)) {
                 return false;
             } else {
-                this.cooldown = toGoalTicks(8 + (int)(Math.sqrt(this.dux.getHealthFraction()) * (22 + this.dux.getRandom().nextInt(20))));
+                this.cooldown = reducedTickDelay(8 + (int)(Math.sqrt(this.dux.getHealthFraction()) * (22 + this.dux.getRandom().nextInt(20))));
 
                 LivingEntity target = this.dux.getTarget();
                 if (target == null) {
@@ -411,7 +411,7 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Anger
                 } else if (!target.isAlive()) {
                     return false;
                 } else {
-                    return !(target instanceof PlayerEntity) || !target.isSpectator() && !((PlayerEntity)target).isCreative();
+                    return !(target instanceof Player) || !target.isSpectator() && !((Player)target).isCreative();
                 }
             }
         }
@@ -442,17 +442,17 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Anger
 
         public AscendGoal(SubcaelicDuxEntity dux) {
             this.dux = dux;
-            this.setControls(EnumSet.of(Control.MOVE));
+            this.setFlags(EnumSet.of(Flag.MOVE));
         }
 
         @Override
-        public boolean canStart() {
-            return this.dux.isDead() && !this.dux.isHollow();
+        public boolean canUse() {
+            return this.dux.isDeadOrDying() && !this.dux.isHollow();
         }
 
         @Override
         public void tick() {
-            World world = this.dux.getWorld();
+            Level world = this.dux.level();
             double x = this.dux.getX();
             double z = this.dux.getZ();
             LivingEntity target = this.dux.getTarget();
@@ -460,7 +460,7 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Anger
                 x = target.getX();
                 z = target.getZ();
             }
-            int topY = world.getTopY(Heightmap.Type.MOTION_BLOCKING, (int)x, (int)z);
+            int topY = world.getHeight(Heightmap.Types.MOTION_BLOCKING, (int)x, (int)z);
             Firmament firmament = Firmament.fromWorld(world);
             int goalHeight = topY + 80;
             if(firmament != null) {
@@ -470,7 +470,7 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Anger
                 }
             }
 
-            this.dux.moveControl.moveTo(x, goalHeight, z, 1.5);
+            this.dux.moveControl.setWantedPosition(x, goalHeight, z, 1.5);
 
             if(this.dux.getY() > goalHeight && this.dux.ticksSinceDeath > 60) {
                 this.dux.becomeHollow();
@@ -491,54 +491,54 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Anger
         }
 
         @Override
-        public boolean canStart() {
+        public boolean canUse() {
             if(this.dux.torpedos.size() >= SubcaelicDuxEntity.MAX_NATURAL_GROUP_SIZE) {
                 return false;
-            } else if(this.cooldown > 0 && (this.dux.isAlive() || this.cooldown <= toGoalTicks(20))) {
+            } else if(this.cooldown > 0 && (this.dux.isAlive() || this.cooldown <= reducedTickDelay(20))) {
                 this.cooldown--;
                 return false;
             } else {
-                if(this.dux.isDead()) {
-                    this.cooldown = toGoalTicks(20);
+                if(this.dux.isDeadOrDying()) {
+                    this.cooldown = reducedTickDelay(20);
                 } else {
-                    this.cooldown = toGoalTicks(6 + (int) (Math.sqrt(this.dux.getHealthFraction()) * (14 + this.dux.getRandom().nextInt(20))));
+                    this.cooldown = reducedTickDelay(6 + (int) (Math.sqrt(this.dux.getHealthFraction()) * (14 + this.dux.getRandom().nextInt(20))));
                 }
 
-                int nearbyTorpedoes = this.dux.getWorld().getEntitiesByType(OperationStarcleaveEntityTypes.SUBCAELIC_TORPEDO, this.dux.getBoundingBox().expand(TORPEDO_CHECK_RANGE), Entity::isAlive).size();
+                int nearbyTorpedoes = this.dux.level().getEntities(OperationStarcleaveEntityTypes.SUBCAELIC_TORPEDO, this.dux.getBoundingBox().inflate(TORPEDO_CHECK_RANGE), Entity::isAlive).size();
                 return nearbyTorpedoes < MAX_NEARBY_TORPEDOES;
             }
         }
 
         @Override
         public void tick() {
-            boolean deadDux = this.dux.isDead();
+            boolean deadDux = this.dux.isDeadOrDying();
             LivingEntity target = this.dux.getTarget();
             if(deadDux && target == null) return;
 
-            World world = this.dux.getWorld();
+            Level world = this.dux.level();
 
-            int torpedoCount = this.dux.isDead() ? (this.dux.random.nextBoolean() ? 4 : 3) : 1;
-            Vec3d rv = this.dux.getRotationVector().multiply(this.dux.getWidth() * 0.5);
+            int torpedoCount = this.dux.isDeadOrDying() ? (this.dux.random.nextBoolean() ? 4 : 3) : 1;
+            Vec3 rv = this.dux.getLookAngle().scale(this.dux.getBbWidth() * 0.5);
             for(int i = 0; i < torpedoCount; i++) {
                 SubcaelicTorpedoEntity torpedo = OperationStarcleaveEntityTypes.SUBCAELIC_TORPEDO.create(world);
                 if (torpedo != null) {
-                    torpedo.refreshPositionAndAngles(this.dux.getX() - rv.x, this.dux.getY() + this.dux.getHeight() / 2 - rv.y, this.dux.getZ() - rv.z, this.dux.getYaw(), this.dux.getPitch());
-                    torpedo.setVelocity(this.dux.getVelocity());
+                    torpedo.moveTo(this.dux.getX() - rv.x, this.dux.getY() + this.dux.getBbHeight() / 2 - rv.y, this.dux.getZ() - rv.z, this.dux.getYRot(), this.dux.getXRot());
+                    torpedo.setDeltaMovement(this.dux.getDeltaMovement());
                     torpedo.joinGroupOf(this.dux);
                     if (deadDux) {
-                        torpedo.setVelocity(target.getPos().subtract(torpedo.getPos()).normalize().multiply(1.5).add(this.dux.random.nextGaussian() * 0.4, this.dux.random.nextGaussian() * 0.4, this.dux.random.nextGaussian() * 0.4));
+                        torpedo.setDeltaMovement(target.position().subtract(torpedo.position()).normalize().scale(1.5).add(this.dux.random.nextGaussian() * 0.4, this.dux.random.nextGaussian() * 0.4, this.dux.random.nextGaussian() * 0.4));
                         torpedo.primeAndTarget(target, 1.5F);
                         torpedo.leaveGroup(false);
                     }
-                    world.spawnEntity(torpedo);
+                    world.addFreshEntity(torpedo);
                 }
             }
         }
     }
 
-    static class TargetAttackerGoal extends TrackTargetGoal {
+    static class TargetAttackerGoal extends TargetGoal {
 
-        private static final TargetPredicate VALID_AVOIDABLES_PREDICATE = TargetPredicate.createAttackable().ignoreVisibility().ignoreDistanceScalingFactor();
+        private static final TargetingConditions VALID_AVOIDABLES_PREDICATE = TargetingConditions.forCombat().ignoreLineOfSight().ignoreInvisibilityTesting();
         private int lastAttackedTime;
         private final Class<?>[] noRevengeTypes;
 
@@ -548,13 +548,13 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Anger
             super(dux, true);
             this.dux = dux;
             this.noRevengeTypes = noRevengeTypes;
-            this.setControls(EnumSet.of(Goal.Control.TARGET));
+            this.setFlags(EnumSet.of(Goal.Flag.TARGET));
         }
 
         @Override
-        public boolean canStart() {
-            int i = this.mob.getLastAttackedTime();
-            LivingEntity livingEntity = this.mob.getAttacker();
+        public boolean canUse() {
+            int i = this.mob.getLastHurtByMobTimestamp();
+            LivingEntity livingEntity = this.mob.getLastHurtByMob();
             if (i != this.lastAttackedTime && livingEntity != null) {
                 for(Class<?> class_ : this.noRevengeTypes) {
                     if (class_.isAssignableFrom(livingEntity.getClass())) {
@@ -562,7 +562,7 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Anger
                     }
                 }
 
-                return this.canTrack(livingEntity, VALID_AVOIDABLES_PREDICATE);
+                return this.canAttack(livingEntity, VALID_AVOIDABLES_PREDICATE);
             } else {
                 return false;
             }
@@ -570,15 +570,15 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Anger
 
         @Override
         public void start() {
-            LivingEntity target = this.mob.getAttacker();
-            if(target instanceof PlayerEntity) {
-                this.dux.universallyAnger();
-                this.lastAttackedTime = this.mob.getLastAttackedTime();
+            LivingEntity target = this.mob.getLastHurtByMob();
+            if(target instanceof Player) {
+                this.dux.forgetCurrentTargetAndRefreshUniversalAnger();
+                this.lastAttackedTime = this.mob.getLastHurtByMobTimestamp();
             } else {
                 this.mob.setTarget(target);
-                this.target = this.mob.getTarget();
-                this.lastAttackedTime = this.mob.getLastAttackedTime();
-                this.maxTimeWithoutVisibility = 300;
+                this.targetMob = this.mob.getTarget();
+                this.lastAttackedTime = this.mob.getLastHurtByMobTimestamp();
+                this.unseenMemoryTicks = 300;
             }
 
             super.start();

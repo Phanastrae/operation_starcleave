@@ -2,32 +2,27 @@ package phanastrae.operation_starcleave.data;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
-import net.minecraft.block.BedBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.enums.BedPart;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.Items;
-import net.minecraft.loot.LootPool;
-import net.minecraft.loot.LootTable;
-import net.minecraft.loot.condition.*;
-import net.minecraft.loot.entry.ItemEntry;
-import net.minecraft.loot.entry.LeafEntry;
-import net.minecraft.loot.entry.LootPoolEntry;
-import net.minecraft.loot.function.ApplyBonusLootFunction;
-import net.minecraft.loot.function.ExplosionDecayLootFunction;
-import net.minecraft.loot.function.SetCountLootFunction;
-import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
-import net.minecraft.loot.provider.number.UniformLootNumberProvider;
-import net.minecraft.predicate.NumberRange;
-import net.minecraft.predicate.StatePredicate;
-import net.minecraft.predicate.item.EnchantmentPredicate;
-import net.minecraft.predicate.item.EnchantmentsPredicate;
-import net.minecraft.predicate.item.ItemPredicate;
-import net.minecraft.predicate.item.ItemSubPredicateTypes;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.advancements.critereon.*;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.BedBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.properties.BedPart;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
+import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
+import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.predicates.*;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 
@@ -35,36 +30,36 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class BlockLootTableProvider extends FabricBlockLootTableProvider {
-    protected BlockLootTableProvider(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
+    protected BlockLootTableProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
         super(dataOutput, registryLookup);
     }
 
     @Override
     public void generate() {
-        RegistryWrapper.Impl<Enchantment> impl = this.registryLookup.getWrapperOrThrow(RegistryKeys.ENCHANTMENT);
+        HolderLookup.RegistryLookup<Enchantment> impl = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
 
-        addDrop(OperationStarcleaveBlocks.NETHERITE_PUMPKIN);
-        addDrop(OperationStarcleaveBlocks.STELLAR_SEDIMENT);
-        addDrop(OperationStarcleaveBlocks.STARBLEACHED_LOG);
-        addDrop(OperationStarcleaveBlocks.STARBLEACHED_WOOD);
-        addDrop(OperationStarcleaveBlocks.STARBLEACHED_LEAVES);
-        addDrop(OperationStarcleaveBlocks.STARBLEACHED_TILES);
-        addDrop(OperationStarcleaveBlocks.STARBLEACHED_TILE_STAIRS);
-        addDrop(OperationStarcleaveBlocks.STARBLEACHED_TILE_SLAB);
-        addDrop(OperationStarcleaveBlocks.STARBLEACHED_TILE_WALL);
-        addDrop(OperationStarcleaveBlocks.CHISELED_STARBLEACHED_TILES);
-        addDrop(OperationStarcleaveBlocks.IMBUED_STARBLEACHED_TILES);
-        addDrop(OperationStarcleaveBlocks.STARBLEACHED_PEARL_BLOCK);
-        addDrop(OperationStarcleaveBlocks.STELLAR_TILES);
-        addDrop(OperationStarcleaveBlocks.STELLAR_TILE_SLAB);
-        addDrop(OperationStarcleaveBlocks.STELLAR_REPULSOR);
-        addDrop(OperationStarcleaveBlocks.BLESSED_CLOTH_BLOCK);
-        addDrop(OperationStarcleaveBlocks.BLESSED_CLOTH_CARPET);
-        addDrop(OperationStarcleaveBlocks.BLESSED_CLOTH_CURTAIN);
+        dropSelf(OperationStarcleaveBlocks.NETHERITE_PUMPKIN);
+        dropSelf(OperationStarcleaveBlocks.STELLAR_SEDIMENT);
+        dropSelf(OperationStarcleaveBlocks.STARBLEACHED_LOG);
+        dropSelf(OperationStarcleaveBlocks.STARBLEACHED_WOOD);
+        dropSelf(OperationStarcleaveBlocks.STARBLEACHED_LEAVES);
+        dropSelf(OperationStarcleaveBlocks.STARBLEACHED_TILES);
+        dropSelf(OperationStarcleaveBlocks.STARBLEACHED_TILE_STAIRS);
+        dropSelf(OperationStarcleaveBlocks.STARBLEACHED_TILE_SLAB);
+        dropSelf(OperationStarcleaveBlocks.STARBLEACHED_TILE_WALL);
+        dropSelf(OperationStarcleaveBlocks.CHISELED_STARBLEACHED_TILES);
+        dropSelf(OperationStarcleaveBlocks.IMBUED_STARBLEACHED_TILES);
+        dropSelf(OperationStarcleaveBlocks.STARBLEACHED_PEARL_BLOCK);
+        dropSelf(OperationStarcleaveBlocks.STELLAR_TILES);
+        dropSelf(OperationStarcleaveBlocks.STELLAR_TILE_SLAB);
+        dropSelf(OperationStarcleaveBlocks.STELLAR_REPULSOR);
+        dropSelf(OperationStarcleaveBlocks.BLESSED_CLOTH_BLOCK);
+        dropSelf(OperationStarcleaveBlocks.BLESSED_CLOTH_CARPET);
+        dropSelf(OperationStarcleaveBlocks.BLESSED_CLOTH_CURTAIN);
 
-        addDrop(OperationStarcleaveBlocks.PHLOGISTIC_FIRE, dropsNothing());
+        add(OperationStarcleaveBlocks.PHLOGISTIC_FIRE, noDrop());
 
-        addDrop(OperationStarcleaveBlocks.STARBLEACH_CAULDRON, Items.CAULDRON);
+        dropOther(OperationStarcleaveBlocks.STARBLEACH_CAULDRON, Items.CAULDRON);
 
         addRandomDrop(OperationStarcleaveBlocks.HOLY_MOSS, silkTouchDrop(OperationStarcleaveItems.HOLY_MOSS, OperationStarcleaveItems.STELLAR_SEDIMENT));
         addRandomDrop(OperationStarcleaveBlocks.STELLAR_MULCH, silkTouchDrop(OperationStarcleaveItems.STELLAR_MULCH, OperationStarcleaveItems.STELLAR_SEDIMENT));
@@ -73,81 +68,81 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
         addRandomDrop(OperationStarcleaveBlocks.STARDUST_BLOCK,
                 silkTouchDrop(
                         item(OperationStarcleaveItems.STARDUST_BLOCK),
-                        item(OperationStarcleaveItems.STARDUST_CLUSTER, 1, 4, false).apply(ExplosionDecayLootFunction.builder())));
+                        item(OperationStarcleaveItems.STARDUST_CLUSTER, 1, 4, false).apply(ApplyExplosionDecay.explosionDecay())));
 
         addRandomDrop(OperationStarcleaveBlocks.SHORT_HOLY_MOSS,
                 conditionalDrop(
                         item(OperationStarcleaveItems.SHORT_HOLY_MOSS),
-                        item(OperationStarcleaveItems.HOLY_STRANDS).apply(ApplyBonusLootFunction.uniformBonusCount(impl.getOrThrow(Enchantments.FORTUNE), 4)).apply(ExplosionDecayLootFunction.builder()).conditionally(RandomChanceLootCondition.builder(0.3F)),
-                        WITH_SHEARS
+                        item(OperationStarcleaveItems.HOLY_STRANDS).apply(ApplyBonusCount.addUniformBonusCount(impl.getOrThrow(Enchantments.FORTUNE), 4)).apply(ApplyExplosionDecay.explosionDecay()).when(LootItemRandomChanceCondition.randomChance(0.3F)),
+                        HAS_SHEARS
                 )
         );
 
         addRandomDrop(OperationStarcleaveBlocks.MULCHBORNE_TUFT,
                 conditionalDrop(
                         item(OperationStarcleaveItems.MULCHBORNE_TUFT),
-                        WITH_SHEARS
+                        HAS_SHEARS
                 )
         );
 
-        addDrop(OperationStarcleaveBlocks.BLESSED_BED, LootTable.builder().pool(
-                LootPool.builder().rolls(ConstantLootNumberProvider.create(1))
-                        .with(item(OperationStarcleaveItems.BLESSED_BED)
-                                .conditionally(BlockStatePropertyLootCondition
-                                        .builder(OperationStarcleaveBlocks.BLESSED_BED)
-                                        .properties(StatePredicate.Builder.create().exactMatch(BedBlock.PART, BedPart.HEAD)))
+        add(OperationStarcleaveBlocks.BLESSED_BED, LootTable.lootTable().withPool(
+                LootPool.lootPool().setRolls(ConstantValue.exactly(1))
+                        .add(item(OperationStarcleaveItems.BLESSED_BED)
+                                .when(LootItemBlockStatePropertyCondition
+                                        .hasBlockStateProperties(OperationStarcleaveBlocks.BLESSED_BED)
+                                        .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BedBlock.PART, BedPart.HEAD)))
                         )
-                        .conditionally(SurvivesExplosionLootCondition.builder())
+                        .when(ExplosionCondition.survivesExplosion())
                 )
         );
     }
 
     public void addRandomDrop(Block block, LootTable.Builder builder) {
-        addDrop(block, builder.randomSequenceId(block.getLootTableKey().getValue()));
+        add(block, builder.setRandomSequence(block.getLootTable().location()));
     }
 
-    public static LeafEntry.Builder<?> item(ItemConvertible itemConvertible) {
-        return ItemEntry.builder(itemConvertible);
+    public static LootPoolSingletonContainer.Builder<?> item(ItemLike itemConvertible) {
+        return LootItem.lootTableItem(itemConvertible);
     }
 
-    public static LeafEntry.Builder<?> item(ItemConvertible itemConvertible, float min, float max, boolean add) {
-        return item(itemConvertible).apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(min, max), add));
+    public static LootPoolSingletonContainer.Builder<?> item(ItemLike itemConvertible, float min, float max, boolean add) {
+        return item(itemConvertible).apply(SetItemCountFunction.setCount(UniformGenerator.between(min, max), add));
     }
 
-    public static LootTable.Builder conditionalDrop(LootPoolEntry.Builder<?> withCondition, LootCondition.Builder condition) {
-        LootPoolEntry.Builder<?> withConditionEntry = withCondition.conditionally(condition);
+    public static LootTable.Builder conditionalDrop(LootPoolEntryContainer.Builder<?> withCondition, LootItemCondition.Builder condition) {
+        LootPoolEntryContainer.Builder<?> withConditionEntry = withCondition.when(condition);
 
-        return LootTable.builder().pool(
-                LootPool.builder().rolls(ConstantLootNumberProvider.create(1))
-                        .with(withConditionEntry)
+        return LootTable.lootTable().withPool(
+                LootPool.lootPool().setRolls(ConstantValue.exactly(1))
+                        .add(withConditionEntry)
         );
     }
 
-    public static LootTable.Builder conditionalDrop(LootPoolEntry.Builder<?> withCondition, LootPoolEntry.Builder<?> noCondition, LootCondition.Builder condition) {
-        LootPoolEntry.Builder<?> noConditionEntry = noCondition.conditionally(SurvivesExplosionLootCondition.builder());
-        LootPoolEntry.Builder<?> withConditionEntry = withCondition.conditionally(condition);
+    public static LootTable.Builder conditionalDrop(LootPoolEntryContainer.Builder<?> withCondition, LootPoolEntryContainer.Builder<?> noCondition, LootItemCondition.Builder condition) {
+        LootPoolEntryContainer.Builder<?> noConditionEntry = noCondition.when(ExplosionCondition.survivesExplosion());
+        LootPoolEntryContainer.Builder<?> withConditionEntry = withCondition.when(condition);
 
-        return LootTable.builder().pool(
-                LootPool.builder().rolls(ConstantLootNumberProvider.create(1))
-                        .with(withConditionEntry.alternatively(noConditionEntry))
+        return LootTable.lootTable().withPool(
+                LootPool.lootPool().setRolls(ConstantValue.exactly(1))
+                        .add(withConditionEntry.otherwise(noConditionEntry))
         );
     }
 
-    public LootTable.Builder silkTouchDrop(LootPoolEntry.Builder<?> withSilkTouch, LootPoolEntry.Builder<?> noSilkTouch) {
-        return conditionalDrop(withSilkTouch, noSilkTouch, createSilkTouchCondition());
+    public LootTable.Builder silkTouchDrop(LootPoolEntryContainer.Builder<?> withSilkTouch, LootPoolEntryContainer.Builder<?> noSilkTouch) {
+        return conditionalDrop(withSilkTouch, noSilkTouch, hasSilkTouch());
     }
 
-    public LootTable.Builder silkTouchDrop(ItemConvertible withSilkTouch, ItemConvertible noSilkTouch) {
+    public LootTable.Builder silkTouchDrop(ItemLike withSilkTouch, ItemLike noSilkTouch) {
         return silkTouchDrop(item(withSilkTouch), item(noSilkTouch));
     }
 
-    public LootCondition.Builder createSilkTouchCondition() {
-        RegistryWrapper.Impl<Enchantment> impl = this.registryLookup.getWrapperOrThrow(RegistryKeys.ENCHANTMENT);
-        return MatchToolLootCondition.builder(
-                ItemPredicate.Builder.create()
-                        .subPredicate(
-                                ItemSubPredicateTypes.ENCHANTMENTS,
-                                EnchantmentsPredicate.enchantments(List.of(new EnchantmentPredicate(impl.getOrThrow(Enchantments.SILK_TOUCH), NumberRange.IntRange.atLeast(1))))
+    public LootItemCondition.Builder hasSilkTouch() {
+        HolderLookup.RegistryLookup<Enchantment> impl = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
+        return MatchTool.toolMatches(
+                ItemPredicate.Builder.item()
+                        .withSubPredicate(
+                                ItemSubPredicates.ENCHANTMENTS,
+                                ItemEnchantmentsPredicate.enchantments(List.of(new EnchantmentPredicate(impl.getOrThrow(Enchantments.SILK_TOUCH), MinMaxBounds.Ints.atLeast(1))))
                         )
         );
     }

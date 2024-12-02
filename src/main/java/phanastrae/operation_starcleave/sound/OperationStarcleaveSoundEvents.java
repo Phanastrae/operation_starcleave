@@ -1,9 +1,9 @@
 package phanastrae.operation_starcleave.sound;
 
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import phanastrae.operation_starcleave.OperationStarcleave;
 
 public class OperationStarcleaveSoundEvents {
@@ -18,11 +18,11 @@ public class OperationStarcleaveSoundEvents {
         return register(OperationStarcleave.id(id));
     }
 
-    private static SoundEvent register(Identifier id) {
+    private static SoundEvent register(ResourceLocation id) {
         return register(id, id);
     }
 
-    private static SoundEvent register(Identifier id, Identifier soundId) {
-        return Registry.register(Registries.SOUND_EVENT, id, SoundEvent.of(soundId));
+    private static SoundEvent register(ResourceLocation id, ResourceLocation soundId) {
+        return Registry.register(BuiltInRegistries.SOUND_EVENT, id, SoundEvent.createVariableRangeEvent(soundId));
     }
 }

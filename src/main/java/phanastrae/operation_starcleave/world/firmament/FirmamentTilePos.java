@@ -1,6 +1,6 @@
 package phanastrae.operation_starcleave.world.firmament;
 
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.phys.Vec3;
 
 public class FirmamentTilePos {
     final public int tileX;
@@ -27,7 +27,7 @@ public class FirmamentTilePos {
         return fromBlockCoords(x, firmament.getY(), z);
     }
 
-    public Vec3d getCenter() {
-        return new Vec3d(this.blockX + 2, this.y, this.blockZ + 2);
+    public Vec3 getCenter() {
+        return new Vec3(this.blockX + 2, this.y, this.blockZ + 2);
     }
 }

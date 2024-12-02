@@ -1,32 +1,31 @@
 package phanastrae.operation_starcleave.client.render.shader;
 
+import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.shaders.Uniform;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.systems.VertexSorter;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.Framebuffer;
-import net.minecraft.client.gl.GlUniform;
-import net.minecraft.client.gl.ShaderProgram;
-import net.minecraft.client.render.*;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.RotationAxis;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Axis;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import phanastrae.operation_starcleave.client.duck.WorldRendererDuck;
 import phanastrae.operation_starcleave.client.render.firmament.FirmamentTextureStorage;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 
-import static net.minecraft.util.math.MathHelper.floorMod;
+import static net.minecraft.util.Mth.positiveModulo;
 
 public class FirmamentPostShader {
     public static void draw() {
-        MinecraftClient client = MinecraftClient.getInstance();
-        if(client.worldRenderer instanceof WorldRendererDuck operationStarcleaveWorldRenderer) {
-            Framebuffer mainBuffer = client.getFramebuffer();
+        Minecraft client = Minecraft.getInstance();
+        if(client.levelRenderer instanceof WorldRendererDuck operationStarcleaveWorldRenderer) {
+            RenderTarget mainBuffer = client.getMainRenderTarget();
 
-            Framebuffer dummyBuffer = operationStarcleaveWorldRenderer.operation_starcleave$getDummyFramebuffer();
+            RenderTarget dummyBuffer = operationStarcleaveWorldRenderer.operation_starcleave$getDummyFramebuffer();
             if(dummyBuffer == null) {
                 return;
             }
@@ -34,23 +33,23 @@ public class FirmamentPostShader {
             if (canDraw()) {
                 // clear dummy
                 dummyBuffer.setClearColor(0, 0, 0, 0);
-                dummyBuffer.clear(MinecraftClient.IS_SYSTEM_MAC);
+                dummyBuffer.clear(Minecraft.ON_OSX);
 
                 // copy main to dummy
-                dummyBuffer.beginWrite(false);
+                dummyBuffer.bindWrite(false);
                 RenderSystem.backupProjectionMatrix();
-                mainBuffer.draw(client.getWindow().getFramebufferWidth(), client.getWindow().getFramebufferHeight(), false);
+                mainBuffer.blitToScreen(client.getWindow().getWidth(), client.getWindow().getHeight(), false);
                 RenderSystem.restoreProjectionMatrix();
 
                 RenderSystem.enableBlend();
                 RenderSystem.blendFuncSeparate(
-                        GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SrcFactor.ZERO, GlStateManager.DstFactor.ONE
+                        GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE
                 );
                 dummyBuffer.copyDepthFrom(mainBuffer);
 
                 // apply dummy with effect to main
-                mainBuffer.beginWrite(false);
-                draw2(client.getWindow().getFramebufferWidth(), client.getWindow().getFramebufferHeight(), false);
+                mainBuffer.bindWrite(false);
+                draw2(client.getWindow().getWidth(), client.getWindow().getHeight(), false);
 
                 RenderSystem.disableBlend();
                 RenderSystem.defaultBlendFunc();
@@ -72,13 +71,13 @@ public class FirmamentPostShader {
     }
 
     private static void drawInternal(int width, int height, boolean disableBlend) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        if(!(client.worldRenderer instanceof WorldRendererDuck operationStarcleaveWorldRenderer)) {
+        Minecraft client = Minecraft.getInstance();
+        if(!(client.levelRenderer instanceof WorldRendererDuck operationStarcleaveWorldRenderer)) {
             return;
         }
-        Framebuffer dummyBuffer = operationStarcleaveWorldRenderer.operation_starcleave$getDummyFramebuffer();
+        RenderTarget dummyBuffer = operationStarcleaveWorldRenderer.operation_starcleave$getDummyFramebuffer();
         if(dummyBuffer == null) return;
-        World world = client.world;
+        Level world = client.level;
         if(world == null) {
             return;
         }
@@ -87,7 +86,7 @@ public class FirmamentPostShader {
             return;
         }
 
-        ShaderProgram shaderProgram = OperationStarcleaveShaders.getFracturePostShader();
+        ShaderInstance shaderProgram = OperationStarcleaveShaders.getFracturePostShader();
         if(shaderProgram == null) {
             return;
         }
@@ -103,27 +102,27 @@ public class FirmamentPostShader {
             GlStateManager._disableBlend();
         }
 
-        Framebuffer mainBuffer = client.getFramebuffer();
-        shaderProgram.addSampler("DiffuseSampler0", dummyBuffer.getColorAttachment());
-        shaderProgram.addSampler("DiffuseSampler1", dummyBuffer.getDepthAttachment());
+        RenderTarget mainBuffer = client.getMainRenderTarget();
+        shaderProgram.setSampler("DiffuseSampler0", dummyBuffer.getColorTextureId());
+        shaderProgram.setSampler("DiffuseSampler1", dummyBuffer.getDepthTextureId());
 
-        int id = FirmamentTextureStorage.getInstance().getTexture().getGlId();
+        int id = FirmamentTextureStorage.getInstance().getTexture().getId();
         RenderSystem.setShaderTexture(0, id);
 
         for(int m = 0; m < 1; ++m) {
             int n = RenderSystem.getShaderTexture(m);
-            shaderProgram.addSampler("Sampler" + m, n);
+            shaderProgram.setSampler("Sampler" + m, n);
         }
 
-        GlUniform glUniform = shaderProgram.getUniform("IMat");
+        Uniform glUniform = shaderProgram.getUniform("IMat");
         if(glUniform != null) {
-            MatrixStack matrices = new MatrixStack();
-            matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(gameRenderer.getCamera().getPitch()));
-            matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(gameRenderer.getCamera().getYaw() + 180.0F));
+            PoseStack matrices = new PoseStack();
+            matrices.mulPose(Axis.XP.rotationDegrees(gameRenderer.getMainCamera().getXRot()));
+            matrices.mulPose(Axis.YP.rotationDegrees(gameRenderer.getMainCamera().getYRot() + 180.0F));
 
             Matrix4f mat = new Matrix4f();
             mat.mul(RenderSystem.getProjectionMatrix());
-            mat.mul(matrices.peek().getPositionMatrix());
+            mat.mul(matrices.last().pose());
             mat.invert();
 
             glUniform.set(mat);
@@ -135,39 +134,39 @@ public class FirmamentPostShader {
         }
         glUniform = shaderProgram.getUniform("FirmamentPos");
         if(glUniform != null) {
-            Vec3d camPos = client.gameRenderer.getCamera().getPos();
-            Vector3f firmamentPos = new Vector3f((float)(-floorMod(camPos.x, 2048)), (float)(firmament.getY() - camPos.y), (float)(-floorMod(camPos.z, 2048)));
+            Vec3 camPos = client.gameRenderer.getMainCamera().getPosition();
+            Vector3f firmamentPos = new Vector3f((float)(-positiveModulo(camPos.x, 2048)), (float)(firmament.getY() - camPos.y), (float)(-positiveModulo(camPos.z, 2048)));
             glUniform.set(firmamentPos);
         }
 
         Matrix4f matrix4f = new Matrix4f().setOrtho(0.0F, (float)width, (float)height, 0.0F, 1000.0F, 3000.0F);
-        RenderSystem.setProjectionMatrix(matrix4f, VertexSorter.BY_Z);
-        if (shaderProgram.modelViewMat != null) {
-            shaderProgram.modelViewMat.set(new Matrix4f().translation(0.0F, 0.0F, -2000.0F));
+        RenderSystem.setProjectionMatrix(matrix4f, VertexSorting.ORTHOGRAPHIC_Z);
+        if (shaderProgram.MODEL_VIEW_MATRIX != null) {
+            shaderProgram.MODEL_VIEW_MATRIX.set(new Matrix4f().translation(0.0F, 0.0F, -2000.0F));
         }
 
-        if (shaderProgram.projectionMat != null) {
-            shaderProgram.projectionMat.set(matrix4f);
+        if (shaderProgram.PROJECTION_MATRIX != null) {
+            shaderProgram.PROJECTION_MATRIX.set(matrix4f);
         }
 
-        if (shaderProgram.gameTime != null) {
-            shaderProgram.gameTime.set(RenderSystem.getShaderGameTime());
+        if (shaderProgram.GAME_TIME != null) {
+            shaderProgram.GAME_TIME.set(RenderSystem.getShaderGameTime());
         }
 
-        shaderProgram.bind();
+        shaderProgram.apply();
         float f = (float)width;
         float g = (float)height;
-        float h = (float)dummyBuffer.viewportWidth / (float)dummyBuffer.textureWidth;
-        float i = (float)dummyBuffer.viewportHeight / (float)dummyBuffer.textureHeight;
+        float h = (float)dummyBuffer.viewWidth / (float)dummyBuffer.width;
+        float i = (float)dummyBuffer.viewHeight / (float)dummyBuffer.height;
 
-        Tessellator tessellator = RenderSystem.renderThreadTesselator();
-        BufferBuilder bufferBuilder = tessellator.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
-        bufferBuilder.vertex(0F, g, 0F).texture(0.0F, 0.0F).color(255, 255, 255, 255);
-        bufferBuilder.vertex(f, g, 0F).texture(h, 0.0F).color(255, 255, 255, 255);
-        bufferBuilder.vertex(f, 0F, 0F).texture(h, i).color(255, 255, 255, 255);
-        bufferBuilder.vertex(0F, 0F, 0F).texture(0.0F, i).color(255, 255, 255, 255);
-        BufferRenderer.draw(bufferBuilder.end());
-        shaderProgram.unbind();
+        Tesselator tessellator = RenderSystem.renderThreadTesselator();
+        BufferBuilder bufferBuilder = tessellator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+        bufferBuilder.addVertex(0F, g, 0F).setUv(0.0F, 0.0F).setColor(255, 255, 255, 255);
+        bufferBuilder.addVertex(f, g, 0F).setUv(h, 0.0F).setColor(255, 255, 255, 255);
+        bufferBuilder.addVertex(f, 0F, 0F).setUv(h, i).setColor(255, 255, 255, 255);
+        bufferBuilder.addVertex(0F, 0F, 0F).setUv(0.0F, i).setColor(255, 255, 255, 255);
+        BufferUploader.draw(bufferBuilder.buildOrThrow());
+        shaderProgram.clear();
         GlStateManager._depthMask(true);
         GlStateManager._colorMask(true, true, true, true);
     }

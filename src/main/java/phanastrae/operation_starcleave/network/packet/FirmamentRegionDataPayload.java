@@ -1,27 +1,27 @@
 package phanastrae.operation_starcleave.network.packet;
 
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.packet.CustomPayload;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.world.firmament.FirmamentRegionData;
 
-public record FirmamentRegionDataPayload(long regionId, FirmamentRegionData firmamentRegionData) implements CustomPayload {
-    public static final PacketCodec<RegistryByteBuf, FirmamentRegionDataPayload> PACKET_CODEC = CustomPayload.codecOf(FirmamentRegionDataPayload::write, FirmamentRegionDataPayload::new);
-    public static final CustomPayload.Id<FirmamentRegionDataPayload> PACKET_ID = new CustomPayload.Id<>(OperationStarcleave.id("firmament_region_data"));
+public record FirmamentRegionDataPayload(long regionId, FirmamentRegionData firmamentRegionData) implements CustomPacketPayload {
+    public static final StreamCodec<RegistryFriendlyByteBuf, FirmamentRegionDataPayload> PACKET_CODEC = CustomPacketPayload.codec(FirmamentRegionDataPayload::write, FirmamentRegionDataPayload::new);
+    public static final CustomPacketPayload.Type<FirmamentRegionDataPayload> PACKET_ID = new CustomPacketPayload.Type<>(OperationStarcleave.id("firmament_region_data"));
 
-    public FirmamentRegionDataPayload(PacketByteBuf buf) {
+    public FirmamentRegionDataPayload(FriendlyByteBuf buf) {
         this(buf.readLong(), new FirmamentRegionData(buf));
     }
 
-    public void write(PacketByteBuf buf) {
+    public void write(FriendlyByteBuf buf) {
         buf.writeLong(this.regionId);
         this.firmamentRegionData.write(buf);
     }
 
     @Override
-    public CustomPayload.Id<? extends CustomPayload> getId() {
+    public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
         return PACKET_ID;
     }
 }

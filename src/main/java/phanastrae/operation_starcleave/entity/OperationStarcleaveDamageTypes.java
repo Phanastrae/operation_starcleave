@@ -1,19 +1,19 @@
 package phanastrae.operation_starcleave.entity;
 
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageType;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.world.World;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.level.Level;
 import phanastrae.operation_starcleave.OperationStarcleave;
 
 public class OperationStarcleaveDamageTypes {
 
-    public static RegistryKey<DamageType> INTERNAL_STARBLEACHING = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, OperationStarcleave.id("internal_starbleaching"));
-    public static RegistryKey<DamageType> ON_PHLOGISTIC_FIRE = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, OperationStarcleave.id("on_phlogistic_fire"));
-    public static RegistryKey<DamageType> IN_PHLOGISTIC_FIRE = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, OperationStarcleave.id("in_phlogistic_fire"));
+    public static ResourceKey<DamageType> INTERNAL_STARBLEACHING = ResourceKey.create(Registries.DAMAGE_TYPE, OperationStarcleave.id("internal_starbleaching"));
+    public static ResourceKey<DamageType> ON_PHLOGISTIC_FIRE = ResourceKey.create(Registries.DAMAGE_TYPE, OperationStarcleave.id("on_phlogistic_fire"));
+    public static ResourceKey<DamageType> IN_PHLOGISTIC_FIRE = ResourceKey.create(Registries.DAMAGE_TYPE, OperationStarcleave.id("in_phlogistic_fire"));
 
-    public static DamageSource of(World world, RegistryKey<DamageType> key) {
-        return new DamageSource(world.getRegistryManager().get(RegistryKeys.DAMAGE_TYPE).entryOf(key));
+    public static DamageSource of(Level world, ResourceKey<DamageType> key) {
+        return new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(key));
     }
 }

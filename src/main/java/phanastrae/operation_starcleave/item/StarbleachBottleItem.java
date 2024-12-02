@@ -1,49 +1,49 @@
 package phanastrae.operation_starcleave.item;
 
-import net.minecraft.advancement.criterion.Criteria;
-import net.minecraft.component.type.FoodComponent;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsage;
-import net.minecraft.item.Items;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
-import net.minecraft.text.Text;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.UseAction;
-import net.minecraft.world.World;
 import phanastrae.operation_starcleave.entity.effect.OperationStarcleaveStatusEffects;
 
 import java.util.List;
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUtils;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.level.Level;
 
 public class StarbleachBottleItem extends Item {
 
-    public StarbleachBottleItem(Settings settings) {
+    public StarbleachBottleItem(Properties settings) {
         super(settings);
     }
 
     @Override
-    public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
-        super.finishUsing(stack, world, user);
-        if (user instanceof ServerPlayerEntity serverPlayerEntity) {
-            Criteria.CONSUME_ITEM.trigger(serverPlayerEntity, stack);
-            serverPlayerEntity.incrementStat(Stats.USED.getOrCreateStat(this));
+    public ItemStack finishUsingItem(ItemStack stack, Level world, LivingEntity user) {
+        super.finishUsingItem(stack, world, user);
+        if (user instanceof ServerPlayer serverPlayerEntity) {
+            CriteriaTriggers.CONSUME_ITEM.trigger(serverPlayerEntity, stack);
+            serverPlayerEntity.awardStat(Stats.ITEM_USED.get(this));
         }
 
         if (stack.isEmpty()) {
             return new ItemStack(Items.GLASS_BOTTLE);
         } else {
-            if (user instanceof PlayerEntity playerEntity && !playerEntity.getAbilities().creativeMode) {
+            if (user instanceof Player playerEntity && !playerEntity.getAbilities().instabuild) {
                 ItemStack itemStack = new ItemStack(Items.GLASS_BOTTLE);
-                if (!playerEntity.getInventory().insertStack(itemStack)) {
-                    playerEntity.dropItem(itemStack, false);
+                if (!playerEntity.getInventory().add(itemStack)) {
+                    playerEntity.drop(itemStack, false);
                 }
             }
 
@@ -52,35 +52,35 @@ public class StarbleachBottleItem extends Item {
     }
 
     @Override
-    public int getMaxUseTime(ItemStack stack, LivingEntity user) {
+    public int getUseDuration(ItemStack stack, LivingEntity user) {
         return 100;
     }
 
     @Override
-    public UseAction getUseAction(ItemStack stack) {
-        return UseAction.DRINK;
+    public UseAnim getUseAnimation(ItemStack stack) {
+        return UseAnim.DRINK;
     }
 
     @Override
-    public SoundEvent getDrinkSound() {
-        return SoundEvents.ITEM_HONEY_BOTTLE_DRINK;
+    public SoundEvent getDrinkingSound() {
+        return SoundEvents.HONEY_DRINK;
     }
 
     @Override
-    public SoundEvent getEatSound() {
-        return SoundEvents.ITEM_HONEY_BOTTLE_DRINK;
+    public SoundEvent getEatingSound() {
+        return SoundEvents.HONEY_DRINK;
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        return ItemUsage.consumeHeldItem(world, user, hand);
+    public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
+        return ItemUtils.startUsingInstantly(world, user, hand);
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag type) {
         tooltip.add(StarbleachCoating.getText("operation_starcleave.tooltip.starbleach"));
-        super.appendTooltip(stack, context, tooltip, type);
+        super.appendHoverText(stack, context, tooltip, type);
     }
 
-    public static final FoodComponent STARBLEACH_BOTTLE = new FoodComponent.Builder().nutrition(12).saturationModifier(5F).statusEffect(new StatusEffectInstance(OperationStarcleaveStatusEffects.STARBLEACHED_INSIDES_ENTRY, 6000, 5), 1).alwaysEdible().build();
+    public static final FoodProperties STARBLEACH_BOTTLE = new FoodProperties.Builder().nutrition(12).saturationModifier(5F).effect(new MobEffectInstance(OperationStarcleaveStatusEffects.STARBLEACHED_INSIDES_ENTRY, 6000, 5), 1).alwaysEdible().build();
 }

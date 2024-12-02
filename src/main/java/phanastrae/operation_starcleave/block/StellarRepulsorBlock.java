@@ -1,74 +1,74 @@
 package phanastrae.operation_starcleave.block;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.vehicle.MinecartEntity;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.vehicle.Minecart;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
 import phanastrae.operation_starcleave.duck.EntityDuck;
 
 public class StellarRepulsorBlock extends Block {
-    public static final MapCodec<StellarRepulsorBlock> CODEC = createCodec(StellarRepulsorBlock::new);
-    public static final BooleanProperty POWERED = Properties.POWERED;
+    public static final MapCodec<StellarRepulsorBlock> CODEC = simpleCodec(StellarRepulsorBlock::new);
+    public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
     @Override
-    public MapCodec<StellarRepulsorBlock> getCodec() {
+    public MapCodec<StellarRepulsorBlock> codec() {
         return CODEC;
     }
 
-    public StellarRepulsorBlock(Settings settings) {
+    public StellarRepulsorBlock(Properties settings) {
         super(settings);
-        this.setDefaultState(this.getDefaultState().with(POWERED, Boolean.valueOf(false)));
+        this.registerDefaultState(this.defaultBlockState().setValue(POWERED, Boolean.valueOf(false)));
     }
 
     @Nullable
     @Override
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return this.getDefaultState().with(POWERED, Boolean.valueOf(ctx.getWorld().isReceivingRedstonePower(ctx.getBlockPos())));
+    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+        return this.defaultBlockState().setValue(POWERED, Boolean.valueOf(ctx.getLevel().hasNeighborSignal(ctx.getClickedPos())));
     }
 
     @Override
-    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify) {
-        if (!world.isClient) {
-            boolean bl = state.get(POWERED);
-            if (bl != world.isReceivingRedstonePower(pos)) {
-                world.setBlockState(pos, state.cycle(POWERED), Block.NOTIFY_LISTENERS);
+    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify) {
+        if (!world.isClientSide) {
+            boolean bl = state.getValue(POWERED);
+            if (bl != world.hasNeighborSignal(pos)) {
+                world.setBlock(pos, state.cycle(POWERED), Block.UPDATE_CLIENTS);
             }
         }
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(POWERED);
     }
 
     @Override
-    public void onLandedUpon(World world, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
-        entity.handleFallDamage(fallDistance, 0.0F, world.getDamageSources().fall());
+    public void fallOn(Level world, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
+        entity.causeFallDamage(fallDistance, 0.0F, world.damageSources().fall());
     }
 
     @Override
-    public void onSteppedOn(World world, BlockPos pos, BlockState state, Entity entity) {
-        if(state.get(POWERED)) {
+    public void stepOn(Level world, BlockPos pos, BlockState state, Entity entity) {
+        if(state.getValue(POWERED)) {
             launch(entity);
         }
     }
 
     public static void tryLaunch(Entity entity) {
-        BlockState blockState = entity.getWorld().getBlockState(entity.getBlockPos().down());
-        if(blockState.isOf(OperationStarcleaveBlocks.STELLAR_REPULSOR)) {
+        BlockState blockState = entity.level().getBlockState(entity.blockPosition().below());
+        if(blockState.is(OperationStarcleaveBlocks.STELLAR_REPULSOR)) {
             StellarRepulsorBlock.launch(entity);
         }
     }
@@ -77,12 +77,12 @@ public class StellarRepulsorBlock extends Block {
         if(!(entity instanceof EntityDuck operationStarcleaveEntity)) {
             return;
         }
-        if(!entity.isOnGround()) {
+        if(!entity.onGround()) {
             return;
         }
 
         // short cooldown between uses
-        long worldTime = entity.getWorld().getTime();
+        long worldTime = entity.level().getGameTime();
         long lastUseTime = operationStarcleaveEntity.operation_starcleave$getLastStellarRepulsorUse();
         long dt = worldTime - lastUseTime;
         if(0 <= dt && dt < 2) {
@@ -90,13 +90,13 @@ public class StellarRepulsorBlock extends Block {
         }
         operationStarcleaveEntity.operation_starcleave$setLastStellarRepulsorUse(worldTime);
 
-        if(entity.isLogicalSideForUpdatingMovement()) {
-            Vec3d vel = entity.getVelocity();
+        if(entity.isControlledByLocalInstance()) {
+            Vec3 vel = entity.getDeltaMovement();
 
-            float yaw = entity.getYaw() * MathHelper.PI / 180;
-            float cosYaw = MathHelper.cos(-yaw);
-            float sinYaw = MathHelper.sin(-yaw);
-            if(entity instanceof MinecartEntity) {
+            float yaw = entity.getYRot() * Mth.PI / 180;
+            float cosYaw = Mth.cos(-yaw);
+            float sinYaw = Mth.sin(-yaw);
+            if(entity instanceof Minecart) {
                 // minecart rotation is weird, so just use minecart velocity for launch direction instead
                 double vx = vel.x;
                 double vz = vel.z;
@@ -116,9 +116,9 @@ public class StellarRepulsorBlock extends Block {
             if (horizontalSpeed < 4) horizontalSpeed = 4;
             double verticalSpeed = Math.max(vel.y, Math.sqrt(horizontalSpeed) * 0.4);
 
-            entity.setVelocity(horizontalSpeed * sinYaw, verticalSpeed, horizontalSpeed * cosYaw);
+            entity.setDeltaMovement(horizontalSpeed * sinYaw, verticalSpeed, horizontalSpeed * cosYaw);
         }
 
-        entity.getWorld().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 0.6F + 0.4F * entity.getWorld().random.nextFloat(), entity.getWorld().random.nextLong());
+        entity.level().playSeededSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 0.5F, 0.6F + 0.4F * entity.level().random.nextFloat(), entity.level().random.nextLong());
     }
 }

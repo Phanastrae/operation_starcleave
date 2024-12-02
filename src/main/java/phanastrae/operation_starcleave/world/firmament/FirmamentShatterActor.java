@@ -1,12 +1,10 @@
 package phanastrae.operation_starcleave.world.firmament;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Heightmap;
-import net.minecraft.world.World;
 import org.joml.Math;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 
 import java.util.Random;
+import net.minecraft.world.level.Level;
 
 import static phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion.TILE_SIZE;
 
@@ -40,7 +38,7 @@ public class FirmamentShatterActor extends FirmamentActor {
 
     @Override
     public void tick() {
-        World world = firmament.getWorld();
+        Level world = firmament.getWorld();
 
         if (this.damagePotential < 0.0001f) {
             discard();

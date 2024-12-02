@@ -1,13 +1,13 @@
 package phanastrae.operation_starcleave.server.network;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import phanastrae.operation_starcleave.network.packet.AcknowledgeFirmamentRegionDataPayload;
 import phanastrae.operation_starcleave.network.packet.AttackFirmamentTilePayload;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
@@ -20,33 +20,33 @@ public class OperationStarcleaveServerPacketHandler {
         register(AttackFirmamentTilePayload.PACKET_ID, OperationStarcleaveServerPacketHandler::attackFirmamentTile);
     }
 
-    public static <T extends CustomPayload> boolean register(CustomPayload.Id<T> type, ServerPlayNetworking.PlayPayloadHandler<T> handler) {
+    public static <T extends CustomPacketPayload> boolean register(CustomPacketPayload.Type<T> type, ServerPlayNetworking.PlayPayloadHandler<T> handler) {
         return ServerPlayNetworking.registerGlobalReceiver(type, handler);
     }
 
     public static void acknowledgeFirmamentRegionData(AcknowledgeFirmamentRegionDataPayload payload, ServerPlayNetworking.Context context) {
-        ServerPlayerEntity player = context.player();
-        FirmamentRegionDataSender.getFirmamentRegionDataSender(player.networkHandler).onAcknowledgeRegions(payload.desiredChunksPerTick());
+        ServerPlayer player = context.player();
+        FirmamentRegionDataSender.getFirmamentRegionDataSender(player.connection).onAcknowledgeRegions(payload.desiredChunksPerTick());
     }
 
     public static void attackFirmamentTile(AttackFirmamentTilePayload payload, ServerPlayNetworking.Context context) {
-        ServerPlayerEntity player = context.player();
-        if(!player.getAbilities().creativeMode) return;
+        ServerPlayer player = context.player();
+        if(!player.getAbilities().instabuild) return;
 
-        World world = player.getWorld();
+        Level world = player.level();
         if(world == null) return;
         Firmament firmament = Firmament.fromWorld(world);
         if(firmament == null) return;
 
         FirmamentTilePos tilePos = new FirmamentTilePos(payload.tileX(), payload.tileZ(), firmament);
-        Vec3d tileCenter = tilePos.getCenter();
-        double d = tileCenter.subtract(player.getEyePos()).length();
-        double interactionRange = player.getAttributeBaseValue(EntityAttributes.PLAYER_BLOCK_INTERACTION_RANGE);
+        Vec3 tileCenter = tilePos.getCenter();
+        double d = tileCenter.subtract(player.getEyePosition()).length();
+        double interactionRange = player.getAttributeBaseValue(Attributes.BLOCK_INTERACTION_RANGE);
         if(d > interactionRange + 3) return;
 
         if(firmament.getDamage(tilePos.blockX, tilePos.blockZ) != 0) {
             firmament.setDamage(tilePos.blockX, tilePos.blockZ, 0);
-            world.playSound(null, tileCenter.x, tileCenter.y, tileCenter.z, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 0.5f, 1);
+            world.playSound(null, tileCenter.x, tileCenter.y, tileCenter.z, SoundEvents.GLASS_BREAK, SoundSource.BLOCKS, 0.5f, 1);
         }
     }
 }

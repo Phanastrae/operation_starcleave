@@ -2,18 +2,17 @@ package phanastrae.operation_starcleave.data;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricAdvancementProvider;
-import net.minecraft.advancement.Advancement;
-import net.minecraft.advancement.AdvancementEntry;
-import net.minecraft.advancement.AdvancementFrame;
-import net.minecraft.advancement.criterion.InventoryChangedCriterion;
-import net.minecraft.advancement.criterion.ItemCriterion;
-import net.minecraft.advancement.criterion.SummonedEntityCriterion;
-import net.minecraft.advancement.criterion.TickCriterion;
-import net.minecraft.item.Items;
-import net.minecraft.predicate.entity.EntityPredicate;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
+import net.minecraft.advancements.AdvancementType;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.advancements.critereon.PlayerTrigger;
+import net.minecraft.advancements.critereon.SummonedEntityTrigger;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Items;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.advancement.criterion.OperationStarcleaveAdvancementCriteria;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
@@ -24,103 +23,103 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public class AdvancementProvider extends FabricAdvancementProvider {
-    protected AdvancementProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
+    protected AdvancementProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registryLookup) {
         super(output, registryLookup);
     }
 
     @Override
-    public void generateAdvancement(RegistryWrapper.WrapperLookup registryLookup, Consumer<AdvancementEntry> consumer) {
-        AdvancementEntry summonStarcleaverGolem = Advancement.Builder.createUntelemetered()
+    public void generateAdvancement(HolderLookup.Provider registryLookup, Consumer<AdvancementHolder> consumer) {
+        AdvancementHolder summonStarcleaverGolem = Advancement.Builder.recipeAdvancement()
                 .display(
                         OperationStarcleaveItems.NETHERITE_PUMPKIN,
-                        Text.translatable("advancements.operation_starcleave.summon_starcleaver_golem.title"),
-                        Text.translatable("advancements.operation_starcleave.summon_starcleaver_golem.description"),
+                        Component.translatable("advancements.operation_starcleave.summon_starcleaver_golem.title"),
+                        Component.translatable("advancements.operation_starcleave.summon_starcleaver_golem.description"),
                         null,
-                        AdvancementFrame.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
                 )
-                .parent(new AdvancementEntry(Identifier.of("nether/obtain_ancient_debris"), null))
-                .criterion("summoned_golem", SummonedEntityCriterion.Conditions
-                        .create(EntityPredicate.Builder
-                                .create().type(OperationStarcleaveEntityTypes.STARCLEAVER_GOLEM)))
-                .build(consumer, OperationStarcleave.id("operation_starcleave/summon_starcleaver_golem").toString());
+                .parent(new AdvancementHolder(ResourceLocation.parse("nether/obtain_ancient_debris"), null))
+                .addCriterion("summoned_golem", SummonedEntityTrigger.TriggerInstance
+                        .summonedEntity(EntityPredicate.Builder
+                                .entity().of(OperationStarcleaveEntityTypes.STARCLEAVER_GOLEM)))
+                .save(consumer, OperationStarcleave.id("operation_starcleave/summon_starcleaver_golem").toString());
 
-        AdvancementEntry root = Advancement.Builder.createUntelemetered()
+        AdvancementHolder root = Advancement.Builder.recipeAdvancement()
                 .display(
                         OperationStarcleaveItems.NETHERITE_PUMPKIN,
-                        Text.translatable("advancements.operation_starcleave.root.title"),
-                        Text.translatable("advancements.operation_starcleave.root.description"),
+                        Component.translatable("advancements.operation_starcleave.root.title"),
+                        Component.translatable("advancements.operation_starcleave.root.description"),
                         OperationStarcleave.id("textures/gui/advancements/backgrounds/operation_starcleave.png"),
-                        AdvancementFrame.TASK,
+                        AdvancementType.TASK,
                         false,
                         false,
                         false
                 )
-                .criterion("summoned_golem", SummonedEntityCriterion.Conditions
-                        .create(EntityPredicate.Builder
-                                .create().type(OperationStarcleaveEntityTypes.STARCLEAVER_GOLEM)))
-                .build(consumer, OperationStarcleave.id("operation_starcleave/root").toString());
+                .addCriterion("summoned_golem", SummonedEntityTrigger.TriggerInstance
+                        .summonedEntity(EntityPredicate.Builder
+                                .entity().of(OperationStarcleaveEntityTypes.STARCLEAVER_GOLEM)))
+                .save(consumer, OperationStarcleave.id("operation_starcleave/root").toString());
 
-        AdvancementEntry launchStarcleaverGolem = Advancement.Builder.createUntelemetered()
+        AdvancementHolder launchStarcleaverGolem = Advancement.Builder.recipeAdvancement()
                 .display(
                         Items.FLINT_AND_STEEL,
-                        Text.translatable("advancements.operation_starcleave.launch_starcleaver_golem.title"),
-                        Text.translatable("advancements.operation_starcleave.launch_starcleaver_golem.description"),
+                        Component.translatable("advancements.operation_starcleave.launch_starcleaver_golem.title"),
+                        Component.translatable("advancements.operation_starcleave.launch_starcleaver_golem.description"),
                         null,
-                        AdvancementFrame.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
                 )
                 .parent(root)
-                .criterion("launched_golem", OperationStarcleaveAdvancementCriteria.LAUNCH_STARCLEAVER_GOLEM.create(new TickCriterion.Conditions(Optional.empty())))
-                .build(consumer, OperationStarcleave.id("operation_starcleave/launch_starcleaver_golem").toString());
+                .addCriterion("launched_golem", OperationStarcleaveAdvancementCriteria.LAUNCH_STARCLEAVER_GOLEM.createCriterion(new PlayerTrigger.TriggerInstance(Optional.empty())))
+                .save(consumer, OperationStarcleave.id("operation_starcleave/launch_starcleaver_golem").toString());
 
-        AdvancementEntry cleave_firmament = Advancement.Builder.createUntelemetered()
+        AdvancementHolder cleave_firmament = Advancement.Builder.recipeAdvancement()
                 .display(
                         OperationStarcleaveItems.FIRMAMENT_MANIPULATOR,
-                        Text.translatable("advancements.operation_starcleave.cleave_firmament.title"),
-                        Text.translatable("advancements.operation_starcleave.cleave_firmament.description"),
+                        Component.translatable("advancements.operation_starcleave.cleave_firmament.title"),
+                        Component.translatable("advancements.operation_starcleave.cleave_firmament.description"),
                         null,
-                        AdvancementFrame.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         true
                 )
                 .parent(launchStarcleaverGolem)
-                .criterion("cleaved_firmament", OperationStarcleaveAdvancementCriteria.CLEAVE_FIRMAMENT.create(new TickCriterion.Conditions(Optional.empty())))
-                .build(consumer, OperationStarcleave.id("operation_starcleave/cleave_firmament").toString());
+                .addCriterion("cleaved_firmament", OperationStarcleaveAdvancementCriteria.CLEAVE_FIRMAMENT.createCriterion(new PlayerTrigger.TriggerInstance(Optional.empty())))
+                .save(consumer, OperationStarcleave.id("operation_starcleave/cleave_firmament").toString());
 
-        AdvancementEntry obtain_starbleach = Advancement.Builder.createUntelemetered()
+        AdvancementHolder obtain_starbleach = Advancement.Builder.recipeAdvancement()
                 .display(
                         OperationStarcleaveItems.STARBLEACH_BOTTLE,
-                        Text.translatable("advancements.operation_starcleave.obtain_starbleach.title"),
-                        Text.translatable("advancements.operation_starcleave.obtain_starbleach.description"),
+                        Component.translatable("advancements.operation_starcleave.obtain_starbleach.title"),
+                        Component.translatable("advancements.operation_starcleave.obtain_starbleach.description"),
                         null,
-                        AdvancementFrame.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
                 )
                 .parent(cleave_firmament)
-                .criterion("obtain_item", InventoryChangedCriterion.Conditions.items(OperationStarcleaveItems.STARBLEACH_BOTTLE))
-                .build(consumer, OperationStarcleave.id("operation_starcleave/obtain_starbleach").toString());
+                .addCriterion("obtain_item", InventoryChangeTrigger.TriggerInstance.hasItems(OperationStarcleaveItems.STARBLEACH_BOTTLE))
+                .save(consumer, OperationStarcleave.id("operation_starcleave/obtain_starbleach").toString());
 
-        AdvancementEntry obtain_blessed_bed = Advancement.Builder.createUntelemetered()
+        AdvancementHolder obtain_blessed_bed = Advancement.Builder.recipeAdvancement()
                 .display(
                         OperationStarcleaveItems.BLESSED_BED,
-                        Text.translatable("advancements.operation_starcleave.obtain_blessed_bed.title"),
-                        Text.translatable("advancements.operation_starcleave.obtain_blessed_bed.description"),
+                        Component.translatable("advancements.operation_starcleave.obtain_blessed_bed.title"),
+                        Component.translatable("advancements.operation_starcleave.obtain_blessed_bed.description"),
                         null,
-                        AdvancementFrame.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
                 )
                 .parent(cleave_firmament)
-                .criterion("obtain_item", InventoryChangedCriterion.Conditions.items(OperationStarcleaveItems.BLESSED_BED))
-                .build(consumer, OperationStarcleave.id("operation_starcleave/obtain_blessed_bed").toString());
+                .addCriterion("obtain_item", InventoryChangeTrigger.TriggerInstance.hasItems(OperationStarcleaveItems.BLESSED_BED))
+                .save(consumer, OperationStarcleave.id("operation_starcleave/obtain_blessed_bed").toString());
     }
 }

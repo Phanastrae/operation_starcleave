@@ -1,9 +1,9 @@
 package phanastrae.operation_starcleave.network.packet;
 
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.packet.CustomPayload;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 public class OperationStarcleavePackets {
 
@@ -25,11 +25,11 @@ public class OperationStarcleavePackets {
         registerC2S(AcknowledgeFirmamentRegionDataPayload.PACKET_ID, AcknowledgeFirmamentRegionDataPayload.PACKET_CODEC);
     }
 
-    public static <T extends CustomPayload> void registerS2C(CustomPayload.Id<T> id, PacketCodec<? super RegistryByteBuf, T> codec) {
+    public static <T extends CustomPacketPayload> void registerS2C(CustomPacketPayload.Type<T> id, StreamCodec<? super RegistryFriendlyByteBuf, T> codec) {
         PayloadTypeRegistry.playS2C().register(id, codec);
     }
 
-    public static <T extends CustomPayload> void registerC2S(CustomPayload.Id<T> id, PacketCodec<? super RegistryByteBuf, T> codec) {
+    public static <T extends CustomPacketPayload> void registerC2S(CustomPacketPayload.Type<T> id, StreamCodec<? super RegistryFriendlyByteBuf, T> codec) {
         PayloadTypeRegistry.playC2S().register(id, codec);
     }
 }

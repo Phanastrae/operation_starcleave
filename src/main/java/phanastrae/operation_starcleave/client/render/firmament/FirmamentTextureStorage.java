@@ -1,17 +1,16 @@
 package phanastrae.operation_starcleave.client.render.firmament;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.texture.NativeImage;
-import net.minecraft.client.texture.NativeImageBackedTexture;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Heightmap;
-import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.world.firmament.*;
-
+import com.mojang.blaze3d.platform.NativeImage;
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.levelgen.Heightmap;
 
 public class FirmamentTextureStorage {
 
@@ -27,11 +26,11 @@ public class FirmamentTextureStorage {
         texture.close();
     }
 
-    public NativeImageBackedTexture getTexture() {
+    public DynamicTexture getTexture() {
         return this.texture;
     }
 
-    NativeImageBackedTexture texture = new NativeImageBackedTexture(new NativeImage(NativeImage.Format.RGBA, 512, 512, true));
+    DynamicTexture texture = new DynamicTexture(new NativeImage(NativeImage.Format.RGBA, 512, 512, true));
     @Nullable RegionPos lastCamPos = null;
     boolean needsUpdate = false;
     RegionPos[][] regions = new RegionPos[4][4];
@@ -42,8 +41,8 @@ public class FirmamentTextureStorage {
     boolean[][] needsRebuild = new boolean[4 * FirmamentRegion.SUBREGIONS][4 * FirmamentRegion.SUBREGIONS];
 
     public void tick() {
-        Entity camEntity = MinecraftClient.getInstance().cameraEntity;
-        World world = camEntity == null ? null : camEntity.getWorld();
+        Entity camEntity = Minecraft.getInstance().cameraEntity;
+        Level world = camEntity == null ? null : camEntity.level();
         RegionPos camPos = camEntity == null ? null : RegionPos.fromEntity(camEntity);
 
         if((camPos == null && lastCamPos != null) || (camPos != null && (lastCamPos == null || camPos.id != lastCamPos.id))) {
@@ -108,7 +107,7 @@ public class FirmamentTextureStorage {
         rebuildQueue.clear();
     }
 
-    public void rebuildQueued(Firmament firmament, World world) {
+    public void rebuildQueued(Firmament firmament, Level world) {
         for(SubRegionPos subRegionPos : rebuildQueue) {
             RegionPos regionPos = RegionPos.fromSubRegion(subRegionPos);
             int x = regionPos.rx;
@@ -139,14 +138,14 @@ public class FirmamentTextureStorage {
     }
 
     // returns the world height minus the topmost block's height in a tile
-    public int getHeight(int x, int z, World world) {
-        int topY = world.getTopY();
-        int bottomY = world.getBottomY();
+    public int getHeight(int x, int z, Level world) {
+        int topY = world.getMaxBuildHeight();
+        int bottomY = world.getMinBuildHeight();
 
         int minY = topY;
         for(int i = 0; i < 4; i++) {
             for(int j = 0; j < 4; j++) {
-                int y = world.getTopY(Heightmap.Type.MOTION_BLOCKING, x+i, z+j);
+                int y = world.getHeight(Heightmap.Types.MOTION_BLOCKING, x+i, z+j);
                 if(y < minY) {
                     minY = y;
                 }
@@ -161,7 +160,7 @@ public class FirmamentTextureStorage {
     }
 
 
-    public void updateCamPos(@Nullable RegionPos newCamPos, @Nullable World world) {
+    public void updateCamPos(@Nullable RegionPos newCamPos, @Nullable Level world) {
         if(newCamPos == null) {
             setRegionsInactive();
         } else {
@@ -200,7 +199,7 @@ public class FirmamentTextureStorage {
         }
     }
 
-    public void setRegionPos(int gx, int gz, @Nullable RegionPos regionPos, @Nullable World world) {
+    public void setRegionPos(int gx, int gz, @Nullable RegionPos regionPos, @Nullable Level world) {
         regions[gx][gz] = regionPos;
 
         FirmamentRegion region = null;
@@ -214,7 +213,7 @@ public class FirmamentTextureStorage {
         updateRegionData(gx, gz, region, world);
     }
 
-    public void updateRegionData(int gx, int gz, @Nullable FirmamentRegion region, @Nullable World world) {
+    public void updateRegionData(int gx, int gz, @Nullable FirmamentRegion region, @Nullable Level world) {
         if(region == null || world == null) {
             active[gx][gz] = false;
             return;
@@ -233,7 +232,7 @@ public class FirmamentTextureStorage {
             return;
         }
 
-        NativeImage image = texture.getImage();
+        NativeImage image = texture.getPixels();
         if(image == null) return;
         int ox = gx * 128;
         int oz = gz * 128;
@@ -241,7 +240,7 @@ public class FirmamentTextureStorage {
             for(int z = 0; z < 128; z++) {
                 int damage = region.getDamage(x << 2, z << 2);
                 int height = getHeight(region.x + 4 * x, region.z + 4 * z, world);
-                image.setColor(x + ox, z + oz, getColor(damage, height));
+                image.setPixelRGBA(x + ox, z + oz, getColor(damage, height));
             }
         }
         filled[gx][gz] = true;
@@ -249,7 +248,7 @@ public class FirmamentTextureStorage {
         needsUpdate = true;
     }
 
-    public void updateRegionData(int gx, int gz, FirmamentSubRegion subRegion, World world) {
+    public void updateRegionData(int gx, int gz, FirmamentSubRegion subRegion, Level world) {
         if(!subRegion.hadDamageLastCheck() && !filled[gx][gz]) return;
 
         if(!active[gx][gz]) {
@@ -257,7 +256,7 @@ public class FirmamentTextureStorage {
             active[gx][gz] = true;
         }
 
-        NativeImage image = texture.getImage();
+        NativeImage image = texture.getPixels();
         if(image == null) return;
         int ox = gx * 128 + ((subRegion.x & FirmamentRegion.REGION_MASK) >> FirmamentSubRegion.TILE_SIZE_BITS);
         int oz = gz * 128 + ((subRegion.z & FirmamentRegion.REGION_MASK) >> FirmamentSubRegion.TILE_SIZE_BITS);
@@ -265,7 +264,7 @@ public class FirmamentTextureStorage {
             for(int z = 0; z < FirmamentSubRegion.TILES; z++) {
                 int damage = subRegion.getDamage(x << 2, z << 2);
                 int height = getHeight(subRegion.x + 4 * x, subRegion.z + 4 * z, world);
-                image.setColor(x + ox, z + oz, getColor(damage, height));
+                image.setPixelRGBA(x + ox, z + oz, getColor(damage, height));
             }
         }
         filled[gx][gz] = true;
@@ -275,7 +274,7 @@ public class FirmamentTextureStorage {
     public void clearRegion(int gx, int gz) {
         if(!filled[gx][gz]) return;
 
-        NativeImage image = texture.getImage();
+        NativeImage image = texture.getPixels();
         if(image == null) return;
         int ox = gx * 128;
         int oz = gz * 128;
@@ -285,7 +284,7 @@ public class FirmamentTextureStorage {
         needsUpdate = true;
     }
 
-    public void onRegionAdded(FirmamentRegion region, World world) {
+    public void onRegionAdded(FirmamentRegion region, Level world) {
         for(int i = 0; i < 4; i++) {
             for(int j = 0; j < 4; j++) {
                 RegionPos regionPos = regions[i][j];
@@ -296,7 +295,7 @@ public class FirmamentTextureStorage {
         }
     }
 
-    public void onSubRegionUpdated(FirmamentSubRegion subRegion, World world) {
+    public void onSubRegionUpdated(FirmamentSubRegion subRegion, Level world) {
         RegionPos rp = RegionPos.fromWorldCoords(subRegion.x, subRegion.z);
         long id = rp.id;
         for(int i = 0; i < 4; i++) {

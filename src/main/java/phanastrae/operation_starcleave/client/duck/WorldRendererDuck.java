@@ -1,8 +1,8 @@
 package phanastrae.operation_starcleave.client.duck;
 
-import net.minecraft.client.gl.Framebuffer;
+import com.mojang.blaze3d.pipeline.RenderTarget;
 
 public interface WorldRendererDuck {
-    Framebuffer operation_starcleave$getDummyFramebuffer();
-    Framebuffer operation_starcleave$getFirmamentFramebuffer();
+    RenderTarget operation_starcleave$getDummyFramebuffer();
+    RenderTarget operation_starcleave$getFirmamentFramebuffer();
 }
