@@ -18,7 +18,7 @@
 			"phanastrae.operation_starcleave.OperationStarcleave"
 		],
 		"client": [
-			"phanastrae.operation_starcleave.OperationStarcleaveClient"
+          "phanastrae.operation_starcleave.client.OperationStarcleaveClient"
 		],
 		"fabric-datagen": [
           "phanastrae.operation_starcleave.data.OperationStarcleaveDataGenerator"
@@ -26,11 +26,7 @@
 	},
 	"accessWidener": "operation_starcleave.accesswidener",
 	"mixins": [
-		"operation_starcleave.mixins.json",
-		{
-			"config": "operation_starcleave.client.mixins.json",
-			"environment": "client"
-		}
+		"operation_starcleave.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.15.11",

@@ -19,12 +19,9 @@ repositories {
 }
 
 loom {
-    splitEnvironmentSourceSets()
-
 	mods {
 		"operation_starcleave" {
 			sourceSet sourceSets.main
-			sourceSet sourceSets.client
 		}
 	}
 

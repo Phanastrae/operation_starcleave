@@ -26,6 +26,21 @@
     "StemBlockMixin",
     "WorldMixin"
   ],
+  "client": [
+    "client.ChunkBuilderMixin",
+    "client.ClientPlayNetworkHandlerMixin",
+    "client.ClientWorldMixin",
+    "client.DebugHudMixin",
+    "client.EntityRenderDispatcherMixin",
+    "client.GameRendererMixin",
+    "client.InGameHudMixin",
+    "client.InGameOverlayRendererMixin",
+    "client.LightmapTextureManagerMixin",
+    "client.MinecraftClientMixin",
+    "client.SmithingScreenMixin",
+    "client.WorldRendererAccessor",
+    "client.WorldRendererMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
 	}
