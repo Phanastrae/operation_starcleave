@@ -4,7 +4,6 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.CoreShaderRegistrationCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.InvalidateRenderStateCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
@@ -17,7 +16,6 @@ import org.joml.Quaternionf;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.block.entity.OperationStarcleaveBlockEntityTypes;
 import phanastrae.operation_starcleave.duck.WorldDuck;
-import phanastrae.operation_starcleave.item.StarbleachCoating;
 import phanastrae.operation_starcleave.network.OperationStarcleaveClientPacketHandler;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticles;
 import phanastrae.operation_starcleave.render.ScreenShakeManager;
@@ -111,12 +109,6 @@ public class OperationStarcleaveClient implements ClientModInitializer {
 		BlockRenderLayerMap.INSTANCE.putBlock(OperationStarcleaveBlocks.BLESSED_BED, RenderLayer.getCutout());
 		BlockRenderLayerMap.INSTANCE.putBlock(OperationStarcleaveBlocks.PHLOGISTIC_FIRE, RenderLayer.getCutout());
 		BlockRenderLayerMap.INSTANCE.putBlock(OperationStarcleaveBlocks.PETRICHORIC_VAPOR, RenderLayer.getTranslucent());
-
-		ItemTooltipCallback.EVENT.register(((stack, context, tooltipType, list) -> {
-			if(StarbleachCoating.hasStarbleachCoating(stack)) {
-				list.add(StarbleachCoating.getText());
-			}
-		}));
 	}
 
 	public static void onClientShutdown(MinecraftClient client) {

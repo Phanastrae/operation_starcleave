@@ -10,6 +10,8 @@
     "EntityMixin",
     "EntityTrackerEntryMixin",
     "HoeItemMixin",
+    "ItemStackComponentizationFixMixin",
+    "ItemStackMixin",
     "LivingEntityMixin",
     "MinecraftServerMixin",
     "PitcherCropBlockMixin",
