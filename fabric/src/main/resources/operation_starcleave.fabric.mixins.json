@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "phanastrae.operation_starcleave.fabric.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "ItemStackMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

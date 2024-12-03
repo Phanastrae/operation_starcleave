@@ -1,0 +1,51 @@
+package phanastrae.operation_starcleave.mixin;
+
+import com.mojang.authlib.GameProfile;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ClientInformation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.portal.DimensionTransition;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import phanastrae.operation_starcleave.duck.EntityDuck;
+import phanastrae.operation_starcleave.network.packet.EntityPhlogisticFirePayload;
+import phanastrae.operation_starcleave.services.XPlatInterface;
+import phanastrae.operation_starcleave.world.firmament.FirmamentRegionsWatched;
+import phanastrae.operation_starcleave.world.firmament.FirmamentWatcher;
+
+@Mixin(ServerPlayer.class)
+public class ServerPlayerMixin implements FirmamentWatcher {
+
+    private FirmamentRegionsWatched operation_starcleave$watched_regions;
+
+
+    @Inject(method = "<init>", at = @At("RETURN"))
+    private void operation_starcleave$onInit(MinecraftServer server, ServerLevel world, GameProfile profile, ClientInformation clientOptions, CallbackInfo ci) {
+        this.operation_starcleave$watched_regions = new FirmamentRegionsWatched((ServerPlayer)(Object)this);
+    }
+
+    @Override
+    public FirmamentRegionsWatched operation_starcleave$getWatchedRegions() {
+        return this.operation_starcleave$watched_regions;
+    }
+
+    @Inject(method = "changeDimension", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;sendActivePlayerEffects(Lnet/minecraft/server/level/ServerPlayer;)V", shift = At.Shift.AFTER))
+    private void operation_starcleave$onPlayerWorldMove(DimensionTransition teleportTarget, CallbackInfoReturnable<Entity> cir) {
+        ServerPlayer player = (ServerPlayer)(Object)this;
+        if(((EntityDuck)player).operation_starcleave$getPhlogisticFireTicks() > 0) {
+            XPlatInterface.INSTANCE.sendPayload(player, new EntityPhlogisticFirePayload(player.getId(), true));
+        }
+    }
+
+    @Inject(method = "die", at = @At("RETURN"))
+    private void operation_starcleave$onDeath(DamageSource damageSource, CallbackInfo ci) {
+        ((EntityDuck)this).operation_starcleave$setPhlogisticFireTicks(0);
+        ((EntityDuck)this).operation_starcleave$setOnPhlogisticFire(false);
+    }
+}

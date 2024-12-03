@@ -1,6 +1,0 @@
-// 1.21	2024-07-21T05:52:16.2256759	Operation: Starcleave/Tags for minecraft:entity_type
-22cde1ab2d95e2cf8ffe888bf29c9c3b3a6fd998 data\operation_starcleave\tags\entity_type\phlogistic_fire_immune.json
-6de32d7edb05d34e0972f14ae12ebad293e337b6 data\minecraft\tags\entity_type\aquatic.json
-35d0d8da579e1533b5bceb99f02b15da3c9d6d87 data\minecraft\tags\entity_type\freeze_immune_entity_types.json
-22cde1ab2d95e2cf8ffe888bf29c9c3b3a6fd998 data\minecraft\tags\entity_type\fall_damage_immune.json
-64baa8dc3db23464b9da7f9a1f69eea4f55a7cb8 data\minecraft\tags\entity_type\frog_food.json
