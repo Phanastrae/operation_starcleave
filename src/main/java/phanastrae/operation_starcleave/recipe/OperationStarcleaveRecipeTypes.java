@@ -1,21 +1,27 @@
 package phanastrae.operation_starcleave.recipe;
 
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import phanastrae.operation_starcleave.OperationStarcleave;
+
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class OperationStarcleaveRecipeTypes {
 
     public static final RecipeType<ItemStarbleachingRecipe> ITEM_STARBLEACHING = create("item_starbleaching");
 
-    public static void init() {
-        register(ITEM_STARBLEACHING);
+    public static void init(BiConsumer<ResourceLocation, RecipeType<?>> r) {
+        Consumer<RecipeType<?>> rwi = (rt) -> { // register with id from recipe type
+            r.accept(id(rt.toString()), rt);
+        };
+
+        rwi.accept(ITEM_STARBLEACHING);
     }
 
-    static <T extends RecipeType<?>> void register(T recipeType) {
-        Registry.register(BuiltInRegistries.RECIPE_TYPE, OperationStarcleave.id(recipeType.toString()), recipeType);
+    private static ResourceLocation id(String path) {
+        return OperationStarcleave.id(path);
     }
 
     static <T extends Recipe<?>> RecipeType<T> create(String id) {

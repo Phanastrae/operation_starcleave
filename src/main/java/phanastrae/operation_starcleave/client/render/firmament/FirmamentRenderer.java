@@ -5,23 +5,10 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.shaders.Uniform;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.BufferUploader;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexBuffer;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.blaze3d.vertex.VertexFormat;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
+import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
@@ -33,7 +20,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.*;
-import phanastrae.operation_starcleave.client.duck.WorldRendererDuck;
+import phanastrae.operation_starcleave.client.duck.LevelRendererDuck;
 import phanastrae.operation_starcleave.client.render.OperationStarcleaveRenderLayers;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 import phanastrae.operation_starcleave.mixin.client.LevelRendererAccessor;
@@ -42,15 +29,12 @@ import phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion;
 import phanastrae.operation_starcleave.world.firmament.RegionPos;
 
 public class FirmamentRenderer {
-    public static void render(PoseStack matrixStack, WorldRenderContext worldRenderContext) {
-        Frustum frustum = worldRenderContext.frustum();
-        Camera camera = worldRenderContext.camera();
-        Level world = worldRenderContext.world();
+    public static void render(Level level, MultiBufferSource vertexConsumerProvider, PoseStack WRCmatrixStack, Camera camera, Frustum frustum, LevelRenderer levelRenderer, PoseStack matrixStack, Matrix4f projectionMatrix) {
         if(frustum == null || camera == null) return;
 
         double camx = camera.getPosition().x;
         double camz = camera.getPosition().z;
-        double firmHeight = world.getMaxBuildHeight() + 16;
+        double firmHeight = level.getMaxBuildHeight() + 16;
         AABB box = new AABB(camx - 512, firmHeight - 1, camz - 512, camx + 512, firmHeight + 1, camz + 512);
         if(!frustum.isVisible(box)) {
             return;
@@ -65,13 +49,13 @@ public class FirmamentRenderer {
             profiler.push("starcleave_firmament");
             profiler.push("debug");
             // TODO serverside firmament regions broke most of debug, either fix or remove this at some point
-            doRender(worldRenderContext, debugMode_General);
+            doRender(level, vertexConsumerProvider, WRCmatrixStack, camera, debugMode_General);
             profiler.pop();
             profiler.pop();
             return;
         }
 
-        if(worldRenderContext.consumers() instanceof MultiBufferSource.BufferSource immediate) {
+        if(vertexConsumerProvider instanceof MultiBufferSource.BufferSource immediate) {
             immediate.endBatch();
             profiler.push("starcleave_firmament");
             profiler.push("check");
@@ -87,28 +71,24 @@ public class FirmamentRenderer {
 
             if(renderSkybox) {
                 profiler.popPush("sky");
-                RenderTarget firmamentFrameBuffer = ((WorldRendererDuck)worldRenderContext.worldRenderer()).operation_starcleave$getFirmamentFramebuffer();
+                RenderTarget firmamentFrameBuffer = ((LevelRendererDuck)levelRenderer).operation_starcleave$getFirmamentFramebuffer();
                 firmamentFrameBuffer.setClearColor(0, 0.08f, 0.08f, 1f);
                 firmamentFrameBuffer.clear(Minecraft.ON_OSX);
                 OperationStarcleaveRenderLayers.FIRMAMENT_SKY_TARGET.setupRenderState();
-                renderFirmamentSky(matrixStack, worldRenderContext);
+                renderFirmamentSky(matrixStack, projectionMatrix, levelRenderer);
                 immediate.endBatch();
                 OperationStarcleaveRenderLayers.FIRMAMENT_SKY_TARGET.clearRenderState();
 
                 profiler.popPush("fracture");
-                renderBakedSubRegions(matrixStack, worldRenderContext);
+                renderBakedSubRegions(matrixStack, frustum, levelRenderer, level, camera);
             }
             profiler.pop();
             profiler.pop();
         }
     }
 
-    public static void renderFirmamentSky(PoseStack matrices, WorldRenderContext worldRenderContext) {
-        Matrix4f projectionMatrix = worldRenderContext.projectionMatrix();
-        LevelRenderer worldRenderer = worldRenderContext.worldRenderer();
+    public static void renderFirmamentSky(PoseStack matrices, Matrix4f projectionMatrix, LevelRenderer worldRenderer) {
         LevelRendererAccessor levelRendererAccessor = (LevelRendererAccessor)worldRenderer;
-        Level world = worldRenderContext.world();
-        float tickDelta = worldRenderContext.tickCounter().getGameTimeDeltaPartialTick(false);
 
         float fogStart = RenderSystem.getShaderFogStart();
         RenderSystem.setShaderFogStart(Float.MAX_VALUE);
@@ -254,27 +234,25 @@ public class FirmamentRenderer {
         RenderSystem.setShaderFogStart(fogStart);
     }
 
-    public static void doRender(WorldRenderContext worldRenderContext, boolean debugMode_General) {
+    public static void doRender(Level level, MultiBufferSource vertexConsumerProvider, PoseStack matrixStack, Camera camera, boolean debugMode_General) {
         // TODO tidy up, this is mostly unused now
-        Firmament firmament = Firmament.fromWorld(worldRenderContext.world());
+        Firmament firmament = Firmament.fromWorld(level);
         if(firmament == null) return;
 
         Minecraft client = Minecraft.getInstance();
 
-        MultiBufferSource vertexConsumerProvider = worldRenderContext.consumers();
         if(vertexConsumerProvider == null) return;
         Entity e = client.cameraEntity;
         if(e == null) return;
 
         boolean debugMode_Activity = client.getEntityRenderDispatcher().shouldRenderHitBoxes();
 
-        PoseStack matrixStack = worldRenderContext.matrixStack();
         VertexConsumer vertexConsumer = debugMode_General ? vertexConsumerProvider.getBuffer(RenderType.debugQuads()) : vertexConsumerProvider.getBuffer(OperationStarcleaveRenderLayers.getFracture());
 
         int ex = e.getBlockX();
         int ez = e.getBlockZ();
 
-        Vec3 camPos = worldRenderContext.camera().getPosition();
+        Vec3 camPos = camera.getPosition();
         matrixStack.pushPose();
         matrixStack.translate(ex - camPos.x, - camPos.y, ez - camPos.z);
 
@@ -399,15 +377,14 @@ public class FirmamentRenderer {
         vertexConsumer.addVertex(vec.x, vec.y, vec.z, color, u2, v2, 0, light, norm.x, norm.y, norm.z);
     }
 
-    public static void renderBakedSubRegions(PoseStack matrices, WorldRenderContext worldRenderContext) {
-        Frustum frustum = worldRenderContext.frustum();
+    public static void renderBakedSubRegions(PoseStack matrices, Frustum frustum, LevelRenderer levelRenderer, Level level, Camera camera) {
         if(frustum == null) return;
 
-        RenderTarget firmamentFrameBuffer = ((WorldRendererDuck)worldRenderContext.worldRenderer()).operation_starcleave$getFirmamentFramebuffer();
+        RenderTarget firmamentFrameBuffer = ((LevelRendererDuck)levelRenderer).operation_starcleave$getFirmamentFramebuffer();
         int currentTexID = RenderSystem.getShaderTexture(0);
         int firmamentSkyTexID = firmamentFrameBuffer.getColorTextureId();
 
-        Firmament firmament = Firmament.fromWorld(worldRenderContext.world());
+        Firmament firmament = Firmament.fromWorld(level);
         if(firmament == null) return;
         int height = firmament.getY();
 
@@ -418,7 +395,7 @@ public class FirmamentRenderer {
         modelViewStack.pushMatrix();
         modelViewStack.identity();
         modelViewStack.mul(matrices.last().pose());
-        Vec3 camPos = worldRenderContext.camera().getPosition();
+        Vec3 camPos = camera.getPosition();
 
         ShaderInstance shaderProgram = RenderSystem.getShader();
 

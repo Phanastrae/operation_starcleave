@@ -11,13 +11,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import phanastrae.operation_starcleave.duck.WorldDuck;
+import phanastrae.operation_starcleave.duck.LevelDuck;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 
 import java.util.function.Supplier;
 
 @Mixin(Level.class)
-public class LevelMixin implements WorldDuck {
+public class LevelMixin implements LevelDuck {
     private int operation_starcleave$cleavingFlashTicksLeft;
 
     @Inject(method = "<init>", at = @At("RETURN"))

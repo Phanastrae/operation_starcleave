@@ -9,11 +9,11 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import phanastrae.operation_starcleave.client.duck.ClientPlayNetworkHandlerDuck;
+import phanastrae.operation_starcleave.client.duck.ClientPacketListenerDuck;
 import phanastrae.operation_starcleave.client.render.firmament.FirmamentTextureStorage;
 
 @Mixin(ClientPacketListener.class)
-public class ClientPacketListenerMixin implements ClientPlayNetworkHandlerDuck {
+public class ClientPacketListenerMixin implements ClientPacketListenerDuck {
 
     private ChunkBatchSizeCalculator operation_starcleave$firmamentRegionBatchSizeCalculator;
 

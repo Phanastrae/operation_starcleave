@@ -1,18 +1,19 @@
 package phanastrae.operation_starcleave.client.particle;
 
-import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 
 public class OperationStarcleaveParticles {
 
-    public static void init() {
-        ParticleFactoryRegistry.getInstance().register(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER, FirmamentGlimmerFactory::new);
-        ParticleFactoryRegistry.getInstance().register(OperationStarcleaveParticleTypes.GLIMMER_SMOKE, GlimmerSmokeFactory::new);
-        ParticleFactoryRegistry.getInstance().register(OperationStarcleaveParticleTypes.LARGE_GLIMMER_SMOKE, LargeGlimmerSmokeFactory::new);
+    public static void init(ClientParticleRegistrar r) {
+        r.register(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER, FirmamentGlimmerFactory::new);
+        r.register(OperationStarcleaveParticleTypes.GLIMMER_SMOKE, GlimmerSmokeFactory::new);
+        r.register(OperationStarcleaveParticleTypes.LARGE_GLIMMER_SMOKE, LargeGlimmerSmokeFactory::new);
     }
 
     public static class FirmamentGlimmerFactory extends SuspendedParticle.UnderwaterProvider {
@@ -77,5 +78,15 @@ public class OperationStarcleaveParticles {
             }
             return particle;
         }
+    }
+
+    @FunctionalInterface
+    public interface ClientParticleRegistrar {
+        <T extends ParticleOptions> void register(ParticleType<T> type, ParticleRegistration<T> registration);
+    }
+
+    @FunctionalInterface
+    public interface ParticleRegistration<T extends ParticleOptions> {
+        ParticleProvider<T> create(SpriteSet sprites);
     }
 }

@@ -1,114 +1,92 @@
 package phanastrae.operation_starcleave.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.CoreShaderRegistrationCallback;
-import net.fabricmc.fabric.api.client.rendering.v1.InvalidateRenderStateCallback;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.minecraft.client.Camera;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.world.TickRateManager;
+import net.minecraft.world.level.Level;
+import org.joml.Matrix4f;
 import org.joml.Quaternionf;
-import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
-import phanastrae.operation_starcleave.block.entity.OperationStarcleaveBlockEntityTypes;
-import phanastrae.operation_starcleave.duck.WorldDuck;
-import phanastrae.operation_starcleave.client.network.OperationStarcleaveClientPacketHandler;
-import phanastrae.operation_starcleave.client.particle.OperationStarcleaveParticles;
 import phanastrae.operation_starcleave.client.render.ScreenShakeManager;
-import phanastrae.operation_starcleave.client.render.block.entity.BlessedBedBlockEntityRenderer;
-import phanastrae.operation_starcleave.client.render.entity.OperationStarcleaveEntityRenderers;
-import phanastrae.operation_starcleave.client.render.entity.model.OperationStarcleaveEntityModelLayers;
+import phanastrae.operation_starcleave.client.render.block.OperationStarcleaveBlockRenderLayers;
+import phanastrae.operation_starcleave.client.render.block.entity.OperationStarcleaveBlockEntityRenderers;
 import phanastrae.operation_starcleave.client.render.firmament.FirmamentActorRenderable;
 import phanastrae.operation_starcleave.client.render.firmament.FirmamentOutlineRenderer;
 import phanastrae.operation_starcleave.client.render.firmament.FirmamentRenderer;
 import phanastrae.operation_starcleave.client.render.firmament.FirmamentTextureStorage;
-import phanastrae.operation_starcleave.client.render.shader.OperationStarcleaveShaders;
+import phanastrae.operation_starcleave.duck.LevelDuck;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 
-public class OperationStarcleaveClient implements ClientModInitializer {
+public class OperationStarcleaveClient {
 
 	public static FirmamentOutlineRenderer firmamentOutlineRenderer = new FirmamentOutlineRenderer();
 
-	@Override
-	public void onInitializeClient() {
-		OperationStarcleaveParticles.init();
+	public static void init() {
+		// register block layers
+		OperationStarcleaveBlockRenderLayers.init();
 
-		BlockEntityRenderers.register(OperationStarcleaveBlockEntityTypes.BLESSED_BED, BlessedBedBlockEntityRenderer::new);
+		// register block entity renderers
+		OperationStarcleaveBlockEntityRenderers.init();
+	}
 
-		ClientTickEvents.START_WORLD_TICK.register((world) -> {
-			WorldDuck opscw = (WorldDuck)world;
-			if(opscw.operation_starcleave$getCleavingFlashTicksLeft() > 0) {
-				opscw.operation_starcleave$setCleavingFlashTicksLeft(opscw.operation_starcleave$getCleavingFlashTicksLeft() - 1);
-			}
+	public static void renderBeforeEntities(Level level, MultiBufferSource vertexConsumerProvider, PoseStack WRCmatrixStack, Camera camera, Frustum frustum, LevelRenderer levelRenderer, Matrix4f projectionMatrix) {
+		Quaternionf quaternionf = camera.rotation().conjugate(new Quaternionf());
+		PoseStack matrixStack = new PoseStack();
+		matrixStack.mulPose(quaternionf);
 
-			TickRateManager tickManager = world.tickRateManager();
-			boolean bl = tickManager.runsNormally();
-			if(bl) {
-				//Profiler profiler = world.getProfiler();
-				//profiler.push("starcleave_fracture");
-				//Firmament.fromWorld(world).tick();
-				//profiler.pop();
-				Firmament firmament = Firmament.fromWorld(world);
-				if(firmament != null) {
-					firmament.getFirmamentRegionManager().tick();
-					firmament.manageActors();
-					firmament.tickActors();
+		FirmamentTextureStorage.getInstance().tick();
+
+		FirmamentRenderer.render(level, vertexConsumerProvider, WRCmatrixStack, camera, frustum, levelRenderer, matrixStack, projectionMatrix);
+	}
+
+	public static void renderAfterEntities(Level level, PoseStack matrixStack, MultiBufferSource vertexConsumers, DeltaTracker deltaTracker, Camera camera) {
+		Firmament firmament = Firmament.fromWorld(level);
+		if(firmament != null) {
+			firmament.forEachActor(firmamentActor -> {
+				if(firmamentActor instanceof FirmamentActorRenderable far) {
+					far.render(matrixStack, vertexConsumers, deltaTracker.getGameTimeDeltaPartialTick(false), camera);
 				}
-			}
+			});
+		}
+	}
 
-			ScreenShakeManager.getInstance().update();
-		});
+	public static boolean renderBeforeBlockOutline(boolean blockOutlines, MultiBufferSource vertexConsumers, Camera camera, PoseStack matrixStack) {
+		if(!blockOutlines) return true;
+		if(vertexConsumers == null) return true;
+		OperationStarcleaveClient.firmamentOutlineRenderer.renderOutline(vertexConsumers, camera, matrixStack);
+		return true;
+	}
 
-		WorldRenderEvents.BEFORE_ENTITIES.register(worldRenderContext -> {
-			Quaternionf quaternionf = worldRenderContext.camera().rotation().conjugate(new Quaternionf());
-			PoseStack matrixStack = new PoseStack();
-			matrixStack.mulPose(quaternionf);
+	public static void startLevelTick(Level level) {
+		LevelDuck opscw = (LevelDuck)level;
+		if(opscw.operation_starcleave$getCleavingFlashTicksLeft() > 0) {
+			opscw.operation_starcleave$setCleavingFlashTicksLeft(opscw.operation_starcleave$getCleavingFlashTicksLeft() - 1);
+		}
 
-			FirmamentTextureStorage.getInstance().tick();
-
-			FirmamentRenderer.render(matrixStack, worldRenderContext);
-		});
-
-		WorldRenderEvents.AFTER_ENTITIES.register(worldRenderContext -> {
-			Firmament firmament = Firmament.fromWorld(worldRenderContext.world());
+		TickRateManager tickManager = level.tickRateManager();
+		boolean bl = tickManager.runsNormally();
+		if(bl) {
+			//Profiler profiler = world.getProfiler();
+			//profiler.push("starcleave_fracture");
+			//Firmament.fromWorld(world).tick();
+			//profiler.pop();
+			Firmament firmament = Firmament.fromWorld(level);
 			if(firmament != null) {
-				firmament.forEachActor(firmamentActor -> {
-					if(firmamentActor instanceof FirmamentActorRenderable far) {
-						far.render(worldRenderContext.matrixStack(), worldRenderContext.consumers(), worldRenderContext.tickCounter().getGameTimeDeltaPartialTick(false), worldRenderContext.camera());
-					}
-				});
+				firmament.getFirmamentRegionManager().tick();
+				firmament.manageActors();
+				firmament.tickActors();
 			}
-		});
+		}
 
-		WorldRenderEvents.BEFORE_BLOCK_OUTLINE.register((worldRenderContext, hitResult) -> {
-			if(!worldRenderContext.blockOutlines()) return true;
-			if(worldRenderContext.consumers() == null) return true;
-			OperationStarcleaveClient.firmamentOutlineRenderer.renderOutline(worldRenderContext.consumers(), worldRenderContext.camera(), worldRenderContext.matrixStack());
-			return true;
-		});
+		ScreenShakeManager.getInstance().update();
+	}
 
-		InvalidateRenderStateCallback.EVENT.register(() -> {
-			FirmamentTextureStorage.getInstance().clearData();
-		});
-
-		CoreShaderRegistrationCallback.EVENT.register(OperationStarcleaveShaders::registerShaders);
-
-		OperationStarcleaveEntityRenderers.init();
-		OperationStarcleaveEntityModelLayers.init();
-		OperationStarcleaveClientPacketHandler.init();
-
-		ClientLifecycleEvents.CLIENT_STOPPING.register(OperationStarcleaveClient::onClientShutdown);
-
-		BlockRenderLayerMap.INSTANCE.putBlock(OperationStarcleaveBlocks.STARBLEACHED_LEAVES, RenderType.cutoutMipped());
-		BlockRenderLayerMap.INSTANCE.putBlock(OperationStarcleaveBlocks.MULCHBORNE_TUFT, RenderType.cutout());
-		BlockRenderLayerMap.INSTANCE.putBlock(OperationStarcleaveBlocks.SHORT_HOLY_MOSS, RenderType.cutout());
-		BlockRenderLayerMap.INSTANCE.putBlock(OperationStarcleaveBlocks.BLESSED_BED, RenderType.cutout());
-		BlockRenderLayerMap.INSTANCE.putBlock(OperationStarcleaveBlocks.PHLOGISTIC_FIRE, RenderType.cutout());
-		BlockRenderLayerMap.INSTANCE.putBlock(OperationStarcleaveBlocks.PETRICHORIC_VAPOR, RenderType.translucent());
+	public static void invalidateRenderState() {
+		FirmamentTextureStorage.getInstance().clearData();
 	}
 
 	public static void onClientShutdown(Minecraft client) {

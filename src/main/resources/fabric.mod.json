@@ -15,10 +15,10 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"phanastrae.operation_starcleave.OperationStarcleave"
+			"phanastrae.operation_starcleave.fabric.OperationStarcleaveFabric"
 		],
 		"client": [
-          "phanastrae.operation_starcleave.client.OperationStarcleaveClient"
+          "phanastrae.operation_starcleave.fabric.client.OperationStarcleaveClientFabric"
 		],
 		"fabric-datagen": [
           "phanastrae.operation_starcleave.data.OperationStarcleaveDataGenerator"

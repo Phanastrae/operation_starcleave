@@ -1,7 +1,6 @@
 package phanastrae.operation_starcleave.block;
 
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ColorRGBA;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.*;
@@ -11,6 +10,7 @@ import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import phanastrae.operation_starcleave.OperationStarcleave;
 
+import java.util.function.BiConsumer;
 import java.util.function.ToIntFunction;
 
 import static net.minecraft.world.level.block.Blocks.CAULDRON;
@@ -65,41 +65,41 @@ public class OperationStarcleaveBlocks {
     public static final Block PETRICHORIC_PLASMA = new PetrichoricPlasmaBlock(settings(COLOR_LIGHT_GREEN, EMPTY).strength(100F).lightLevel(constant(15)).pushReaction(DESTROY).emissiveRendering(Blocks::always).noLootTable().noOcclusion().noCollission());
     public static final Block PETRICHORIC_VAPOR = new PetrichoricVaporBlock(settings(COLOR_LIGHT_GREEN, EMPTY).strength(100F).lightLevel(constant(15)).pushReaction(DESTROY).emissiveRendering(Blocks::always).noLootTable().noOcclusion().noCollission());
 
-    public static void init() {
-        register(NETHERITE_PUMPKIN, "netherite_pumpkin");
-        register(STELLAR_SEDIMENT, "stellar_sediment");
-        register(STELLAR_MULCH, "stellar_mulch");
-        register(STELLAR_FARMLAND, "stellar_farmland");
-        register(MULCHBORNE_TUFT, "mulchborne_tuft");
-        register(HOLY_MOSS, "holy_moss");
-        register(SHORT_HOLY_MOSS, "short_holy_moss");
-        register(STARDUST_BLOCK, "stardust_block");
-        register(STARDUST_CLUSTER, "stardust_cluster");
-        register(STARBLEACHED_LOG, "starbleached_log");
-        register(STARBLEACHED_WOOD, "starbleached_wood");
-        register(STARBLEACHED_LEAVES, "starbleached_leaves");
-        register(STARBLEACHED_TILES, "starbleached_tiles");
-        register(STARBLEACHED_TILE_STAIRS, "starbleached_tile_stairs");
-        register(STARBLEACHED_TILE_SLAB, "starbleached_tile_slab");
-        register(STARBLEACHED_TILE_WALL, "starbleached_tile_wall");
-        register(CHISELED_STARBLEACHED_TILES, "chiseled_starbleached_tiles");
-        register(IMBUED_STARBLEACHED_TILES, "imbued_starbleached_tiles");
-        register(STARBLEACHED_PEARL_BLOCK, "starbleached_pearl_block");
-        register(STARBLEACH_CAULDRON, "starbleach_cauldron");
-        register(STELLAR_TILES, "stellar_tiles");
-        register(STELLAR_TILE_SLAB, "stellar_tile_slab");
-        register(STELLAR_REPULSOR, "stellar_repulsor");
-        register(BLESSED_CLOTH_BLOCK, "blessed_cloth_block");
-        register(BLESSED_CLOTH_CARPET, "blessed_cloth_carpet");
-        register(BLESSED_CLOTH_CURTAIN, "blessed_cloth_curtain");
-        register(BLESSED_BED, "blessed_bed");
-        register(PHLOGISTIC_FIRE, "phlogistic_fire");
-        register(PETRICHORIC_PLASMA, "petrichoric_plasma");
-        register(PETRICHORIC_VAPOR, "petrichoric_vapor");
+    public static void init(BiConsumer<ResourceLocation, Block> r) {
+        r.accept(id("netherite_pumpkin"), NETHERITE_PUMPKIN);
+        r.accept(id("stellar_sediment"), STELLAR_SEDIMENT);
+        r.accept(id("stellar_mulch"), STELLAR_MULCH);
+        r.accept(id("stellar_farmland"), STELLAR_FARMLAND);
+        r.accept(id("mulchborne_tuft"), MULCHBORNE_TUFT);
+        r.accept(id("holy_moss"), HOLY_MOSS);
+        r.accept(id("short_holy_moss"), SHORT_HOLY_MOSS);
+        r.accept(id("stardust_block"), STARDUST_BLOCK);
+        r.accept(id("stardust_cluster"), STARDUST_CLUSTER);
+        r.accept(id("starbleached_log"), STARBLEACHED_LOG);
+        r.accept(id("starbleached_wood"), STARBLEACHED_WOOD);
+        r.accept(id("starbleached_leaves"), STARBLEACHED_LEAVES);
+        r.accept(id("starbleached_tiles"), STARBLEACHED_TILES);
+        r.accept(id("starbleached_tile_stairs"), STARBLEACHED_TILE_STAIRS);
+        r.accept(id("starbleached_tile_slab"), STARBLEACHED_TILE_SLAB);
+        r.accept(id("starbleached_tile_wall"), STARBLEACHED_TILE_WALL);
+        r.accept(id("chiseled_starbleached_tiles"), CHISELED_STARBLEACHED_TILES);
+        r.accept(id("imbued_starbleached_tiles"), IMBUED_STARBLEACHED_TILES);
+        r.accept(id("starbleached_pearl_block"), STARBLEACHED_PEARL_BLOCK);
+        r.accept(id("starbleach_cauldron"), STARBLEACH_CAULDRON);
+        r.accept(id("stellar_tiles"), STELLAR_TILES);
+        r.accept(id("stellar_tile_slab"), STELLAR_TILE_SLAB);
+        r.accept(id("stellar_repulsor"), STELLAR_REPULSOR);
+        r.accept(id("blessed_cloth_block"), BLESSED_CLOTH_BLOCK);
+        r.accept(id("blessed_cloth_carpet"), BLESSED_CLOTH_CARPET);
+        r.accept(id("blessed_cloth_curtain"), BLESSED_CLOTH_CURTAIN);
+        r.accept(id("blessed_bed"), BLESSED_BED);
+        r.accept(id("phlogistic_fire"), PHLOGISTIC_FIRE);
+        r.accept(id("petrichoric_plasma"), PETRICHORIC_PLASMA);
+        r.accept(id("petrichoric_vapor"), PETRICHORIC_VAPOR);
     }
 
-    protected static <T extends Block> void register(T item, String name) {
-        Registry.register(BuiltInRegistries.BLOCK, OperationStarcleave.id(name), item);
+    private static ResourceLocation id(String path) {
+        return OperationStarcleave.id(path);
     }
 
     protected static ToIntFunction<BlockState> constant(int t) {

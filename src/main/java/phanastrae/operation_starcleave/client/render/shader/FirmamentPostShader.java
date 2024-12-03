@@ -13,7 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-import phanastrae.operation_starcleave.client.duck.WorldRendererDuck;
+import phanastrae.operation_starcleave.client.duck.LevelRendererDuck;
 import phanastrae.operation_starcleave.client.render.firmament.FirmamentTextureStorage;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 
@@ -22,7 +22,7 @@ import static net.minecraft.util.Mth.positiveModulo;
 public class FirmamentPostShader {
     public static void draw() {
         Minecraft client = Minecraft.getInstance();
-        if(client.levelRenderer instanceof WorldRendererDuck operationStarcleaveWorldRenderer) {
+        if(client.levelRenderer instanceof LevelRendererDuck operationStarcleaveWorldRenderer) {
             RenderTarget mainBuffer = client.getMainRenderTarget();
 
             RenderTarget dummyBuffer = operationStarcleaveWorldRenderer.operation_starcleave$getDummyFramebuffer();
@@ -72,7 +72,7 @@ public class FirmamentPostShader {
 
     private static void drawInternal(int width, int height, boolean disableBlend) {
         Minecraft client = Minecraft.getInstance();
-        if(!(client.levelRenderer instanceof WorldRendererDuck operationStarcleaveWorldRenderer)) {
+        if(!(client.levelRenderer instanceof LevelRendererDuck operationStarcleaveWorldRenderer)) {
             return;
         }
         RenderTarget dummyBuffer = operationStarcleaveWorldRenderer.operation_starcleave$getDummyFramebuffer();

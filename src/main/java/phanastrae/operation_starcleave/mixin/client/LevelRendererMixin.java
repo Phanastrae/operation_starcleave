@@ -19,11 +19,11 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import phanastrae.operation_starcleave.client.duck.WorldRendererDuck;
+import phanastrae.operation_starcleave.client.duck.LevelRendererDuck;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 
 @Mixin(LevelRenderer.class)
-public class LevelRendererMixin implements WorldRendererDuck {
+public class LevelRendererMixin implements LevelRendererDuck {
 
     @Shadow @Final private Minecraft minecraft;
     RenderTarget operationStarcleave$dummyFramebuffer;

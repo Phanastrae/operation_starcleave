@@ -6,6 +6,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import phanastrae.operation_starcleave.network.packet.AcknowledgeFirmamentRegionDataPayload;
@@ -14,23 +15,18 @@ import phanastrae.operation_starcleave.world.firmament.Firmament;
 import phanastrae.operation_starcleave.world.firmament.FirmamentTilePos;
 
 public class OperationStarcleaveServerPacketHandler {
-    
-    public static void init() {
-        register(AcknowledgeFirmamentRegionDataPayload.PACKET_ID, OperationStarcleaveServerPacketHandler::acknowledgeFirmamentRegionData);
-        register(AttackFirmamentTilePayload.PACKET_ID, OperationStarcleaveServerPacketHandler::attackFirmamentTile);
-    }
 
     public static <T extends CustomPacketPayload> boolean register(CustomPacketPayload.Type<T> type, ServerPlayNetworking.PlayPayloadHandler<T> handler) {
         return ServerPlayNetworking.registerGlobalReceiver(type, handler);
     }
 
-    public static void acknowledgeFirmamentRegionData(AcknowledgeFirmamentRegionDataPayload payload, ServerPlayNetworking.Context context) {
-        ServerPlayer player = context.player();
-        FirmamentRegionDataSender.getFirmamentRegionDataSender(player.connection).onAcknowledgeRegions(payload.desiredChunksPerTick());
+    public static void acknowledgeFirmamentRegionData(AcknowledgeFirmamentRegionDataPayload payload, Player player) {
+        if(player instanceof ServerPlayer serverPlayer) {
+            FirmamentRegionDataSender.getFirmamentRegionDataSender(serverPlayer.connection).onAcknowledgeRegions(payload.desiredChunksPerTick());
+        }
     }
 
-    public static void attackFirmamentTile(AttackFirmamentTilePayload payload, ServerPlayNetworking.Context context) {
-        ServerPlayer player = context.player();
+    public static void attackFirmamentTile(AttackFirmamentTilePayload payload, Player player) {
         if(!player.getAbilities().instabuild) return;
 
         Level world = player.level();

@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import phanastrae.operation_starcleave.world.firmament.FirmamentHolder;
-import phanastrae.operation_starcleave.duck.WorldDuck;
+import phanastrae.operation_starcleave.duck.LevelDuck;
 import phanastrae.operation_starcleave.client.world.firmament.ClientFirmamentRegionManager;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 import phanastrae.operation_starcleave.client.world.starbleach.StarbleachParticles;
@@ -42,7 +42,7 @@ public class ClientLevelMixin implements FirmamentHolder {
 
     @ModifyReturnValue(method = "getSkyColor", at = @At("RETURN"))
     private Vec3 operation_starcleave$doCleavingFlash(Vec3 original, Vec3 cameraPos, float tickDelta) {
-        int flashTicks = this.minecraft.options.hideLightningFlash().get() ? 0 : ((WorldDuck)this).operation_starcleave$getCleavingFlashTicksLeft();
+        int flashTicks = this.minecraft.options.hideLightningFlash().get() ? 0 : ((LevelDuck)this).operation_starcleave$getCleavingFlashTicksLeft();
         if (flashTicks > 0) {
             float flashAmount = (float)flashTicks - tickDelta;
             if (flashAmount > 1.0F) {

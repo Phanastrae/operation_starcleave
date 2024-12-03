@@ -2,19 +2,22 @@ package phanastrae.operation_starcleave.advancement.criterion;
 
 import net.minecraft.advancements.CriterionTrigger;
 import net.minecraft.advancements.critereon.PlayerTrigger;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import phanastrae.operation_starcleave.OperationStarcleave;
+
+import java.util.function.BiConsumer;
 
 public class OperationStarcleaveAdvancementCriteria {
 
-    public static final PlayerTrigger LAUNCH_STARCLEAVER_GOLEM = register("launch_starcleaver_golem", new PlayerTrigger());
-    public static final PlayerTrigger CLEAVE_FIRMAMENT = register("cleave_firmament", new PlayerTrigger());
+    public static final PlayerTrigger LAUNCH_STARCLEAVER_GOLEM = new PlayerTrigger();
+    public static final PlayerTrigger CLEAVE_FIRMAMENT = new PlayerTrigger();
 
-    public static void init() {
+    public static void init(BiConsumer<ResourceLocation, CriterionTrigger<?>> r) {
+        r.accept(id("launch_starcleaver_golem"), LAUNCH_STARCLEAVER_GOLEM);
+        r.accept(id("cleave_firmament"), CLEAVE_FIRMAMENT);
     }
 
-    public static <T extends CriterionTrigger<?>> T register(String id, T criterion) {
-        return Registry.register(BuiltInRegistries.TRIGGER_TYPES, OperationStarcleave.id(id), criterion);
+    public static ResourceLocation id(String key) {
+        return OperationStarcleave.id(key);
     }
 }

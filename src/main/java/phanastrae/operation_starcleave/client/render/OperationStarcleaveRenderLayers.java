@@ -5,13 +5,13 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
-import phanastrae.operation_starcleave.client.duck.WorldRendererDuck;
+import phanastrae.operation_starcleave.client.duck.LevelRendererDuck;
 import phanastrae.operation_starcleave.client.render.shader.OperationStarcleaveShaders;
 
 public class OperationStarcleaveRenderLayers {
 
     public static final RenderStateShard.OutputStateShard FIRMAMENT_SKY_TARGET = new RenderStateShard.OutputStateShard("operation_starcleave$firmament_sky_target", () -> {
-        ((WorldRendererDuck)Minecraft.getInstance().levelRenderer).operation_starcleave$getFirmamentFramebuffer().bindWrite(false);
+        ((LevelRendererDuck)Minecraft.getInstance().levelRenderer).operation_starcleave$getFirmamentFramebuffer().bindWrite(false);
     }, () -> {
         Minecraft.getInstance().getMainRenderTarget().bindWrite(false);
     });
