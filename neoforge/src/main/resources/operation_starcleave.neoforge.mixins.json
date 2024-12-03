@@ -4,8 +4,11 @@
   "package": "phanastrae.operation_starcleave.neoforge.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "CropBlockMixin",
+    "StellarSedimentBlockMixin"
   ],
   "client": [
+    "client.LevelRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

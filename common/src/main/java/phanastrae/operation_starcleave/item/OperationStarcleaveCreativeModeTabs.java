@@ -113,11 +113,8 @@ public class OperationStarcleaveCreativeModeTabs {
                 PHLOGISTON_SAC);
 
         // Combat
-        // TODO setup addBefore
-        /*
-        helper.addBefore(COMBAT, Items.TURTLE_HELMET,
+        helper.addBefore(Items.TURTLE_HELMET, COMBAT,
                 NETHERITE_PUMPKIN);
-        */
 
         // Food and Drink
         helper.addAfter(Items.CHORUS_FRUIT, FOOD_AND_DRINKS,
@@ -171,6 +168,12 @@ public class OperationStarcleaveCreativeModeTabs {
         public abstract void addAfter(ItemStack after, ResourceKey<CreativeModeTab> groupKey, ItemStack item);
 
         public abstract void addAfter(ItemLike after, ResourceKey<CreativeModeTab> groupKey, ItemLike... items);
+
+        public abstract void addBefore(ItemLike before, ResourceKey<CreativeModeTab> groupKey, ItemLike item);
+
+        public abstract void addBefore(ItemStack before, ResourceKey<CreativeModeTab> groupKey, ItemStack item);
+
+        public abstract void addBefore(ItemLike before, ResourceKey<CreativeModeTab> groupKey, ItemLike... items);
 
         public abstract void forTabRun(ResourceKey<CreativeModeTab> groupKey, BiConsumer<CreativeModeTab.ItemDisplayParameters, CreativeModeTab.Output> biConsumer);
 

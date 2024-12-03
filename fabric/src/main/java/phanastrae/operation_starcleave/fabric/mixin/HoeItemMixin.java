@@ -1,4 +1,4 @@
-package phanastrae.operation_starcleave.mixin;
+package phanastrae.operation_starcleave.fabric.mixin;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.world.item.HoeItem;
@@ -24,7 +24,7 @@ public abstract class HoeItemMixin {
 
     @Shadow public static Consumer<UseOnContext> changeIntoState(BlockState state) {
         throw new AssertionError();
-    };
+    }
 
     @Inject(method = "<clinit>", at = @At("RETURN"))
     private static void operation_starcleave$onInit(CallbackInfo ci) {

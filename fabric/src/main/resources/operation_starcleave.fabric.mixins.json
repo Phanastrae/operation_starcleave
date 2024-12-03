@@ -3,6 +3,8 @@
   "package": "phanastrae.operation_starcleave.fabric.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "CropBlockMixin",
+    "HoeItemMixin",
     "ItemStackMixin"
   ],
   "client": [

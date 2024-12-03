@@ -3,7 +3,9 @@ package phanastrae.operation_starcleave.mixin;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
@@ -49,6 +51,8 @@ public abstract class EntityMixin implements EntityDuck {
 
     @Shadow public abstract boolean hurt(DamageSource source, float amount);
 
+    @Shadow public abstract Component getName();
+
     private long operation_starcleave$lastRepulsorUse = Long.MIN_VALUE;
     private boolean operation_starcleave$onPhlogisticFire = false;
     private int operation_starcleave$phlogisticFireTicks = -1;
@@ -80,6 +84,9 @@ public abstract class EntityMixin implements EntityDuck {
                 EntityPhlogisticFirePayload payload = new EntityPhlogisticFirePayload(entity.getId(), onPhlogisticFire);
 
                 XPlatInterface.INSTANCE.sendToPlayersTrackingEntity(entity, payload);
+                if(entity instanceof ServerPlayer player) {
+                    XPlatInterface.INSTANCE.sendPayload(player, payload);
+                }
             }
         }
     }
@@ -141,7 +148,11 @@ public abstract class EntityMixin implements EntityDuck {
         }
 
         if (!this.level().isClientSide) {
-            this.operation_starcleave$setOnPhlogisticFire(this.operation_starcleave$phlogisticFireTicks > 0);
+            boolean isOnPhlogisticFire = this.operation_starcleave$onPhlogisticFire;
+            boolean shouldBeOnPhlogisticFire = this.operation_starcleave$phlogisticFireTicks > 0;
+            if(isOnPhlogisticFire != shouldBeOnPhlogisticFire) {
+                this.operation_starcleave$setOnPhlogisticFire(shouldBeOnPhlogisticFire);
+            }
         }
     }
 

@@ -23,7 +23,6 @@ import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
 import phanastrae.operation_starcleave.entity.effect.OperationStarcleaveStatusEffects;
 import phanastrae.operation_starcleave.item.OperationStarcleaveCreativeModeTabs;
 import phanastrae.operation_starcleave.network.packet.OperationStarcleavePayloads;
-import phanastrae.operation_starcleave.world.firmament.FirmamentWatcher;
 
 import java.util.Collection;
 import java.util.function.BiConsumer;
@@ -61,8 +60,8 @@ public class OperationStarcleaveFabric implements ModInitializer {
         // world tick start
         ServerTickEvents.START_WORLD_TICK.register((OperationStarcleave::startLevelTick));
 
-        // after player changes world
-        ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register(((player, origin, destination) -> ((FirmamentWatcher)player).operation_starcleave$getWatchedRegions().unWatchAll()));
+        // player changes dimension
+        ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register(((player, origin, destination) -> OperationStarcleave.onPlayerChangeDimension(player)));
     }
 
     public void setupCreativeTabs() {
@@ -108,6 +107,21 @@ public class OperationStarcleaveFabric implements ModInitializer {
             @Override
             public void addAfter(ItemLike after, ResourceKey<CreativeModeTab> groupKey, ItemLike... items) {
                 ItemGroupEvents.modifyEntriesEvent(groupKey).register(entries -> entries.addAfter(after, items));
+            }
+
+            @Override
+            public void addBefore(ItemLike before, ResourceKey<CreativeModeTab> groupKey, ItemLike item) {
+                ItemGroupEvents.modifyEntriesEvent(groupKey).register(entries -> entries.addBefore(before, item));
+            }
+
+            @Override
+            public void addBefore(ItemStack before, ResourceKey<CreativeModeTab> groupKey, ItemStack item) {
+                ItemGroupEvents.modifyEntriesEvent(groupKey).register(entries -> entries.addBefore(before, item));
+            }
+
+            @Override
+            public void addBefore(ItemLike before, ResourceKey<CreativeModeTab> groupKey, ItemLike... items) {
+                ItemGroupEvents.modifyEntriesEvent(groupKey).register(entries -> entries.addBefore(before, items));
             }
 
             @Override

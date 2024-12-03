@@ -7,6 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.TickRateManager;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -30,6 +31,7 @@ import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
 import phanastrae.operation_starcleave.world.OperationStarcleaveGameRules;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 import phanastrae.operation_starcleave.world.firmament.FirmamentRegion;
+import phanastrae.operation_starcleave.world.firmament.FirmamentWatcher;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -101,6 +103,10 @@ public class OperationStarcleave {
 
 			firmament.forEachRegion(FirmamentRegion::flushUpdates);
 		}
+	}
+
+	public static void onPlayerChangeDimension(Player player) {
+		((FirmamentWatcher)player).operation_starcleave$getWatchedRegions().unWatchAll();
 	}
 
 	public static void addTooltips(ItemStack stack, Item.TooltipContext tooltipContext, Consumer<Component> componentConsumer, TooltipFlag tooltipFlag) {
