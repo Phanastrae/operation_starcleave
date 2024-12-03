@@ -22,6 +22,7 @@ import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 import phanastrae.operation_starcleave.network.packet.StarbleachedPearlLaunchPayload;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
+import phanastrae.operation_starcleave.services.XPlatInterface;
 
 import java.util.function.Predicate;
 
@@ -102,7 +103,7 @@ public class StarbleachedPearlEntity extends ThrowableItemProjectile {
                 // expand radius to be safe
                 float radiusBig = radius * 1.25f + 4;
                 if(distance < radiusBig) {
-                    ServerPlayNetworking.send(playerEntity, new StarbleachedPearlLaunchPayload(pos, radius, maxAddedSpeed, entity != null, entity == null ? -1 : entity.getId()));
+                    XPlatInterface.INSTANCE.sendPayload(playerEntity, new StarbleachedPearlLaunchPayload(pos, radius, maxAddedSpeed, entity != null, entity == null ? -1 : entity.getId()));
                 }
             });
         }

@@ -14,6 +14,7 @@ import phanastrae.operation_starcleave.entity.mob.SubcaelicTorpedoEntity;
 import phanastrae.operation_starcleave.entity.projectile.FirmamentRejuvenatorEntity;
 import phanastrae.operation_starcleave.entity.projectile.SplashStarbleachEntity;
 import phanastrae.operation_starcleave.entity.projectile.StarbleachedPearlEntity;
+import phanastrae.operation_starcleave.services.XPlatInterface;
 
 import java.util.function.BiConsumer;
 
@@ -87,9 +88,7 @@ public class OperationStarcleaveEntityTypes {
     @Nullable
     private static String getStr(ResourceLocation resourceLocation) {
         // sending null on neoforge crashes, but sending a string on fabric logs an error
-        // TODO
-        // String loader = XPlatInterface.INSTANCE.getLoader();
-        String loader = "fabric";
+        String loader = XPlatInterface.INSTANCE.getLoader();
         if(loader.equals("fabric")) {
             return null;
         } else {

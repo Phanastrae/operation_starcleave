@@ -17,6 +17,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Math;
 import phanastrae.operation_starcleave.network.packet.FirmamentCleavedPayload;
+import phanastrae.operation_starcleave.services.XPlatInterface;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 import phanastrae.operation_starcleave.world.firmament.FirmamentShatterActor;
 import phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion;
@@ -87,7 +88,7 @@ public class FirmamentManipulatorItem extends Item {
     public static void fractureFirmament(Firmament firmament, int x, int z, RandomSource random) {
         if(firmament.getWorld() instanceof ServerLevel world) {
             for(ServerPlayer player : world.players()) {
-                ServerPlayNetworking.send(player, new FirmamentCleavedPayload(x, z));
+                XPlatInterface.INSTANCE.sendPayload(player, new FirmamentCleavedPayload(x, z));
             }
         }
 

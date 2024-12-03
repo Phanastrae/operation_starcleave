@@ -1,6 +1,5 @@
 package phanastrae.operation_starcleave.client.network;
 
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.multiplayer.ChunkBatchSizeCalculator;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.particles.ParticleOptions;
@@ -14,6 +13,7 @@ import net.minecraft.world.phys.Vec3;
 import phanastrae.operation_starcleave.client.duck.ClientPacketListenerDuck;
 import phanastrae.operation_starcleave.client.render.ScreenShakeManager;
 import phanastrae.operation_starcleave.client.render.firmament.FirmamentTextureStorage;
+import phanastrae.operation_starcleave.client.services.XPlatClientInterface;
 import phanastrae.operation_starcleave.client.world.firmament.ClientFirmamentRegionManager;
 import phanastrae.operation_starcleave.client.world.firmament.FirmamentDamageGlowActor;
 import phanastrae.operation_starcleave.duck.EntityDuck;
@@ -57,7 +57,7 @@ public class OperationStarcleaveClientPacketHandler {
             ChunkBatchSizeCalculator firmamentRegionBatchSizeCalculator = ((ClientPacketListenerDuck) localPlayer.connection).operation_starcleave$getFirmamentRegionBatchSizeCalculator();
             firmamentRegionBatchSizeCalculator.onBatchFinished(payload.batchSize());
 
-            ClientPlayNetworking.send(new AcknowledgeFirmamentRegionDataPayload(firmamentRegionBatchSizeCalculator.getDesiredChunksPerTick()));
+            XPlatClientInterface.INSTANCE.sendPayload(new AcknowledgeFirmamentRegionDataPayload(firmamentRegionBatchSizeCalculator.getDesiredChunksPerTick()));
         }
     }
 

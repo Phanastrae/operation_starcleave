@@ -16,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import phanastrae.operation_starcleave.duck.EntityDuck;
 import phanastrae.operation_starcleave.network.packet.EntityPhlogisticFirePayload;
+import phanastrae.operation_starcleave.services.XPlatInterface;
 import phanastrae.operation_starcleave.world.firmament.FirmamentRegionsWatched;
 import phanastrae.operation_starcleave.world.firmament.FirmamentWatcher;
 
@@ -39,7 +40,7 @@ public class ServerPlayerMixin implements FirmamentWatcher {
     private void operation_starcleave$onPlayerWorldMove(DimensionTransition teleportTarget, CallbackInfoReturnable<Entity> cir) {
         ServerPlayer player = (ServerPlayer)(Object)this;
         if(((EntityDuck)player).operation_starcleave$getPhlogisticFireTicks() > 0) {
-            ServerPlayNetworking.send(player, new EntityPhlogisticFirePayload(player.getId(), true));
+            XPlatInterface.INSTANCE.sendPayload(player, new EntityPhlogisticFirePayload(player.getId(), true));
         }
     }
 

@@ -1,9 +1,9 @@
 package phanastrae.operation_starcleave.client.render.block;
 
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.block.Block;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
+import phanastrae.operation_starcleave.client.services.XPlatClientInterface;
 
 public class OperationStarcleaveBlockRenderLayers {
 
@@ -20,7 +20,6 @@ public class OperationStarcleaveBlockRenderLayers {
     }
 
     private static void putBlocks(RenderType renderLayer, Block... blocks) {
-        // TODO Xplat
-        BlockRenderLayerMap.INSTANCE.putBlocks(renderLayer, blocks);
+        XPlatClientInterface.INSTANCE.registerBlockRenderLayers(renderLayer, blocks);
     }
 }

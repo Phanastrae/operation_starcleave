@@ -6,6 +6,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.util.TriConsumer;
 import phanastrae.operation_starcleave.network.packet.UpdateFirmamentSubRegionPayload;
+import phanastrae.operation_starcleave.services.XPlatInterface;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -338,7 +339,7 @@ public class FirmamentSubRegion implements FirmamentAccess {
 
                 if(!nearbyPlayers.isEmpty()) {
                     FirmamentSubRegionData data = new FirmamentSubRegionData(this);
-                    nearbyPlayers.forEach(serverPlayerEntity -> ServerPlayNetworking.send(serverPlayerEntity, new UpdateFirmamentSubRegionPayload(subRegionPos.id, data)));
+                    nearbyPlayers.forEach(serverPlayerEntity -> XPlatInterface.INSTANCE.sendPayload(serverPlayerEntity, new UpdateFirmamentSubRegionPayload(subRegionPos.id, data)));
                 }
             }
         }

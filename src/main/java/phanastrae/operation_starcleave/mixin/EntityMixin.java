@@ -32,6 +32,7 @@ import phanastrae.operation_starcleave.entity.OperationStarcleaveDamageTypeTags;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveDamageTypes;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypeTags;
 import phanastrae.operation_starcleave.network.packet.EntityPhlogisticFirePayload;
+import phanastrae.operation_starcleave.services.XPlatInterface;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin implements EntityDuck {
@@ -83,11 +84,11 @@ public abstract class EntityMixin implements EntityDuck {
 
                 for (ServerPlayer player : PlayerLookup.tracking(entity)) {
                     if(player != entity) {
-                        ServerPlayNetworking.send(player, payload);
+                        XPlatInterface.INSTANCE.sendPayload(player, payload);
                     }
                 }
                 if(entity instanceof ServerPlayer player) {
-                    ServerPlayNetworking.send(player, payload);
+                    XPlatInterface.INSTANCE.sendPayload(player, payload);
                 }
             }
         }

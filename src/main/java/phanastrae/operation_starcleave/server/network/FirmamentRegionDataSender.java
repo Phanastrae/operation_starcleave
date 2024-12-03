@@ -14,6 +14,7 @@ import phanastrae.operation_starcleave.network.packet.FirmamentRegionDataPayload
 import phanastrae.operation_starcleave.network.packet.FirmamentRegionSentPayload;
 import phanastrae.operation_starcleave.network.packet.StartFirmamentRegionSendPayload;
 import phanastrae.operation_starcleave.network.packet.UnloadFirmamentRegionPayload;
+import phanastrae.operation_starcleave.services.XPlatInterface;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 import phanastrae.operation_starcleave.world.firmament.FirmamentRegion;
 import phanastrae.operation_starcleave.world.firmament.FirmamentRegionData;
@@ -42,7 +43,7 @@ public class FirmamentRegionDataSender {
     public void unload(ServerPlayer player, RegionPos regionPos) {
         this.regions.remove(regionPos.id);
         if(player.isAlive()) {
-            ServerPlayNetworking.send(player, new UnloadFirmamentRegionPayload(regionPos.id));
+            XPlatInterface.INSTANCE.sendPayload(player, new UnloadFirmamentRegionPayload(regionPos.id));
         }
     }
 
@@ -59,13 +60,13 @@ public class FirmamentRegionDataSender {
                     if (!list.isEmpty()) {
                         ServerGamePacketListenerImpl serverPlayNetworkHandler = player.connection;
                         ++this.unacknowledgedBatches;
-                        ServerPlayNetworking.send(player, new StartFirmamentRegionSendPayload());
+                        XPlatInterface.INSTANCE.sendPayload(player, new StartFirmamentRegionSendPayload());
 
                         for(FirmamentRegion region : list) {
                             sendChunkData(serverPlayNetworkHandler, serverWorld, region);
                         }
 
-                        ServerPlayNetworking.send(player, new FirmamentRegionSentPayload(list.size()));
+                        XPlatInterface.INSTANCE.sendPayload(player, new FirmamentRegionSentPayload(list.size()));
                         this.pending -= (float)list.size();
                     }
                 }
@@ -74,7 +75,7 @@ public class FirmamentRegionDataSender {
     }
 
     private static void sendChunkData(ServerGamePacketListenerImpl handler, ServerLevel world, FirmamentRegion region) {
-        ServerPlayNetworking.send(handler.player, new FirmamentRegionDataPayload(region.regionPos.id, new FirmamentRegionData(region)));
+        XPlatInterface.INSTANCE.sendPayload(handler.player, new FirmamentRegionDataPayload(region.regionPos.id, new FirmamentRegionData(region)));
     }
 
     private List<FirmamentRegion> makeBatch(Firmament firmament, ChunkPos playerPos) {

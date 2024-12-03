@@ -1,17 +1,16 @@
 package phanastrae.operation_starcleave.item;
 
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import phanastrae.operation_starcleave.OperationStarcleave;
+import phanastrae.operation_starcleave.services.XPlatInterface;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,8 +32,7 @@ public class OperationStarcleaveCreativeModeTabs {
     public static final ResourceKey<CreativeModeTab> SPAWN_EGGS = createKey("spawn_eggs");
     public static final ResourceKey<CreativeModeTab> OP_BLOCKS = createKey("op_blocks");
 
-    // TODO XPlat
-    public static final CreativeModeTab OPERATION_STARCLEAVE_TAB = FabricItemGroup.builder()
+    public static final CreativeModeTab OPERATION_STARCLEAVE_TAB = XPlatInterface.INSTANCE.createCreativeModeTabBuilder()
             .icon(OperationStarcleaveItems.NETHERITE_PUMPKIN::getDefaultInstance)
             .title(Component.translatable("itemGroup.operation_starcleave.group"))
             .build();
@@ -58,10 +56,10 @@ public class OperationStarcleaveCreativeModeTabs {
         addQueuedItems(helper);
 
         // Building Blocks
-        helper.addAfter(Items.WARPED_BUTTON, CreativeModeTabs.BUILDING_BLOCKS,
+        helper.addAfter(Items.WARPED_BUTTON, BUILDING_BLOCKS,
                 STARBLEACHED_LOG,
                 STARBLEACHED_WOOD);
-        helper.add(CreativeModeTabs.BUILDING_BLOCKS,
+        helper.add(BUILDING_BLOCKS,
                 STARBLEACHED_TILES,
                 STARBLEACHED_TILE_STAIRS,
                 STARBLEACHED_TILE_SLAB,
@@ -76,38 +74,38 @@ public class OperationStarcleaveCreativeModeTabs {
                 BLESSED_CLOTH_CURTAIN);
 
         // Natural
-        helper.addAfter(Items.WARPED_STEM, CreativeModeTabs.NATURAL_BLOCKS,
+        helper.addAfter(Items.WARPED_STEM, NATURAL_BLOCKS,
                 STARBLEACHED_LOG);
-        helper.addAfter(Items.FLOWERING_AZALEA_LEAVES, CreativeModeTabs.NATURAL_BLOCKS,
+        helper.addAfter(Items.FLOWERING_AZALEA_LEAVES, NATURAL_BLOCKS,
                 STARBLEACHED_LEAVES);
-        helper.addAfter(Items.END_STONE, CreativeModeTabs.NATURAL_BLOCKS,
+        helper.addAfter(Items.END_STONE, NATURAL_BLOCKS,
                 HOLY_MOSS,
                 STELLAR_SEDIMENT,
                 STELLAR_MULCH,
                 STELLAR_FARMLAND,
                 STARDUST_BLOCK);
-        helper.addAfter(Items.HANGING_ROOTS, CreativeModeTabs.NATURAL_BLOCKS,
+        helper.addAfter(Items.HANGING_ROOTS, NATURAL_BLOCKS,
                 MULCHBORNE_TUFT,
                 SHORT_HOLY_MOSS);
 
         // Functional
-        helper.addAfter(Items.DRAGON_HEAD, CreativeModeTabs.FUNCTIONAL_BLOCKS,
+        helper.addAfter(Items.DRAGON_HEAD, FUNCTIONAL_BLOCKS,
                 NETHERITE_PUMPKIN);
-        helper.add(CreativeModeTabs.FUNCTIONAL_BLOCKS,
+        helper.add(FUNCTIONAL_BLOCKS,
                 STARDUST_CLUSTER,
                 STARBLEACHED_LEAVES,
                 BLESSED_CLOTH_BLOCK,
                 BLESSED_CLOTH_CARPET);
-        helper.addAfter(Items.PINK_BED, CreativeModeTabs.FUNCTIONAL_BLOCKS,
+        helper.addAfter(Items.PINK_BED, FUNCTIONAL_BLOCKS,
                 BLESSED_BED);
 
         // Redstone
-        helper.add(CreativeModeTabs.REDSTONE_BLOCKS,
+        helper.add(REDSTONE_BLOCKS,
                 STARBLEACHED_PEARL_BLOCK,
                 STELLAR_REPULSOR);
 
         // Tools
-        helper.add(CreativeModeTabs.TOOLS_AND_UTILITIES,
+        helper.add(TOOLS_AND_UTILITIES,
                 STARBLEACHED_PEARL,
                 FIRMAMENT_REJUVENATOR,
                 STARCLEAVER_GOLEM_BUCKET,
@@ -117,25 +115,25 @@ public class OperationStarcleaveCreativeModeTabs {
         // Combat
         // TODO setup addBefore
         /*
-        helper.addBefore(CreativeModeTabs.COMBAT, Items.TURTLE_HELMET,
+        helper.addBefore(COMBAT, Items.TURTLE_HELMET,
                 NETHERITE_PUMPKIN);
         */
 
         // Food and Drink
-        helper.addAfter(Items.CHORUS_FRUIT, CreativeModeTabs.FOOD_AND_DRINKS,
+        helper.addAfter(Items.CHORUS_FRUIT, FOOD_AND_DRINKS,
                 STARFRUIT);
-        helper.add(CreativeModeTabs.FOOD_AND_DRINKS,
+        helper.add(FOOD_AND_DRINKS,
                 STARBLEACH_BOTTLE,
                 SPLASH_STARBLEACH_BOTTLE);
 
         // Ingredients
-        helper.addAfter(Items.EXPERIENCE_BOTTLE, CreativeModeTabs.INGREDIENTS,
+        helper.addAfter(Items.EXPERIENCE_BOTTLE, INGREDIENTS,
                 STARBLEACH_BOTTLE,
                 HOLY_STRANDS,
                 BLESSED_CLOTH);
 
         // Spawn Eggs
-        helper.add(CreativeModeTabs.SPAWN_EGGS,
+        helper.add(SPAWN_EGGS,
                 STARCLEAVER_GOLEM_SPAWN_EGG,
                 SUBCAELIC_TORPEDO_SPAWN_EGG,
                 SUBCAELIC_DUX_SPAWN_EGG);

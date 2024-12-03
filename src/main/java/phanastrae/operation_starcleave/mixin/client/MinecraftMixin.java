@@ -1,6 +1,5 @@
 package phanastrae.operation_starcleave.mixin.client;
 
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
@@ -11,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import phanastrae.operation_starcleave.client.OperationStarcleaveClient;
+import phanastrae.operation_starcleave.client.services.XPlatClientInterface;
 import phanastrae.operation_starcleave.network.packet.AttackFirmamentTilePayload;
 import phanastrae.operation_starcleave.world.firmament.FirmamentTilePos;
 
@@ -23,7 +23,7 @@ public class MinecraftMixin {
     private void operation_starcleave$handleFirmamentHit(CallbackInfoReturnable<Boolean> cir) {
         FirmamentTilePos tile = OperationStarcleaveClient.firmamentOutlineRenderer.hitTile;
         if(tile != null) {
-            ClientPlayNetworking.send(new AttackFirmamentTilePayload(tile.tileX, tile.tileZ));
+            XPlatClientInterface.INSTANCE.sendPayload(new AttackFirmamentTilePayload(tile.tileX, tile.tileZ));
             this.player.swing(InteractionHand.MAIN_HAND);
             cir.setReturnValue(false);
         }
