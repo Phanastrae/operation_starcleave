@@ -1,10 +1,5 @@
-package phanastrae.operation_starcleave.fabric.services;
+package phanastrae.operation_starcleave.neoforge.services;
 
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -12,50 +7,56 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.fml.ModList;
+import net.neoforged.neoforge.network.PacketDistributor;
 import phanastrae.operation_starcleave.services.XPlatInterface;
 
-public class XPlatFabric implements XPlatInterface {
+public class XPlatNeoForge implements XPlatInterface {
 
     @Override
     public String getLoader() {
-        return "fabric";
+        return "neoforge";
     }
 
     @Override
-    public boolean isModLoaded(String id) {
-        return FabricLoader.getInstance().isModLoaded(id);
+    public boolean isModLoaded(String modId) {
+        return ModList.get().isLoaded(modId);
     }
 
     @Override
     public void sendPayload(ServerPlayer player, CustomPacketPayload payload) {
-        ServerPlayNetworking.send(player, payload);
+        PacketDistributor.sendToPlayer(player, payload);
     }
 
     @Override
     public CreativeModeTab.Builder createCreativeModeTabBuilder() {
-        return FabricItemGroup.builder();
+        return CreativeModeTab.builder();
     }
 
     @Override
     public int getFireSpreadChance(BlockState state, BlockGetter blockGetter, BlockPos blockPos, Direction face) {
-        return FlammableBlockRegistry.getDefaultInstance().get(state.getBlock()).getSpreadChance();
+        return state.getFireSpreadSpeed(blockGetter, blockPos, face);
     }
 
     @Override
     public int getFireBurnChance(BlockState state, BlockGetter blockGetter, BlockPos blockPos, Direction face) {
-        return FlammableBlockRegistry.getDefaultInstance().get(state.getBlock()).getBurnChance();
+        return state.getFlammability(blockGetter, blockPos, face);
     }
 
     @Override
     public boolean canBurn(BlockState state) {
-        return FlammableBlockRegistry.getDefaultInstance().get(state.getBlock()).getBurnChance() > 0;
+        if(Blocks.FIRE instanceof FireBlock fireBlock) {
+            return fireBlock.getIgniteOdds(state) > 0;
+        } else {
+            return false;
+        }
     }
 
     @Override
     public void sendToPlayersTrackingEntity(Entity entity, CustomPacketPayload payload) {
-        for(ServerPlayer serverPlayer : PlayerLookup.tracking(entity)) {
-            XPlatInterface.INSTANCE.sendPayload(serverPlayer, payload);
-        }
+        PacketDistributor.sendToPlayersTrackingEntity(entity, payload);
     }
 }

@@ -211,7 +211,7 @@ public class PhlogisticFireBlock extends BaseFireBlock implements SimpleWaterlog
     protected void spread(Level world, BlockPos pos, RandomSource random, int age) {
         for(Direction direction : UPDATE_SHAPE_ORDER) {
             int spreadFactor = direction.getAxis() == Direction.Axis.Y ? 125 : 150;
-            this.trySpreadingFire(world, pos.relative(direction), spreadFactor, random, age);
+            this.trySpreadingFire(world, pos.relative(direction), direction.getOpposite(), spreadFactor, random, age);
         }
     }
 
@@ -290,7 +290,7 @@ public class PhlogisticFireBlock extends BaseFireBlock implements SimpleWaterlog
 
     @Override
     protected boolean canBurn(BlockState state) {
-        return this.getBurnChance(state) > 0;
+        return XPlatInterface.INSTANCE.canBurn(state);
     }
 
     protected boolean isValidSupport(BlockGetter world, BlockPos blockPos, Direction direction) {
@@ -326,24 +326,25 @@ public class PhlogisticFireBlock extends BaseFireBlock implements SimpleWaterlog
             int maxBurnChance = 0;
 
             for(Direction direction : Direction.values()) {
-                BlockState blockState = world.getBlockState(pos.relative(direction));
-                maxBurnChance = Math.max(this.getBurnChance(blockState), maxBurnChance);
+                BlockPos adjPos = pos.relative(direction);
+                BlockState blockState = world.getBlockState(adjPos);
+                maxBurnChance = Math.max(this.getBurnChance(blockState, world, adjPos, direction.getOpposite()), maxBurnChance);
             }
 
             return maxBurnChance;
         }
     }
 
-    private int getSpreadChance(BlockState state) {
-        return XPlatInterface.INSTANCE.getFireSpreadChance(state);
+    private int getSpreadChance(BlockState state, BlockGetter blockGetter, BlockPos blockPos, Direction face) {
+        return XPlatInterface.INSTANCE.getFireSpreadChance(state, blockGetter, blockPos, face);
     }
 
-    private int getBurnChance(BlockState state) {
-        return XPlatInterface.INSTANCE.getFireBurnChance(state);
+    private int getBurnChance(BlockState state, BlockGetter blockGetter, BlockPos blockPos, Direction face) {
+        return XPlatInterface.INSTANCE.getFireBurnChance(state, blockGetter, blockPos, face);
     }
 
-    private void trySpreadingFire(Level world, BlockPos pos, int spreadFactor, RandomSource random, int currentAge) {
-        int spreadChance = this.getSpreadChance(world.getBlockState(pos));
+    private void trySpreadingFire(Level world, BlockPos pos, Direction originDirection, int spreadFactor, RandomSource random, int currentAge) {
+        int spreadChance = this.getSpreadChance(world.getBlockState(pos), world, pos, originDirection);
         if (random.nextInt(spreadFactor) < spreadChance) {
             BlockState blockState = world.getBlockState(pos);
             if (random.nextInt(currentAge + 5) < 13) {

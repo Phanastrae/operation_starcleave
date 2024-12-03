@@ -28,6 +28,7 @@ public class OperationStarcleaveClientFabric implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        // client init
         OperationStarcleaveClient.init();
 
         // register clientside payloads
@@ -50,11 +51,15 @@ public class OperationStarcleaveClientFabric implements ClientModInitializer {
         // register shaders
         CoreShaderRegistrationCallback.EVENT.register(context -> OperationStarcleaveShaders.registerShaders(context::register));
 
-        // events
+
+
+        // on client stop
         ClientLifecycleEvents.CLIENT_STOPPING.register(OperationStarcleaveClient::onClientShutdown);
 
+        // client world tick start
         ClientTickEvents.START_WORLD_TICK.register(OperationStarcleaveClient::startLevelTick);
 
+        // render before entities
         WorldRenderEvents.BEFORE_ENTITIES.register(worldRenderContext -> OperationStarcleaveClient.renderBeforeEntities(
                 worldRenderContext.world(),
                 worldRenderContext.consumers(),
@@ -65,6 +70,7 @@ public class OperationStarcleaveClientFabric implements ClientModInitializer {
                 worldRenderContext.projectionMatrix()
         ));
 
+        // render after entities
         WorldRenderEvents.AFTER_ENTITIES.register(worldRenderContext -> OperationStarcleaveClient.renderAfterEntities(
                 worldRenderContext.world(),
                 worldRenderContext.matrixStack(),
@@ -73,8 +79,10 @@ public class OperationStarcleaveClientFabric implements ClientModInitializer {
                 worldRenderContext.camera()
         ));
 
+        // render before block outline
         WorldRenderEvents.BEFORE_BLOCK_OUTLINE.register((worldRenderContext, hitResult) -> OperationStarcleaveClient.renderBeforeBlockOutline(worldRenderContext.blockOutlines(), worldRenderContext.consumers(), worldRenderContext.camera(), worldRenderContext.matrixStack()));
 
+        // invalidate render state
         InvalidateRenderStateCallback.EVENT.register(OperationStarcleaveClient::invalidateRenderState);
     }
 

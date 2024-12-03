@@ -27,6 +27,7 @@ import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes
 import phanastrae.operation_starcleave.recipe.OperationStarcleaveRecipeSerializers;
 import phanastrae.operation_starcleave.recipe.OperationStarcleaveRecipeTypes;
 import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
+import phanastrae.operation_starcleave.world.OperationStarcleaveGameRules;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 import phanastrae.operation_starcleave.world.firmament.FirmamentRegion;
 
@@ -34,10 +35,11 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class OperationStarcleave {
-    public static final Logger LOGGER = LoggerFactory.getLogger("operation_starcleave");
+	public static final String MOD_ID = "operation_starcleave";
+    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     public static ResourceLocation id(String path) {
-    	return ResourceLocation.fromNamespaceAndPath("operation_starcleave", path);
+    	return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
 	}
 
 	public static void initRegistryEntries(RegistryListenerAdder rla) {
@@ -79,6 +81,9 @@ public class OperationStarcleave {
 
 		// cauldron interactions
 		StarbleachCauldronBlock.init();
+
+		// game rules
+		OperationStarcleaveGameRules.init();
 	}
 
 	public static void startLevelTick(Level level) {

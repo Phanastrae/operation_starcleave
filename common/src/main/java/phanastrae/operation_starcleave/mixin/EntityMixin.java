@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
@@ -80,14 +79,7 @@ public abstract class EntityMixin implements EntityDuck {
 
                 EntityPhlogisticFirePayload payload = new EntityPhlogisticFirePayload(entity.getId(), onPhlogisticFire);
 
-                for (ServerPlayer player : XPlatInterface.INSTANCE.getTracking(entity)) {
-                    if(player != entity) {
-                        XPlatInterface.INSTANCE.sendPayload(player, payload);
-                    }
-                }
-                if(entity instanceof ServerPlayer player) {
-                    XPlatInterface.INSTANCE.sendPayload(player, payload);
-                }
+                XPlatInterface.INSTANCE.sendToPlayersTrackingEntity(entity, payload);
             }
         }
     }

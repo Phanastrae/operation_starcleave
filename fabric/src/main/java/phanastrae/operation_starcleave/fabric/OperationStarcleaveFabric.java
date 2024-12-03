@@ -23,7 +23,6 @@ import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
 import phanastrae.operation_starcleave.entity.effect.OperationStarcleaveStatusEffects;
 import phanastrae.operation_starcleave.item.OperationStarcleaveCreativeModeTabs;
 import phanastrae.operation_starcleave.network.packet.OperationStarcleavePayloads;
-import phanastrae.operation_starcleave.world.OperationStarcleaveGameRules;
 import phanastrae.operation_starcleave.world.firmament.FirmamentWatcher;
 
 import java.util.Collection;
@@ -57,9 +56,7 @@ public class OperationStarcleaveFabric implements ModInitializer {
         // entity attributes
         OperationStarcleaveEntityTypes.registerEntityAttributes((FabricDefaultAttributeRegistry::register));
 
-        // game rules
-        // TODO work out how to do these on neoforge
-        OperationStarcleaveGameRules.init();
+
 
         // world tick start
         ServerTickEvents.START_WORLD_TICK.register((OperationStarcleave::startLevelTick));
