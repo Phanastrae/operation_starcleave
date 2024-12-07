@@ -6,12 +6,15 @@ plugins {
 dependencies {
 }
 
+// set commonPath based on the current path, to allow for multi-mod dev env setups
+String commonPath = project.path - ':neoforge' + ':common'
+
 neoForge {
     version = neoforge_version
 
-    def at = project(':common').file('src/main/resources/META-INF/accesstransformer.cfg')
+    def at = project(commonPath).file('src/main/resources/META-INF/accesstransformer.cfg')
     if (at.exists()) {
-        accessTransformers = project(':common').files('src/main/resources/META-INF/accesstransformer.cfg')
+        accessTransformers = project(commonPath).files('src/main/resources/META-INF/accesstransformer.cfg')
     }
 
     parchment {
