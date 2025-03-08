@@ -1,4 +1,4 @@
-package phanastrae.operation_starcleave.client.render.entity.feature;
+package phanastrae.operation_starcleave.client.render.entity.layers;
 
 import phanastrae.operation_starcleave.entity.mob.SubcaelicDuxEntity;
 import phanastrae.operation_starcleave.client.render.entity.model.SubcaelicDuxEntityModel;
@@ -17,16 +17,16 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 
-public class SubcaelicDuxFeatureRenderer<T extends SubcaelicDuxEntity, M extends SubcaelicDuxEntityModel<T>> extends RenderLayer<T, M> {
+public class SubcaelicDuxLayer<T extends SubcaelicDuxEntity, M extends SubcaelicDuxEntityModel<T>> extends RenderLayer<T, M> {
     private final ResourceLocation texture;
-    private final SubcaelicDuxFeatureRenderer.AnimationAngleAdjuster<T> animationAngleAdjuster;
-    private final SubcaelicDuxFeatureRenderer.ModelPartVisibility<T, M> modelPartVisibility;
+    private final SubcaelicDuxLayer.AnimationAngleAdjuster<T> animationAngleAdjuster;
+    private final SubcaelicDuxLayer.ModelPartVisibility<T, M> modelPartVisibility;
 
-    public SubcaelicDuxFeatureRenderer(
+    public SubcaelicDuxLayer(
             RenderLayerParent<T, M> context,
             ResourceLocation texture,
-            SubcaelicDuxFeatureRenderer.AnimationAngleAdjuster<T> animationAngleAdjuster,
-            SubcaelicDuxFeatureRenderer.ModelPartVisibility<T, M> modelPartVisibility
+            SubcaelicDuxLayer.AnimationAngleAdjuster<T> animationAngleAdjuster,
+            SubcaelicDuxLayer.ModelPartVisibility<T, M> modelPartVisibility
     ) {
         super(context);
         this.texture = texture;

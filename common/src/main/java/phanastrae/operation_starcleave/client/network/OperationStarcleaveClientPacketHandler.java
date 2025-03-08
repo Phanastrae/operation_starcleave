@@ -16,8 +16,8 @@ import phanastrae.operation_starcleave.client.render.firmament.FirmamentTextureS
 import phanastrae.operation_starcleave.client.services.XPlatClientInterface;
 import phanastrae.operation_starcleave.client.world.firmament.ClientFirmamentRegionManager;
 import phanastrae.operation_starcleave.client.world.firmament.FirmamentDamageGlowActor;
-import phanastrae.operation_starcleave.duck.EntityDuck;
-import phanastrae.operation_starcleave.duck.LevelDuck;
+import phanastrae.operation_starcleave.duck.LevelDuckInterface;
+import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityAttachment;
 import phanastrae.operation_starcleave.entity.projectile.StarbleachedPearlEntity;
 import phanastrae.operation_starcleave.network.packet.*;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
@@ -35,7 +35,7 @@ public class OperationStarcleaveClientPacketHandler {
 
     public static void receiveFirmamentRegionData(FirmamentRegionDataPayload payload, Player player) {
         Level world = player.level();
-        Firmament firmament = Firmament.fromWorld(world);
+        Firmament firmament = Firmament.fromLevel(world);
         if(firmament != null) {
             FirmamentRegion firmamentRegion = firmament.getFirmamentRegion(payload.regionId());
             if(firmamentRegion == null) {
@@ -63,7 +63,7 @@ public class OperationStarcleaveClientPacketHandler {
 
     public static void updateFirmamentSubRegion(UpdateFirmamentSubRegionPayload payload, Player player) {
         Level world = player.level();
-        Firmament firmament = Firmament.fromWorld(world);
+        Firmament firmament = Firmament.fromLevel(world);
         if(firmament != null) {
             FirmamentSubRegion firmamentSubRegion = firmament.getSubRegionFromId(payload.id());
 
@@ -76,7 +76,7 @@ public class OperationStarcleaveClientPacketHandler {
     }
 
     public static void unloadFirmamentRegion(UnloadFirmamentRegionPayload payload, Player player) {
-        Firmament firmament = Firmament.fromWorld(player.level());
+        Firmament firmament = Firmament.fromLevel(player.level());
         if(firmament != null) {
             if(firmament.getFirmamentRegionManager() instanceof ClientFirmamentRegionManager clientFirmamentRegionManager) {
                 clientFirmamentRegionManager.unloadRegion(payload.regionId());
@@ -86,7 +86,7 @@ public class OperationStarcleaveClientPacketHandler {
 
     public static void onFirmamentCleaved(FirmamentCleavedPayload payload, Player player) {
         Level world = player.level();
-        ((LevelDuck)world).operation_starcleave$setCleavingFlashTicksLeft(24);
+        ((LevelDuckInterface)world).operation_starcleave$setCleavingFlashTicksLeft(24);
         Vec3 pos = new Vec3(payload.x(), world.getMaxBuildHeight() + 16, payload.z());
         world.playLocalSound(
                 pos.x,
@@ -102,7 +102,7 @@ public class OperationStarcleaveClientPacketHandler {
         world.addAlwaysVisibleParticle(particleEffect, pos.x, pos.y - 1, pos.z, 0, 0, 0);
 
         ScreenShakeManager.getInstance().setShakeAmount(3);
-        Firmament firmament = Firmament.fromWorld(world);
+        Firmament firmament = Firmament.fromLevel(world);
         if(firmament != null) {
             firmament.addActor(new FirmamentDamageGlowActor(firmament, (int)pos.x, (int)pos.z));
         }
@@ -123,7 +123,23 @@ public class OperationStarcleaveClientPacketHandler {
         Level world = player.level();
         Entity entity = world.getEntity(payload.id());
         if (entity != null) {
-            ((EntityDuck)entity).operation_starcleave$setOnPhlogisticFire(payload.onPhlogisticFire());
+            OperationStarcleaveEntityAttachment.fromEntity(entity).setOnPhlogisticFire(payload.onPhlogisticFire());
+        }
+    }
+
+    public static void handleEntityPegasusGliding(EntityPegasusGlidingPayload payload, Player player) {
+        Level world = player.level();
+        Entity entity = world.getEntity(payload.id());
+        if (entity != null) {
+            OperationStarcleaveEntityAttachment.fromEntity(entity).setPegasusGliding(payload.pegasusGliding());
+        }
+    }
+
+    public static void handleEntityPegasusFlying(EntityPegasusFlyingPayload payload, Player player) {
+        Level world = player.level();
+        Entity entity = world.getEntity(payload.id());
+        if (entity != null) {
+            OperationStarcleaveEntityAttachment.fromEntity(entity).setPegasusFlying(payload.pegasusFlying());
         }
     }
 }

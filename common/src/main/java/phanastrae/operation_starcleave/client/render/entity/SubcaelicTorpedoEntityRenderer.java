@@ -12,7 +12,7 @@ import net.minecraft.util.RandomSource;
 import org.joml.Matrix4f;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.client.render.OperationStarcleaveRenderLayers;
-import phanastrae.operation_starcleave.client.render.entity.feature.SubcaelicTorpedoOverlayFeatureRenderer;
+import phanastrae.operation_starcleave.client.render.entity.layers.SubcaelicTorpedoOverlayLayer;
 import phanastrae.operation_starcleave.client.render.entity.model.OperationStarcleaveEntityModelLayers;
 import phanastrae.operation_starcleave.client.render.entity.model.SubcaelicTorpedoEntityModel;
 import phanastrae.operation_starcleave.entity.mob.SubcaelicTorpedoEntity;
@@ -24,7 +24,7 @@ public class SubcaelicTorpedoEntityRenderer extends MobRenderer<SubcaelicTorpedo
 
     public SubcaelicTorpedoEntityRenderer(EntityRendererProvider.Context context) {
         super(context, new SubcaelicTorpedoEntityModel<>(context.bakeLayer(OperationStarcleaveEntityModelLayers.SUBCAELIC_TORPEDO)), 0.7f);
-        this.addLayer(new SubcaelicTorpedoOverlayFeatureRenderer<>(this, context.getModelSet()));
+        this.addLayer(new SubcaelicTorpedoOverlayLayer<>(this, context.getModelSet()));
     }
 
     @Override

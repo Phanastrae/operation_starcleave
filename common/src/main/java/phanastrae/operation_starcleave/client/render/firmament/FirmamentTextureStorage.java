@@ -51,7 +51,7 @@ public class FirmamentTextureStorage {
 
 
         if(world != null) {
-            Firmament firmament = Firmament.fromWorld(world);
+            Firmament firmament = Firmament.fromLevel(world);
             if(firmament != null) {
                 rebuildQueued(firmament, world);
             }
@@ -204,7 +204,7 @@ public class FirmamentTextureStorage {
 
         FirmamentRegion region = null;
         if(regionPos != null) {
-            Firmament firmament = Firmament.fromWorld(world);
+            Firmament firmament = Firmament.fromLevel(world);
             if(firmament != null) {
                 region = firmament.getFirmamentRegion(regionPos);
             }

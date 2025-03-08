@@ -9,9 +9,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import phanastrae.operation_starcleave.duck.EntityDuck;
-import phanastrae.operation_starcleave.network.packet.EntityPhlogisticFirePayload;
-import phanastrae.operation_starcleave.services.XPlatInterface;
+import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityAttachment;
 
 @Mixin(ServerEntity.class)
 public class ServerEntityMixin {
@@ -19,10 +17,6 @@ public class ServerEntityMixin {
 
     @Inject(method = "addPairing", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerGamePacketListenerImpl;send(Lnet/minecraft/network/protocol/Packet;)V", shift = At.Shift.AFTER))
     private void operation_starcleave$sendBonusPackets(ServerPlayer player, CallbackInfo ci) {
-        if(this.entity instanceof EntityDuck opsce) {
-            if(opsce.operation_starcleave$getPhlogisticFireTicks() > 0) {
-                XPlatInterface.INSTANCE.sendPayload(player, new EntityPhlogisticFirePayload(this.entity.getId(), true));
-            }
-        }
+        OperationStarcleaveEntityAttachment.fromEntity(this.entity).sendPairingData(player);
     }
 }

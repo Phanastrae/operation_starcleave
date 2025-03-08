@@ -81,7 +81,7 @@ public class FirmamentPostShader {
         if(world == null) {
             return;
         }
-        Firmament firmament = Firmament.fromWorld(world);
+        Firmament firmament = Firmament.fromLevel(world);
         if(firmament == null) {
             return;
         }

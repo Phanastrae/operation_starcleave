@@ -20,7 +20,7 @@ public class DebugScreenOverlayMixin {
     private void operation_starcleave$targetedFirmamentTile(CallbackInfoReturnable<List<String>> cir, long l, long m, long n, long o, List list) {
         Minecraft client = Minecraft.getInstance();
         if(!client.showOnlyReducedInfo()) {
-            Firmament firmament = Firmament.fromWorld(client.level);
+            Firmament firmament = Firmament.fromLevel(client.level);
             if(firmament == null) return;
 
             FirmamentTilePos tile = OperationStarcleaveClient.firmamentOutlineRenderer.hitTile;

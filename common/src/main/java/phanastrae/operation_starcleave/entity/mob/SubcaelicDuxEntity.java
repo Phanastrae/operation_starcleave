@@ -130,7 +130,7 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
         }
 
         if(this.level().isClientSide) {
-            Firmament firmament = Firmament.fromWorld(this.level());
+            Firmament firmament = Firmament.fromLevel(this.level());
             if(firmament != null) {
                 boolean starlit = StellarFarmlandBlock.isStarlit(this.level(), this.blockPosition(), firmament);
                 if(starlit) {
@@ -180,7 +180,7 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
 
     @Override
     protected void customServerAiStep() {
-        Firmament firmament = Firmament.fromWorld(this.level());
+        Firmament firmament = Firmament.fromLevel(this.level());
         if(firmament != null) {
             boolean starlit = StellarFarmlandBlock.isStarlit(this.level(), this.blockPosition(), firmament);
             if(starlit) {
@@ -461,7 +461,7 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
                 z = target.getZ();
             }
             int topY = world.getHeight(Heightmap.Types.MOTION_BLOCKING, (int)x, (int)z);
-            Firmament firmament = Firmament.fromWorld(world);
+            Firmament firmament = Firmament.fromLevel(world);
             int goalHeight = topY + 80;
             if(firmament != null) {
                 int maxHeight = firmament.getY() - 12;

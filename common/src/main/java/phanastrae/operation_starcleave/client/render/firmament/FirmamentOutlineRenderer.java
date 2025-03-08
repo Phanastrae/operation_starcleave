@@ -46,7 +46,7 @@ public class FirmamentOutlineRenderer {
         if(world == null) {
             return null;
         }
-        Firmament firmament = Firmament.fromWorld(world);
+        Firmament firmament = Firmament.fromLevel(world);
         if(firmament == null) {
             return null;
         }

@@ -15,7 +15,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 import phanastrae.operation_starcleave.block.PhlogisticFireBlock;
-import phanastrae.operation_starcleave.duck.EntityDuck;
+import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityAttachment;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypeTags;
 
 public class PhlogistonSacItem extends Item {
@@ -48,7 +48,7 @@ public class PhlogistonSacItem extends Item {
             Level world = entity.level();
             this.playUseSound(world, entity.position());
             if (!user.level().isClientSide) {
-                ((EntityDuck) entity).operation_starcleave$setOnPhlogisticFireFor(5);
+                OperationStarcleaveEntityAttachment.fromEntity(entity).setOnPhlogisticFireFor(5);
                 world.gameEvent(user, GameEvent.ENTITY_ACTION, entity.position());
                 this.empty(stack);
             }

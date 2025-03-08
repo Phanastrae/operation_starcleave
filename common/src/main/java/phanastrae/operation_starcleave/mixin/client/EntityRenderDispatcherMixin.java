@@ -15,16 +15,16 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import phanastrae.operation_starcleave.OperationStarcleave;
-import phanastrae.operation_starcleave.duck.EntityDuck;
+import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityAttachment;
 
 @Mixin(EntityRenderDispatcher.class)
 public class EntityRenderDispatcherMixin {
     private static final Material PHLOGISTIC_FIRE_0 = new Material(TextureAtlas.LOCATION_BLOCKS, OperationStarcleave.id("block/phlogistic_fire_0"));
     private static final Material PHLOGISTIC_FIRE_1 = new Material(TextureAtlas.LOCATION_BLOCKS, OperationStarcleave.id("block/phlogistic_fire_1"));
 
-    @Inject(method = "renderFlame", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;pushPose()V", ordinal = 0, shift = At.Shift.BEFORE))
+    @Inject(method = "renderFlame", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;pushPose()V", ordinal = 0))
     private void operation_starcleave$renderPhlogisticFire(PoseStack matrices, MultiBufferSource vertexConsumers, Entity entity, Quaternionf rotation, CallbackInfo ci, @Local(ordinal = 0) LocalRef<TextureAtlasSprite> spriteRefFire0, @Local(ordinal = 1) LocalRef<TextureAtlasSprite> spriteRefFire1) {
-        if(((EntityDuck)entity).operation_starcleave$isOnPhlogisticFire()) {
+        if(OperationStarcleaveEntityAttachment.fromEntity(entity).isOnPhlogisticFire()) {
             spriteRefFire0.set(PHLOGISTIC_FIRE_0.sprite());
             spriteRefFire1.set(PHLOGISTIC_FIRE_1.sprite());
         }

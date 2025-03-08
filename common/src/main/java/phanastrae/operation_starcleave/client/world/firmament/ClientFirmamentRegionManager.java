@@ -54,7 +54,7 @@ public class ClientFirmamentRegionManager extends FirmamentRegionManager {
         int x = rx << FirmamentRegion.REGION_SIZE_BITS;
         int z = rz << FirmamentRegion.REGION_SIZE_BITS;
 
-        FirmamentRegion firmamentRegion = new FirmamentRegion(Firmament.fromWorld(this.clientWorld), x, z);
+        FirmamentRegion firmamentRegion = new FirmamentRegion(Firmament.fromLevel(this.clientWorld), x, z);
 
         FirmamentRegionHolder firmamentRegionHolder = new FirmamentRegionHolder(firmamentRegion);
         firmamentRegionHolder.recordAccess();

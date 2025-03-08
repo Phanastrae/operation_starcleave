@@ -18,7 +18,7 @@ public class ServerChunkCacheMixin {
 
     @Inject(method = "save", at = @At("RETURN"))
     private void operation_starcleave$saveFirmament(boolean flush, CallbackInfo ci) {
-        Firmament firmament = Firmament.fromWorld(this.level);
+        Firmament firmament = Firmament.fromLevel(this.level);
         if(firmament != null) {
             if(firmament.getFirmamentRegionManager() instanceof ServerFirmamentRegionManager serverFirmamentRegionManager) {
                 serverFirmamentRegionManager.saveAll();

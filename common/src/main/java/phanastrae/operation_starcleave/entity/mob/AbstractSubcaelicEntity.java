@@ -147,7 +147,7 @@ public abstract class AbstractSubcaelicEntity extends Mob implements Enemy {
 
                 double lerpFactor = getLerpFactor(movementSpeed);
                 double dragFactor = 0.98;
-                Firmament firmament = Firmament.fromWorld(this.entity.level());
+                Firmament firmament = Firmament.fromLevel(this.entity.level());
                 if(this.entity.isAlive() && firmament != null) {
                     int damage = firmament.getDamage(this.entity.getBlockX(), this.entity.getBlockZ());
                     dragFactor *= 0.7 + 0.3 * damage/7.0;
@@ -294,7 +294,7 @@ public abstract class AbstractSubcaelicEntity extends Mob implements Enemy {
             }
             double dot = offset.dot(this.entity.getViewVector(1F));
 
-            Firmament firmament = Firmament.fromWorld(this.entity.level());
+            Firmament firmament = Firmament.fromLevel(this.entity.level());
             int damage = firmament == null ? 0 : firmament.getDamage((int)target.x(), (int)target.z());
 
             double dotFactor = 0.5 - 0.5 * dot;

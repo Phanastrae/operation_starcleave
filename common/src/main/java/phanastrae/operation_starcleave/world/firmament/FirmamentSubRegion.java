@@ -324,7 +324,7 @@ public class FirmamentSubRegion implements FirmamentAccess {
     public void flushUpdates() {
         if(this.pendingClientUpdate) {
             this.pendingClientUpdate = false;
-            Level world = this.firmamentRegion.firmament.getWorld();
+            Level world = this.firmamentRegion.firmament.getLevel();
             if(world instanceof ServerLevel serverWorld) {
                 SubRegionPos subRegionPos = SubRegionPos.fromWorldCoords(this.x, this.z);
                 RegionPos regionPos = RegionPos.fromSubRegion(subRegionPos);

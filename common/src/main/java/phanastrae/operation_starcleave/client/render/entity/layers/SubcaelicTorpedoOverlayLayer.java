@@ -1,4 +1,4 @@
-package phanastrae.operation_starcleave.client.render.entity.feature;
+package phanastrae.operation_starcleave.client.render.entity.layers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -19,11 +19,11 @@ import phanastrae.operation_starcleave.client.render.entity.model.OperationStarc
 import phanastrae.operation_starcleave.client.render.entity.model.SubcaelicTorpedoEntityModel;
 import phanastrae.operation_starcleave.entity.mob.SubcaelicTorpedoEntity;
 
-public class SubcaelicTorpedoOverlayFeatureRenderer<T extends SubcaelicTorpedoEntity, M extends SubcaelicTorpedoEntityModel<T>> extends RenderLayer<T, M> {
+public class SubcaelicTorpedoOverlayLayer<T extends SubcaelicTorpedoEntity, M extends SubcaelicTorpedoEntityModel<T>> extends RenderLayer<T, M> {
     private static final ResourceLocation TEXTURE = OperationStarcleave.id("textures/entity/subcaelic_torpedo/subcaelic_torpedo_overlay.png");
     private final EntityModel<T> model;
 
-    public SubcaelicTorpedoOverlayFeatureRenderer(RenderLayerParent<T, M> context, EntityModelSet loader) {
+    public SubcaelicTorpedoOverlayLayer(RenderLayerParent<T, M> context, EntityModelSet loader) {
         super(context);
         this.model = new SubcaelicTorpedoEntityModel<>(loader.bakeLayer(OperationStarcleaveEntityModelLayers.SUBCAELIC_TORPEDO_OVERLAY));
     }

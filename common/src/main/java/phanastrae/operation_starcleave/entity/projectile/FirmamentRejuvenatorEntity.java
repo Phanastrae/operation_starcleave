@@ -91,7 +91,7 @@ public class FirmamentRejuvenatorEntity extends ThrowableItemProjectile {
             float firmHeight = this.level().getMaxBuildHeight() + 16;
             double dy = this.position().y - firmHeight;
             if(dy*dy < 1) {
-                Firmament firmament = Firmament.fromWorld(this.level());
+                Firmament firmament = Firmament.fromLevel(this.level());
                 if(firmament != null) {
                     int x = this.getBlockX();
                     int z = this.getBlockZ();

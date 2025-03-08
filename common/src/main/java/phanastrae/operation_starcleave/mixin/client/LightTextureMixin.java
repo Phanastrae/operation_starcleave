@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import phanastrae.operation_starcleave.duck.LevelDuck;
+import phanastrae.operation_starcleave.duck.LevelDuckInterface;
 
 @Mixin(LightTexture.class)
 public class LightTextureMixin {
@@ -18,7 +18,7 @@ public class LightTextureMixin {
     @ModifyVariable(method = "updateLightTexture", at = @At(value = "STORE"), ordinal = 1)
     private float operation_starcleave$cleavingFlash(float value) {
         ClientLevel clientWorld = this.minecraft.level;
-        if(((LevelDuck)clientWorld).operation_starcleave$getCleavingFlashTicksLeft() > 0) {
+        if(((LevelDuckInterface)clientWorld).operation_starcleave$getCleavingFlashTicksLeft() > 0) {
             return 1.0F;
         }
         return value;

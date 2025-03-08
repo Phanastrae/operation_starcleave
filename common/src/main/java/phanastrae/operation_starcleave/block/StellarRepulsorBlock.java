@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
-import phanastrae.operation_starcleave.duck.EntityDuck;
+import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityAttachment;
 
 public class StellarRepulsorBlock extends Block {
     public static final MapCodec<StellarRepulsorBlock> CODEC = simpleCodec(StellarRepulsorBlock::new);
@@ -74,21 +74,19 @@ public class StellarRepulsorBlock extends Block {
     }
 
     public static void launch(Entity entity) {
-        if(!(entity instanceof EntityDuck operationStarcleaveEntity)) {
-            return;
-        }
         if(!entity.onGround()) {
             return;
         }
+        OperationStarcleaveEntityAttachment osea = OperationStarcleaveEntityAttachment.fromEntity(entity);
 
         // short cooldown between uses
         long worldTime = entity.level().getGameTime();
-        long lastUseTime = operationStarcleaveEntity.operation_starcleave$getLastStellarRepulsorUse();
+        long lastUseTime = osea.getLastStellarRepulsorUse();
         long dt = worldTime - lastUseTime;
         if(0 <= dt && dt < 2) {
             return;
         }
-        operationStarcleaveEntity.operation_starcleave$setLastStellarRepulsorUse(worldTime);
+        osea.setLastStellarRepulsorUse(worldTime);
 
         if(entity.isControlledByLocalInstance()) {
             Vec3 vel = entity.getDeltaMovement();

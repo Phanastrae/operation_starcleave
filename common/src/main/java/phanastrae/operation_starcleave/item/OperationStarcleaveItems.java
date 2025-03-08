@@ -54,6 +54,12 @@ public class OperationStarcleaveItems {
     public static final Item BLESSED_CLOTH = new Item(settings());
     public static final Item HOLLOWED_SAC = new HollowedSacItem(settings());
     public static final Item PHLOGISTON_SAC = new PhlogistonSacItem(settings());
+    public static final Item BISMUTH_PEGASUS_ARMOR = new AnimalArmorItem(
+            OperationStarcleaveArmorMaterials.BISMUTH_ENTRY,
+            AnimalArmorItem.BodyType.EQUESTRIAN,
+            false,
+            settings().stacksTo(1)
+    );
     public static final Item FIRMAMENT_REJUVENATOR = new FirmamentRejuvenatorItem(settings(8, RARE));
     public static final Item FIRMAMENT_MANIPULATOR = new FirmamentManipulatorItem(settings(1, EPIC));
     public static final Item STARCLEAVER_GOLEM_SPAWN_EGG = spawnEggItem(OperationStarcleaveEntityTypes.STARCLEAVER_GOLEM, 0x292725, 0x61EDDF);
@@ -104,6 +110,7 @@ public class OperationStarcleaveItems {
         rwt.accept("blessed_cloth", BLESSED_CLOTH);
         rwt.accept("hollowed_sac", HOLLOWED_SAC);
         rwt.accept("phlogiston_sac", PHLOGISTON_SAC);
+        rwt.accept("bismuth_pegasus_armor", BISMUTH_PEGASUS_ARMOR);
         rwt.accept("firmament_rejuvenator", FIRMAMENT_REJUVENATOR);
         rwt.accept("firmament_manipulator", FIRMAMENT_MANIPULATOR);
 

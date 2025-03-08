@@ -18,7 +18,7 @@ import phanastrae.operation_starcleave.client.render.firmament.FirmamentActorRen
 import phanastrae.operation_starcleave.client.render.firmament.FirmamentOutlineRenderer;
 import phanastrae.operation_starcleave.client.render.firmament.FirmamentRenderer;
 import phanastrae.operation_starcleave.client.render.firmament.FirmamentTextureStorage;
-import phanastrae.operation_starcleave.duck.LevelDuck;
+import phanastrae.operation_starcleave.duck.LevelDuckInterface;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 
 public class OperationStarcleaveClient {
@@ -44,7 +44,7 @@ public class OperationStarcleaveClient {
 	}
 
 	public static void renderAfterEntities(Level level, PoseStack matrixStack, MultiBufferSource vertexConsumers, DeltaTracker deltaTracker, Camera camera) {
-		Firmament firmament = Firmament.fromWorld(level);
+		Firmament firmament = Firmament.fromLevel(level);
 		if(firmament != null) {
 			firmament.forEachActor(firmamentActor -> {
 				if(firmamentActor instanceof FirmamentActorRenderable far) {
@@ -62,7 +62,7 @@ public class OperationStarcleaveClient {
 	}
 
 	public static void startLevelTick(Level level) {
-		LevelDuck opscw = (LevelDuck)level;
+		LevelDuckInterface opscw = (LevelDuckInterface)level;
 		if(opscw.operation_starcleave$getCleavingFlashTicksLeft() > 0) {
 			opscw.operation_starcleave$setCleavingFlashTicksLeft(opscw.operation_starcleave$getCleavingFlashTicksLeft() - 1);
 		}
@@ -74,7 +74,7 @@ public class OperationStarcleaveClient {
 			//profiler.push("starcleave_fracture");
 			//Firmament.fromWorld(world).tick();
 			//profiler.pop();
-			Firmament firmament = Firmament.fromWorld(level);
+			Firmament firmament = Firmament.fromLevel(level);
 			if(firmament != null) {
 				firmament.getFirmamentRegionManager().tick();
 				firmament.manageActors();

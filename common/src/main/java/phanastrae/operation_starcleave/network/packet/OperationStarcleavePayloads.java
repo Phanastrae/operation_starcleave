@@ -23,6 +23,8 @@ public class OperationStarcleavePayloads {
         helper.registerS2C(FirmamentCleavedPayload.PACKET_ID, FirmamentCleavedPayload.PACKET_CODEC, OperationStarcleaveClientPacketHandler::onFirmamentCleaved);
         helper.registerS2C(StarbleachedPearlLaunchPayload.PACKET_ID, StarbleachedPearlLaunchPayload.PACKET_CODEC, OperationStarcleaveClientPacketHandler::onStarbleachedPearlLaunch);
         helper.registerS2C(EntityPhlogisticFirePayload.PACKET_ID, EntityPhlogisticFirePayload.PACKET_CODEC, OperationStarcleaveClientPacketHandler::handleEntityPhlogisticFire);
+        helper.registerS2C(EntityPegasusGlidingPayload.PACKET_ID, EntityPegasusGlidingPayload.PACKET_CODEC, OperationStarcleaveClientPacketHandler::handleEntityPegasusGliding);
+        helper.registerS2C(EntityPegasusFlyingPayload.PACKET_ID, EntityPegasusFlyingPayload.PACKET_CODEC, OperationStarcleaveClientPacketHandler::handleEntityPegasusFlying);
 
         // c2s
         helper.registerC2S(AttackFirmamentTilePayload.PACKET_ID, AttackFirmamentTilePayload.PACKET_CODEC, OperationStarcleaveServerPacketHandler::attackFirmamentTile);

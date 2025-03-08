@@ -42,7 +42,7 @@ public class FirmamentRegionHolder {
     }
 
     public void recordAccess() {
-        this.lastAccessTime = firmamentRegion.firmament.getWorld().getGameTime();
+        this.lastAccessTime = firmamentRegion.firmament.getLevel().getGameTime();
     }
 
     public long getTimeSinceLastAccess(long currentTime) {

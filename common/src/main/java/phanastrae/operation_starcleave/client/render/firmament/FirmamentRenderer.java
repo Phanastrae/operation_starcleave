@@ -236,7 +236,7 @@ public class FirmamentRenderer {
 
     public static void doRender(Level level, MultiBufferSource vertexConsumerProvider, PoseStack matrixStack, Camera camera, boolean debugMode_General) {
         // TODO tidy up, this is mostly unused now
-        Firmament firmament = Firmament.fromWorld(level);
+        Firmament firmament = Firmament.fromLevel(level);
         if(firmament == null) return;
 
         Minecraft client = Minecraft.getInstance();
@@ -384,7 +384,7 @@ public class FirmamentRenderer {
         int currentTexID = RenderSystem.getShaderTexture(0);
         int firmamentSkyTexID = firmamentFrameBuffer.getColorTextureId();
 
-        Firmament firmament = Firmament.fromWorld(level);
+        Firmament firmament = Firmament.fromLevel(level);
         if(firmament == null) return;
         int height = firmament.getY();
 

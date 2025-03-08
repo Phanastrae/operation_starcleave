@@ -82,7 +82,7 @@ public class LevelRendererMixin implements LevelRendererDuck {
     @Inject(method = "renderSnowAndRain", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/world/level/Level;getHeight(Lnet/minecraft/world/level/levelgen/Heightmap$Types;II)I", shift = At.Shift.AFTER))
     private void operation_starcleave$blockPrecipitationRender(CallbackInfo ci, @Local(ordinal = 0) BlockPos.MutableBlockPos mutable, @Local(ordinal = 8) LocalIntRef refTopY) {
         Level world = this.minecraft.level;
-        Firmament firmament = Firmament.fromWorld(world);
+        Firmament firmament = Firmament.fromLevel(world);
         if(firmament == null) return;
 
         int damage = firmament.getDamage(mutable.getX(), mutable.getZ());
@@ -95,7 +95,7 @@ public class LevelRendererMixin implements LevelRendererDuck {
     @Inject(method = "tickRain", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/world/level/LevelReader;getHeightmapPos(Lnet/minecraft/world/level/levelgen/Heightmap$Types;Lnet/minecraft/core/BlockPos;)Lnet/minecraft/core/BlockPos;", shift = At.Shift.AFTER))
     private void operation_starcleave$blockRainSplash(CallbackInfo ci, @Local(ordinal = 2) LocalRef<BlockPos> refTopPosition) {
         Level world = this.minecraft.level;
-        Firmament firmament = Firmament.fromWorld(world);
+        Firmament firmament = Firmament.fromLevel(world);
         if(firmament == null) return;
 
         BlockPos topPos = refTopPosition.get();

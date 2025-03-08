@@ -8,7 +8,6 @@ import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -20,7 +19,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
-import phanastrae.operation_starcleave.entity.effect.OperationStarcleaveStatusEffects;
 import phanastrae.operation_starcleave.item.OperationStarcleaveCreativeModeTabs;
 import phanastrae.operation_starcleave.network.packet.OperationStarcleavePayloads;
 
@@ -32,14 +30,16 @@ public class OperationStarcleaveFabric implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        // mob effect registry
-        OperationStarcleaveStatusEffects.init((name, mobEffect) -> Registry.registerForHolder(BuiltInRegistries.MOB_EFFECT, OperationStarcleave.id(name), mobEffect));
-
         // init registry entries
         OperationStarcleave.initRegistryEntries(new OperationStarcleave.RegistryListenerAdder() {
             @Override
             public <T> void addRegistryListener(Registry<T> registry, Consumer<BiConsumer<ResourceLocation, T>> source) {
                 source.accept((rl, t) -> Registry.register(registry, rl, t));
+            }
+
+            @Override
+            public <T> void addHolderRegistryListener(Registry<T> registry, Consumer<OperationStarcleave.HolderRegisterHelper<T>> source) {
+                source.accept((name, t) -> Registry.registerForHolder(registry, OperationStarcleave.id(name), t));
             }
         });
 

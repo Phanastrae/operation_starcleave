@@ -41,7 +41,7 @@ public class FirmamentManipulatorItem extends Item {
 
 
         if(!world.isClientSide) {
-            Firmament firmament = Firmament.fromWorld(world);
+            Firmament firmament = Firmament.fromLevel(world);
             if(firmament == null) {
                 return super.use(world, user, hand);
             }
@@ -85,7 +85,7 @@ public class FirmamentManipulatorItem extends Item {
     }
 
     public static void fractureFirmament(Firmament firmament, int x, int z, RandomSource random) {
-        if(firmament.getWorld() instanceof ServerLevel world) {
+        if(firmament.getLevel() instanceof ServerLevel world) {
             for(ServerPlayer player : world.players()) {
                 XPlatInterface.INSTANCE.sendPayload(player, new FirmamentCleavedPayload(x, z));
             }

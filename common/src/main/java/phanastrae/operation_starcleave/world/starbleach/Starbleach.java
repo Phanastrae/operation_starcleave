@@ -43,7 +43,7 @@ public class Starbleach {
     }
 
     public static void starbleachChunk(ServerLevel world, LevelChunk chunk, int randomTickSpeed) {
-        Firmament firmament = Firmament.fromWorld(world);
+        Firmament firmament = Firmament.fromLevel(world);
         if(firmament == null) {
             return;
         }
@@ -285,7 +285,7 @@ public class Starbleach {
             }
         }
         if(blockState.is(Blocks.FARMLAND)) {
-            Firmament firmament = Firmament.fromWorld(world);
+            Firmament firmament = Firmament.fromLevel(world);
             if(firmament != null && StellarFarmlandBlock.isStarlit(world, blockPos, firmament)) {
                 return OperationStarcleaveBlocks.STELLAR_FARMLAND.defaultBlockState().setValue(FarmBlock.MOISTURE, 7);
             } else {

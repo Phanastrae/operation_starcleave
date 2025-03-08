@@ -195,23 +195,32 @@ public class ModelProvider extends FabricModelProvider {
 
     @Override
     public void generateItemModels(ItemModelGenerators IMG) {
-        registerGenerated(IMG, OperationStarcleaveItems.STARCLEAVER_GOLEM_BUCKET);
-        registerGenerated(IMG, OperationStarcleaveItems.BLESSED_BED);
-        registerGenerated(IMG, OperationStarcleaveItems.BLESSED_CLOTH);
-        registerGenerated(IMG, OperationStarcleaveItems.FIRMAMENT_REJUVENATOR);
-        registerGenerated(IMG, OperationStarcleaveItems.HOLY_STRANDS);
-        registerGenerated(IMG, OperationStarcleaveItems.SPLASH_STARBLEACH_BOTTLE);
-        registerGenerated(IMG, OperationStarcleaveItems.STARBLEACH_BOTTLE);
-        registerGenerated(IMG, OperationStarcleaveItems.STARBLEACHED_PEARL);
-        registerGenerated(IMG, OperationStarcleaveItems.STARDUST_CLUSTER);
-        registerGenerated(IMG, OperationStarcleaveItems.STARFRUIT);
-        registerGenerated(IMG, OperationStarcleaveItems.HOLLOWED_SAC);
-        registerGenerated(IMG, OperationStarcleaveItems.PHLOGISTON_SAC);
+        generateFlat(IMG,
+                OperationStarcleaveItems.STARCLEAVER_GOLEM_BUCKET,
+                OperationStarcleaveItems.BLESSED_BED,
+                OperationStarcleaveItems.BLESSED_CLOTH,
+                OperationStarcleaveItems.FIRMAMENT_REJUVENATOR,
+                OperationStarcleaveItems.HOLY_STRANDS,
+                OperationStarcleaveItems.SPLASH_STARBLEACH_BOTTLE,
+                OperationStarcleaveItems.STARBLEACH_BOTTLE,
+                OperationStarcleaveItems.STARBLEACHED_PEARL,
+                OperationStarcleaveItems.STARDUST_CLUSTER,
+                OperationStarcleaveItems.STARFRUIT,
+                OperationStarcleaveItems.HOLLOWED_SAC,
+                OperationStarcleaveItems.PHLOGISTON_SAC,
+                OperationStarcleaveItems.BISMUTH_PEGASUS_ARMOR
+        );
 
         IMG.generateFlatItem(OperationStarcleaveItems.FIRMAMENT_MANIPULATOR, ModelTemplates.FLAT_HANDHELD_ITEM);
     }
 
-    private static void registerGenerated(ItemModelGenerators IMG, Item item) {
+    private static void generateFlat(ItemModelGenerators IMG, Item... items) {
+        for(Item item : items) {
+            generateFlat(IMG, item);
+        }
+    }
+
+    private static void generateFlat(ItemModelGenerators IMG, Item item) {
         IMG.generateFlatItem(item, ModelTemplates.FLAT_ITEM);
     }
 }

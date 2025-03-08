@@ -115,6 +115,9 @@ public class OperationStarcleaveCreativeModeTabs {
         // Combat
         helper.addBefore(Items.TURTLE_HELMET, COMBAT,
                 NETHERITE_PUMPKIN);
+        helper.addAfter(Items.DIAMOND_HORSE_ARMOR, COMBAT,
+                BISMUTH_PEGASUS_ARMOR
+        );
 
         // Food and Drink
         helper.addAfter(Items.CHORUS_FRUIT, FOOD_AND_DRINKS,

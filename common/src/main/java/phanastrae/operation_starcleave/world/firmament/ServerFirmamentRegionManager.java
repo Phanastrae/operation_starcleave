@@ -94,7 +94,7 @@ public class ServerFirmamentRegionManager extends FirmamentRegionManager {
 
         RegionPos regionPos = new RegionPos(id);
 
-        FirmamentRegion firmamentRegion = new FirmamentRegion(Firmament.fromWorld(this.serverWorld), regionPos);
+        FirmamentRegion firmamentRegion = new FirmamentRegion(Firmament.fromLevel(this.serverWorld), regionPos);
         FirmamentRegionHolder firmamentRegionHolder = new FirmamentRegionHolder(firmamentRegion);
         firmamentRegionHolder.recordAccess();
 

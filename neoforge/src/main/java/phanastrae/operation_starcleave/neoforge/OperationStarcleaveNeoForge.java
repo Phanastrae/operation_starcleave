@@ -1,13 +1,11 @@
 package phanastrae.operation_starcleave.neoforge;
 
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -16,7 +14,6 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.common.FarmlandWaterManager;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
@@ -29,7 +26,6 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
-import phanastrae.operation_starcleave.entity.effect.OperationStarcleaveStatusEffects;
 import phanastrae.operation_starcleave.item.OperationStarcleaveCreativeModeTabs;
 import phanastrae.operation_starcleave.network.packet.OperationStarcleavePayloads;
 
@@ -46,11 +42,6 @@ public class OperationStarcleaveNeoForge {
     }
 
     public void setupModBusEvents(IEventBus modEventBus) {
-        // mob effect registry
-        DeferredRegister<MobEffect> mobEffectDeferredRegister = DeferredRegister.create(Registries.MOB_EFFECT, OperationStarcleave.MOD_ID);
-        mobEffectDeferredRegister.register(modEventBus);
-        OperationStarcleaveStatusEffects.init((name, mobEffect) -> mobEffectDeferredRegister.register(name, () -> mobEffect));
-
         // init registry entries
         OperationStarcleave.initRegistryEntries(new OperationStarcleave.RegistryListenerAdder() {
             @Override
@@ -61,6 +52,13 @@ public class OperationStarcleaveNeoForge {
                         source.accept((resourceLocation, t) -> event.register(registryKey, resourceLocation, () -> t));
                     }
                 });
+            }
+
+            @Override
+            public <T> void addHolderRegistryListener(Registry<T> registry, Consumer<OperationStarcleave.HolderRegisterHelper<T>> source) {
+                DeferredRegister<T> defRegister = DeferredRegister.create(registry, OperationStarcleave.MOD_ID);
+                defRegister.register(modEventBus);
+                source.accept((name, t) -> defRegister.register(name, () -> t));
             }
         });
 

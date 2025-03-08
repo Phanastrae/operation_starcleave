@@ -1,7 +1,6 @@
 package phanastrae.operation_starcleave.world.firmament;
 
 import org.joml.Math;
-import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 
 import java.util.Random;
 import net.minecraft.world.level.Level;
@@ -38,7 +37,7 @@ public class FirmamentShatterActor extends FirmamentActor {
 
     @Override
     public void tick() {
-        Level world = firmament.getWorld();
+        Level world = firmament.getLevel();
 
         if (this.damagePotential < 0.0001f) {
             discard();

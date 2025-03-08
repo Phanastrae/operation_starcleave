@@ -25,8 +25,8 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import phanastrae.operation_starcleave.duck.EntityDuck;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveDamageTypes;
+import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityAttachment;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypeTags;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 import phanastrae.operation_starcleave.services.XPlatInterface;
@@ -144,10 +144,10 @@ public class PhlogisticFireBlock extends BaseFireBlock implements SimpleWaterlog
     @Override
     public void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
         if (!entity.getType().is(OperationStarcleaveEntityTypeTags.PHLOGISTIC_FIRE_IMMUNE)) {
-            EntityDuck opsce = (EntityDuck)entity;
-            opsce.operation_starcleave$setPhlogisticFireTicks(opsce.operation_starcleave$getPhlogisticFireTicks() + 1);
-            if(opsce.operation_starcleave$getPhlogisticFireTicks() == 0) {
-                opsce.operation_starcleave$setOnPhlogisticFireFor(8);
+            OperationStarcleaveEntityAttachment osea = OperationStarcleaveEntityAttachment.fromEntity(entity);
+            osea.setPhlogisticFireTicks(osea.getPhlogisticFireTicks() + 1);
+            if(osea.getPhlogisticFireTicks() == 0) {
+                osea.setOnPhlogisticFireFor(8);
             }
         }
 

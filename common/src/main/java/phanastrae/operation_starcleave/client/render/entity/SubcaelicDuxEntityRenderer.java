@@ -13,7 +13,7 @@ import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.client.render.OperationStarcleaveRenderLayers;
-import phanastrae.operation_starcleave.client.render.entity.feature.SubcaelicDuxFeatureRenderer;
+import phanastrae.operation_starcleave.client.render.entity.layers.SubcaelicDuxLayer;
 import phanastrae.operation_starcleave.client.render.entity.model.OperationStarcleaveEntityModelLayers;
 import phanastrae.operation_starcleave.client.render.entity.model.SubcaelicDuxEntityModel;
 import phanastrae.operation_starcleave.entity.mob.SubcaelicDuxEntity;
@@ -30,13 +30,13 @@ public class SubcaelicDuxEntityRenderer extends MobRenderer<SubcaelicDuxEntity, 
     public SubcaelicDuxEntityRenderer(EntityRendererProvider.Context context) {
         super(context, new SubcaelicDuxEntityModel<>(context.bakeLayer(OperationStarcleaveEntityModelLayers.SUBCAELIC_DUX)), 3f);
         this.addLayer(
-                new SubcaelicDuxFeatureRenderer<>(this, GLOW_1_TEXTURE, (dux, tickDelta, animationProgress) -> Mth.sin((0.1f * (float)Math.toRadians(Mth.rotLerp(tickDelta, dux.prevTentacleRollAngle, dux.tentacleRollAngle))) * 2f * (float)Math.PI) * 0.5f + 0.5f, SubcaelicDuxEntityModel::getGlowingParts)
+                new SubcaelicDuxLayer<>(this, GLOW_1_TEXTURE, (dux, tickDelta, animationProgress) -> Mth.sin((0.1f * (float)Math.toRadians(Mth.rotLerp(tickDelta, dux.prevTentacleRollAngle, dux.tentacleRollAngle))) * 2f * (float)Math.PI) * 0.5f + 0.5f, SubcaelicDuxEntityModel::getGlowingParts)
         );
         this.addLayer(
-                new SubcaelicDuxFeatureRenderer<>(this, GLOW_2_TEXTURE, (dux, tickDelta, animationProgress) -> Mth.sin((0.1f * (float)Math.toRadians(Mth.rotLerp(tickDelta, dux.prevTentacleRollAngle, dux.tentacleRollAngle)) + 1/3f) * 2f * (float)Math.PI) * 0.5f + 0.5f, SubcaelicDuxEntityModel::getGlowingParts)
+                new SubcaelicDuxLayer<>(this, GLOW_2_TEXTURE, (dux, tickDelta, animationProgress) -> Mth.sin((0.1f * (float)Math.toRadians(Mth.rotLerp(tickDelta, dux.prevTentacleRollAngle, dux.tentacleRollAngle)) + 1/3f) * 2f * (float)Math.PI) * 0.5f + 0.5f, SubcaelicDuxEntityModel::getGlowingParts)
         );
         this.addLayer(
-                new SubcaelicDuxFeatureRenderer<>(this, GLOW_3_TEXTURE, (dux, tickDelta, animationProgress) -> Mth.sin((0.1f * (float)Math.toRadians(Mth.rotLerp(tickDelta, dux.prevTentacleRollAngle, dux.tentacleRollAngle)) - 1/3f) * 2f * (float)Math.PI) * 0.5f + 0.5f, SubcaelicDuxEntityModel::getGlowingParts)
+                new SubcaelicDuxLayer<>(this, GLOW_3_TEXTURE, (dux, tickDelta, animationProgress) -> Mth.sin((0.1f * (float)Math.toRadians(Mth.rotLerp(tickDelta, dux.prevTentacleRollAngle, dux.tentacleRollAngle)) - 1/3f) * 2f * (float)Math.PI) * 0.5f + 0.5f, SubcaelicDuxEntityModel::getGlowingParts)
         );
     }
 

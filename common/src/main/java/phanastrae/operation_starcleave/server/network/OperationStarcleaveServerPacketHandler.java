@@ -25,7 +25,7 @@ public class OperationStarcleaveServerPacketHandler {
 
         Level world = player.level();
         if(world == null) return;
-        Firmament firmament = Firmament.fromWorld(world);
+        Firmament firmament = Firmament.fromLevel(world);
         if(firmament == null) return;
 
         FirmamentTilePos tilePos = new FirmamentTilePos(payload.tileX(), payload.tileZ(), firmament);

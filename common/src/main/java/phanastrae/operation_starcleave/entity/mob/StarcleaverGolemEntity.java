@@ -510,7 +510,7 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
     }
 
     public void cleave() {
-        Firmament firmament = Firmament.fromWorld(this.level());
+        Firmament firmament = Firmament.fromLevel(this.level());
         if(firmament != null) {
             FirmamentManipulatorItem.fractureFirmament(firmament, this.getBlockX(), this.getBlockZ(), this.getRandom());
         }

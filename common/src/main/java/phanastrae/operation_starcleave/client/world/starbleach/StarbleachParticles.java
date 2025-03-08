@@ -11,7 +11,7 @@ public class StarbleachParticles {
 
     public static void spawnParticles(ClientLevel clientWorld, int centerX, int centerY, int centerZ) {
         RandomSource random = clientWorld.random;
-        Firmament firmament = Firmament.fromWorld(clientWorld);
+        Firmament firmament = Firmament.fromLevel(clientWorld);
         if(firmament == null) return;
 
         ParticleOptions particleEffect = OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER;

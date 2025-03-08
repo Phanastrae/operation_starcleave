@@ -1,29 +1,29 @@
 package phanastrae.operation_starcleave.world.firmament;
 
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.OperationStarcleave;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.Level;
 
 public class Firmament implements FirmamentAccess {
 
-    private final Level world;
+    private final Level level;
     private final FirmamentRegionManager firmamentRegionManager;
 
-    public Firmament(Level world, FirmamentRegionManager firmamentRegionManager) {
-        this.world = world;
+    public Firmament(Level level, FirmamentRegionManager firmamentRegionManager) {
+        this.level = level;
         this.firmamentRegionManager = firmamentRegionManager;
     }
 
     public int getY() {
-        return this.world.getMaxBuildHeight() + 16;
+        return this.level.getMaxBuildHeight() + 16;
     }
 
     public void tick() {
-        long t = world.getGameTime();
+        long t = level.getGameTime();
         if (t % 2 == 0) {
             manageActors();
             tickActors();
@@ -237,19 +237,19 @@ public class Firmament implements FirmamentAccess {
         forEachRegion(FirmamentRegion::markUpdatesFromActivity);
     }
 
-    public Level getWorld() {
-        return this.world;
+    public Level getLevel() {
+        return this.level;
     }
 
     public FirmamentRegionManager getFirmamentRegionManager() {
         return this.firmamentRegionManager;
     }
 
-    public static Firmament fromWorld(Level world) {
-        if(world instanceof FirmamentHolder opscw) {
-            return opscw.operation_starcleave$getFirmament();
+    public static Firmament fromLevel(Level level) {
+        if(level instanceof FirmamentHolder firmamentHolder) {
+            return firmamentHolder.operation_starcleave$getFirmament();
         } else {
-            OperationStarcleave.LOGGER.info("World " + world.gatherChunkSourceStats() + " has no Firmament!?");
+            OperationStarcleave.LOGGER.info("World " + level.gatherChunkSourceStats() + " has no Firmament!?");
             return null;
         }
     }

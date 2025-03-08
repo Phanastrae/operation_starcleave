@@ -1,5 +1,6 @@
 package phanastrae.operation_starcleave;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -22,6 +23,8 @@ import phanastrae.operation_starcleave.block.StarbleachCauldronBlock;
 import phanastrae.operation_starcleave.block.entity.OperationStarcleaveBlockEntityTypes;
 import phanastrae.operation_starcleave.component.OperationStarcleaveComponentTypes;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
+import phanastrae.operation_starcleave.entity.effect.OperationStarcleaveStatusEffects;
+import phanastrae.operation_starcleave.item.OperationStarcleaveArmorMaterials;
 import phanastrae.operation_starcleave.item.OperationStarcleaveCreativeModeTabs;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
@@ -45,6 +48,11 @@ public class OperationStarcleave {
 	}
 
 	public static void initRegistryEntries(RegistryListenerAdder rla) {
+		// mob effects
+		rla.addHolderRegistryListener(BuiltInRegistries.MOB_EFFECT, OperationStarcleaveStatusEffects::init);
+		// armor materials
+		rla.addHolderRegistryListener(BuiltInRegistries.ARMOR_MATERIAL, OperationStarcleaveArmorMaterials::init);
+
 		// creative mode tabs
 		rla.addRegistryListener(BuiltInRegistries.CREATIVE_MODE_TAB, OperationStarcleaveCreativeModeTabs::init);
 
@@ -89,7 +97,7 @@ public class OperationStarcleave {
 	}
 
 	public static void startLevelTick(Level level) {
-		Firmament firmament = Firmament.fromWorld(level);
+		Firmament firmament = Firmament.fromLevel(level);
 		if(firmament != null) {
 			TickRateManager tickManager = level.tickRateManager();
 			boolean shouldTick = tickManager.runsNormally();
@@ -122,8 +130,14 @@ public class OperationStarcleave {
 		}
 	}
 
-	@FunctionalInterface
 	public interface RegistryListenerAdder {
 		<T> void addRegistryListener(Registry<T> registry, Consumer<BiConsumer<ResourceLocation, T>> source);
+
+		<T> void addHolderRegistryListener(Registry<T> registry, Consumer<HolderRegisterHelper<T>> source);
+	}
+
+	@FunctionalInterface
+	public interface HolderRegisterHelper<T> {
+		Holder<T> register(String name, T held);
 	}
 }

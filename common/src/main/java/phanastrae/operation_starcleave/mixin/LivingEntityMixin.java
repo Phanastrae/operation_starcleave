@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalFloatRef;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
@@ -13,7 +14,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,7 +27,9 @@ import phanastrae.operation_starcleave.block.BlessedBedBlock;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.block.StellarRepulsorBlock;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveDamageTypeTags;
+import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityAttachment;
 import phanastrae.operation_starcleave.item.StarbleachCoating;
+import phanastrae.operation_starcleave.world.firmament.Firmament;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
@@ -58,6 +63,18 @@ public abstract class LivingEntityMixin extends Entity {
         }
     }
 
+    @Inject(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;handleRelativeFrictionAndCalculateMovement(Lnet/minecraft/world/phys/Vec3;F)Lnet/minecraft/world/phys/Vec3;"))
+    private void operation_starcleave$reduceGlidingFriction(Vec3 travelVector, CallbackInfo ci, @Local(ordinal = 1) LocalFloatRef frictionMultiplierRef) {
+        if(OperationStarcleaveEntityAttachment.fromEntity(this).isPegasusGliding() && !this.onGround()) {
+            Firmament firmament = Firmament.fromLevel(this.level());
+            int damage = firmament == null ? 0 : firmament.getDamage(this.getBlockX(), this.getBlockZ());
+            int skyLight = this.level().getBrightness(LightLayer.SKY, this.blockPosition());
+            float starlight = (damage / 7F) * (skyLight / 15F);
+
+            frictionMultiplierRef.set(Mth.lerp(starlight, 0.965F, 0.995F));
+        }
+    }
+
     @Inject(method = "jumpFromGround", at = @At("RETURN"))
     private void operation_starcleave$repulsorJump(CallbackInfo ci) {
         LivingEntity livingEntity = (LivingEntity)(Object)this;
@@ -67,8 +84,8 @@ public abstract class LivingEntityMixin extends Entity {
     @Inject(method = "startSleeping", at = @At("HEAD"))
     private void operation_starcleave$blessedBed(BlockPos pos, CallbackInfo ci) {
         LivingEntity livingEntity = (LivingEntity)(Object)this;
-        Level world = livingEntity.level();
-        BlockState blockState = world.getBlockState(pos);
+        Level level = livingEntity.level();
+        BlockState blockState = level.getBlockState(pos);
         if(blockState.is(OperationStarcleaveBlocks.BLESSED_BED)) {
             BlessedBedBlock.blessedSleep(livingEntity);
         }
