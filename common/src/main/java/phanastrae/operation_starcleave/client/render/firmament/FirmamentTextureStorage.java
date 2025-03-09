@@ -59,7 +59,6 @@ public class FirmamentTextureStorage {
         ProfilerFiller profiler = client.getProfiler();
         profiler.push("starcleave_update_firmament_texture");
 
-
         // make note of what regions were filled and active
         boolean[][] wasFilledAndActiveArray = new boolean[4][4];
         for(int i = 0; i < 4; i++) {
@@ -68,6 +67,7 @@ public class FirmamentTextureStorage {
             }
         }
 
+        profiler.push("update_position");
         // get and update cam pos
         Entity camEntity = Minecraft.getInstance().cameraEntity;
         Level level = camEntity == null ? null : camEntity.level();
@@ -77,6 +77,7 @@ public class FirmamentTextureStorage {
             updateCamPos(camPos, level);
         }
 
+        profiler.popPush("process_queued");
         // rebuild queued subchunks
         if(level != null) {
             Firmament firmament = Firmament.fromLevel(level);
@@ -85,6 +86,7 @@ public class FirmamentTextureStorage {
             }
         }
 
+        profiler.popPush("update_final");
         // update final image if necessary
         boolean changed = false;
         NativeImage finalImage = this.finalTexture.getPixels();
@@ -124,6 +126,7 @@ public class FirmamentTextureStorage {
             }
         }
 
+        profiler.popPush("upload");
         // update
         if(changed) {
             this.finalTexture.upload();
@@ -150,6 +153,7 @@ public class FirmamentTextureStorage {
         }
         this.needsUpdate = false;
 
+        profiler.pop();
         profiler.pop();
     }
 
