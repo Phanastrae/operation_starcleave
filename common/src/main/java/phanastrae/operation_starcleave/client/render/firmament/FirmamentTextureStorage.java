@@ -1,6 +1,7 @@
 package phanastrae.operation_starcleave.client.render.firmament;
 
 import com.mojang.blaze3d.platform.NativeImage;
+import com.mojang.blaze3d.platform.TextureUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.core.BlockPos;
@@ -9,11 +10,13 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.Heightmap;
 import org.jetbrains.annotations.Nullable;
+import org.lwjgl.opengl.GL30C;
 import phanastrae.operation_starcleave.world.firmament.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.mojang.blaze3d.platform.GlConst.GL_TEXTURE_2D;
 import static phanastrae.operation_starcleave.world.firmament.FirmamentRegion.SUBREGIONS;
 import static phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion.TILES;
 
@@ -129,7 +132,10 @@ public class FirmamentTextureStorage {
         profiler.popPush("upload");
         // update
         if(changed) {
+            TextureUtil.prepareImage(this.finalTexture.getId(), 5, 512, 512);
             this.finalTexture.upload();
+            this.finalTexture.bind();
+            GL30C.glGenerateMipmap(GL_TEXTURE_2D);
         }
 
         // reset update info

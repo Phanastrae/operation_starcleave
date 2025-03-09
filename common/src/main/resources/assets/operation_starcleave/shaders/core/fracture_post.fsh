@@ -30,10 +30,10 @@ vec2 lerp(vec2 p1, vec2 p2, float t) {
     return p1 * (1.-t) + p2 * t;
 }
 
-vec2 sampleDamage(float x, float z) {
+vec2 sampleDamage(float x, float z, float mipLevel) {
     float rx = x / 2048.0;
     float rz = z / 2048.0;
-    vec2 col = textureGrad(Sampler0, vec2(rx, rz), vec2(0.), vec2(0.)).xy;
+    vec2 col = textureLod(Sampler0, vec2(rx, rz), mipLevel).xy;
 
     col.x = (col.x * 255.) / 7.;
     col.y = (col.y * 255.) * 3. + 16. - 3.;
@@ -43,7 +43,9 @@ vec2 sampleDamage(float x, float z) {
 
 float getDamage(vec3 pos, vec3 firmPos) {
     vec2 p = pos.xz - firmPos.xz;
-    vec2 damage = sampleDamage(p.x, p.y);
+
+    float targetMipLevel = max(log2(1. + length(pos)) - 6., 0.);
+    vec2 damage = sampleDamage(p.x, p.y, targetMipLevel);
 
     // modify damage to be 0 below 5/7, and 1 at 7/7
     damage.x = max(0., (damage.x * 7. - 3.) / 4.);
@@ -100,7 +102,7 @@ void main() {
     vec3 nov2 = position / length(position.xz);
     nov = nov * 0.1 + nov2 * 0.9;
 
-    int n = 20;
+    int n = 7;
 
     float totDam = 0.;
     //float totChange = 0.;
@@ -108,7 +110,13 @@ void main() {
     float lastDistance = 0.;
 
     for(int i = 1; i <= n; i++) {
-        float f2 = float(i*i) / float(n*n);
+        float g = 0.5 * (1. + 0.3 * sin(TAU * GameTime * 90. + theta * 7.) + 0.7 * sin(-TAU * GameTime * 40. + theta * 3. + 1.234567));
+
+        //float f2 = float(i*i) / float(n*n);
+        float fi = float(i);
+        float fn = float(n);
+        float f2 = pow(sqrt(2.), (fi - g - fn - 0.02 * random)) * exp(0.75 * (log(fi - g) - log(fn) - 0.02 * random));
+
         float f3 = (0.5 + 0.5 * sin(21. * theta + TAU * GameTime * -120.));
         float f4 = (0.5 + 0.5 * sin(7. * theta + TAU * GameTime * 240.));
         float r = f2 * 0.975 + f3 * 0.005 + f4 * 0.01 + 0.009 + 0.001 * random;
@@ -138,7 +146,7 @@ void main() {
     //avgChange = sqrt(sqrt(avgChange)) * 2.;
     //avgDam = max(0., min(1., avgDam * 3.2 - 0.3));
 
-    getDamage(position, FirmamentPos);
+    //getDamage(position, FirmamentPos);
 
     // reduce effect beneath camera
     //avgDam *= 1. - pow(0.5 - 0.5 * position.y / length(position), 12.);
