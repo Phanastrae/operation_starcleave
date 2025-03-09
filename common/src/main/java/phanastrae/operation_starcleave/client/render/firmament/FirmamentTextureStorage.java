@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static phanastrae.operation_starcleave.world.firmament.FirmamentRegion.SUBREGIONS;
-import static phanastrae.operation_starcleave.world.firmament.FirmamentRegion.SUBREGION_MASK;
 import static phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion.TILES;
 
 public class FirmamentTextureStorage {
@@ -28,21 +27,21 @@ public class FirmamentTextureStorage {
         return INSTANCE;
     }
 
-    NativeImage image = new NativeImage(NativeImage.Format.RGBA, 512, 512, true);
-    DynamicTexture finalTexture = new DynamicTexture(new NativeImage(NativeImage.Format.RGBA, 512, 512, true));
+    private final NativeImage image = new NativeImage(NativeImage.Format.RGBA, 512, 512, true);
+    private final DynamicTexture finalTexture = new DynamicTexture(new NativeImage(NativeImage.Format.RGBA, 512, 512, true));
 
-    @Nullable RegionPos lastCamPos = null;
-    boolean needsUpdate = false;
-    RegionPos[][] regions = new RegionPos[4][4];
-    boolean[][] filled = new boolean[4][4];
-    boolean[][] active = new boolean[4][4];
+    private @Nullable RegionPos lastCamPos = null;
+    private final RegionPos[][] regions = new RegionPos[4][4];
+    private final boolean[][] filled = new boolean[4][4];
+    private final boolean[][] active = new boolean[4][4];
 
-    List<SubRegionPos> rebuildQueue = new ArrayList<>();
-    boolean[][] needsRebuild = new boolean[4 * SUBREGIONS][4 * SUBREGIONS];
+    private final List<SubRegionPos> rebuildQueue = new ArrayList<>();
+    private final boolean[][] needsRebuild = new boolean[4 * SUBREGIONS][4 * SUBREGIONS];
 
-    boolean[][] entireRegionHadUpdate = new boolean[4][4];
-    boolean[][] regionHadUpdate = new boolean[4 * SUBREGIONS][4 * SUBREGIONS];
-    boolean[][] subregionHadUpdate = new boolean[4 * SUBREGIONS][4 * SUBREGIONS];
+    private boolean needsUpdate = false;
+    private final boolean[][] entireRegionHadUpdate = new boolean[4][4];
+    private final boolean[][] regionHadUpdate = new boolean[4][4];
+    private final boolean[][] subregionHadUpdate = new boolean[4 * SUBREGIONS][4 * SUBREGIONS];
 
     public void close() {
         this.image.close();
@@ -125,6 +124,11 @@ public class FirmamentTextureStorage {
             }
         }
 
+        // update
+        if(changed) {
+            this.finalTexture.upload();
+        }
+
         // reset update info
         if(this.needsUpdate) {
             for(int i = 0; i < 4; i++) {
@@ -143,10 +147,6 @@ public class FirmamentTextureStorage {
                     }
                 }
             }
-        }
-
-        if(changed) {
-            this.finalTexture.upload();
         }
         this.needsUpdate = false;
 
@@ -319,7 +319,9 @@ public class FirmamentTextureStorage {
 
         this.needsUpdate = true;
         this.regionHadUpdate[gx][gz] = true;
-        this.subregionHadUpdate[(subRegion.x >> FirmamentRegion.SUBREGION_SIZE_BITS) & SUBREGION_MASK][(subRegion.z >> FirmamentRegion.SUBREGION_SIZE_BITS) & SUBREGION_MASK] = true;
+        int sx = gx * SUBREGIONS + ((subRegion.x >> FirmamentRegion.SUBREGION_SIZE_BITS) & 0xF);
+        int sz = gz * SUBREGIONS + ((subRegion.z >> FirmamentRegion.SUBREGION_SIZE_BITS) & 0xF);
+        this.subregionHadUpdate[sx][sz] = true;
 
         filled[gx][gz] = true;
     }
@@ -376,6 +378,14 @@ public class FirmamentTextureStorage {
 
     public DynamicTexture getTexture() {
         return this.finalTexture;
+    }
+
+    public boolean isActive(int i, int j) {
+        return this.active[i][j];
+    }
+
+    public boolean isFilled(int i, int j) {
+        return this.filled[i][j];
     }
 
     public static int getColor(int damage, int height) {

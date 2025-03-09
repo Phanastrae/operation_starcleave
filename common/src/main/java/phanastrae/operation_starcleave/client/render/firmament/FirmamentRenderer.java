@@ -29,7 +29,6 @@ import phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion;
 import phanastrae.operation_starcleave.world.firmament.RegionPos;
 
 import static com.mojang.blaze3d.platform.GlConst.*;
-import static com.mojang.blaze3d.platform.GlConst.GL_NEAREST;
 
 public class FirmamentRenderer {
     public static void render(Level level, MultiBufferSource vertexConsumerProvider, PoseStack WRCmatrixStack, Camera camera, Frustum frustum, LevelRenderer levelRenderer, PoseStack matrixStack, Matrix4f projectionMatrix) {
@@ -48,15 +47,18 @@ public class FirmamentRenderer {
         Player player = client.player;
         boolean debugMode_General = client.getDebugOverlay().showDebugScreen() && player != null && player.getMainHandItem().is(OperationStarcleaveItems.FIRMAMENT_MANIPULATOR);
 
+        /*
         if(debugMode_General) {
             profiler.push("starcleave_firmament");
             profiler.push("debug");
             // TODO serverside firmament regions broke most of debug, either fix or remove this at some point
-            doRender(level, vertexConsumerProvider, WRCmatrixStack, camera, debugMode_General);
+            // TODO apparently i'm passing the wrong matrix and it crashes, i'm just disabling this for now
+            //doRender(level, vertexConsumerProvider, WRCmatrixStack, camera, debugMode_General);
             profiler.pop();
             profiler.pop();
             return;
         }
+        */
 
         if(vertexConsumerProvider instanceof MultiBufferSource.BufferSource immediate) {
             immediate.endBatch();
@@ -67,7 +69,7 @@ public class FirmamentRenderer {
             for(int i = 0; i < 4 && !renderSkybox; i++) {
                 for(int j = 0; j < 4 && !renderSkybox; j++) {
                     FirmamentTextureStorage fts = FirmamentTextureStorage.getInstance();
-                    if(!fts.active[i][j] || !fts.filled[i][j]) continue;
+                    if(!fts.isActive(i, j) || !fts.isFilled(i, j)) continue;
                     renderSkybox = true;
                 }
             }
