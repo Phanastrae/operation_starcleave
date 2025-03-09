@@ -3,7 +3,6 @@ package phanastrae.operation_starcleave.client.render.firmament;
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.Window;
-import com.mojang.blaze3d.shaders.Uniform;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Camera;
@@ -400,7 +399,7 @@ public class FirmamentRenderer {
         ShaderInstance shaderProgram = RenderSystem.getShader();
 
         if(shaderProgram != null) {
-            int id = FirmamentTextureStorage.getInstance().texture.getId();
+            int id = FirmamentTextureStorage.getInstance().getTexture().getId();
             RenderSystem.setShaderTexture(0, id);
 
             RenderSystem.setShaderTexture(1, firmamentSkyTexID);
@@ -428,11 +427,6 @@ public class FirmamentRenderer {
             }
 
             shaderProgram.apply();
-            Uniform glUniform = shaderProgram.getUniform("ActiveRegions");
-            if(glUniform != null) {
-                float[] activeRegions = FirmamentTextureStorage.getInstance().getActiveRegions();
-                glUniform.set(activeRegions);
-            }
 
             Tesselator tessellator = Tesselator.getInstance();
 

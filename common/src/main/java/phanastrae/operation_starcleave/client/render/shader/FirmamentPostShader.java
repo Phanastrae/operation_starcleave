@@ -127,11 +127,6 @@ public class FirmamentPostShader {
 
             glUniform.set(mat);
         }
-        glUniform = shaderProgram.getUniform("ActiveRegions");
-        if(glUniform != null) {
-            float[] activeRegions = FirmamentTextureStorage.getInstance().getActiveRegions();
-            glUniform.set(activeRegions);
-        }
         glUniform = shaderProgram.getUniform("FirmamentPos");
         if(glUniform != null) {
             Vec3 camPos = client.gameRenderer.getMainCamera().getPosition();

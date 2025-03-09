@@ -5,7 +5,6 @@ uniform sampler2D DiffuseSampler1;
 uniform sampler2D Sampler0;
 
 uniform mat4 IMat;
-uniform float[16] ActiveRegions;
 uniform vec3 FirmamentPos;
 uniform float GameTime;
 
@@ -35,12 +34,6 @@ vec2 sampleDamage(float x, float z) {
     float rx = x / 2048.0;
     float rz = z / 2048.0;
     vec2 col = textureGrad(Sampler0, vec2(rx, rz), vec2(0.), vec2(0.)).xy;
-
-    int i = int(floor(mod(rx * 4., 4.)));
-    int j = int(floor(mod(rz * 4., 4.)));
-    int index = i * 4 + j;
-    float m = ActiveRegions[index];
-    col *= m;
 
     col.x = (col.x * 255.) / 7.;
     col.y = (col.y * 255.) * 3. + 16. - 3.;

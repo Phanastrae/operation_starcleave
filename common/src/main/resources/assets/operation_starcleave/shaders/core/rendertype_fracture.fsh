@@ -5,7 +5,6 @@ uniform sampler2D Sampler1;
 
 uniform float GameTime;
 uniform vec2 ScreenSize;
-uniform float[16] ActiveRegions;
 
 in vec2 texCoord0;
 in vec3 pos;
@@ -26,12 +25,7 @@ vec3 rainbow(float f) {
 }
 
 vec4 getColor(float x, float z) {
-    vec4 col = textureGrad(Sampler0, vec2(x, z), vec2(0.), vec2(0.));
-    int i = int(floor(mod(x * 4., 4.)));
-    int j = int(floor(mod(z * 4., 4.)));
-    int index = i * 4 + j;
-    float m = ActiveRegions[index];
-    return col * m;
+    return textureGrad(Sampler0, vec2(x, z), vec2(0.), vec2(0.));
 }
 
 void main() {
