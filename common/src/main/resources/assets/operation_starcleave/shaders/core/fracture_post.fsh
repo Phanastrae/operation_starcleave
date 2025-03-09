@@ -43,23 +43,7 @@ vec2 sampleDamage(float x, float z) {
 
 float getDamage(vec3 pos, vec3 firmPos) {
     vec2 p = pos.xz - firmPos.xz;
-    // gets the min and max corners of the sampling square
-    // this square is spread across four tiles
-    vec2 minCorner = floor((p - 2.) / 4.) * 4. + 2.;
-    vec2 maxCorner = minCorner + 4.;
-
-    // sample damage at each tile
-    vec2 mm = sampleDamage(minCorner.x, minCorner.y);
-    vec2 Mm = sampleDamage(maxCorner.x, minCorner.y);
-    vec2 mM = sampleDamage(minCorner.x, maxCorner.y);
-    vec2 MM = sampleDamage(maxCorner.x, maxCorner.y);
-
-    // interpolate based on position
-    vec2 t = (p - minCorner) / 4.;
-
-    vec2 lm = lerp(mm, Mm, t.x);
-    vec2 lM = lerp(mM, MM, t.x);
-    vec2 damage = lerp(lm, lM, t.y);
+    vec2 damage = sampleDamage(p.x, p.y);
 
     // modify damage to be 0 below 5/7, and 1 at 7/7
     damage.x = max(0., (damage.x * 7. - 3.) / 4.);

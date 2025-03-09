@@ -9,6 +9,7 @@ import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
@@ -17,6 +18,7 @@ import phanastrae.operation_starcleave.client.duck.LevelRendererDuck;
 import phanastrae.operation_starcleave.client.render.firmament.FirmamentTextureStorage;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 
+import static com.mojang.blaze3d.platform.GlConst.*;
 import static net.minecraft.util.Mth.positiveModulo;
 
 public class FirmamentPostShader {
@@ -106,8 +108,11 @@ public class FirmamentPostShader {
         shaderProgram.setSampler("DiffuseSampler0", dummyBuffer.getColorTextureId());
         shaderProgram.setSampler("DiffuseSampler1", dummyBuffer.getDepthTextureId());
 
-        int id = FirmamentTextureStorage.getInstance().getTexture().getId();
-        RenderSystem.setShaderTexture(0, id);
+        DynamicTexture firmamentTex = FirmamentTextureStorage.getInstance().getTexture();
+        RenderSystem.setShaderTexture(0, firmamentTex.getId());
+        firmamentTex.bind();
+        RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
         for(int m = 0; m < 1; ++m) {
             int n = RenderSystem.getShaderTexture(m);

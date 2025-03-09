@@ -9,6 +9,7 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.culling.Frustum;
+import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
@@ -26,6 +27,9 @@ import phanastrae.operation_starcleave.mixin.client.LevelRendererAccessor;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 import phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion;
 import phanastrae.operation_starcleave.world.firmament.RegionPos;
+
+import static com.mojang.blaze3d.platform.GlConst.*;
+import static com.mojang.blaze3d.platform.GlConst.GL_NEAREST;
 
 public class FirmamentRenderer {
     public static void render(Level level, MultiBufferSource vertexConsumerProvider, PoseStack WRCmatrixStack, Camera camera, Frustum frustum, LevelRenderer levelRenderer, PoseStack matrixStack, Matrix4f projectionMatrix) {
@@ -399,8 +403,11 @@ public class FirmamentRenderer {
         ShaderInstance shaderProgram = RenderSystem.getShader();
 
         if(shaderProgram != null) {
-            int id = FirmamentTextureStorage.getInstance().getTexture().getId();
-            RenderSystem.setShaderTexture(0, id);
+            DynamicTexture firmamentTex = FirmamentTextureStorage.getInstance().getTexture();
+            RenderSystem.setShaderTexture(0, firmamentTex.getId());
+            firmamentTex.bind();
+            RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
             RenderSystem.setShaderTexture(1, firmamentSkyTexID);
 
