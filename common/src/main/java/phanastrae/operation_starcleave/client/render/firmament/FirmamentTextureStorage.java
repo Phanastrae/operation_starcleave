@@ -5,9 +5,11 @@ import com.mojang.blaze3d.platform.TextureUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.SectionPos;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.Heightmap;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL30C;
@@ -293,11 +295,28 @@ public class FirmamentTextureStorage {
 
         int ox = gx * 128;
         int oz = gz * 128;
-        for(int x = 0; x < 128; x++) {
-            for(int z = 0; z < 128; z++) {
-                int damage = region.getDamage(x << 2, z << 2);
-                int height = getHeight(region.x + 4 * x, region.z + 4 * z, level);
-                this.image.setPixelRGBA(x + ox, z + oz, getColor(damage, height));
+        // iterate chunk by chunk
+        for(int cx = 0; cx < 32; cx++) {
+            for(int cz = 0; cz < 32; cz++) {
+                int chunkX = SectionPos.blockToSectionCoord(region.x + 16 * cx);
+                int chunkZ = SectionPos.blockToSectionCoord(region.z + 16 * cz);
+
+                LevelChunk chunk;
+                if(level.hasChunk(chunkX, chunkZ)) {
+                    chunk = level.getChunk(chunkX, chunkZ);
+                } else {
+                    chunk = null;
+                }
+                for (int tx = 0; tx < 4; tx++) {
+                    for (int tz = 0; tz < 4; tz++) {
+                        int x = cx * 4 + tx;
+                        int z = cz * 4 + tz;
+
+                        int damage = region.getDamage(x << 2, z << 2);
+                        int height = getHeight(region.x + 4 * x, region.z + 4 * z, level, chunk);
+                        this.image.setPixelRGBA(x + ox, z + oz, getColor(damage, height));
+                    }
+                }
             }
         }
 
@@ -319,11 +338,28 @@ public class FirmamentTextureStorage {
 
         int ox = gx * 128 + ((subRegion.x & FirmamentRegion.REGION_MASK) >> FirmamentSubRegion.TILE_SIZE_BITS);
         int oz = gz * 128 + ((subRegion.z & FirmamentRegion.REGION_MASK) >> FirmamentSubRegion.TILE_SIZE_BITS);
-        for(int x = 0; x < TILES; x++) {
-            for(int z = 0; z < TILES; z++) {
-                int damage = subRegion.getDamage(x << 2, z << 2);
-                int height = getHeight(subRegion.x + 4 * x, subRegion.z + 4 * z, level);
-                this.image.setPixelRGBA(x + ox, z + oz, getColor(damage, height));
+        // iterate chunk by chunk
+        for(int cx = 0; cx < 2; cx++) {
+            for(int cz = 0; cz < 2; cz++) {
+                int chunkX = SectionPos.blockToSectionCoord(subRegion.x + 16 * cx);
+                int chunkZ = SectionPos.blockToSectionCoord(subRegion.z + 16 * cz);
+
+                LevelChunk chunk;
+                if(level.hasChunk(chunkX, chunkZ)) {
+                    chunk = level.getChunk(chunkX, chunkZ);
+                } else {
+                    chunk = null;
+                }
+                for(int tx = 0; tx < 4; tx++) {
+                    for (int tz = 0; tz < 4; tz++) {
+                        int x = cx * 4 + tx;
+                        int z = cz * 4 + tz;
+
+                        int damage = subRegion.getDamage(x << 2, z << 2);
+                        int height = getHeight(subRegion.x + 4 * x, subRegion.z + 4 * z, level, chunk);
+                        this.image.setPixelRGBA(x + ox, z + oz, getColor(damage, height));
+                    }
+                }
             }
         }
 
@@ -410,14 +446,19 @@ public class FirmamentTextureStorage {
     }
 
     // returns the world height minus the topmost block's height in a tile
-    public static int getHeight(int x, int z, Level level) {
+    public static int getHeight(int x, int z, Level level, @Nullable LevelChunk chunk) {
+        if(chunk == null) {
+            // if chunk is null set to max value
+            return 255 * 3;
+        }
+
         int topY = level.getMaxBuildHeight();
         int bottomY = level.getMinBuildHeight();
 
         int minY = topY;
         for(int i = 0; i < 4; i++) {
             for(int j = 0; j < 4; j++) {
-                int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING, x+i, z+j);
+                int y = chunk.getHeight(Heightmap.Types.MOTION_BLOCKING, (x+i) & 15, (z+j) & 15);
                 if(y < minY) {
                     minY = y;
                 }
