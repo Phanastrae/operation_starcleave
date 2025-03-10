@@ -30,14 +30,14 @@ public class OperationStarcleaveEntityTypes {
 
     public static final ResourceLocation SUBCAELIC_TORPEDO_KEY = id("subcaelic_torpedo");
     public static final EntityType<SubcaelicTorpedoEntity> SUBCAELIC_TORPEDO =
-            createBuilder(SubcaelicTorpedoEntity::new, MobCategory.MISC)
+            createBuilder(SubcaelicTorpedoEntity::new, MobCategory.MONSTER)
                     .sized(1f, 1f)
                     .clientTrackingRange(10)
                     .build(getStr(SUBCAELIC_TORPEDO_KEY));
 
     public static final ResourceLocation SUBCAELIC_DUX_KEY = id("subcaelic_dux");
     public static final EntityType<SubcaelicDuxEntity> SUBCAELIC_DUX =
-        createBuilder(SubcaelicDuxEntity::new, MobCategory.MISC)
+        createBuilder(SubcaelicDuxEntity::new, MobCategory.MONSTER)
                 .sized(7f, 7f)
                 .clientTrackingRange(10)
                 .build(getStr(SUBCAELIC_DUX_KEY));

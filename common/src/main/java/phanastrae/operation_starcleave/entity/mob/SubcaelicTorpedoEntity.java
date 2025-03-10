@@ -10,11 +10,7 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.EntityEvent;
-import net.minecraft.world.entity.EntitySelector;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -156,6 +152,15 @@ public class SubcaelicTorpedoEntity extends AbstractSubcaelicEntity {
         if(!this.isAlive()) {
             this.setDeltaMovement(this.getDeltaMovement().x * 0.98, this.getDeltaMovement().y * 0.98 - 0.03, this.getDeltaMovement().z * 0.98);
         }
+    }
+
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        if(this.dux != null) {
+            return false;
+        }
+
+        return super.removeWhenFarAway(distanceToClosestPlayer);
     }
 
     @Override

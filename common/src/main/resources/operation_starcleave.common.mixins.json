@@ -17,6 +17,7 @@
     "LevelMixin",
     "LivingEntityMixin",
     "MinecraftServerMixin",
+    "NaturalSpawnerMixin",
     "PitcherCropBlockMixin",
     "PlayerMixin",
     "ServerChunkCacheMixin",
