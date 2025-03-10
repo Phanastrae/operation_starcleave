@@ -74,19 +74,22 @@ public class OperationStarcleaveCreativeModeTabs {
                 BLESSED_CLOTH_CURTAIN);
 
         // Natural
-        helper.addAfter(Items.WARPED_STEM, NATURAL_BLOCKS,
-                STARBLEACHED_LOG);
-        helper.addAfter(Items.FLOWERING_AZALEA_LEAVES, NATURAL_BLOCKS,
-                STARBLEACHED_LEAVES);
         helper.addAfter(Items.END_STONE, NATURAL_BLOCKS,
                 HOLY_MOSS,
                 STELLAR_SEDIMENT,
                 STELLAR_MULCH,
                 STELLAR_FARMLAND,
                 STARDUST_BLOCK);
+        helper.addAfter(Items.WARPED_STEM, NATURAL_BLOCKS,
+                STARBLEACHED_LOG);
+        helper.addAfter(Items.FLOWERING_AZALEA_LEAVES, NATURAL_BLOCKS,
+                STARBLEACHED_LEAVES);
         helper.addAfter(Items.HANGING_ROOTS, NATURAL_BLOCKS,
                 MULCHBORNE_TUFT,
                 SHORT_HOLY_MOSS);
+        helper.addAfter(Items.NETHER_WART, NATURAL_BLOCKS,
+                BISREED_ROOT
+        );
 
         // Functional
         helper.addAfter(Items.DRAGON_HEAD, FUNCTIONAL_BLOCKS,
@@ -127,6 +130,10 @@ public class OperationStarcleaveCreativeModeTabs {
                 SPLASH_STARBLEACH_BOTTLE);
 
         // Ingredients
+        helper.addAfter(Items.NETHERITE_INGOT, INGREDIENTS,
+                BISMUTH_FLAKE,
+                STARFLAKED_BISMUTH
+        );
         helper.addAfter(Items.EXPERIENCE_BOTTLE, INGREDIENTS,
                 STARBLEACH_BOTTLE,
                 HOLY_STRANDS,

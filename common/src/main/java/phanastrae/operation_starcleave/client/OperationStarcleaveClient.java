@@ -12,7 +12,7 @@ import net.minecraft.world.level.Level;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import phanastrae.operation_starcleave.client.render.ScreenShakeManager;
-import phanastrae.operation_starcleave.client.render.block.OperationStarcleaveBlockRenderLayers;
+import phanastrae.operation_starcleave.client.render.block.OperationStarcleaveBlockRenderTypes;
 import phanastrae.operation_starcleave.client.render.block.entity.OperationStarcleaveBlockEntityRenderers;
 import phanastrae.operation_starcleave.client.render.firmament.FirmamentActorRenderable;
 import phanastrae.operation_starcleave.client.render.firmament.FirmamentOutlineRenderer;
@@ -27,7 +27,7 @@ public class OperationStarcleaveClient {
 
 	public static void init() {
 		// register block layers
-		OperationStarcleaveBlockRenderLayers.init();
+		OperationStarcleaveBlockRenderTypes.init();
 
 		// register block entity renderers
 		OperationStarcleaveBlockEntityRenderers.init();

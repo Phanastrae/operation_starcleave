@@ -15,9 +15,14 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider arg) {
-        getOrCreateTagBuilder(ItemTags.DAMPENS_VIBRATIONS)
-                .add(OperationStarcleaveItems.BLESSED_CLOTH_BLOCK)
-                .add(OperationStarcleaveItems.BLESSED_CLOTH_CARPET)
-                .add(OperationStarcleaveItems.BLESSED_CLOTH_CURTAIN);
+        getOrCreateTagBuilder(ItemTags.DAMPENS_VIBRATIONS).add(
+                OperationStarcleaveItems.BLESSED_CLOTH_BLOCK,
+                OperationStarcleaveItems.BLESSED_CLOTH_CARPET,
+                OperationStarcleaveItems.BLESSED_CLOTH_CURTAIN
+        );
+
+        getOrCreateTagBuilder(ItemTags.VILLAGER_PLANTABLE_SEEDS).add(
+                OperationStarcleaveItems.BISREED_ROOT
+        );
     }
 }

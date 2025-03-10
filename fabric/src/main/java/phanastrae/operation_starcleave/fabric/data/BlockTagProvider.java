@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.block.Blocks;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.block.tag.OperationStarcleaveBlockTags;
 
@@ -35,7 +36,8 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
         getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_AXE)
                 .add(OperationStarcleaveBlocks.MULCHBORNE_TUFT)
-                .add(OperationStarcleaveBlocks.SHORT_HOLY_MOSS);
+                .add(OperationStarcleaveBlocks.SHORT_HOLY_MOSS)
+                .add(OperationStarcleaveBlocks.BISREEDS);
 
         getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_HOE)
                 .add(OperationStarcleaveBlocks.NETHERITE_PUMPKIN)
@@ -83,8 +85,14 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         getOrCreateTagBuilder(BlockTags.WALLS)
                 .add(OperationStarcleaveBlocks.STARBLEACHED_TILE_WALL);
 
+        getOrCreateTagBuilder(BlockTags.CROPS)
+                .add(OperationStarcleaveBlocks.BISREEDS);
+
         getOrCreateTagBuilder(BlockTags.FIRE)
                 .add(OperationStarcleaveBlocks.PHLOGISTIC_FIRE);
+
+        getOrCreateTagBuilder(BlockTags.MAINTAINS_FARMLAND)
+                .add(OperationStarcleaveBlocks.BISREEDS);
 
         getOrCreateTagBuilder(OperationStarcleaveBlockTags.STARBLEACHED)
                 .add(OperationStarcleaveBlocks.STELLAR_SEDIMENT)
@@ -95,5 +103,22 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 .add(OperationStarcleaveBlocks.STARBLEACHED_WOOD)
                 .add(OperationStarcleaveBlocks.STARBLEACHED_LEAVES)
                 .add(OperationStarcleaveBlocks.STARDUST_BLOCK);
+
+        getOrCreateTagBuilder(OperationStarcleaveBlockTags.ALLOWS_BISREED_PLANTING)
+                .add(
+                        Blocks.FARMLAND,
+                        Blocks.MOSS_BLOCK,
+                        Blocks.SOUL_SAND,
+                        Blocks.END_STONE,
+                        Blocks.PRISMARINE,
+                        OperationStarcleaveBlocks.STELLAR_SEDIMENT,
+                        OperationStarcleaveBlocks.STELLAR_FARMLAND,
+                        OperationStarcleaveBlocks.STELLAR_MULCH,
+                        OperationStarcleaveBlocks.HOLY_MOSS,
+                        OperationStarcleaveBlocks.STARDUST_BLOCK,
+                        OperationStarcleaveBlocks.STARBLEACHED_LOG,
+                        OperationStarcleaveBlocks.STARBLEACHED_WOOD
+
+                );
     }
 }

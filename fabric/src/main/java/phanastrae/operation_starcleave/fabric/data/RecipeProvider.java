@@ -3,11 +3,7 @@ package phanastrae.operation_starcleave.fabric.data;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.data.recipes.ShapedRecipeBuilder;
-import net.minecraft.data.recipes.ShapelessRecipeBuilder;
-import net.minecraft.data.recipes.SmithingTransformRecipeBuilder;
+import net.minecraft.data.recipes.*;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -44,6 +40,13 @@ public class RecipeProvider extends FabricRecipeProvider {
                 .unlockedBy(
                         getHasName(OperationStarcleaveItems.STARBLEACH_BOTTLE),
                         has(OperationStarcleaveItems.STARBLEACH_BOTTLE))
+                .save(exporter);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OperationStarcleaveItems.BISMUTH_FLAKE, 6)
+                .requires(OperationStarcleaveItems.STARFLAKED_BISMUTH)
+                .unlockedBy(
+                        getHasName(OperationStarcleaveItems.STARFLAKED_BISMUTH),
+                        has(OperationStarcleaveItems.STARFLAKED_BISMUTH))
                 .save(exporter);
 
         // shaped
@@ -111,6 +114,16 @@ public class RecipeProvider extends FabricRecipeProvider {
                         has(OperationStarcleaveItems.STARBLEACHED_TILES))
                 .save(exporter);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OperationStarcleaveItems.STARFLAKED_BISMUTH)
+                .define('#', OperationStarcleaveItems.BISMUTH_FLAKE)
+                .pattern("# #")
+                .pattern("###")
+                .pattern(" # ")
+                .unlockedBy(
+                        getHasName(OperationStarcleaveItems.BISMUTH_FLAKE),
+                        has(OperationStarcleaveItems.BISMUTH_FLAKE))
+                .save(exporter);
+
         // complex shaped
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OperationStarcleaveItems.BLESSED_BED)
                 .define('B', OperationStarcleaveItems.BLESSED_CLOTH)
@@ -175,6 +188,20 @@ public class RecipeProvider extends FabricRecipeProvider {
                 )
                 .save(exporter);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OperationStarcleaveItems.BISMUTH_PEGASUS_ARMOR)
+                .define('F', OperationStarcleaveItems.BISMUTH_FLAKE)
+                .define('B', OperationStarcleaveItems.STARFLAKED_BISMUTH)
+                .define('P', OperationStarcleaveItems.STARBLEACHED_PEARL)
+                .pattern("F B")
+                .pattern("BPB")
+                .pattern("F F")
+                .unlockedBy(
+                        getHasName(OperationStarcleaveItems.STARFLAKED_BISMUTH),
+                        has(OperationStarcleaveItems.STARFLAKED_BISMUTH)
+                )
+                .save(exporter);
+
+        // smithing
         SmithingTransformRecipeBuilder.smithing(Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), Ingredient.of(Items.CARVED_PUMPKIN), Ingredient.of(Items.NETHERITE_INGOT), RecipeCategory.TOOLS, OperationStarcleaveItems.NETHERITE_PUMPKIN)
                 .unlocks(
                         getHasName(Items.NETHERITE_INGOT),

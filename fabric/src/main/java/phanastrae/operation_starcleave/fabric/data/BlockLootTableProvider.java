@@ -23,11 +23,14 @@ import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.*;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import phanastrae.operation_starcleave.block.BisreedBlock;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+
+import static phanastrae.operation_starcleave.block.OperationStarcleaveBlocks.BISREEDS;
 
 public class BlockLootTableProvider extends FabricBlockLootTableProvider {
     protected BlockLootTableProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
@@ -93,6 +96,35 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                                         .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BedBlock.PART, BedPart.HEAD)))
                         )
                         .when(ExplosionCondition.survivesExplosion())
+                )
+        );
+
+        LootItemCondition.Builder fullyGrownBisreed = LootItemBlockStatePropertyCondition.hasBlockStateProperties(BISREEDS)
+                .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BisreedBlock.AGE, 3));
+        this.add(BISREEDS, this.applyExplosionDecay(
+                BISREEDS,
+                LootTable.lootTable()
+                        .withPool(
+                                LootPool.lootPool()
+                                        .when(fullyGrownBisreed.invert().and(LootItemRandomChanceCondition.randomChance(0.3F))) // when not fully grown, low chance to recover root
+                                        .add(LootItem.lootTableItem(OperationStarcleaveItems.BISREED_ROOT))
+                        )
+                        .withPool(
+                                LootPool.lootPool()
+                                        .when(fullyGrownBisreed.and(LootItemRandomChanceCondition.randomChance(0.8F))) // when fully grown, decent chance to recover root
+                                        .add(
+                                                LootItem.lootTableItem(OperationStarcleaveItems.BISREED_ROOT) // small chance for bonus root
+                                                        .apply(ApplyBonusCount.addBonusBinomialDistributionCount(impl.getOrThrow(Enchantments.FORTUNE), 0.1F, 1))
+                                        )
+                        )
+                        .withPool(
+                                LootPool.lootPool()
+                                        .when(fullyGrownBisreed) // when fully grown, drop flakes
+                                        .add(
+                                                LootItem.lootTableItem(OperationStarcleaveItems.BISMUTH_FLAKE)
+                                                        .apply(ApplyBonusCount.addBonusBinomialDistributionCount(impl.getOrThrow(Enchantments.FORTUNE), 0.25F, 5))
+                                        )
+                        )
                 )
         );
     }

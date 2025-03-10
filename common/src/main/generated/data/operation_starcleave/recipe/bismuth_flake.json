@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "operation_starcleave:starflaked_bismuth"
+    }
+  ],
+  "result": {
+    "count": 6,
+    "id": "operation_starcleave:bismuth_flake"
+  }
+}
