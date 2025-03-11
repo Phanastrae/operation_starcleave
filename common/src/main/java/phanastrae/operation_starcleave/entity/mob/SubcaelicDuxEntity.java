@@ -1,5 +1,7 @@
 package phanastrae.operation_starcleave.entity.mob;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -26,13 +28,16 @@ import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
+import phanastrae.operation_starcleave.block.PhlogisticFireBlock;
 import phanastrae.operation_starcleave.block.StellarFarmlandBlock;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
+import phanastrae.operation_starcleave.entity.projectile.PhlogisticSparkEntity;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 
@@ -188,34 +193,90 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
 
     @Override
     protected void tickDeath() {
+        Level level = this.level();
         ++this.ticksSinceDeath;
         if(this.ticksSinceDeath >= 200 && !this.isHollow()) {
             this.becomeHollow();
         }
 
-        if(this.level().isClientSide && this.getRandom().nextInt(8) == 0) {
+        if(!level.isClientSide && this.isHollow()) {
+            if(this.getRandom().nextInt(8) == 0 || this.ticksSinceDeath % 49 == 0) {
+                this.spewSparks(3 + this.getRandom().nextInt(4), true);
+            }
+        }
+
+        if(level.isClientSide && this.getRandom().nextInt(8) == 0) {
             this.spawnSmokeBurst();
-            this.level().playLocalSound(this, SoundEvents.GENERIC_EXPLODE.value(), SoundSource.NEUTRAL, 6f, 0.7F + 0.5F * this.getRandom().nextFloat());
+            level.playLocalSound(this, SoundEvents.FIRECHARGE_USE, SoundSource.HOSTILE, 4f, 0.7F + 0.5F * this.getRandom().nextFloat());
         }
 
         if(!this.isRemoved() && (this.ticksSinceDeath >= 400 || (this.ticksSinceDeath >= 240 && this.onGround()))) {
-            boolean doMobLoot = this.level().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT);
+            boolean doMobLoot = level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT);
+            boolean doMobGriefing = level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING);
 
-            if (this.level() instanceof ServerLevel serverWorld) {
+            if (level instanceof ServerLevel serverLevel) {
                 if (doMobLoot) {
-                    ExperienceOrb.award(serverWorld, this.position(), this.getBaseExperienceReward());
+                    ExperienceOrb.award(serverLevel, this.position(), this.getBaseExperienceReward());
                 }
 
                 this.gameEvent(GameEvent.ENTITY_DIE);
 
-                serverWorld.explode(this, this.getX(), this.getY(), this.getZ(), 10, true, Level.ExplosionInteraction.MOB);
+                serverLevel.explode(this, this.getX(), this.getY(), this.getZ(), 10, false, Level.ExplosionInteraction.MOB);
+
+                for(int i = 0; i < 7; i++) {
+                    this.spewSparks(5 + this.getRandom().nextInt(4), false);
+                }
+
+                if(doMobGriefing) {
+                    BlockPos thisPos = this.blockPosition();
+                    RandomSource random = this.getRandom();
+                    for (int i = 0; i < 800; i++) {
+                        Vec3i offset = new Vec3i(random.nextInt(17) - 8, random.nextInt(17) - 8, random.nextInt(17) - 8);
+                        double distSqr = offset.distSqr(Vec3i.ZERO);
+                        if(distSqr < 8.5 * 8.5) {
+                            BlockPos targetPos = thisPos.offset(offset);
+
+                            boolean hitWater = (level.getBlockState(targetPos).is(Blocks.WATER));
+                            if (level.isEmptyBlock(targetPos) || hitWater) {
+                                level.setBlockAndUpdate(targetPos, PhlogisticFireBlock.getState(this.level(), targetPos).setValue(PhlogisticFireBlock.WATERLOGGED, hitWater));
+                            }
+                        }
+                    }
+                }
             }
             this.remove(RemovalReason.KILLED);
         }
     }
 
+    public void spewSparks(int sparkCount, boolean hasOwner) {
+        float yaw = (float)(this.getRandom().nextFloat() * Math.TAU);
+        float pitch = (float)((this.getRandom().nextFloat() * 0.7F - 0.3F) * Math.PI);
+
+        for(int i = 0; i < sparkCount; i++) {
+            float sparkYaw = yaw + (float)((this.getRandom().nextFloat() - 0.5) * 0.2 * Math.TAU);
+            float sparkPitch = pitch + (float)((this.getRandom().nextFloat() - 0.5) * 0.1 * Math.TAU);
+
+            float cosYaw = Mth.cos(sparkYaw);
+            float sinYaw = Mth.sin(sparkYaw);
+            float cosPitch = Mth.cos(sparkPitch);
+            float sinPitch = Mth.sin(sparkPitch);
+            Vec3 targetDirection = new Vec3(cosYaw * cosPitch, sinPitch, sinYaw * cosPitch);
+
+            float posOffset = 1.2F;
+            PhlogisticSparkEntity spark = new PhlogisticSparkEntity(this.getX() + targetDirection.x * posOffset, this.getY() + targetDirection.y * posOffset, this.getZ() + targetDirection.z * posOffset, targetDirection, this.level());
+            spark.setOwner(this);
+            this.level().addFreshEntity(spark);
+        }
+
+        this.level().playSound(null, this.getX(), this.getY() + this.getBbHeight() / 2F, this.getZ(), SoundEvents.GENERIC_EXPLODE, SoundSource.HOSTILE, 7f, 0.4F + 0.5F * this.getRandom().nextFloat());
+    }
+
     @Override
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        if(this.isDeadOrDying()) {
+            return false;
+        }
+
         if(this.isAngry()) {
             return false;
         }

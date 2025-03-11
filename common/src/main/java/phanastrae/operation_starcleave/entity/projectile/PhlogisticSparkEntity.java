@@ -32,7 +32,20 @@ public class PhlogisticSparkEntity extends AbstractHurtingProjectile {
         this.accelerationPower = 0.04;
     }
 
-    public PhlogisticSparkEntity(Level level, LivingEntity owner, Vec3 movement) {
+    protected PhlogisticSparkEntity(
+            double x, double y, double z, Level level
+    ) {
+        super(OperationStarcleaveEntityTypes.PHLOGISTIC_SPARK, level);
+    }
+
+    public PhlogisticSparkEntity(
+            double x, double y, double z, Vec3 movement, Level level
+    ) {
+        super(OperationStarcleaveEntityTypes.PHLOGISTIC_SPARK, x, y, z, movement, level);
+        this.accelerationPower = 0.04;
+    }
+
+    public PhlogisticSparkEntity(LivingEntity owner, Vec3 movement, Level level) {
         super(OperationStarcleaveEntityTypes.PHLOGISTIC_SPARK, owner, movement, level);
         this.accelerationPower = 0.04;
     }
