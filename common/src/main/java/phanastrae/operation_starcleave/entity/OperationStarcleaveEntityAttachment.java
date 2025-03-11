@@ -14,6 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LevelEvent;
 import phanastrae.operation_starcleave.duck.EntityDuckInterface;
+import phanastrae.operation_starcleave.entity.projectile.PhlogisticSparkEntity;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 import phanastrae.operation_starcleave.network.packet.EntityPegasusFlyingPayload;
 import phanastrae.operation_starcleave.network.packet.EntityPegasusGlidingPayload;
@@ -84,7 +85,7 @@ public class OperationStarcleaveEntityAttachment {
         Level level = this.entity.level();
         if (!level.isClientSide && this.phlogisticFireTicks > 0) {
             if (this.phlogisticFireTicks % 10 == 0) {
-                this.entity.hurt(OperationStarcleaveDamageTypes.of(level, OperationStarcleaveDamageTypes.ON_PHLOGISTIC_FIRE), 1.5F);
+                this.entity.hurt(OperationStarcleaveDamageTypes.source(level, OperationStarcleaveDamageTypes.ON_PHLOGISTIC_FIRE), 1.5F);
             }
 
             this.setPhlogisticFireTicks(this.phlogisticFireTicks - 1);
@@ -151,6 +152,10 @@ public class OperationStarcleaveEntityAttachment {
     }
 
     public boolean isOnPhlogisticFire() {
+        if(this.entity instanceof PhlogisticSparkEntity) {
+            return true;
+        }
+
         return onPhlogisticFire;
     }
 

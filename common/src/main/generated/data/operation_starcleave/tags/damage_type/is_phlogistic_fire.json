@@ -1,0 +1,20 @@
+{
+  "values": [
+    {
+      "id": "operation_starcleave:in_phlogistic_fire",
+      "required": false
+    },
+    {
+      "id": "operation_starcleave:on_phlogistic_fire",
+      "required": false
+    },
+    {
+      "id": "operation_starcleave:unattributed_phlogistic_spark",
+      "required": false
+    },
+    {
+      "id": "operation_starcleave:phlogistic_spark",
+      "required": false
+    }
+  ]
+}

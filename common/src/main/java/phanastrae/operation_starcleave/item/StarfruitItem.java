@@ -44,7 +44,7 @@ public class StarfruitItem extends Item {
             world.gameEvent(GameEvent.PROJECTILE_SHOOT, vec3d, GameEvent.Context.of(user));
             world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.SPLASH_POTION_BREAK, SoundSource.PLAYERS);
 
-            user.hurt(OperationStarcleaveDamageTypes.of(world, OperationStarcleaveDamageTypes.INTERNAL_STARBLEACHING), 4);
+            user.hurt(OperationStarcleaveDamageTypes.source(world, OperationStarcleaveDamageTypes.INTERNAL_STARBLEACHING), 4);
         } else {
             Vec3 pos = user.getEyePosition();
             RandomSource random = user.getRandom();

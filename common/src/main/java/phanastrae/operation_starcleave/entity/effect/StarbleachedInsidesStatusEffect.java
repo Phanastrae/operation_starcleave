@@ -17,7 +17,7 @@ public class StarbleachedInsidesStatusEffect extends MobEffect {
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         Level world = entity.level();
         if(world != null) {
-            entity.hurt(OperationStarcleaveDamageTypes.of(world, OperationStarcleaveDamageTypes.INTERNAL_STARBLEACHING), 0.5f * (amplifier + 1));
+            entity.hurt(OperationStarcleaveDamageTypes.source(world, OperationStarcleaveDamageTypes.INTERNAL_STARBLEACHING), 0.5f * (amplifier + 1));
             if(world instanceof ServerLevel serverWorld) {
                 float h = entity.getBbHeight();
                 float w = entity.getBbWidth();

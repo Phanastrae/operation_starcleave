@@ -111,7 +111,7 @@ public class StarbleachCauldronBlock extends AbstractCauldronBlock {
                 }
             }
 
-            entity.hurt(OperationStarcleaveDamageTypes.of(world, OperationStarcleaveDamageTypes.INTERNAL_STARBLEACHING), 0.25f * state.getValue(LEVEL_7));
+            entity.hurt(OperationStarcleaveDamageTypes.source(world, OperationStarcleaveDamageTypes.INTERNAL_STARBLEACHING), 0.25f * state.getValue(LEVEL_7));
             if(!entity.isAlive() && world instanceof ServerLevel serverWorld) {
                 spawnParticles(serverWorld, pos);
             }

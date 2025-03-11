@@ -12,6 +12,7 @@ import phanastrae.operation_starcleave.entity.mob.StarcleaverGolemEntity;
 import phanastrae.operation_starcleave.entity.mob.SubcaelicDuxEntity;
 import phanastrae.operation_starcleave.entity.mob.SubcaelicTorpedoEntity;
 import phanastrae.operation_starcleave.entity.projectile.FirmamentRejuvenatorEntity;
+import phanastrae.operation_starcleave.entity.projectile.PhlogisticSparkEntity;
 import phanastrae.operation_starcleave.entity.projectile.SplashStarbleachEntity;
 import phanastrae.operation_starcleave.entity.projectile.StarbleachedPearlEntity;
 import phanastrae.operation_starcleave.services.XPlatInterface;
@@ -62,17 +63,32 @@ public class OperationStarcleaveEntityTypes {
     public static final EntityType<FirmamentRejuvenatorEntity> FIRMAMENT_REJUVENATOR =
             EntityType.Builder.<FirmamentRejuvenatorEntity>of(FirmamentRejuvenatorEntity::new, MobCategory.MISC)
                     .sized(0.25F, 0.25F)
-                    .clientTrackingRange(4)
+                    .clientTrackingRange(12)
                     .updateInterval(10)
                     .build(getStr(FIRMAMENT_REJUVENATOR_KEY));
 
+    public static final ResourceLocation PHLOGISTIC_SPARK_KEY = id("phlogistic_spark");
+    public static final EntityType<PhlogisticSparkEntity> PHLOGISTIC_SPARK =
+            EntityType.Builder.<PhlogisticSparkEntity>of(PhlogisticSparkEntity::new, MobCategory.MISC)
+                    .sized(0.5F, 0.5F)
+                    .clientTrackingRange(4)
+                    .updateInterval(10)
+                    .build(getStr(PHLOGISTIC_SPARK_KEY));
+
     public static void init(BiConsumer<ResourceLocation, EntityType<?>> r) {
         r.accept(STARCLEAVER_GOLEM_KEY, STARCLEAVER_GOLEM);
+
         r.accept(SUBCAELIC_TORPEDO_KEY, SUBCAELIC_TORPEDO);
         r.accept(SUBCAELIC_DUX_KEY, SUBCAELIC_DUX);
+
+
         r.accept(SPLASH_STARBLEACH_KEY, SPLASH_STARBLEACH);
+
         r.accept(STARBLEACHED_PEARL_KEY, STARBLEACHED_PEARL);
+
         r.accept(FIRMAMENT_REJUVENATOR_KEY, FIRMAMENT_REJUVENATOR);
+
+        r.accept(PHLOGISTIC_SPARK_KEY, PHLOGISTIC_SPARK);
     }
 
     public static void registerEntityAttributes(org.apache.logging.log4j.util.BiConsumer<EntityType<? extends LivingEntity>, AttributeSupplier.Builder> r) {

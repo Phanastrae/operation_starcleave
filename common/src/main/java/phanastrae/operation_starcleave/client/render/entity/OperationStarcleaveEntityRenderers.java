@@ -16,6 +16,7 @@ public class OperationStarcleaveEntityRenderers {
         r.accept(OperationStarcleaveEntityTypes.SPLASH_STARBLEACH, ThrownItemRenderer::new);
         r.accept(OperationStarcleaveEntityTypes.STARBLEACHED_PEARL, ThrownItemRenderer::new);
         r.accept(OperationStarcleaveEntityTypes.FIRMAMENT_REJUVENATOR, ThrownItemRenderer::new);
+        r.accept(OperationStarcleaveEntityTypes.PHLOGISTIC_SPARK, PhlogisticSparkRenderer::new);
     }
 
     @FunctionalInterface

@@ -151,7 +151,7 @@ public class PhlogisticFireBlock extends BaseFireBlock implements SimpleWaterlog
             }
         }
 
-        entity.hurt(OperationStarcleaveDamageTypes.of(world, OperationStarcleaveDamageTypes.IN_PHLOGISTIC_FIRE), 3.0F);
+        entity.hurt(OperationStarcleaveDamageTypes.source(world, OperationStarcleaveDamageTypes.IN_PHLOGISTIC_FIRE), 3.0F);
     }
 
     @Override

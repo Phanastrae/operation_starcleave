@@ -31,7 +31,7 @@ public abstract class AbstractPetrichoricBlock extends Block {
     @Override
     public void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
         entity.makeStuckInBlock(state, new Vec3(0.85, 0.5, 0.85));
-        if(entity.hurt(OperationStarcleaveDamageTypes.of(world, OperationStarcleaveDamageTypes.IN_PHLOGISTIC_FIRE), 12.0F)) { // TODO add custom damage type
+        if(entity.hurt(OperationStarcleaveDamageTypes.source(world, OperationStarcleaveDamageTypes.IN_PHLOGISTIC_FIRE), 12.0F)) { // TODO add custom damage type
             if (!(entity instanceof Player player && player.getAbilities().invulnerable && player.getAbilities().flying)) {
                 RandomSource random = world.getRandom();
                 entity.push(random.nextFloat() * 0.8 - 0.4, random.nextFloat() * 0.3 + 0.6, random.nextFloat() * 0.8 - 0.4);
