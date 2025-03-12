@@ -3,6 +3,7 @@ package phanastrae.operation_starcleave.world.firmament;
 import net.minecraft.world.level.Level;
 import org.joml.Math;
 import phanastrae.operation_starcleave.entity.NuclearStormcloudEntity;
+import phanastrae.operation_starcleave.world.OperationStarcleaveGameRules;
 
 import java.util.Random;
 
@@ -148,10 +149,12 @@ public class FirmamentShatterActor extends FirmamentActor {
     }
 
     public void trySpawnStormcloud(Level level, int x, int z) {
-        if(this.random.nextInt(25) == 0) {
-            int y = this.firmament.getY();
-            NuclearStormcloudEntity stormcloud = new NuclearStormcloudEntity(level, x, y, z);
-            level.addFreshEntity(stormcloud);
+        if(level.getGameRules().getBoolean(OperationStarcleaveGameRules.SPAWN_FRACTURE_BYPRODUCTS)) {
+            if (this.random.nextInt(25) == 0) {
+                int y = this.firmament.getY();
+                NuclearStormcloudEntity stormcloud = new NuclearStormcloudEntity(level, x, y, z);
+                level.addFreshEntity(stormcloud);
+            }
         }
     }
 }

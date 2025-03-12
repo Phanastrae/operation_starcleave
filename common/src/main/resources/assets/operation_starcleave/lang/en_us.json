@@ -72,6 +72,7 @@
   "entity.operation_starcleave.subcaelic_torpedo": "Subcaelic Torpedo",
 
   "gamerule.operation_starcleave:doFractureStarbleaching": "Firmament Fractures Starbleach",
+  "gamerule.operation_starcleave:spawnFractureByproducts": "Fracturing Firmament spawns Nuclear Stormclouds",
 
   "item.operation_starcleave.bismuth_pegasus_armor": "Bismuth Pegasus Armor",
   "item.operation_starcleave.bismuth_flake": "Bismuth Flake",
