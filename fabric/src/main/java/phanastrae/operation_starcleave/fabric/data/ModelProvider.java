@@ -226,6 +226,9 @@ public class ModelProvider extends FabricModelProvider {
                 OperationStarcleaveItems.PHLOGISTON_SAC,
 
                 OperationStarcleaveItems.BISMUTH_PEGASUS_ARMOR,
+
+                OperationStarcleaveItems.NUCLEAR_STORMCLOUD_BOTTLE,
+
                 OperationStarcleaveItems.FIRMAMENT_REJUVENATOR
         );
 

@@ -62,6 +62,8 @@
   "effect.operation_starcleave.starbleached_insides": "Starbleached Insides",
 
   "entity.operation_starcleave.firmament_rejuvenator": "Firmament Rejuvenator",
+  "entity.operation_starcleave.nuclear_stardrop": "Nuclear Stardrop",
+  "entity.operation_starcleave.nuclear_stormcloud": "Nuclear Stormcloud",
   "entity.operation_starcleave.phlogistic_spark": "Phlogistic Spark",
   "entity.operation_starcleave.splash_starbleach_bottle": "Splash Starbleach Bottle",
   "entity.operation_starcleave.starbleached_pearl": "Starbleached Pearl",
@@ -80,6 +82,7 @@
   "item.operation_starcleave.firmament_rejuvenator": "Firmament Rejuvenator",
   "item.operation_starcleave.hollowed_sac": "Hollowed Sac",
   "item.operation_starcleave.holy_strands": "Holy Strands",
+  "item.operation_starcleave.nuclear_stormcloud_bottle": "Nuclear Stormcloud in a Bottle",
   "item.operation_starcleave.phlogiston_sac": "Phlogiston Sac",
   "item.operation_starcleave.splash_starbleach_bottle": "Splash Starbleach Bottle",
   "item.operation_starcleave.starbleach_bottle": "Starbleach Bottle",

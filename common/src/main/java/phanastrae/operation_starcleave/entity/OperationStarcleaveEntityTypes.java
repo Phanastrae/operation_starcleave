@@ -11,10 +11,7 @@ import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.entity.mob.StarcleaverGolemEntity;
 import phanastrae.operation_starcleave.entity.mob.SubcaelicDuxEntity;
 import phanastrae.operation_starcleave.entity.mob.SubcaelicTorpedoEntity;
-import phanastrae.operation_starcleave.entity.projectile.FirmamentRejuvenatorEntity;
-import phanastrae.operation_starcleave.entity.projectile.PhlogisticSparkEntity;
-import phanastrae.operation_starcleave.entity.projectile.SplashStarbleachEntity;
-import phanastrae.operation_starcleave.entity.projectile.StarbleachedPearlEntity;
+import phanastrae.operation_starcleave.entity.projectile.*;
 import phanastrae.operation_starcleave.services.XPlatInterface;
 
 import java.util.function.BiConsumer;
@@ -75,20 +72,38 @@ public class OperationStarcleaveEntityTypes {
                     .updateInterval(10)
                     .build(getStr(PHLOGISTIC_SPARK_KEY));
 
+    public static final ResourceLocation NUCLEAR_STARDROP_KEY = id("nuclear_stardrop");
+    public static final EntityType<NuclearStardropEntity> NUCLEAR_STARDROP =
+            EntityType.Builder.<NuclearStardropEntity>of(NuclearStardropEntity::new, MobCategory.MISC)
+                    .sized(0.5F, 0.5F)
+                    .clientTrackingRange(4)
+                    .updateInterval(10)
+                    .build(getStr(NUCLEAR_STARDROP_KEY));
+
+    public static final ResourceLocation NUCLEAR_STORMCLOUD_KEY = id("nuclear_stormcloud");
+    public static final EntityType<NuclearStormcloudEntity> NUCLEAR_STORMCLOUD =
+            EntityType.Builder.<NuclearStormcloudEntity>of(NuclearStormcloudEntity::new, MobCategory.MISC)
+                    .sized(5F, 3F)
+                    .clientTrackingRange(16)
+                    .updateInterval(2)
+                    .build(getStr(NUCLEAR_STORMCLOUD_KEY));
+
     public static void init(BiConsumer<ResourceLocation, EntityType<?>> r) {
+        // mobs
         r.accept(STARCLEAVER_GOLEM_KEY, STARCLEAVER_GOLEM);
 
         r.accept(SUBCAELIC_TORPEDO_KEY, SUBCAELIC_TORPEDO);
         r.accept(SUBCAELIC_DUX_KEY, SUBCAELIC_DUX);
 
-
+        // projectiles
         r.accept(SPLASH_STARBLEACH_KEY, SPLASH_STARBLEACH);
-
         r.accept(STARBLEACHED_PEARL_KEY, STARBLEACHED_PEARL);
-
         r.accept(FIRMAMENT_REJUVENATOR_KEY, FIRMAMENT_REJUVENATOR);
-
         r.accept(PHLOGISTIC_SPARK_KEY, PHLOGISTIC_SPARK);
+        r.accept(NUCLEAR_STARDROP_KEY, NUCLEAR_STARDROP);
+
+        // misc
+        r.accept(NUCLEAR_STORMCLOUD_KEY, NUCLEAR_STORMCLOUD);
     }
 
     public static void registerEntityAttributes(org.apache.logging.log4j.util.BiConsumer<EntityType<? extends LivingEntity>, AttributeSupplier.Builder> r) {

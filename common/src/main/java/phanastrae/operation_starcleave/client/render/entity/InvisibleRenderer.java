@@ -9,9 +9,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
-public class PhlogisticSparkRenderer<T extends Entity> extends EntityRenderer<T> {
+public class InvisibleRenderer<T extends Entity> extends EntityRenderer<T> {
 
-    protected PhlogisticSparkRenderer(EntityRendererProvider.Context context) {
+    protected InvisibleRenderer(EntityRendererProvider.Context context) {
         super(context);
     }
 

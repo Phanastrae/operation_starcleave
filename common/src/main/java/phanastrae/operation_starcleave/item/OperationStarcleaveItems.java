@@ -77,6 +77,8 @@ public class OperationStarcleaveItems {
             false,
             settings().stacksTo(1)
     );
+    public static final Item NUCLEAR_STORMCLOUD_BOTTLE = new NuclearStormcloudBottleItem(settings().rarity(EPIC));
+
     public static final Item FIRMAMENT_REJUVENATOR = new FirmamentRejuvenatorItem(settings(8, RARE));
     public static final Item FIRMAMENT_MANIPULATOR = new FirmamentManipulatorItem(settings(1, EPIC));
     public static final Item STARCLEAVER_GOLEM_SPAWN_EGG = spawnEggItem(OperationStarcleaveEntityTypes.STARCLEAVER_GOLEM, 0x292725, 0x61EDDF);
@@ -150,6 +152,8 @@ public class OperationStarcleaveItems {
         rwt.accept("phlogiston_sac", PHLOGISTON_SAC);
 
         rwt.accept("bismuth_pegasus_armor", BISMUTH_PEGASUS_ARMOR);
+
+        rwt.accept("nuclear_stormcloud_bottle",NUCLEAR_STORMCLOUD_BOTTLE);
 
         rwt.accept("firmament_rejuvenator", FIRMAMENT_REJUVENATOR);
 

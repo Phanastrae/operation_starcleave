@@ -1,9 +1,10 @@
 package phanastrae.operation_starcleave.world.firmament;
 
+import net.minecraft.world.level.Level;
 import org.joml.Math;
+import phanastrae.operation_starcleave.entity.NuclearStormcloudEntity;
 
 import java.util.Random;
-import net.minecraft.world.level.Level;
 
 import static phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion.TILE_SIZE;
 
@@ -88,18 +89,10 @@ public class FirmamentShatterActor extends FirmamentActor {
             if(damage < 7) {
                 int d = Math.clamp(0, 7, damage + (int) addDamage);
                 firmament.setDamage(idx, idz, d);
-                /*
+
                 if(d == 7) {
-                    for(int x = 0; x < 4; x++) {
-                        for(int z = 0; z < 4; z++) {
-                            int xPos = x + idx;
-                            int zPos = z + idz;
-                            int yPos = world.getTopY(Heightmap.Type.WORLD_SURFACE, xPos, zPos);
-                            world.setBlockState(new BlockPos(xPos, yPos + 1, zPos), OperationStarcleaveBlocks.PETRICHORIC_PLASMA.getDefaultState());
-                        }
-                    }
+                    this.trySpawnStormcloud(this.firmament.getLevel(), 2 + idx, 2 + idz);
                 }
-                */
             }
             firmament.markActive(idx, idz);
 
@@ -109,18 +102,9 @@ public class FirmamentShatterActor extends FirmamentActor {
                 if(damage2 < 7) {
                     int d2 = Math.clamp(0, 7, damage2 + (int) addDamage2);
                     firmament.setDamage(idx + nx, idz + nz, d2);
-                    /*
                     if(d2 == 7) {
-                        for(int x = 0; x < 4; x++) {
-                            for(int z = 0; z < 4; z++) {
-                                int xPos = x + (idx + nx);
-                                int zPos = z + (idz + nz);
-                                int yPos = world.getTopY(Heightmap.Type.WORLD_SURFACE, xPos, zPos);
-                                world.setBlockState(new BlockPos(xPos, yPos + 1, zPos), OperationStarcleaveBlocks.PETRICHORIC_PLASMA.getDefaultState());
-                            }
-                        }
+                        this.trySpawnStormcloud(this.firmament.getLevel(), 2 + idx + nx, 2 + idz + nz);
                     }
-                    */
                 }
             });
 
@@ -161,5 +145,13 @@ public class FirmamentShatterActor extends FirmamentActor {
 
         firmament.addActor(actor1);
         firmament.addActor(actor2);
+    }
+
+    public void trySpawnStormcloud(Level level, int x, int z) {
+        if(this.random.nextInt(25) == 0) {
+            int y = this.firmament.getY();
+            NuclearStormcloudEntity stormcloud = new NuclearStormcloudEntity(level, x, y, z);
+            level.addFreshEntity(stormcloud);
+        }
     }
 }
