@@ -54,6 +54,12 @@ public class OperationStarcleaveItems {
     public static final Item BLESSED_CLOTH_CARPET = blockItem(OperationStarcleaveBlocks.BLESSED_CLOTH_CARPET);
     public static final Item BLESSED_CLOTH_CURTAIN = blockItem(OperationStarcleaveBlocks.BLESSED_CLOTH_CURTAIN);
 
+    public static final Item NUCLEOSYNTHESEED = blockItem(OperationStarcleaveBlocks.NUCLEOSYNTHESEED);
+    public static final Item NUCLEIC_FISSUREROOT = blockItem(OperationStarcleaveBlocks.NUCLEIC_FISSUREROOT);
+    public static final Item NUCLEIC_FISSURELEAVES = blockItem(OperationStarcleaveBlocks.NUCLEIC_FISSURELEAVES);
+    public static final Item COAGULATED_PLASMA = blockItem(OperationStarcleaveBlocks.COAGULATED_PLASMA);
+    public static final Item PLASMA_ICE = blockItem(OperationStarcleaveBlocks.PLASMA_ICE);
+
     public static final Item BLESSED_BED = new BedItem(OperationStarcleaveBlocks.BLESSED_BED, settings(1, RARE));
 
     public static final Item STARCLEAVER_GOLEM_BUCKET = new StarcleaverGolemBucketItem(settings(1));
@@ -121,6 +127,12 @@ public class OperationStarcleaveItems {
         rwt.accept("blessed_cloth_block", BLESSED_CLOTH_BLOCK);
         rwt.accept("blessed_cloth_carpet", BLESSED_CLOTH_CARPET);
         rwt.accept("blessed_cloth_curtain", BLESSED_CLOTH_CURTAIN);
+
+        rwt.accept("nucleosyntheseed", NUCLEOSYNTHESEED);
+        rwt.accept("nucleic_fissureroot", NUCLEIC_FISSUREROOT);
+        rwt.accept("nucleic_fissureleaves", NUCLEIC_FISSURELEAVES);
+        rwt.accept("coagulated_plasma", COAGULATED_PLASMA);
+        rwt.accept("plasma_ice", PLASMA_ICE);
 
         rwt.accept("blessed_bed", BLESSED_BED);
         Item.BY_BLOCK.put(OperationStarcleaveBlocks.STARBLEACH_CAULDRON, Items.CAULDRON);

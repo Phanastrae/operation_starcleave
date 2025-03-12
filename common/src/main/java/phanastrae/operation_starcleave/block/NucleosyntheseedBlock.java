@@ -1,0 +1,384 @@
+package phanastrae.operation_starcleave.block;
+
+import com.mojang.serialization.MapCodec;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.ExplosionDamageCalculator;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.material.FluidState;
+import phanastrae.operation_starcleave.entity.OperationStarcleaveDamageTypes;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+public class NucleosyntheseedBlock extends Block {
+    public static final MapCodec<NucleosyntheseedBlock> CODEC = simpleCodec(NucleosyntheseedBlock::new);
+    public static final int MAX_AGE = 15;
+    public static final IntegerProperty AGE = BlockStateProperties.AGE_15;
+    public static final BooleanProperty GROWS_DOWN = BooleanProperty.create("grows_down");
+
+    @Override
+    protected MapCodec<? extends NucleosyntheseedBlock> codec() {
+        return CODEC;
+    }
+
+    public NucleosyntheseedBlock(Properties properties) {
+        super(properties);
+        this.registerDefaultState(
+                this.defaultBlockState()
+                        .setValue(AGE, 0)
+                        .setValue(GROWS_DOWN, true)
+        );
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(AGE, GROWS_DOWN);
+    }
+
+    @Override
+    protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
+        super.onPlace(state, level, pos, oldState, movedByPiston);
+        level.scheduleTick(pos, this, 30 + level.getRandom().nextInt(120));
+    }
+
+    @Override
+    protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        trySpread(state, level, pos, random);
+    }
+
+    @Override
+    protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        trySpread(state, level, pos, random);
+    }
+
+    public static void trySpread(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        if(state.getValue(AGE) == MAX_AGE) {
+            return;
+        }
+
+        if(random.nextInt(4) != 0) {
+            boolean growsDown = state.getValue(GROWS_DOWN);
+            if (trySpread(state, level, pos, random, growsDown ? Direction.DOWN : Direction.UP)) {
+                return;
+            }
+        }
+
+        List<Direction> directions = Direction.Plane.HORIZONTAL.shuffledCopy(random);
+        for(Direction direction : directions) {
+            if(trySpread(state, level, pos, random, direction)) {
+                return;
+            }
+        }
+
+        level.setBlockAndUpdate(pos, state.cycle(AGE));
+    }
+
+    public static boolean trySpread(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, Direction direction) {
+        boolean growsDown = state.getValue(GROWS_DOWN);
+        int age = state.getValue(AGE);
+        BlockState newState = random.nextInt(growsDown ? 6 : 3) == 0 ? state.cycle(AGE) : state;
+
+        BlockPos adjPos = pos.relative(direction);
+        BlockState adjState = level.getBlockState(adjPos);
+
+        if(canBurrowThrough(adjState)) {
+            level.setBlockAndUpdate(adjPos, newState);
+            level.scheduleTick(adjPos, newState.getBlock(), 30 + random.nextInt(120));
+            level.setBlockAndUpdate(pos, OperationStarcleaveBlocks.NUCLEIC_FISSUREROOT.defaultBlockState().setValue(RotatedPillarBlock.AXIS, direction.getAxis()));
+            if(!growsDown) {
+                spawnLeaves(level, adjPos, random);
+            }
+
+            boolean vertical = direction.getAxis() != Direction.Axis.Y;
+            if(vertical || growsDown) {
+                BlockPos oppPos = pos.relative(direction.getOpposite());
+                BlockState oppState = level.getBlockState(oppPos);
+                if (canBurrowThrough(oppState)) {
+                    if (random.nextInt(3) == 0 || (vertical && growsDown && age <= 2)) {
+                        int newAge;
+                        if(random.nextInt(3) == 0) {
+                            newAge = MAX_AGE;
+                        } else {
+                            newAge = Math.min(age + 5 + random.nextInt(5), MAX_AGE);
+                        }
+
+                        BlockState nState = state.setValue(AGE, newAge);
+                        boolean makeGrowUp = vertical && growsDown;
+                        if(makeGrowUp) {
+                            nState = nState.setValue(GROWS_DOWN, false);
+                        }
+                        level.setBlockAndUpdate(oppPos, nState);
+                        level.scheduleTick(oppPos, newState.getBlock(), 30 + random.nextInt(120));
+
+                        if(makeGrowUp || !growsDown) {
+                            spawnLeaves(level, oppPos, random);
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    public static void spawnLeaves(Level level, BlockPos pos, RandomSource random) {
+        // place direct neighbours
+        for(Direction direction : Direction.values()) {
+            BlockPos adjPos = pos.relative(direction);
+            if(random.nextInt(5) != 0) {
+                trySpawnLeavesAtPos(level, adjPos);
+            }
+        }
+
+        // place plane-diagonal blocks
+        for(int i = -1; i <= 1; i++) {
+            for(int j = -1; j <= 1; j++) {
+                for(int k = -1; k <= 1; k++) {
+                    int distSqr = i*i + j*j + k*k;
+                    if(distSqr != 2) continue; // only check the blocks next to the directional blocks
+
+                    BlockPos adjPos = pos.offset(i, j, k);
+                    if(random.nextInt(3) != 0) {
+                        if(countAdjacentLeaves(level, adjPos) >= 1) {
+                            trySpawnLeavesAtPos(level, adjPos);
+                        }
+                    }
+                }
+            }
+        }
+
+        // place 3-axis-diagonal blocks
+        for(int i = -1; i <= 1; i++) {
+            if(i == 0) continue;
+            for(int j = -1; j <= 1; j++) {
+                if(j == 0) continue;
+                for(int k = -1; k <= 1; k++) {
+                    if(k == 0) continue;
+                    BlockPos adjPos = pos.offset(i, j, k);
+                    if(random.nextInt(2) != 0) {
+                        if(countAdjacentLeaves(level, adjPos) >= 2) {
+                            trySpawnLeavesAtPos(level, adjPos);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public static int countAdjacentLeaves(Level level, BlockPos pos) {
+        int count = 0;
+        for(Direction direction : Direction.values()) {
+            BlockPos adjPos = pos.relative(direction);
+            BlockState adjState = level.getBlockState(adjPos);
+            if(adjState.is(OperationStarcleaveBlocks.NUCLEIC_FISSURELEAVES)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public static void trySpawnLeavesAtPos(Level level, BlockPos pos) {
+        BlockState adjState = level.getBlockState(pos);
+        if(adjState.canBeReplaced()) {
+            level.setBlockAndUpdate(pos, OperationStarcleaveBlocks.NUCLEIC_FISSURELEAVES.defaultBlockState());
+        }
+    }
+
+    public static void detonate(Level level, BlockPos pos) {
+        level.setBlockAndUpdate(pos, PhlogisticFireBlock.getState(level, pos));
+
+        explode(level, pos);
+
+        RandomSource random = level.getRandom();
+
+        Set<BlockPos> positions = new HashSet<>();
+        Set<BlockPos> positionsLast = new HashSet<>();
+        positionsLast.add(locateStartPos(level, pos));
+
+        for(int i = 0; i < 19; i++) {
+            // clear blocks below
+            for(BlockPos targetPos : positionsLast) {
+                BlockPos downPos = targetPos.below();
+                BlockState downState = level.getBlockState(downPos);
+                if(canErode(downState)) {
+                    if(!downState.is(OperationStarcleaveBlocks.PHLOGISTIC_FIRE)) {
+                        level.setBlockAndUpdate(downPos, Blocks.AIR.defaultBlockState());
+                    }
+                    positions.add(downPos);
+                }
+            }
+
+            positionsLast.clear();
+
+            // spread outwards
+            for(BlockPos targetPos : positions) {
+                for(Direction direction : Direction.Plane.HORIZONTAL) {
+                    BlockPos adjPos = targetPos.relative(direction);
+                    if(!positionsLast.contains(adjPos)) {
+                        BlockState adjState = level.getBlockState(adjPos);
+                        if(canErode(adjState)) {
+                            if(random.nextInt(5) <= 1) {
+                                if(!adjState.is(OperationStarcleaveBlocks.PHLOGISTIC_FIRE)) {
+                                    level.setBlockAndUpdate(adjPos, Blocks.AIR.defaultBlockState());
+                                }
+                                positionsLast.add(adjPos);
+                            }
+                        }
+                    }
+                }
+            }
+
+            positionsLast.addAll(positions);
+            positions.clear();
+
+            if(positionsLast.isEmpty()) {
+                break;
+            }
+        }
+
+        positions.addAll(positionsLast);
+
+        for(int i = 0; i < 15; i++) {
+            // spread inwards
+            for(BlockPos targetPos : positions) {
+                for (Direction direction : Direction.Plane.HORIZONTAL) {
+                    BlockPos adjPos = targetPos.relative(direction);
+                    if (!positions.contains(adjPos)) {
+                        if (random.nextInt(1) == 0) {
+                            positionsLast.remove(targetPos);
+
+                            BlockPos downPos = targetPos.below();
+                            BlockState downState = level.getBlockState(downPos);
+                            if(canErode(downState) && !((downState.canBeReplaced() || !downState.canOcclude()) && i <= 1)) {
+                                level.setBlockAndUpdate(downPos, OperationStarcleaveBlocks.COAGULATED_PLASMA.defaultBlockState());
+                            }
+                        }
+                    }
+                }
+            }
+
+            positions.clear();
+
+            // clear blocks below
+            for(BlockPos targetPos : positionsLast) {
+                BlockPos downPos = targetPos.below();
+                BlockState downState = level.getBlockState(downPos);
+                if(canErode(downState) && !((downState.canBeReplaced() || !downState.canOcclude()) && i <= 1)) {
+                    BlockState state = (i <= 1 ? Blocks.AIR : (i < 14 ? OperationStarcleaveBlocks.PETRICHORIC_PLASMA : OperationStarcleaveBlocks.COAGULATED_PLASMA)).defaultBlockState();
+                    level.setBlockAndUpdate(downPos, state);
+                    positions.add(downPos);
+                }
+            }
+
+            positionsLast.clear();
+            positionsLast.addAll(positions);
+
+            if(positionsLast.isEmpty()) {
+                break;
+            }
+        }
+    }
+
+    public static BlockPos locateStartPos(Level level, BlockPos pos) {
+        BlockPos startPos = pos;
+        for(int i = 0; i < 7; i++) {
+            BlockPos upPos = startPos.above();
+            BlockState upState = level.getBlockState(upPos);
+            if(upState.canBeReplaced()) {
+                startPos = upPos;
+            }
+        }
+        return startPos;
+    }
+
+    public static void explode(Level level, BlockPos pos) {
+        ExplosionDamageCalculator damageCalculator = new ExplosionDamageCalculator() {
+            @Override
+            public Optional<Float> getBlockExplosionResistance(
+                    Explosion explosion, BlockGetter blockGetter, BlockPos blockPos, BlockState blockState, FluidState fluidState
+            ) {
+                return blockState.is(OperationStarcleaveBlocks.NUCLEOSYNTHESEED) || blockState.is(OperationStarcleaveBlocks.NUCLEIC_FISSUREROOT) || blockState.is(OperationStarcleaveBlocks.PHLOGISTIC_FIRE)
+                        ? Optional.of(Blocks.WATER.getExplosionResistance())
+                        : super.getBlockExplosionResistance(explosion, blockGetter, blockPos, blockState, fluidState);
+            }
+        };
+        level.explode(
+                null,
+                OperationStarcleaveDamageTypes.source(level, OperationStarcleaveDamageTypes.IN_PHLOGISTIC_FIRE),
+                damageCalculator,
+                pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+                4,
+                false,
+                Level.ExplosionInteraction.TNT
+        );
+    }
+
+    public static boolean canBurrowThrough(BlockState state) {
+        // do destroy petrichoric blocks
+        if(state.is(OperationStarcleaveBlocks.PETRICHORIC_PLASMA) || state.is(OperationStarcleaveBlocks.PETRICHORIC_VAPOR)) {
+            return true;
+        }
+
+        // do not destroy phlogistic fire
+        if(state.is(OperationStarcleaveBlocks.PHLOGISTIC_FIRE)) {
+            return false;
+        }
+
+        return canDestroy(state);
+    }
+
+    public static boolean canErode(BlockState state) {
+        // do destroy petrichoric blocks
+        if(state.is(OperationStarcleaveBlocks.PETRICHORIC_PLASMA) || state.is(OperationStarcleaveBlocks.PETRICHORIC_VAPOR)) {
+            return true;
+        }
+
+        // do destroy coagulated plasma
+        if(state.is(OperationStarcleaveBlocks.COAGULATED_PLASMA)) {
+            return true;
+        }
+
+        return canDestroy(state);
+    }
+
+    public static boolean canDestroy(BlockState state) {
+        // do not destroy roots or seeds
+        if(state.is(OperationStarcleaveBlocks.NUCLEIC_FISSUREROOT) || state.is(OperationStarcleaveBlocks.NUCLEOSYNTHESEED)) {
+            return false;
+        }
+
+        // destroy replaceable blocks
+        if(state.canBeReplaced()) {
+            return true;
+        }
+
+        return mayDestroy(state);
+    }
+
+    public static boolean mayDestroy(BlockState state) {
+        // do not destroy boss immune blocks
+        if(state.is(BlockTags.WITHER_IMMUNE) || state.is(BlockTags.DRAGON_IMMUNE)) {
+            return false;
+        }
+
+        // destroy blocks with low explosion resistane
+        return !(state.getBlock().getExplosionResistance() > 6);
+    }
+}

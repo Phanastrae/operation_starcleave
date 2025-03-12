@@ -194,12 +194,15 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
     @Override
     protected void tickDeath() {
         Level level = this.level();
+        boolean doMobLoot = level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT);
+        boolean doMobGriefing = level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING);
+
         ++this.ticksSinceDeath;
         if(this.ticksSinceDeath >= 200 && !this.isHollow()) {
             this.becomeHollow();
         }
 
-        if(!level.isClientSide && this.isHollow()) {
+        if(!level.isClientSide && this.isHollow() && doMobGriefing) {
             if(this.getRandom().nextInt(8) == 0 || this.ticksSinceDeath % 49 == 0) {
                 this.spewSparks(3 + this.getRandom().nextInt(4), true);
             }
@@ -211,9 +214,6 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
         }
 
         if(!this.isRemoved() && (this.ticksSinceDeath >= 400 || (this.ticksSinceDeath >= 240 && this.onGround()))) {
-            boolean doMobLoot = level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT);
-            boolean doMobGriefing = level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING);
-
             if (level instanceof ServerLevel serverLevel) {
                 if (doMobLoot) {
                     ExperienceOrb.award(serverLevel, this.position(), this.getBaseExperienceReward());
@@ -223,11 +223,11 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
 
                 serverLevel.explode(this, this.getX(), this.getY(), this.getZ(), 10, false, Level.ExplosionInteraction.MOB);
 
-                for(int i = 0; i < 7; i++) {
-                    this.spewSparks(5 + this.getRandom().nextInt(4), false);
-                }
-
                 if(doMobGriefing) {
+                    for(int i = 0; i < 7; i++) {
+                        this.spewSparks(5 + this.getRandom().nextInt(4), false);
+                    }
+
                     BlockPos thisPos = this.blockPosition();
                     RandomSource random = this.getRandom();
                     for (int i = 0; i < 800; i++) {
@@ -264,7 +264,9 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
 
             float posOffset = 1.2F;
             PhlogisticSparkEntity spark = new PhlogisticSparkEntity(this.getX() + targetDirection.x * posOffset, this.getY() + targetDirection.y * posOffset, this.getZ() + targetDirection.z * posOffset, targetDirection, this.level());
-            spark.setOwner(this);
+            if(hasOwner) {
+                spark.setOwner(this);
+            }
             this.level().addFreshEntity(spark);
         }
 

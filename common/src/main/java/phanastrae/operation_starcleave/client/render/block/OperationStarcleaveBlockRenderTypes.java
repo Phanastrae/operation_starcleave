@@ -9,15 +9,19 @@ public class OperationStarcleaveBlockRenderTypes {
 
     public static void init() {
         putBlocks(RenderType.cutoutMipped(),
-                OperationStarcleaveBlocks.STARBLEACHED_LEAVES);
+                OperationStarcleaveBlocks.STARBLEACHED_LEAVES,
+                OperationStarcleaveBlocks.NUCLEIC_FISSURELEAVES
+        );
         putBlocks(RenderType.cutout(),
                 OperationStarcleaveBlocks.BISREEDS,
                 OperationStarcleaveBlocks.MULCHBORNE_TUFT,
                 OperationStarcleaveBlocks.SHORT_HOLY_MOSS,
                 OperationStarcleaveBlocks.BLESSED_BED,
-                OperationStarcleaveBlocks.PHLOGISTIC_FIRE);
+                OperationStarcleaveBlocks.PHLOGISTIC_FIRE
+        );
         putBlocks(RenderType.translucent(),
-                OperationStarcleaveBlocks.PETRICHORIC_VAPOR);
+                OperationStarcleaveBlocks.PETRICHORIC_VAPOR
+        );
     }
 
     private static void putBlocks(RenderType renderLayer, Block... blocks) {

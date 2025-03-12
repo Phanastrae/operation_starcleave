@@ -2,7 +2,6 @@ package phanastrae.operation_starcleave.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -29,71 +28,77 @@ public abstract class AbstractPetrichoricBlock extends Block {
     }
 
     @Override
-    public void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
+    public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+        // slow entities inside block
         entity.makeStuckInBlock(state, new Vec3(0.85, 0.5, 0.85));
-        if(entity.hurt(OperationStarcleaveDamageTypes.source(world, OperationStarcleaveDamageTypes.IN_PHLOGISTIC_FIRE), 12.0F)) { // TODO add custom damage type
+
+        // damage to entities inside block
+        if(entity.hurt(OperationStarcleaveDamageTypes.source(level, OperationStarcleaveDamageTypes.IN_PHLOGISTIC_FIRE), 12.0F)) { // TODO add custom damage type
             if (!(entity instanceof Player player && player.getAbilities().invulnerable && player.getAbilities().flying)) {
-                RandomSource random = world.getRandom();
+                RandomSource random = level.getRandom();
                 entity.push(random.nextFloat() * 0.8 - 0.4, random.nextFloat() * 0.3 + 0.6, random.nextFloat() * 0.8 - 0.4);
             }
         }
     }
 
     @Override
-    public void animateTick(BlockState state, Level world, BlockPos pos, RandomSource random) {
-        if(world.getBlockState(pos.above()).isAir()) {
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        // particles
+
+        if(level.getBlockState(pos.above()).isAir()) {
             double x = pos.getX() + random.nextDouble();
             double y = pos.getY() + random.nextDouble() * 0.2 + 0.8;
             double z = pos.getZ() + random.nextDouble();
-            world.addParticle(OperationStarcleaveParticleTypes.LARGE_GLIMMER_SMOKE, x, y, z, 0.0, 0.0, 0.0);
+            level.addParticle(OperationStarcleaveParticleTypes.LARGE_GLIMMER_SMOKE, x, y, z, 0.0, 0.0, 0.0);
         }
     }
 
-    public static boolean canDestroy(BlockState state) {
-        if(state.isAir() || state.is(OperationStarcleaveBlocks.PETRICHORIC_PLASMA) || state.is(OperationStarcleaveBlocks.PETRICHORIC_VAPOR)) {
-            return false;
-        }
-
-        if(state.canBeReplaced()) {
-            return true;
-        }
-
-        if(state.is(BlockTags.WITHER_IMMUNE) || state.is(BlockTags.DRAGON_IMMUNE)) {
-            return false;
-        }
-
-        return !(state.getBlock().getExplosionResistance() > 6);
-    }
-
-    public static boolean absorbWater(Level world, BlockPos pos) {
+    public static boolean absorbWater(Level level, BlockPos pos, RandomSource random) {
         int posY = pos.getY();
-        return BlockPos.breadthFirstTraversal(pos, 4, 65, (currentPos, queuer) -> {
+
+        return BlockPos.breadthFirstTraversal(pos, 2, 65, (currentPos, queuer) -> {
             for(Direction direction : UPDATE_SHAPE_ORDER) {
                 queuer.accept(currentPos.relative(direction));
             }
         }, currentPos -> {
             int yDif = currentPos.getY() - posY;
-            BlockState newState = yDif <= 0 ? OperationStarcleaveBlocks.STELLAR_SEDIMENT.defaultBlockState() : OperationStarcleaveBlocks.PETRICHORIC_VAPOR.defaultBlockState();
+
+            // place vapor if current block is higher than the plasma/vapor, otherwise place filler block
+            BlockState filler = OperationStarcleaveBlocks.PLASMA_ICE.defaultBlockState();
+            BlockState vapor = OperationStarcleaveBlocks.PETRICHORIC_VAPOR.defaultBlockState();
+            BlockState newState = yDif <= 0 ? filler : vapor;
 
             if (currentPos.equals(pos)) {
+                // always spread from start
                 return true;
             } else {
-                BlockState blockState = world.getBlockState(currentPos);
-                FluidState fluidState = world.getFluidState(currentPos);
+                BlockState blockState = level.getBlockState(currentPos);
+                FluidState fluidState = level.getFluidState(currentPos);
 
                 if (fluidState.isEmpty()) {
                     return false;
                 } else {
                     Block block = blockState.getBlock();
                     if (block instanceof LiquidBlock) {
-                        world.setBlock(currentPos, newState, Block.UPDATE_ALL);
+                        // replace liquids
+                        BlockState st = fluidState.isSource() ? newState : vapor;
+                        level.setBlock(currentPos, st, Block.UPDATE_ALL);
+                        if(st.is(OperationStarcleaveBlocks.PLASMA_ICE)) {
+                            level.scheduleTick(currentPos, newState.getBlock(), random.nextInt(2) + 1);
+                        }
                         return true;
-                    } else if (block instanceof BucketPickup fluidDrainable && !fluidDrainable.pickupBlock(null, world, currentPos, blockState).isEmpty()) {
+                    } else if (block instanceof BucketPickup fluidDrainable && !fluidDrainable.pickupBlock(null, level, currentPos, blockState).isEmpty()) {
+                        // try to drain fluids from fluidlogged blocks
                         return true;
                     } else if (blockState.is(Blocks.KELP) || blockState.is(Blocks.KELP_PLANT) || blockState.is(Blocks.SEAGRASS) || blockState.is(Blocks.TALL_SEAGRASS)) {
-                        BlockEntity blockEntity = blockState.hasBlockEntity() ? world.getBlockEntity(currentPos) : null;
-                        dropResources(blockState, world, currentPos, blockEntity);
-                        world.setBlock(currentPos, newState, Block.UPDATE_ALL);
+                        // replace certain blocks
+
+                        BlockEntity blockEntity = blockState.hasBlockEntity() ? level.getBlockEntity(currentPos) : null;
+                        dropResources(blockState, level, currentPos, blockEntity);
+                        level.setBlock(currentPos, newState, Block.UPDATE_ALL);
+                        if(newState.is(OperationStarcleaveBlocks.PLASMA_ICE)) {
+                            level.scheduleTick(currentPos, newState.getBlock(), random.nextInt(2) + 1);
+                        }
                         return true;
                     } else {
                         return false;

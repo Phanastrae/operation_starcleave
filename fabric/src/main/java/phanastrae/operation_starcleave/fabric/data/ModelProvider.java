@@ -27,6 +27,23 @@ public class ModelProvider extends FabricModelProvider {
 
     @Override
     public void generateBlockStateModels(BlockModelGenerators BMG) {
+        BMG.createTrivialCube(CHISELED_STARBLEACHED_TILES);
+        BMG.createTrivialCube(IMBUED_STARBLEACHED_TILES);
+        BMG.createTrivialCube(NUCLEOSYNTHESEED);
+        BMG.createTrivialCube(PLASMA_ICE);
+
+        BMG.createRotatedVariantBlock(COAGULATED_PLASMA);
+        BMG.createRotatedVariantBlock(STELLAR_SEDIMENT);
+        BMG.createRotatedVariantBlock(STARDUST_BLOCK);
+        BMG.createRotatedVariantBlock(PETRICHORIC_PLASMA);
+        BMG.createRotatedVariantBlock(PETRICHORIC_VAPOR);
+
+        BMG.createTrivialBlock(STARBLEACHED_LEAVES, TexturedModel.LEAVES);
+        BMG.createTrivialBlock(NUCLEIC_FISSURELEAVES, TexturedModel.LEAVES);
+
+        BMG.woodProvider(STARBLEACHED_LOG).logWithHorizontal(STARBLEACHED_LOG).wood(STARBLEACHED_WOOD);
+        BMG.woodProvider(NUCLEIC_FISSUREROOT).logWithHorizontal(NUCLEIC_FISSUREROOT);
+
         BMG.family(STARBLEACHED_TILES)
                 .slab(STARBLEACHED_TILE_SLAB)
                 .stairs(STARBLEACHED_TILE_STAIRS)
@@ -35,17 +52,6 @@ public class ModelProvider extends FabricModelProvider {
         BMG.family(STELLAR_TILES)
                 .slab(STELLAR_TILE_SLAB);
 
-        BMG.createTrivialCube(CHISELED_STARBLEACHED_TILES);
-        BMG.createTrivialCube(IMBUED_STARBLEACHED_TILES);
-
-        BMG.woodProvider(STARBLEACHED_LOG).logWithHorizontal(STARBLEACHED_LOG).wood(STARBLEACHED_WOOD);
-
-        BMG.createTrivialBlock(STARBLEACHED_LEAVES, TexturedModel.LEAVES);
-
-        BMG.createRotatedVariantBlock(STELLAR_SEDIMENT);
-        BMG.createRotatedVariantBlock(STARDUST_BLOCK);
-        BMG.createRotatedVariantBlock(PETRICHORIC_PLASMA);
-        BMG.createRotatedVariantBlock(PETRICHORIC_VAPOR);
 
         BMG.createCrossBlockWithDefaultItem(SHORT_HOLY_MOSS, BlockModelGenerators.TintState.NOT_TINTED);
         registerUnevenCross(BMG, MULCHBORNE_TUFT);

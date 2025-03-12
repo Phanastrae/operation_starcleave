@@ -1,9 +1,11 @@
 package phanastrae.operation_starcleave.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ColorRGBA;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -86,6 +88,52 @@ public class OperationStarcleaveBlocks {
     public static final Block PETRICHORIC_PLASMA = new PetrichoricPlasmaBlock(settings(COLOR_LIGHT_GREEN, EMPTY).strength(100F).lightLevel(constant(15)).pushReaction(DESTROY).emissiveRendering(OperationStarcleaveBlocks::always).noLootTable().noOcclusion().noCollission());
     public static final Block PETRICHORIC_VAPOR = new PetrichoricVaporBlock(settings(COLOR_LIGHT_GREEN, EMPTY).strength(100F).lightLevel(constant(15)).pushReaction(DESTROY).emissiveRendering(OperationStarcleaveBlocks::always).noLootTable().noOcclusion().noCollission());
 
+    public static final Block NUCLEOSYNTHESEED = new NucleosyntheseedBlock(settings()
+            .strength(4.0F)
+            .mapColor(DyeColor.GREEN)
+            .sound(NETHER_WOOD)
+            .lightLevel(constant(13))
+            .randomTicks()
+    );
+    public static final Block NUCLEIC_FISSUREROOT = new NucleicFissurerootBlock(settings()
+            .strength(2.0F)
+            .mapColor(state -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? COLOR_GREEN : COLOR_LIGHT_GREEN)
+            .sound(NETHER_WOOD)
+            .instrument(NoteBlockInstrument.BASS)
+            .lightLevel(constant(9))
+            .randomTicks()
+    );
+    public static final Block NUCLEIC_FISSURELEAVES = new LeavesBlock(settings()
+            .strength(0.2F)
+            .mapColor(COLOR_LIGHT_GREEN)
+            .sound(GRASS)
+            .lightLevel(constant(12))
+            .isValidSpawn(OperationStarcleaveBlocks::never)
+            .isSuffocating(OperationStarcleaveBlocks::never)
+            .isViewBlocking(OperationStarcleaveBlocks::never)
+            .isRedstoneConductor(OperationStarcleaveBlocks::never)
+            .pushReaction(PushReaction.DESTROY)
+            .noOcclusion()
+            .randomTicks()
+    );
+    public static final Block COAGULATED_PLASMA = new CoagulatedPlasmaBlock(settings()
+            .strength(3.0F, 6.0F)
+            .mapColor(TERRACOTTA_GREEN)
+            .sound(SoundType.DEEPSLATE)
+            .instrument(NoteBlockInstrument.BASEDRUM)
+            .lightLevel(constant(8))
+            .requiresCorrectToolForDrops()
+            .randomTicks()
+    );
+    public static final Block PLASMA_ICE = new PlasmaIceBlock(settings()
+            .randomTicks()
+            .mapColor(COLOR_LIGHT_GREEN)
+            .lightLevel(constant(13))
+            .strength(2.8F)
+            .friction(0.989F)
+            .sound(SoundType.GLASS)
+    );
+
     public static void init(BiConsumer<ResourceLocation, Block> r) {
         r.accept(id("netherite_pumpkin"), NETHERITE_PUMPKIN);
 
@@ -129,6 +177,12 @@ public class OperationStarcleaveBlocks {
         r.accept(id("phlogistic_fire"), PHLOGISTIC_FIRE);
         r.accept(id("petrichoric_plasma"), PETRICHORIC_PLASMA);
         r.accept(id("petrichoric_vapor"), PETRICHORIC_VAPOR);
+
+        r.accept(id("nucleosyntheseed"), NUCLEOSYNTHESEED);
+        r.accept(id("nucleic_fissureroot"), NUCLEIC_FISSUREROOT);
+        r.accept(id("nucleic_fissureleaves"), NUCLEIC_FISSURELEAVES);
+        r.accept(id("coagulated_plasma"), COAGULATED_PLASMA);
+        r.accept(id("plasma_ice"), PLASMA_ICE);
     }
 
     private static ResourceLocation id(String path) {
@@ -187,7 +241,19 @@ public class OperationStarcleaveBlocks {
         return new WallBlock(copyShallow(block).forceSolidOn());
     }
 
+    private static Boolean always(BlockState state, BlockGetter blockGetter, BlockPos pos, EntityType<?> entity) {
+        return true;
+    }
+
+    private static Boolean never(BlockState state, BlockGetter blockGetter, BlockPos pos, EntityType<?> entity) {
+        return false;
+    }
+
     private static boolean always(BlockState state, BlockGetter blockGetter, BlockPos pos) {
         return true;
+    }
+
+    private static boolean never(BlockState state, BlockGetter blockGetter, BlockPos pos) {
+        return false;
     }
 }

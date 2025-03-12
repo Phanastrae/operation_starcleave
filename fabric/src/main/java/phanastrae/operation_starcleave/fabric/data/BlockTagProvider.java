@@ -17,6 +17,17 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider arg) {
+        // vanilla tags
+        getOrCreateTagBuilder(BlockTags.LOGS)
+                .add(
+                        OperationStarcleaveBlocks.NUCLEIC_FISSUREROOT
+                );
+
+        getOrCreateTagBuilder(BlockTags.LEAVES)
+                .add(
+                        OperationStarcleaveBlocks.NUCLEIC_FISSURELEAVES
+                );
+
         getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_PICKAXE)
                 .add(OperationStarcleaveBlocks.NETHERITE_PUMPKIN)
                 .add(OperationStarcleaveBlocks.STARBLEACHED_LOG)
@@ -94,6 +105,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         getOrCreateTagBuilder(BlockTags.MAINTAINS_FARMLAND)
                 .add(OperationStarcleaveBlocks.BISREEDS);
 
+        // starcleave tags
         getOrCreateTagBuilder(OperationStarcleaveBlockTags.STARBLEACHED)
                 .add(OperationStarcleaveBlocks.STELLAR_SEDIMENT)
                 .add(OperationStarcleaveBlocks.STELLAR_MULCH)

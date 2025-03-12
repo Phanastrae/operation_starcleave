@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "operation_starcleave:block/nucleic_fissureroot_top",
+    "side": "operation_starcleave:block/nucleic_fissureroot"
+  }
+}

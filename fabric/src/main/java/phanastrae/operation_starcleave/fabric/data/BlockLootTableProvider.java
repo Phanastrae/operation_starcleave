@@ -24,13 +24,12 @@ import net.minecraft.world.level.storage.loot.predicates.*;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import phanastrae.operation_starcleave.block.BisreedBlock;
-import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import static phanastrae.operation_starcleave.block.OperationStarcleaveBlocks.BISREEDS;
+import static phanastrae.operation_starcleave.block.OperationStarcleaveBlocks.*;
 
 public class BlockLootTableProvider extends FabricBlockLootTableProvider {
     protected BlockLootTableProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
@@ -41,39 +40,45 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
     public void generate() {
         HolderLookup.RegistryLookup<Enchantment> impl = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
 
-        dropSelf(OperationStarcleaveBlocks.NETHERITE_PUMPKIN);
-        dropSelf(OperationStarcleaveBlocks.STELLAR_SEDIMENT);
-        dropSelf(OperationStarcleaveBlocks.STARBLEACHED_LOG);
-        dropSelf(OperationStarcleaveBlocks.STARBLEACHED_WOOD);
-        dropSelf(OperationStarcleaveBlocks.STARBLEACHED_LEAVES);
-        dropSelf(OperationStarcleaveBlocks.STARBLEACHED_TILES);
-        dropSelf(OperationStarcleaveBlocks.STARBLEACHED_TILE_STAIRS);
-        dropSelf(OperationStarcleaveBlocks.STARBLEACHED_TILE_SLAB);
-        dropSelf(OperationStarcleaveBlocks.STARBLEACHED_TILE_WALL);
-        dropSelf(OperationStarcleaveBlocks.CHISELED_STARBLEACHED_TILES);
-        dropSelf(OperationStarcleaveBlocks.IMBUED_STARBLEACHED_TILES);
-        dropSelf(OperationStarcleaveBlocks.STARBLEACHED_PEARL_BLOCK);
-        dropSelf(OperationStarcleaveBlocks.STELLAR_TILES);
-        dropSelf(OperationStarcleaveBlocks.STELLAR_TILE_SLAB);
-        dropSelf(OperationStarcleaveBlocks.STELLAR_REPULSOR);
-        dropSelf(OperationStarcleaveBlocks.BLESSED_CLOTH_BLOCK);
-        dropSelf(OperationStarcleaveBlocks.BLESSED_CLOTH_CARPET);
-        dropSelf(OperationStarcleaveBlocks.BLESSED_CLOTH_CURTAIN);
+        dropSelf(NETHERITE_PUMPKIN);
+        dropSelf(STELLAR_SEDIMENT);
+        dropSelf(STARBLEACHED_LOG);
+        dropSelf(STARBLEACHED_WOOD);
+        dropSelf(STARBLEACHED_LEAVES);
+        dropSelf(STARBLEACHED_TILES);
+        dropSelf(STARBLEACHED_TILE_STAIRS);
+        dropSelf(STARBLEACHED_TILE_SLAB);
+        dropSelf(STARBLEACHED_TILE_WALL);
+        dropSelf(CHISELED_STARBLEACHED_TILES);
+        dropSelf(IMBUED_STARBLEACHED_TILES);
+        dropSelf(STARBLEACHED_PEARL_BLOCK);
+        dropSelf(STELLAR_TILES);
+        dropSelf(STELLAR_TILE_SLAB);
+        dropSelf(STELLAR_REPULSOR);
+        dropSelf(BLESSED_CLOTH_BLOCK);
+        dropSelf(BLESSED_CLOTH_CARPET);
+        dropSelf(BLESSED_CLOTH_CURTAIN);
+        dropSelf(NUCLEIC_FISSUREROOT);
+        dropSelf(COAGULATED_PLASMA);
+        dropSelf(PLASMA_ICE);
 
-        add(OperationStarcleaveBlocks.PHLOGISTIC_FIRE, noDrop());
+        add(PHLOGISTIC_FIRE, noDrop());
 
-        dropOther(OperationStarcleaveBlocks.STARBLEACH_CAULDRON, Items.CAULDRON);
+        dropOther(STARBLEACH_CAULDRON, Items.CAULDRON);
 
-        addRandomDrop(OperationStarcleaveBlocks.HOLY_MOSS, silkTouchDrop(OperationStarcleaveItems.HOLY_MOSS, OperationStarcleaveItems.STELLAR_SEDIMENT));
-        addRandomDrop(OperationStarcleaveBlocks.STELLAR_MULCH, silkTouchDrop(OperationStarcleaveItems.STELLAR_MULCH, OperationStarcleaveItems.STELLAR_SEDIMENT));
-        addRandomDrop(OperationStarcleaveBlocks.STELLAR_FARMLAND, silkTouchDrop(OperationStarcleaveItems.STELLAR_MULCH, OperationStarcleaveItems.STELLAR_SEDIMENT));
+        addRandomDrop(HOLY_MOSS, silkTouchDrop(OperationStarcleaveItems.HOLY_MOSS, OperationStarcleaveItems.STELLAR_SEDIMENT));
+        addRandomDrop(STELLAR_MULCH, silkTouchDrop(OperationStarcleaveItems.STELLAR_MULCH, OperationStarcleaveItems.STELLAR_SEDIMENT));
+        addRandomDrop(STELLAR_FARMLAND, silkTouchDrop(OperationStarcleaveItems.STELLAR_MULCH, OperationStarcleaveItems.STELLAR_SEDIMENT));
 
-        addRandomDrop(OperationStarcleaveBlocks.STARDUST_BLOCK,
+        add(NUCLEOSYNTHESEED, createSilkTouchOnlyTable(NUCLEOSYNTHESEED));
+        add(NUCLEIC_FISSURELEAVES, createShearsOnlyDrop(NUCLEIC_FISSURELEAVES));
+
+        addRandomDrop(STARDUST_BLOCK,
                 silkTouchDrop(
                         item(OperationStarcleaveItems.STARDUST_BLOCK),
                         item(OperationStarcleaveItems.STARDUST_CLUSTER, 1, 4, false).apply(ApplyExplosionDecay.explosionDecay())));
 
-        addRandomDrop(OperationStarcleaveBlocks.SHORT_HOLY_MOSS,
+        addRandomDrop(SHORT_HOLY_MOSS,
                 conditionalDrop(
                         item(OperationStarcleaveItems.SHORT_HOLY_MOSS),
                         item(OperationStarcleaveItems.HOLY_STRANDS).apply(ApplyBonusCount.addUniformBonusCount(impl.getOrThrow(Enchantments.FORTUNE), 4)).apply(ApplyExplosionDecay.explosionDecay()).when(LootItemRandomChanceCondition.randomChance(0.3F)),
@@ -81,18 +86,18 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                 )
         );
 
-        addRandomDrop(OperationStarcleaveBlocks.MULCHBORNE_TUFT,
+        addRandomDrop(MULCHBORNE_TUFT,
                 conditionalDrop(
                         item(OperationStarcleaveItems.MULCHBORNE_TUFT),
                         HAS_SHEARS
                 )
         );
 
-        add(OperationStarcleaveBlocks.BLESSED_BED, LootTable.lootTable().withPool(
+        add(BLESSED_BED, LootTable.lootTable().withPool(
                 LootPool.lootPool().setRolls(ConstantValue.exactly(1))
                         .add(item(OperationStarcleaveItems.BLESSED_BED)
                                 .when(LootItemBlockStatePropertyCondition
-                                        .hasBlockStateProperties(OperationStarcleaveBlocks.BLESSED_BED)
+                                        .hasBlockStateProperties(BLESSED_BED)
                                         .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BedBlock.PART, BedPart.HEAD)))
                         )
                         .when(ExplosionCondition.survivesExplosion())

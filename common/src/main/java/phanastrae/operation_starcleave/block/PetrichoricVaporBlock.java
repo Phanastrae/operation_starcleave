@@ -15,7 +15,6 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
 public class PetrichoricVaporBlock extends AbstractPetrichoricBlock {
     public static final MapCodec<PetrichoricPlasmaBlock> CODEC = simpleCodec(PetrichoricPlasmaBlock::new);
-
     public static final IntegerProperty DISTANCE = IntegerProperty.create("distance", 0, 3);
 
     @Override
@@ -34,17 +33,17 @@ public class PetrichoricVaporBlock extends AbstractPetrichoricBlock {
     }
 
     @Override
-    public void onPlace(BlockState state, Level world, BlockPos pos, BlockState oldState, boolean notify) {
-        world.scheduleTick(pos, this, getDelay(world.getRandom()));
-        super.onPlace(state, world, pos, oldState, notify);
+    public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean notify) {
+        level.scheduleTick(pos, this, getDelay(level.getRandom()));
+        super.onPlace(state, level, pos, oldState, notify);
     }
 
     @Override
     public BlockState updateShape(
-            BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos
+            BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos
     ) {
-        world.scheduleTick(pos, this, getDelay(world.getRandom()));
-        return super.updateShape(state, direction, neighborState, world, pos, neighborPos);
+        level.scheduleTick(pos, this, getDelay(level.getRandom()));
+        return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
     }
 
     public static int getDelay(RandomSource random) {
@@ -52,29 +51,24 @@ public class PetrichoricVaporBlock extends AbstractPetrichoricBlock {
     }
 
     @Override
-    public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
-        absorbWater(world, pos);
+    public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        absorbWater(level, pos, random);
 
         int distance = getDistance(state);
 
         BlockPos downPos = pos.below();
-        BlockState downState = world.getBlockState(downPos);
-        BlockPos upPos = pos.above();
-        BlockState upState = world.getBlockState(upPos);
+        BlockState downState = level.getBlockState(downPos);
 
         if(downState.is(OperationStarcleaveBlocks.PETRICHORIC_VAPOR)) {
+            // if block below is vapor, set this vapor's distance to other vapor's distance + 1
             int downDistance = getDistance(downState);
             int desiredDistance = downDistance + 1;
             if (distance != desiredDistance) {
-                world.setBlockAndUpdate(pos, getStateForDistance(desiredDistance));
-                distance = desiredDistance;
+                level.setBlockAndUpdate(pos, getStateForDistance(desiredDistance));
             }
-        } else if(!downState.is(OperationStarcleaveBlocks.PETRICHORIC_PLASMA)) {
-            world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
-        }
-
-        if ((upState.canBeReplaced() && distance < 3) || canDestroy(upState)) {
-            world.setBlockAndUpdate(upPos, getStateForDistance(distance + 1));
+        } else {
+            // if block below is neither vapor nor plasma, remove this vapor
+            level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
         }
     }
 

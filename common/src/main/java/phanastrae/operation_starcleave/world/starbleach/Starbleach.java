@@ -267,7 +267,7 @@ public class Starbleach {
                 || blockState.is(Blocks.GRAVEL)) {
             return OperationStarcleaveBlocks.STARDUST_BLOCK.defaultBlockState();
         }
-        if(blockState.is(BlockTags.LEAVES)
+        if(blockState.is(BlockTags.LEAVES) && !blockState.is(OperationStarcleaveBlocks.NUCLEIC_FISSURELEAVES)
                 || blockState.is(BlockTags.WART_BLOCKS)
                 || blockState.is(Blocks.CHORUS_PLANT)
                 || blockState.is(Blocks.CHORUS_FLOWER)) {
@@ -277,7 +277,7 @@ public class Starbleach {
                 return Blocks.AIR.defaultBlockState();
             }
         }
-        if(blockState.is(BlockTags.LOGS)) {
+        if(blockState.is(BlockTags.LOGS) && !blockState.is(OperationStarcleaveBlocks.NUCLEIC_FISSUREROOT)) {
             if(blockState.getProperties().contains(RotatedPillarBlock.AXIS)) {
                 return OperationStarcleaveBlocks.STARBLEACHED_LOG.defaultBlockState().setValue(RotatedPillarBlock.AXIS, blockState.getValue(RotatedPillarBlock.AXIS));
             } else {
