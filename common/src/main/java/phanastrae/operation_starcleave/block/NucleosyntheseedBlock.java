@@ -4,14 +4,18 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.stats.Stats;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Explosion;
-import net.minecraft.world.level.ExplosionDamageCalculator;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -19,14 +23,17 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.phys.BlockHitResult;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveDamageTypes;
+import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
+import phanastrae.operation_starcleave.world.OperationStarcleaveGameRules;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-public class NucleosyntheseedBlock extends Block {
+public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
     public static final MapCodec<NucleosyntheseedBlock> CODEC = simpleCodec(NucleosyntheseedBlock::new);
     public static final int MAX_AGE = 15;
     public static final IntegerProperty AGE = BlockStateProperties.AGE_15;
@@ -59,15 +66,51 @@ public class NucleosyntheseedBlock extends Block {
 
     @Override
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        trySpread(state, level, pos, random);
+        trySpread(state, level, pos, random, false);
     }
 
     @Override
     protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        trySpread(state, level, pos, random);
+        trySpread(state, level, pos, random, false);
     }
 
-    public static void trySpread(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+    @Override
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        if(player.getAbilities().mayBuild) {
+            if(stack.is(OperationStarcleaveItems.PHLOGISTON_SAC)) {
+                detonate(level, pos);
+
+                Item item = stack.getItem();
+                stack.consume(1, player);
+                player.awardStat(Stats.ITEM_USED.get(item));
+
+                return ItemInteractionResult.sidedSuccess(level.isClientSide);
+            }
+        }
+
+        return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
+    }
+
+    @Override
+    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
+        return true;
+    }
+
+    @Override
+    public boolean isBonemealSuccess(Level level, RandomSource random, BlockPos pos, BlockState state) {
+        return state.getValue(AGE) < MAX_AGE;
+    }
+
+    @Override
+    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state) {
+        trySpread(state, level, pos, random, true);
+    }
+
+    public static void trySpread(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, boolean forceGrowth) {
+        if(!level.getGameRules().getBoolean(OperationStarcleaveGameRules.DO_NUCLEOSYNTHESEED_GROWTH) && !forceGrowth) {
+            return;
+        }
+
         if(state.getValue(AGE) == MAX_AGE) {
             return;
         }

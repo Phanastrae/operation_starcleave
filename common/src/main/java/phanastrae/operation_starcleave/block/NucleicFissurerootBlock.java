@@ -30,7 +30,7 @@ public class NucleicFissurerootBlock extends RotatedPillarBlock {
         BlockState adjState = level.getBlockState(adjPos);
 
         if(adjState.is(OperationStarcleaveBlocks.NUCLEOSYNTHESEED)) {
-            NucleosyntheseedBlock.trySpread(adjState, level, adjPos, random);
+            NucleosyntheseedBlock.trySpread(adjState, level, adjPos, random, false);
         }
     }
 }
