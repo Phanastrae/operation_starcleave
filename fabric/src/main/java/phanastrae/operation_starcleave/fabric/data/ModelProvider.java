@@ -126,6 +126,9 @@ public class ModelProvider extends FabricModelProvider {
 
         registerFire(BMG, PHLOGISTIC_FIRE);
         registerStarbleachCauldron(BMG, STARBLEACH_CAULDRON);
+
+        // fluids
+        BMG.createNonTemplateModelBlock(PETRICHORIC_PLASMA);
     }
 
     private void registerFire(BlockModelGenerators BMG, Block block) {
