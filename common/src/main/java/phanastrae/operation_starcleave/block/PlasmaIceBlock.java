@@ -103,7 +103,7 @@ public class PlasmaIceBlock extends Block {
 
     public void tryDestroy(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (this.decaying(state)) {
-            level.removeBlock(pos, false);
+            level.destroyBlock(pos, false);
             for(Direction direction : Direction.values()) {
                 BlockPos adjPos = pos.relative(direction);
                 BlockState adjState = level.getBlockState(adjPos);
