@@ -2,6 +2,7 @@ package phanastrae.operation_starcleave.client.render.firmament;
 
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.platform.TextureUtil;
+import net.minecraft.client.GraphicsStatus;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.core.BlockPos;
@@ -60,6 +61,14 @@ public class FirmamentTextureStorage {
     }
 
     public void tick() {
+        if(!this.shouldRenderPostOnGraphicsMode()) {
+            // there is no need to do any of this if we aren't rendering the effect
+
+            // clear rebuild queue just in case, this really shouldn't matter
+            this.clearRebuildQueue();
+            return;
+        }
+
         Minecraft client = Minecraft.getInstance();
         ProfilerFiller profiler = client.getProfiler();
         profiler.push("starcleave_update_firmament_texture");
@@ -166,6 +175,13 @@ public class FirmamentTextureStorage {
     }
 
     public void queueRebuild(BlockPos blockPos) {
+        if(!shouldRenderPostOnGraphicsMode()) {
+            // we don't render the post effect and thus don't need the heightmap, so don't bother queuing rebuilds
+            // switching graphics modes should probably refresh chunks (probably), and so automatically ask for rebuilds when they get rebuilt
+            // if not players can just F3+A so it's probably fine
+            return;
+        }
+
         SubRegionPos subRegionPos = SubRegionPos.fromWorldCoords(blockPos.getX(), blockPos.getZ());
         RegionPos regionPos = RegionPos.fromSubRegion(subRegionPos);
 
@@ -432,6 +448,36 @@ public class FirmamentTextureStorage {
 
     public boolean isFilled(int i, int j) {
         return this.filled[i][j];
+    }
+
+    public boolean isAnyFilledAndActive() {
+        for(int i = 0; i < 4; i++) {
+            for(int j = 0; j < 4; j++) {
+                FirmamentTextureStorage fts = FirmamentTextureStorage.getInstance();
+                if(fts.isActive(i, j) && fts.isFilled(i, j)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public boolean shouldRenderPostOnGraphicsMode() {
+        Minecraft minecraft = Minecraft.getInstance();
+        GraphicsStatus graphicsMode = minecraft.options.graphicsMode().get();
+
+        if(graphicsMode == GraphicsStatus.FAST) {
+            // don't render on fast because potential lag
+            return false;
+        }
+        if(graphicsMode == GraphicsStatus.FABULOUS) {
+            // don't render on fabulous because it doesn't work correctly
+            // TODO fix fabulous rendering if possible
+            return false;
+        }
+
+        return true;
     }
 
     public static int getColor(int damage, int height) {

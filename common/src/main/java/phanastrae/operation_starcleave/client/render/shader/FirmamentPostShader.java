@@ -10,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
@@ -24,15 +25,16 @@ import static net.minecraft.util.Mth.positiveModulo;
 public class FirmamentPostShader {
     public static void draw() {
         Minecraft client = Minecraft.getInstance();
+
+        ProfilerFiller profiler = client.getProfiler();
+        profiler.push("starcleave_post_effect");
+
         if(client.levelRenderer instanceof LevelRendererDuck operationStarcleaveWorldRenderer) {
             RenderTarget mainBuffer = client.getMainRenderTarget();
 
             RenderTarget dummyBuffer = operationStarcleaveWorldRenderer.operation_starcleave$getDummyFramebuffer();
-            if(dummyBuffer == null) {
-                return;
-            }
 
-            if (canDraw()) {
+            if (dummyBuffer != null && canDraw()) {
                 // clear dummy
                 dummyBuffer.setClearColor(0, 0, 0, 0);
                 dummyBuffer.clear(Minecraft.ON_OSX);
@@ -57,10 +59,21 @@ public class FirmamentPostShader {
                 RenderSystem.defaultBlendFunc();
             }
         }
+
+        profiler.pop();
     }
 
     public static boolean canDraw() {
-        return true; // TODO
+        if(!FirmamentTextureStorage.getInstance().shouldRenderPostOnGraphicsMode()) {
+            return false;
+        }
+
+        if(!FirmamentTextureStorage.getInstance().isAnyFilledAndActive()) {
+            // don't render if there is nothing to render
+            return false;
+        }
+
+        return true;
     }
 
     public static void draw2(int width, int height, boolean disableBlend) {

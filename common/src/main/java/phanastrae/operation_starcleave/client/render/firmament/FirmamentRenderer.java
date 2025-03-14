@@ -65,14 +65,7 @@ public class FirmamentRenderer {
             profiler.push("starcleave_firmament");
             profiler.push("check");
 
-            boolean renderSkybox = false;
-            for(int i = 0; i < 4 && !renderSkybox; i++) {
-                for(int j = 0; j < 4 && !renderSkybox; j++) {
-                    FirmamentTextureStorage fts = FirmamentTextureStorage.getInstance();
-                    if(!fts.isActive(i, j) || !fts.isFilled(i, j)) continue;
-                    renderSkybox = true;
-                }
-            }
+            boolean renderSkybox = FirmamentTextureStorage.getInstance().isAnyFilledAndActive();
 
             if(renderSkybox) {
                 profiler.popPush("sky");
