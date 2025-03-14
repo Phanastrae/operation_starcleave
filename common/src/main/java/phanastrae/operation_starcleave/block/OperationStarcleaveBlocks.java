@@ -128,7 +128,7 @@ public class OperationStarcleaveBlocks {
             .noOcclusion()
             .randomTicks()
     );
-    public static final Block COAGULATED_PLASMA = new CoagulatedPlasmaBlock(settings()
+    public static final Block COAGULATED_PLASMA = new Block(settings()
             .strength(3.0F, 6.0F)
             .mapColor(TERRACOTTA_GREEN)
             .sound(SoundType.DEEPSLATE)

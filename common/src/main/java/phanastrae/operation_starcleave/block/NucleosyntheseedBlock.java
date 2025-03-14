@@ -245,6 +245,7 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
     }
 
     public static void detonate(Level level, BlockPos pos) {
+        // TODO optimise this at some point
         level.setBlockAndUpdate(pos, PhlogisticFireBlock.getState(level, pos));
 
         explode(level, pos);
@@ -263,6 +264,7 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
                 if(canErode(downState)) {
                     if(!downState.is(OperationStarcleaveBlocks.PHLOGISTIC_FIRE)) {
                         level.setBlockAndUpdate(downPos, Blocks.AIR.defaultBlockState());
+                        coagulateHorizontallyAdjacentPlasma(level, downPos);
                     }
                     positions.add(downPos);
                 }
@@ -280,6 +282,7 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
                             if(random.nextInt(5) <= 1) {
                                 if(!adjState.is(OperationStarcleaveBlocks.PHLOGISTIC_FIRE)) {
                                     level.setBlockAndUpdate(adjPos, Blocks.AIR.defaultBlockState());
+                                    coagulateHorizontallyAdjacentPlasma(level, adjPos);
                                 }
                                 positionsLast.add(adjPos);
                             }
@@ -311,6 +314,7 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
                             BlockState downState = level.getBlockState(downPos);
                             if(canErode(downState) && !((downState.canBeReplaced() || !downState.canOcclude()) && i <= 1)) {
                                 level.setBlockAndUpdate(downPos, OperationStarcleaveBlocks.COAGULATED_PLASMA.defaultBlockState());
+                                coagulateHorizontallyAdjacentPlasma(level, downPos);
                             }
                         }
                     }
@@ -326,6 +330,9 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
                 if(canErode(downState) && !((downState.canBeReplaced() || !downState.canOcclude()) && i <= 1)) {
                     BlockState state = (i <= 1 ? Blocks.AIR : (i < 14 ? OperationStarcleaveBlocks.PETRICHORIC_PLASMA : OperationStarcleaveBlocks.COAGULATED_PLASMA)).defaultBlockState();
                     level.setBlockAndUpdate(downPos, state);
+                    if(i <= 1) {
+                        coagulateHorizontallyAdjacentPlasma(level, downPos);
+                    }
                     positions.add(downPos);
                 }
             }
@@ -335,6 +342,17 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
 
             if(positionsLast.isEmpty()) {
                 break;
+            }
+        }
+    }
+
+    public static void coagulateHorizontallyAdjacentPlasma(Level level, BlockPos pos) {
+        for(Direction direction : Direction.Plane.HORIZONTAL) {
+            BlockPos adjPos = pos.relative(direction);
+            BlockState adjState = level.getBlockState(adjPos);
+            FluidState adjFState = level.getFluidState(adjPos);
+            if(adjState.is(OperationStarcleaveBlocks.PETRICHORIC_PLASMA) && !adjFState.isEmpty() && adjFState.isSource()) {
+                level.setBlockAndUpdate(adjPos, OperationStarcleaveBlocks.COAGULATED_PLASMA.defaultBlockState());
             }
         }
     }
