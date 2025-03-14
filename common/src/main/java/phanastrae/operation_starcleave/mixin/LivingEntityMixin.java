@@ -56,7 +56,7 @@ public abstract class LivingEntityMixin extends Entity {
         if(this.jumping && this.noJumpDelay == 0) {
             LivingEntity livingEntity = (LivingEntity)(Object)this;
             Entity controllingVehicle = livingEntity.getControlledVehicle();
-            if(controllingVehicle != null && controllingVehicle.getDeltaMovement().y < 0.01) {
+            if(controllingVehicle != null && controllingVehicle.getDeltaMovement().y < 0.01 && controllingVehicle.onGround()) {
                 StellarRepulsorBlock.tryLaunch(controllingVehicle);
                 this.noJumpDelay = 10;
             }

@@ -18,6 +18,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import phanastrae.operation_starcleave.block.StellarRepulsorBlock;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityAttachment;
 
 @Mixin(LocalPlayer.class)
@@ -50,6 +51,7 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
                 } else if (this.input.jumping) {
                     if(osea.getPegasusFlightCharge() > 0.1F) {
                         // start flying
+                        StellarRepulsorBlock.tryLaunch(horse);
                         vehicle.onPlayerJump(Mth.floor(100));
                         this.connection
                                 .send(

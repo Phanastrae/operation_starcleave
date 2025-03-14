@@ -74,9 +74,6 @@ public class StellarRepulsorBlock extends Block {
     }
 
     public static void launch(Entity entity) {
-        if(!entity.onGround()) {
-            return;
-        }
         OperationStarcleaveEntityAttachment osea = OperationStarcleaveEntityAttachment.fromEntity(entity);
 
         // short cooldown between uses
