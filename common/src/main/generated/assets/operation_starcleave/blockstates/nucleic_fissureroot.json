@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "operation_starcleave:block/nucleic_fissureroot_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "operation_starcleave:block/nucleic_fissureroot"
+    },
+    "axis=z": {
+      "model": "operation_starcleave:block/nucleic_fissureroot_horizontal",
+      "x": 90
+    }
+  }
+}

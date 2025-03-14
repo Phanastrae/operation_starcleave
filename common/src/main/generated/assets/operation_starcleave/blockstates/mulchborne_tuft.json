@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "operation_starcleave:block/mulchborne_tuft"
+      },
+      {
+        "model": "operation_starcleave:block/mulchborne_tuft_mirrored"
+      },
+      {
+        "model": "operation_starcleave:block/mulchborne_tuft",
+        "y": 90
+      },
+      {
+        "model": "operation_starcleave:block/mulchborne_tuft_mirrored",
+        "y": 90
+      }
+    ]
+  }
+}

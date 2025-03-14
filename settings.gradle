@@ -1,10 +1,52 @@
 pluginManagement {
 	repositories {
-		maven {
-			name = 'Fabric'
-			url = 'https://maven.fabricmc.net/'
-		}
-		mavenCentral()
 		gradlePluginPortal()
+		mavenCentral()
+
+		exclusiveContent {
+			forRepository {
+				maven {
+					name = 'Fabric'
+					url = uri('https://maven.fabricmc.net')
+				}
+			}
+			filter {
+				includeGroup('net.fabricmc')
+				includeGroup('fabric-loom')
+			}
+		}
+
+		exclusiveContent {
+			forRepository {
+				maven {
+					name = 'Sponge'
+					url = 'https://repo.spongepowered.org/repository/maven-public'
+				}
+			}
+			filter { includeGroupAndSubgroups('org.spongepowered') }
+		}
+
+		exclusiveContent {
+			forRepositories(
+					maven {
+						name = 'ParchmentMC'
+						url = 'https://maven.parchmentmc.org/'
+					},
+					maven {
+						name = "NeoForge"
+						url = 'https://maven.neoforged.net/releases'
+					}
+			)
+			filter { includeGroup('org.parchmentmc.data') }
+		}
 	}
 }
+
+plugins {
+	id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
+}
+
+rootProject.name = 'operation_starcleave'
+include('common')
+include('fabric')
+include('neoforge')

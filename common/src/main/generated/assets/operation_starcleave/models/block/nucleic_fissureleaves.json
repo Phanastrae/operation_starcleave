@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/leaves",
+  "textures": {
+    "all": "operation_starcleave:block/nucleic_fissureleaves"
+  }
+}

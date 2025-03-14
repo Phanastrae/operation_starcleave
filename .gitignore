@@ -38,3 +38,6 @@ hs_err_*.log
 replay_*.log
 *.hprof
 *.jfr
+/fabric/runs/
+/common/src/main/generated/.cache/
+/neoforge/runs/

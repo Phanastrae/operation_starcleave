@@ -1,0 +1,11 @@
+{
+  "parent": "operation_starcleave:block/template_cauldron_7_level3",
+  "textures": {
+    "bottom": "minecraft:block/cauldron_bottom",
+    "content": "operation_starcleave:block/starbleach_still",
+    "inside": "minecraft:block/cauldron_inner",
+    "particle": "minecraft:block/cauldron_side",
+    "side": "minecraft:block/cauldron_side",
+    "top": "minecraft:block/cauldron_top"
+  }
+}

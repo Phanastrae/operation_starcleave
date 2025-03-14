@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "operation_starcleave:starflaked_bismuth"
+    },
+    "F": {
+      "item": "operation_starcleave:bismuth_flake"
+    },
+    "P": {
+      "item": "operation_starcleave:starbleached_pearl"
+    }
+  },
+  "pattern": [
+    "F B",
+    "BPB",
+    "F F"
+  ],
+  "result": {
+    "count": 1,
+    "id": "operation_starcleave:bismuth_pegasus_armor"
+  }
+}

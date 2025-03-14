@@ -1,0 +1,32 @@
+{
+  "parent": "operation_starcleave:operation_starcleave/cleave_firmament",
+  "criteria": {
+    "obtain_item": {
+      "conditions": {
+        "items": [
+          {
+            "items": "operation_starcleave:starbleach_bottle"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.operation_starcleave.obtain_starbleach.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "operation_starcleave:starbleach_bottle"
+    },
+    "title": {
+      "translate": "advancements.operation_starcleave.obtain_starbleach.title"
+    }
+  },
+  "requirements": [
+    [
+      "obtain_item"
+    ]
+  ]
+}

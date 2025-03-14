@@ -1,0 +1,93 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+base {
+    archivesName = "${mod_id}-${project.name}-mc${minecraft_version}"
+}
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(java_version)
+    withSourcesJar()
+}
+
+['apiElements', 'runtimeElements', 'sourcesElements'].each { variant ->
+    configurations."$variant".outgoing {
+        capability("$group:${base.archivesName.get()}:$version")
+        capability("$group:$mod_id:$version")
+        capability("$group:$mod_id-${project.name}-mc${minecraft_version}:$version")
+    }
+    publishing.publications.configureEach {
+        suppressPomMetadataWarningsFor(variant)
+    }
+}
+
+sourcesJar {
+    from(rootProject.file('LICENSE')) {
+        rename { "${it}_${mod_id}" }
+    }
+}
+
+jar {
+    from(rootProject.file('LICENSE')) {
+        rename { "${it}_${mod_id}" }
+    }
+
+    manifest {
+        attributes([
+                     'Specification-Title'   : mod_name,
+                     'Specification-Version' : project.jar.archiveVersion,
+                     'Specification-Vendor'  : mod_author,
+                     'Implementation-Title'  : project.name,
+                     'Implementation-Version': project.jar.archiveVersion,
+                     'Implementation-Vendor' : mod_author,
+                     'Built-On-Minecraft'    : minecraft_version
+        ])
+    }
+}
+
+processResources {
+    def expandProps = [
+            'version'                      : version,
+            'group'                        : project.group,
+            'java_version'                 : java_version,
+            'minecraft_version'            : minecraft_version,
+            'minecraft_version_range'      : minecraft_version_range,
+            'mod_id'                       : mod_id,
+            'mod_name'                     : mod_name,
+            'license'                      : license,
+            'description'                  : mod_description,
+            'mod_author'                   : mod_author,
+            'homepage_url'                 : homepage_url,
+            'issues_url'                   : issues_url,
+            'sources_url'                  : sources_url,
+            'neoforge_version'             : neoforge_version,
+            'neoforge_loader_version'      : neoforge_loader_version,
+            'fabric_version'               : fabric_version,
+            'fabric_loader_version'        : fabric_loader_version
+    ]
+
+    filesMatching(['pack.mcmeta', 'fabric.mod.json', 'META-INF/neoforge.mods.toml', '*.mixins.json']) {
+        expand expandProps
+    }
+    inputs.properties(expandProps)
+
+    exclude '.cache'
+}
+
+tasks.withType(GenerateModuleMetadata).configureEach {
+    it.enabled = false
+}
+
+publishing {
+    publications {
+        register('mavenJava', MavenPublication) {
+            artifactId base.archivesName.get()
+            from components.java
+        }
+    }
+    repositories {
+        // Add repositories to publish to here.
+    }
+}

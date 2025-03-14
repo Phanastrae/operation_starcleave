@@ -1,0 +1,11 @@
+{
+  "type": "operation_starcleave:item_starbleaching",
+  "ingredient": {
+    "item": "minecraft:dirt"
+  },
+  "starbleach_cost": 0.04,
+  "result": {
+    "id": "operation_starcleave:stellar_sediment",
+    "count": 1
+  }
+}

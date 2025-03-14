@@ -1,0 +1,16 @@
+{
+  "values": [
+    {
+      "id": "operation_starcleave:internal_starbleaching",
+      "required": false
+    },
+    {
+      "id": "operation_starcleave:in_phlogistic_fire",
+      "required": false
+    },
+    {
+      "id": "operation_starcleave:on_phlogistic_fire",
+      "required": false
+    }
+  ]
+}

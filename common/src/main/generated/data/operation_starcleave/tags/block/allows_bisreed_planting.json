@@ -1,0 +1,16 @@
+{
+  "values": [
+    "minecraft:farmland",
+    "minecraft:moss_block",
+    "minecraft:soul_sand",
+    "minecraft:end_stone",
+    "minecraft:prismarine",
+    "operation_starcleave:stellar_sediment",
+    "operation_starcleave:stellar_farmland",
+    "operation_starcleave:stellar_mulch",
+    "operation_starcleave:holy_moss",
+    "operation_starcleave:stardust_block",
+    "operation_starcleave:starbleached_log",
+    "operation_starcleave:starbleached_wood"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+	"schemaVersion": 1,
+	"id": "${mod_id}",
+	"version": "${version}",
+	"name": "${mod_name}",
+	"license": "${license}",
+	"description": "${description}",
+	"icon": "assets/${mod_id}/icon.png",
+	"authors": [
+		"${mod_author}"
+	],
+	"contact": {
+		"homepage": "${homepage_url}",
+		"issues": "${issues_url}",
+		"sources": "${sources_url}"
+	},
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"phanastrae.operation_starcleave.fabric.OperationStarcleaveFabric"
+		],
+		"client": [
+			"phanastrae.operation_starcleave.fabric.client.OperationStarcleaveClientFabric"
+		],
+		"fabric-datagen": [
+			"phanastrae.operation_starcleave.fabric.data.OperationStarcleaveDataGenerator"
+		]
+	},
+	"mixins": [
+		"${mod_id}.common.mixins.json",
+		"${mod_id}.fabric.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=${fabric_loader_version}",
+		"fabric-api": "*",
+		"minecraft": "~${minecraft_version}-",
+		"java": ">=${java_version}"
+	}
+}

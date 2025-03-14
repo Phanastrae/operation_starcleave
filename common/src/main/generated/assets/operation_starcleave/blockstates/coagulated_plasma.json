@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "operation_starcleave:block/coagulated_plasma"
+      },
+      {
+        "model": "operation_starcleave:block/coagulated_plasma",
+        "y": 90
+      },
+      {
+        "model": "operation_starcleave:block/coagulated_plasma",
+        "y": 180
+      },
+      {
+        "model": "operation_starcleave:block/coagulated_plasma",
+        "y": 270
+      }
+    ]
+  }
+}

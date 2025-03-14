@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "operation_starcleave:unattributed_phlogistic_spark",
+      "required": false
+    },
+    {
+      "id": "operation_starcleave:phlogistic_spark",
+      "required": false
+    }
+  ]
+}

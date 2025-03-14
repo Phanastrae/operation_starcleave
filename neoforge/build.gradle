@@ -1,0 +1,46 @@
+plugins {
+    id 'loader'
+    id 'net.neoforged.moddev'
+}
+
+dependencies {
+}
+
+// set commonPath based on the current path, to allow for multi-mod dev env setups
+String commonPath = project.path - ':neoforge' + ':common'
+
+neoForge {
+    version = neoforge_version
+
+    def at = project(commonPath).file('src/main/resources/META-INF/accesstransformer.cfg')
+    if (at.exists()) {
+        accessTransformers = project(commonPath).files('src/main/resources/META-INF/accesstransformer.cfg')
+    }
+
+    parchment {
+        minecraftVersion = parchment_minecraft_version
+        mappingsVersion = parchment_version
+    }
+
+    runs {
+        client {
+            client()
+        }
+        server {
+            server()
+        }
+
+        configureEach {
+            ideName = "NeoForge ${it.name.capitalize()} (${project.path})"
+            project.mkdir("../neoforge/runs/${it.name}")
+            getGameDirectory().convention(project.getLayout().getProjectDirectory().dir("runs/${it.name}"))
+
+            systemProperty('neoforge.enabledGameTestNamespaces', mod_id)
+        }
+    }
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+        }
+    }
+}

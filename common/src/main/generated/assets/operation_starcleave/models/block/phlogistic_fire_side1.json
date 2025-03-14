@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/template_fire_side",
+  "textures": {
+    "fire": "operation_starcleave:block/phlogistic_fire_1"
+  }
+}

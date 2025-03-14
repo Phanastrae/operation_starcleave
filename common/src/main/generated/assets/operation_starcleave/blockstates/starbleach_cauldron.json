@@ -1,0 +1,25 @@
+{
+  "variants": {
+    "level=1": {
+      "model": "operation_starcleave:block/starbleach_cauldron_level1"
+    },
+    "level=2": {
+      "model": "operation_starcleave:block/starbleach_cauldron_level2"
+    },
+    "level=3": {
+      "model": "operation_starcleave:block/starbleach_cauldron_level3"
+    },
+    "level=4": {
+      "model": "operation_starcleave:block/starbleach_cauldron_level4"
+    },
+    "level=5": {
+      "model": "operation_starcleave:block/starbleach_cauldron_level5"
+    },
+    "level=6": {
+      "model": "operation_starcleave:block/starbleach_cauldron_level6"
+    },
+    "level=7": {
+      "model": "operation_starcleave:block/starbleach_cauldron_level7"
+    }
+  }
+}

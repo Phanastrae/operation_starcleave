@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/crop",
+  "textures": {
+    "crop": "operation_starcleave:block/bisreeds_stage3"
+  }
+}

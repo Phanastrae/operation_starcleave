@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "P": {
+      "item": "operation_starcleave:starbleached_pearl"
+    },
+    "T": {
+      "item": "operation_starcleave:starbleached_tiles"
+    }
+  },
+  "pattern": [
+    "TPT",
+    "P P",
+    "TPT"
+  ],
+  "result": {
+    "count": 1,
+    "id": "operation_starcleave:starbleached_pearl_block"
+  }
+}
