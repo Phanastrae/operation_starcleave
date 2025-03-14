@@ -61,14 +61,6 @@ public class FirmamentTextureStorage {
     }
 
     public void tick() {
-        if(!this.shouldRenderPostOnGraphicsMode()) {
-            // there is no need to do any of this if we aren't rendering the effect
-
-            // clear rebuild queue just in case, this really shouldn't matter
-            this.clearRebuildQueue();
-            return;
-        }
-
         Minecraft client = Minecraft.getInstance();
         ProfilerFiller profiler = client.getProfiler();
         profiler.push("starcleave_update_firmament_texture");
