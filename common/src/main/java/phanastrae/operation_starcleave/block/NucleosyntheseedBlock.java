@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
@@ -13,10 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BonemealableBlock;
-import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -115,8 +113,9 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
             return;
         }
 
-        if(random.nextInt(4) != 0) {
-            boolean growsDown = state.getValue(GROWS_DOWN);
+        boolean growsDown = state.getValue(GROWS_DOWN);
+
+        if(random.nextInt(8) <= (growsDown ? 1 : 2)) {
             if (trySpread(state, level, pos, random, growsDown ? Direction.DOWN : Direction.UP)) {
                 return;
             }
@@ -170,7 +169,9 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
                         level.scheduleTick(oppPos, newState.getBlock(), 30 + random.nextInt(120));
 
                         if(makeGrowUp || !growsDown) {
-                            spawnLeaves(level, oppPos, random);
+                            if(random.nextInt(5) <= 1) {
+                                spawnLeaves(level, oppPos, random);
+                            }
                         }
                     }
                 }
@@ -240,7 +241,11 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
     public static void trySpawnLeavesAtPos(Level level, BlockPos pos) {
         BlockState adjState = level.getBlockState(pos);
         if(adjState.canBeReplaced()) {
-            level.setBlockAndUpdate(pos, OperationStarcleaveBlocks.NUCLEIC_FISSURELEAVES.defaultBlockState());
+            BlockState leafState = OperationStarcleaveBlocks.NUCLEIC_FISSURELEAVES.defaultBlockState();
+            if(adjState.getFluidState().is(FluidTags.WATER)) {
+                leafState = leafState.setValue(LeavesBlock.WATERLOGGED, true);
+            }
+            level.setBlockAndUpdate(pos, leafState);
         }
     }
 
