@@ -91,5 +91,6 @@ public class OperationStarcleaveClient {
 
 	public static void onClientShutdown(Minecraft client) {
 		FirmamentTextureStorage.getInstance().close();
+		FirmamentRenderer.close();
 	}
 }

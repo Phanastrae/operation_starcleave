@@ -1,11 +1,5 @@
 package phanastrae.operation_starcleave.item;
 
-import phanastrae.operation_starcleave.component.OperationStarcleaveComponentTypes;
-import phanastrae.operation_starcleave.component.type.StarbleachComponent;
-import phanastrae.operation_starcleave.entity.effect.OperationStarcleaveStatusEffects;
-
-import static net.minecraft.core.component.DataComponents.FOOD;
-
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -14,6 +8,11 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import phanastrae.operation_starcleave.component.OperationStarcleaveComponentTypes;
+import phanastrae.operation_starcleave.component.type.StarbleachComponent;
+import phanastrae.operation_starcleave.entity.effect.OperationStarcleaveStatusEffects;
+
+import static net.minecraft.core.component.DataComponents.FOOD;
 
 public class StarbleachCoating {
 
@@ -66,10 +65,9 @@ public class StarbleachCoating {
 
     public static Component getText(String key) {
         float fl = (System.currentTimeMillis() % 4000) / 4000f;
-        float twopi = 2 * Mth.PI;
-        float red = Mth.sin(fl * twopi) * 0.2f + 0.8f;
-        float green = Mth.sin((fl + 1/3f) * twopi) * 0.2f + 0.8f;
-        float blue = Mth.sin((fl + 2/3f) * twopi) * 0.2f + 0.8f;
+        float red = Mth.sin(fl * Mth.TWO_PI) * 0.2f + 0.8f;
+        float green = Mth.sin((fl + 1/3f) * Mth.TWO_PI) * 0.2f + 0.8f;
+        float blue = Mth.sin((fl + 2/3f) * Mth.TWO_PI) * 0.2f + 0.8f;
 
         int r = (int)(red * 255f) & 0xFF;
         int g = (int)(green * 255f) & 0xFF;
