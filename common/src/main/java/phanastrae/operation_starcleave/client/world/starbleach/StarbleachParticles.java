@@ -16,7 +16,7 @@ public class StarbleachParticles {
 
         ParticleOptions particleEffect = OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER;
         int radius = 32;
-        int firmHeight = clientWorld.getMaxBuildHeight() + 16;
+        int firmHeight = firmament.getY();
         int bottomY = clientWorld.getMinBuildHeight();
         for(int n = 0; n < 20; n++) {
             int x = centerX + random.nextInt(radius) - random.nextInt(radius);

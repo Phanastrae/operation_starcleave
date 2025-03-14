@@ -113,9 +113,12 @@ public class FirmamentRenderer {
     public static void render(Level level, MultiBufferSource vertexConsumerProvider, PoseStack WRCmatrixStack, Camera camera, Frustum frustum, LevelRenderer levelRenderer, PoseStack matrixStack, Matrix4f projectionMatrix) {
         if(frustum == null || camera == null) return;
 
+        Firmament firmament = Firmament.fromLevel(level);
+        if(firmament == null) return;
+
         double camx = camera.getPosition().x;
         double camz = camera.getPosition().z;
-        double firmHeight = level.getMaxBuildHeight() + 16;
+        double firmHeight = firmament.getY();
         AABB box = new AABB(camx - 512, firmHeight - 1, camz - 512, camx + 512, firmHeight + 1, camz + 512);
         if(!frustum.isVisible(box)) {
             return;
@@ -520,7 +523,7 @@ public class FirmamentRenderer {
 
             RegionPos regionPos = RegionPos.fromWorldCoords(Mth.floor(camPos.x), Mth.floor(camPos.z));
 
-            matrices.translate(regionPos.worldX-camPos.x, height-camPos.y, regionPos.worldZ-camPos.z);
+            matrices.translate(regionPos.worldX - camPos.x, height + (1 / 16F) - camPos.y, regionPos.worldZ - camPos.z);
             for(int i = -1; i <= 1; i++) {
                 for(int j = -1; j <= 1; j++) {
                     int ox = 512 * i;

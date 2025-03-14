@@ -19,7 +19,7 @@ public class Firmament implements FirmamentAccess {
     }
 
     public int getY() {
-        return this.level.getMaxBuildHeight() + 16;
+        return this.level.getMaxBuildHeight();
     }
 
     public void tick() {
