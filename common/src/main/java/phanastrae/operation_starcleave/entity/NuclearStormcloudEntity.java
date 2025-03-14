@@ -1,6 +1,5 @@
 package phanastrae.operation_starcleave.entity;
 
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -84,9 +83,21 @@ public class NuclearStormcloudEntity extends Entity {
         Level level = this.level();
         RandomSource random = this.getRandom();
 
-        for(int i = 0; i < 70; i++) {
+        for(int i = 0; i < 30; i++) {
             level.addParticle(
-                    random.nextInt(4) == 0 ? OperationStarcleaveParticleTypes.LARGE_GLIMMER_SMOKE : ParticleTypes.LARGE_SMOKE,
+                    random.nextInt(20) == 0 ? OperationStarcleaveParticleTypes.LARGE_GLIMMER_SMOKE : OperationStarcleaveParticleTypes.NUCLEAR_SMOKE,
+                    this.getX() + (random.nextFloat() * 2 - 1) * this.getBbWidth() / 2F,
+                    this.getY() + (random.nextFloat() * 2) * this.getBbHeight(),
+                    this.getZ() + (random.nextFloat() * 2 - 1) * this.getBbWidth() / 2F,
+                    random.nextGaussian() * 0.15,
+                    random.nextGaussian() * 0.15,
+                    random.nextGaussian() * 0.15
+            );
+        }
+        if(random.nextInt(3) == 0) {
+            level.addParticle(
+                    OperationStarcleaveParticleTypes.LARGE_NUCLEAR_SMOKE,
+                    true,
                     this.getX() + (random.nextFloat() * 2 - 1) * this.getBbWidth() / 2F,
                     this.getY() + (random.nextFloat() * 2) * this.getBbHeight(),
                     this.getZ() + (random.nextFloat() * 2 - 1) * this.getBbWidth() / 2F,
@@ -97,7 +108,7 @@ public class NuclearStormcloudEntity extends Entity {
         }
         for(int i = 0; i < 10; i++) {
             level.addParticle(
-                    ParticleTypes.FALLING_OBSIDIAN_TEAR,
+                    OperationStarcleaveParticleTypes.PLASMA_DUST,
                     this.getX() + (random.nextFloat() * 2 - 1) * this.getBbWidth() / 2F,
                     this.getY() + 0.25 * (random.nextFloat() * 2) * this.getBbHeight(),
                     this.getZ() + (random.nextFloat() * 2 - 1) * this.getBbWidth() / 2F,

@@ -60,7 +60,7 @@ public class NuclearStardropEntity extends AbstractHurtingProjectile {
     @Nullable
     @Override
     protected ParticleOptions getTrailParticle() {
-        return OperationStarcleaveParticleTypes.LARGE_GLIMMER_SMOKE;
+        return OperationStarcleaveParticleTypes.NUCLEAR_SMOKE;
     }
 
     @Override
@@ -121,5 +121,10 @@ public class NuclearStardropEntity extends AbstractHurtingProjectile {
         } else {
             this.accelerationPower = 0.04;
         }
+    }
+
+    @Override
+    public boolean isOnFire() {
+        return false;
     }
 }
