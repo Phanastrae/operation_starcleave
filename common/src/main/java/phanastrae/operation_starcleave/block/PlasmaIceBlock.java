@@ -80,12 +80,12 @@ public class PlasmaIceBlock extends Block {
 
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-        if(random.nextInt(16) == 0) {
+        if(random.nextInt(6) == 0) {
             for (Direction direction : Direction.values()) {
                 BlockPos adjPos = pos.relative(direction);
                 BlockState adjState = level.getBlockState(adjPos);
                 if (!adjState.isFaceSturdy(level, pos, direction.getOpposite())) {
-                    for (int i = 0; i < 7 + random.nextInt(14); i++) {
+                    for (int i = 0; i < 2 + random.nextInt(3); i++) {
                         level.addParticle(
                                 OperationStarcleaveParticleTypes.PLASMA_DUST,
                                 pos.getX() + 0.5,

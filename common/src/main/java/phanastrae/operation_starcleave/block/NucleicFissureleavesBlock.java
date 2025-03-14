@@ -16,20 +16,20 @@ public class NucleicFissureleavesBlock extends LeavesBlock {
 
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-        if(random.nextInt(6) == 0) {
+        if(random.nextInt(12) == 0) {
             for (Direction direction : Direction.values()) {
                 BlockPos adjPos = pos.relative(direction);
                 BlockState adjState = level.getBlockState(adjPos);
-                if (!adjState.isFaceSturdy(level, pos, direction.getOpposite())) {
-                    for (int i = 0; i < 7 + random.nextInt(14); i++) {
+                if (!adjState.isFaceSturdy(level, pos, direction.getOpposite()) && !adjState.is(OperationStarcleaveBlocks.NUCLEIC_FISSURELEAVES)) {
+                    for (int i = 0; i < 1 + random.nextInt(2); i++) {
                         level.addParticle(
                                 OperationStarcleaveParticleTypes.PLASMA_DUST,
                                 pos.getX() + 0.5,
                                 pos.getY() + 0.5,
                                 pos.getZ() + 0.5,
-                                random.nextGaussian() * 0.1,
-                                random.nextGaussian() * 0.1,
-                                random.nextGaussian() * 0.1
+                                random.nextGaussian() * 0.05,
+                                random.nextGaussian() * 0.05,
+                                random.nextGaussian() * 0.05
                         );
                     }
                 }
