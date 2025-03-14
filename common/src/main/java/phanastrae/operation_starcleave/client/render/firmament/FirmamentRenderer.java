@@ -401,8 +401,8 @@ public class FirmamentRenderer {
             DynamicTexture firmamentTex = FirmamentTextureStorage.getInstance().getTexture();
             RenderSystem.setShaderTexture(0, firmamentTex.getId());
             firmamentTex.bind();
-            RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
             RenderSystem.setShaderTexture(1, firmamentSkyTexID);
 
