@@ -115,7 +115,7 @@ public class OperationStarcleaveBlocks {
             .lightLevel(constant(9))
             .randomTicks()
     );
-    public static final Block NUCLEIC_FISSURELEAVES = new LeavesBlock(settings()
+    public static final Block NUCLEIC_FISSURELEAVES = new NucleicFissureleavesBlock(settings()
             .strength(0.2F)
             .mapColor(COLOR_LIGHT_GREEN)
             .sound(GRASS)
@@ -128,7 +128,7 @@ public class OperationStarcleaveBlocks {
             .noOcclusion()
             .randomTicks()
     );
-    public static final Block COAGULATED_PLASMA = new Block(settings()
+    public static final Block COAGULATED_PLASMA = new CoagulatedPlasmaBlock(settings()
             .strength(3.0F, 6.0F)
             .mapColor(TERRACOTTA_GREEN)
             .sound(SoundType.DEEPSLATE)

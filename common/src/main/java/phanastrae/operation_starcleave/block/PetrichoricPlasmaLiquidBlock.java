@@ -41,12 +41,25 @@ public class PetrichoricPlasmaLiquidBlock extends CustomLiquidBlock {
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         // particles
-
         if(level.getBlockState(pos.above()).isAir()) {
-            double x = pos.getX() + random.nextDouble();
-            double y = pos.getY() + random.nextDouble() * 0.2 + 0.8;
-            double z = pos.getZ() + random.nextDouble();
-            level.addParticle(OperationStarcleaveParticleTypes.LARGE_GLIMMER_SMOKE, x, y, z, 0.0, 0.0, 0.0);
+            if (random.nextInt(8) == 0) {
+                double x = pos.getX() + random.nextDouble();
+                double y = pos.getY() + random.nextDouble() * 0.2 + 0.8;
+                double z = pos.getZ() + random.nextDouble();
+                level.addParticle(OperationStarcleaveParticleTypes.LARGE_GLIMMER_SMOKE, x, y, z, 0.0, 0.0, 0.0);
+            } else {
+                double x = pos.getX() + random.nextDouble();
+                double y = pos.getY() + random.nextDouble() * 0.2 + 0.8;
+                double z = pos.getZ() + random.nextDouble();
+                level.addParticle(OperationStarcleaveParticleTypes.NUCLEAR_SMOKE, x, y, z, 0.0, 0.0, 0.0);
+            }
+
+            for (int j = 0; j < 1 + random.nextInt(3); j++) {
+                double x = pos.getX() + random.nextDouble();
+                double y = pos.getY() + random.nextDouble() * 0.2 + 0.8;
+                double z = pos.getZ() + random.nextDouble();
+                level.addParticle(OperationStarcleaveParticleTypes.PLASMA_DUST, x, y, z, random.nextGaussian() * 0.25, random.nextGaussian() * 0.25, random.nextGaussian() * 0.25);
+            }
         }
     }
 

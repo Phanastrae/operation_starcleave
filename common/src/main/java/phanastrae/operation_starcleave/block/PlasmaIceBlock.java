@@ -4,10 +4,9 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -15,7 +14,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.material.Fluids;
+import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 
 import java.util.OptionalInt;
 
@@ -77,6 +76,29 @@ public class PlasmaIceBlock extends Block {
         BlockState newState = updateDistance(state, level, pos);
         level.setBlock(pos, newState, 3);
         tryDestroy(newState, level, pos, random);
+    }
+
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        if(random.nextInt(16) == 0) {
+            for (Direction direction : Direction.values()) {
+                BlockPos adjPos = pos.relative(direction);
+                BlockState adjState = level.getBlockState(adjPos);
+                if (!adjState.isFaceSturdy(level, pos, direction.getOpposite())) {
+                    for (int i = 0; i < 7 + random.nextInt(14); i++) {
+                        level.addParticle(
+                                OperationStarcleaveParticleTypes.PLASMA_DUST,
+                                pos.getX() + 0.5,
+                                pos.getY() + 0.5,
+                                pos.getZ() + 0.5,
+                                random.nextGaussian() * 0.1,
+                                random.nextGaussian() * 0.1,
+                                random.nextGaussian() * 0.1
+                        );
+                    }
+                }
+            }
+        }
     }
 
     public void tryDestroy(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
