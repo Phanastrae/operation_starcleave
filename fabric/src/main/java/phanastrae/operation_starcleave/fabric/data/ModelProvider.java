@@ -35,7 +35,6 @@ public class ModelProvider extends FabricModelProvider {
         BMG.createRotatedVariantBlock(COAGULATED_PLASMA);
         BMG.createRotatedVariantBlock(STELLAR_SEDIMENT);
         BMG.createRotatedVariantBlock(STARDUST_BLOCK);
-        BMG.createRotatedVariantBlock(PETRICHORIC_PLASMA);
         BMG.createRotatedVariantBlock(PETRICHORIC_VAPOR);
 
         BMG.createTrivialBlock(STARBLEACHED_LEAVES, TexturedModel.LEAVES);
@@ -226,6 +225,8 @@ public class ModelProvider extends FabricModelProvider {
                 OperationStarcleaveItems.PHLOGISTON_SAC,
 
                 OperationStarcleaveItems.BISMUTH_PEGASUS_ARMOR,
+
+                OperationStarcleaveItems.PETRICHORIC_PLASMA_BUCKET,
 
                 OperationStarcleaveItems.NUCLEAR_STORMCLOUD_BOTTLE,
 

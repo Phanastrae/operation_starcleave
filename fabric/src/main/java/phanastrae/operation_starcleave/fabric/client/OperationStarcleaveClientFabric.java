@@ -20,6 +20,7 @@ import phanastrae.operation_starcleave.client.particle.OperationStarcleavePartic
 import phanastrae.operation_starcleave.client.render.entity.OperationStarcleaveEntityRenderers;
 import phanastrae.operation_starcleave.client.render.entity.model.OperationStarcleaveEntityModelLayers;
 import phanastrae.operation_starcleave.client.render.shader.OperationStarcleaveShaders;
+import phanastrae.operation_starcleave.fabric.client.fluid.OperationStarcleaveFluidRenderHandlers;
 import phanastrae.operation_starcleave.network.packet.OperationStarcleavePayloads;
 
 import java.util.function.BiConsumer;
@@ -50,6 +51,9 @@ public class OperationStarcleaveClientFabric implements ClientModInitializer {
 
         // register shaders
         CoreShaderRegistrationCallback.EVENT.register(context -> OperationStarcleaveShaders.registerShaders(context::register));
+
+        // fluid rendering
+        OperationStarcleaveFluidRenderHandlers.init();
 
 
 

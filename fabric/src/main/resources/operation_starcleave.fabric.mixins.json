@@ -3,11 +3,16 @@
   "package": "phanastrae.operation_starcleave.fabric.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "ClipContextMixin",
     "CropBlockMixin",
+    "EntityMixin",
     "HoeItemMixin",
-    "ItemStackMixin"
+    "ItemStackMixin",
+    "LivingEntityMixin"
   ],
   "client": [
+    "client.FogRendererMixin",
+    "client.ScreenEffectRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -18,9 +19,12 @@ import java.util.OptionalInt;
 
 public class CoagulatedPlasmaBlock extends Block {
     public static final MapCodec<CoagulatedPlasmaBlock> CODEC = simpleCodec(CoagulatedPlasmaBlock::new);
-    public static final int MAX_DISTANCE = 2;
+    public static final int MAX_DISTANCE = 4;
     public static final IntegerProperty DISTANCE = IntegerProperty.create("distance", 1, MAX_DISTANCE);
     public static final BooleanProperty PERSISTENT = BlockStateProperties.PERSISTENT;
+    public static final Direction[] DIRECTIONS_EXCEPT_UP = new Direction[]{
+            Direction.WEST, Direction.EAST, Direction.NORTH, Direction.SOUTH, Direction.DOWN
+    };
 
     @Override
     protected MapCodec<? extends CoagulatedPlasmaBlock> codec() {
@@ -66,11 +70,23 @@ public class CoagulatedPlasmaBlock extends Block {
 
     @Override
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        if (state.hasProperty(DISTANCE) && state.getValue(DISTANCE) == 1) {
-            if(!PetrichoricPlasmaBlock.nextToGap(pos, level)) {
+        if (state.hasProperty(DISTANCE) && state.getValue(DISTANCE) <= 3) {
+            if(!nextToGap(pos, level)) {
                 level.setBlockAndUpdate(pos, OperationStarcleaveBlocks.PETRICHORIC_PLASMA.defaultBlockState());
             }
         }
+    }
+
+    public static boolean nextToGap(BlockPos pos, Level level) {
+        for(Direction direction : DIRECTIONS_EXCEPT_UP) {
+            BlockPos adjPos = pos.relative(direction);
+            BlockState adjState = level.getBlockState(adjPos);
+
+            if(!adjState.is(OperationStarcleaveBlocks.PETRICHORIC_PLASMA) && !adjState.isFaceSturdy(level, adjPos, direction)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

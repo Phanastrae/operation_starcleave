@@ -24,6 +24,7 @@ import phanastrae.operation_starcleave.block.entity.OperationStarcleaveBlockEnti
 import phanastrae.operation_starcleave.component.OperationStarcleaveComponentTypes;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
 import phanastrae.operation_starcleave.entity.effect.OperationStarcleaveStatusEffects;
+import phanastrae.operation_starcleave.fluid.OperationStarcleaveFluids;
 import phanastrae.operation_starcleave.item.OperationStarcleaveArmorMaterials;
 import phanastrae.operation_starcleave.item.OperationStarcleaveCreativeModeTabs;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
@@ -53,11 +54,13 @@ public class OperationStarcleave {
 		// armor materials
 		rla.addHolderRegistryListener(BuiltInRegistries.ARMOR_MATERIAL, OperationStarcleaveArmorMaterials::init);
 
-		// creative mode tabs
-		rla.addRegistryListener(BuiltInRegistries.CREATIVE_MODE_TAB, OperationStarcleaveCreativeModeTabs::init);
-
 		// data components
 		rla.addRegistryListener(BuiltInRegistries.DATA_COMPONENT_TYPE, OperationStarcleaveComponentTypes::init);
+
+		// creative mode tabs
+		rla.addRegistryListener(BuiltInRegistries.CREATIVE_MODE_TAB, OperationStarcleaveCreativeModeTabs::init);
+		// fluids
+		rla.addRegistryListener(BuiltInRegistries.FLUID, OperationStarcleaveFluids::init);
 
 		// blocks
 		rla.addRegistryListener(BuiltInRegistries.BLOCK, OperationStarcleaveBlocks::init);

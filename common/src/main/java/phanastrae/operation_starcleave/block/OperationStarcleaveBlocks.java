@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import phanastrae.operation_starcleave.OperationStarcleave;
+import phanastrae.operation_starcleave.fluid.OperationStarcleaveFluids;
 
 import java.util.function.BiConsumer;
 import java.util.function.ToIntFunction;
@@ -85,7 +86,18 @@ public class OperationStarcleaveBlocks {
     public static final Block BLESSED_BED = new BlessedBedBlock(settings(SAND, SoundType.WOOD).strength(0.2F).pushReaction(DESTROY).noOcclusion());
 
     public static final Block PHLOGISTIC_FIRE = new PhlogisticFireBlock(settings(COLOR_LIGHT_GREEN, WOOL).lightLevel(constant(15)).pushReaction(DESTROY).replaceable().noCollission().instabreak());
-    public static final Block PETRICHORIC_PLASMA = new PetrichoricPlasmaBlock(settings(COLOR_LIGHT_GREEN, EMPTY).strength(100F).lightLevel(constant(15)).pushReaction(DESTROY).emissiveRendering(OperationStarcleaveBlocks::always).noLootTable().noOcclusion().noCollission());
+    public static final Block PETRICHORIC_PLASMA = new PetrichoricPlasmaLiquidBlock(OperationStarcleaveFluids.FLOWING_PETRICHORIC_PLASMA, settings()
+            .mapColor(COLOR_LIGHT_GREEN)
+            .replaceable()
+            .noCollission()
+            .randomTicks()
+            .strength(100.0F)
+            .lightLevel(constant(15))
+            .pushReaction(DESTROY)
+            .noLootTable()
+            .liquid()
+            .sound(EMPTY)
+    );
     public static final Block PETRICHORIC_VAPOR = new PetrichoricVaporBlock(settings(COLOR_LIGHT_GREEN, EMPTY).strength(100F).lightLevel(constant(15)).pushReaction(DESTROY).emissiveRendering(OperationStarcleaveBlocks::always).noLootTable().noOcclusion().noCollission());
 
     public static final Block NUCLEOSYNTHESEED = new NucleosyntheseedBlock(settings()

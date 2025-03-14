@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.Block;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
+import phanastrae.operation_starcleave.fluid.OperationStarcleaveFluids;
 
 import java.util.function.BiConsumer;
 
@@ -77,6 +78,7 @@ public class OperationStarcleaveItems {
             false,
             settings().stacksTo(1)
     );
+    public static final Item PETRICHORIC_PLASMA_BUCKET = new PetrichoricPlasmaBucketItem(OperationStarcleaveFluids.PETRICHORIC_PLASMA, settings().craftRemainder(Items.BUCKET).stacksTo(1));
     public static final Item NUCLEAR_STORMCLOUD_BOTTLE = new NuclearStormcloudBottleItem(settings().rarity(EPIC));
 
     public static final Item FIRMAMENT_REJUVENATOR = new FirmamentRejuvenatorItem(settings(8, RARE));
@@ -152,6 +154,8 @@ public class OperationStarcleaveItems {
         rwt.accept("phlogiston_sac", PHLOGISTON_SAC);
 
         rwt.accept("bismuth_pegasus_armor", BISMUTH_PEGASUS_ARMOR);
+
+        rwt.accept("petrichoric_plasma_bucket", PETRICHORIC_PLASMA_BUCKET);
 
         rwt.accept("nuclear_stormcloud_bottle",NUCLEAR_STORMCLOUD_BOTTLE);
 

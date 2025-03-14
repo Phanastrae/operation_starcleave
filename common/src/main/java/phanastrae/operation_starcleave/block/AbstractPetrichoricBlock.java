@@ -16,6 +16,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveDamageTypes;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
+import phanastrae.operation_starcleave.registry.OperationStarcleaveFluidTags;
 
 public abstract class AbstractPetrichoricBlock extends Block {
     public AbstractPetrichoricBlock(Properties settings) {
@@ -75,7 +76,7 @@ public abstract class AbstractPetrichoricBlock extends Block {
                 BlockState blockState = level.getBlockState(currentPos);
                 FluidState fluidState = level.getFluidState(currentPos);
 
-                if (fluidState.isEmpty()) {
+                if (fluidState.isEmpty() || fluidState.is(OperationStarcleaveFluidTags.PETRICHORIC_PLASMA)) {
                     return false;
                 } else {
                     Block block = blockState.getBlock();

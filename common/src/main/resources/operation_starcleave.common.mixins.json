@@ -31,6 +31,7 @@
   ],
   "client": [
     "client.BlockEntityRenderersAccessor",
+    "client.CameraAccessor",
     "client.ClientLevelMixin",
     "client.ClientPacketListenerMixin",
     "client.DebugScreenOverlayMixin",

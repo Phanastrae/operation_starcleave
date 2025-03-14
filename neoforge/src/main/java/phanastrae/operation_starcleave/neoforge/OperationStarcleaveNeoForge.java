@@ -14,6 +14,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
@@ -23,10 +24,13 @@ import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
 import phanastrae.operation_starcleave.item.OperationStarcleaveCreativeModeTabs;
+import phanastrae.operation_starcleave.neoforge.client.fluid.OperationStarcleaveFluidTypeExtensions;
+import phanastrae.operation_starcleave.neoforge.fluid.OperationStarcleaveFluidTypes;
 import phanastrae.operation_starcleave.network.packet.OperationStarcleavePayloads;
 
 import java.util.Collection;
@@ -43,7 +47,7 @@ public class OperationStarcleaveNeoForge {
 
     public void setupModBusEvents(IEventBus modEventBus) {
         // init registry entries
-        OperationStarcleave.initRegistryEntries(new OperationStarcleave.RegistryListenerAdder() {
+        OperationStarcleave.RegistryListenerAdder RLA = new OperationStarcleave.RegistryListenerAdder() {
             @Override
             public <T> void addRegistryListener(Registry<T> registry, Consumer<BiConsumer<ResourceLocation, T>> source) {
                 modEventBus.addListener((RegisterEvent event) -> {
@@ -60,7 +64,9 @@ public class OperationStarcleaveNeoForge {
                 defRegister.register(modEventBus);
                 source.accept((name, t) -> defRegister.register(name, () -> t));
             }
-        });
+        };
+        OperationStarcleave.initRegistryEntries(RLA);
+        this.neoforgeRegistriesInit(RLA);
 
         // common init
         modEventBus.addListener(this::commonInit);
@@ -73,6 +79,9 @@ public class OperationStarcleaveNeoForge {
 
         // entity attributes
         modEventBus.addListener(this::entityAttributeCreation);
+
+        // register client extensions
+        modEventBus.addListener(this::registerClientExtensions);
     }
 
     public void setupGameBusEvents(IEventBus gameEventBus) {
@@ -86,9 +95,16 @@ public class OperationStarcleaveNeoForge {
         gameEventBus.addListener(this::addTooltips);
     }
 
+    public void neoforgeRegistriesInit(OperationStarcleave.RegistryListenerAdder registryListenerAdder) {
+        registryListenerAdder.addRegistryListener(NeoForgeRegistries.FLUID_TYPES, OperationStarcleaveFluidTypes::init);
+    }
+
     public void commonInit(FMLCommonSetupEvent event) {
         // everything here needs to be multithread safe
-        event.enqueueWork(OperationStarcleave::init);
+        event.enqueueWork(() -> {
+            OperationStarcleave.init();
+            OperationStarcleaveFluidTypes.registerFluidInteractions();
+        });
     }
 
     public void buildCreativeModeTabContents(BuildCreativeModeTabContentsEvent event) {
@@ -203,6 +219,10 @@ public class OperationStarcleaveNeoForge {
 
     public void entityAttributeCreation(EntityAttributeCreationEvent event) {
         OperationStarcleaveEntityTypes.registerEntityAttributes(((entityType, builder) -> event.put(entityType, builder.build())));
+    }
+
+    public void registerClientExtensions(RegisterClientExtensionsEvent event) {
+        OperationStarcleaveFluidTypeExtensions.init(event::registerFluidType);
     }
 
     public void tickLevel(LevelTickEvent.Pre event) {

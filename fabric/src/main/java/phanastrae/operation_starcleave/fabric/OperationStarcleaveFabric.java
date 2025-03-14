@@ -19,6 +19,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
+import phanastrae.operation_starcleave.fabric.fluid.OperationStarcleaveFluidVariantAttributes;
 import phanastrae.operation_starcleave.item.OperationStarcleaveCreativeModeTabs;
 import phanastrae.operation_starcleave.network.packet.OperationStarcleavePayloads;
 
@@ -42,6 +43,9 @@ public class OperationStarcleaveFabric implements ModInitializer {
                 source.accept((name, t) -> Registry.registerForHolder(registry, OperationStarcleave.id(name), t));
             }
         });
+
+        // register fluid attributes
+        OperationStarcleaveFluidVariantAttributes.init();
 
         // common init
         OperationStarcleave.init();

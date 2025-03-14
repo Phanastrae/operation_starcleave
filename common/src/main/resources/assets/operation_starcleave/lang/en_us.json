@@ -85,6 +85,7 @@
   "item.operation_starcleave.hollowed_sac": "Hollowed Sac",
   "item.operation_starcleave.holy_strands": "Holy Strands",
   "item.operation_starcleave.nuclear_stormcloud_bottle": "Nuclear Stormcloud in a Bottle",
+  "item.operation_starcleave.petrichoric_plasma_bucket": "Petrichoric Plasma Bucket",
   "item.operation_starcleave.phlogiston_sac": "Phlogiston Sac",
   "item.operation_starcleave.splash_starbleach_bottle": "Splash Starbleach Bottle",
   "item.operation_starcleave.starbleach_bottle": "Starbleach Bottle",
@@ -105,5 +106,7 @@
 
   "subtitles.operation_starcleave.entity.starcleaver_golem.ambient": "Starcleaver Golem clicks",
   "subtitles.operation_starcleave.entity.starcleaver_golem.death": "Starcleaver Golem dies",
-  "subtitles.operation_starcleave.entity.starcleaver_golem.step": "Starcleaver Golem skitters"
+  "subtitles.operation_starcleave.entity.starcleaver_golem.step": "Starcleaver Golem skitters",
+
+  "tag.fluid.operation_starcleave.petrichoric_plasma": "Petrichoric Plasma"
 }

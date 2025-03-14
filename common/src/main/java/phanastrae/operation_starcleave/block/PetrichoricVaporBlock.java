@@ -14,11 +14,11 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
 public class PetrichoricVaporBlock extends AbstractPetrichoricBlock {
-    public static final MapCodec<PetrichoricPlasmaBlock> CODEC = simpleCodec(PetrichoricPlasmaBlock::new);
+    public static final MapCodec<PetrichoricVaporBlock> CODEC = simpleCodec(PetrichoricVaporBlock::new);
     public static final IntegerProperty DISTANCE = IntegerProperty.create("distance", 0, 3);
 
     @Override
-    protected MapCodec<? extends PetrichoricPlasmaBlock> codec() {
+    protected MapCodec<? extends PetrichoricVaporBlock> codec() {
         return CODEC;
     }
 

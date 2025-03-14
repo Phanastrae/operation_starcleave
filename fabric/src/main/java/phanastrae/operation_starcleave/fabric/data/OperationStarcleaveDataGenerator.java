@@ -8,6 +8,7 @@ public class OperationStarcleaveDataGenerator implements DataGeneratorEntrypoint
 	public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
 		FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
 
+		pack.addProvider(FluidTagProvider::new);
 		pack.addProvider(BlockTagProvider::new);
 		pack.addProvider(ItemTagProvider::new);
 		pack.addProvider(EntityTypeTagProvider::new);

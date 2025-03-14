@@ -36,7 +36,7 @@ public abstract class ServerPlayerMixin extends Player implements FirmamentWatch
     }
 
     @Inject(method = "restoreFrom", at = @At("RETURN"))
-    private void mirthdew_encore$restoreFrom(ServerPlayer oldPlayer, boolean alive, CallbackInfo ci) {
+    private void operation_starcleave$restoreFrom(ServerPlayer oldPlayer, boolean alive, CallbackInfo ci) {
         OperationStarcleaveEntityAttachment.fromEntity(this).restoreFromOldServerPlayer(oldPlayer, alive);
     }
 

@@ -35,7 +35,7 @@ public abstract class EntityMixin implements EntityDuckInterface {
     private OperationStarcleaveEntityAttachment operation_starcleave$entityAttachment;
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void mirthdew_encore$init(EntityType type, Level world, CallbackInfo ci) {
+    private void operation_starcleave$init(EntityType type, Level world, CallbackInfo ci) {
         this.operation_starcleave$entityAttachment = new OperationStarcleaveEntityAttachment((Entity)(Object)this);
     }
 
