@@ -22,6 +22,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
+import phanastrae.operation_starcleave.block.tag.OperationStarcleaveBlockTags;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveDamageTypes;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
@@ -342,9 +343,11 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
                             BlockPos downPos = targetPos.below();
                             BlockState downState = level.getBlockState(downPos);
                             if(canErode(downState) && !((downState.canBeReplaced() || !downState.canOcclude()) && i <= 1)) {
-                                level.setBlockAndUpdate(downPos, OperationStarcleaveBlocks.COAGULATED_PLASMA.defaultBlockState());
-                                potentiallySpawnParticle(level, downPos);
-                                coagulateHorizontallyAdjacentPlasma(level, downPos);
+                                if(!downState.is(OperationStarcleaveBlocks.PHLOGISTIC_FIRE)) {
+                                    level.setBlockAndUpdate(downPos, OperationStarcleaveBlocks.COAGULATED_PLASMA.defaultBlockState());
+                                    potentiallySpawnParticle(level, downPos);
+                                    coagulateHorizontallyAdjacentPlasma(level, downPos);
+                                }
                             }
                         }
                     }
@@ -357,12 +360,15 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
             for(BlockPos targetPos : positionsLast) {
                 BlockPos downPos = targetPos.below();
                 BlockState downState = level.getBlockState(downPos);
-                if(canErode(downState) && !((downState.canBeReplaced() || !downState.canOcclude()) && i <= 1)) {
-                    BlockState state = (i <= 1 ? Blocks.AIR : (i < 14 ? OperationStarcleaveBlocks.PETRICHORIC_PLASMA : OperationStarcleaveBlocks.COAGULATED_PLASMA)).defaultBlockState();
-                    level.setBlockAndUpdate(downPos, state);
-                    potentiallySpawnParticle(level, downPos);
-                    if(i <= 1) {
-                        coagulateHorizontallyAdjacentPlasma(level, downPos);
+                boolean spawnsPlasmaAtHeight = i >= 2;
+                if(canErode(downState) && !((downState.canBeReplaced() || !downState.canOcclude()) && !spawnsPlasmaAtHeight)) {
+                    BlockState state = (!spawnsPlasmaAtHeight ? Blocks.AIR : (i < 14 ? OperationStarcleaveBlocks.PETRICHORIC_PLASMA : OperationStarcleaveBlocks.COAGULATED_PLASMA)).defaultBlockState();
+                    if(!downState.is(OperationStarcleaveBlocks.PHLOGISTIC_FIRE) || spawnsPlasmaAtHeight) {
+                        level.setBlockAndUpdate(downPos, state);
+                        potentiallySpawnParticle(level, downPos);
+                        if(!spawnsPlasmaAtHeight) {
+                            coagulateHorizontallyAdjacentPlasma(level, downPos);
+                        }
                     }
                     positions.add(downPos);
                 }
@@ -423,7 +429,7 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
             public Optional<Float> getBlockExplosionResistance(
                     Explosion explosion, BlockGetter blockGetter, BlockPos blockPos, BlockState blockState, FluidState fluidState
             ) {
-                return blockState.is(OperationStarcleaveBlocks.NUCLEOSYNTHESEED) || blockState.is(OperationStarcleaveBlocks.NUCLEIC_FISSUREROOT) || blockState.is(OperationStarcleaveBlocks.PHLOGISTIC_FIRE)
+                return blockState.is(OperationStarcleaveBlockTags.NUCLEOSYNTHESEED_BLAST_IMMUNE)
                         ? Optional.of(Blocks.WATER.getExplosionResistance())
                         : super.getBlockExplosionResistance(explosion, blockGetter, blockPos, blockState, fluidState);
             }
@@ -440,25 +446,10 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
     }
 
     public static boolean canBurrowThrough(BlockState state) {
-        // do destroy petrichoric blocks
-        if(state.is(OperationStarcleaveBlocks.PETRICHORIC_PLASMA) || state.is(OperationStarcleaveBlocks.PETRICHORIC_VAPOR)) {
-            return true;
-        }
-
-        // do not destroy phlogistic fire
-        if(state.is(OperationStarcleaveBlocks.PHLOGISTIC_FIRE)) {
-            return false;
-        }
-
         return canDestroy(state);
     }
 
     public static boolean canErode(BlockState state) {
-        // do destroy petrichoric blocks
-        if(state.is(OperationStarcleaveBlocks.PETRICHORIC_PLASMA) || state.is(OperationStarcleaveBlocks.PETRICHORIC_VAPOR)) {
-            return true;
-        }
-
         // do destroy coagulated plasma
         if(state.is(OperationStarcleaveBlocks.COAGULATED_PLASMA)) {
             return true;
@@ -468,9 +459,14 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
     }
 
     public static boolean canDestroy(BlockState state) {
-        // do not destroy roots or seeds
-        if(state.is(OperationStarcleaveBlocks.NUCLEIC_FISSUREROOT) || state.is(OperationStarcleaveBlocks.NUCLEOSYNTHESEED)) {
+        // do not destroy roots or seeds or phlogistic fire
+        if(state.is(OperationStarcleaveBlockTags.NUCLEOSYNTHESEED_BLAST_IMMUNE)) {
             return false;
+        }
+
+        // do destroy petrichoric blocks
+        if(state.is(OperationStarcleaveBlocks.PETRICHORIC_PLASMA) || state.is(OperationStarcleaveBlocks.PETRICHORIC_VAPOR)) {
+            return true;
         }
 
         // destroy replaceable blocks

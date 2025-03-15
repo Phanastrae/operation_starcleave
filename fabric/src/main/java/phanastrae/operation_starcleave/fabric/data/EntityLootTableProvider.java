@@ -9,8 +9,11 @@ import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
+import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
@@ -25,5 +28,8 @@ public class EntityLootTableProvider extends SimpleFabricLootTableProvider {
         lootTableBiConsumer.accept(OperationStarcleaveEntityTypes.STARCLEAVER_GOLEM.getDefaultLootTable(), LootTable.lootTable()
                 .withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
                         .add(LootItem.lootTableItem(Items.GOLD_NUGGET))));
+        lootTableBiConsumer.accept(OperationStarcleaveEntityTypes.SUBCAELIC_TORPEDO.getDefaultLootTable(), LootTable.lootTable()
+                .withPool(LootPool.lootPool().setRolls(BinomialDistributionGenerator.binomial(1, 0.3F))
+                        .add(LootItem.lootTableItem(OperationStarcleaveItems.HOLLOWED_SAC))));
     }
 }

@@ -101,18 +101,20 @@ public class OperationStarcleaveBlocks {
     public static final Block PETRICHORIC_VAPOR = new PetrichoricVaporBlock(settings(COLOR_LIGHT_GREEN, EMPTY).strength(100F).lightLevel(constant(15)).pushReaction(DESTROY).emissiveRendering(OperationStarcleaveBlocks::always).noLootTable().noOcclusion().noCollission());
 
     public static final Block NUCLEOSYNTHESEED = new NucleosyntheseedBlock(settings()
-            .strength(4.0F)
+            .strength(5.0F)
             .mapColor(DyeColor.GREEN)
             .sound(NETHER_WOOD)
             .lightLevel(constant(13))
+            .requiresCorrectToolForDrops()
             .randomTicks()
     );
     public static final Block NUCLEIC_FISSUREROOT = new NucleicFissurerootBlock(settings()
-            .strength(2.0F)
+            .strength(2.5F)
             .mapColor(state -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? COLOR_GREEN : COLOR_LIGHT_GREEN)
             .sound(NETHER_WOOD)
             .instrument(NoteBlockInstrument.BASS)
             .lightLevel(constant(9))
+            .requiresCorrectToolForDrops()
             .randomTicks()
     );
     public static final Block NUCLEIC_FISSURELEAVES = new NucleicFissureleavesBlock(settings()
