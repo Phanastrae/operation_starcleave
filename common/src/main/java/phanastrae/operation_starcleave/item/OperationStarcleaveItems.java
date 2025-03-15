@@ -96,17 +96,31 @@ public class OperationStarcleaveItems {
         rwt.accept("netherite_pumpkin", NETHERITE_PUMPKIN);
         rwt.accept("starcleaver_golem_bucket", STARCLEAVER_GOLEM_BUCKET);
 
+        rwt.accept("starbleach_bottle", STARBLEACH_BOTTLE);
+        rwt.accept("splash_starbleach_bottle", SPLASH_STARBLEACH_BOTTLE);
+
         rwt.accept("stellar_sediment", STELLAR_SEDIMENT);
         rwt.accept("stellar_farmland", STELLAR_FARMLAND);
         rwt.accept("bisreed_root", BISREED_ROOT);
         rwt.accept("bismuth_flake", BISMUTH_FLAKE);
         rwt.accept("starflaked_bismuth", STARFLAKED_BISMUTH);
 
+        rwt.accept("stellar_tiles", STELLAR_TILES);
+        rwt.accept("stellar_tile_slab", STELLAR_TILE_SLAB);
+
         rwt.accept("stellar_mulch", STELLAR_MULCH);
         rwt.accept("mulchborne_tuft", MULCHBORNE_TUFT);
 
         rwt.accept("holy_moss", HOLY_MOSS);
         rwt.accept("short_holy_moss", SHORT_HOLY_MOSS);
+
+        rwt.accept("holy_strands", HOLY_STRANDS);
+        rwt.accept("blessed_cloth", BLESSED_CLOTH);
+
+        rwt.accept("blessed_cloth_block", BLESSED_CLOTH_BLOCK);
+        rwt.accept("blessed_cloth_carpet", BLESSED_CLOTH_CARPET);
+        rwt.accept("blessed_cloth_curtain", BLESSED_CLOTH_CURTAIN);
+        rwt.accept("blessed_bed", BLESSED_BED);
 
         rwt.accept("stardust_block", STARDUST_BLOCK);
         rwt.accept("stardust_cluster", STARDUST_CLUSTER);
@@ -121,51 +135,34 @@ public class OperationStarcleaveItems {
         rwt.accept("chiseled_starbleached_tiles", CHISELED_STARBLEACHED_TILES);
         rwt.accept("imbued_starbleached_tiles", IMBUED_STARBLEACHED_TILES);
 
-        rwt.accept("starbleached_pearl_block", STARBLEACHED_PEARL_BLOCK);
-
-        rwt.accept("stellar_tiles", STELLAR_TILES);
-        rwt.accept("stellar_tile_slab", STELLAR_TILE_SLAB);
-
-        rwt.accept("stellar_repulsor", STELLAR_REPULSOR);
-
-        rwt.accept("blessed_cloth_block", BLESSED_CLOTH_BLOCK);
-        rwt.accept("blessed_cloth_carpet", BLESSED_CLOTH_CARPET);
-        rwt.accept("blessed_cloth_curtain", BLESSED_CLOTH_CURTAIN);
-
         rwt.accept("nucleosyntheseed", NUCLEOSYNTHESEED);
         rwt.accept("nucleic_fissureroot", NUCLEIC_FISSUREROOT);
         rwt.accept("nucleic_fissureleaves", NUCLEIC_FISSURELEAVES);
-        rwt.accept("coagulated_plasma", COAGULATED_PLASMA);
-        rwt.accept("plasma_ice", PLASMA_ICE);
-
-        rwt.accept("blessed_bed", BLESSED_BED);
-        Item.BY_BLOCK.put(OperationStarcleaveBlocks.STARBLEACH_CAULDRON, Items.CAULDRON);
-
-        rwt.accept("starbleach_bottle", STARBLEACH_BOTTLE);
-        rwt.accept("splash_starbleach_bottle", SPLASH_STARBLEACH_BOTTLE);
 
         rwt.accept("starbleached_pearl", STARBLEACHED_PEARL);
         rwt.accept("starfruit", STARFRUIT);
+        rwt.accept("firmament_rejuvenator", FIRMAMENT_REJUVENATOR);
+        rwt.accept("bismuth_pegasus_armor", BISMUTH_PEGASUS_ARMOR);
 
-        rwt.accept("holy_strands", HOLY_STRANDS);
-        rwt.accept("blessed_cloth", BLESSED_CLOTH);
+        rwt.accept("starbleached_pearl_block", STARBLEACHED_PEARL_BLOCK);
+        rwt.accept("stellar_repulsor", STELLAR_REPULSOR);
 
         rwt.accept("hollowed_sac", HOLLOWED_SAC);
         rwt.accept("phlogiston_sac", PHLOGISTON_SAC);
 
-        rwt.accept("bismuth_pegasus_armor", BISMUTH_PEGASUS_ARMOR);
-
+        rwt.accept("coagulated_plasma", COAGULATED_PLASMA);
+        rwt.accept("plasma_ice", PLASMA_ICE);
         rwt.accept("petrichoric_plasma_bucket", PETRICHORIC_PLASMA_BUCKET);
 
-        rwt.accept("nuclear_stormcloud_bottle",NUCLEAR_STORMCLOUD_BOTTLE);
 
-        rwt.accept("firmament_rejuvenator", FIRMAMENT_REJUVENATOR);
-
+        rwt.accept("nuclear_stormcloud_bottle", NUCLEAR_STORMCLOUD_BOTTLE);
         rwt.accept("firmament_manipulator", FIRMAMENT_MANIPULATOR);
 
         rwt.accept("starcleaver_golem_spawn_egg", STARCLEAVER_GOLEM_SPAWN_EGG);
         rwt.accept("subcaelic_torpedo_spawn_egg", SUBCAELIC_TORPEDO_SPAWN_EGG);
         rwt.accept("subcaelic_dux_spawn_egg", SUBCAELIC_DUX_SPAWN_EGG);
+
+        Item.BY_BLOCK.put(OperationStarcleaveBlocks.STARBLEACH_CAULDRON, Items.CAULDRON);
     }
 
     private static ResourceLocation id(String path) {
