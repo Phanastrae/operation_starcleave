@@ -60,7 +60,6 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
         dropSelf(BLESSED_CLOTH_CURTAIN);
         dropSelf(NUCLEIC_FISSUREROOT);
         dropSelf(COAGULATED_PLASMA);
-        dropSelf(PLASMA_ICE);
 
         add(PHLOGISTIC_FIRE, noDrop());
 
@@ -70,8 +69,9 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
         addRandomDrop(STELLAR_MULCH, silkTouchDrop(OperationStarcleaveItems.STELLAR_MULCH, OperationStarcleaveItems.STELLAR_SEDIMENT));
         addRandomDrop(STELLAR_FARMLAND, silkTouchDrop(OperationStarcleaveItems.STELLAR_MULCH, OperationStarcleaveItems.STELLAR_SEDIMENT));
 
-        add(NUCLEOSYNTHESEED, createSilkTouchOnlyTable(NUCLEOSYNTHESEED));
+        add(NUCLEOSYNTHESEED, silkTouchDrop(NUCLEOSYNTHESEED, NUCLEIC_FISSUREROOT));
         add(NUCLEIC_FISSURELEAVES, createShearsOnlyDrop(NUCLEIC_FISSURELEAVES));
+        add(PLASMA_ICE, createSilkTouchOnlyTable(PLASMA_ICE));
 
         addRandomDrop(STARDUST_BLOCK,
                 silkTouchDrop(
