@@ -201,6 +201,10 @@ public class Starbleach {
     @Nullable
     public static BlockState getStarbleachBlockResult(Level world, BlockPos blockPos, BlockState blockState, RandomSource random) {
         // TODO implement proper datapack based system for this instead of hardcoding it all
+        if(blockState.is(OperationStarcleaveBlockTags.STARBLEACH_IMMUNE)) {
+            return null;
+        }
+
         if(blockState.is(Blocks.PODZOL)
                 || blockState.is(Blocks.MYCELIUM)) {
             return OperationStarcleaveBlocks.STELLAR_MULCH.defaultBlockState();
@@ -267,7 +271,7 @@ public class Starbleach {
                 || blockState.is(Blocks.GRAVEL)) {
             return OperationStarcleaveBlocks.STARDUST_BLOCK.defaultBlockState();
         }
-        if(blockState.is(BlockTags.LEAVES) && !blockState.is(OperationStarcleaveBlocks.NUCLEIC_FISSURELEAVES)
+        if(blockState.is(BlockTags.LEAVES)
                 || blockState.is(BlockTags.WART_BLOCKS)
                 || blockState.is(Blocks.CHORUS_PLANT)
                 || blockState.is(Blocks.CHORUS_FLOWER)) {
@@ -277,7 +281,7 @@ public class Starbleach {
                 return Blocks.AIR.defaultBlockState();
             }
         }
-        if(blockState.is(BlockTags.LOGS) && !blockState.is(OperationStarcleaveBlocks.NUCLEIC_FISSUREROOT)) {
+        if(blockState.is(BlockTags.LOGS)) {
             if(blockState.getProperties().contains(RotatedPillarBlock.AXIS)) {
                 return OperationStarcleaveBlocks.STARBLEACHED_LOG.defaultBlockState().setValue(RotatedPillarBlock.AXIS, blockState.getValue(RotatedPillarBlock.AXIS));
             } else {

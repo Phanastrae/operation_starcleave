@@ -2,6 +2,7 @@ package phanastrae.operation_starcleave.fabric.data;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBlockTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
@@ -20,6 +21,14 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
     @Override
     protected void addTags(HolderLookup.Provider arg) {
         // vanilla tags
+        getOrCreateTagBuilder(BlockTags.WOOL).add(
+                BLESSED_CLOTH_BLOCK
+        );
+
+        getOrCreateTagBuilder(BlockTags.WOOL_CARPETS).add(
+                BLESSED_CLOTH_CARPET
+        );
+
         getOrCreateTagBuilder(BlockTags.LOGS).add(
                 NUCLEIC_FISSUREROOT
         );
@@ -28,8 +37,22 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 STARBLEACHED_TILE_WALL
         );
 
+        getOrCreateTagBuilder(BlockTags.STAIRS).add(
+                STARBLEACHED_TILE_STAIRS
+        );
+
+        getOrCreateTagBuilder(BlockTags.SLABS).add(
+                STARBLEACHED_TILE_SLAB,
+                STELLAR_TILE_SLAB
+        );
+
         getOrCreateTagBuilder(BlockTags.LEAVES).add(
+                STARBLEACHED_LEAVES,
                 NUCLEIC_FISSURELEAVES
+        );
+
+        getOrCreateTagBuilder(BlockTags.BEDS).add(
+                BLESSED_BED
         );
 
         getOrCreateTagBuilder(BlockTags.CROPS).add(
@@ -44,6 +67,10 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 STARBLEACH_CAULDRON
         );
 
+        getOrCreateTagBuilder(BlockTags.COMBINATION_STEP_SOUND_BLOCKS).add(
+                BLESSED_CLOTH_CARPET
+        );
+
         getOrCreateTagBuilder(BlockTags.OCCLUDES_VIBRATION_SIGNALS).add(
                 BLESSED_CLOTH_BLOCK
         );
@@ -54,19 +81,26 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 BLESSED_CLOTH_CURTAIN
         );
 
+        getOrCreateTagBuilder(BlockTags.BIG_DRIPLEAF_PLACEABLE).add(
+                STELLAR_FARMLAND
+        );
+
         getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_AXE).add(
+                NETHERITE_PUMPKIN,
                 MULCHBORNE_TUFT,
                 SHORT_HOLY_MOSS,
-                BISREEDS
+                BISREEDS,
+                NUCLEOSYNTHESEED
         );
 
         getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_HOE).add(
-                NETHERITE_PUMPKIN,
-                STARBLEACHED_LEAVES
+                STARBLEACHED_LEAVES,
+                NUCLEIC_FISSURELEAVES
         );
 
         getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_PICKAXE).add(
                 NETHERITE_PUMPKIN,
+
                 STARBLEACHED_LOG,
                 STARBLEACHED_WOOD,
                 STARBLEACHED_LEAVES,
@@ -76,24 +110,36 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 STARBLEACHED_TILE_WALL,
                 CHISELED_STARBLEACHED_TILES,
                 IMBUED_STARBLEACHED_TILES,
+
                 STARBLEACH_CAULDRON,
                 STARBLEACHED_PEARL_BLOCK,
+
                 STELLAR_TILES,
                 STELLAR_TILE_SLAB,
-                STELLAR_REPULSOR
+                STELLAR_REPULSOR,
+
+                COAGULATED_PLASMA,
+                PLASMA_ICE
         );
 
         getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_SHOVEL).add(
                 STELLAR_SEDIMENT,
                 STELLAR_MULCH,
                 STELLAR_FARMLAND,
+
                 HOLY_MOSS,
+
                 STELLAR_TILES,
+                STELLAR_TILE_SLAB,
+
                 STELLAR_REPULSOR,
-                STARDUST_BLOCK
+
+                STARDUST_BLOCK,
+                COAGULATED_PLASMA
         );
 
         getOrCreateTagBuilder(BlockTags.SWORD_EFFICIENT).add(
+                NETHERITE_PUMPKIN,
                 MULCHBORNE_TUFT,
                 SHORT_HOLY_MOSS
         );
@@ -108,17 +154,26 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         );
 
         getOrCreateTagBuilder(BlockTags.REPLACEABLE).add(
+                STARDUST_CLUSTER,
                 MULCHBORNE_TUFT,
-                SHORT_HOLY_MOSS
+                SHORT_HOLY_MOSS,
+                PHLOGISTIC_FIRE
         );
 
         getOrCreateTagBuilder(BlockTags.ENCHANTMENT_POWER_TRANSMITTER).add(
+                STARDUST_CLUSTER,
                 MULCHBORNE_TUFT,
-                SHORT_HOLY_MOSS
+                SHORT_HOLY_MOSS,
+                PHLOGISTIC_FIRE
         );
 
         getOrCreateTagBuilder(BlockTags.MAINTAINS_FARMLAND).add(
                 BISREEDS
+        );
+
+        // common
+        getOrCreateTagBuilder(ConventionalBlockTags.VILLAGER_JOB_SITES).add(
+                STARBLEACH_CAULDRON
         );
 
         // starcleave tags
@@ -146,7 +201,26 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 STARDUST_BLOCK,
                 STARBLEACHED_LOG,
                 STARBLEACHED_WOOD
+        );
 
+        getOrCreateTagBuilder(OperationStarcleaveBlockTags.STARBLEACH_IMMUNE).add(
+                STARBLEACHED_LOG,
+                STARBLEACHED_WOOD,
+                STARBLEACHED_LEAVES,
+                NUCLEIC_FISSUREROOT,
+                NUCLEIC_FISSURELEAVES
+        );
+
+        getOrCreateTagBuilder(OperationStarcleaveBlockTags.PHLOGISTIC_HYPERFLAMMABLES).add(
+                NUCLEOSYNTHESEED,
+                NUCLEIC_FISSUREROOT,
+                NUCLEIC_FISSURELEAVES
+        );
+
+        getOrCreateTagBuilder(OperationStarcleaveBlockTags.NUCLEOSYNTHESEED_BLAST_IMMUNE).add(
+                NUCLEOSYNTHESEED,
+                NUCLEIC_FISSUREROOT,
+                PHLOGISTIC_FIRE
         );
     }
 }

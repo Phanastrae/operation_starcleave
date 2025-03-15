@@ -14,6 +14,8 @@
     "operation_starcleave:starbleached_pearl_block",
     "operation_starcleave:stellar_tiles",
     "operation_starcleave:stellar_tile_slab",
-    "operation_starcleave:stellar_repulsor"
+    "operation_starcleave:stellar_repulsor",
+    "operation_starcleave:coagulated_plasma",
+    "operation_starcleave:plasma_ice"
   ]
 }

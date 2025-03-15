@@ -25,6 +25,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import phanastrae.operation_starcleave.block.tag.OperationStarcleaveBlockTags;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveDamageTypes;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityAttachment;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypeTags;
@@ -294,7 +295,7 @@ public class PhlogisticFireBlock extends BaseFireBlock implements SimpleWaterlog
     }
 
     public boolean isFissurePlant(BlockState state) {
-        return state.is(OperationStarcleaveBlocks.NUCLEIC_FISSUREROOT) || state.is(OperationStarcleaveBlocks.NUCLEIC_FISSURELEAVES) || state.is(OperationStarcleaveBlocks.NUCLEOSYNTHESEED);
+        return state.is(OperationStarcleaveBlockTags.PHLOGISTIC_HYPERFLAMMABLES);
     }
 
     @Override

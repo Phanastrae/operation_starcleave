@@ -2,13 +2,15 @@ package phanastrae.operation_starcleave.fabric.data;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import org.jetbrains.annotations.Nullable;
-import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 
 import java.util.concurrent.CompletableFuture;
+
+import static phanastrae.operation_starcleave.item.OperationStarcleaveItems.*;
 
 public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
     public ItemTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> completableFuture, @Nullable FabricTagProvider.BlockTagProvider blockTagProvider) {
@@ -18,13 +20,13 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
     @Override
     protected void addTags(HolderLookup.Provider arg) {
         // copy block tags
-        //this.copy(BlockTags.WOOL, ItemTags.WOOL);
+        this.copy(BlockTags.WOOL, ItemTags.WOOL);
         //this.copy(BlockTags.PLANKS, ItemTags.PLANKS);
         //this.copy(BlockTags.STONE_BRICKS, ItemTags.STONE_BRICKS);
         //this.copy(BlockTags.WOODEN_BUTTONS, ItemTags.WOODEN_BUTTONS);
         //this.copy(BlockTags.STONE_BUTTONS, ItemTags.STONE_BUTTONS);
         //this.copy(BlockTags.BUTTONS, ItemTags.BUTTONS);
-        //this.copy(BlockTags.WOOL_CARPETS, ItemTags.WOOL_CARPETS);
+        this.copy(BlockTags.WOOL_CARPETS, ItemTags.WOOL_CARPETS);
         //this.copy(BlockTags.WOODEN_DOORS, ItemTags.WOODEN_DOORS);
         //this.copy(BlockTags.WOODEN_STAIRS, ItemTags.WOODEN_STAIRS);
         //this.copy(BlockTags.WOODEN_SLABS, ItemTags.WOODEN_SLABS);
@@ -46,19 +48,19 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
         //this.copy(BlockTags.WARPED_STEMS, ItemTags.WARPED_STEMS);
         //this.copy(BlockTags.WART_BLOCKS, ItemTags.WART_BLOCKS);
         //this.copy(BlockTags.LOGS_THAT_BURN, ItemTags.LOGS_THAT_BURN);
-        //this.copy(BlockTags.LOGS, ItemTags.LOGS);
+        this.copy(BlockTags.LOGS, ItemTags.LOGS);
         //this.copy(BlockTags.SAND, ItemTags.SAND);
         //this.copy(BlockTags.SMELTS_TO_GLASS, ItemTags.SMELTS_TO_GLASS);
-        //this.copy(BlockTags.SLABS, ItemTags.SLABS);
-        //this.copy(BlockTags.WALLS, ItemTags.WALLS);
-        //this.copy(BlockTags.STAIRS, ItemTags.STAIRS);
+        this.copy(BlockTags.SLABS, ItemTags.SLABS);
+        this.copy(BlockTags.WALLS, ItemTags.WALLS);
+        this.copy(BlockTags.STAIRS, ItemTags.STAIRS);
         //this.copy(BlockTags.ANVIL, ItemTags.ANVIL);
         //this.copy(BlockTags.RAILS, ItemTags.RAILS);
-        //this.copy(BlockTags.LEAVES, ItemTags.LEAVES);
+        this.copy(BlockTags.LEAVES, ItemTags.LEAVES);
         //this.copy(BlockTags.WOODEN_TRAPDOORS, ItemTags.WOODEN_TRAPDOORS);
         //this.copy(BlockTags.TRAPDOORS, ItemTags.TRAPDOORS);
         //this.copy(BlockTags.SMALL_FLOWERS, ItemTags.SMALL_FLOWERS);
-        //this.copy(BlockTags.BEDS, ItemTags.BEDS);
+        this.copy(BlockTags.BEDS, ItemTags.BEDS);
         //this.copy(BlockTags.FENCES, ItemTags.FENCES);
         //this.copy(BlockTags.TALL_FLOWERS, ItemTags.TALL_FLOWERS);
         //this.copy(BlockTags.FLOWERS, ItemTags.FLOWERS);
@@ -81,7 +83,34 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
         // vanilla
         getOrCreateTagBuilder(ItemTags.VILLAGER_PLANTABLE_SEEDS).add(
-                OperationStarcleaveItems.BISREED_ROOT
+                BISREED_ROOT
+        );
+
+        // convention
+        getOrCreateTagBuilder(ConventionalItemTags.FOODS).add(
+                STARFRUIT
+        );
+
+        getOrCreateTagBuilder(ConventionalItemTags.FRUIT_FOODS).add(
+                STARFRUIT
+        );
+
+        getOrCreateTagBuilder(ConventionalItemTags.CANDY_FOODS).add(
+                STARFRUIT
+        );
+
+        getOrCreateTagBuilder(ConventionalItemTags.FOOD_POISONING_FOODS).add(
+                STARFRUIT
+        );
+
+        getOrCreateTagBuilder(ConventionalItemTags.BUCKETS).add(
+                STARCLEAVER_GOLEM_BUCKET,
+                PETRICHORIC_PLASMA_BUCKET
+        );
+
+        getOrCreateTagBuilder(ConventionalItemTags.CROPS).add(
+                BISREED_ROOT,
+                BISMUTH_FLAKE
         );
     }
 }
