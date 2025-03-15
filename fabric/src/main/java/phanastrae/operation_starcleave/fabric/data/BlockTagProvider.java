@@ -148,6 +148,15 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 NETHERITE_PUMPKIN
         );
 
+        getOrCreateTagBuilder(BlockTags.NEEDS_IRON_TOOL).add(
+                NUCLEIC_FISSUREROOT,
+                NUCLEOSYNTHESEED
+        );
+
+        getOrCreateTagBuilder(BlockTags.NEEDS_STONE_TOOL).add(
+                COAGULATED_PLASMA
+        );
+
         getOrCreateTagBuilder(BlockTags.REPLACEABLE_BY_TREES).add(
                 MULCHBORNE_TUFT,
                 SHORT_HOLY_MOSS
