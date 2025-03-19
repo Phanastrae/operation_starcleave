@@ -14,6 +14,11 @@ authors = "${mod_author}" #optional
 displayURL="${homepage_url}" #optional (displayed in the mod UI)
 #updateJSONURL="https://change.me.example.invalid/updates.json" #optional (see https://docs.neoforged.net/docs/misc/updatechecker/)
 
+[[accessTransformers]]
+## The file is relative to the output directory of the resources, or the root path inside the jar when compiled
+## The 'resources' directory represents the root output directory of the resources
+file="META-INF/accesstransformer.cfg"
+
 [[mixins]]
 config = "${mod_id}.common.mixins.json"
 
