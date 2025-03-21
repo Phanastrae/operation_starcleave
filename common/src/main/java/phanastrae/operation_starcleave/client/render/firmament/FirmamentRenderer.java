@@ -172,6 +172,11 @@ public class FirmamentRenderer {
         VertexBuffer vb1 = LIGHT_SKY_BUFFER;
         if(vb1 != null && !vb1.isInvalid()) {
             float[] fogColor = RenderSystem.getShaderFogColor();
+            float fog0 = fogColor[0];
+            float fog1 = fogColor[1];
+            float fog2 = fogColor[2];
+            float fog3 = fogColor[3];
+
             RenderSystem.setShaderFogColor(0f, 0.08f, 0.08f, 1f);
 
             matrices.pushPose();
@@ -200,7 +205,7 @@ public class FirmamentRenderer {
 
             matrices.popPose();
 
-            RenderSystem.setShaderFogColor(fogColor[0], fogColor[1], fogColor[2], fogColor[3]);
+            RenderSystem.setShaderFogColor(fog0, fog1, fog2, fog3);
         }
 
         float fogStart = RenderSystem.getShaderFogStart();
