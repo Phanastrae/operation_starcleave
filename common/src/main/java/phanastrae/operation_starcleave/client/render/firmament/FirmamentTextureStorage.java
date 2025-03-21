@@ -40,6 +40,7 @@ public class FirmamentTextureStorage {
     private final RegionPos[][] regions = new RegionPos[4][4];
     private final boolean[][] filled = new boolean[4][4];
     private final boolean[][] active = new boolean[4][4];
+    private final boolean[][] wasFilledAndActiveArray = new boolean[4][4];
 
     private final List<SubRegionPos> rebuildQueue = new ArrayList<>();
     private final boolean[][] needsRebuild = new boolean[4 * SUBREGIONS][4 * SUBREGIONS];
@@ -64,14 +65,6 @@ public class FirmamentTextureStorage {
         Minecraft client = Minecraft.getInstance();
         ProfilerFiller profiler = client.getProfiler();
         profiler.push("starcleave_update_firmament_texture");
-
-        // make note of what regions were filled and active
-        boolean[][] wasFilledAndActiveArray = new boolean[4][4];
-        for(int i = 0; i < 4; i++) {
-            for(int j = 0; j < 4; j++) {
-                wasFilledAndActiveArray[i][j] = this.active[i][j] && this.filled[i][j];
-            }
-        }
 
         profiler.push("update_position");
         // get and update cam pos
@@ -99,7 +92,7 @@ public class FirmamentTextureStorage {
         if(finalImage != null) {
             for(int i = 0; i < 4; i++) {
                 for(int j = 0; j < 4; j++) {
-                    boolean wasFilledAndActive = wasFilledAndActiveArray[i][j];
+                    boolean wasFilledAndActive = this.wasFilledAndActiveArray[i][j];
                     boolean isFilledAndActive = this.filled[i][j] && this.active[i][j];
 
                     if(isFilledAndActive) {
@@ -128,6 +121,9 @@ public class FirmamentTextureStorage {
                         finalImage.fillRect(i * 128, j * 128, 128, 128, 0x0);
                         changed = true;
                     }
+
+                    // update info on which regions were filled and active
+                    this.wasFilledAndActiveArray[i][j] = isFilledAndActive;
                 }
             }
         }
