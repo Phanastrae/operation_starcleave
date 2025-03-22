@@ -1,5 +1,6 @@
 package phanastrae.operation_starcleave.mixin;
 
+import net.minecraft.util.Mth;
 import net.minecraft.world.ContainerListener;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -13,6 +14,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -52,11 +54,7 @@ public abstract class AbstractHorseMixin extends Animal implements ContainerList
             if(osea.isPegasusFlying()) {
                 osea.setPegasusFlightCharge(Math.max(osea.getPegasusFlightCharge() - 0.025F, 0F));
             } else {
-                Firmament firmament = Firmament.fromLevel(this.level());
-                int damage = firmament == null ? 0 : firmament.getDamage(this.getBlockX(), this.getBlockZ());
-                int skyLight = this.level().getBrightness(LightLayer.SKY, this.blockPosition());
-                float starlight = (damage / 7F) * (skyLight / 15F);
-
+                float starlight = this.operation_starcleave$calculateStarlight();
                 float rechargeSpeed = this.onGround()
                         ? 0.05F * (0.25F + 0.75F * starlight)
                         : 0.00625F * (0.125F + 0.875F * starlight);
@@ -121,15 +119,63 @@ public abstract class AbstractHorseMixin extends Animal implements ContainerList
 
                 this.addDeltaMovement(turnAcceleration);
 
-                Firmament firmament = Firmament.fromLevel(this.level());
-                int damage = firmament == null ? 0 : firmament.getDamage(this.getBlockX(), this.getBlockZ());
-                int skyLight = this.level().getBrightness(LightLayer.SKY, this.blockPosition());
-                float starlight = (damage / 7F) * (skyLight / 15F);
-
+                float starlight = this.operation_starcleave$calculateStarlight();
                 double boostSpeed = 0.05 * (0.5 + 0.5 * starlight) * this.getSpeed();
                 this.addDeltaMovement(lookAngle.multiply(1, 0, 1).scale(boostSpeed));
             }
         }
+    }
+
+    @Unique
+    private float operation_starcleave$calculateStarlight() {
+        Level level = this.level();
+        int skyLight = level.getBrightness(LightLayer.SKY, this.blockPosition());
+
+        float starlight;
+        if(skyLight == 0) {
+            starlight = 0;
+        } else {
+            Firmament firmament = Firmament.fromLevel(this.level());
+            if(firmament == null) {
+                starlight = 0;
+            } else {
+                int firmamentHeight = firmament.getY();
+                double horseHeight = this.getY();
+                double heightAboveFirmament = horseHeight - firmamentHeight;
+                float heightDropoff = 1F - (float)Math.clamp(heightAboveFirmament / 24.0, 0, 1); // gradually dropoff up to 24 blocks above the firmament
+
+                if(heightDropoff <= 0) {
+                    starlight = 0;
+                } else {
+                    float SAMPLE_RADIUS = 3.5F;
+                    int SEARCH_SIZE = Mth.ceil(SAMPLE_RADIUS);
+                    int bx = this.getBlockX();
+                    int bz = this.getBlockZ();
+
+                    float damage = 0;
+                    for(int i = -SEARCH_SIZE; i <= SEARCH_SIZE; i++) {
+                        for(int j = -SEARCH_SIZE; j <= SEARCH_SIZE; j++) {
+                            int distSqr = i*i + j*j;
+                            if(distSqr < SAMPLE_RADIUS * SAMPLE_RADIUS) {
+                                int x = bx + i * 4;
+                                int z = bz + j * 4;
+
+                                // sample damage
+                                float d = firmament.getDamage(x, z) / 7F;
+                                // reduce sampled damage based on distance
+                                d = d - Math.max(0, 2 * Mth.sqrt(distSqr) / SAMPLE_RADIUS - 1);
+                                // increase damage if larger
+                                damage = Math.max(damage, d);
+                            }
+                        }
+                    }
+
+                    starlight = damage * (skyLight / 15F) * heightDropoff;
+                }
+            }
+        }
+
+        return starlight;
     }
 
     @Inject(method = "getRiddenInput", at = @At("HEAD"), cancellable = true)
