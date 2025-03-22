@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
@@ -385,13 +386,13 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
 
     public static void potentiallySpawnParticle(Level level, BlockPos pos) {
         RandomSource random = level.random;
-        if(random.nextInt(15) == 0 && level instanceof ServerLevel serverLevel) {
+        if(random.nextInt(32) == 0 && level instanceof ServerLevel serverLevel) {
             serverLevel.sendParticles(
                     OperationStarcleaveParticleTypes.LARGE_NUCLEAR_SMOKE,
                     pos.getX() + 0.5,
                     pos.getY() + 0.5,
                     pos.getZ() + 0.5,
-                    3,
+                    2,
                     0.25,
                     0.25,
                     0.25,
@@ -434,6 +435,7 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
                         : super.getBlockExplosionResistance(explosion, blockGetter, blockPos, blockState, fluidState);
             }
         };
+
         level.explode(
                 null,
                 OperationStarcleaveDamageTypes.source(level, OperationStarcleaveDamageTypes.IN_PHLOGISTIC_FIRE),
@@ -441,7 +443,10 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
                 pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
                 4,
                 false,
-                Level.ExplosionInteraction.TNT
+                Level.ExplosionInteraction.TNT,
+                OperationStarcleaveParticleTypes.NUCLEAR_SMOKE,
+                OperationStarcleaveParticleTypes.LARGE_NUCLEAR_SMOKE,
+                SoundEvents.GENERIC_EXPLODE
         );
     }
 
