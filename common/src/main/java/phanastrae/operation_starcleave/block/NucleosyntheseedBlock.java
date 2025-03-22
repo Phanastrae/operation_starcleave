@@ -79,7 +79,7 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if(player.getAbilities().mayBuild) {
             if(stack.is(OperationStarcleaveItems.PHLOGISTON_SAC)) {
-                detonate(level, pos);
+                detonate(level, pos, 0);
 
                 Item item = stack.getItem();
                 stack.consume(1, player);
@@ -273,9 +273,14 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
         }
     }
 
-    public static void detonate(Level level, BlockPos pos) {
+    public static void detonate(Level level, BlockPos pos, int ignitingFireAge) {
         // TODO optimise this at some point
-        level.setBlockAndUpdate(pos, PhlogisticFireBlock.getState(level, pos));
+
+        // replace seed with fire
+        int newFireAge = Math.min(ignitingFireAge + 3, 6);
+        level.setBlockAndUpdate(pos, PhlogisticFireBlock.getStateWithAge(level, pos, newFireAge));
+        // replace nearby hyperflammables (that are not also seeds) with fire
+        instantlyIgniteNearbyHyperflammables(level, pos, newFireAge);
 
         explode(level, pos);
 
@@ -422,6 +427,30 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
             }
         }
         return startPos;
+    }
+
+    public static void instantlyIgniteNearbyHyperflammables(Level level, BlockPos pos, int fireAge) {
+        BlockPos.MutableBlockPos mutableBlockPos = pos.mutable();
+
+        int searchRadius = 3;
+        for(int i = -searchRadius; i <= searchRadius; i++) {
+            mutableBlockPos.setX(pos.getX() + i);
+            for(int j = -searchRadius; j <= searchRadius; j++) {
+                mutableBlockPos.setY(pos.getY() + j);
+                for(int k = -searchRadius; k < searchRadius; k++) {
+                    int distSqr = i*i + j*j + k*k;
+
+                    if(distSqr <= searchRadius * searchRadius) {
+                        mutableBlockPos.setZ(pos.getZ() + k);
+
+                        BlockState currentState = level.getBlockState(mutableBlockPos);
+                        if(currentState.is(OperationStarcleaveBlockTags.PHLOGISTIC_HYPERFLAMMABLES) && !currentState.is(OperationStarcleaveBlocks.NUCLEOSYNTHESEED)) {
+                            level.setBlockAndUpdate(mutableBlockPos, PhlogisticFireBlock.getStateWithAge(level, mutableBlockPos, fireAge));
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public static void explode(Level level, BlockPos pos) {

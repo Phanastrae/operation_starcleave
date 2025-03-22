@@ -136,7 +136,7 @@ public class PhlogisticFireBlock extends BaseFireBlock implements SimpleWaterlog
             if (state.getValue(WATERLOGGED)) {
                 level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
             }
-            return this.getStateWithAge(level, pos, state.getValue(AGE));
+            return getStateWithAge(level, pos, state.getValue(AGE));
         } else {
             return Blocks.AIR.defaultBlockState();
         }
@@ -235,12 +235,13 @@ public class PhlogisticFireBlock extends BaseFireBlock implements SimpleWaterlog
 
                         if (modifiedBurnChance > 0 && random.nextInt(o) <= modifiedBurnChance) {
                             int newAge;
-                            if(isFissurePlant(level.getBlockState(mutable))) {
-                                newAge = 0;
-                            } else {
-                                newAge = Math.min(7, age + random.nextInt(4) / 3);
+                            newAge = Math.min(7, age + random.nextInt(4) / 3);
+                            /*
+                            if(isHyperflammable(level.getBlockState(mutable))) {
+                                newAge = Math.min(newAge, 2);
                             }
-                            level.setBlock(mutable, withWaterlogged(this.getStateWithAge(level, mutable, newAge), shouldWaterlog(level, mutable)), Block.UPDATE_ALL);
+                            */
+                            level.setBlock(mutable, withWaterlogged(getStateWithAge(level, mutable, newAge), shouldWaterlog(level, mutable)), Block.UPDATE_ALL);
                         }
                     }
                 }
@@ -294,13 +295,13 @@ public class PhlogisticFireBlock extends BaseFireBlock implements SimpleWaterlog
         }
     }
 
-    public boolean isFissurePlant(BlockState state) {
+    public static boolean isHyperflammable(BlockState state) {
         return state.is(OperationStarcleaveBlockTags.PHLOGISTIC_HYPERFLAMMABLES);
     }
 
     @Override
     protected boolean canBurn(BlockState state) {
-        if(this.isFissurePlant(state)) {
+        if(isHyperflammable(state)) {
             return true;
         }
         return XPlatInterface.INSTANCE.canBurn(state);
@@ -349,16 +350,18 @@ public class PhlogisticFireBlock extends BaseFireBlock implements SimpleWaterlog
     }
 
     private int getSpreadChance(BlockState state, BlockGetter blockGetter, BlockPos blockPos, Direction face) {
-        if(isFissurePlant(state)) {
+        if(isHyperflammable(state)) {
             return 100;
         }
         return XPlatInterface.INSTANCE.getFireSpreadChance(state, blockGetter, blockPos, face);
     }
 
     private int getBurnChance(BlockState state, BlockGetter blockGetter, BlockPos blockPos, Direction face) {
-        if(isFissurePlant(state)) {
+        /*
+        if(isHyperflammable(state)) {
             return 100;
         }
+        */
         return XPlatInterface.INSTANCE.getFireBurnChance(state, blockGetter, blockPos, face);
     }
 
@@ -368,12 +371,11 @@ public class PhlogisticFireBlock extends BaseFireBlock implements SimpleWaterlog
             BlockState blockState = level.getBlockState(pos);
             if (random.nextInt(currentAge + 5) < 13) {
                 int newAge;
-                if(isFissurePlant(blockState)) {
-                    newAge = 0;
-                } else {
-                    newAge = Math.min(7, currentAge + random.nextInt(5) / 2);
+                newAge = Math.min(7, currentAge + random.nextInt(5) / 2);
+                if(isHyperflammable(blockState)) {
+                    newAge = Math.min(newAge, 2);
                 }
-                level.setBlock(pos, withWaterlogged(this.getStateWithAge(level, pos, newAge), shouldWaterlog(level, pos)), Block.UPDATE_ALL);
+                level.setBlock(pos, withWaterlogged(getStateWithAge(level, pos, newAge), shouldWaterlog(level, pos)), Block.UPDATE_ALL);
             } else {
                 level.setBlock(pos, withWaterlogged(Blocks.AIR.defaultBlockState(), shouldWaterlog(level, pos)), Block.UPDATE_ALL);
             }
@@ -383,12 +385,12 @@ public class PhlogisticFireBlock extends BaseFireBlock implements SimpleWaterlog
             }
 
             if(blockState.is(OperationStarcleaveBlocks.NUCLEOSYNTHESEED)) {
-                NucleosyntheseedBlock.detonate(level, pos);
+                NucleosyntheseedBlock.detonate(level, pos, currentAge);
             }
         }
     }
 
-    protected BlockState withWaterlogged(BlockState state, boolean waterlogged) {
+    protected static BlockState withWaterlogged(BlockState state, boolean waterlogged) {
         if(state.hasProperty(WATERLOGGED)) {
             return state.setValue(WATERLOGGED, waterlogged);
         } else if(state.isAir() && waterlogged) {
@@ -398,7 +400,7 @@ public class PhlogisticFireBlock extends BaseFireBlock implements SimpleWaterlog
         }
     }
 
-    protected boolean shouldWaterlog(BlockGetter level, BlockPos pos) {
+    protected static boolean shouldWaterlog(BlockGetter level, BlockPos pos) {
         int adjWater = 0;
         for(Direction direction : UPDATE_SHAPE_ORDER) {
             if(direction.getAxis() != Direction.Axis.Y) {
@@ -433,8 +435,8 @@ public class PhlogisticFireBlock extends BaseFireBlock implements SimpleWaterlog
         return newState;
     }
 
-    private BlockState getStateWithAge(LevelAccessor level, BlockPos pos, int age) {
-        BlockState blockState = getStateForPosition(level, pos);
+    public static BlockState getStateWithAge(LevelAccessor level, BlockPos pos, int age) {
+        BlockState blockState = getState(level, pos);
         return blockState.is(OperationStarcleaveBlocks.PHLOGISTIC_FIRE) ? blockState.setValue(AGE, age) : blockState;
     }
 
