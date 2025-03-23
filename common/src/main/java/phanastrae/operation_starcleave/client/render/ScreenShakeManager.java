@@ -3,6 +3,7 @@ package phanastrae.operation_starcleave.client.render;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.Options;
 import net.minecraft.world.level.Level;
 
 public class ScreenShakeManager {
@@ -35,14 +36,20 @@ public class ScreenShakeManager {
     }
 
     public void updateScreenMatrices(PoseStack matrixStack, float tickDelta) {
-        float shake = this.getCurrentShakeAmount(tickDelta);
+        Minecraft minecraft = Minecraft.getInstance();
+        Options options = minecraft.options;
+
+        double damageTiltStrength = options.damageTiltStrength().get();
+        double distortionEffectStrength = options.screenEffectScale().get();
+
+        float shake = (float)(this.getCurrentShakeAmount(tickDelta) * damageTiltStrength * distortionEffectStrength * distortionEffectStrength);
+
         if(shake > 0) {
             float t2 = getTime() / 20f + tickDelta;
             double tpi = 2 * Math.PI;
             matrixStack.mulPose(Axis.ZP.rotationDegrees((float)Math.sin(3 * t2 * tpi) * shake));
             matrixStack.mulPose(Axis.XP.rotationDegrees((float)Math.sin(2 * t2 * tpi + 0.5) * shake));
         }
-
     }
 
     public long getTime() {

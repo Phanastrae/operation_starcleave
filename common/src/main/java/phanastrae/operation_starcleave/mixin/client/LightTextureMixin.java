@@ -18,7 +18,8 @@ public class LightTextureMixin {
     @ModifyVariable(method = "updateLightTexture", at = @At(value = "STORE"), ordinal = 1)
     private float operation_starcleave$cleavingFlash(float value) {
         ClientLevel clientWorld = this.minecraft.level;
-        if(((LevelDuckInterface)clientWorld).operation_starcleave$getCleavingFlashTicksLeft() > 0) {
+        int flashTicks = this.minecraft.options.hideLightningFlash().get() ? 0 : ((LevelDuckInterface)clientWorld).operation_starcleave$getCleavingFlashTicksLeft();
+        if(flashTicks > 0) {
             return 1.0F;
         }
         return value;
