@@ -264,7 +264,7 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
 
     public static void trySpawnLeavesAtPos(Level level, BlockPos pos) {
         BlockState adjState = level.getBlockState(pos);
-        if(adjState.canBeReplaced()) {
+        if(adjState.is(BlockTags.REPLACEABLE_BY_TREES)) {
             BlockState leafState = OperationStarcleaveBlocks.NUCLEIC_FISSURELEAVES.defaultBlockState();
             if(adjState.getFluidState().is(FluidTags.WATER)) {
                 leafState = leafState.setValue(LeavesBlock.WATERLOGGED, true);
