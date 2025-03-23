@@ -127,13 +127,21 @@ public class OperationStarcleaveClientNeoForge {
         MultiBufferSource vertexConsumers = ((LevelRendererAccessor)levelRenderer).getRenderBuffers().bufferSource();
         DeltaTracker deltaTracker = event.getPartialTick();
         Camera camera = event.getCamera();
-        Matrix4f projectionMatirx = event.getProjectionMatrix();
+        Matrix4f projectionMatrix = event.getProjectionMatrix();
+        Matrix4f positionMatrix = event.getModelViewMatrix();
         Frustum frustum = event.getFrustum();
 
         RenderLevelStageEvent.Stage stage = event.getStage();
         if(stage.equals(AFTER_CUTOUT_BLOCKS)) {
             // render before entities
-            OperationStarcleaveClient.renderBeforeEntities(level, vertexConsumers, matrixStack, camera, frustum, levelRenderer, projectionMatirx);
+            OperationStarcleaveClient.renderBeforeEntities(
+                    level,
+                    camera,
+                    frustum,
+                    levelRenderer,
+                    projectionMatrix,
+                    positionMatrix
+            );
         } else if(stage.equals(AFTER_ENTITIES)) {
             // render after entities
             OperationStarcleaveClient.renderAfterEntities(level, matrixStack, vertexConsumers, deltaTracker, camera);

@@ -66,12 +66,11 @@ public class OperationStarcleaveClientFabric implements ClientModInitializer {
         // render before entities
         WorldRenderEvents.BEFORE_ENTITIES.register(worldRenderContext -> OperationStarcleaveClient.renderBeforeEntities(
                 worldRenderContext.world(),
-                worldRenderContext.consumers(),
-                worldRenderContext.matrixStack(),
                 worldRenderContext.camera(),
                 worldRenderContext.frustum(),
                 worldRenderContext.worldRenderer(),
-                worldRenderContext.projectionMatrix()
+                worldRenderContext.projectionMatrix(),
+                worldRenderContext.positionMatrix()
         ));
 
         // render after entities

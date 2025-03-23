@@ -10,7 +10,6 @@ import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.world.TickRateManager;
 import net.minecraft.world.level.Level;
 import org.joml.Matrix4f;
-import org.joml.Quaternionf;
 import phanastrae.operation_starcleave.client.render.ScreenShakeManager;
 import phanastrae.operation_starcleave.client.render.block.OperationStarcleaveBlockRenderTypes;
 import phanastrae.operation_starcleave.client.render.block.entity.OperationStarcleaveBlockEntityRenderers;
@@ -33,14 +32,9 @@ public class OperationStarcleaveClient {
 		OperationStarcleaveBlockEntityRenderers.init();
 	}
 
-	public static void renderBeforeEntities(Level level, MultiBufferSource vertexConsumerProvider, PoseStack WRCmatrixStack, Camera camera, Frustum frustum, LevelRenderer levelRenderer, Matrix4f projectionMatrix) {
-		Quaternionf quaternionf = camera.rotation().conjugate(new Quaternionf());
-		PoseStack matrixStack = new PoseStack();
-		matrixStack.mulPose(quaternionf);
-
+	public static void renderBeforeEntities(Level level, Camera camera, Frustum frustum, LevelRenderer levelRenderer, Matrix4f projectionMatrix, Matrix4f positionMatrix) {
 		FirmamentTextureStorage.getInstance().tick();
-
-		FirmamentRenderer.render(level, vertexConsumerProvider, WRCmatrixStack, camera, frustum, levelRenderer, matrixStack, projectionMatrix);
+		FirmamentRenderer.render(level, camera, frustum, levelRenderer, projectionMatrix, positionMatrix);
 	}
 
 	public static void renderAfterEntities(Level level, PoseStack matrixStack, MultiBufferSource vertexConsumers, DeltaTracker deltaTracker, Camera camera) {
