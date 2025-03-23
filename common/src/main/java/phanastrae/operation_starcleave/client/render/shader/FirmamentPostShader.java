@@ -5,7 +5,6 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.shaders.Uniform;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.ShaderInstance;
@@ -16,6 +15,7 @@ import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import phanastrae.operation_starcleave.client.duck.LevelRendererDuck;
+import phanastrae.operation_starcleave.client.render.firmament.FirmamentRenderer;
 import phanastrae.operation_starcleave.client.render.firmament.FirmamentTextureStorage;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 
@@ -35,12 +35,21 @@ public class FirmamentPostShader {
             RenderTarget dummyBuffer = operationStarcleaveWorldRenderer.operation_starcleave$getDummyFramebuffer();
 
             if (dummyBuffer != null && canDraw()) {
+                // this code should do nothing, but just in case the render state is messed up by other mods we reset it here to avoid problems
+                RenderSystem.enableBlend();
+                RenderSystem.disableBlend();
+
                 // clear dummy
-                dummyBuffer.setClearColor(0, 0, 0, 0);
-                dummyBuffer.clear(Minecraft.ON_OSX);
+                //dummyBuffer.setClearColor(0, 0, 0, 0);
+                //dummyBuffer.clear(Minecraft.ON_OSX);
+
+                // clear dummy buffer, specifically using whatever the last used clear color was, to hopefully slightly reduce the chance of weird render bugs actually being visible
+                dummyBuffer.bindWrite(true);
+                RenderSystem.clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT, Minecraft.ON_OSX);
+                dummyBuffer.unbindWrite();
 
                 // copy main to dummy
-                dummyBuffer.bindWrite(false);
+                dummyBuffer.bindWrite(true);
                 RenderSystem.backupProjectionMatrix();
                 mainBuffer.blitToScreen(client.getWindow().getWidth(), client.getWindow().getHeight(), false);
                 RenderSystem.restoreProjectionMatrix();
@@ -52,7 +61,7 @@ public class FirmamentPostShader {
                 dummyBuffer.copyDepthFrom(mainBuffer);
 
                 // apply dummy with effect to main
-                mainBuffer.bindWrite(false);
+                mainBuffer.bindWrite(true);
                 draw2(client.getWindow().getWidth(), client.getWindow().getHeight(), false);
 
                 RenderSystem.disableBlend();
@@ -117,7 +126,6 @@ public class FirmamentPostShader {
             GlStateManager._disableBlend();
         }
 
-        RenderTarget mainBuffer = client.getMainRenderTarget();
         shaderProgram.setSampler("DiffuseSampler0", dummyBuffer.getColorTextureId());
         shaderProgram.setSampler("DiffuseSampler1", dummyBuffer.getDepthTextureId());
 
@@ -135,8 +143,13 @@ public class FirmamentPostShader {
         Uniform glUniform = shaderProgram.getUniform("IMat");
         if(glUniform != null) {
             PoseStack matrices = new PoseStack();
-            matrices.mulPose(Axis.XP.rotationDegrees(gameRenderer.getMainCamera().getXRot()));
-            matrices.mulPose(Axis.YP.rotationDegrees(gameRenderer.getMainCamera().getYRot() + 180.0F));
+
+            // calculate matrices from camera
+            //matrices.mulPose(Axis.XP.rotationDegrees(gameRenderer.getMainCamera().getXRot()));
+            //matrices.mulPose(Axis.YP.rotationDegrees(gameRenderer.getMainCamera().getYRot() + 180.0F));
+
+            // copy matrices from whatever was used to render the fracture itself
+            matrices.mulPose(FirmamentRenderer.LAST_POSITION_MATRIX);
 
             Matrix4f mat = new Matrix4f();
             mat.mul(RenderSystem.getProjectionMatrix());

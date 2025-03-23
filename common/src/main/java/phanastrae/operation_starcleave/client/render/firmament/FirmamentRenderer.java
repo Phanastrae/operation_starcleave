@@ -30,6 +30,10 @@ import static com.mojang.blaze3d.platform.GlConst.*;
 
 public class FirmamentRenderer {
 
+    // we use this to get the position matrix in the post shader, in case somebody is messing with it in a weird way that needs copying
+    // TODO consider moving the post shader inside of LevelRenderer so we can just grab this directly, and also have maybe-better compat
+    public static Matrix4f LAST_POSITION_MATRIX = new Matrix4f();
+
     @Nullable
     private static VertexBuffer STARS_BUFFER;
     @Nullable
@@ -108,12 +112,21 @@ public class FirmamentRenderer {
     }
 
     public static void render(Level level, Camera camera, Frustum frustum, LevelRenderer levelRenderer, Matrix4f projectionMatrix, Matrix4f positionMatrix) {
+        Minecraft client = Minecraft.getInstance();
+
+        // check the camera is the same camera as the actual client's main camera to try and avoid issues with mods that render the world twice
+        // TODO test this with more mods, and maybe look for a better way to do this (ie moving this to LevelRenderer)
+        if(client.gameRenderer.getMainCamera().equals(camera)) {
+            // update the last position matrix used, for future use in the post renderer
+            // this is needed for mods that apply additional transformations to the camera
+            LAST_POSITION_MATRIX.set(positionMatrix);
+        }
+
         if(frustum == null || camera == null) return;
 
         Firmament firmament = Firmament.fromLevel(level);
         if(firmament == null) return;
 
-        Minecraft client = Minecraft.getInstance();
         ProfilerFiller profiler = client.getProfiler();
         profiler.push("starcleave_firmament");
         profiler.push("check");
