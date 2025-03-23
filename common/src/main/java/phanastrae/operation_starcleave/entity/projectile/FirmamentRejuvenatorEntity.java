@@ -54,10 +54,13 @@ public class FirmamentRejuvenatorEntity extends ThrowableItemProjectile {
                 this.spawnAtLocation(this.getItem());
                 this.discard();
             } else {
-                float firmHeight = this.level().getMaxBuildHeight() + 16;
-                double dy = this.position().y - firmHeight;
-                if (dy * dy < 1) {
-                    this.explode();
+                Firmament firmament = Firmament.fromLevel(this.level());
+                if(firmament != null) {
+                    double firmHeight = firmament.getY();
+                    double dy = this.position().y - firmHeight;
+                    if (Math.abs(dy) < 1) {
+                        this.explode();
+                    }
                 }
             }
         }
@@ -88,21 +91,21 @@ public class FirmamentRejuvenatorEntity extends ThrowableItemProjectile {
                 serverWorld.sendParticles(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER, pos.x(), pos.y(), pos.z(), 400, 2, 1, 2, 0.01);
             }
 
-            float firmHeight = this.level().getMaxBuildHeight() + 16;
-            double dy = this.position().y - firmHeight;
-            if(dy*dy < 1) {
-                Firmament firmament = Firmament.fromLevel(this.level());
-                if(firmament != null) {
+            Firmament firmament = Firmament.fromLevel(this.level());
+            if(firmament != null) {
+                double firmHeight = firmament.getY();
+                double dy = this.position().y - firmHeight;
+                if (Math.abs(dy) < 1) {
                     int x = this.getBlockX();
                     int z = this.getBlockZ();
                     int n = 5;
-                    for(int i = -n; i <= n; i++) {
-                        for(int j = -n; j <= n; j++) {
-                            if(i*i + j*j > n*n) continue;
-                            firmament.setDisplacement(x+i*FirmamentSubRegion.TILE_SIZE, z+j*FirmamentSubRegion.TILE_SIZE, 0);
-                            firmament.setVelocity(x+i*FirmamentSubRegion.TILE_SIZE, z+j*FirmamentSubRegion.TILE_SIZE, 0);
-                            firmament.setDrip(x+i*FirmamentSubRegion.TILE_SIZE, z+j*FirmamentSubRegion.TILE_SIZE, 0);
-                            firmament.setDamage(x+i*FirmamentSubRegion.TILE_SIZE, z+j*FirmamentSubRegion.TILE_SIZE, 0);
+                    for (int i = -n; i <= n; i++) {
+                        for (int j = -n; j <= n; j++) {
+                            if (i * i + j * j > n * n) continue;
+                            firmament.setDisplacement(x + i * FirmamentSubRegion.TILE_SIZE, z + j * FirmamentSubRegion.TILE_SIZE, 0);
+                            firmament.setVelocity(x + i * FirmamentSubRegion.TILE_SIZE, z + j * FirmamentSubRegion.TILE_SIZE, 0);
+                            firmament.setDrip(x + i * FirmamentSubRegion.TILE_SIZE, z + j * FirmamentSubRegion.TILE_SIZE, 0);
+                            firmament.setDamage(x + i * FirmamentSubRegion.TILE_SIZE, z + j * FirmamentSubRegion.TILE_SIZE, 0);
                         }
                     }
                 }
