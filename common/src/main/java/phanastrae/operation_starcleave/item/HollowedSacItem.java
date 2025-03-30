@@ -3,6 +3,7 @@ package phanastrae.operation_starcleave.item;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -32,16 +33,16 @@ public class HollowedSacItem extends Item {
             this.playUseSound(world, blockPos);
             world.setBlockAndUpdate(blockPos, getNewBlockState(world, blockPos));
             world.gameEvent(user, GameEvent.FLUID_PICKUP, blockPos);
-            this.fill(context.getItemInHand(), user);
+            this.fill(context.getItemInHand(), user, context.getHand());
             return InteractionResult.sidedSuccess(world.isClientSide);
         } else {
             return InteractionResult.FAIL;
         }
     }
 
-    protected void fill(ItemStack stack, Player player) {
+    protected void fill(ItemStack stack, Player player, InteractionHand hand) {
         ItemStack newStack = new ItemStack(OperationStarcleaveItems.PHLOGISTON_SAC);
-        ItemUtils.createFilledResult(stack, player, newStack);
+        player.setItemInHand(hand, ItemUtils.createFilledResult(stack, player, newStack));
     }
 
     protected BlockState getNewBlockState(Level world, BlockPos blockPos) {
