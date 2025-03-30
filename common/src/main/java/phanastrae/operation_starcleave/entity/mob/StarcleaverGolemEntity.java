@@ -59,7 +59,8 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
     private static final EntityDataAccessor<Boolean> IGNITED = SynchedEntityData.defineId(StarcleaverGolemEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> PLUMMETING = SynchedEntityData.defineId(StarcleaverGolemEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> GUNPOWDER_TICKS = SynchedEntityData.defineId(StarcleaverGolemEntity.class, EntityDataSerializers.INT);
-    protected static final EntityDataAccessor<Optional<UUID>> FAVORITE_UUID = SynchedEntityData.defineId(StarcleaverGolemEntity.class, EntityDataSerializers.OPTIONAL_UUID);
+    private static final EntityDataAccessor<Optional<UUID>> FAVORITE_UUID = SynchedEntityData.defineId(StarcleaverGolemEntity.class, EntityDataSerializers.OPTIONAL_UUID);
+    private static final EntityDataAccessor<Boolean> BUCKETABLE = SynchedEntityData.defineId(StarcleaverGolemEntity.class, EntityDataSerializers.BOOLEAN);
 
     public float drillBasePitch = -45;
     public float prevDrillBasePitch = -45;
@@ -111,6 +112,7 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
         builder.define(PLUMMETING, false);
         builder.define(GUNPOWDER_TICKS, 0);
         builder.define(FAVORITE_UUID, Optional.empty());
+        builder.define(BUCKETABLE, true);
     }
 
     @Override
@@ -124,6 +126,8 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
         if (this.getFavoriteUuid() != null) {
             nbt.putUUID("Favorite", this.getFavoriteUuid());
         }
+
+        nbt.putBoolean("Bucketable", this.isBucketable());
     }
 
     @Override
@@ -132,12 +136,12 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
 
         readLegacy(nbt);
 
-        if (nbt.getBoolean("Ignited")) {
-            this.setIgnited(true);
+        if (nbt.contains("Ignited", Tag.TAG_BYTE)) {
+            this.setIgnited(nbt.getBoolean("Ignited"));
         }
 
-        if (nbt.getBoolean("Plummeting")) {
-            this.setPlummeting(true);
+        if (nbt.contains("Plummeting", Tag.TAG_BYTE)) {
+            this.setPlummeting(nbt.getBoolean("Plummeting"));
         }
 
         if(nbt.contains("GunpowderTicks", Tag.TAG_INT)) {
@@ -151,6 +155,10 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
             } catch (Throwable var4) {
                 // empty
             }
+        }
+
+        if (nbt.contains("Bucketable", Tag.TAG_BYTE)) {
+            this.setBucketable(nbt.getBoolean("Bucketable"));
         }
     }
 
@@ -344,7 +352,7 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
         Level world = this.level();
         ItemStack itemStack = player.getItemInHand(hand);
 
-        if (itemStack.is(Items.BUCKET) && !this.isIgnited() && !this.isPlummeting()) {
+        if (itemStack.is(Items.BUCKET) && this.isAlive() && !this.isIgnited() && !this.isPlummeting() && this.isBucketable()) {
             this.playSound(this.getPickupSound(), 1.0F, 1.0F);
             ItemStack itemStack2 = this.getBucketItemStack();
             this.saveToBucketTag(itemStack2);
@@ -479,6 +487,14 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
 
     public boolean isFavorite(LivingEntity entity) {
         return entity == this.getFavorite();
+    }
+
+    public boolean isBucketable() {
+        return this.entityData.get(BUCKETABLE);
+    }
+
+    public void setBucketable(boolean val) {
+        this.entityData.set(BUCKETABLE, val);
     }
 
     public void addLauncher(ServerPlayer serverPlayerEntity) {
