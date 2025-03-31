@@ -31,7 +31,6 @@ import phanastrae.operation_starcleave.world.OperationStarcleaveGameRules;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
@@ -422,7 +421,7 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
         for(int i = 0; i < 7; i++) {
             BlockPos upPos = startPos.above();
             BlockState upState = level.getBlockState(upPos);
-            if(upState.canBeReplaced()) {
+            if(canErode(upState)) {
                 startPos = upPos;
             }
         }
@@ -456,12 +455,10 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
     public static void explode(Level level, BlockPos pos) {
         ExplosionDamageCalculator damageCalculator = new ExplosionDamageCalculator() {
             @Override
-            public Optional<Float> getBlockExplosionResistance(
-                    Explosion explosion, BlockGetter blockGetter, BlockPos blockPos, BlockState blockState, FluidState fluidState
-            ) {
-                return blockState.is(OperationStarcleaveBlockTags.NUCLEOSYNTHESEED_BLAST_IMMUNE)
-                        ? Optional.of(Blocks.WATER.getExplosionResistance())
-                        : super.getBlockExplosionResistance(explosion, blockGetter, blockPos, blockState, fluidState);
+            public boolean shouldBlockExplode(Explosion explosion, BlockGetter reader, BlockPos pos, BlockState state, float power) {
+                return state.is(OperationStarcleaveBlockTags.NUCLEOSYNTHESEED_BLAST_IMMUNE)
+                        ? false
+                        : super.shouldBlockExplode(explosion, reader, pos, state, power);
             }
         };
 
