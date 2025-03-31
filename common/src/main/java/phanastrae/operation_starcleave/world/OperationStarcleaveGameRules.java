@@ -5,14 +5,19 @@ import phanastrae.operation_starcleave.mixin.GameRulesAccessor;
 import phanastrae.operation_starcleave.mixin.GameRulesBooleanValueAccessor;
 
 public class OperationStarcleaveGameRules {
-    public static final GameRules.Key<GameRules.BooleanValue> DO_FRACTURE_STARBLEACHING =
-            GameRulesAccessor.invokeRegister("operation_starcleave:doFractureStarbleaching",
-                    GameRules.Category.UPDATES,
+    public static final GameRules.Key<GameRules.BooleanValue> ALLOW_STARCLEAVER_GOLEM_FIRMAMENT_FRACTURING =
+            GameRulesAccessor.invokeRegister("operation_starcleave:allowStarcleaverGolemFirmamentFracturing",
+                    GameRules.Category.MOBS,
                     GameRulesBooleanValueAccessor.invokeCreate(true, (server, rule) -> {})
             );
     public static final GameRules.Key<GameRules.BooleanValue> SPAWN_FRACTURE_BYPRODUCTS =
             GameRulesAccessor.invokeRegister("operation_starcleave:spawnFractureByproducts",
                     GameRules.Category.SPAWNING,
+                    GameRulesBooleanValueAccessor.invokeCreate(true, (server, rule) -> {})
+            );
+    public static final GameRules.Key<GameRules.BooleanValue> DO_FRACTURE_STARBLEACHING =
+            GameRulesAccessor.invokeRegister("operation_starcleave:doFractureStarbleaching",
+                    GameRules.Category.UPDATES,
                     GameRulesBooleanValueAccessor.invokeCreate(true, (server, rule) -> {})
             );
     public static final GameRules.Key<GameRules.BooleanValue> DO_NUCLEOSYNTHESEED_GROWTH =

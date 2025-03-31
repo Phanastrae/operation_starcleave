@@ -46,6 +46,7 @@ import phanastrae.operation_starcleave.entity.projectile.SplashStarbleachEntity;
 import phanastrae.operation_starcleave.item.FirmamentManipulatorItem;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
+import phanastrae.operation_starcleave.world.OperationStarcleaveGameRules;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 
 import java.util.ArrayList;
@@ -241,9 +242,12 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
                     if(this.onGround()) {
                         this.setPlummeting(false);
                         world.explode(this, this.getX(), this.getY(), this.getZ(), 3, Level.ExplosionInteraction.MOB);
-                        for(int i = 0; i < 6; i++) {
-                            BlockPos pos = this.blockPosition().offset(random.nextInt(7) - 3, random.nextInt(7) - 3, random.nextInt(7) - 3);
-                            SplashStarbleachEntity.starbleach(pos, this.level());
+
+                        if(this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
+                            for (int i = 0; i < 6; i++) {
+                                BlockPos pos = this.blockPosition().offset(random.nextInt(7) - 3, random.nextInt(7) - 3, random.nextInt(7) - 3);
+                                SplashStarbleachEntity.starbleach(pos, this.level());
+                            }
                         }
                     }
                 }
@@ -526,14 +530,20 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
     }
 
     public void cleave() {
-        Firmament firmament = Firmament.fromLevel(this.level());
-        if(firmament != null) {
-            FirmamentManipulatorItem.fractureFirmament(firmament, this.getBlockX(), this.getBlockZ(), this.getRandom());
+        boolean canFracture = this.level().getGameRules().getBoolean(OperationStarcleaveGameRules.ALLOW_STARCLEAVER_GOLEM_FIRMAMENT_FRACTURING);
+
+        if(canFracture) {
+            Firmament firmament = Firmament.fromLevel(this.level());
+            if (firmament != null) {
+                FirmamentManipulatorItem.fractureFirmament(firmament, this.getBlockX(), this.getBlockZ(), this.getRandom());
+            }
         }
 
         this.level().explode(this, this.getX(), this.getY(), this.getZ(), 7, Level.ExplosionInteraction.MOB);
+
         float angle = this.random.nextFloat() * Mth.TWO_PI;
         this.setDeltaMovement(2 * Mth.sin(angle), -3, 2 * Mth.cos(angle));
+
         this.setIgnited(false);
         this.setPlummeting(true);
 
