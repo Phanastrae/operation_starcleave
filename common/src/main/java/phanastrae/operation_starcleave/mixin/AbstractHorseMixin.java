@@ -1,5 +1,6 @@
 package phanastrae.operation_starcleave.mixin;
 
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.ContainerListener;
 import net.minecraft.world.entity.*;
@@ -19,6 +20,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import phanastrae.operation_starcleave.advancement.criterion.OperationStarcleaveAdvancementCriteria;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityAttachment;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 
@@ -211,6 +213,11 @@ public abstract class AbstractHorseMixin extends Animal implements ContainerList
         if(osea.isPegasus()) {
             if(!osea.wasPegasusFlying() && osea.getPegasusFlightCharge() > 0.1F) {
                 osea.setPegasusFlying(true);
+
+                LivingEntity controllingPassenger = this.getControllingPassenger();
+                if (controllingPassenger instanceof ServerPlayer serverPlayerEntity) {
+                    OperationStarcleaveAdvancementCriteria.FLY_PEGASUS.trigger(serverPlayerEntity);
+                }
 
                 this.allowStandSliding = true;
                 this.standIfPossible();

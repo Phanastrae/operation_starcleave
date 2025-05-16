@@ -1,0 +1,25 @@
+{
+  "parent": "operation_starcleave:operation_starcleave/cleave_firmament",
+  "criteria": {
+    "kill_dux": {
+      "trigger": "operation_starcleave:kill_dux"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.operation_starcleave.kill_dux.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:trident"
+    },
+    "title": {
+      "translate": "advancements.operation_starcleave.kill_dux.title"
+    }
+  },
+  "requirements": [
+    [
+      "kill_dux"
+    ]
+  ]
+}

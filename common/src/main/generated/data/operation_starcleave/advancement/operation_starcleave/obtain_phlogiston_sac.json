@@ -1,0 +1,32 @@
+{
+  "parent": "operation_starcleave:operation_starcleave/kill_dux",
+  "criteria": {
+    "obtain_item": {
+      "conditions": {
+        "items": [
+          {
+            "items": "operation_starcleave:phlogiston_sac"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.operation_starcleave.obtain_phlogiston_sac.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "operation_starcleave:phlogiston_sac"
+    },
+    "title": {
+      "translate": "advancements.operation_starcleave.obtain_phlogiston_sac.title"
+    }
+  },
+  "requirements": [
+    [
+      "obtain_item"
+    ]
+  ]
+}

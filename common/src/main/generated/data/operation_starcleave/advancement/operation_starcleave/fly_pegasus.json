@@ -1,0 +1,25 @@
+{
+  "parent": "operation_starcleave:operation_starcleave/obtain_bismuth",
+  "criteria": {
+    "fly_pegasus": {
+      "trigger": "operation_starcleave:fly_pegasus"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.operation_starcleave.fly_pegasus.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "operation_starcleave:bismuth_pegasus_armor"
+    },
+    "title": {
+      "translate": "advancements.operation_starcleave.fly_pegasus.title"
+    }
+  },
+  "requirements": [
+    [
+      "fly_pegasus"
+    ]
+  ]
+}

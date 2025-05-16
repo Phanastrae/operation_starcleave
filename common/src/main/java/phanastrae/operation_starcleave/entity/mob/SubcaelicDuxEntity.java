@@ -8,6 +8,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.EntityTypeTags;
@@ -34,6 +35,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
+import phanastrae.operation_starcleave.advancement.criterion.OperationStarcleaveAdvancementCriteria;
 import phanastrae.operation_starcleave.block.PhlogisticFireBlock;
 import phanastrae.operation_starcleave.block.StellarFarmlandBlock;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
@@ -189,6 +191,32 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
                 }
             }
         }
+    }
+
+    @Override
+    public void die(DamageSource damageSource) {
+        if(!this.isRemoved() && !this.dead) {
+            Level level = this.level();
+
+            if(!level.isClientSide) {
+                LivingEntity killCredit = this.getKillCredit();
+                if (killCredit instanceof ServerPlayer serverPlayerEntity) {
+                    OperationStarcleaveAdvancementCriteria.KILL_DUX.trigger(serverPlayerEntity);
+                }
+
+                LivingEntity target = this.getTarget();
+                if (target != killCredit && target instanceof ServerPlayer serverPlayerEntity) {
+                    OperationStarcleaveAdvancementCriteria.KILL_DUX.trigger(serverPlayerEntity);
+                }
+
+                for (ServerPlayer serverPlayerEntity : level.getEntitiesOfClass(ServerPlayer.class, this.getBoundingBox().inflate(80.0))) {
+                    if (serverPlayerEntity != killCredit && serverPlayerEntity != target) {
+                        OperationStarcleaveAdvancementCriteria.KILL_DUX.trigger(serverPlayerEntity);
+                    }
+                }
+            }
+        }
+        super.die(damageSource);
     }
 
     @Override

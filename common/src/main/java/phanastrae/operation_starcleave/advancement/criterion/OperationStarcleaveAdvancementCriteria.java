@@ -11,10 +11,14 @@ public class OperationStarcleaveAdvancementCriteria {
 
     public static final PlayerTrigger LAUNCH_STARCLEAVER_GOLEM = new PlayerTrigger();
     public static final PlayerTrigger CLEAVE_FIRMAMENT = new PlayerTrigger();
+    public static final PlayerTrigger FLY_PEGASUS = new PlayerTrigger();
+    public static final PlayerTrigger KILL_DUX = new PlayerTrigger();
 
     public static void init(BiConsumer<ResourceLocation, CriterionTrigger<?>> r) {
         r.accept(id("launch_starcleaver_golem"), LAUNCH_STARCLEAVER_GOLEM);
         r.accept(id("cleave_firmament"), CLEAVE_FIRMAMENT);
+        r.accept(id("fly_pegasus"), FLY_PEGASUS);
+        r.accept(id("kill_dux"), KILL_DUX);
     }
 
     public static ResourceLocation id(String key) {

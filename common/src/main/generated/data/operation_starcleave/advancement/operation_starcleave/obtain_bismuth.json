@@ -1,0 +1,43 @@
+{
+  "parent": "operation_starcleave:operation_starcleave/cleave_firmament",
+  "criteria": {
+    "obtain_bismuth": {
+      "conditions": {
+        "items": [
+          {
+            "items": "operation_starcleave:starflaked_bismuth"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "obtain_bismuth_flake": {
+      "conditions": {
+        "items": [
+          {
+            "items": "operation_starcleave:bismuth_flake"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.operation_starcleave.obtain_bismuth.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "operation_starcleave:starflaked_bismuth"
+    },
+    "title": {
+      "translate": "advancements.operation_starcleave.obtain_bismuth.title"
+    }
+  },
+  "requirements": [
+    [
+      "obtain_bismuth",
+      "obtain_bismuth_flake"
+    ]
+  ]
+}
