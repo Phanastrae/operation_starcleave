@@ -1,12 +1,10 @@
 package phanastrae.operation_starcleave.block;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ColorRGBA;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -19,16 +17,9 @@ import phanastrae.operation_starcleave.fluid.OperationStarcleaveFluids;
 import java.util.function.BiConsumer;
 import java.util.function.ToIntFunction;
 
-import static net.minecraft.world.level.block.Blocks.CAULDRON;
-import static net.minecraft.world.level.block.SoundType.DEEPSLATE;
-import static net.minecraft.world.level.block.SoundType.GRASS;
-import static net.minecraft.world.level.block.SoundType.STONE;
-import static net.minecraft.world.level.block.SoundType.WOOL;
 import static net.minecraft.world.level.block.SoundType.*;
 import static net.minecraft.world.level.block.state.BlockBehaviour.OffsetType.XYZ;
-import static net.minecraft.world.level.block.state.properties.NoteBlockInstrument.BASEDRUM;
-import static net.minecraft.world.level.block.state.properties.NoteBlockInstrument.GUITAR;
-import static net.minecraft.world.level.material.MapColor.SAND;
+import static net.minecraft.world.level.block.state.properties.NoteBlockInstrument.*;
 import static net.minecraft.world.level.material.MapColor.*;
 import static net.minecraft.world.level.material.PushReaction.DESTROY;
 
@@ -38,10 +29,35 @@ public class OperationStarcleaveBlocks {
     protected static final BlockBehaviour.StateArgumentPredicate<EntityType<?>> SPAWN_ALWAYS = (blockState, blockView, blockPos, entityType) -> true;
     protected static final BlockBehaviour.StateArgumentPredicate<EntityType<?>> SPAWN_NEVER = (blockState, blockView, blockPos, entityType) -> true;
 
-    public static final Block NETHERITE_PUMPKIN = new NetheritePumpkinBlock(settings(COLOR_BLACK, NETHERITE_BLOCK).requiresCorrectToolForDrops().strength(10.0F, 1200.0F).isValidSpawn(SPAWN_ALWAYS).pushReaction(DESTROY));
+    public static final Block NETHERITE_PUMPKIN = new NetheritePumpkinBlock(settings()
+            .strength(10.0F, 1200.0F)
+            .mapColor(COLOR_BLACK)
+            .sound(NETHERITE_BLOCK)
+            .pushReaction(DESTROY)
+            .isValidSpawn(SPAWN_ALWAYS)
+            .requiresCorrectToolForDrops()
+    );
 
-    public static final Block STELLAR_SEDIMENT = new StellarSedimentBlock(settings(COLOR_PURPLE, SoundType.SAND, BASEDRUM, 1.15f, 2f, 2).isValidSpawn(SPAWN_NEVER));
-    public static final Block STELLAR_FARMLAND = new StellarFarmlandBlock(settings(COLOR_PURPLE, SoundType.SAND, BASEDRUM, 1.25f, 2f).lightLevel(b -> b.getValue(FarmBlock.MOISTURE) == 7 ? 15 : 2).isValidSpawn(SPAWN_NEVER).isViewBlocking(ALWAYS).isSuffocating(ALWAYS).randomTicks());
+    public static final Block STELLAR_SEDIMENT = new StellarSedimentBlock(settings()
+            .strength(1.25F, 2F)
+            .mapColor(COLOR_PURPLE)
+            .sound(SoundType.SAND)
+            .instrument(BASEDRUM)
+            .isValidSpawn(SPAWN_NEVER)
+            .lightLevel(constant(2))
+    );
+    public static final Block STELLAR_FARMLAND = new StellarFarmlandBlock(settings()
+            .strength(1.25F, 2F)
+            .mapColor(COLOR_PURPLE)
+            .sound(SoundType.SAND)
+            .instrument(BASEDRUM)
+            .isValidSpawn(SPAWN_NEVER)
+            .isViewBlocking(ALWAYS)
+            .isSuffocating(ALWAYS)
+            .lightLevel(b -> b.getValue(FarmBlock.MOISTURE) == 7 ? 15 : 2)
+            .randomTicks()
+    );
+
     public static final Block BISREEDS = new BisreedBlock(settings()
             .mapColor(COLOR_PINK)
             .sound(SoundType.CROP)
@@ -51,54 +67,204 @@ public class OperationStarcleaveBlocks {
             .instabreak()
     );
 
-    public static final Block STELLAR_MULCH = new StellarMulchBlock(settings(COLOR_PURPLE, MUD, BASEDRUM, 1.15f, 2f, 4).isValidSpawn(SPAWN_NEVER).randomTicks());
-    public static final Block MULCHBORNE_TUFT = new MulchborneTuftBlock(settings(COLOR_MAGENTA, GRASS).lightLevel(constant(6)).offsetType(XYZ).pushReaction(DESTROY).replaceable().noCollission().instabreak());
+    public static final Block STELLAR_MULCH = new StellarMulchBlock(settings()
+            .strength(1.15F, 2F)
+            .mapColor(COLOR_PURPLE)
+            .sound(MUD)
+            .instrument(BASEDRUM)
+            .isValidSpawn(SPAWN_NEVER)
+            .lightLevel(constant(4))
+            .randomTicks()
+    );
+    public static final Block MULCHBORNE_TUFT = new MulchborneTuftBlock(settings()
+            .mapColor(COLOR_MAGENTA)
+            .sound(SoundType.GRASS)
+            .offsetType(XYZ)
+            .pushReaction(DESTROY)
+            .lightLevel(constant(6))
+            .replaceable()
+            .noCollission()
+            .instabreak()
+    );
 
-    public static final Block HOLY_MOSS = new HolyMossBlock(settings(SAND, MOSS, BASEDRUM, 1.15f, 2f, 13).isValidSpawn(SPAWN_NEVER).randomTicks());
-    public static final Block SHORT_HOLY_MOSS = new ShortHolyMossBlock(settings(SAND, MOSS).lightLevel(constant(13)).offsetType(XYZ).pushReaction(DESTROY).replaceable().noCollission().instabreak());
+    public static final Block HOLY_MOSS = new HolyMossBlock(settings()
+            .strength(1.15F, 2F)
+            .mapColor(MapColor.SAND)
+            .sound(MOSS)
+            .instrument(BASEDRUM)
+            .isValidSpawn(SPAWN_NEVER)
+            .lightLevel(constant(13))
+            .randomTicks()
+    );
+    public static final Block SHORT_HOLY_MOSS = new ShortHolyMossBlock(settings()
+            .mapColor(MapColor.SAND)
+            .sound(MOSS)
+            .offsetType(XYZ)
+            .pushReaction(DESTROY)
+            .lightLevel(constant(13))
+            .replaceable()
+            .noCollission()
+            .instabreak()
+    );
 
-    public static final Block STARDUST_BLOCK = new ColoredFallingBlock(new ColorRGBA(0xEF9FCFFF), settings(ICE, SoundType.SAND, BASEDRUM, 0.2f, 0.1f, 9).isValidSpawn(SPAWN_NEVER));
-    public static final Block STARDUST_CLUSTER = new StardustClusterBlock(settings().lightLevel(constant(15)).replaceable().instabreak().noLootTable().noOcclusion());
+    public static final Block STARDUST_BLOCK = new ColoredFallingBlock(new ColorRGBA(0xEF9FCFFF), settings()
+            .strength(0.2F, 0.1F)
+            .mapColor(ICE)
+            .sound(SoundType.SAND)
+            .instrument(BASEDRUM)
+            .isValidSpawn(SPAWN_NEVER)
+            .lightLevel(constant(9))
+    );
+    public static final Block STARDUST_CLUSTER = new StardustClusterBlock(settings()
+            .lightLevel(constant(15))
+            .replaceable()
+            .instabreak()
+            .noLootTable()
+            .noOcclusion()
+    );
 
-    public static final Block STARBLEACHED_LOG = new RotatedPillarBlock(settings(COLOR_GRAY, STONE, BASEDRUM, 2f, 6f, 8, true).isValidSpawn(SPAWN_NEVER));
+    public static final Block STARBLEACHED_LOG = new RotatedPillarBlock(settings()
+            .strength(2F, 6F)
+            .mapColor(COLOR_GRAY)
+            .sound(SoundType.STONE)
+            .instrument(BASEDRUM)
+            .isValidSpawn(SPAWN_NEVER)
+            .lightLevel(constant(8))
+            .requiresCorrectToolForDrops()
+    );
     public static final Block STARBLEACHED_WOOD = new RotatedPillarBlock(copyShallow(STARBLEACHED_LOG));
-    public static final Block STARBLEACHED_LEAVES = new StarbleachedLeavesBlock(settings(COLOR_GRAY, STONE, BASEDRUM, 0.25f, 2f, 11, true).isValidSpawn(SPAWN_NEVER).isSuffocating(NEVER).isViewBlocking(NEVER).isRedstoneConductor(NEVER).noOcclusion());
-    public static final Block STARBLEACHED_TILES = new Block(settings(COLOR_GRAY, STONE, BASEDRUM, 1.5f, 6f, 8, true).isValidSpawn(SPAWN_NEVER));
+
+    public static final Block STARBLEACHED_LEAVES = new StarbleachedLeavesBlock(settings()
+            .strength(0.25F, 2F)
+            .mapColor(COLOR_GRAY)
+            .sound(SoundType.STONE)
+            .instrument(BASEDRUM)
+            .isValidSpawn(SPAWN_NEVER)
+            .isSuffocating(NEVER)
+            .isViewBlocking(NEVER)
+            .isRedstoneConductor(NEVER)
+            .lightLevel(constant(11))
+            .requiresCorrectToolForDrops()
+            .noOcclusion()
+    );
+
+    public static final Block STARBLEACHED_TILES = new Block(settings()
+            .strength(1.5F, 6F)
+            .mapColor(COLOR_GRAY)
+            .sound(SoundType.STONE)
+            .instrument(BASEDRUM)
+            .isValidSpawn(SPAWN_NEVER)
+            .lightLevel(constant(8))
+            .requiresCorrectToolForDrops()
+    );
     public static final Block STARBLEACHED_TILE_STAIRS = stairsOf(STARBLEACHED_TILES);
     public static final Block STARBLEACHED_TILE_SLAB = slabOf(STARBLEACHED_TILES);
     public static final Block STARBLEACHED_TILE_WALL = wallOf(STARBLEACHED_TILES);
-    public static final Block CHISELED_STARBLEACHED_TILES = new Block(settings(COLOR_GRAY, STONE, BASEDRUM, 1.5f, 6f, 8, true).isValidSpawn(SPAWN_NEVER));
-    public static final Block IMBUED_STARBLEACHED_TILES = new ImbuedStarbleachedTilesBlock(settings(COLOR_CYAN, STONE, BASEDRUM, 1.25f, 6f, 15, true).isValidSpawn(SPAWN_NEVER));
 
-    public static final Block STARBLEACHED_PEARL_BLOCK = new StarbleachedPearlBlock(settings(COLOR_CYAN, GLASS, BASEDRUM, 1.3f, 6f, 12, true).isValidSpawn(SPAWN_NEVER));
+    public static final Block CHISELED_STARBLEACHED_TILES = new Block(copyShallow(STARBLEACHED_TILES));
 
-    public static final Block STARBLEACH_CAULDRON = new StarbleachCauldronBlock(copyShallow(CAULDRON).lightLevel(constant(13)));
+    public static final Block IMBUED_STARBLEACHED_TILES = new ImbuedStarbleachedTilesBlock(settings()
+            .strength(1.25F, 6F)
+            .mapColor(COLOR_CYAN)
+            .sound(SoundType.STONE)
+            .instrument(BASEDRUM)
+            .isValidSpawn(SPAWN_NEVER)
+            .lightLevel(constant(15))
+            .requiresCorrectToolForDrops()
+    );
 
-    public static final Block STELLAR_TILES = new Block(settings(COLOR_PURPLE, DEEPSLATE, BASEDRUM, 1.75f, 6f, 2).isValidSpawn(SPAWN_NEVER));
+    public static final Block STARBLEACHED_PEARL_BLOCK = new StarbleachedPearlBlock(settings()
+            .strength(1.3F, 6F)
+            .mapColor(COLOR_CYAN)
+            .sound(GLASS)
+            .instrument(BASEDRUM)
+            .isValidSpawn(SPAWN_NEVER)
+            .lightLevel(constant(12))
+            .requiresCorrectToolForDrops()
+    );
+
+    public static final Block STARBLEACH_CAULDRON = new StarbleachCauldronBlock(copyShallow(Blocks.CAULDRON)
+            .lightLevel(constant(13))
+    );
+
+    public static final Block STELLAR_TILES = new Block(settings()
+            .strength(1.75F, 6F)
+            .mapColor(COLOR_PURPLE)
+            .sound(SoundType.DEEPSLATE)
+            .instrument(BASEDRUM)
+            .isValidSpawn(SPAWN_NEVER)
+            .lightLevel(constant(2))
+    );
     public static final Block STELLAR_TILE_SLAB = slabOf(STELLAR_TILES);
 
-    public static final Block STELLAR_REPULSOR = new StellarRepulsorBlock(settings(SAND, WOOL, BASEDRUM, 1.75f, 6f, 13).isValidSpawn(SPAWN_NEVER));
+    public static final Block STELLAR_REPULSOR = new StellarRepulsorBlock(settings()
+            .strength(1.75F, 6F)
+            .mapColor(MapColor.SAND)
+            .sound(SoundType.WOOL)
+            .instrument(BASEDRUM)
+            .lightLevel(constant(13))
+            .isValidSpawn(SPAWN_NEVER)
+    );
 
-    public static final Block BLESSED_CLOTH_BLOCK = new BlessedClothBlock(settings(SAND, WOOL, GUITAR).strength(0.8F));
-    public static final Block BLESSED_CLOTH_CARPET = new BlessedClothCarpetBlock(settings(SAND, WOOL).strength(0.1F));
-    public static final Block BLESSED_CLOTH_CURTAIN = new BlessedClothCurtainBlock(settings(SAND, WOOL, GUITAR).strength(0.8F).noOcclusion());
+    public static final Block BLESSED_CLOTH_BLOCK = new BlessedClothBlock(settings()
+            .strength(0.8F)
+            .mapColor(MapColor.SAND)
+            .sound(SoundType.WOOL)
+            .instrument(GUITAR)
+    );
+    public static final Block BLESSED_CLOTH_CARPET = new BlessedClothCarpetBlock(settings()
+            .strength(0.1F)
+            .mapColor(MapColor.SAND)
+            .sound(SoundType.WOOL)
+    );
+    public static final Block BLESSED_CLOTH_CURTAIN = new BlessedClothCurtainBlock(settings()
+            .strength(0.8F)
+            .mapColor(MapColor.SAND)
+            .sound(SoundType.WOOL)
+            .instrument(GUITAR)
+            .noOcclusion()
+    );
 
-    public static final Block BLESSED_BED = new BlessedBedBlock(settings(SAND, SoundType.WOOD).strength(0.2F).pushReaction(DESTROY).noOcclusion());
+    public static final Block BLESSED_BED = new BlessedBedBlock(settings()
+            .strength(0.2F)
+            .mapColor(MapColor.SAND)
+            .sound(SoundType.WOOD)
+            .pushReaction(DESTROY)
+            .noOcclusion()
+    );
 
-    public static final Block PHLOGISTIC_FIRE = new PhlogisticFireBlock(settings(COLOR_LIGHT_GREEN, WOOL).lightLevel(constant(15)).pushReaction(DESTROY).replaceable().noCollission().instabreak());
-    public static final Block PETRICHORIC_PLASMA = new PetrichoricPlasmaLiquidBlock(OperationStarcleaveFluids.FLOWING_PETRICHORIC_PLASMA, settings()
+    public static final Block PHLOGISTIC_FIRE = new PhlogisticFireBlock(settings()
             .mapColor(COLOR_LIGHT_GREEN)
+            .sound(SoundType.WOOL)
+            .pushReaction(DESTROY)
+            .lightLevel(constant(15))
+            .replaceable()
+            .noCollission()
+            .instabreak()
+    );
+    public static final Block PETRICHORIC_PLASMA = new PetrichoricPlasmaLiquidBlock(OperationStarcleaveFluids.FLOWING_PETRICHORIC_PLASMA, settings()
+            .strength(100.0F)
+            .mapColor(COLOR_LIGHT_GREEN)
+            .sound(EMPTY)
+            .pushReaction(DESTROY)
+            .lightLevel(constant(15))
             .replaceable()
             .noCollission()
             .randomTicks()
-            .strength(100.0F)
-            .lightLevel(constant(15))
-            .pushReaction(DESTROY)
             .noLootTable()
             .liquid()
-            .sound(EMPTY)
     );
-    public static final Block PETRICHORIC_VAPOR = new PetrichoricVaporBlock(settings(COLOR_LIGHT_GREEN, EMPTY).strength(100F).lightLevel(constant(15)).pushReaction(DESTROY).emissiveRendering(OperationStarcleaveBlocks::always).noLootTable().noOcclusion().noCollission());
+    public static final Block PETRICHORIC_VAPOR = new PetrichoricVaporBlock(settings()
+            .strength(100F)
+            .mapColor(COLOR_LIGHT_GREEN)
+            .sound(EMPTY)
+            .pushReaction(DESTROY)
+            .emissiveRendering(ALWAYS)
+            .lightLevel(constant(15))
+            .noLootTable()
+            .noOcclusion()
+            .noCollission()
+    );
 
     public static final Block NUCLEOSYNTHESEED = new NucleosyntheseedBlock(settings()
             .strength(5.0F)
@@ -112,7 +278,7 @@ public class OperationStarcleaveBlocks {
             .strength(2.5F)
             .mapColor(state -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? COLOR_GREEN : COLOR_LIGHT_GREEN)
             .sound(NETHER_WOOD)
-            .instrument(NoteBlockInstrument.BASS)
+            .instrument(BASS)
             .lightLevel(constant(9))
             .requiresCorrectToolForDrops()
             .randomTicks()
@@ -120,16 +286,17 @@ public class OperationStarcleaveBlocks {
     public static final Block NUCLEIC_FISSURELEAVES = new NucleicFissureleavesBlock(settings()
             .strength(0.2F)
             .mapColor(COLOR_LIGHT_GREEN)
-            .sound(GRASS)
-            .lightLevel(constant(12))
-            .isValidSpawn(OperationStarcleaveBlocks::never)
-            .isSuffocating(OperationStarcleaveBlocks::never)
-            .isViewBlocking(OperationStarcleaveBlocks::never)
-            .isRedstoneConductor(OperationStarcleaveBlocks::never)
+            .sound(SoundType.GRASS)
             .pushReaction(PushReaction.DESTROY)
+            .isValidSpawn(SPAWN_NEVER)
+            .isSuffocating(NEVER)
+            .isViewBlocking(NEVER)
+            .isRedstoneConductor(NEVER)
+            .lightLevel(constant(12))
             .noOcclusion()
             .randomTicks()
     );
+
     public static final Block COAGULATED_PLASMA = new CoagulatedPlasmaBlock(settings()
             .strength(3.0F, 6.0F)
             .mapColor(TERRACOTTA_GREEN)
@@ -140,12 +307,12 @@ public class OperationStarcleaveBlocks {
             .randomTicks()
     );
     public static final Block PLASMA_ICE = new PlasmaIceBlock(settings()
-            .randomTicks()
-            .mapColor(COLOR_LIGHT_GREEN)
-            .lightLevel(constant(13))
             .strength(2.8F)
             .friction(0.989F)
+            .mapColor(COLOR_LIGHT_GREEN)
             .sound(SoundType.GLASS)
+            .lightLevel(constant(13))
+            .randomTicks()
     );
 
     public static void init(BiConsumer<ResourceLocation, Block> r) {
@@ -207,40 +374,12 @@ public class OperationStarcleaveBlocks {
         return b -> t;
     }
 
-    protected static BlockBehaviour.Properties copyShallow(BlockBehaviour settings) {
-        return BlockBehaviour.Properties.ofLegacyCopy(settings);
-    }
-
     protected static BlockBehaviour.Properties settings() {
         return BlockBehaviour.Properties.of();
     }
 
-    protected static BlockBehaviour.Properties settings(MapColor mapColor) {
-        return BlockBehaviour.Properties.of().mapColor(mapColor);
-    }
-
-    protected static BlockBehaviour.Properties settings(MapColor mapColor, SoundType soundGroup) {
-        return BlockBehaviour.Properties.of().mapColor(mapColor).sound(soundGroup);
-    }
-
-    protected static BlockBehaviour.Properties settings(MapColor mapColor, SoundType soundGroup, NoteBlockInstrument instrument) {
-        return BlockBehaviour.Properties.of().mapColor(mapColor).sound(soundGroup).instrument(instrument);
-    }
-
-    protected static BlockBehaviour.Properties settings(MapColor mapColor, SoundType soundGroup, NoteBlockInstrument instrument, float hardness, float resistance) {
-        return BlockBehaviour.Properties.of().mapColor(mapColor).sound(soundGroup).instrument(instrument).strength(hardness, resistance);
-    }
-
-    protected static BlockBehaviour.Properties settings(MapColor mapColor, SoundType soundGroup, NoteBlockInstrument instrument, float hardness, float resistance, int luminance) {
-        return BlockBehaviour.Properties.of().mapColor(mapColor).sound(soundGroup).instrument(instrument).strength(hardness, resistance).lightLevel(constant(luminance));
-    }
-
-    protected static BlockBehaviour.Properties settings(MapColor mapColor, SoundType soundGroup, NoteBlockInstrument instrument, float hardness, float resistance, int luminance, boolean requiresTool) {
-        BlockBehaviour.Properties settings = BlockBehaviour.Properties.of().mapColor(mapColor).sound(soundGroup).instrument(instrument).strength(hardness, resistance).lightLevel(constant(luminance));
-        if(requiresTool) {
-            settings.requiresCorrectToolForDrops();
-        }
-        return settings;
+    protected static BlockBehaviour.Properties copyShallow(BlockBehaviour settings) {
+        return BlockBehaviour.Properties.ofLegacyCopy(settings);
     }
 
     protected static StairBlock stairsOf(Block block) {
@@ -253,21 +392,5 @@ public class OperationStarcleaveBlocks {
 
     protected static WallBlock wallOf(BlockBehaviour block) {
         return new WallBlock(copyShallow(block).forceSolidOn());
-    }
-
-    private static Boolean always(BlockState state, BlockGetter blockGetter, BlockPos pos, EntityType<?> entity) {
-        return true;
-    }
-
-    private static Boolean never(BlockState state, BlockGetter blockGetter, BlockPos pos, EntityType<?> entity) {
-        return false;
-    }
-
-    private static boolean always(BlockState state, BlockGetter blockGetter, BlockPos pos) {
-        return true;
-    }
-
-    private static boolean never(BlockState state, BlockGetter blockGetter, BlockPos pos) {
-        return false;
     }
 }

@@ -21,9 +21,8 @@ public class OperationStarcleaveItems {
 
     public static final Item STELLAR_SEDIMENT = blockItem(OperationStarcleaveBlocks.STELLAR_SEDIMENT);
     public static final Item STELLAR_FARMLAND = blockItem(OperationStarcleaveBlocks.STELLAR_FARMLAND);
+
     public static final Item BISREED_ROOT = new ItemNameBlockItem(OperationStarcleaveBlocks.BISREEDS, settings());
-    public static final Item BISMUTH_FLAKE = new Item(settings());
-    public static final Item STARFLAKED_BISMUTH = new Item(settings());
 
     public static final Item STELLAR_MULCH = blockItem(OperationStarcleaveBlocks.STELLAR_MULCH);
     public static final Item MULCHBORNE_TUFT = blockItem(OperationStarcleaveBlocks.MULCHBORNE_TUFT);
@@ -36,12 +35,16 @@ public class OperationStarcleaveItems {
 
     public static final Item STARBLEACHED_LOG = blockItem(OperationStarcleaveBlocks.STARBLEACHED_LOG);
     public static final Item STARBLEACHED_WOOD = blockItem(OperationStarcleaveBlocks.STARBLEACHED_WOOD);
+
     public static final Item STARBLEACHED_LEAVES = blockItem(OperationStarcleaveBlocks.STARBLEACHED_LEAVES);
+
     public static final Item STARBLEACHED_TILES = blockItem(OperationStarcleaveBlocks.STARBLEACHED_TILES);
     public static final Item STARBLEACHED_TILE_STAIRS = blockItem(OperationStarcleaveBlocks.STARBLEACHED_TILE_STAIRS);
     public static final Item STARBLEACHED_TILE_SLAB = blockItem(OperationStarcleaveBlocks.STARBLEACHED_TILE_SLAB);
     public static final Item STARBLEACHED_TILE_WALL = blockItem(OperationStarcleaveBlocks.STARBLEACHED_TILE_WALL);
+
     public static final Item CHISELED_STARBLEACHED_TILES = blockItem(OperationStarcleaveBlocks.CHISELED_STARBLEACHED_TILES);
+
     public static final Item IMBUED_STARBLEACHED_TILES = blockItem(OperationStarcleaveBlocks.IMBUED_STARBLEACHED_TILES);
 
     public static final Item STARBLEACHED_PEARL_BLOCK = blockItem(OperationStarcleaveBlocks.STARBLEACHED_PEARL_BLOCK);
@@ -58,31 +61,45 @@ public class OperationStarcleaveItems {
     public static final Item NUCLEOSYNTHESEED = blockItem(OperationStarcleaveBlocks.NUCLEOSYNTHESEED);
     public static final Item NUCLEIC_FISSUREROOT = blockItem(OperationStarcleaveBlocks.NUCLEIC_FISSUREROOT);
     public static final Item NUCLEIC_FISSURELEAVES = blockItem(OperationStarcleaveBlocks.NUCLEIC_FISSURELEAVES);
+
     public static final Item COAGULATED_PLASMA = blockItem(OperationStarcleaveBlocks.COAGULATED_PLASMA);
     public static final Item PLASMA_ICE = blockItem(OperationStarcleaveBlocks.PLASMA_ICE);
 
-    public static final Item BLESSED_BED = new BedItem(OperationStarcleaveBlocks.BLESSED_BED, settings(1, RARE));
+
 
     public static final Item STARCLEAVER_GOLEM_BUCKET = new StarcleaverGolemBucketItem(settings(1));
+
     public static final Item STARBLEACH_BOTTLE = new StarbleachBottleItem(settings(16).craftRemainder(Items.GLASS_BOTTLE).food(StarbleachBottleItem.STARBLEACH_BOTTLE));
     public static final Item SPLASH_STARBLEACH_BOTTLE = new SplashStarbleachBottleItem(settings(16));
-    public static final Item STARBLEACHED_PEARL = new StarbleachedPearlItem(settings(16));
-    public static final Item STARFRUIT = new StarfruitItem(settings().food(StarfruitItem.STARFRUIT));
+
+    public static final Item BISMUTH_FLAKE = new Item(settings());
+    public static final Item STARFLAKED_BISMUTH = new Item(settings());
+
     public static final Item HOLY_STRANDS = new Item(settings());
     public static final Item BLESSED_CLOTH = new Item(settings());
-    public static final Item HOLLOWED_SAC = new HollowedSacItem(settings());
-    public static final Item PHLOGISTON_SAC = new PhlogistonSacItem(settings());
+
+    public static final Item BLESSED_BED = new BedItem(OperationStarcleaveBlocks.BLESSED_BED, settings(1, RARE));
+
+    public static final Item STARBLEACHED_PEARL = new StarbleachedPearlItem(settings(16));
+    public static final Item STARFRUIT = new StarfruitItem(settings().food(StarfruitItem.STARFRUIT));
+
+    public static final Item FIRMAMENT_REJUVENATOR = new FirmamentRejuvenatorItem(settings(8, RARE));
+
     public static final Item BISMUTH_PEGASUS_ARMOR = new AnimalArmorItem(
             OperationStarcleaveArmorMaterials.BISMUTH_ENTRY,
             AnimalArmorItem.BodyType.EQUESTRIAN,
             false,
             settings().stacksTo(1)
     );
-    public static final Item PETRICHORIC_PLASMA_BUCKET = new PetrichoricPlasmaBucketItem(OperationStarcleaveFluids.PETRICHORIC_PLASMA, settings().craftRemainder(Items.BUCKET).stacksTo(1));
-    public static final Item NUCLEAR_STORMCLOUD_BOTTLE = new NuclearStormcloudBottleItem(settings().rarity(EPIC));
 
-    public static final Item FIRMAMENT_REJUVENATOR = new FirmamentRejuvenatorItem(settings(8, RARE));
+    public static final Item HOLLOWED_SAC = new HollowedSacItem(settings());
+    public static final Item PHLOGISTON_SAC = new PhlogistonSacItem(settings());
+
+    public static final Item PETRICHORIC_PLASMA_BUCKET = new PetrichoricPlasmaBucketItem(OperationStarcleaveFluids.PETRICHORIC_PLASMA, settings().craftRemainder(Items.BUCKET).stacksTo(1));
+
+    public static final Item NUCLEAR_STORMCLOUD_BOTTLE = new NuclearStormcloudBottleItem(settings().rarity(EPIC));
     public static final Item FIRMAMENT_MANIPULATOR = new FirmamentManipulatorItem(settings(1, EPIC));
+
     public static final Item STARCLEAVER_GOLEM_SPAWN_EGG = spawnEggItem(OperationStarcleaveEntityTypes.STARCLEAVER_GOLEM, 0x292725, 0x61EDDF);
     public static final Item SUBCAELIC_TORPEDO_SPAWN_EGG = spawnEggItem(OperationStarcleaveEntityTypes.SUBCAELIC_TORPEDO, 0xDFDFDF, 0x1FAF7F);
     public static final Item SUBCAELIC_DUX_SPAWN_EGG = spawnEggItem(OperationStarcleaveEntityTypes.SUBCAELIC_DUX, 0xDFEF9F, 0x6FFFDF);
@@ -101,6 +118,7 @@ public class OperationStarcleaveItems {
 
         rwt.accept("stellar_sediment", STELLAR_SEDIMENT);
         rwt.accept("stellar_farmland", STELLAR_FARMLAND);
+
         rwt.accept("bisreed_root", BISREED_ROOT);
         rwt.accept("bismuth_flake", BISMUTH_FLAKE);
         rwt.accept("starflaked_bismuth", STARFLAKED_BISMUTH);
@@ -120,6 +138,7 @@ public class OperationStarcleaveItems {
         rwt.accept("blessed_cloth_block", BLESSED_CLOTH_BLOCK);
         rwt.accept("blessed_cloth_carpet", BLESSED_CLOTH_CARPET);
         rwt.accept("blessed_cloth_curtain", BLESSED_CLOTH_CURTAIN);
+
         rwt.accept("blessed_bed", BLESSED_BED);
 
         rwt.accept("stardust_block", STARDUST_BLOCK);
@@ -127,11 +146,14 @@ public class OperationStarcleaveItems {
 
         rwt.accept("starbleached_log", STARBLEACHED_LOG);
         rwt.accept("starbleached_wood", STARBLEACHED_WOOD);
+
         rwt.accept("starbleached_leaves", STARBLEACHED_LEAVES);
+
         rwt.accept("starbleached_tiles", STARBLEACHED_TILES);
         rwt.accept("starbleached_tile_slab", STARBLEACHED_TILE_SLAB);
         rwt.accept("starbleached_tile_stairs", STARBLEACHED_TILE_STAIRS);
         rwt.accept("starbleached_tile_wall", STARBLEACHED_TILE_WALL);
+
         rwt.accept("chiseled_starbleached_tiles", CHISELED_STARBLEACHED_TILES);
         rwt.accept("imbued_starbleached_tiles", IMBUED_STARBLEACHED_TILES);
 
@@ -141,7 +163,9 @@ public class OperationStarcleaveItems {
 
         rwt.accept("starbleached_pearl", STARBLEACHED_PEARL);
         rwt.accept("starfruit", STARFRUIT);
+
         rwt.accept("firmament_rejuvenator", FIRMAMENT_REJUVENATOR);
+
         rwt.accept("bismuth_pegasus_armor", BISMUTH_PEGASUS_ARMOR);
 
         rwt.accept("starbleached_pearl_block", STARBLEACHED_PEARL_BLOCK);
