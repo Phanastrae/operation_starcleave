@@ -1,8 +1,5 @@
 package phanastrae.operation_starcleave.item;
 
-import phanastrae.operation_starcleave.entity.projectile.SplashStarbleachEntity;
-
-import java.util.List;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
 import net.minecraft.network.chat.Component;
@@ -18,6 +15,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ProjectileItem;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import phanastrae.operation_starcleave.entity.projectile.SplashStarbleachEntity;
+
+import java.util.List;
 
 public class SplashStarbleachBottleItem extends Item implements ProjectileItem {
 
@@ -64,6 +64,7 @@ public class SplashStarbleachBottleItem extends Item implements ProjectileItem {
     public Projectile asProjectile(Level world, Position pos, ItemStack stack, Direction direction) {
         SplashStarbleachEntity entity = new SplashStarbleachEntity(world, pos.x(), pos.y(), pos.z());
         entity.setItem(stack);
+        entity.setCanStarbleach(true);
         return entity;
     }
 
