@@ -1,7 +1,6 @@
 package phanastrae.operation_starcleave.entity.projectile;
 
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.*;
@@ -18,6 +17,7 @@ import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 import phanastrae.operation_starcleave.network.packet.StarbleachedPearlLaunchPayload;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 import phanastrae.operation_starcleave.services.XPlatInterface;
+import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
 
 import java.util.function.Predicate;
 
@@ -107,7 +107,7 @@ public class StarbleachedPearlEntity extends ThrowableItemProjectile {
 
         if(!world.isClientSide) {
             RandomSource random = world.getRandom();
-            world.playSound(null, pos.x(), pos.y(), pos.z(), SoundEvents.TRIDENT_THUNDER, SoundSource.PLAYERS, audioMultiplier, 0.9f + random.nextFloat() * 0.3f);
+            world.playSound(null, pos.x(), pos.y(), pos.z(), OperationStarcleaveSoundEvents.STARBLEACHED_PEARL_REPEL, SoundSource.PLAYERS, audioMultiplier, 0.9f + random.nextFloat() * 0.3f);
         }
     }
 

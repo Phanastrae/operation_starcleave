@@ -5,7 +5,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
@@ -25,6 +25,7 @@ import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.entity.projectile.SplashStarbleachEntity;
 import phanastrae.operation_starcleave.entity.projectile.StarbleachedPearlEntity;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
+import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
 
 import java.util.EnumSet;
 
@@ -118,7 +119,7 @@ public class SubcaelicTorpedoEntity extends AbstractSubcaelicEntity {
 
         int fuseSpeed = this.getFuseSpeed();
         if (this.isAlive() && fuseSpeed > 0 && this.currentFuseTime == 0) {
-            this.playSound(SoundEvents.CREEPER_PRIMED, 1.0F, 0.5F);
+            this.playSound(OperationStarcleaveSoundEvents.SUBCAELIC_TORPEDO_PRIMED, 1.0F, 0.5F);
             this.gameEvent(GameEvent.PRIME_FUSE);
         }
 
@@ -138,7 +139,7 @@ public class SubcaelicTorpedoEntity extends AbstractSubcaelicEntity {
             int lastBeep = this.lastFuseTime / 10;
             int currentBeep = this.currentFuseTime / 10;
             if(currentBeep > lastBeep) {
-                this.playSound(SoundEvents.AMETHYST_BLOCK_STEP, 1.8F, 1F + 0.8F * this.getClientFuseTime(0));
+                this.playSound(OperationStarcleaveSoundEvents.SUBCAELIC_TORPEDO_BEEP, 1.8F, 1F + 0.8F * this.getClientFuseTime(0));
             }
         }
 
@@ -152,6 +153,21 @@ public class SubcaelicTorpedoEntity extends AbstractSubcaelicEntity {
         if(!this.isAlive()) {
             this.setDeltaMovement(this.getDeltaMovement().x * 0.98, this.getDeltaMovement().y * 0.98 - 0.03, this.getDeltaMovement().z * 0.98);
         }
+    }
+
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return OperationStarcleaveSoundEvents.SUBCAELIC_TORPEDO_AMBIENT;
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return OperationStarcleaveSoundEvents.SUBCAELIC_TORPEDO_HURT;
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return OperationStarcleaveSoundEvents.SUBCAELIC_TORPEDO_DEATH;
     }
 
     @Override

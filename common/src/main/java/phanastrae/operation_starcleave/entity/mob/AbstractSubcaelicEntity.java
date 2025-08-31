@@ -1,17 +1,9 @@
 package phanastrae.operation_starcleave.entity.mob;
 
-import org.jetbrains.annotations.Nullable;
-import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
-import phanastrae.operation_starcleave.world.firmament.Firmament;
-
-import java.util.EnumSet;
 import net.minecraft.core.BlockPos;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -25,6 +17,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
+import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
+import phanastrae.operation_starcleave.world.firmament.Firmament;
+
+import java.util.EnumSet;
 
 public abstract class AbstractSubcaelicEntity extends Mob implements Enemy {
 
@@ -87,21 +84,6 @@ public abstract class AbstractSubcaelicEntity extends Mob implements Enemy {
     @Override
     public SoundSource getSoundSource() {
         return SoundSource.HOSTILE;
-    }
-
-    @Override
-    protected SoundEvent getAmbientSound() {
-        return SoundEvents.GLOW_SQUID_AMBIENT;
-    }
-
-    @Override
-    protected SoundEvent getHurtSound(DamageSource source) {
-        return SoundEvents.GLOW_SQUID_HURT;
-    }
-
-    @Override
-    protected SoundEvent getDeathSound() {
-        return SoundEvents.GLOW_SQUID_DEATH;
     }
 
     @Override

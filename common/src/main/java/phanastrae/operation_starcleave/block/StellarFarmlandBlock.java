@@ -5,7 +5,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -20,6 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
+import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 
 public class StellarFarmlandBlock extends FarmBlock {
@@ -100,7 +100,7 @@ public class StellarFarmlandBlock extends FarmBlock {
                     if (setBisreeds) {
                         level.setBlock(upPos, OperationStarcleaveBlocks.BISREEDS.defaultBlockState(), 3);
 
-                        level.playSeededSound(null, upPos.getX(), upPos.getY(), upPos.getZ(), SoundEvents.BREWING_STAND_BREW, SoundSource.BLOCKS, 0.1F, 1.6F + 0.4F * level.random.nextFloat(), level.random.nextLong());
+                        level.playSeededSound(null, upPos.getX(), upPos.getY(), upPos.getZ(), OperationStarcleaveSoundEvents.BISREEDS_CONVERT, SoundSource.BLOCKS, 0.1F, 1.6F + 0.4F * level.random.nextFloat(), level.random.nextLong());
                         hydrationParticles(level, pos);
                     }
                 }

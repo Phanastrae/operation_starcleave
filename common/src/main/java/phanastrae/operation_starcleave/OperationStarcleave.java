@@ -49,6 +49,10 @@ public class OperationStarcleave {
 	}
 
 	public static void initRegistryEntries(RegistryListenerAdder rla) {
+		// sound events
+		rla.addRegistryListener(BuiltInRegistries.SOUND_EVENT, OperationStarcleaveSoundEvents::init);
+		rla.addHolderRegistryListener(BuiltInRegistries.SOUND_EVENT, OperationStarcleaveSoundEvents::initHolders);
+
 		// mob effects
 		rla.addHolderRegistryListener(BuiltInRegistries.MOB_EFFECT, OperationStarcleaveStatusEffects::init);
 		// armor materials
@@ -75,9 +79,6 @@ public class OperationStarcleave {
 
 		// particle types
 		rla.addRegistryListener(BuiltInRegistries.PARTICLE_TYPE, OperationStarcleaveParticleTypes::init);
-
-		// sound events
-		rla.addRegistryListener(BuiltInRegistries.SOUND_EVENT, OperationStarcleaveSoundEvents::init);
 
 		// advancement triggers
 		rla.addRegistryListener(BuiltInRegistries.TRIGGER_TYPES, OperationStarcleaveAdvancementCriteria::init);

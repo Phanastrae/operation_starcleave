@@ -24,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 import phanastrae.operation_starcleave.registry.OperationStarcleaveFluidTags;
+import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
 
 import java.util.Optional;
 
@@ -53,7 +54,7 @@ public abstract class PetrichoricPlasmaFluid extends FlowingFluid {
                         pos.getX(),
                         pos.getY(),
                         pos.getZ(),
-                        SoundEvents.LAVA_AMBIENT,
+                        OperationStarcleaveSoundEvents.PLASMA_AMBIENT,
                         SoundSource.BLOCKS,
                         0.2F + random.nextFloat() * 0.2F,
                         0.9F + random.nextFloat() * 0.15F,

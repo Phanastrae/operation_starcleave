@@ -4,12 +4,12 @@ import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import phanastrae.operation_starcleave.OperationStarcleave;
+import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -23,7 +23,7 @@ public class OperationStarcleaveArmorMaterials {
         map.put(ArmorItem.Type.CHESTPLATE, 6);
         map.put(ArmorItem.Type.HELMET, 2);
         map.put(ArmorItem.Type.BODY, 5);
-    }), 20, SoundEvents.ARMOR_EQUIP_IRON, 1.5F, 0.0F, () -> Ingredient.of(Items.IRON_INGOT));
+    }), 20, OperationStarcleaveSoundEvents.ARMOR_EQUIP_BISMUTH_ENTRY, 1.5F, 0.0F, () -> Ingredient.of(Items.IRON_INGOT));
 
     public static Holder<ArmorMaterial> BISMUTH_ENTRY;
 

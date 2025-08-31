@@ -2,7 +2,6 @@ package phanastrae.operation_starcleave.item;
 
 import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -14,6 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ProjectileItem;
 import net.minecraft.world.level.Level;
 import phanastrae.operation_starcleave.entity.projectile.StarbleachedPearlEntity;
+import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
 
 public class StarbleachedPearlItem extends Item implements ProjectileItem {
     public StarbleachedPearlItem(Item.Properties settings) {
@@ -28,7 +28,7 @@ public class StarbleachedPearlItem extends Item implements ProjectileItem {
                 user.getX(),
                 user.getY(),
                 user.getZ(),
-                SoundEvents.ENDER_PEARL_THROW,
+                OperationStarcleaveSoundEvents.STARBLEACHED_PEARL_THROW,
                 SoundSource.NEUTRAL,
                 0.5F,
                 0.8F / (world.getRandom().nextFloat() * 0.4F + 0.8F)

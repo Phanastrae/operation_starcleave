@@ -2,7 +2,6 @@ package phanastrae.operation_starcleave.item;
 
 import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -16,6 +15,7 @@ import net.minecraft.world.item.ProjectileItem;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import phanastrae.operation_starcleave.entity.projectile.FirmamentRejuvenatorEntity;
+import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
 
 public class FirmamentRejuvenatorItem extends Item implements ProjectileItem {
 
@@ -44,7 +44,7 @@ public class FirmamentRejuvenatorItem extends Item implements ProjectileItem {
                 user.getX(),
                 user.getY(),
                 user.getZ(),
-                SoundEvents.LIGHTNING_BOLT_THUNDER,
+                OperationStarcleaveSoundEvents.REJUVENATOR_THROW,
                 SoundSource.PLAYERS,
                 0.5F,
                 0.4F / (world.getRandom().nextFloat() * 0.4F + 0.8F)

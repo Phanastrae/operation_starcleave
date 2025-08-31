@@ -1,4 +1,130 @@
 {
+  "block.petrichoric_plasma_ambient": {
+    "subtitle": "subtitles.operation_starcleave.block.petrichoric_plasma_ambient",
+    "sounds": [
+      "liquid/lava"
+    ]
+  },
+  "block.stellar_repulsor.launch": {
+    "subtitle": "subtitles.operation_starcleave.block.stellar_repulsor.launch",
+    "sounds": [
+      "tile/piston/out"
+    ]
+  },
+  "block.starbleach": {
+    "subtitle": "subtitles.operation_starcleave.block.starbleach",
+    "sounds": [
+      "block/brewing_stand/brew1",
+      "block/brewing_stand/brew2"
+    ]
+  },
+  "block.starbleach_cauldron.collect": {
+    "subtitle": "subtitles.operation_starcleave.block.starbleach_cauldron.collect",
+    "sounds": [
+      "block/brewing_stand/brew1",
+      "block/brewing_stand/brew2"
+    ]
+  },
+  "block.biseeds.convert": {
+    "subtitle": "subtitles.operation_starcleave.block.biseeds.convert",
+    "sounds": [
+      "block/brewing_stand/brew1",
+      "block/brewing_stand/brew2"
+    ]
+  },
+  "item.armor.equip_bismuth": {
+    "subtitle": "subtitles.operation_starcleave.item.armor.equip_bismuth",
+    "sounds": [
+      "item/armor/equip_iron1",
+      "item/armor/equip_iron2",
+      "item/armor/equip_iron3",
+      "item/armor/equip_iron4",
+      "item/armor/equip_iron5",
+      "item/armor/equip_iron6"
+    ]
+  },
+  "item.hollowed_sac.use": {
+    "subtitle": "subtitles.operation_starcleave.item.hollowed_sac.use",
+    "sounds": [
+      "item/ink_sac/ink_sac1",
+      {
+        "name": "item/ink_sac/ink_sac1",
+        "pitch": 0.95
+      },
+      {
+        "name": "item/ink_sac/ink_sac1",
+        "pitch": 1.05
+      },
+      "item/ink_sac/ink_sac2",
+      {
+        "name": "item/ink_sac/ink_sac2",
+        "pitch": 0.95
+      },
+      {
+        "name": "item/ink_sac/ink_sac2",
+        "pitch": 1.05
+      },
+      "item/ink_sac/ink_sac3",
+      {
+        "name": "item/ink_sac/ink_sac3",
+        "pitch": 0.95
+      },
+      {
+        "name": "item/ink_sac/ink_sac3",
+        "pitch": 1.05
+      }
+    ]
+  },
+  "item.phlogiston_sac.use": {
+    "subtitle": "subtitles.operation_starcleave.item.phlogiston_sac.use",
+    "sounds": [
+      "mob/ghast/fireball4"
+    ]
+  },
+  "item.starbleach_bottle.drink": {
+    "subtitle": "subtitles.operation_starcleave.item.starbleach_bottle.drink",
+    "sounds": [
+      "item/bottle/drink_honey1",
+      "item/bottle/drink_honey2",
+      {
+        "name": "item/bottle/drink_honey3",
+        "volume": 0.35
+      },
+      {
+        "name": "item/bottle/drink_honey3",
+        "volume": 0.75
+      }
+    ]
+  },
+  "item.starfruit.burst": {
+    "subtitle": "subtitles.operation_starcleave.item.starfruit.burst",
+    "sounds": [
+      "random/glass1",
+      "random/glass2",
+      "random/glass3"
+    ]
+  },
+  "entity.firmament_rejuvenator.throw": {
+    "subtitle": "subtitles.operation_starcleave.entity.firmament_rejuvenator.throw",
+    "sounds": [
+      "ambient/weather/thunder1",
+      "ambient/weather/thunder2",
+      "ambient/weather/thunder3"
+    ]
+  },
+  "entity.starbleached_pearl.throw": {
+    "subtitle": "subtitles.operation_starcleave.entity.starbleached_pearl.throw",
+    "sounds": [
+      "random/bow"
+    ]
+  },
+  "entity.starbleached_pearl.repel": {
+    "subtitle": "subtitles.operation_starcleave.entity.starbleached_pearl.repel",
+    "sounds": [
+      "item/trident/thunder1",
+      "item/trident/thunder2"
+    ]
+  },
   "entity.starcleaver_golem.ambient": {
     "subtitle": "subtitles.operation_starcleave.entity.starcleaver_golem.ambient",
     "sounds": [
@@ -13,6 +139,14 @@
       "operation_starcleave:mob/starcleaver_golem/death"
     ]
   },
+  "entity.starcleaver_golem.hurt": {
+    "subtitle": "subtitles.operation_starcleave.entity.starcleaver_golem.hurt",
+    "sounds": [
+      "operation_starcleave:mob/starcleaver_golem/say1",
+      "operation_starcleave:mob/starcleaver_golem/say2",
+      "operation_starcleave:mob/starcleaver_golem/say3"
+    ]
+  },
   "entity.starcleaver_golem.step": {
     "subtitle": "subtitles.operation_starcleave.entity.starcleaver_golem.step",
     "sounds": [
@@ -20,6 +154,124 @@
       "operation_starcleave:mob/starcleaver_golem/step2",
       "operation_starcleave:mob/starcleaver_golem/step3",
       "operation_starcleave:mob/starcleaver_golem/step4"
+    ]
+  },
+  "entity.starcleaver_golem.eat": {
+    "subtitle": "subtitles.operation_starcleave.entity.starcleaver_golem.eat",
+    "sounds": [
+      "dig/sand1",
+      "dig/sand2",
+      "dig/sand3",
+      "dig/sand4"
+    ]
+  },
+  "entity.subcaelic_dux.ambient": {
+    "subtitle": "subtitles.operation_starcleave.entity.subcaelic_dux.ambient",
+    "sounds": [
+      "entity/glow_squid/ambient1",
+      "entity/glow_squid/ambient2",
+      "entity/glow_squid/ambient3",
+      "entity/glow_squid/ambient4",
+      "entity/glow_squid/ambient5"
+    ]
+  },
+  "entity.subcaelic_dux.death": {
+    "subtitle": "subtitles.operation_starcleave.entity.subcaelic_dux.death",
+    "sounds": [
+      "entity/glow_squid/death1",
+      "entity/glow_squid/death2",
+      "entity/glow_squid/death3"
+    ]
+  },
+  "entity.subcaelic_dux.hurt": {
+    "subtitle": "subtitles.operation_starcleave.entity.subcaelic_dux.hurt",
+    "sounds": [
+      "entity/glow_squid/hurt1",
+      "entity/glow_squid/hurt2",
+      "entity/glow_squid/hurt3",
+      "entity/glow_squid/hurt4"
+    ]
+  },
+  "entity.subcaelic_dux.burst": {
+    "subtitle": "subtitles.operation_starcleave.entity.subcaelic_dux.burst",
+    "sounds": [
+      "mob/ghast/fireball4"
+    ]
+  },
+  "entity.subcaelic_dux.explode": {
+    "subtitle": "subtitles.operation_starcleave.entity.subcaelic_dux.explode",
+    "sounds": [
+      "random/explode1",
+      "random/explode2",
+      "random/explode3",
+      "random/explode4"
+    ]
+  },
+  "entity.subcaelic_torpedo.ambient": {
+    "subtitle": "subtitles.operation_starcleave.entity.subcaelic_torpedo.ambient",
+    "sounds": [
+      "entity/glow_squid/ambient1",
+      "entity/glow_squid/ambient2",
+      "entity/glow_squid/ambient3",
+      "entity/glow_squid/ambient4",
+      "entity/glow_squid/ambient5"
+    ]
+  },
+  "entity.subcaelic_torpedo.death": {
+    "subtitle": "subtitles.operation_starcleave.entity.subcaelic_torpedo.death",
+    "sounds": [
+      "entity/glow_squid/death1",
+      "entity/glow_squid/death2",
+      "entity/glow_squid/death3"
+    ]
+  },
+  "entity.subcaelic_torpedo.hurt": {
+    "subtitle": "subtitles.operation_starcleave.entity.subcaelic_torpedo.hurt",
+    "sounds": [
+      "entity/glow_squid/hurt1",
+      "entity/glow_squid/hurt2",
+      "entity/glow_squid/hurt3",
+      "entity/glow_squid/hurt4"
+    ]
+  },
+  "entity.subcaelic_torpedo.primed": {
+    "subtitle": "subtitles.operation_starcleave.entity.subcaelic_torpedo.primed",
+    "sounds": [
+      "random/fuse"
+    ]
+  },
+  "entity.subcaelic_torpedo.beep": {
+    "subtitle": "subtitles.operation_starcleave.entity.subcaelic_torpedo.beep",
+    "sounds": [
+      "block/amethyst/step1",
+      "block/amethyst/step2",
+      "block/amethyst/step3",
+      "block/amethyst/step4",
+      "block/amethyst/step5",
+      "block/amethyst/step6",
+      "block/amethyst/step7",
+      "block/amethyst/step8",
+      "block/amethyst/step9",
+      "block/amethyst/step10",
+      "block/amethyst/step11",
+      "block/amethyst/step12",
+      "block/amethyst/step13",
+      "block/amethyst/step14"
+    ]
+  },
+  "firmament.cleave": {
+    "subtitle": "subtitles.operation_starcleave.firmament.cleave",
+    "sounds": [
+      "item/trident/thunder1",
+      "item/trident/thunder2"
+    ]
+  },
+  "firmament.tile.break": {
+    "subtitle": "subtitles.operation_starcleave.firmament.tile.break",
+    "sounds": [
+      "random/glass1",
+      "random/glass2",
+      "random/glass3"
     ]
   }
 }

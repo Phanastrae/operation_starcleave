@@ -4,7 +4,6 @@ import net.minecraft.client.multiplayer.ChunkBatchSizeCalculator;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -20,6 +19,7 @@ import phanastrae.operation_starcleave.duck.LevelDuckInterface;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityAttachment;
 import phanastrae.operation_starcleave.entity.projectile.StarbleachedPearlEntity;
 import phanastrae.operation_starcleave.network.packet.*;
+import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 import phanastrae.operation_starcleave.world.firmament.FirmamentRegion;
 import phanastrae.operation_starcleave.world.firmament.FirmamentRegionHolder;
@@ -92,7 +92,7 @@ public class OperationStarcleaveClientPacketHandler {
                 pos.x,
                 pos.y,
                 pos.z,
-                SoundEvents.TRIDENT_THUNDER.value(),
+                OperationStarcleaveSoundEvents.FIRMAMENT_CLEAVE,
                 SoundSource.BLOCKS,
                 500.0F,
                 1.6F + world.random.nextFloat() * 0.2F,

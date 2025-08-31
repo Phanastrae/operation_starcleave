@@ -1,7 +1,6 @@
 package phanastrae.operation_starcleave.item;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -17,6 +16,7 @@ import net.minecraft.world.phys.Vec3;
 import phanastrae.operation_starcleave.block.PhlogisticFireBlock;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityAttachment;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypeTags;
+import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
 
 public class PhlogistonSacItem extends Item {
 
@@ -67,6 +67,6 @@ public class PhlogistonSacItem extends Item {
 
     protected void playUseSound(Level world, Vec3 pos) {
         RandomSource random = world.getRandom();
-        world.playSound(null, pos.x, pos.y, pos.z, SoundEvents.FIRECHARGE_USE, SoundSource.BLOCKS, 1.0F, (random.nextFloat() - random.nextFloat()) * 0.15F + 0.75F);
+        world.playSound(null, pos.x, pos.y, pos.z, OperationStarcleaveSoundEvents.PHLOGISTON_SAC_USE, SoundSource.BLOCKS, 1.0F, (random.nextFloat() - random.nextFloat()) * 0.15F + 0.75F);
     }
 }

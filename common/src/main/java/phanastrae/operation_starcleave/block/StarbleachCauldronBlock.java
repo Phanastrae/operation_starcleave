@@ -37,6 +37,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
 
 import static net.minecraft.core.cauldron.CauldronInteraction.newInteractionMap;
 
@@ -257,7 +258,7 @@ public class StarbleachCauldronBlock extends AbstractCauldronBlock {
         world.gameEvent(null, GameEvent.FLUID_PICKUP, blockPos);
 
         if(spawnParticles) {
-            world.playSound(null, blockPos, SoundEvents.BREWING_STAND_BREW, SoundSource.BLOCKS, 1.0F, 1.5F);
+            world.playSound(null, blockPos, OperationStarcleaveSoundEvents.STARBLEACH_CAULDRON_COLLECT, SoundSource.BLOCKS, 1.0F, 1.5F);
         } else {
             world.playSound(null, blockPos, SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
         }

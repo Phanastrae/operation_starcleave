@@ -1,6 +1,5 @@
 package phanastrae.operation_starcleave.item;
 
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -13,6 +12,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveDamageTypes;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
+import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
 
 public class StarfruitItem extends Item {
     public StarfruitItem(Properties settings) {
@@ -42,7 +42,7 @@ public class StarfruitItem extends Item {
 
             Vec3 vec3d = user.position();
             world.gameEvent(GameEvent.PROJECTILE_SHOOT, vec3d, GameEvent.Context.of(user));
-            world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.SPLASH_POTION_BREAK, SoundSource.PLAYERS);
+            world.playSound(null, user.getX(), user.getY(), user.getZ(), OperationStarcleaveSoundEvents.STARFRUIT_BURST, SoundSource.PLAYERS);
 
             user.hurt(OperationStarcleaveDamageTypes.source(world, OperationStarcleaveDamageTypes.INTERNAL_STARBLEACHING), 4);
         } else {

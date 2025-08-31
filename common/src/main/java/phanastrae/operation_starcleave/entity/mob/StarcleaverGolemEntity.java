@@ -399,7 +399,7 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
         }
 
         if(itemStack.is(Items.GUNPOWDER) && this.getGunpowderTicks() + 60 <= 600) {
-            SoundEvent soundEvent = SoundEvents.SAND_PLACE;
+            SoundEvent soundEvent = OperationStarcleaveSoundEvents.STARCLEAVER_GOLEM_EAT;
             world.playSound(player, this.getX(), this.getY(), this.getZ(), soundEvent, this.getSoundSource(), 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
             if (!world.isClientSide) {
                 this.setGunpowderTicks(this.getGunpowderTicks() + 60);
@@ -553,19 +553,25 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
 
     @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
-        this.playSound(OperationStarcleaveSoundEvents.ENTITY_STARCLEAVER_GOLEM_STEP, 0.45F, 0.8F + this.random.nextFloat() * 0.4F);
+        this.playSound(OperationStarcleaveSoundEvents.STARCLEAVER_GOLEM_STEP, 0.45F, 0.8F + this.random.nextFloat() * 0.4F);
     }
 
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return OperationStarcleaveSoundEvents.ENTITY_STARCLEAVER_GOLEM_AMBIENT;
+        return OperationStarcleaveSoundEvents.STARCLEAVER_GOLEM_AMBIENT;
     }
 
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
-        return OperationStarcleaveSoundEvents.ENTITY_STARCLEAVER_GOLEM_DEATH;
+        return OperationStarcleaveSoundEvents.STARCLEAVER_GOLEM_DEATH;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        return OperationStarcleaveSoundEvents.STARCLEAVER_GOLEM_HURT;
     }
 
     @Override
@@ -612,7 +618,7 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
 
     @Override
     public SoundEvent getPickupSound() {
-        return OperationStarcleaveSoundEvents.ENTITY_STARCLEAVER_GOLEM_AMBIENT;
+        return OperationStarcleaveSoundEvents.STARCLEAVER_GOLEM_AMBIENT;
     }
 
     @Override

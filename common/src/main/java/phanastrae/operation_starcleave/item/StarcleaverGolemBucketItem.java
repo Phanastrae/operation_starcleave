@@ -21,7 +21,7 @@ import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
 
 public class StarcleaverGolemBucketItem extends MobBucketItem {
     public StarcleaverGolemBucketItem(Properties settings) {
-        super(OperationStarcleaveEntityTypes.STARCLEAVER_GOLEM, Fluids.EMPTY, OperationStarcleaveSoundEvents.ENTITY_STARCLEAVER_GOLEM_AMBIENT, settings);
+        super(OperationStarcleaveEntityTypes.STARCLEAVER_GOLEM, Fluids.EMPTY, OperationStarcleaveSoundEvents.STARCLEAVER_GOLEM_AMBIENT, settings);
     }
 
     @Override

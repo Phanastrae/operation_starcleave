@@ -1,7 +1,6 @@
 package phanastrae.operation_starcleave.item;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -15,6 +14,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
+import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
 
 public class HollowedSacItem extends Item {
     public HollowedSacItem(Item.Properties settings) {
@@ -50,6 +50,6 @@ public class HollowedSacItem extends Item {
     }
 
     protected void playUseSound(Level world, BlockPos pos) {
-        world.playSound(null, pos, SoundEvents.GLOW_INK_SAC_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
+        world.playSound(null, pos, OperationStarcleaveSoundEvents.HOLLOWED_SAC_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
     }
 }

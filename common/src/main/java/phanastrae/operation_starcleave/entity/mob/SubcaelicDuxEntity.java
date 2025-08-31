@@ -9,7 +9,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.util.Mth;
@@ -41,6 +41,7 @@ import phanastrae.operation_starcleave.block.StellarFarmlandBlock;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
 import phanastrae.operation_starcleave.entity.projectile.PhlogisticSparkEntity;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
+import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 
 import java.util.ArrayList;
@@ -194,6 +195,21 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
     }
 
     @Override
+    protected SoundEvent getAmbientSound() {
+        return OperationStarcleaveSoundEvents.SUBCAELIC_DUX_AMBIENT;
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return OperationStarcleaveSoundEvents.SUBCAELIC_DUX_HURT;
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return OperationStarcleaveSoundEvents.SUBCAELIC_DUX_DEATH;
+    }
+
+    @Override
     public void die(DamageSource damageSource) {
         if(!this.isRemoved() && !this.dead) {
             Level level = this.level();
@@ -238,7 +254,7 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
 
         if(level.isClientSide && this.getRandom().nextInt(8) == 0) {
             this.spawnSmokeBurst();
-            level.playLocalSound(this, SoundEvents.FIRECHARGE_USE, SoundSource.HOSTILE, 4f, 0.7F + 0.5F * this.getRandom().nextFloat());
+            level.playLocalSound(this, OperationStarcleaveSoundEvents.SUBCAELIC_DUX_BURST, SoundSource.HOSTILE, 4f, 0.7F + 0.5F * this.getRandom().nextFloat());
         }
 
         if(!this.isRemoved() && (this.ticksSinceDeath >= 400 || (this.ticksSinceDeath >= 240 && this.onGround()))) {
@@ -298,7 +314,7 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
             this.level().addFreshEntity(spark);
         }
 
-        this.level().playSound(null, this.getX(), this.getY() + this.getBbHeight() / 2F, this.getZ(), SoundEvents.GENERIC_EXPLODE, SoundSource.HOSTILE, 7f, 0.4F + 0.5F * this.getRandom().nextFloat());
+        this.level().playSound(null, this.getX(), this.getY() + this.getBbHeight() / 2F, this.getZ(), OperationStarcleaveSoundEvents.SUBCAELIC_DUX_EXPLODE, SoundSource.HOSTILE, 7f, 0.4F + 0.5F * this.getRandom().nextFloat());
     }
 
     @Override

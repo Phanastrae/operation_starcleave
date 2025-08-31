@@ -2,7 +2,6 @@ package phanastrae.operation_starcleave.block;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -18,6 +17,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityAttachment;
+import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
 
 public class StellarRepulsorBlock extends Block {
     public static final MapCodec<StellarRepulsorBlock> CODEC = simpleCodec(StellarRepulsorBlock::new);
@@ -114,6 +114,6 @@ public class StellarRepulsorBlock extends Block {
             entity.setDeltaMovement(horizontalSpeed * sinYaw, verticalSpeed, horizontalSpeed * cosYaw);
         }
 
-        entity.level().playSeededSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 0.5F, 0.6F + 0.4F * entity.level().random.nextFloat(), entity.level().random.nextLong());
+        entity.level().playSeededSound(null, entity.getX(), entity.getY(), entity.getZ(), OperationStarcleaveSoundEvents.REPULSOR_LAUNCH, SoundSource.BLOCKS, 0.5F, 0.6F + 0.4F * entity.level().random.nextFloat(), entity.level().random.nextLong());
     }
 }
