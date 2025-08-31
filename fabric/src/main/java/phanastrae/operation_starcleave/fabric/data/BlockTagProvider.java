@@ -34,14 +34,17 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         );
 
         getOrCreateTagBuilder(BlockTags.WALLS).add(
+                STARDUST_BRICK_WALL,
                 STARBLEACHED_TILE_WALL
         );
 
         getOrCreateTagBuilder(BlockTags.STAIRS).add(
+                STARDUST_BRICK_STAIRS,
                 STARBLEACHED_TILE_STAIRS
         );
 
         getOrCreateTagBuilder(BlockTags.SLABS).add(
+                STARDUST_BRICK_SLAB,
                 STARBLEACHED_TILE_SLAB,
                 STELLAR_TILE_SLAB
         );
@@ -118,6 +121,11 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 STELLAR_TILE_SLAB,
                 STELLAR_REPULSOR,
 
+                STARDUST_BRICKS,
+                STARDUST_BRICK_STAIRS,
+                STARDUST_BRICK_SLAB,
+                STARDUST_BRICK_WALL,
+
                 COAGULATED_PLASMA,
                 PLASMA_ICE
         );
@@ -135,6 +143,12 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 STELLAR_REPULSOR,
 
                 STARDUST_BLOCK,
+
+                STARDUST_BRICKS,
+                STARDUST_BRICK_STAIRS,
+                STARDUST_BRICK_SLAB,
+                STARDUST_BRICK_WALL,
+
                 COAGULATED_PLASMA
         );
 

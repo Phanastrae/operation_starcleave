@@ -15,6 +15,10 @@
     "operation_starcleave:stellar_tiles",
     "operation_starcleave:stellar_tile_slab",
     "operation_starcleave:stellar_repulsor",
+    "operation_starcleave:stardust_bricks",
+    "operation_starcleave:stardust_brick_stairs",
+    "operation_starcleave:stardust_brick_slab",
+    "operation_starcleave:stardust_brick_wall",
     "operation_starcleave:coagulated_plasma",
     "operation_starcleave:plasma_ice"
   ]

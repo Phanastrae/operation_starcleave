@@ -43,6 +43,11 @@ public class ModelProvider extends FabricModelProvider {
         BMG.woodProvider(STARBLEACHED_LOG).logWithHorizontal(STARBLEACHED_LOG).wood(STARBLEACHED_WOOD);
         BMG.woodProvider(NUCLEIC_FISSUREROOT).logWithHorizontal(NUCLEIC_FISSUREROOT);
 
+        BMG.family(STARDUST_BRICKS)
+                .slab(STARDUST_BRICK_SLAB)
+                .stairs(STARDUST_BRICK_STAIRS)
+                .wall(STARDUST_BRICK_WALL);
+
         BMG.family(STARBLEACHED_TILES)
                 .slab(STARBLEACHED_TILE_SLAB)
                 .stairs(STARBLEACHED_TILE_STAIRS)

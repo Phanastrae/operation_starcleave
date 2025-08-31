@@ -20,9 +20,14 @@ public class RecipeProvider extends FabricRecipeProvider {
 
     @Override
     public void buildRecipes(RecipeOutput exporter) {
+        slab(exporter, RecipeCategory.BUILDING_BLOCKS, OperationStarcleaveItems.STARDUST_BRICK_SLAB, OperationStarcleaveItems.STARDUST_BRICKS);
+        wall(exporter, RecipeCategory.BUILDING_BLOCKS, OperationStarcleaveItems.STARDUST_BRICK_WALL, OperationStarcleaveItems.STARDUST_BRICKS);
+
         slab(exporter, RecipeCategory.BUILDING_BLOCKS, OperationStarcleaveItems.STARBLEACHED_TILE_SLAB, OperationStarcleaveItems.STARBLEACHED_TILES);
         wall(exporter, RecipeCategory.BUILDING_BLOCKS, OperationStarcleaveItems.STARBLEACHED_TILE_WALL, OperationStarcleaveItems.STARBLEACHED_TILES);
+
         slab(exporter, RecipeCategory.BUILDING_BLOCKS, OperationStarcleaveItems.STELLAR_TILE_SLAB, OperationStarcleaveItems.STELLAR_TILES);
+
         woodFromLogs(exporter, OperationStarcleaveBlocks.STARBLEACHED_WOOD, OperationStarcleaveBlocks.STARBLEACHED_LOG);
 
         // shapeless
@@ -74,6 +79,14 @@ public class RecipeProvider extends FabricRecipeProvider {
                         has(OperationStarcleaveItems.STARDUST_CLUSTER))
                 .save(exporter);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, OperationStarcleaveItems.STARDUST_BRICKS, 4)
+                .define('#', OperationStarcleaveItems.STARDUST_BLOCK)
+                .pattern("##").pattern("##")
+                .unlockedBy(
+                        getHasName(OperationStarcleaveItems.STARDUST_BLOCK),
+                        has(OperationStarcleaveItems.STARDUST_BLOCK))
+                .save(exporter);
+
         ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, OperationStarcleaveItems.STELLAR_TILES, 4)
                 .define('#', OperationStarcleaveItems.STELLAR_SEDIMENT)
                 .pattern("##").pattern("##")
@@ -106,6 +119,12 @@ public class RecipeProvider extends FabricRecipeProvider {
                 .unlockedBy(
                         getHasName(OperationStarcleaveItems.BLESSED_CLOTH),
                         has(OperationStarcleaveItems.BLESSED_CLOTH))
+                .save(exporter);
+
+        stairBuilder(OperationStarcleaveItems.STARDUST_BRICK_STAIRS, Ingredient.of(OperationStarcleaveItems.STARDUST_BRICKS))
+                .unlockedBy(
+                        getHasName(OperationStarcleaveItems.STARDUST_BRICKS),
+                        has(OperationStarcleaveItems.STARDUST_BRICKS))
                 .save(exporter);
 
         stairBuilder(OperationStarcleaveItems.STARBLEACHED_TILE_STAIRS, Ingredient.of(OperationStarcleaveItems.STARBLEACHED_TILES))

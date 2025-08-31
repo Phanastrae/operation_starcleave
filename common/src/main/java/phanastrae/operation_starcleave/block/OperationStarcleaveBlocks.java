@@ -115,6 +115,20 @@ public class OperationStarcleaveBlocks {
             .isValidSpawn(SPAWN_NEVER)
             .lightLevel(constant(9))
     );
+
+    public static final Block STARDUST_BRICKS = new Block(settings()
+            .strength(0.6F, 0.4F)
+            .mapColor(ICE)
+            .sound(TUFF_BRICKS)
+            .instrument(BASEDRUM)
+            .isValidSpawn(SPAWN_NEVER)
+            .lightLevel(constant(9))
+            .requiresCorrectToolForDrops()
+    );
+    public static final Block STARDUST_BRICK_STAIRS = stairsOf(STARDUST_BRICKS);
+    public static final Block STARDUST_BRICK_SLAB = slabOf(STARDUST_BRICKS);
+    public static final Block STARDUST_BRICK_WALL = wallOf(STARDUST_BRICKS);
+
     public static final Block STARDUST_CLUSTER = new StardustClusterBlock(settings()
             .lightLevel(constant(15))
             .replaceable()
@@ -330,6 +344,11 @@ public class OperationStarcleaveBlocks {
 
         r.accept(id("stardust_block"), STARDUST_BLOCK);
         r.accept(id("stardust_cluster"), STARDUST_CLUSTER);
+
+        r.accept(id("stardust_bricks"), STARDUST_BRICKS);
+        r.accept(id("stardust_brick_stairs"), STARDUST_BRICK_STAIRS);
+        r.accept(id("stardust_brick_slab"), STARDUST_BRICK_SLAB);
+        r.accept(id("stardust_brick_wall"), STARDUST_BRICK_WALL);
 
         r.accept(id("starbleached_log"), STARBLEACHED_LOG);
         r.accept(id("starbleached_wood"), STARBLEACHED_WOOD);

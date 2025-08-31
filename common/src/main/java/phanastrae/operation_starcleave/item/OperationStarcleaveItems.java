@@ -33,6 +33,11 @@ public class OperationStarcleaveItems {
     public static final Item STARDUST_BLOCK = blockItem(OperationStarcleaveBlocks.STARDUST_BLOCK);
     public static final Item STARDUST_CLUSTER = blockItem(OperationStarcleaveBlocks.STARDUST_CLUSTER);
 
+    public static final Item STARDUST_BRICKS = blockItem(OperationStarcleaveBlocks.STARDUST_BRICKS);
+    public static final Item STARDUST_BRICK_STAIRS = blockItem(OperationStarcleaveBlocks.STARDUST_BRICK_STAIRS);
+    public static final Item STARDUST_BRICK_SLAB = blockItem(OperationStarcleaveBlocks.STARDUST_BRICK_SLAB);
+    public static final Item STARDUST_BRICK_WALL = blockItem(OperationStarcleaveBlocks.STARDUST_BRICK_WALL);
+
     public static final Item STARBLEACHED_LOG = blockItem(OperationStarcleaveBlocks.STARBLEACHED_LOG);
     public static final Item STARBLEACHED_WOOD = blockItem(OperationStarcleaveBlocks.STARBLEACHED_WOOD);
 
@@ -143,6 +148,11 @@ public class OperationStarcleaveItems {
 
         rwt.accept("stardust_block", STARDUST_BLOCK);
         rwt.accept("stardust_cluster", STARDUST_CLUSTER);
+
+        rwt.accept("stardust_bricks", STARDUST_BRICKS);
+        rwt.accept("stardust_brick_stairs", STARDUST_BRICK_STAIRS);
+        rwt.accept("stardust_brick_slab", STARDUST_BRICK_SLAB);
+        rwt.accept("stardust_brick_wall", STARDUST_BRICK_WALL);
 
         rwt.accept("starbleached_log", STARBLEACHED_LOG);
         rwt.accept("starbleached_wood", STARBLEACHED_WOOD);

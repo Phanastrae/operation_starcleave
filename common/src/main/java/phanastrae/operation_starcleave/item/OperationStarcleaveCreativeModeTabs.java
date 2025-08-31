@@ -58,20 +58,31 @@ public class OperationStarcleaveCreativeModeTabs {
         // Building Blocks
         helper.addAfter(Items.WARPED_BUTTON, BUILDING_BLOCKS,
                 STARBLEACHED_LOG,
-                STARBLEACHED_WOOD);
+                STARBLEACHED_WOOD
+        );
         helper.add(BUILDING_BLOCKS,
+                STARDUST_BRICKS,
+                STARDUST_BRICK_STAIRS,
+                STARDUST_BRICK_SLAB,
+                STARDUST_BRICK_WALL,
+
                 STARBLEACHED_TILES,
                 STARBLEACHED_TILE_STAIRS,
                 STARBLEACHED_TILE_SLAB,
                 STARBLEACHED_TILE_WALL,
+
                 CHISELED_STARBLEACHED_TILES,
                 IMBUED_STARBLEACHED_TILES,
+
                 STELLAR_TILES,
                 STELLAR_TILE_SLAB,
+
                 STARDUST_CLUSTER,
+
                 BLESSED_CLOTH_BLOCK,
                 BLESSED_CLOTH_CARPET,
-                BLESSED_CLOTH_CURTAIN);
+                BLESSED_CLOTH_CURTAIN
+        );
 
         // Natural
         helper.addAfter(Items.END_STONE, NATURAL_BLOCKS,
@@ -79,33 +90,41 @@ public class OperationStarcleaveCreativeModeTabs {
                 STELLAR_SEDIMENT,
                 STELLAR_MULCH,
                 STELLAR_FARMLAND,
-                STARDUST_BLOCK);
+                STARDUST_BLOCK
+        );
         helper.addAfter(Items.WARPED_STEM, NATURAL_BLOCKS,
-                STARBLEACHED_LOG);
+                STARBLEACHED_LOG
+        );
         helper.addAfter(Items.FLOWERING_AZALEA_LEAVES, NATURAL_BLOCKS,
-                STARBLEACHED_LEAVES);
+                STARBLEACHED_LEAVES
+        );
         helper.addAfter(Items.HANGING_ROOTS, NATURAL_BLOCKS,
                 MULCHBORNE_TUFT,
-                SHORT_HOLY_MOSS);
+                SHORT_HOLY_MOSS
+        );
         helper.addAfter(Items.NETHER_WART, NATURAL_BLOCKS,
                 BISREED_ROOT
         );
 
         // Functional
         helper.addAfter(Items.DRAGON_HEAD, FUNCTIONAL_BLOCKS,
-                NETHERITE_PUMPKIN);
+                NETHERITE_PUMPKIN
+        );
         helper.add(FUNCTIONAL_BLOCKS,
                 STARDUST_CLUSTER,
                 STARBLEACHED_LEAVES,
                 BLESSED_CLOTH_BLOCK,
-                BLESSED_CLOTH_CARPET);
+                BLESSED_CLOTH_CARPET
+        );
         helper.addAfter(Items.PINK_BED, FUNCTIONAL_BLOCKS,
-                BLESSED_BED);
+                BLESSED_BED
+        );
 
         // Redstone
         helper.add(REDSTONE_BLOCKS,
                 STARBLEACHED_PEARL_BLOCK,
-                STELLAR_REPULSOR);
+                STELLAR_REPULSOR
+        );
 
         // Tools
         helper.add(TOOLS_AND_UTILITIES,
@@ -113,21 +132,25 @@ public class OperationStarcleaveCreativeModeTabs {
                 FIRMAMENT_REJUVENATOR,
                 STARCLEAVER_GOLEM_BUCKET,
                 HOLLOWED_SAC,
-                PHLOGISTON_SAC);
+                PHLOGISTON_SAC
+        );
 
         // Combat
         helper.addBefore(Items.TURTLE_HELMET, COMBAT,
-                NETHERITE_PUMPKIN);
+                NETHERITE_PUMPKIN
+        );
         helper.addAfter(Items.DIAMOND_HORSE_ARMOR, COMBAT,
                 BISMUTH_PEGASUS_ARMOR
         );
 
         // Food and Drink
         helper.addAfter(Items.CHORUS_FRUIT, FOOD_AND_DRINKS,
-                STARFRUIT);
+                STARFRUIT
+        );
         helper.add(FOOD_AND_DRINKS,
                 STARBLEACH_BOTTLE,
-                SPLASH_STARBLEACH_BOTTLE);
+                SPLASH_STARBLEACH_BOTTLE
+        );
 
         // Ingredients
         helper.addAfter(Items.NETHERITE_INGOT, INGREDIENTS,
@@ -137,18 +160,21 @@ public class OperationStarcleaveCreativeModeTabs {
         helper.addAfter(Items.EXPERIENCE_BOTTLE, INGREDIENTS,
                 STARBLEACH_BOTTLE,
                 HOLY_STRANDS,
-                BLESSED_CLOTH);
+                BLESSED_CLOTH
+        );
 
         // Spawn Eggs
         helper.add(SPAWN_EGGS,
                 STARCLEAVER_GOLEM_SPAWN_EGG,
                 SUBCAELIC_TORPEDO_SPAWN_EGG,
-                SUBCAELIC_DUX_SPAWN_EGG);
+                SUBCAELIC_DUX_SPAWN_EGG
+        );
 
         // Operator
         if(helper.operatorTabEnabled()) {
             helper.add(OP_BLOCKS,
-                    FIRMAMENT_MANIPULATOR);
+                    FIRMAMENT_MANIPULATOR
+            );
         }
     }
 

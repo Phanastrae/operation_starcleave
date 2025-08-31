@@ -42,6 +42,10 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
 
         dropSelf(NETHERITE_PUMPKIN);
         dropSelf(STELLAR_SEDIMENT);
+        dropSelf(STARDUST_BRICKS);
+        dropSelf(STARDUST_BRICK_STAIRS);
+        dropSelf(STARDUST_BRICK_SLAB);
+        dropSelf(STARDUST_BRICK_WALL);
         dropSelf(STARBLEACHED_LOG);
         dropSelf(STARBLEACHED_WOOD);
         dropSelf(STARBLEACHED_LEAVES);
