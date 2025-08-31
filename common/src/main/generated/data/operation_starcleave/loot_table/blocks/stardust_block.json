@@ -30,11 +30,6 @@
             },
             {
               "type": "minecraft:item",
-              "conditions": [
-                {
-                  "condition": "minecraft:survives_explosion"
-                }
-              ],
               "functions": [
                 {
                   "add": false,
@@ -56,6 +51,5 @@
       ],
       "rolls": 1.0
     }
-  ],
-  "random_sequence": "operation_starcleave:blocks/stardust_block"
+  ]
 }

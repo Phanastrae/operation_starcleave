@@ -1,17 +1,17 @@
 {
   "values": [
+    "operation_starcleave:stardust_bricks",
+    "operation_starcleave:stardust_brick_slab",
+    "operation_starcleave:stardust_brick_stairs",
+    "operation_starcleave:stardust_brick_wall",
+    "operation_starcleave:stellar_tiles",
+    "operation_starcleave:stellar_tile_slab",
     "operation_starcleave:stellar_sediment",
     "operation_starcleave:stellar_mulch",
     "operation_starcleave:stellar_farmland",
     "operation_starcleave:holy_moss",
-    "operation_starcleave:stellar_tiles",
-    "operation_starcleave:stellar_tile_slab",
     "operation_starcleave:stellar_repulsor",
     "operation_starcleave:stardust_block",
-    "operation_starcleave:stardust_bricks",
-    "operation_starcleave:stardust_brick_stairs",
-    "operation_starcleave:stardust_brick_slab",
-    "operation_starcleave:stardust_brick_wall",
     "operation_starcleave:coagulated_plasma"
   ]
 }

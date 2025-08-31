@@ -25,9 +25,6 @@
                 {
                   "chance": 0.3,
                   "condition": "minecraft:random_chance"
-                },
-                {
-                  "condition": "minecraft:survives_explosion"
                 }
               ],
               "functions": [
@@ -50,6 +47,5 @@
       ],
       "rolls": 1.0
     }
-  ],
-  "random_sequence": "operation_starcleave:blocks/short_holy_moss"
+  ]
 }

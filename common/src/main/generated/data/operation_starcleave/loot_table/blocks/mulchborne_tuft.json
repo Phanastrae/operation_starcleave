@@ -3,22 +3,21 @@
   "pools": [
     {
       "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:match_tool",
+          "predicate": {
+            "items": "minecraft:shears"
+          }
+        }
+      ],
       "entries": [
         {
           "type": "minecraft:item",
-          "conditions": [
-            {
-              "condition": "minecraft:match_tool",
-              "predicate": {
-                "items": "minecraft:shears"
-              }
-            }
-          ],
           "name": "operation_starcleave:mulchborne_tuft"
         }
       ],
       "rolls": 1.0
     }
-  ],
-  "random_sequence": "operation_starcleave:blocks/mulchborne_tuft"
+  ]
 }

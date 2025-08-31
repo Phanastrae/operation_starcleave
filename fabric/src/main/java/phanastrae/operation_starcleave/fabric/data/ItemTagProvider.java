@@ -7,6 +7,8 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import org.jetbrains.annotations.Nullable;
+import phanastrae.operation_starcleave.block.tag.OperationStarcleaveBlockTags;
+import phanastrae.operation_starcleave.item.tag.OperationStarcleaveItemTags;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -23,17 +25,17 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
         this.copy(BlockTags.WOOL, ItemTags.WOOL);
         //this.copy(BlockTags.PLANKS, ItemTags.PLANKS);
         //this.copy(BlockTags.STONE_BRICKS, ItemTags.STONE_BRICKS);
-        //this.copy(BlockTags.WOODEN_BUTTONS, ItemTags.WOODEN_BUTTONS);
-        //this.copy(BlockTags.STONE_BUTTONS, ItemTags.STONE_BUTTONS);
-        //this.copy(BlockTags.BUTTONS, ItemTags.BUTTONS);
+        this.copy(BlockTags.WOODEN_BUTTONS, ItemTags.WOODEN_BUTTONS);
+        this.copy(BlockTags.STONE_BUTTONS, ItemTags.STONE_BUTTONS);
+        this.copy(BlockTags.BUTTONS, ItemTags.BUTTONS);
         this.copy(BlockTags.WOOL_CARPETS, ItemTags.WOOL_CARPETS);
-        //this.copy(BlockTags.WOODEN_DOORS, ItemTags.WOODEN_DOORS);
-        //this.copy(BlockTags.WOODEN_STAIRS, ItemTags.WOODEN_STAIRS);
-        //this.copy(BlockTags.WOODEN_SLABS, ItemTags.WOODEN_SLABS);
-        //this.copy(BlockTags.WOODEN_FENCES, ItemTags.WOODEN_FENCES);
-        //this.copy(BlockTags.FENCE_GATES, ItemTags.FENCE_GATES);
-        //this.copy(BlockTags.WOODEN_PRESSURE_PLATES, ItemTags.WOODEN_PRESSURE_PLATES);
-        //this.copy(BlockTags.DOORS, ItemTags.DOORS);
+        this.copy(BlockTags.WOODEN_DOORS, ItemTags.WOODEN_DOORS);
+        this.copy(BlockTags.WOODEN_STAIRS, ItemTags.WOODEN_STAIRS);
+        this.copy(BlockTags.WOODEN_SLABS, ItemTags.WOODEN_SLABS);
+        this.copy(BlockTags.WOODEN_FENCES, ItemTags.WOODEN_FENCES);
+        this.copy(BlockTags.FENCE_GATES, ItemTags.FENCE_GATES);
+        this.copy(BlockTags.WOODEN_PRESSURE_PLATES, ItemTags.WOODEN_PRESSURE_PLATES);
+        this.copy(BlockTags.DOORS, ItemTags.DOORS);
         //this.copy(BlockTags.SAPLINGS, ItemTags.SAPLINGS);
         //this.copy(BlockTags.BAMBOO_BLOCKS, ItemTags.BAMBOO_BLOCKS);
         //this.copy(BlockTags.OAK_LOGS, ItemTags.OAK_LOGS);
@@ -57,11 +59,11 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
         //this.copy(BlockTags.ANVIL, ItemTags.ANVIL);
         //this.copy(BlockTags.RAILS, ItemTags.RAILS);
         this.copy(BlockTags.LEAVES, ItemTags.LEAVES);
-        //this.copy(BlockTags.WOODEN_TRAPDOORS, ItemTags.WOODEN_TRAPDOORS);
-        //this.copy(BlockTags.TRAPDOORS, ItemTags.TRAPDOORS);
+        this.copy(BlockTags.WOODEN_TRAPDOORS, ItemTags.WOODEN_TRAPDOORS);
+        this.copy(BlockTags.TRAPDOORS, ItemTags.TRAPDOORS);
         //this.copy(BlockTags.SMALL_FLOWERS, ItemTags.SMALL_FLOWERS);
         this.copy(BlockTags.BEDS, ItemTags.BEDS);
-        //this.copy(BlockTags.FENCES, ItemTags.FENCES);
+        this.copy(BlockTags.FENCES, ItemTags.FENCES);
         //this.copy(BlockTags.TALL_FLOWERS, ItemTags.TALL_FLOWERS);
         //this.copy(BlockTags.FLOWERS, ItemTags.FLOWERS);
         //this.copy(BlockTags.SOUL_FIRE_BASE_BLOCKS, ItemTags.SOUL_FIRE_BASE_BLOCKS);
@@ -81,36 +83,45 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
         //this.copy(BlockTags.STANDING_SIGNS, ItemTags.SIGNS);
         //this.copy(BlockTags.CEILING_HANGING_SIGNS, ItemTags.HANGING_SIGNS);
 
+        this.copy(OperationStarcleaveBlockTags.STARBLEACHED_LOGS, OperationStarcleaveItemTags.STARBLEACHED_LOGS);
+
         // vanilla
-        getOrCreateTagBuilder(ItemTags.VILLAGER_PLANTABLE_SEEDS).add(
-                BISREED_ROOT
-        );
+        getOrCreateTagBuilder(ItemTags.VILLAGER_PLANTABLE_SEEDS)
+                .add(
+                        BISREED_ROOT
+                );
 
         // convention
-        getOrCreateTagBuilder(ConventionalItemTags.FOODS).add(
-                STARFRUIT
-        );
+        getOrCreateTagBuilder(ConventionalItemTags.FOODS)
+                .add(
+                        STARFRUIT
+                );
 
-        getOrCreateTagBuilder(ConventionalItemTags.FRUIT_FOODS).add(
-                STARFRUIT
-        );
+        getOrCreateTagBuilder(ConventionalItemTags.FRUIT_FOODS)
+                .add(
+                        STARFRUIT
+                );
 
-        getOrCreateTagBuilder(ConventionalItemTags.CANDY_FOODS).add(
-                STARFRUIT
-        );
+        getOrCreateTagBuilder(ConventionalItemTags.CANDY_FOODS)
+                .add(
+                        STARFRUIT
+                );
 
-        getOrCreateTagBuilder(ConventionalItemTags.FOOD_POISONING_FOODS).add(
-                STARFRUIT
-        );
+        getOrCreateTagBuilder(ConventionalItemTags.FOOD_POISONING_FOODS)
+                .add(
+                        STARFRUIT
+                );
 
-        getOrCreateTagBuilder(ConventionalItemTags.BUCKETS).add(
-                STARCLEAVER_GOLEM_BUCKET,
-                PETRICHORIC_PLASMA_BUCKET
-        );
+        getOrCreateTagBuilder(ConventionalItemTags.BUCKETS)
+                .add(
+                        STARCLEAVER_GOLEM_BUCKET,
+                        PETRICHORIC_PLASMA_BUCKET
+                );
 
-        getOrCreateTagBuilder(ConventionalItemTags.CROPS).add(
-                BISREED_ROOT,
-                BISMUTH_FLAKE
-        );
+        getOrCreateTagBuilder(ConventionalItemTags.CROPS)
+                .add(
+                        BISREED_ROOT,
+                        BISMUTH_FLAKE
+                );
     }
 }

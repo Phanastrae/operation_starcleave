@@ -4,7 +4,7 @@
   "group": "planks",
   "ingredients": [
     {
-      "item": "operation_starcleave:starbleached_log"
+      "tag": "operation_starcleave:starbleached_logs"
     }
   ],
   "result": {

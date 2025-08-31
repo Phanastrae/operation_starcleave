@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_starbleached_tiles": {
+    "has_starbleached_tile_slab": {
       "conditions": {
         "items": [
           {
-            "items": "operation_starcleave:starbleached_tiles"
+            "items": "operation_starcleave:starbleached_tile_slab"
           }
         ]
       },
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_starbleached_tiles"
+      "has_starbleached_tile_slab"
     ]
   ],
   "rewards": {

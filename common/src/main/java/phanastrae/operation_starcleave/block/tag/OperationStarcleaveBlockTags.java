@@ -6,9 +6,15 @@ import net.minecraft.world.level.block.Block;
 import phanastrae.operation_starcleave.OperationStarcleave;
 
 public class OperationStarcleaveBlockTags {
-    public static final TagKey<Block> STARBLEACHED = TagKey.create(Registries.BLOCK, OperationStarcleave.id("starbleached"));
-    public static final TagKey<Block> ALLOWS_BISREED_PLANTING = TagKey.create(Registries.BLOCK, OperationStarcleave.id("allows_bisreed_planting"));
-    public static final TagKey<Block> STARBLEACH_IMMUNE = TagKey.create(Registries.BLOCK, OperationStarcleave.id("starbleach_immune"));
-    public static final TagKey<Block> PHLOGISTIC_HYPERFLAMMABLES = TagKey.create(Registries.BLOCK, OperationStarcleave.id("phlogistic_hyperflammables"));
-    public static final TagKey<Block> NUCLEOSYNTHESEED_BLAST_IMMUNE = TagKey.create(Registries.BLOCK, OperationStarcleave.id("nucleosyntheseed_blast_immune"));
+    public static final TagKey<Block> STARBLEACHED = of("starbleached");
+    public static final TagKey<Block> ALLOWS_BISREED_PLANTING = of("allows_bisreed_planting");
+    public static final TagKey<Block> STARBLEACH_IMMUNE = of("starbleach_immune");
+    public static final TagKey<Block> PHLOGISTIC_HYPERFLAMMABLES = of("phlogistic_hyperflammables");
+    public static final TagKey<Block> NUCLEOSYNTHESEED_BLAST_IMMUNE = of("nucleosyntheseed_blast_immune");
+
+    public static final TagKey<Block> STARBLEACHED_LOGS = of("starbleached_logs");
+
+    private static TagKey<Block> of(String id) {
+        return TagKey.create(Registries.BLOCK, OperationStarcleave.id(id));
+    }
 }
