@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_stellar_tiles": {
+      "conditions": {
+        "items": [
+          {
+            "items": "operation_starcleave:stellar_tiles"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:stellar_tile_slab_from_stellar_tiles_stonecutting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_stellar_tiles"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:stellar_tile_slab_from_stellar_tiles_stonecutting"
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_starbleached_wood": {
+      "conditions": {
+        "items": [
+          {
+            "items": "operation_starcleave:starbleached_wood"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:starbleached_tile_wall_from_starbleached_wood_stonecutting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_starbleached_wood"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:starbleached_tile_wall_from_starbleached_wood_stonecutting"
+    ]
+  }
+}

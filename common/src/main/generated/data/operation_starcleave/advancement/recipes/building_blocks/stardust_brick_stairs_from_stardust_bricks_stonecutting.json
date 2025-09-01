@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_stardust_bricks": {
+      "conditions": {
+        "items": [
+          {
+            "items": "operation_starcleave:stardust_bricks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:stardust_brick_stairs_from_stardust_bricks_stonecutting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_stardust_bricks"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:stardust_brick_stairs_from_stardust_bricks_stonecutting"
+    ]
+  }
+}

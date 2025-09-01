@@ -33,7 +33,7 @@ public class RecipeProvider extends FabricRecipeProvider {
 
         woodFromLogs(exporter, STARBLEACHED_WOOD, STARBLEACHED_LOG);
 
-        // shapeless
+        // region shapeless crafting
         planksFromLog(exporter, STARBLEACHED_TILES, OperationStarcleaveItemTags.STARBLEACHED_LOGS, 4);
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, SPLASH_STARBLEACH_BOTTLE, 5)
@@ -50,8 +50,9 @@ public class RecipeProvider extends FabricRecipeProvider {
                         getHasName(STARFLAKED_BISMUTH),
                         has(STARFLAKED_BISMUTH))
                 .save(exporter);
+        // endregion
 
-        // shaped
+        // region shaped crafting
         twoByTwoPacker(exporter, RecipeCategory.MISC, BLESSED_CLOTH, HOLY_STRANDS);
         twoByTwoPacker(exporter, RecipeCategory.BUILDING_BLOCKS, BLESSED_CLOTH_BLOCK, BLESSED_CLOTH, 2);
         twoByTwoPacker(exporter, RecipeCategory.BUILDING_BLOCKS, STARDUST_BLOCK, STARDUST_CLUSTER);
@@ -156,14 +157,40 @@ public class RecipeProvider extends FabricRecipeProvider {
                         has(STARFLAKED_BISMUTH)
                 )
                 .save(exporter);
+        // endregion
 
-        // smithing
+        // region stonecutting
+        // stardust bricks
+        scBlocks(exporter, STARDUST_BRICK_STAIRS, 1, STARDUST_BRICKS);
+        scBlocks(exporter, STARDUST_BRICK_SLAB, 2, STARDUST_BRICKS);
+        scWalls(exporter, STARDUST_BRICK_WALL, 1, STARDUST_BRICKS);
+
+        // 1:1 wood:log recipe, slightly better than the normal 3:4 wood:log crafting recipe
+        scBlocks(exporter, STARBLEACHED_WOOD, 1, STARBLEACHED_LOG);
+        // starbleached tiles (from log/wood)
+        scBlocks(exporter, STARBLEACHED_TILES, 4, STARBLEACHED_LOG, STARBLEACHED_WOOD);
+        scBlocks(exporter, STARBLEACHED_TILE_STAIRS, 4, STARBLEACHED_LOG, STARBLEACHED_WOOD);
+        scBlocks(exporter, STARBLEACHED_TILE_SLAB, 8, STARBLEACHED_LOG, STARBLEACHED_WOOD);
+        scWalls(exporter, STARBLEACHED_TILE_WALL, 4, STARBLEACHED_LOG, STARBLEACHED_WOOD);
+        scBlocks(exporter, CHISELED_STARBLEACHED_TILES, 4, STARBLEACHED_LOG, STARBLEACHED_WOOD);
+        // starbleached tiles
+        scBlocks(exporter, STARBLEACHED_TILE_STAIRS, 1, STARBLEACHED_TILES);
+        scBlocks(exporter, STARBLEACHED_TILE_SLAB, 2, STARBLEACHED_TILES);
+        scWalls(exporter, STARBLEACHED_TILE_WALL, 1, STARBLEACHED_TILES);
+        scBlocks(exporter, CHISELED_STARBLEACHED_TILES, 1, STARBLEACHED_TILES);
+
+        // stellar tiles
+        scBlocks(exporter, STELLAR_TILE_SLAB, 2, STELLAR_TILES);
+        // endregion
+
+        // region smithing
         SmithingTransformRecipeBuilder.smithing(Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), Ingredient.of(Items.CARVED_PUMPKIN), Ingredient.of(Items.NETHERITE_INGOT), RecipeCategory.TOOLS, NETHERITE_PUMPKIN)
                 .unlocks(
                         getHasName(Items.NETHERITE_INGOT),
                         has(Items.NETHERITE_INGOT)
                 )
                 .save(exporter, OperationStarcleave.id("netherite_pumpkin_smithing"));
+        // endregion
     }
 
     private static void savePolished(ItemLike polished, ItemLike material, RecipeOutput exporter) {
@@ -177,5 +204,27 @@ public class RecipeProvider extends FabricRecipeProvider {
                 .pattern("##")
                 .unlockedBy(getHasName(unpacked), has(unpacked))
                 .save(recipeOutput);
+    }
+
+    private static void scBlocks(RecipeOutput recipeOutput, ItemLike result, int amount, ItemLike... materials) {
+        for(ItemLike material : materials) {
+            scBuildingBlock(recipeOutput, result, material, amount);
+        }
+    }
+
+    private static void scWalls(RecipeOutput recipeOutput, ItemLike result, int amount, ItemLike... materials) {
+        for(ItemLike material : materials) {
+            scDecoration(recipeOutput, result, material, amount);
+        }
+    }
+
+    private static void scBuildingBlock(RecipeOutput recipeOutput, ItemLike result, ItemLike material, int amount) {
+        // use this for non-walls
+        stonecutterResultFromBase(recipeOutput, RecipeCategory.BUILDING_BLOCKS, result, material, amount);
+    }
+
+    private static void scDecoration(RecipeOutput recipeOutput, ItemLike result, ItemLike material, int amount) {
+        // use this for walls
+        stonecutterResultFromBase(recipeOutput, RecipeCategory.DECORATIONS, result, material, amount);
     }
 }

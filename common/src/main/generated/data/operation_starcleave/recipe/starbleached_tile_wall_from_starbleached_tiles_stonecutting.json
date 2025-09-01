@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "operation_starcleave:starbleached_tiles"
+  },
+  "result": {
+    "count": 1,
+    "id": "operation_starcleave:starbleached_tile_wall"
+  }
+}
