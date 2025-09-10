@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/flower_pot_cross",
+  "textures": {
+    "plant": "operation_starcleave:block/short_holy_moss_pot"
+  }
+}

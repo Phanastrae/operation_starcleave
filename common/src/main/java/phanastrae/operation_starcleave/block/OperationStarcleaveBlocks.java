@@ -29,7 +29,7 @@ public class OperationStarcleaveBlocks {
     protected static final BlockBehaviour.StateArgumentPredicate<EntityType<?>> SPAWN_ALWAYS = (blockState, blockView, blockPos, entityType) -> true;
     protected static final BlockBehaviour.StateArgumentPredicate<EntityType<?>> SPAWN_NEVER = (blockState, blockView, blockPos, entityType) -> true;
 
-    public static final Block NETHERITE_PUMPKIN = new NetheritePumpkinBlock(settings()
+    public static final Block NETHERITE_PUMPKIN = new NetheritePumpkinBlock(properties()
             .strength(10.0F, 1200.0F)
             .mapColor(COLOR_BLACK)
             .sound(NETHERITE_BLOCK)
@@ -38,7 +38,7 @@ public class OperationStarcleaveBlocks {
             .requiresCorrectToolForDrops()
     );
 
-    public static final Block STELLAR_SEDIMENT = new StellarSedimentBlock(settings()
+    public static final Block STELLAR_SEDIMENT = new StellarSedimentBlock(properties()
             .strength(1.25F, 2F)
             .mapColor(COLOR_PURPLE)
             .sound(SoundType.SAND)
@@ -46,7 +46,7 @@ public class OperationStarcleaveBlocks {
             .isValidSpawn(SPAWN_NEVER)
             .lightLevel(constant(2))
     );
-    public static final Block STELLAR_FARMLAND = new StellarFarmlandBlock(settings()
+    public static final Block STELLAR_FARMLAND = new StellarFarmlandBlock(properties()
             .strength(1.25F, 2F)
             .mapColor(COLOR_PURPLE)
             .sound(SoundType.SAND)
@@ -58,7 +58,7 @@ public class OperationStarcleaveBlocks {
             .randomTicks()
     );
 
-    public static final Block BISREEDS = new BisreedBlock(settings()
+    public static final Block BISREEDS = new BisreedBlock(properties()
             .mapColor(COLOR_PINK)
             .sound(SoundType.CROP)
             .pushReaction(PushReaction.DESTROY)
@@ -67,7 +67,7 @@ public class OperationStarcleaveBlocks {
             .instabreak()
     );
 
-    public static final Block STELLAR_MULCH = new StellarMulchBlock(settings()
+    public static final Block STELLAR_MULCH = new StellarMulchBlock(properties()
             .strength(1.15F, 2F)
             .mapColor(COLOR_PURPLE)
             .sound(MUD)
@@ -76,7 +76,7 @@ public class OperationStarcleaveBlocks {
             .lightLevel(constant(4))
             .randomTicks()
     );
-    public static final Block MULCHBORNE_TUFT = new MulchborneTuftBlock(settings()
+    public static final Block MULCHBORNE_TUFT = new MulchborneTuftBlock(properties()
             .mapColor(COLOR_MAGENTA)
             .sound(SoundType.GRASS)
             .offsetType(XYZ)
@@ -86,8 +86,9 @@ public class OperationStarcleaveBlocks {
             .noCollission()
             .instabreak()
     );
+    public static final Block POTTED_MULCHBORNE_TUFT = flowerPot(MULCHBORNE_TUFT, 6);
 
-    public static final Block HOLY_MOSS = new HolyMossBlock(settings()
+    public static final Block HOLY_MOSS = new HolyMossBlock(properties()
             .strength(1.15F, 2F)
             .mapColor(MapColor.SAND)
             .sound(MOSS)
@@ -96,7 +97,7 @@ public class OperationStarcleaveBlocks {
             .lightLevel(constant(13))
             .randomTicks()
     );
-    public static final Block SHORT_HOLY_MOSS = new ShortHolyMossBlock(settings()
+    public static final Block SHORT_HOLY_MOSS = new ShortHolyMossBlock(properties()
             .mapColor(MapColor.SAND)
             .sound(MOSS)
             .offsetType(XYZ)
@@ -106,8 +107,9 @@ public class OperationStarcleaveBlocks {
             .noCollission()
             .instabreak()
     );
+    public static final Block POTTED_SHORT_HOLY_MOSS = flowerPot(SHORT_HOLY_MOSS, 13);
 
-    public static final Block STARDUST_BLOCK = new ColoredFallingBlock(new ColorRGBA(0xEF9FCFFF), settings()
+    public static final Block STARDUST_BLOCK = new ColoredFallingBlock(new ColorRGBA(0xEF9FCFFF), properties()
             .strength(0.2F, 0.1F)
             .mapColor(ICE)
             .sound(SoundType.SAND)
@@ -116,7 +118,7 @@ public class OperationStarcleaveBlocks {
             .lightLevel(constant(9))
     );
 
-    public static final Block STARDUST_BRICKS = new Block(settings()
+    public static final Block STARDUST_BRICKS = new Block(properties()
             .strength(0.6F, 0.4F)
             .mapColor(ICE)
             .sound(TUFF_BRICKS)
@@ -129,7 +131,7 @@ public class OperationStarcleaveBlocks {
     public static final Block STARDUST_BRICK_SLAB = slabOf(STARDUST_BRICKS);
     public static final Block STARDUST_BRICK_WALL = wallOf(STARDUST_BRICKS);
 
-    public static final Block STARDUST_CLUSTER = new StardustClusterBlock(settings()
+    public static final Block STARDUST_CLUSTER = new StardustClusterBlock(properties()
             .lightLevel(constant(15))
             .replaceable()
             .instabreak()
@@ -137,7 +139,7 @@ public class OperationStarcleaveBlocks {
             .noOcclusion()
     );
 
-    public static final Block STARBLEACHED_LOG = new RotatedPillarBlock(settings()
+    public static final Block STARBLEACHED_LOG = new RotatedPillarBlock(properties()
             .strength(2F, 6F)
             .mapColor(COLOR_GRAY)
             .sound(SoundType.STONE)
@@ -148,7 +150,7 @@ public class OperationStarcleaveBlocks {
     );
     public static final Block STARBLEACHED_WOOD = new RotatedPillarBlock(copyShallow(STARBLEACHED_LOG));
 
-    public static final Block STARBLEACHED_LEAVES = new StarbleachedLeavesBlock(settings()
+    public static final Block STARBLEACHED_LEAVES = new StarbleachedLeavesBlock(properties()
             .strength(0.25F, 2F)
             .mapColor(COLOR_GRAY)
             .sound(SoundType.STONE)
@@ -162,7 +164,7 @@ public class OperationStarcleaveBlocks {
             .noOcclusion()
     );
 
-    public static final Block STARBLEACHED_TILES = new Block(settings()
+    public static final Block STARBLEACHED_TILES = new Block(properties()
             .strength(1.5F, 6F)
             .mapColor(COLOR_GRAY)
             .sound(SoundType.STONE)
@@ -177,7 +179,7 @@ public class OperationStarcleaveBlocks {
 
     public static final Block CHISELED_STARBLEACHED_TILES = new Block(copyShallow(STARBLEACHED_TILES));
 
-    public static final Block IMBUED_STARBLEACHED_TILES = new ImbuedStarbleachedTilesBlock(settings()
+    public static final Block IMBUED_STARBLEACHED_TILES = new ImbuedStarbleachedTilesBlock(properties()
             .strength(1.25F, 6F)
             .mapColor(COLOR_CYAN)
             .sound(SoundType.STONE)
@@ -187,7 +189,7 @@ public class OperationStarcleaveBlocks {
             .requiresCorrectToolForDrops()
     );
 
-    public static final Block STARBLEACHED_PEARL_BLOCK = new StarbleachedPearlBlock(settings()
+    public static final Block STARBLEACHED_PEARL_BLOCK = new StarbleachedPearlBlock(properties()
             .strength(1.3F, 6F)
             .mapColor(COLOR_CYAN)
             .sound(GLASS)
@@ -201,7 +203,7 @@ public class OperationStarcleaveBlocks {
             .lightLevel(constant(13))
     );
 
-    public static final Block STELLAR_TILES = new Block(settings()
+    public static final Block STELLAR_TILES = new Block(properties()
             .strength(1.75F, 6F)
             .mapColor(COLOR_PURPLE)
             .sound(SoundType.DEEPSLATE)
@@ -211,7 +213,7 @@ public class OperationStarcleaveBlocks {
     );
     public static final Block STELLAR_TILE_SLAB = slabOf(STELLAR_TILES);
 
-    public static final Block STELLAR_REPULSOR = new StellarRepulsorBlock(settings()
+    public static final Block STELLAR_REPULSOR = new StellarRepulsorBlock(properties()
             .strength(1.75F, 6F)
             .mapColor(MapColor.SAND)
             .sound(SoundType.WOOL)
@@ -220,18 +222,18 @@ public class OperationStarcleaveBlocks {
             .isValidSpawn(SPAWN_NEVER)
     );
 
-    public static final Block BLESSED_CLOTH_BLOCK = new BlessedClothBlock(settings()
+    public static final Block BLESSED_CLOTH_BLOCK = new BlessedClothBlock(properties()
             .strength(0.8F)
             .mapColor(MapColor.SAND)
             .sound(SoundType.WOOL)
             .instrument(GUITAR)
     );
-    public static final Block BLESSED_CLOTH_CARPET = new BlessedClothCarpetBlock(settings()
+    public static final Block BLESSED_CLOTH_CARPET = new BlessedClothCarpetBlock(properties()
             .strength(0.1F)
             .mapColor(MapColor.SAND)
             .sound(SoundType.WOOL)
     );
-    public static final Block BLESSED_CLOTH_CURTAIN = new BlessedClothCurtainBlock(settings()
+    public static final Block BLESSED_CLOTH_CURTAIN = new BlessedClothCurtainBlock(properties()
             .strength(0.8F)
             .mapColor(MapColor.SAND)
             .sound(SoundType.WOOL)
@@ -239,7 +241,7 @@ public class OperationStarcleaveBlocks {
             .noOcclusion()
     );
 
-    public static final Block BLESSED_BED = new BlessedBedBlock(settings()
+    public static final Block BLESSED_BED = new BlessedBedBlock(properties()
             .strength(0.2F)
             .mapColor(MapColor.SAND)
             .sound(SoundType.WOOD)
@@ -247,7 +249,7 @@ public class OperationStarcleaveBlocks {
             .noOcclusion()
     );
 
-    public static final Block PHLOGISTIC_FIRE = new PhlogisticFireBlock(settings()
+    public static final Block PHLOGISTIC_FIRE = new PhlogisticFireBlock(properties()
             .mapColor(COLOR_LIGHT_GREEN)
             .sound(SoundType.WOOL)
             .pushReaction(DESTROY)
@@ -256,7 +258,7 @@ public class OperationStarcleaveBlocks {
             .noCollission()
             .instabreak()
     );
-    public static final Block PETRICHORIC_PLASMA = new PetrichoricPlasmaLiquidBlock(OperationStarcleaveFluids.FLOWING_PETRICHORIC_PLASMA, settings()
+    public static final Block PETRICHORIC_PLASMA = new PetrichoricPlasmaLiquidBlock(OperationStarcleaveFluids.FLOWING_PETRICHORIC_PLASMA, properties()
             .strength(100.0F)
             .mapColor(COLOR_LIGHT_GREEN)
             .sound(EMPTY)
@@ -268,7 +270,7 @@ public class OperationStarcleaveBlocks {
             .noLootTable()
             .liquid()
     );
-    public static final Block PETRICHORIC_VAPOR = new PetrichoricVaporBlock(settings()
+    public static final Block PETRICHORIC_VAPOR = new PetrichoricVaporBlock(properties()
             .strength(100F)
             .mapColor(COLOR_LIGHT_GREEN)
             .sound(EMPTY)
@@ -280,7 +282,7 @@ public class OperationStarcleaveBlocks {
             .noCollission()
     );
 
-    public static final Block NUCLEOSYNTHESEED = new NucleosyntheseedBlock(settings()
+    public static final Block NUCLEOSYNTHESEED = new NucleosyntheseedBlock(properties()
             .strength(5.0F)
             .mapColor(DyeColor.GREEN)
             .sound(NETHER_WOOD)
@@ -288,7 +290,7 @@ public class OperationStarcleaveBlocks {
             .requiresCorrectToolForDrops()
             .randomTicks()
     );
-    public static final Block NUCLEIC_FISSUREROOT = new NucleicFissurerootBlock(settings()
+    public static final Block NUCLEIC_FISSUREROOT = new NucleicFissurerootBlock(properties()
             .strength(2.5F)
             .mapColor(state -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? COLOR_GREEN : COLOR_LIGHT_GREEN)
             .sound(NETHER_WOOD)
@@ -303,7 +305,7 @@ public class OperationStarcleaveBlocks {
     // striped[sic]
     public static final Block STRIPED_NUCLEIC_FISSUREROOT = new NucleicFissurerootBlock(copyShallow(NUCLEIC_FISSUREROOT));
     public static final Block STRIPED_NUCLEIC_FISSURERIND = new NucleicFissurerootBlock(copyShallow(NUCLEIC_FISSURERIND));
-    public static final Block NUCLEIC_FISSURELEAVES = new NucleicFissureleavesBlock(settings()
+    public static final Block NUCLEIC_FISSURELEAVES = new NucleicFissureleavesBlock(properties()
             .strength(0.2F)
             .mapColor(COLOR_LIGHT_GREEN)
             .sound(SoundType.GRASS)
@@ -317,7 +319,7 @@ public class OperationStarcleaveBlocks {
             .randomTicks()
     );
 
-    public static final Block COAGULATED_PLASMA = new CoagulatedPlasmaBlock(settings()
+    public static final Block COAGULATED_PLASMA = new CoagulatedPlasmaBlock(properties()
             .strength(3.0F, 6.0F)
             .mapColor(TERRACOTTA_GREEN)
             .sound(SoundType.DEEPSLATE)
@@ -326,7 +328,7 @@ public class OperationStarcleaveBlocks {
             .requiresCorrectToolForDrops()
             .randomTicks()
     );
-    public static final Block PLASMA_ICE = new PlasmaIceBlock(settings()
+    public static final Block PLASMA_ICE = new PlasmaIceBlock(properties()
             .strength(2.8F)
             .friction(0.989F)
             .mapColor(COLOR_LIGHT_GREEN)
@@ -344,9 +346,11 @@ public class OperationStarcleaveBlocks {
 
         r.accept(id("stellar_mulch"), STELLAR_MULCH);
         r.accept(id("mulchborne_tuft"), MULCHBORNE_TUFT);
+        r.accept(id("potted_mulchborne_tuft"), POTTED_MULCHBORNE_TUFT);
 
         r.accept(id("holy_moss"), HOLY_MOSS);
         r.accept(id("short_holy_moss"), SHORT_HOLY_MOSS);
+        r.accept(id("potted_short_holy_moss"), POTTED_SHORT_HOLY_MOSS);
 
         r.accept(id("stardust_block"), STARDUST_BLOCK);
         r.accept(id("stardust_cluster"), STARDUST_CLUSTER);
@@ -402,7 +406,7 @@ public class OperationStarcleaveBlocks {
         return b -> t;
     }
 
-    protected static BlockBehaviour.Properties settings() {
+    protected static BlockBehaviour.Properties properties() {
         return BlockBehaviour.Properties.of();
     }
 
@@ -420,5 +424,14 @@ public class OperationStarcleaveBlocks {
 
     protected static WallBlock wallOf(BlockBehaviour block) {
         return new WallBlock(copyShallow(block).forceSolidOn());
+    }
+
+    public static Block flowerPot(Block potted, int lightLevel) {
+        BlockBehaviour.Properties props = properties()
+                .lightLevel(state -> lightLevel)
+                .instabreak()
+                .noOcclusion()
+                .pushReaction(PushReaction.DESTROY);
+        return new FlowerPotBlock(potted, props);
     }
 }

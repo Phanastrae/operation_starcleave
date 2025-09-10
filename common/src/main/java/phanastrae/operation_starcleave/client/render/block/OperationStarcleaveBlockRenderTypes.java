@@ -2,25 +2,28 @@ package phanastrae.operation_starcleave.client.render.block;
 
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.block.Block;
-import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.client.services.XPlatClientInterface;
+
+import static phanastrae.operation_starcleave.block.OperationStarcleaveBlocks.*;
 
 public class OperationStarcleaveBlockRenderTypes {
 
     public static void init() {
         putBlocks(RenderType.cutoutMipped(),
-                OperationStarcleaveBlocks.STARBLEACHED_LEAVES,
-                OperationStarcleaveBlocks.NUCLEIC_FISSURELEAVES
+                STARBLEACHED_LEAVES,
+                NUCLEIC_FISSURELEAVES
         );
         putBlocks(RenderType.cutout(),
-                OperationStarcleaveBlocks.BISREEDS,
-                OperationStarcleaveBlocks.MULCHBORNE_TUFT,
-                OperationStarcleaveBlocks.SHORT_HOLY_MOSS,
-                OperationStarcleaveBlocks.BLESSED_BED,
-                OperationStarcleaveBlocks.PHLOGISTIC_FIRE
+                BISREEDS,
+                MULCHBORNE_TUFT,
+                POTTED_MULCHBORNE_TUFT,
+                SHORT_HOLY_MOSS,
+                POTTED_SHORT_HOLY_MOSS,
+                BLESSED_BED,
+                PHLOGISTIC_FIRE
         );
         putBlocks(RenderType.translucent(),
-                OperationStarcleaveBlocks.PETRICHORIC_VAPOR
+                PETRICHORIC_VAPOR
         );
     }
 

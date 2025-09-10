@@ -76,6 +76,11 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                 COAGULATED_PLASMA
         );
 
+        forEach(this::dropPottedContents,
+                POTTED_MULCHBORNE_TUFT,
+                POTTED_SHORT_HOLY_MOSS
+        );
+
         dropNothing(PHLOGISTIC_FIRE);
 
         dropOther(STARBLEACH_CAULDRON, Items.CAULDRON);

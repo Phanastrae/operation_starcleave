@@ -203,6 +203,12 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         BISREEDS
                 );
 
+        getOrCreateTagBuilder(BlockTags.FLOWER_POTS)
+                .add(
+                        POTTED_MULCHBORNE_TUFT,
+                        POTTED_SHORT_HOLY_MOSS
+                );
+
         // common
         getOrCreateTagBuilder(ConventionalBlockTags.STRIPPED_LOGS)
                 .add(

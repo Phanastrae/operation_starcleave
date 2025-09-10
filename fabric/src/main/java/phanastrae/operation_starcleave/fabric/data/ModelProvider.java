@@ -57,8 +57,10 @@ public class ModelProvider extends FabricModelProvider {
         BMG.woodProvider(NUCLEIC_FISSUREROOT).logWithHorizontal(NUCLEIC_FISSUREROOT).wood(NUCLEIC_FISSURERIND);
         BMG.woodProvider(STRIPED_NUCLEIC_FISSUREROOT).logWithHorizontal(STRIPED_NUCLEIC_FISSUREROOT).wood(STRIPED_NUCLEIC_FISSURERIND);
 
-        BMG.createCrossBlockWithDefaultItem(SHORT_HOLY_MOSS, BlockModelGenerators.TintState.NOT_TINTED);
         registerUnevenCross(BMG, MULCHBORNE_TUFT);
+        createPottedRoot(BMG, MULCHBORNE_TUFT, POTTED_MULCHBORNE_TUFT, TintState.NOT_TINTED);
+        BMG.createCrossBlockWithDefaultItem(SHORT_HOLY_MOSS, BlockModelGenerators.TintState.NOT_TINTED);
+        createPottedRoot(BMG, SHORT_HOLY_MOSS, POTTED_SHORT_HOLY_MOSS, TintState.NOT_TINTED);
 
         registerGrassLikeBlock(BMG, HOLY_MOSS, STELLAR_SEDIMENT);
         registerGrassLikeBlock(BMG, STELLAR_MULCH, STELLAR_SEDIMENT);
@@ -100,6 +102,21 @@ public class ModelProvider extends FabricModelProvider {
                 Variant.variant().with(VariantProperties.MODEL, modelId).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90),
                 Variant.variant().with(VariantProperties.MODEL, modelId2).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90)
         ));
+    }
+
+    protected static void createPottedPlant(BlockModelGenerators BMG, Block plantBlock, Block pottedPlantBlock, BlockModelGenerators.TintState tintState) {
+        TextureMapping textureMapping = TextureMapping.plant(plantBlock);
+        createPotted(BMG, pottedPlantBlock, textureMapping, tintState);
+    }
+
+    protected static void createPottedRoot(BlockModelGenerators BMG, Block plantBlock, Block pottedPlantBlock, BlockModelGenerators.TintState tintState) {
+        TextureMapping textureMapping = TextureMapping.plant(TextureMapping.getBlockTexture(plantBlock, "_pot"));
+        createPotted(BMG, pottedPlantBlock, textureMapping, tintState);
+    }
+
+    protected static void createPotted(BlockModelGenerators BMG, Block pottedPlantBlock, TextureMapping textureMapping, BlockModelGenerators.TintState tintState) {
+        ResourceLocation resourceLocation = tintState.getCrossPot().create(pottedPlantBlock, textureMapping, BMG.modelOutput);
+        BMG.blockStateOutput.accept(createSimpleBlock(pottedPlantBlock, resourceLocation));
     }
 
     private void registerGrassLikeBlock(BlockModelGenerators BMG, Block block, Block baseBlock) {
