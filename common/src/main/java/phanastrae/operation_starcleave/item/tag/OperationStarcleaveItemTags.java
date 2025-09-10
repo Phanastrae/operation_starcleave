@@ -7,6 +7,7 @@ import phanastrae.operation_starcleave.OperationStarcleave;
 
 public class OperationStarcleaveItemTags {
     public static final TagKey<Item> STARBLEACHED_LOGS = of("starbleached_logs");
+    public static final TagKey<Item> NUCLEIC_FISSUREROOTS = of("nucleic_fissureroots");
 
     private static TagKey<Item> of(String id) {
         return TagKey.create(Registries.ITEM, OperationStarcleave.id(id));

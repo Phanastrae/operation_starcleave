@@ -1,6 +1,9 @@
 {
   "values": [
-    "operation_starcleave:nucleic_fissureroot",
+    {
+      "id": "#operation_starcleave:nucleic_fissureroots",
+      "required": false
+    },
     "operation_starcleave:nucleosyntheseed"
   ]
 }

@@ -69,6 +69,9 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                 BLESSED_CLOTH_CURTAIN,
 
                 NUCLEIC_FISSUREROOT,
+                NUCLEIC_FISSURERIND,
+                STRIPED_NUCLEIC_FISSUREROOT,
+                STRIPED_NUCLEIC_FISSURERIND,
 
                 COAGULATED_PLASMA
         );

@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
+import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -18,6 +19,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import phanastrae.operation_starcleave.OperationStarcleave;
+import phanastrae.operation_starcleave.block.OperationStarcleaveLogStripping;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
 import phanastrae.operation_starcleave.fabric.fluid.OperationStarcleaveFluidVariantAttributes;
 import phanastrae.operation_starcleave.item.OperationStarcleaveCreativeModeTabs;
@@ -58,6 +60,9 @@ public class OperationStarcleaveFabric implements ModInitializer {
 
         // entity attributes
         OperationStarcleaveEntityTypes.registerEntityAttributes((FabricDefaultAttributeRegistry::register));
+
+        // setup log stripping
+        OperationStarcleaveLogStripping.STARCLEAVE_STRIPPABLES.forEach(StrippableBlockRegistry::register);
 
 
 

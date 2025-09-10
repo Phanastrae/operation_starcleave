@@ -65,6 +65,9 @@ public class OperationStarcleaveItems {
 
     public static final Item NUCLEOSYNTHESEED = blockItem(OperationStarcleaveBlocks.NUCLEOSYNTHESEED);
     public static final Item NUCLEIC_FISSUREROOT = blockItem(OperationStarcleaveBlocks.NUCLEIC_FISSUREROOT);
+    public static final Item NUCLEIC_FISSURERIND = blockItem(OperationStarcleaveBlocks.NUCLEIC_FISSURERIND);
+    public static final Item STRIPED_NUCLEIC_FISSUREROOT = blockItem(OperationStarcleaveBlocks.STRIPED_NUCLEIC_FISSUREROOT);
+    public static final Item STRIPED_NUCLEIC_FISSURERIND = blockItem(OperationStarcleaveBlocks.STRIPED_NUCLEIC_FISSURERIND);
     public static final Item NUCLEIC_FISSURELEAVES = blockItem(OperationStarcleaveBlocks.NUCLEIC_FISSURELEAVES);
 
     public static final Item COAGULATED_PLASMA = blockItem(OperationStarcleaveBlocks.COAGULATED_PLASMA);
@@ -169,6 +172,9 @@ public class OperationStarcleaveItems {
 
         rwt.accept("nucleosyntheseed", NUCLEOSYNTHESEED);
         rwt.accept("nucleic_fissureroot", NUCLEIC_FISSUREROOT);
+        rwt.accept("nucleic_fissurerind", NUCLEIC_FISSURERIND);
+        rwt.accept("striped_nucleic_fissureroot", STRIPED_NUCLEIC_FISSUREROOT);
+        rwt.accept("striped_nucleic_fissurerind", STRIPED_NUCLEIC_FISSURERIND);
         rwt.accept("nucleic_fissureleaves", NUCLEIC_FISSURELEAVES);
 
         rwt.accept("starbleached_pearl", STARBLEACHED_PEARL);

@@ -56,9 +56,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 );
 
         getOrCreateTagBuilder(BlockTags.LOGS)
-                .add(
-                        NUCLEIC_FISSUREROOT
-                );
+                .addOptionalTag(OperationStarcleaveBlockTags.NUCLEIC_FISSUREROOTS);
 
         getOrCreateTagBuilder(BlockTags.LEAVES)
                 .add(
@@ -124,11 +122,10 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 );
 
         getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_PICKAXE)
+                .addOptionalTag(OperationStarcleaveBlockTags.STARBLEACHED_LOGS)
                 .add(
                         NETHERITE_PUMPKIN,
 
-                        STARBLEACHED_LOG,
-                        STARBLEACHED_WOOD,
                         STARBLEACHED_LEAVES,
                         IMBUED_STARBLEACHED_TILES,
 
@@ -169,8 +166,8 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 );
 
         getOrCreateTagBuilder(BlockTags.NEEDS_IRON_TOOL)
+                .addOptionalTag(OperationStarcleaveBlockTags.NUCLEIC_FISSUREROOTS)
                 .add(
-                        NUCLEIC_FISSUREROOT,
                         NUCLEOSYNTHESEED
                 );
 
@@ -207,6 +204,16 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 );
 
         // common
+        getOrCreateTagBuilder(ConventionalBlockTags.STRIPPED_LOGS)
+                .add(
+                        STRIPED_NUCLEIC_FISSUREROOT
+                );
+        getOrCreateTagBuilder(ConventionalBlockTags.STRIPPED_WOODS)
+                .add(
+                        STRIPED_NUCLEIC_FISSURERIND
+                );
+
+
         getOrCreateTagBuilder(ConventionalBlockTags.VILLAGER_JOB_SITES)
                 .add(
                         STARBLEACH_CAULDRON
@@ -214,18 +221,18 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
         // starcleave tags
         getOrCreateTagBuilder(OperationStarcleaveBlockTags.STARBLEACHED)
+                .addOptionalTag(OperationStarcleaveBlockTags.STARBLEACHED_LOGS)
                 .add(
                         STELLAR_SEDIMENT,
                         STELLAR_MULCH,
                         STELLAR_FARMLAND,
                         HOLY_MOSS,
-                        STARBLEACHED_LOG,
-                        STARBLEACHED_WOOD,
                         STARBLEACHED_LEAVES,
                         STARDUST_BLOCK
                 );
 
         getOrCreateTagBuilder(OperationStarcleaveBlockTags.ALLOWS_BISREED_PLANTING)
+                .addOptionalTag(OperationStarcleaveBlockTags.STARBLEACHED_LOGS)
                 .add(
                         Blocks.FARMLAND,
                         Blocks.MOSS_BLOCK,
@@ -236,31 +243,28 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         STELLAR_FARMLAND,
                         STELLAR_MULCH,
                         HOLY_MOSS,
-                        STARDUST_BLOCK,
-                        STARBLEACHED_LOG,
-                        STARBLEACHED_WOOD
+                        STARDUST_BLOCK
                 );
 
         getOrCreateTagBuilder(OperationStarcleaveBlockTags.STARBLEACH_IMMUNE)
+                .addOptionalTag(OperationStarcleaveBlockTags.STARBLEACHED_LOGS)
+                .addOptionalTag(OperationStarcleaveBlockTags.NUCLEIC_FISSUREROOTS)
                 .add(
-                        STARBLEACHED_LOG,
-                        STARBLEACHED_WOOD,
                         STARBLEACHED_LEAVES,
-                        NUCLEIC_FISSUREROOT,
                         NUCLEIC_FISSURELEAVES
                 );
 
         getOrCreateTagBuilder(OperationStarcleaveBlockTags.PHLOGISTIC_HYPERFLAMMABLES)
+                .addOptionalTag(OperationStarcleaveBlockTags.NUCLEIC_FISSUREROOTS)
                 .add(
                         NUCLEOSYNTHESEED,
-                        NUCLEIC_FISSUREROOT,
                         NUCLEIC_FISSURELEAVES
                 );
 
         getOrCreateTagBuilder(OperationStarcleaveBlockTags.NUCLEOSYNTHESEED_BLAST_IMMUNE)
+                .addOptionalTag(OperationStarcleaveBlockTags.NUCLEIC_FISSUREROOTS)
                 .add(
                         NUCLEOSYNTHESEED,
-                        NUCLEIC_FISSUREROOT,
                         PHLOGISTIC_FIRE
                 );
 
@@ -269,6 +273,14 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 .add(
                         STARBLEACHED_LOG,
                         STARBLEACHED_WOOD
+                );
+
+        getOrCreateTagBuilder(OperationStarcleaveBlockTags.NUCLEIC_FISSUREROOTS)
+                .add(
+                        NUCLEIC_FISSUREROOT,
+                        NUCLEIC_FISSURERIND,
+                        STRIPED_NUCLEIC_FISSUREROOT,
+                        STRIPED_NUCLEIC_FISSURERIND
                 );
     }
 

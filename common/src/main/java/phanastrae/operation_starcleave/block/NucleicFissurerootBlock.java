@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 
-public class NucleicFissurerootBlock extends RotatedPillarBlock {
+public class NucleicFissurerootBlock extends CustomLogBlock {
     public static final MapCodec<NucleicFissurerootBlock> CODEC = simpleCodec(NucleicFissurerootBlock::new);
 
     public NucleicFissurerootBlock(Properties properties) {

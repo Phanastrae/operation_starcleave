@@ -31,8 +31,6 @@ public class RecipeProvider extends FabricRecipeProvider {
                 .filter(BlockFamily::shouldGenerateRecipe)
                 .forEach(blockFamily -> generateRecipes(exporter, blockFamily, FeatureFlags.VANILLA_SET));
 
-        woodFromLogs(exporter, STARBLEACHED_WOOD, STARBLEACHED_LOG);
-
         // region shapeless crafting
         planksFromLog(exporter, STARBLEACHED_TILES, OperationStarcleaveItemTags.STARBLEACHED_LOGS, 4);
 
@@ -53,6 +51,10 @@ public class RecipeProvider extends FabricRecipeProvider {
         // endregion
 
         // region shaped crafting
+        woodFromLogs(exporter, STARBLEACHED_WOOD, STARBLEACHED_LOG);
+        woodFromLogs(exporter, NUCLEIC_FISSURERIND, NUCLEIC_FISSUREROOT);
+        woodFromLogs(exporter, STRIPED_NUCLEIC_FISSURERIND, STRIPED_NUCLEIC_FISSUREROOT);
+
         twoByTwoPacker(exporter, RecipeCategory.MISC, BLESSED_CLOTH, HOLY_STRANDS);
         twoByTwoPacker(exporter, RecipeCategory.BUILDING_BLOCKS, BLESSED_CLOTH_BLOCK, BLESSED_CLOTH, 2);
         twoByTwoPacker(exporter, RecipeCategory.BUILDING_BLOCKS, STARDUST_BLOCK, STARDUST_CLUSTER);

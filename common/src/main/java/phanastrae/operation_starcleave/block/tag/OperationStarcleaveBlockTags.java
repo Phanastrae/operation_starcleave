@@ -13,6 +13,7 @@ public class OperationStarcleaveBlockTags {
     public static final TagKey<Block> NUCLEOSYNTHESEED_BLAST_IMMUNE = of("nucleosyntheseed_blast_immune");
 
     public static final TagKey<Block> STARBLEACHED_LOGS = of("starbleached_logs");
+    public static final TagKey<Block> NUCLEIC_FISSUREROOTS = of("nucleic_fissureroots");
 
     private static TagKey<Block> of(String id) {
         return TagKey.create(Registries.BLOCK, OperationStarcleave.id(id));

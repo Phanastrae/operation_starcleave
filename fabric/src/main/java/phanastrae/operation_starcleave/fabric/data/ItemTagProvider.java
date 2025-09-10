@@ -2,6 +2,7 @@ package phanastrae.operation_starcleave.fabric.data;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBlockTags;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.tags.BlockTags;
@@ -83,7 +84,11 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
         //this.copy(BlockTags.STANDING_SIGNS, ItemTags.SIGNS);
         //this.copy(BlockTags.CEILING_HANGING_SIGNS, ItemTags.HANGING_SIGNS);
 
+        this.copy(ConventionalBlockTags.STRIPPED_LOGS, ConventionalItemTags.STRIPPED_LOGS);
+        this.copy(ConventionalBlockTags.STRIPPED_WOODS, ConventionalItemTags.STRIPPED_WOODS);
+
         this.copy(OperationStarcleaveBlockTags.STARBLEACHED_LOGS, OperationStarcleaveItemTags.STARBLEACHED_LOGS);
+        this.copy(OperationStarcleaveBlockTags.NUCLEIC_FISSUREROOTS, OperationStarcleaveItemTags.NUCLEIC_FISSUREROOTS);
 
         // vanilla
         getOrCreateTagBuilder(ItemTags.VILLAGER_PLANTABLE_SEEDS)

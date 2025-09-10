@@ -1,9 +1,14 @@
 {
   "values": [
-    "operation_starcleave:starbleached_log",
-    "operation_starcleave:starbleached_wood",
+    {
+      "id": "#operation_starcleave:starbleached_logs",
+      "required": false
+    },
+    {
+      "id": "#operation_starcleave:nucleic_fissureroots",
+      "required": false
+    },
     "operation_starcleave:starbleached_leaves",
-    "operation_starcleave:nucleic_fissureroot",
     "operation_starcleave:nucleic_fissureleaves"
   ]
 }

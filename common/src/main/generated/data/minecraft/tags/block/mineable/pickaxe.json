@@ -11,9 +11,11 @@
     "operation_starcleave:starbleached_tile_wall",
     "operation_starcleave:stellar_tiles",
     "operation_starcleave:stellar_tile_slab",
+    {
+      "id": "#operation_starcleave:starbleached_logs",
+      "required": false
+    },
     "operation_starcleave:netherite_pumpkin",
-    "operation_starcleave:starbleached_log",
-    "operation_starcleave:starbleached_wood",
     "operation_starcleave:starbleached_leaves",
     "operation_starcleave:imbued_starbleached_tiles",
     "operation_starcleave:starbleach_cauldron",

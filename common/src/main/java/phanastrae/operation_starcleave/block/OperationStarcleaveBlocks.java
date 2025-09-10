@@ -297,6 +297,12 @@ public class OperationStarcleaveBlocks {
             .requiresCorrectToolForDrops()
             .randomTicks()
     );
+    public static final Block NUCLEIC_FISSURERIND = new NucleicFissurerootBlock(copyShallow(NUCLEIC_FISSUREROOT)
+            .mapColor(state -> COLOR_LIGHT_GREEN)
+    );
+    // striped[sic]
+    public static final Block STRIPED_NUCLEIC_FISSUREROOT = new NucleicFissurerootBlock(copyShallow(NUCLEIC_FISSUREROOT));
+    public static final Block STRIPED_NUCLEIC_FISSURERIND = new NucleicFissurerootBlock(copyShallow(NUCLEIC_FISSURERIND));
     public static final Block NUCLEIC_FISSURELEAVES = new NucleicFissureleavesBlock(settings()
             .strength(0.2F)
             .mapColor(COLOR_LIGHT_GREEN)
@@ -380,6 +386,9 @@ public class OperationStarcleaveBlocks {
 
         r.accept(id("nucleosyntheseed"), NUCLEOSYNTHESEED);
         r.accept(id("nucleic_fissureroot"), NUCLEIC_FISSUREROOT);
+        r.accept(id("nucleic_fissurerind"), NUCLEIC_FISSURERIND);
+        r.accept(id("striped_nucleic_fissureroot"), STRIPED_NUCLEIC_FISSUREROOT);
+        r.accept(id("striped_nucleic_fissurerind"), STRIPED_NUCLEIC_FISSURERIND);
         r.accept(id("nucleic_fissureleaves"), NUCLEIC_FISSURELEAVES);
         r.accept(id("coagulated_plasma"), COAGULATED_PLASMA);
         r.accept(id("plasma_ice"), PLASMA_ICE);
