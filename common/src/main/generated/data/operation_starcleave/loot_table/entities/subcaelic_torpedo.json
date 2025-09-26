@@ -6,14 +6,30 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 2.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            },
+            {
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.0
+              },
+              "enchantment": "minecraft:looting",
+              "function": "minecraft:enchanted_count_increase"
+            }
+          ],
           "name": "operation_starcleave:hollowed_sac"
         }
       ],
-      "rolls": {
-        "type": "minecraft:binomial",
-        "n": 1.0,
-        "p": 0.3
-      }
+      "rolls": 1.0
     }
   ]
 }
