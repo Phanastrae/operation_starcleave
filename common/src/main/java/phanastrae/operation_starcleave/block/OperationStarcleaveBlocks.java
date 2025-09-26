@@ -27,7 +27,7 @@ public class OperationStarcleaveBlocks {
     protected static final BlockBehaviour.StatePredicate ALWAYS = (blockState, blockView, blockPos) -> true;
     protected static final BlockBehaviour.StatePredicate NEVER = (blockState, blockView, blockPos) -> false;
     protected static final BlockBehaviour.StateArgumentPredicate<EntityType<?>> SPAWN_ALWAYS = (blockState, blockView, blockPos, entityType) -> true;
-    protected static final BlockBehaviour.StateArgumentPredicate<EntityType<?>> SPAWN_NEVER = (blockState, blockView, blockPos, entityType) -> true;
+    protected static final BlockBehaviour.StateArgumentPredicate<EntityType<?>> SPAWN_NEVER = (blockState, blockView, blockPos, entityType) -> false;
 
     public static final Block NETHERITE_PUMPKIN = new NetheritePumpkinBlock(properties()
             .strength(10.0F, 1200.0F)
@@ -43,7 +43,6 @@ public class OperationStarcleaveBlocks {
             .mapColor(COLOR_PURPLE)
             .sound(SoundType.SAND)
             .instrument(BASEDRUM)
-            .isValidSpawn(SPAWN_NEVER)
             .lightLevel(constant(2))
     );
     public static final Block STELLAR_FARMLAND = new StellarFarmlandBlock(properties()
@@ -51,7 +50,6 @@ public class OperationStarcleaveBlocks {
             .mapColor(COLOR_PURPLE)
             .sound(SoundType.SAND)
             .instrument(BASEDRUM)
-            .isValidSpawn(SPAWN_NEVER)
             .isViewBlocking(ALWAYS)
             .isSuffocating(ALWAYS)
             .lightLevel(b -> b.getValue(FarmBlock.MOISTURE) == 7 ? 15 : 2)
@@ -72,7 +70,6 @@ public class OperationStarcleaveBlocks {
             .mapColor(COLOR_PURPLE)
             .sound(MUD)
             .instrument(BASEDRUM)
-            .isValidSpawn(SPAWN_NEVER)
             .lightLevel(constant(4))
             .randomTicks()
     );
@@ -93,7 +90,6 @@ public class OperationStarcleaveBlocks {
             .mapColor(MapColor.SAND)
             .sound(MOSS)
             .instrument(BASEDRUM)
-            .isValidSpawn(SPAWN_NEVER)
             .lightLevel(constant(13))
             .randomTicks()
     );
@@ -114,7 +110,6 @@ public class OperationStarcleaveBlocks {
             .mapColor(ICE)
             .sound(SoundType.SAND)
             .instrument(BASEDRUM)
-            .isValidSpawn(SPAWN_NEVER)
             .lightLevel(constant(9))
     );
 
@@ -123,7 +118,6 @@ public class OperationStarcleaveBlocks {
             .mapColor(ICE)
             .sound(TUFF_BRICKS)
             .instrument(BASEDRUM)
-            .isValidSpawn(SPAWN_NEVER)
             .lightLevel(constant(9))
             .requiresCorrectToolForDrops()
     );
@@ -144,7 +138,6 @@ public class OperationStarcleaveBlocks {
             .mapColor(COLOR_GRAY)
             .sound(SoundType.STONE)
             .instrument(BASEDRUM)
-            .isValidSpawn(SPAWN_NEVER)
             .lightLevel(constant(8))
             .requiresCorrectToolForDrops()
     );
@@ -155,10 +148,10 @@ public class OperationStarcleaveBlocks {
             .mapColor(COLOR_GRAY)
             .sound(SoundType.STONE)
             .instrument(BASEDRUM)
-            .isValidSpawn(SPAWN_NEVER)
             .isSuffocating(NEVER)
             .isViewBlocking(NEVER)
             .isRedstoneConductor(NEVER)
+            .isValidSpawn(SPAWN_NEVER)
             .lightLevel(constant(11))
             .requiresCorrectToolForDrops()
             .noOcclusion()
@@ -169,7 +162,6 @@ public class OperationStarcleaveBlocks {
             .mapColor(COLOR_GRAY)
             .sound(SoundType.STONE)
             .instrument(BASEDRUM)
-            .isValidSpawn(SPAWN_NEVER)
             .lightLevel(constant(8))
             .requiresCorrectToolForDrops()
     );
@@ -184,7 +176,6 @@ public class OperationStarcleaveBlocks {
             .mapColor(COLOR_CYAN)
             .sound(SoundType.STONE)
             .instrument(BASEDRUM)
-            .isValidSpawn(SPAWN_NEVER)
             .lightLevel(constant(15))
             .requiresCorrectToolForDrops()
     );
@@ -194,7 +185,6 @@ public class OperationStarcleaveBlocks {
             .mapColor(COLOR_CYAN)
             .sound(GLASS)
             .instrument(BASEDRUM)
-            .isValidSpawn(SPAWN_NEVER)
             .lightLevel(constant(12))
             .requiresCorrectToolForDrops()
     );
@@ -208,7 +198,6 @@ public class OperationStarcleaveBlocks {
             .mapColor(COLOR_PURPLE)
             .sound(SoundType.DEEPSLATE)
             .instrument(BASEDRUM)
-            .isValidSpawn(SPAWN_NEVER)
             .lightLevel(constant(2))
     );
     public static final Block STELLAR_TILE_SLAB = slabOf(STELLAR_TILES);
@@ -219,7 +208,6 @@ public class OperationStarcleaveBlocks {
             .sound(SoundType.WOOL)
             .instrument(BASEDRUM)
             .lightLevel(constant(13))
-            .isValidSpawn(SPAWN_NEVER)
     );
 
     public static final Block BLESSED_CLOTH_BLOCK = new BlessedClothBlock(properties()
@@ -310,10 +298,10 @@ public class OperationStarcleaveBlocks {
             .mapColor(COLOR_LIGHT_GREEN)
             .sound(SoundType.GRASS)
             .pushReaction(PushReaction.DESTROY)
-            .isValidSpawn(SPAWN_NEVER)
             .isSuffocating(NEVER)
             .isViewBlocking(NEVER)
             .isRedstoneConductor(NEVER)
+            .isValidSpawn(SPAWN_NEVER)
             .lightLevel(constant(12))
             .noOcclusion()
             .randomTicks()
