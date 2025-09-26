@@ -23,6 +23,7 @@ import phanastrae.operation_starcleave.block.StarbleachCauldronBlock;
 import phanastrae.operation_starcleave.block.entity.OperationStarcleaveBlockEntityTypes;
 import phanastrae.operation_starcleave.component.OperationStarcleaveComponentTypes;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
+import phanastrae.operation_starcleave.entity.OperationStarcleaveSpawnPlacements;
 import phanastrae.operation_starcleave.entity.effect.OperationStarcleaveStatusEffects;
 import phanastrae.operation_starcleave.fluid.OperationStarcleaveFluids;
 import phanastrae.operation_starcleave.item.OperationStarcleaveArmorMaterials;
@@ -98,6 +99,9 @@ public class OperationStarcleave {
 
 		// game rules
 		OperationStarcleaveGameRules.init();
+
+		// mob spawn conditions
+		OperationStarcleaveSpawnPlacements.init();
 	}
 
 	public static void startLevelTick(Level level) {

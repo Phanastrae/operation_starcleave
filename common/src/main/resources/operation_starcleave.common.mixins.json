@@ -29,6 +29,7 @@
     "ServerLevelMixin",
     "ServerPlayerMixin",
     "SimpleParticleTypeAccessor",
+    "SpawnPlacementsAccessor",
     "StemBlockMixin",
     "ThrownPotionMixin"
   ],
