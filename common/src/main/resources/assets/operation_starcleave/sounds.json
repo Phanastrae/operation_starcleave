@@ -1,6 +1,6 @@
 {
-  "block.petrichoric_plasma_ambient": {
-    "subtitle": "subtitles.operation_starcleave.block.petrichoric_plasma_ambient",
+  "block.petrichoric_plasma.ambient": {
+    "subtitle": "subtitles.operation_starcleave.block.petrichoric_plasma.ambient",
     "sounds": [
       "liquid/lava"
     ]
@@ -25,8 +25,8 @@
       "block/brewing_stand/brew2"
     ]
   },
-  "block.biseeds.convert": {
-    "subtitle": "subtitles.operation_starcleave.block.biseeds.convert",
+  "block.bisreeds.convert": {
+    "subtitle": "subtitles.operation_starcleave.block.bisreeds.convert",
     "sounds": [
       "block/brewing_stand/brew1",
       "block/brewing_stand/brew2"
