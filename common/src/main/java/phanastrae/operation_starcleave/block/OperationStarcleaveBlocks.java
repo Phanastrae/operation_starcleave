@@ -1,6 +1,7 @@
 package phanastrae.operation_starcleave.block;
 
-import it.unimi.dsi.fastutil.Pair;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ColorRGBA;
@@ -15,8 +16,6 @@ import net.minecraft.world.level.material.PushReaction;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.fluid.OperationStarcleaveFluids;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.ToIntFunction;
 
@@ -32,7 +31,7 @@ public class OperationStarcleaveBlocks {
     protected static final BlockBehaviour.StateArgumentPredicate<EntityType<?>> SPAWN_ALWAYS = (blockState, blockView, blockPos, entityType) -> true;
     protected static final BlockBehaviour.StateArgumentPredicate<EntityType<?>> SPAWN_NEVER = (blockState, blockView, blockPos, entityType) -> false;
 
-    private static final List<Pair<ResourceLocation, Block>> UNREGISTERED_BLOCKS = new ArrayList<>();
+    public static final BiMap<ResourceLocation, Block> UNREGISTERED_BLOCKS = HashBiMap.create();
 
     public static final Block NETHERITE_PUMPKIN = register(
             "netherite_pumpkin",
@@ -470,12 +469,12 @@ public class OperationStarcleaveBlocks {
     }
 
     private static <T extends Block> T register(ResourceLocation location, T block) {
-        UNREGISTERED_BLOCKS.add(Pair.of(location, block));
+        UNREGISTERED_BLOCKS.put(location, block);
         return block;
     }
 
     public static void init(BiConsumer<ResourceLocation, Block> r) {
-        UNREGISTERED_BLOCKS.forEach(pair -> r.accept(pair.left(), pair.right()));
+        UNREGISTERED_BLOCKS.forEach(r);
         UNREGISTERED_BLOCKS.clear();
     }
 

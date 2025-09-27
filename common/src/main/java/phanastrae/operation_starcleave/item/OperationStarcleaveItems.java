@@ -1,6 +1,5 @@
 package phanastrae.operation_starcleave.item;
 
-import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -12,16 +11,15 @@ import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
 import phanastrae.operation_starcleave.fluid.OperationStarcleaveFluids;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.BiConsumer;
 
 import static net.minecraft.world.item.Rarity.EPIC;
 import static net.minecraft.world.item.Rarity.RARE;
 
 public class OperationStarcleaveItems {
-
-    public static final List<Pair<ResourceLocation, Item>> UNREGISTERED_ITEMS = new ArrayList<>();
+    private static final Map<ResourceLocation, Item> UNREGISTERED_ITEMS = new HashMap<>();
 
     public static final Item NETHERITE_PUMPKIN = registerBlock(new NetheritePumpkinItem(OperationStarcleaveBlocks.NETHERITE_PUMPKIN, properties().rarity(Rarity.UNCOMMON).fireResistant()));
 
@@ -117,25 +115,32 @@ public class OperationStarcleaveItems {
     public static final Item SUBCAELIC_TORPEDO_SPAWN_EGG = register("subcaelic_torpedo_spawn_egg", spawnEggItem(OperationStarcleaveEntityTypes.SUBCAELIC_TORPEDO, 0xDFDFDF, 0x1FAF7F));
     public static final Item SUBCAELIC_DUX_SPAWN_EGG = register("subcaelic_dux_spawn_egg", spawnEggItem(OperationStarcleaveEntityTypes.SUBCAELIC_DUX, 0xDFEF9F, 0x6FFFDF));
 
+    private static Item registerBlock(BlockItem item) {
+        return registerBlock(item.getBlock(), item);
+    }
+
+    private static Item registerBlock(Block block, Item item) {
+        ResourceLocation location;
+        Map<Block, ResourceLocation> map = OperationStarcleaveBlocks.UNREGISTERED_BLOCKS.inverse();
+        if(map.containsKey(block)) {
+            location = map.get(block);
+        } else {
+            location = BuiltInRegistries.BLOCK.getKey(block);
+        }
+        return register(location, item);
+    }
+
     private static Item register(String id, Item item) {
         return register(OperationStarcleave.id(id), item);
     }
 
-    public static Item registerBlock(BlockItem item) {
-        return registerBlock(item.getBlock(), item);
-    }
-
-    public static Item registerBlock(Block block, Item item) {
-        return register(BuiltInRegistries.BLOCK.getKey(block), item);
-    }
-
     private static Item register(ResourceLocation location, Item item) {
-        UNREGISTERED_ITEMS.add(Pair.of(location, item));
+        UNREGISTERED_ITEMS.put(location, item);
         return item;
     }
 
     public static void init(BiConsumer<ResourceLocation, Item> r) {
-        UNREGISTERED_ITEMS.forEach(pair -> r.accept(pair.left(), pair.right()));
+        UNREGISTERED_ITEMS.forEach(r);
         UNREGISTERED_ITEMS.clear();
 
         Item.BY_BLOCK.put(OperationStarcleaveBlocks.STARBLEACH_CAULDRON, Items.CAULDRON);
