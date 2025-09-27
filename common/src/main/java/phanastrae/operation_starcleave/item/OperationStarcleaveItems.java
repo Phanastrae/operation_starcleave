@@ -23,59 +23,61 @@ public class OperationStarcleaveItems {
 
     public static final Item NETHERITE_PUMPKIN = registerBlock(new NetheritePumpkinItem(OperationStarcleaveBlocks.NETHERITE_PUMPKIN, properties().rarity(Rarity.UNCOMMON).fireResistant()));
 
-    public static final Item STELLAR_SEDIMENT = registerBlock(blockItem(OperationStarcleaveBlocks.STELLAR_SEDIMENT));
-    public static final Item STELLAR_FARMLAND = registerBlock(blockItem(OperationStarcleaveBlocks.STELLAR_FARMLAND));
+    public static final Item STELLAR_SEDIMENT = registerBlockItem(OperationStarcleaveBlocks.STELLAR_SEDIMENT);
+    public static final Item STELLAR_FARMLAND = registerBlockItem(OperationStarcleaveBlocks.STELLAR_FARMLAND);
 
     public static final Item BISREED_ROOT = register("bisreed_root", new ItemNameBlockItem(OperationStarcleaveBlocks.BISREEDS, properties()));
 
-    public static final Item STELLAR_MULCH = registerBlock(blockItem(OperationStarcleaveBlocks.STELLAR_MULCH));
-    public static final Item MULCHBORNE_TUFT = registerBlock(blockItem(OperationStarcleaveBlocks.MULCHBORNE_TUFT));
+    public static final Item STELLAR_MULCH = registerBlockItem(OperationStarcleaveBlocks.STELLAR_MULCH);
+    public static final Item MULCHBORNE_TUFT = registerBlockItem(OperationStarcleaveBlocks.MULCHBORNE_TUFT);
 
-    public static final Item HOLY_MOSS = registerBlock(blockItem(OperationStarcleaveBlocks.HOLY_MOSS));
-    public static final Item SHORT_HOLY_MOSS = registerBlock(blockItem(OperationStarcleaveBlocks.SHORT_HOLY_MOSS));
+    public static final Item HOLY_MOSS = registerBlockItem(OperationStarcleaveBlocks.HOLY_MOSS);
+    public static final Item SHORT_HOLY_MOSS = registerBlockItem(OperationStarcleaveBlocks.SHORT_HOLY_MOSS);
 
-    public static final Item STARDUST_BLOCK = registerBlock(blockItem(OperationStarcleaveBlocks.STARDUST_BLOCK));
-    public static final Item STARDUST_CLUSTER = registerBlock(blockItem(OperationStarcleaveBlocks.STARDUST_CLUSTER));
+    public static final Item STARDUST_BLOCK = registerBlockItem(OperationStarcleaveBlocks.STARDUST_BLOCK);
+    public static final Item STARDUST_CLUSTER = registerBlockItem(OperationStarcleaveBlocks.STARDUST_CLUSTER);
 
-    public static final Item STARDUST_BRICKS = registerBlock(blockItem(OperationStarcleaveBlocks.STARDUST_BRICKS));
-    public static final Item STARDUST_BRICK_STAIRS = registerBlock(blockItem(OperationStarcleaveBlocks.STARDUST_BRICK_STAIRS));
-    public static final Item STARDUST_BRICK_SLAB = registerBlock(blockItem(OperationStarcleaveBlocks.STARDUST_BRICK_SLAB));
-    public static final Item STARDUST_BRICK_WALL = registerBlock(blockItem(OperationStarcleaveBlocks.STARDUST_BRICK_WALL));
+    public static final Item STARDUST_BRICKS = registerBlockItem(OperationStarcleaveBlocks.STARDUST_BRICKS);
+    public static final Item STARDUST_BRICK_STAIRS = registerBlockItem(OperationStarcleaveBlocks.STARDUST_BRICK_STAIRS);
+    public static final Item STARDUST_BRICK_SLAB = registerBlockItem(OperationStarcleaveBlocks.STARDUST_BRICK_SLAB);
+    public static final Item STARDUST_BRICK_WALL = registerBlockItem(OperationStarcleaveBlocks.STARDUST_BRICK_WALL);
 
-    public static final Item STARBLEACHED_LOG = registerBlock(blockItem(OperationStarcleaveBlocks.STARBLEACHED_LOG));
-    public static final Item STARBLEACHED_WOOD = registerBlock(blockItem(OperationStarcleaveBlocks.STARBLEACHED_WOOD));
+    public static final Item STARBLEACHED_LOG = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_LOG);
+    public static final Item STARBLEACHED_WOOD = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_WOOD);
 
-    public static final Item STARBLEACHED_LEAVES = registerBlock(blockItem(OperationStarcleaveBlocks.STARBLEACHED_LEAVES));
+    public static final Item STARBLEACHED_LEAVES = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_LEAVES);
 
-    public static final Item STARBLEACHED_TILES = registerBlock(blockItem(OperationStarcleaveBlocks.STARBLEACHED_TILES));
-    public static final Item STARBLEACHED_TILE_STAIRS = registerBlock(blockItem(OperationStarcleaveBlocks.STARBLEACHED_TILE_STAIRS));
-    public static final Item STARBLEACHED_TILE_SLAB = registerBlock(blockItem(OperationStarcleaveBlocks.STARBLEACHED_TILE_SLAB));
-    public static final Item STARBLEACHED_TILE_WALL = registerBlock(blockItem(OperationStarcleaveBlocks.STARBLEACHED_TILE_WALL));
+    public static final Item STARBLEACHED_TILES = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_TILES);
+    public static final Item STARBLEACHED_TILE_STAIRS = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_TILE_STAIRS);
+    public static final Item STARBLEACHED_TILE_SLAB = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_TILE_SLAB);
+    public static final Item STARBLEACHED_TILE_WALL = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_TILE_WALL);
 
-    public static final Item CHISELED_STARBLEACHED_TILES = registerBlock(blockItem(OperationStarcleaveBlocks.CHISELED_STARBLEACHED_TILES));
+    public static final Item CHISELED_STARBLEACHED_TILES = registerBlockItem(OperationStarcleaveBlocks.CHISELED_STARBLEACHED_TILES);
 
-    public static final Item IMBUED_STARBLEACHED_TILES = registerBlock(blockItem(OperationStarcleaveBlocks.IMBUED_STARBLEACHED_TILES));
+    public static final Item IMBUED_STARBLEACHED_TILES = registerBlockItem(OperationStarcleaveBlocks.IMBUED_STARBLEACHED_TILES);
 
-    public static final Item STARBLEACHED_PEARL_BLOCK = registerBlock(blockItem(OperationStarcleaveBlocks.STARBLEACHED_PEARL_BLOCK));
+    public static final Item STARBLEACHED_PEARL_BLOCK = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_PEARL_BLOCK);
 
-    public static final Item STELLAR_TILES = registerBlock(blockItem(OperationStarcleaveBlocks.STELLAR_TILES));
-    public static final Item STELLAR_TILE_SLAB = registerBlock(blockItem(OperationStarcleaveBlocks.STELLAR_TILE_SLAB));
+    public static final Item STELLAR_TILES = registerBlockItem(OperationStarcleaveBlocks.STELLAR_TILES);
+    public static final Item STELLAR_TILE_SLAB = registerBlockItem(OperationStarcleaveBlocks.STELLAR_TILE_SLAB);
 
-    public static final Item STELLAR_REPULSOR = registerBlock(blockItem(OperationStarcleaveBlocks.STELLAR_REPULSOR));
+    public static final Item STELLAR_REPULSOR = registerBlockItem((OperationStarcleaveBlocks.STELLAR_REPULSOR));
 
-    public static final Item BLESSED_CLOTH_BLOCK = registerBlock(blockItem(OperationStarcleaveBlocks.BLESSED_CLOTH_BLOCK));
-    public static final Item BLESSED_CLOTH_CARPET = registerBlock(blockItem(OperationStarcleaveBlocks.BLESSED_CLOTH_CARPET));
-    public static final Item BLESSED_CLOTH_CURTAIN = registerBlock(blockItem(OperationStarcleaveBlocks.BLESSED_CLOTH_CURTAIN));
+    public static final Item BLESSED_CLOTH_BLOCK = registerBlockItem((OperationStarcleaveBlocks.BLESSED_CLOTH_BLOCK));
+    public static final Item BLESSED_CLOTH_CARPET = registerBlockItem((OperationStarcleaveBlocks.BLESSED_CLOTH_CARPET));
+    public static final Item BLESSED_CLOTH_CURTAIN = registerBlockItem((OperationStarcleaveBlocks.BLESSED_CLOTH_CURTAIN));
 
-    public static final Item NUCLEOSYNTHESEED = registerBlock(blockItem(OperationStarcleaveBlocks.NUCLEOSYNTHESEED));
-    public static final Item NUCLEIC_FISSUREROOT = registerBlock(blockItem(OperationStarcleaveBlocks.NUCLEIC_FISSUREROOT));
-    public static final Item NUCLEIC_FISSURERIND = registerBlock(blockItem(OperationStarcleaveBlocks.NUCLEIC_FISSURERIND));
-    public static final Item STRIPED_NUCLEIC_FISSUREROOT = registerBlock(blockItem(OperationStarcleaveBlocks.STRIPED_NUCLEIC_FISSUREROOT));
-    public static final Item STRIPED_NUCLEIC_FISSURERIND = registerBlock(blockItem(OperationStarcleaveBlocks.STRIPED_NUCLEIC_FISSURERIND));
-    public static final Item NUCLEIC_FISSURELEAVES = registerBlock(blockItem(OperationStarcleaveBlocks.NUCLEIC_FISSURELEAVES));
+    public static final Item BLESSED_BED = registerBlock(new BedItem(OperationStarcleaveBlocks.BLESSED_BED, properties().stacksTo(1).rarity(RARE)));
 
-    public static final Item COAGULATED_PLASMA = registerBlock(blockItem(OperationStarcleaveBlocks.COAGULATED_PLASMA));
-    public static final Item PLASMA_ICE = registerBlock(blockItem(OperationStarcleaveBlocks.PLASMA_ICE));
+    public static final Item NUCLEOSYNTHESEED = registerBlockItem(OperationStarcleaveBlocks.NUCLEOSYNTHESEED);
+    public static final Item NUCLEIC_FISSUREROOT = registerBlockItem(OperationStarcleaveBlocks.NUCLEIC_FISSUREROOT);
+    public static final Item NUCLEIC_FISSURERIND = registerBlockItem(OperationStarcleaveBlocks.NUCLEIC_FISSURERIND);
+    public static final Item STRIPED_NUCLEIC_FISSUREROOT = registerBlockItem(OperationStarcleaveBlocks.STRIPED_NUCLEIC_FISSUREROOT);
+    public static final Item STRIPED_NUCLEIC_FISSURERIND = registerBlockItem(OperationStarcleaveBlocks.STRIPED_NUCLEIC_FISSURERIND);
+    public static final Item NUCLEIC_FISSURELEAVES = registerBlockItem(OperationStarcleaveBlocks.NUCLEIC_FISSURELEAVES);
+
+    public static final Item COAGULATED_PLASMA = registerBlockItem((OperationStarcleaveBlocks.COAGULATED_PLASMA));
+    public static final Item PLASMA_ICE = registerBlockItem((OperationStarcleaveBlocks.PLASMA_ICE));
 
 
     public static final Item STARCLEAVER_GOLEM_BUCKET = register("starcleaver_golem_bucket", new StarcleaverGolemBucketItem(properties().stacksTo(1)));
@@ -88,8 +90,6 @@ public class OperationStarcleaveItems {
 
     public static final Item HOLY_STRANDS = register("holy_strands", new Item(properties()));
     public static final Item BLESSED_CLOTH = register("blessed_cloth", new Item(properties()));
-
-    public static final Item BLESSED_BED = registerBlock(new BedItem(OperationStarcleaveBlocks.BLESSED_BED, properties().stacksTo(1).rarity(RARE)));
 
     public static final Item STARBLEACHED_PEARL = register("starbleached_pearl", new StarbleachedPearlItem(properties().stacksTo(16)));
     public static final Item STARFRUIT = register("starfruit", new StarfruitItem(properties().food(StarfruitItem.STARFRUIT)));
@@ -115,6 +115,10 @@ public class OperationStarcleaveItems {
     public static final Item SUBCAELIC_TORPEDO_SPAWN_EGG = register("subcaelic_torpedo_spawn_egg", spawnEggItem(OperationStarcleaveEntityTypes.SUBCAELIC_TORPEDO, 0xDFDFDF, 0x1FAF7F));
     public static final Item SUBCAELIC_DUX_SPAWN_EGG = register("subcaelic_dux_spawn_egg", spawnEggItem(OperationStarcleaveEntityTypes.SUBCAELIC_DUX, 0xDFEF9F, 0x6FFFDF));
 
+    private static Item registerBlockItem(Block block) {
+        return registerBlock(new BlockItem(block, properties()));
+    }
+
     private static Item registerBlock(BlockItem item) {
         return registerBlock(item.getBlock(), item);
     }
@@ -122,7 +126,7 @@ public class OperationStarcleaveItems {
     private static Item registerBlock(Block block, Item item) {
         ResourceLocation location;
         Map<Block, ResourceLocation> map = OperationStarcleaveBlocks.UNREGISTERED_BLOCKS.inverse();
-        if(map.containsKey(block)) {
+        if (map.containsKey(block)) {
             location = map.get(block);
         } else {
             location = BuiltInRegistries.BLOCK.getKey(block);
@@ -148,10 +152,6 @@ public class OperationStarcleaveItems {
 
     protected static Item.Properties properties() {
         return new Item.Properties();
-    }
-
-    protected static BlockItem blockItem(Block block) {
-        return new BlockItem(block, properties());
     }
 
     protected static SpawnEggItem spawnEggItem(EntityType<? extends Mob> entityType, int primaryColor, int secondaryColor) {
