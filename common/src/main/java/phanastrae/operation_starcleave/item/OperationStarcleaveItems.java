@@ -1,5 +1,6 @@
 package phanastrae.operation_starcleave.item;
 
+import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -10,6 +11,8 @@ import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
 import phanastrae.operation_starcleave.fluid.OperationStarcleaveFluids;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.BiConsumer;
 
 import static net.minecraft.world.item.Rarity.EPIC;
@@ -17,12 +20,14 @@ import static net.minecraft.world.item.Rarity.RARE;
 
 public class OperationStarcleaveItems {
 
-    public static final Item NETHERITE_PUMPKIN = new NetheritePumpkinItem(OperationStarcleaveBlocks.NETHERITE_PUMPKIN, settings().rarity(Rarity.UNCOMMON).fireResistant());
+    public static final List<Pair<ResourceLocation, Item>> UNREGISTERED_ITEMS = new ArrayList<>();
+
+    public static final Item NETHERITE_PUMPKIN = new NetheritePumpkinItem(OperationStarcleaveBlocks.NETHERITE_PUMPKIN, properties().rarity(Rarity.UNCOMMON).fireResistant());
 
     public static final Item STELLAR_SEDIMENT = blockItem(OperationStarcleaveBlocks.STELLAR_SEDIMENT);
     public static final Item STELLAR_FARMLAND = blockItem(OperationStarcleaveBlocks.STELLAR_FARMLAND);
 
-    public static final Item BISREED_ROOT = new ItemNameBlockItem(OperationStarcleaveBlocks.BISREEDS, settings());
+    public static final Item BISREED_ROOT = new ItemNameBlockItem(OperationStarcleaveBlocks.BISREEDS, properties());
 
     public static final Item STELLAR_MULCH = blockItem(OperationStarcleaveBlocks.STELLAR_MULCH);
     public static final Item MULCHBORNE_TUFT = blockItem(OperationStarcleaveBlocks.MULCHBORNE_TUFT);
@@ -74,62 +79,77 @@ public class OperationStarcleaveItems {
     public static final Item PLASMA_ICE = blockItem(OperationStarcleaveBlocks.PLASMA_ICE);
 
 
+    public static final Item STARCLEAVER_GOLEM_BUCKET = register("starcleaver_golem_bucket", new StarcleaverGolemBucketItem(properties().stacksTo(1)));
 
-    public static final Item STARCLEAVER_GOLEM_BUCKET = new StarcleaverGolemBucketItem(settings(1));
+    public static final Item STARBLEACH_BOTTLE = register("starbleach_bottle", new StarbleachBottleItem(properties().stacksTo(16).craftRemainder(Items.GLASS_BOTTLE).food(StarbleachBottleItem.STARBLEACH_BOTTLE)));
+    public static final Item SPLASH_STARBLEACH_BOTTLE = register("splash_starbleach_bottle", new SplashStarbleachBottleItem(properties().stacksTo(16)));
 
-    public static final Item STARBLEACH_BOTTLE = new StarbleachBottleItem(settings(16).craftRemainder(Items.GLASS_BOTTLE).food(StarbleachBottleItem.STARBLEACH_BOTTLE));
-    public static final Item SPLASH_STARBLEACH_BOTTLE = new SplashStarbleachBottleItem(settings(16));
+    public static final Item BISMUTH_FLAKE = register("bismuth_flake", new Item(properties()));
+    public static final Item STARFLAKED_BISMUTH = register("starflaked_bismuth", new Item(properties()));
 
-    public static final Item BISMUTH_FLAKE = new Item(settings());
-    public static final Item STARFLAKED_BISMUTH = new Item(settings());
+    public static final Item HOLY_STRANDS = register("holy_strands", new Item(properties()));
+    public static final Item BLESSED_CLOTH = register("blessed_cloth", new Item(properties()));
 
-    public static final Item HOLY_STRANDS = new Item(settings());
-    public static final Item BLESSED_CLOTH = new Item(settings());
+    public static final Item BLESSED_BED = register("blessed_bed", new BedItem(OperationStarcleaveBlocks.BLESSED_BED, properties().stacksTo(1).rarity(RARE)));
 
-    public static final Item BLESSED_BED = new BedItem(OperationStarcleaveBlocks.BLESSED_BED, settings(1, RARE));
+    public static final Item STARBLEACHED_PEARL = register("starbleached_pearl", new StarbleachedPearlItem(properties().stacksTo(16)));
+    public static final Item STARFRUIT = register("starfruit", new StarfruitItem(properties().food(StarfruitItem.STARFRUIT)));
 
-    public static final Item STARBLEACHED_PEARL = new StarbleachedPearlItem(settings(16));
-    public static final Item STARFRUIT = new StarfruitItem(settings().food(StarfruitItem.STARFRUIT));
+    public static final Item FIRMAMENT_REJUVENATOR = register("firmament_rejuvenator", new FirmamentRejuvenatorItem(properties().stacksTo(8).rarity(RARE)));
 
-    public static final Item FIRMAMENT_REJUVENATOR = new FirmamentRejuvenatorItem(settings(8, RARE));
-
-    public static final Item BISMUTH_PEGASUS_ARMOR = new AnimalArmorItem(
+    public static final Item BISMUTH_PEGASUS_ARMOR = register("bismuth_pegasus_armor", new AnimalArmorItem(
             OperationStarcleaveArmorMaterials.BISMUTH_ENTRY,
             AnimalArmorItem.BodyType.EQUESTRIAN,
             false,
-            settings().stacksTo(1)
-    );
+            properties().stacksTo(1)
+    ));
 
-    public static final Item HOLLOWED_SAC = new HollowedSacItem(settings());
-    public static final Item PHLOGISTON_SAC = new PhlogistonSacItem(settings());
+    public static final Item HOLLOWED_SAC = register("hollowed_sac", new HollowedSacItem(properties()));
+    public static final Item PHLOGISTON_SAC = register("phlogiston_sac", new PhlogistonSacItem(properties()));
 
-    public static final Item PETRICHORIC_PLASMA_BUCKET = new PetrichoricPlasmaBucketItem(OperationStarcleaveFluids.PETRICHORIC_PLASMA, settings().craftRemainder(Items.BUCKET).stacksTo(1));
+    public static final Item PETRICHORIC_PLASMA_BUCKET = register("petrichoric_plasma_bucket", new PetrichoricPlasmaBucketItem(OperationStarcleaveFluids.PETRICHORIC_PLASMA, properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
-    public static final Item NUCLEAR_STORMCLOUD_BOTTLE = new NuclearStormcloudBottleItem(settings().rarity(EPIC));
-    public static final Item FIRMAMENT_MANIPULATOR = new FirmamentManipulatorItem(settings(1, EPIC));
+    public static final Item NUCLEAR_STORMCLOUD_BOTTLE = register("nuclear_stormcloud_bottle", new NuclearStormcloudBottleItem(properties().rarity(EPIC)));
+    public static final Item FIRMAMENT_MANIPULATOR = register("firmament_manipulator", new FirmamentManipulatorItem(properties().stacksTo(1).rarity(EPIC)));
 
-    public static final Item STARCLEAVER_GOLEM_SPAWN_EGG = spawnEggItem(OperationStarcleaveEntityTypes.STARCLEAVER_GOLEM, 0x292725, 0x61EDDF);
-    public static final Item SUBCAELIC_TORPEDO_SPAWN_EGG = spawnEggItem(OperationStarcleaveEntityTypes.SUBCAELIC_TORPEDO, 0xDFDFDF, 0x1FAF7F);
-    public static final Item SUBCAELIC_DUX_SPAWN_EGG = spawnEggItem(OperationStarcleaveEntityTypes.SUBCAELIC_DUX, 0xDFEF9F, 0x6FFFDF);
+    public static final Item STARCLEAVER_GOLEM_SPAWN_EGG = register("starcleaver_golem_spawn_egg", spawnEggItem(OperationStarcleaveEntityTypes.STARCLEAVER_GOLEM, 0x292725, 0x61EDDF));
+    public static final Item SUBCAELIC_TORPEDO_SPAWN_EGG = register("subcaelic_torpedo_spawn_egg", spawnEggItem(OperationStarcleaveEntityTypes.SUBCAELIC_TORPEDO, 0xDFDFDF, 0x1FAF7F));
+    public static final Item SUBCAELIC_DUX_SPAWN_EGG = register("subcaelic_dux_spawn_egg", spawnEggItem(OperationStarcleaveEntityTypes.SUBCAELIC_DUX, 0xDFEF9F, 0x6FFFDF));
+
+    private static <T extends Item> T register(String id, T item) {
+        return register(OperationStarcleave.id(id), item);
+    }
+
+    private static <T extends Item> T register(ResourceLocation location, T item) {
+        UNREGISTERED_ITEMS.add(Pair.of(location, item));
+        return item;
+    }
+
+    public static void addToTab(Item item) {
+        OperationStarcleaveCreativeModeTabs.addItemToOperationStarcleaveTab(item);
+    }
 
     public static void init(BiConsumer<ResourceLocation, Item> r) {
+        UNREGISTERED_ITEMS.forEach(pair -> r.accept(pair.left(), pair.right()));
+        UNREGISTERED_ITEMS.clear();
+
         BiConsumer<String, Item> rwt = (s, i) -> { // register and add to creative mode tab
             r.accept(id(s), i);
-            OperationStarcleaveCreativeModeTabs.addItemToOperationStarcleaveTab(i);
+            addToTab(i);
         };
 
         rwt.accept("netherite_pumpkin", NETHERITE_PUMPKIN);
-        rwt.accept("starcleaver_golem_bucket", STARCLEAVER_GOLEM_BUCKET);
+        addToTab(STARCLEAVER_GOLEM_BUCKET);
 
-        rwt.accept("starbleach_bottle", STARBLEACH_BOTTLE);
-        rwt.accept("splash_starbleach_bottle", SPLASH_STARBLEACH_BOTTLE);
+        addToTab(STARBLEACH_BOTTLE);
+        addToTab(SPLASH_STARBLEACH_BOTTLE);
 
         rwt.accept("stellar_sediment", STELLAR_SEDIMENT);
         rwt.accept("stellar_farmland", STELLAR_FARMLAND);
 
         rwt.accept("bisreed_root", BISREED_ROOT);
-        rwt.accept("bismuth_flake", BISMUTH_FLAKE);
-        rwt.accept("starflaked_bismuth", STARFLAKED_BISMUTH);
+        addToTab(BISMUTH_FLAKE);
+        addToTab(STARFLAKED_BISMUTH);
 
         rwt.accept("stellar_tiles", STELLAR_TILES);
         rwt.accept("stellar_tile_slab", STELLAR_TILE_SLAB);
@@ -140,14 +160,14 @@ public class OperationStarcleaveItems {
         rwt.accept("holy_moss", HOLY_MOSS);
         rwt.accept("short_holy_moss", SHORT_HOLY_MOSS);
 
-        rwt.accept("holy_strands", HOLY_STRANDS);
-        rwt.accept("blessed_cloth", BLESSED_CLOTH);
+        addToTab(HOLY_STRANDS);
+        addToTab(BLESSED_CLOTH);
 
         rwt.accept("blessed_cloth_block", BLESSED_CLOTH_BLOCK);
         rwt.accept("blessed_cloth_carpet", BLESSED_CLOTH_CARPET);
         rwt.accept("blessed_cloth_curtain", BLESSED_CLOTH_CURTAIN);
 
-        rwt.accept("blessed_bed", BLESSED_BED);
+        addToTab(BLESSED_BED);
 
         rwt.accept("stardust_block", STARDUST_BLOCK);
         rwt.accept("stardust_cluster", STARDUST_CLUSTER);
@@ -177,30 +197,30 @@ public class OperationStarcleaveItems {
         rwt.accept("striped_nucleic_fissurerind", STRIPED_NUCLEIC_FISSURERIND);
         rwt.accept("nucleic_fissureleaves", NUCLEIC_FISSURELEAVES);
 
-        rwt.accept("starbleached_pearl", STARBLEACHED_PEARL);
-        rwt.accept("starfruit", STARFRUIT);
+        addToTab(STARBLEACHED_PEARL);
+        addToTab(STARFRUIT);
 
-        rwt.accept("firmament_rejuvenator", FIRMAMENT_REJUVENATOR);
+        addToTab(FIRMAMENT_REJUVENATOR);
 
-        rwt.accept("bismuth_pegasus_armor", BISMUTH_PEGASUS_ARMOR);
+        addToTab(BISMUTH_PEGASUS_ARMOR);
 
         rwt.accept("starbleached_pearl_block", STARBLEACHED_PEARL_BLOCK);
         rwt.accept("stellar_repulsor", STELLAR_REPULSOR);
 
-        rwt.accept("hollowed_sac", HOLLOWED_SAC);
-        rwt.accept("phlogiston_sac", PHLOGISTON_SAC);
+        addToTab(HOLLOWED_SAC);
+        addToTab(PHLOGISTON_SAC);
 
         rwt.accept("coagulated_plasma", COAGULATED_PLASMA);
         rwt.accept("plasma_ice", PLASMA_ICE);
-        rwt.accept("petrichoric_plasma_bucket", PETRICHORIC_PLASMA_BUCKET);
+        addToTab(PETRICHORIC_PLASMA_BUCKET);
 
 
-        rwt.accept("nuclear_stormcloud_bottle", NUCLEAR_STORMCLOUD_BOTTLE);
-        rwt.accept("firmament_manipulator", FIRMAMENT_MANIPULATOR);
+        addToTab(NUCLEAR_STORMCLOUD_BOTTLE);
+        addToTab(FIRMAMENT_MANIPULATOR);
 
-        rwt.accept("starcleaver_golem_spawn_egg", STARCLEAVER_GOLEM_SPAWN_EGG);
-        rwt.accept("subcaelic_torpedo_spawn_egg", SUBCAELIC_TORPEDO_SPAWN_EGG);
-        rwt.accept("subcaelic_dux_spawn_egg", SUBCAELIC_DUX_SPAWN_EGG);
+        addToTab(STARCLEAVER_GOLEM_SPAWN_EGG);
+        addToTab(SUBCAELIC_TORPEDO_SPAWN_EGG);
+        addToTab(SUBCAELIC_DUX_SPAWN_EGG);
 
         Item.BY_BLOCK.put(OperationStarcleaveBlocks.STARBLEACH_CAULDRON, Items.CAULDRON);
     }
@@ -209,23 +229,15 @@ public class OperationStarcleaveItems {
         return OperationStarcleave.id(path);
     }
 
-    protected static Item.Properties settings() {
+    protected static Item.Properties properties() {
         return new Item.Properties();
     }
 
-    protected static Item.Properties settings(int maxCount) {
-        return new Item.Properties().stacksTo(maxCount);
-    }
-
-    protected static Item.Properties settings(int maxCount, Rarity rarity) {
-        return new Item.Properties().stacksTo(maxCount).rarity(rarity);
-    }
-
     protected static BlockItem blockItem(Block block) {
-        return new BlockItem(block, settings());
+        return new BlockItem(block, properties());
     }
 
     protected static SpawnEggItem spawnEggItem(EntityType<? extends Mob> entityType, int primaryColor, int secondaryColor) {
-        return new SpawnEggItem(entityType, primaryColor, secondaryColor, settings());
+        return new SpawnEggItem(entityType, primaryColor, secondaryColor, properties());
     }
 }
