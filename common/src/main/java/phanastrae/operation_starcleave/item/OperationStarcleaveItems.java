@@ -134,97 +134,9 @@ public class OperationStarcleaveItems {
         return item;
     }
 
-    public static void addToTab(Item item) {
-        OperationStarcleaveCreativeModeTabs.addItemToOperationStarcleaveTab(item);
-    }
-
     public static void init(BiConsumer<ResourceLocation, Item> r) {
         UNREGISTERED_ITEMS.forEach(pair -> r.accept(pair.left(), pair.right()));
         UNREGISTERED_ITEMS.clear();
-
-        addToTab(NETHERITE_PUMPKIN);
-        addToTab(STARCLEAVER_GOLEM_BUCKET);
-
-        addToTab(STARBLEACH_BOTTLE);
-        addToTab(SPLASH_STARBLEACH_BOTTLE);
-
-        addToTab(STELLAR_SEDIMENT);
-        addToTab(STELLAR_FARMLAND);
-
-        addToTab(BISREED_ROOT);
-        addToTab(BISMUTH_FLAKE);
-        addToTab(STARFLAKED_BISMUTH);
-
-        addToTab(STELLAR_TILES);
-        addToTab(STELLAR_TILE_SLAB);
-
-        addToTab(STELLAR_MULCH);
-        addToTab(MULCHBORNE_TUFT);
-
-        addToTab(HOLY_MOSS);
-        addToTab(SHORT_HOLY_MOSS);
-
-        addToTab(HOLY_STRANDS);
-        addToTab(BLESSED_CLOTH);
-
-        addToTab(BLESSED_CLOTH_BLOCK);
-        addToTab(BLESSED_CLOTH_CARPET);
-        addToTab(BLESSED_CLOTH_CURTAIN);
-
-        addToTab(BLESSED_BED);
-
-        addToTab(STARDUST_BLOCK);
-        addToTab(STARDUST_CLUSTER);
-
-        addToTab(STARDUST_BRICKS);
-        addToTab(STARDUST_BRICK_STAIRS);
-        addToTab(STARDUST_BRICK_SLAB);
-        addToTab(STARDUST_BRICK_WALL);
-
-        addToTab(STARBLEACHED_LOG);
-        addToTab(STARBLEACHED_WOOD);
-
-        addToTab(STARBLEACHED_LEAVES);
-
-        addToTab(STARBLEACHED_TILES);
-        addToTab(STARBLEACHED_TILE_SLAB);
-        addToTab(STARBLEACHED_TILE_STAIRS);
-        addToTab(STARBLEACHED_TILE_WALL);
-
-        addToTab(CHISELED_STARBLEACHED_TILES);
-        addToTab(IMBUED_STARBLEACHED_TILES);
-
-        addToTab(NUCLEOSYNTHESEED);
-        addToTab(NUCLEIC_FISSUREROOT);
-        addToTab(NUCLEIC_FISSURERIND);
-        addToTab(STRIPED_NUCLEIC_FISSUREROOT);
-        addToTab(STRIPED_NUCLEIC_FISSURERIND);
-        addToTab(NUCLEIC_FISSURELEAVES);
-
-        addToTab(STARBLEACHED_PEARL);
-        addToTab(STARFRUIT);
-
-        addToTab(FIRMAMENT_REJUVENATOR);
-
-        addToTab(BISMUTH_PEGASUS_ARMOR);
-
-        addToTab(STARBLEACHED_PEARL_BLOCK);
-        addToTab(STELLAR_REPULSOR);
-
-        addToTab(HOLLOWED_SAC);
-        addToTab(PHLOGISTON_SAC);
-
-        addToTab(COAGULATED_PLASMA);
-        addToTab(PLASMA_ICE);
-        addToTab(PETRICHORIC_PLASMA_BUCKET);
-
-
-        addToTab(NUCLEAR_STORMCLOUD_BOTTLE);
-        addToTab(FIRMAMENT_MANIPULATOR);
-
-        addToTab(STARCLEAVER_GOLEM_SPAWN_EGG);
-        addToTab(SUBCAELIC_TORPEDO_SPAWN_EGG);
-        addToTab(SUBCAELIC_DUX_SPAWN_EGG);
 
         Item.BY_BLOCK.put(OperationStarcleaveBlocks.STARBLEACH_CAULDRON, Items.CAULDRON);
     }

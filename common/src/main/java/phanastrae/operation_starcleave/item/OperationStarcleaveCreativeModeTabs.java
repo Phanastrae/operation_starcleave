@@ -12,9 +12,7 @@ import net.minecraft.world.level.ItemLike;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.services.XPlatInterface;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.function.BiConsumer;
 
 import static phanastrae.operation_starcleave.item.OperationStarcleaveItems.*;
@@ -32,28 +30,104 @@ public class OperationStarcleaveCreativeModeTabs {
     public static final ResourceKey<CreativeModeTab> SPAWN_EGGS = createKey("spawn_eggs");
     public static final ResourceKey<CreativeModeTab> OP_BLOCKS = createKey("op_blocks");
 
+    public static final ResourceKey<CreativeModeTab> OPERATION_STARCLEAVE_RESOURCE_KEY = ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), OperationStarcleave.id("operation_starcleave"));
+
     public static final CreativeModeTab OPERATION_STARCLEAVE_TAB = XPlatInterface.INSTANCE.createCreativeModeTabBuilder()
             .icon(OperationStarcleaveItems.NETHERITE_PUMPKIN::getDefaultInstance)
             .title(Component.translatable("itemGroup.operation_starcleave.group"))
             .build();
-    public static final ResourceKey<CreativeModeTab> OPERATION_STARCLEAVE_RESOURCE_KEY = ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), OperationStarcleave.id("operation_starcleave"));
-
-    private static final List<ItemStack> QUEUED_TAB_ITEMS = new ArrayList<>();
 
     public static void init(BiConsumer<ResourceLocation, CreativeModeTab> r) {
         r.accept(id("operation_starcleave"), OPERATION_STARCLEAVE_TAB);
     }
 
-    public static void addItemToOperationStarcleaveTab(ItemLike item) {
-        addItemToOperationStarcleaveTab(new ItemStack(item));
-    }
-
-    public static void addItemToOperationStarcleaveTab(ItemStack itemStack) {
-        QUEUED_TAB_ITEMS.add(itemStack);
-    }
-
     public static void setupEntries(Helper helper) {
-        addQueuedItems(helper);
+        // Operation: Starcleave Tab
+        helper.add(OPERATION_STARCLEAVE_RESOURCE_KEY,
+                NETHERITE_PUMPKIN,
+                STARCLEAVER_GOLEM_BUCKET,
+
+                STARBLEACH_BOTTLE,
+                SPLASH_STARBLEACH_BOTTLE,
+
+                STELLAR_SEDIMENT,
+                STELLAR_FARMLAND,
+
+                BISREED_ROOT,
+                BISMUTH_FLAKE,
+                STARFLAKED_BISMUTH,
+
+                STELLAR_TILES,
+                STELLAR_TILE_SLAB,
+
+                STELLAR_MULCH,
+                MULCHBORNE_TUFT,
+
+                HOLY_MOSS,
+                SHORT_HOLY_MOSS,
+
+                HOLY_STRANDS,
+                BLESSED_CLOTH,
+
+                BLESSED_CLOTH_BLOCK,
+                BLESSED_CLOTH_CARPET,
+                BLESSED_CLOTH_CURTAIN,
+
+                BLESSED_BED,
+
+                STARDUST_BLOCK,
+                STARDUST_CLUSTER,
+
+                STARDUST_BRICKS,
+                STARDUST_BRICK_STAIRS,
+                STARDUST_BRICK_SLAB,
+                STARDUST_BRICK_WALL,
+
+                STARBLEACHED_LOG,
+                STARBLEACHED_WOOD,
+
+                STARBLEACHED_LEAVES,
+
+                STARBLEACHED_TILES,
+                STARBLEACHED_TILE_SLAB,
+                STARBLEACHED_TILE_STAIRS,
+                STARBLEACHED_TILE_WALL,
+
+                CHISELED_STARBLEACHED_TILES,
+                IMBUED_STARBLEACHED_TILES,
+
+                NUCLEOSYNTHESEED,
+                NUCLEIC_FISSUREROOT,
+                NUCLEIC_FISSURERIND,
+                STRIPED_NUCLEIC_FISSUREROOT,
+                STRIPED_NUCLEIC_FISSURERIND,
+                NUCLEIC_FISSURELEAVES,
+
+                STARBLEACHED_PEARL,
+                STARFRUIT,
+
+                FIRMAMENT_REJUVENATOR,
+
+                BISMUTH_PEGASUS_ARMOR,
+
+                STARBLEACHED_PEARL_BLOCK,
+                STELLAR_REPULSOR,
+
+                HOLLOWED_SAC,
+                PHLOGISTON_SAC,
+
+                COAGULATED_PLASMA,
+                PLASMA_ICE,
+                PETRICHORIC_PLASMA_BUCKET,
+
+
+                NUCLEAR_STORMCLOUD_BOTTLE,
+                FIRMAMENT_MANIPULATOR,
+
+                STARCLEAVER_GOLEM_SPAWN_EGG,
+                SUBCAELIC_TORPEDO_SPAWN_EGG,
+                SUBCAELIC_DUX_SPAWN_EGG
+        );
 
         // Building Blocks
         helper.addAfter(Items.WARPED_BUTTON, BUILDING_BLOCKS,
@@ -178,15 +252,11 @@ public class OperationStarcleaveCreativeModeTabs {
         }
     }
 
-    private static void addQueuedItems(Helper helper) {
-        helper.add(OPERATION_STARCLEAVE_RESOURCE_KEY, QUEUED_TAB_ITEMS);
-    }
-
-    private static ResourceLocation id(String path) {
+    public static ResourceLocation id(String path) {
         return OperationStarcleave.id(path);
     }
 
-    private static ResourceKey<CreativeModeTab> createKey(String name) {
+    public static ResourceKey<CreativeModeTab> createKey(String name) {
         return ResourceKey.create(Registries.CREATIVE_MODE_TAB, ResourceLocation.withDefaultNamespace(name));
     }
 
