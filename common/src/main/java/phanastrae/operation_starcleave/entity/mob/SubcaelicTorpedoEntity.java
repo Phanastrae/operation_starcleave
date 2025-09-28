@@ -15,6 +15,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameRules;
@@ -74,8 +75,8 @@ public class SubcaelicTorpedoEntity extends AbstractSubcaelicEntity {
     public void addAdditionalSaveData(CompoundTag nbt) {
         super.addAdditionalSaveData(nbt);
 
-        nbt.putShort("Fuse", (short)this.fuseTime);
-        if(this.currentFuseTime > 0) {
+        nbt.putShort("Fuse", (short) this.fuseTime);
+        if (this.currentFuseTime > 0) {
             nbt.putShort("CurrentFuse", (short) this.currentFuseTime);
         }
         nbt.putFloat("SpeedModifier", this.getSpeedModifier());
@@ -98,11 +99,11 @@ public class SubcaelicTorpedoEntity extends AbstractSubcaelicEntity {
 
     @Override
     public void tick() {
-        if(!this.level().isClientSide()) {
-            if(this.isPrimed() && this.level().getDifficulty().equals(Difficulty.PEACEFUL)) {
+        if (!this.level().isClientSide()) {
+            if (this.isPrimed() && this.level().getDifficulty().equals(Difficulty.PEACEFUL)) {
                 this.unprimeAndUntarget();
-                if(this.dux != null) {
-                    if(!this.inGroup && this.dux.canAdoptTorpedo()) {
+                if (this.dux != null) {
+                    if (!this.inGroup && this.dux.canAdoptTorpedo()) {
                         this.joinGroupOf(this.dux);
                     } else {
                         this.dux = null;
@@ -110,7 +111,7 @@ public class SubcaelicTorpedoEntity extends AbstractSubcaelicEntity {
                 }
             }
 
-            if(this.isPrimed() && (this.horizontalCollision || this.verticalCollision)) {
+            if (this.isPrimed() && (this.horizontalCollision || this.verticalCollision)) {
                 this.setFuseSpeedToAtLeast(5);
             }
         }
@@ -130,15 +131,15 @@ public class SubcaelicTorpedoEntity extends AbstractSubcaelicEntity {
 
         if (this.currentFuseTime >= this.fuseTime) {
             this.currentFuseTime = this.fuseTime;
-            if(this.isAlive()) {
+            if (this.isAlive()) {
                 this.explode();
             }
         }
 
-        if(this.isAlive()) {
+        if (this.isAlive()) {
             int lastBeep = this.lastFuseTime / 10;
             int currentBeep = this.currentFuseTime / 10;
-            if(currentBeep > lastBeep) {
+            if (currentBeep > lastBeep) {
                 this.playSound(OperationStarcleaveSoundEvents.SUBCAELIC_TORPEDO_BEEP, 1.8F, 1F + 0.8F * this.getClientFuseTime(0));
             }
         }
@@ -150,7 +151,7 @@ public class SubcaelicTorpedoEntity extends AbstractSubcaelicEntity {
     public void aiStep() {
         super.aiStep();
 
-        if(!this.isAlive()) {
+        if (!this.isAlive()) {
             this.setDeltaMovement(this.getDeltaMovement().x * 0.98, this.getDeltaMovement().y * 0.98 - 0.03, this.getDeltaMovement().z * 0.98);
         }
     }
@@ -172,7 +173,7 @@ public class SubcaelicTorpedoEntity extends AbstractSubcaelicEntity {
 
     @Override
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
-        if(this.dux != null) {
+        if (this.dux != null) {
             return false;
         }
 
@@ -181,10 +182,12 @@ public class SubcaelicTorpedoEntity extends AbstractSubcaelicEntity {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if(this.isPrimed()) {
-            if(!source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
-                this.setFuseSpeedToAtLeast(60);
-                return true;
+        if (this.isPrimed()) {
+            if (!(source.getEntity() instanceof Frog)) {
+                if (!source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+                    this.setFuseSpeedToAtLeast(60);
+                    return true;
+                }
             }
         }
         return super.hurt(source, amount);
@@ -205,7 +208,7 @@ public class SubcaelicTorpedoEntity extends AbstractSubcaelicEntity {
     @Override
     public void handleEntityEvent(byte status) {
         if (status == EntityEvent.FIREWORKS_EXPLODE) {
-            for(int i = 0; i < 1000; ++i) {
+            for (int i = 0; i < 1000; ++i) {
                 this.level()
                         .addParticle(
                                 OperationStarcleaveParticleTypes.GLIMMER_SMOKE,
@@ -221,7 +224,13 @@ public class SubcaelicTorpedoEntity extends AbstractSubcaelicEntity {
     }
 
     public float getClientFuseTime(float timeDelta) {
-        return Mth.lerp(timeDelta, (float)this.lastFuseTime, (float)this.currentFuseTime) / (float)(this.fuseTime - 2);
+        return Mth.lerp(timeDelta, (float) this.lastFuseTime, (float) this.currentFuseTime) / (float) (this.fuseTime - 2);
+    }
+
+    public void limitFuseTimeTo(int maxFuseTime) {
+        if (this.currentFuseTime > maxFuseTime) {
+            this.currentFuseTime = maxFuseTime;
+        }
     }
 
     public boolean isPrimed() {
@@ -249,7 +258,7 @@ public class SubcaelicTorpedoEntity extends AbstractSubcaelicEntity {
     }
 
     public void setFuseSpeedToAtLeast(int fuseSpeed) {
-        if(fuseSpeed > this.getFuseSpeed()) {
+        if (fuseSpeed > this.getFuseSpeed()) {
             this.setFuseSpeed(fuseSpeed);
         }
     }
@@ -258,9 +267,9 @@ public class SubcaelicTorpedoEntity extends AbstractSubcaelicEntity {
         if (!this.level().isClientSide) {
             this.dead = true;
             LivingEntity attacker = (this.dux != null && !this.dux.isRemoved()) ? this.dux : this;
-            this.level().explode(attacker, this.getX(), this.getY()+this.getBbHeight()/2, this.getZ(), 1.5f, Level.ExplosionInteraction.NONE);
+            this.level().explode(attacker, this.getX(), this.getY() + this.getBbHeight() / 2, this.getZ(), 1.5f, Level.ExplosionInteraction.NONE);
             StarbleachedPearlEntity.doRepulsion(this.position(), 4f, 2.0f, this.level(), this, EntitySelector.NO_SPECTATORS.and((entity -> !(entity instanceof AbstractSubcaelicEntity))));
-            if(this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && this.getTarget() instanceof Player) {
+            if (this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && this.getTarget() instanceof Player) {
                 SplashStarbleachEntity.starbleach(blockPosition(), this.level());
             }
             this.level().broadcastEntityEvent(this, EntityEvent.FIREWORKS_EXPLODE);
@@ -269,7 +278,7 @@ public class SubcaelicTorpedoEntity extends AbstractSubcaelicEntity {
     }
 
     public void joinGroupOf(SubcaelicDuxEntity dux) {
-        if(this.inGroup) {
+        if (this.inGroup) {
             this.leaveGroup(true);
         }
 
@@ -279,11 +288,11 @@ public class SubcaelicTorpedoEntity extends AbstractSubcaelicEntity {
     }
 
     public void leaveGroup(boolean forgetDux) {
-        if(this.dux != null) {
+        if (this.dux != null) {
             this.dux.removeTorpedo(this);
         }
         this.inGroup = false;
-        if(forgetDux) {
+        if (forgetDux) {
             this.dux = null;
         }
     }
@@ -314,7 +323,7 @@ public class SubcaelicTorpedoEntity extends AbstractSubcaelicEntity {
 
         @Override
         public boolean canUse() {
-            if(!torpedo.isPrimed()) {
+            if (!torpedo.isPrimed()) {
                 return false;
             }
             long l = this.torpedo.level().getGameTime();
@@ -335,7 +344,7 @@ public class SubcaelicTorpedoEntity extends AbstractSubcaelicEntity {
             } else if (!target.isAlive()) {
                 return false;
             } else {
-                return !(target instanceof Player) || !target.isSpectator() && !((Player)target).isCreative();
+                return !(target instanceof Player) || !target.isSpectator() && !((Player) target).isCreative();
             }
         }
 
@@ -362,7 +371,7 @@ public class SubcaelicTorpedoEntity extends AbstractSubcaelicEntity {
         @Override
         public void tick() {
             LivingEntity target = this.torpedo.getTarget();
-            if(target != null) {
+            if (target != null) {
                 Vec3 offset = target.position().subtract(torpedo.position());
 
                 double sqrDistance = offset.lengthSqr();
@@ -386,7 +395,7 @@ public class SubcaelicTorpedoEntity extends AbstractSubcaelicEntity {
 
         @Override
         public boolean canUse() {
-            if(this.torpedo.isPrimed()) {
+            if (this.torpedo.isPrimed()) {
                 return false;
             }
 
@@ -396,9 +405,9 @@ public class SubcaelicTorpedoEntity extends AbstractSubcaelicEntity {
         @Override
         public void tick() {
             SubcaelicDuxEntity dux = this.torpedo.dux;
-            if(dux == null) return;
+            if (dux == null) return;
 
-            if(this.torpedo.getRandom().nextInt(reducedTickDelay(10)) == 0) {
+            if (this.torpedo.getRandom().nextInt(reducedTickDelay(10)) == 0) {
                 this.torpedo.moveControl.setWantedPosition(dux.getX(), dux.getY(), dux.getZ(), 1.4);
             }
         }
@@ -420,11 +429,11 @@ public class SubcaelicTorpedoEntity extends AbstractSubcaelicEntity {
 
         @Override
         public boolean canUse() {
-            if(this.torpedo.isPrimed()) {
+            if (this.torpedo.isPrimed()) {
                 return false;
             }
 
-            if(this.searchCooldown > 0) {
+            if (this.searchCooldown > 0) {
                 this.searchCooldown--;
                 return false;
             }
@@ -434,8 +443,8 @@ public class SubcaelicTorpedoEntity extends AbstractSubcaelicEntity {
 
         @Override
         public void tick() {
-            if(this.torpedo.inGroup && this.torpedo.dux != null) {
-                if(this.torpedo.dux.isRemoved() || this.torpedo.distanceToSqr(this.torpedo.dux) > DUX_STOP_FOLLOW_RANGE * DUX_STOP_FOLLOW_RANGE) {
+            if (this.torpedo.inGroup && this.torpedo.dux != null) {
+                if (this.torpedo.dux.isRemoved() || this.torpedo.distanceToSqr(this.torpedo.dux) > DUX_STOP_FOLLOW_RANGE * DUX_STOP_FOLLOW_RANGE) {
                     this.torpedo.leaveGroup(true);
                 } else {
                     return;
@@ -444,7 +453,7 @@ public class SubcaelicTorpedoEntity extends AbstractSubcaelicEntity {
 
             SubcaelicDuxEntity closestDux = this.torpedo.level().getNearestEntity(SubcaelicDuxEntity.class, CLOSE_DUX_PREDICATE, this.torpedo,
                     this.torpedo.getX(), this.torpedo.getY(), this.torpedo.getZ(), this.torpedo.getBoundingBox().inflate(DUX_START_FOLLOW_RANGE));
-            if(closestDux != null && closestDux.canAdoptTorpedo()) {
+            if (closestDux != null && closestDux.canAdoptTorpedo()) {
                 this.torpedo.joinGroupOf(closestDux);
             }
         }
