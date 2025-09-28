@@ -343,6 +343,16 @@ public class OperationStarcleaveBlocks {
             )
     );
 
+    public static final Block SUBCAELIC_PHLOGLIGHT = register(
+            "subcaelic_phloglight",
+            new RotatedPillarBlock(properties()
+                    .strength(0.3F)
+                    .mapColor(COLOR_ORANGE)
+                    .sound(SoundType.FROGLIGHT)
+                    .lightLevel(constant(15))
+            )
+    );
+
     public static final Block PHLOGISTIC_FIRE = register(
             "phlogistic_fire",
             new PhlogisticFireBlock(properties()

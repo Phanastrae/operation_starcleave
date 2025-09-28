@@ -28,6 +28,7 @@
     "ServerGamePacketListenerImplMixin",
     "ServerLevelMixin",
     "ServerPlayerMixin",
+    "ShootTongueMixin",
     "SimpleParticleTypeAccessor",
     "SpawnPlacementsAccessor",
     "StemBlockMixin",

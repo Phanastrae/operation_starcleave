@@ -65,6 +65,7 @@
   "block.operation_starcleave.stellar_tile_slab": "Stellar Tile Slab",
   "block.operation_starcleave.striped_nucleic_fissurerind": "Striped Nucleic Fissurerind",
   "block.operation_starcleave.striped_nucleic_fissureroot": "Striped Nucleic Fissureroot",
+  "block.operation_starcleave.subcaelic_phloglight": "Subcaelic Phloglight",
 
   "death.attack.operation_starcleave.inPhlogisticFire": "%1$s went up in otherworldly flame",
   "death.attack.operation_starcleave.inPhlogisticFire.player": "%1$s walked into otherworldly fire while fighting %2$s",

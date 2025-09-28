@@ -115,6 +115,7 @@ public class OperationStarcleaveCreativeModeTabs {
 
                 HOLLOWED_SAC,
                 PHLOGISTON_SAC,
+                SUBCAELIC_PHLOGLIGHT,
 
                 COAGULATED_PLASMA,
                 PLASMA_ICE,
@@ -192,8 +193,14 @@ public class OperationStarcleaveCreativeModeTabs {
         helper.addAfter(Items.NETHER_WART, NATURAL_BLOCKS,
                 BISREED_ROOT
         );
+        helper.addAfter(Items.PEARLESCENT_FROGLIGHT, NATURAL_BLOCKS,
+                SUBCAELIC_PHLOGLIGHT
+        );
 
         // Functional
+        helper.addAfter(Items.PEARLESCENT_FROGLIGHT, FUNCTIONAL_BLOCKS,
+                SUBCAELIC_PHLOGLIGHT
+        );
         helper.addAfter(Items.DRAGON_HEAD, FUNCTIONAL_BLOCKS,
                 NETHERITE_PUMPKIN
         );

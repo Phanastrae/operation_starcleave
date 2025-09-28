@@ -63,11 +63,13 @@ public class OperationStarcleaveItems {
 
     public static final Item STELLAR_REPULSOR = registerBlockItem((OperationStarcleaveBlocks.STELLAR_REPULSOR));
 
-    public static final Item BLESSED_CLOTH_BLOCK = registerBlockItem((OperationStarcleaveBlocks.BLESSED_CLOTH_BLOCK));
-    public static final Item BLESSED_CLOTH_CARPET = registerBlockItem((OperationStarcleaveBlocks.BLESSED_CLOTH_CARPET));
-    public static final Item BLESSED_CLOTH_CURTAIN = registerBlockItem((OperationStarcleaveBlocks.BLESSED_CLOTH_CURTAIN));
+    public static final Item BLESSED_CLOTH_BLOCK = registerBlockItem(OperationStarcleaveBlocks.BLESSED_CLOTH_BLOCK);
+    public static final Item BLESSED_CLOTH_CARPET = registerBlockItem(OperationStarcleaveBlocks.BLESSED_CLOTH_CARPET);
+    public static final Item BLESSED_CLOTH_CURTAIN = registerBlockItem(OperationStarcleaveBlocks.BLESSED_CLOTH_CURTAIN);
 
     public static final Item BLESSED_BED = registerBlock(new BedItem(OperationStarcleaveBlocks.BLESSED_BED, properties().stacksTo(1).rarity(RARE)));
+
+    public static final Item SUBCAELIC_PHLOGLIGHT = registerBlockItem(OperationStarcleaveBlocks.SUBCAELIC_PHLOGLIGHT);
 
     public static final Item NUCLEOSYNTHESEED = registerBlockItem(OperationStarcleaveBlocks.NUCLEOSYNTHESEED);
     public static final Item NUCLEIC_FISSUREROOT = registerBlockItem(OperationStarcleaveBlocks.NUCLEIC_FISSUREROOT);

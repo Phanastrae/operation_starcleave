@@ -68,6 +68,8 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                 BLESSED_CLOTH_CARPET,
                 BLESSED_CLOTH_CURTAIN,
 
+                SUBCAELIC_PHLOGLIGHT,
+
                 NUCLEIC_FISSUREROOT,
                 NUCLEIC_FISSURERIND,
                 STRIPED_NUCLEIC_FISSUREROOT,

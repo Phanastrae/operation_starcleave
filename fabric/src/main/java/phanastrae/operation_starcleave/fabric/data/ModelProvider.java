@@ -65,6 +65,8 @@ public class ModelProvider extends FabricModelProvider {
         registerGrassLikeBlock(BMG, HOLY_MOSS, STELLAR_SEDIMENT);
         registerGrassLikeBlock(BMG, STELLAR_MULCH, STELLAR_SEDIMENT);
 
+        BMG.createRotatedPillarWithHorizontalVariant(SUBCAELIC_PHLOGLIGHT, TexturedModel.COLUMN, TexturedModel.COLUMN_HORIZONTAL);
+
         BMG.createCropBlock(BISREEDS, BlockStateProperties.AGE_3, 0, 1, 2, 3);
 
         registerPumpkin(BMG, NETHERITE_PUMPKIN);
