@@ -132,13 +132,7 @@ public class OperationStarcleaveCreativeModeTabs {
         // Building Blocks
         helper.addAfter(Items.WARPED_BUTTON, BUILDING_BLOCKS,
                 STARBLEACHED_LOG,
-                STARBLEACHED_WOOD
-        );
-        helper.add(BUILDING_BLOCKS,
-                STARDUST_BRICKS,
-                STARDUST_BRICK_STAIRS,
-                STARDUST_BRICK_SLAB,
-                STARDUST_BRICK_WALL,
+                STARBLEACHED_WOOD,
 
                 STARBLEACHED_TILES,
                 STARBLEACHED_TILE_STAIRS,
@@ -148,11 +142,21 @@ public class OperationStarcleaveCreativeModeTabs {
                 CHISELED_STARBLEACHED_TILES,
                 IMBUED_STARBLEACHED_TILES,
 
-                STELLAR_TILES,
-                STELLAR_TILE_SLAB,
+                NUCLEIC_FISSUREROOT,
+                NUCLEIC_FISSURERIND,
+                STRIPED_NUCLEIC_FISSUREROOT,
+                STRIPED_NUCLEIC_FISSURERIND
+        );
+        helper.addAfter(Items.PURPUR_SLAB, BUILDING_BLOCKS,
+                STARDUST_BRICKS,
+                STARDUST_BRICK_STAIRS,
+                STARDUST_BRICK_SLAB,
+                STARDUST_BRICK_WALL,
 
                 STARDUST_CLUSTER,
 
+                STELLAR_TILES,
+                STELLAR_TILE_SLAB,
                 BLESSED_CLOTH_BLOCK,
                 BLESSED_CLOTH_CARPET,
                 BLESSED_CLOTH_CURTAIN
@@ -160,17 +164,26 @@ public class OperationStarcleaveCreativeModeTabs {
 
         // Natural
         helper.addAfter(Items.END_STONE, NATURAL_BLOCKS,
-                HOLY_MOSS,
                 STELLAR_SEDIMENT,
-                STELLAR_MULCH,
                 STELLAR_FARMLAND,
-                STARDUST_BLOCK
+                STELLAR_MULCH,
+                HOLY_MOSS,
+                STARDUST_BLOCK,
+
+                COAGULATED_PLASMA,
+                PLASMA_ICE
+
         );
         helper.addAfter(Items.WARPED_STEM, NATURAL_BLOCKS,
-                STARBLEACHED_LOG
+                STARBLEACHED_LOG,
+                NUCLEIC_FISSUREROOT
         );
         helper.addAfter(Items.FLOWERING_AZALEA_LEAVES, NATURAL_BLOCKS,
-                STARBLEACHED_LEAVES
+                STARBLEACHED_LEAVES,
+                NUCLEIC_FISSURELEAVES
+        );
+        helper.addAfter(Items.FLOWERING_AZALEA, NATURAL_BLOCKS,
+                NUCLEOSYNTHESEED
         );
         helper.addAfter(Items.HANGING_ROOTS, NATURAL_BLOCKS,
                 MULCHBORNE_TUFT,
@@ -193,6 +206,9 @@ public class OperationStarcleaveCreativeModeTabs {
         helper.addAfter(Items.PINK_BED, FUNCTIONAL_BLOCKS,
                 BLESSED_BED
         );
+        helper.add(FUNCTIONAL_BLOCKS,
+                NUCLEOSYNTHESEED
+        );
 
         // Redstone
         helper.add(REDSTONE_BLOCKS,
@@ -201,12 +217,20 @@ public class OperationStarcleaveCreativeModeTabs {
         );
 
         // Tools
+        helper.addAfter(Items.BUCKET, TOOLS_AND_UTILITIES,
+                STARCLEAVER_GOLEM_BUCKET
+        );
+        helper.addAfter(Items.LAVA_BUCKET, TOOLS_AND_UTILITIES,
+                PETRICHORIC_PLASMA_BUCKET
+        );
         helper.add(TOOLS_AND_UTILITIES,
                 STARBLEACHED_PEARL,
-                FIRMAMENT_REJUVENATOR,
-                STARCLEAVER_GOLEM_BUCKET,
                 HOLLOWED_SAC,
-                PHLOGISTON_SAC
+                PHLOGISTON_SAC,
+                FIRMAMENT_REJUVENATOR,
+
+                NUCLEAR_STORMCLOUD_BOTTLE,
+                FIRMAMENT_MANIPULATOR
         );
 
         // Combat
@@ -245,9 +269,10 @@ public class OperationStarcleaveCreativeModeTabs {
         );
 
         // Operator
-        if(helper.operatorTabEnabled()) {
+        if (helper.operatorTabEnabled()) {
             helper.add(OP_BLOCKS,
-                    FIRMAMENT_MANIPULATOR
+                    FIRMAMENT_MANIPULATOR,
+                    NUCLEAR_STORMCLOUD_BOTTLE
             );
         }
     }
