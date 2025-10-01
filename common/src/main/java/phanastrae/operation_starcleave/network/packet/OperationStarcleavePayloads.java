@@ -25,6 +25,7 @@ public class OperationStarcleavePayloads {
         helper.registerS2C(EntityPhlogisticFirePayload.PACKET_ID, EntityPhlogisticFirePayload.PACKET_CODEC, OperationStarcleaveClientPacketHandler::handleEntityPhlogisticFire);
         helper.registerS2C(EntityPegasusGlidingPayload.PACKET_ID, EntityPegasusGlidingPayload.PACKET_CODEC, OperationStarcleaveClientPacketHandler::handleEntityPegasusGliding);
         helper.registerS2C(EntityPegasusFlyingPayload.PACKET_ID, EntityPegasusFlyingPayload.PACKET_CODEC, OperationStarcleaveClientPacketHandler::handleEntityPegasusFlying);
+        helper.registerS2C(ClientboundBossEventExtrasPayload.PACKET_ID, ClientboundBossEventExtrasPayload.PACKET_CODEC, OperationStarcleaveClientPacketHandler::handleBossExtrasPayload);
 
         // c2s
         helper.registerC2S(AttackFirmamentTilePayload.PACKET_ID, AttackFirmamentTilePayload.PACKET_CODEC, OperationStarcleaveServerPacketHandler::attackFirmamentTile);
@@ -33,6 +34,7 @@ public class OperationStarcleavePayloads {
 
     public interface Helper {
         <T extends CustomPacketPayload> void registerS2C(CustomPacketPayload.Type<T> id, StreamCodec<? super RegistryFriendlyByteBuf, T> codec, BiConsumer<T, Player> clientCallback);
+
         <T extends CustomPacketPayload> void registerC2S(CustomPacketPayload.Type<T> id, StreamCodec<? super RegistryFriendlyByteBuf, T> codec, BiConsumer<T, Player> serverCallback);
     }
 }

@@ -4,9 +4,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -16,6 +18,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.BossEvent;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -42,6 +45,7 @@ import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
 import phanastrae.operation_starcleave.entity.projectile.PhlogisticSparkEntity;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
+import phanastrae.operation_starcleave.world.ServerBossEventExtras;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 
 import java.util.ArrayList;
@@ -66,6 +70,19 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
     private int angerTime;
     @Nullable
     private UUID angryAt;
+
+    private final ServerBossEvent bossEvent = createBossEvent();
+    private boolean showBossEvent = false;
+    private int timeSincePlayerAggro = 0;
+
+    private ServerBossEvent createBossEvent() {
+        ServerBossEvent event = new ServerBossEvent(
+                this.getDisplayName(), BossEvent.BossBarColor.YELLOW, BossEvent.BossBarOverlay.PROGRESS
+        );
+        event.setVisible(false);
+        ServerBossEventExtras.fromEvent(event).setMini(true);
+        return event;
+    }
 
     public SubcaelicDuxEntity(EntityType<? extends SubcaelicDuxEntity> entityType, Level world) {
         super(entityType, world);
@@ -113,34 +130,44 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
         super.readAdditionalSaveData(nbt);
         this.readPersistentAngerSaveData(this.level(), nbt);
 
-        if(nbt.contains("DuxDeathTime", Tag.TAG_INT)) {
+        if (nbt.contains("DuxDeathTime", Tag.TAG_INT)) {
             this.ticksSinceDeath = nbt.getInt("DuxDeathTime");
         }
-        if(nbt.contains("Hollow", Tag.TAG_BYTE)) {
+        if (nbt.contains("Hollow", Tag.TAG_BYTE)) {
             this.setHollow(nbt.getBoolean("Hollow"));
         }
+
+        if (this.hasCustomName()) {
+            this.bossEvent.setName(this.getDisplayName());
+        }
+    }
+
+    @Override
+    public void setCustomName(@Nullable Component name) {
+        super.setCustomName(name);
+        this.bossEvent.setName(this.getDisplayName());
     }
 
     @Override
     public void tick() {
         super.tick();
-        if(this.getTarget() != null) {
-            if(this.level().getDifficulty().equals(Difficulty.PEACEFUL)) {
+        if (this.getTarget() != null) {
+            if (this.level().getDifficulty().equals(Difficulty.PEACEFUL)) {
                 this.setTarget(null);
-            } else if(this.getTarget().isRemoved() || this.getTarget().isDeadOrDying() || this.distanceTo(this.getTarget()) > 128) {
+            } else if (this.getTarget().isRemoved() || this.getTarget().isDeadOrDying() || this.distanceTo(this.getTarget()) > 128) {
                 this.setTarget(null);
             }
         }
 
-        if(this.level().isClientSide) {
+        if (this.level().isClientSide) {
             Firmament firmament = Firmament.fromLevel(this.level());
-            if(firmament != null) {
+            if (firmament != null) {
                 boolean starlit = StellarFarmlandBlock.isStarlit(this.level(), this.blockPosition(), firmament);
-                if(starlit) {
-                    Vec3 spawnCenter = this.position().add(0.0, this.getBbHeight()*0.5, 0.0);
+                if (starlit) {
+                    Vec3 spawnCenter = this.position().add(0.0, this.getBbHeight() * 0.5, 0.0);
                     double f = this.getBbWidth();
-                    int count = (int)(this.getBbWidth() * 8);
-                    for(int i = 0; i < count; ++i) {
+                    int count = (int) (this.getBbWidth() * 8);
+                    for (int i = 0; i < count; ++i) {
                         double x = spawnCenter.x + (this.random.nextDouble() - 0.5) * f;
                         double y = spawnCenter.y + (this.random.nextDouble() - 0.5) * this.getBbHeight();
                         double z = spawnCenter.z + (this.random.nextDouble() - 0.5) * f;
@@ -159,7 +186,7 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
         super.aiStep();
 
         if (!this.level().isClientSide) {
-            this.updatePersistentAnger((ServerLevel)this.level(), false);
+            this.updatePersistentAnger((ServerLevel) this.level(), false);
         } else {
             this.prevHaloAngle = this.haloAngle;
 
@@ -167,14 +194,14 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
             this.haloAngle += 2.5f + 40f * (1f - h * h);
         }
 
-        if(this.isDeadOrDying()) {
+        if (this.isDeadOrDying()) {
             float d = this.getExplosionGlowProgress();
 
             this.rollAngle += (float) Math.PI * d * 5F;
             this.tentacleRollAngle += (float) Math.PI * d * 20F;
         }
 
-        if(this.isHollow()) {
+        if (this.isHollow()) {
             this.tiltAngle += (180.0 - this.tiltAngle) * 0.05;
 
             this.setDeltaMovement(this.getDeltaMovement().x * 0.8, this.getDeltaMovement().y * 0.98 - 0.05, this.getDeltaMovement().z * 0.8);
@@ -184,14 +211,21 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
     @Override
     protected void customServerAiStep() {
         Firmament firmament = Firmament.fromLevel(this.level());
-        if(firmament != null) {
+        if (firmament != null) {
             boolean starlit = StellarFarmlandBlock.isStarlit(this.level(), this.blockPosition(), firmament);
-            if(starlit) {
+            if (starlit) {
                 if (this.tickCount % 20 == 0) {
                     this.heal(1.0F);
                 }
             }
         }
+
+        this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
+        if (this.showBossEvent && this.getHealthFraction() > 0.99 && this.timeSincePlayerAggro > 600) {
+            // hide boss bar if dux is almost fully healed and last player aggro was more than 30 seconds ago
+            this.showBossEvent = false;
+        }
+        this.bossEvent.setVisible(this.showBossEvent);
     }
 
     @Override
@@ -211,10 +245,10 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
 
     @Override
     public void die(DamageSource damageSource) {
-        if(!this.isRemoved() && !this.dead) {
+        if (!this.isRemoved() && !this.dead) {
             Level level = this.level();
 
-            if(!level.isClientSide) {
+            if (!level.isClientSide) {
                 LivingEntity killCredit = this.getKillCredit();
                 if (killCredit instanceof ServerPlayer serverPlayerEntity) {
                     OperationStarcleaveAdvancementCriteria.KILL_DUX.trigger(serverPlayerEntity);
@@ -242,22 +276,22 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
         boolean doMobGriefing = level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING);
 
         ++this.ticksSinceDeath;
-        if(this.ticksSinceDeath >= 200 && !this.isHollow()) {
+        if (this.ticksSinceDeath >= 200 && !this.isHollow()) {
             this.becomeHollow();
         }
 
-        if(!level.isClientSide && this.isHollow() && doMobGriefing) {
-            if(this.getRandom().nextInt(8) == 0 || this.ticksSinceDeath % 49 == 0) {
+        if (!level.isClientSide && this.isHollow() && doMobGriefing) {
+            if (this.getRandom().nextInt(8) == 0 || this.ticksSinceDeath % 49 == 0) {
                 this.spewSparks(3 + this.getRandom().nextInt(4), true);
             }
         }
 
-        if(level.isClientSide && this.getRandom().nextInt(8) == 0) {
+        if (level.isClientSide && this.getRandom().nextInt(8) == 0) {
             this.spawnSmokeBurst();
             level.playLocalSound(this, OperationStarcleaveSoundEvents.SUBCAELIC_DUX_BURST, SoundSource.HOSTILE, 4f, 0.7F + 0.5F * this.getRandom().nextFloat());
         }
 
-        if(!this.isRemoved() && (this.ticksSinceDeath >= 400 || (this.ticksSinceDeath >= 240 && this.onGround()))) {
+        if (!this.isRemoved() && (this.ticksSinceDeath >= 400 || (this.ticksSinceDeath >= 240 && this.onGround()))) {
             if (level instanceof ServerLevel serverLevel) {
                 if (doMobLoot) {
                     ExperienceOrb.award(serverLevel, this.position(), this.getBaseExperienceReward());
@@ -267,8 +301,8 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
 
                 serverLevel.explode(this, this.getX(), this.getY(), this.getZ(), 10, false, Level.ExplosionInteraction.MOB);
 
-                if(doMobGriefing) {
-                    for(int i = 0; i < 7; i++) {
+                if (doMobGriefing) {
+                    for (int i = 0; i < 7; i++) {
                         this.spewSparks(5 + this.getRandom().nextInt(4), false);
                     }
 
@@ -277,7 +311,7 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
                     for (int i = 0; i < 800; i++) {
                         Vec3i offset = new Vec3i(random.nextInt(17) - 8, random.nextInt(17) - 8, random.nextInt(17) - 8);
                         double distSqr = offset.distSqr(Vec3i.ZERO);
-                        if(distSqr < 8.5 * 8.5) {
+                        if (distSqr < 8.5 * 8.5) {
                             BlockPos targetPos = thisPos.offset(offset);
 
                             boolean hitWater = (level.getBlockState(targetPos).is(Blocks.WATER));
@@ -293,12 +327,12 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
     }
 
     public void spewSparks(int sparkCount, boolean hasOwner) {
-        float yaw = (float)(this.getRandom().nextFloat() * Math.TAU);
-        float pitch = (float)((this.getRandom().nextFloat() * 0.7F - 0.3F) * Math.PI);
+        float yaw = (float) (this.getRandom().nextFloat() * Math.TAU);
+        float pitch = (float) ((this.getRandom().nextFloat() * 0.7F - 0.3F) * Math.PI);
 
-        for(int i = 0; i < sparkCount; i++) {
-            float sparkYaw = yaw + (float)((this.getRandom().nextFloat() - 0.5) * 0.2 * Math.TAU);
-            float sparkPitch = pitch + (float)((this.getRandom().nextFloat() - 0.5) * 0.1 * Math.TAU);
+        for (int i = 0; i < sparkCount; i++) {
+            float sparkYaw = yaw + (float) ((this.getRandom().nextFloat() - 0.5) * 0.2 * Math.TAU);
+            float sparkPitch = pitch + (float) ((this.getRandom().nextFloat() - 0.5) * 0.1 * Math.TAU);
 
             float cosYaw = Mth.cos(sparkYaw);
             float sinYaw = Mth.sin(sparkYaw);
@@ -308,7 +342,7 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
 
             float posOffset = 1.2F;
             PhlogisticSparkEntity spark = new PhlogisticSparkEntity(this.getX() + targetDirection.x * posOffset, this.getY() + targetDirection.y * posOffset, this.getZ() + targetDirection.z * posOffset, targetDirection, this.level());
-            if(hasOwner) {
+            if (hasOwner) {
                 spark.setOwner(this);
             }
             this.level().addFreshEntity(spark);
@@ -319,15 +353,15 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
 
     @Override
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
-        if(this.isDeadOrDying()) {
+        if (this.isDeadOrDying()) {
             return false;
         }
 
-        if(this.isAngry()) {
+        if (this.isAngry()) {
             return false;
         }
 
-        if(distanceToClosestPlayer < 128) {
+        if (distanceToClosestPlayer < 128) {
             return false;
         }
 
@@ -341,8 +375,13 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if(source.getEntity() instanceof AbstractSubcaelicEntity) {
+        Entity attacker = source.getEntity();
+        if (attacker instanceof AbstractSubcaelicEntity) {
             return false;
+        }
+        if (attacker instanceof Player || (attacker instanceof OwnableEntity ownable && ownable.getOwner() instanceof Player)) {
+            this.timeSincePlayerAggro = 0;
+            this.showBossEvent = true;
         }
         return super.hurt(source, amount);
     }
@@ -401,6 +440,18 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
     }
 
     @Override
+    public void startSeenByPlayer(ServerPlayer player) {
+        super.startSeenByPlayer(player);
+        this.bossEvent.addPlayer(player);
+    }
+
+    @Override
+    public void stopSeenByPlayer(ServerPlayer player) {
+        super.stopSeenByPlayer(player);
+        this.bossEvent.removePlayer(player);
+    }
+
+    @Override
     public AABB getBoundingBoxForCulling() {
         return super.getBoundingBoxForCulling().inflate(this.getBbWidth() * 0.6);
     }
@@ -417,17 +468,17 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
 
     @Override
     public void spawnTrailParticles() {
-        Vec3 spawnCenter = this.position().add(0.0, this.getBbHeight()*0.5, 0.0).subtract(this.getLookAngle().scale(this.getBbWidth()*0.5));
+        Vec3 spawnCenter = this.position().add(0.0, this.getBbHeight() * 0.5, 0.0).subtract(this.getLookAngle().scale(this.getBbWidth() * 0.5));
         double f = this.getBbWidth() * 0.2;
-        int count = (int)(this.getBbWidth() * 4 * Math.min(1.0, 2.0 * this.getDeltaMovement().length()));
-        for(int i = 0; i < count; ++i) {
+        int count = (int) (this.getBbWidth() * 4 * Math.min(1.0, 2.0 * this.getDeltaMovement().length()));
+        for (int i = 0; i < count; ++i) {
             double x = spawnCenter.x + (this.random.nextDouble() - 0.5) * f;
             double y = spawnCenter.y + (this.random.nextDouble() - 0.5) * f;
             double z = spawnCenter.z + (this.random.nextDouble() - 0.5) * f;
             this.level().addParticle(OperationStarcleaveParticleTypes.LARGE_GLIMMER_SMOKE, true, x, y, z,
-                    this.getDeltaMovement().x * - 1.5,
-                    this.getDeltaMovement().y * - 1.5,
-                    this.getDeltaMovement().z * - 1.5);
+                    this.getDeltaMovement().x * -1.5,
+                    this.getDeltaMovement().y * -1.5,
+                    this.getDeltaMovement().z * -1.5);
         }
     }
 
@@ -438,7 +489,7 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
 
         Vec3 offset = new Vec3(random.nextFloat() - 0.5, random.nextFloat() - 0.5, random.nextFloat() - 0.5).normalize().multiply(width, height, width);
 
-        for(int i = 0; i < 240; ++i) {
+        for (int i = 0; i < 240; ++i) {
             double speed = 0.15F + random.nextFloat() * 0.15F;
             double variation = 0.3F;
             this.level().addParticle(OperationStarcleaveParticleTypes.LARGE_GLIMMER_SMOKE, false,
@@ -465,7 +516,7 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
     }
 
     public float getExplosionGlowProgress() {
-        if(this.isDeadOrDying()) {
+        if (this.isDeadOrDying()) {
             return this.ticksSinceDeath / 400f;
         } else {
             return 0;
@@ -485,7 +536,7 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
     }
 
     public void orphanTorpedos() {
-        for(SubcaelicTorpedoEntity torpedo : this.torpedos) {
+        for (SubcaelicTorpedoEntity torpedo : this.torpedos) {
             torpedo.dux = null;
             torpedo.inGroup = false;
         }
@@ -493,7 +544,7 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
     }
 
     public float getHealthFraction() {
-        if(this.getMaxHealth() == 0) return 0f;
+        if (this.getMaxHealth() == 0) return 0f;
         float f = this.getHealth() / this.getMaxHealth();
         return Mth.clamp(f, 0f, 1f);
     }
@@ -510,15 +561,15 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
 
         @Override
         public boolean canUse() {
-            if(this.dux.torpedos.isEmpty()) {
+            if (this.dux.torpedos.isEmpty()) {
                 return false;
-            } else if(this.cooldown > 0) {
+            } else if (this.cooldown > 0) {
                 this.cooldown--;
                 return false;
-            } else if(this.dux.level().getDifficulty().equals(Difficulty.PEACEFUL)) {
+            } else if (this.dux.level().getDifficulty().equals(Difficulty.PEACEFUL)) {
                 return false;
             } else {
-                this.cooldown = reducedTickDelay(8 + (int)(Math.sqrt(this.dux.getHealthFraction()) * (22 + this.dux.getRandom().nextInt(20))));
+                this.cooldown = reducedTickDelay(8 + (int) (Math.sqrt(this.dux.getHealthFraction()) * (22 + this.dux.getRandom().nextInt(20))));
 
                 LivingEntity target = this.dux.getTarget();
                 if (target == null) {
@@ -526,7 +577,7 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
                 } else if (!target.isAlive()) {
                     return false;
                 } else {
-                    return !(target instanceof Player) || !target.isSpectator() && !((Player)target).isCreative();
+                    return !(target instanceof Player) || !target.isSpectator() && !((Player) target).isCreative();
                 }
             }
         }
@@ -534,15 +585,15 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
         @Override
         public void tick() {
             LivingEntity target = this.dux.getTarget();
-            if(target != null) {
+            if (target != null) {
                 // at high health chance to fire torpedo is 25%, at low health chance is 100%
-                int torpedoReciprocalChance = 1 + (int)(Math.sqrt(this.dux.getHealthFraction()) * 3.5f);
+                int torpedoReciprocalChance = 1 + (int) (Math.sqrt(this.dux.getHealthFraction()) * 3.5f);
 
-                for(SubcaelicTorpedoEntity torpedo : this.dux.torpedos) {
-                    if(!torpedo.isAlive()) continue;
-                    if(torpedo.isPrimed()) continue;
+                for (SubcaelicTorpedoEntity torpedo : this.dux.torpedos) {
+                    if (!torpedo.isAlive()) continue;
+                    if (torpedo.isPrimed()) continue;
 
-                    if(torpedo.getRandom().nextInt(torpedoReciprocalChance) == 0) {
+                    if (torpedo.getRandom().nextInt(torpedoReciprocalChance) == 0) {
                         torpedo.primeAndTarget(target, 1F - 0.25F * this.dux.getHealthFraction());
                     }
                 }
@@ -571,23 +622,23 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
             double x = this.dux.getX();
             double z = this.dux.getZ();
             LivingEntity target = this.dux.getTarget();
-            if(target != null) {
+            if (target != null) {
                 x = target.getX();
                 z = target.getZ();
             }
-            int topY = world.getHeight(Heightmap.Types.MOTION_BLOCKING, (int)x, (int)z);
+            int topY = world.getHeight(Heightmap.Types.MOTION_BLOCKING, (int) x, (int) z);
             Firmament firmament = Firmament.fromLevel(world);
             int goalHeight = topY + 80;
-            if(firmament != null) {
+            if (firmament != null) {
                 int maxHeight = firmament.getY() - 12;
-                if(goalHeight > maxHeight) {
+                if (goalHeight > maxHeight) {
                     goalHeight = maxHeight;
                 }
             }
 
             this.dux.moveControl.setWantedPosition(x, goalHeight, z, 1.5);
 
-            if(this.dux.getY() > goalHeight && this.dux.ticksSinceDeath > 60) {
+            if (this.dux.getY() > goalHeight && this.dux.ticksSinceDeath > 60) {
                 this.dux.becomeHollow();
             }
         }
@@ -607,13 +658,13 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
 
         @Override
         public boolean canUse() {
-            if(this.dux.torpedos.size() >= SubcaelicDuxEntity.MAX_NATURAL_GROUP_SIZE) {
+            if (this.dux.torpedos.size() >= SubcaelicDuxEntity.MAX_NATURAL_GROUP_SIZE) {
                 return false;
-            } else if(this.cooldown > 0 && (this.dux.isAlive() || this.cooldown <= reducedTickDelay(20))) {
+            } else if (this.cooldown > 0 && (this.dux.isAlive() || this.cooldown <= reducedTickDelay(20))) {
                 this.cooldown--;
                 return false;
             } else {
-                if(this.dux.isDeadOrDying()) {
+                if (this.dux.isDeadOrDying()) {
                     this.cooldown = reducedTickDelay(20);
                 } else {
                     this.cooldown = reducedTickDelay(6 + (int) (Math.sqrt(this.dux.getHealthFraction()) * (14 + this.dux.getRandom().nextInt(20))));
@@ -628,13 +679,13 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
         public void tick() {
             boolean deadDux = this.dux.isDeadOrDying();
             LivingEntity target = this.dux.getTarget();
-            if(deadDux && target == null) return;
+            if (deadDux && target == null) return;
 
             Level world = this.dux.level();
 
             int torpedoCount = this.dux.isDeadOrDying() ? (this.dux.random.nextBoolean() ? 4 : 3) : 1;
             Vec3 rv = this.dux.getLookAngle().scale(this.dux.getBbWidth() * 0.5);
-            for(int i = 0; i < torpedoCount; i++) {
+            for (int i = 0; i < torpedoCount; i++) {
                 SubcaelicTorpedoEntity torpedo = OperationStarcleaveEntityTypes.SUBCAELIC_TORPEDO.create(world);
                 if (torpedo != null) {
                     torpedo.moveTo(this.dux.getX() - rv.x, this.dux.getY() + this.dux.getBbHeight() / 2 - rv.y, this.dux.getZ() - rv.z, this.dux.getYRot(), this.dux.getXRot());
@@ -671,7 +722,7 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
             int i = this.mob.getLastHurtByMobTimestamp();
             LivingEntity livingEntity = this.mob.getLastHurtByMob();
             if (i != this.lastAttackedTime && livingEntity != null) {
-                for(Class<?> class_ : this.noRevengeTypes) {
+                for (Class<?> class_ : this.noRevengeTypes) {
                     if (class_.isAssignableFrom(livingEntity.getClass())) {
                         return false;
                     }
@@ -686,7 +737,7 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
         @Override
         public void start() {
             LivingEntity target = this.mob.getLastHurtByMob();
-            if(target instanceof Player) {
+            if (target instanceof Player) {
                 this.dux.forgetCurrentTargetAndRefreshUniversalAnger();
                 this.lastAttackedTime = this.mob.getLastHurtByMobTimestamp();
             } else {

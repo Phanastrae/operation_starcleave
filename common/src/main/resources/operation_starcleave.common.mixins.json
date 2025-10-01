@@ -7,6 +7,7 @@
   "mixins": [
     "AbstractHorseMixin",
     "AttachedStemBlockMixin",
+    "BossEventMixin",
     "BushBlockMixin",
     "ChunkMapMixin",
     "CropBlockMixin",
@@ -23,6 +24,7 @@
     "NaturalSpawnerMixin",
     "PitcherCropBlockMixin",
     "PlayerMixin",
+    "ServerBossEventMixin",
     "ServerChunkCacheMixin",
     "ServerEntityMixin",
     "ServerGamePacketListenerImplMixin",
@@ -36,6 +38,7 @@
   ],
   "client": [
     "client.BlockEntityRenderersAccessor",
+    "client.BossHealthOverlayMixin",
     "client.CameraAccessor",
     "client.ClientLevelMixin",
     "client.ClientPacketListenerMixin",
