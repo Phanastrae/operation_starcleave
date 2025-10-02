@@ -1,10 +1,16 @@
 #version 150
 
+#moj_import <fog.glsl>
+
 uniform sampler2D Sampler0;
 uniform sampler2D Sampler1;
 
 uniform float GameTime;
 uniform vec2 ScreenSize;
+uniform float FogStart;
+uniform float FogEnd;
+uniform vec4 FogColor;
+uniform int FogShape;
 
 in vec2 texCoord0;
 in vec3 pos;
@@ -30,6 +36,8 @@ vec4 getColor(float x, float z) {
 }
 
 void main() {
+    float vertexDistance = fog_distance(pos, FogShape);
+
     int TILE_SIZE_PIXELS = 16 * 128 * 4;
 
     // input texCoords are in range [0,1]x[0,1]
@@ -142,7 +150,7 @@ void main() {
         }
     }
 
-    float xAxisSin = sin(texCoord0.x * 64 * 2. * PI);
+    float xAxisSin = sin(texCoord0.x * 64. * 2. * PI);
     float yAxisSin = sin(texCoord0.y * 64. * 2. * PI);
     float colorInput = xAxisSin*yAxisSin + (GameTime * 100.) * 2. * PI;
 
@@ -156,9 +164,11 @@ void main() {
 
     if(a != 1.) {
         // render sky
-        fragColor = texture(Sampler1, gl_FragCoord.xy / ScreenSize.xy);
+        vec4 nearlyFinalColor = texture(Sampler1, gl_FragCoord.xy / ScreenSize.xy);
+        fragColor = linear_fog(nearlyFinalColor, vertexDistance, FogStart, FogEnd, FogColor);
     } else {
         // render border
-        fragColor = vec4(color, a);
+        vec4 nearlyFinalColor = vec4(color, a);
+        fragColor = linear_fog(nearlyFinalColor, vertexDistance, FogStart, FogEnd, FogColor);
     }
 }

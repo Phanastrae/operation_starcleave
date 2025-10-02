@@ -2,6 +2,7 @@ package phanastrae.operation_starcleave.client.render.firmament;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.shaders.FogShape;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Camera;
@@ -14,6 +15,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.FogType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -45,7 +47,7 @@ public class FirmamentRenderer {
     }
 
     private static void closeIfNotNull(VertexBuffer vertexBuffer) {
-        if(vertexBuffer != null) {
+        if (vertexBuffer != null) {
             vertexBuffer.close();
         }
     }
@@ -73,20 +75,20 @@ public class FirmamentRenderer {
         BufferBuilder bufferBuilder = tessellator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 
         int STAR_COUNT = 6120;
-        for(int j = 0; j < STAR_COUNT; ++j) {
+        for (int j = 0; j < STAR_COUNT; ++j) {
             float x = random.nextFloat() * 2.0F - 1.0F;
             float y = random.nextFloat() * 2.0F - 1.0F;
             float z = random.nextFloat() * 2.0F - 1.0F;
             float m = Mth.lengthSquared(x, y, z);
             if (!(m <= 0.010000001F) && !(m >= 1.0F)) {
                 Vector3f vector3f = new Vector3f(x, y, z).normalize(100.0F);
-                float zAngle = (float)(random.nextDouble() * (float) Math.PI * 2.0);
+                float zAngle = (float) (random.nextDouble() * (float) Math.PI * 2.0);
                 Quaternionf quaternionf = new Quaternionf().rotateTo(new Vector3f(0.0F, 0.0F, -1.0F), vector3f).rotateZ(zAngle);
 
                 float phase = random.nextFloat();
-                float red = 0.5F + 0.3F * (float)Math.sin(Mth.TWO_PI * phase);
-                float green = 0.5F + 0.3F * (float)Math.sin(Mth.TWO_PI * (phase + 1/3F));
-                float blue = 0.5F + 0.3F * (float)Math.sin(Mth.TWO_PI * (phase - 1/3F));
+                float red = 0.5F + 0.3F * (float) Math.sin(Mth.TWO_PI * phase);
+                float green = 0.5F + 0.3F * (float) Math.sin(Mth.TWO_PI * (phase + 1 / 3F));
+                float blue = 0.5F + 0.3F * (float) Math.sin(Mth.TWO_PI * (phase - 1 / 3F));
 
                 float l = 0.15F + random.nextFloat() * 0.1F;
                 bufferBuilder.addVertex(vector3f.add(new Vector3f(l, -l, 0.0F).rotate(quaternionf))).setColor(red, green, blue, 1);
@@ -104,8 +106,8 @@ public class FirmamentRenderer {
         BufferBuilder bufferBuilder = tessellator.begin(VertexFormat.Mode.TRIANGLE_FAN, DefaultVertexFormat.POSITION);
         bufferBuilder.addVertex(0.0F, f, 0.0F);
 
-        for(int i = -180; i <= 180; i += 45) {
-            bufferBuilder.addVertex(g * Mth.cos((float)i * (float) (Math.PI / 180.0)), f, 512.0F * Mth.sin((float)i * (float) (Math.PI / 180.0)));
+        for (int i = -180; i <= 180; i += 45) {
+            bufferBuilder.addVertex(g * Mth.cos((float) i * (float) (Math.PI / 180.0)), f, 512.0F * Mth.sin((float) i * (float) (Math.PI / 180.0)));
         }
 
         return bufferBuilder.buildOrThrow();
@@ -116,16 +118,16 @@ public class FirmamentRenderer {
 
         // check the camera is the same camera as the actual client's main camera to try and avoid issues with mods that render the world twice
         // TODO test this with more mods, and maybe look for a better way to do this (ie moving this to LevelRenderer)
-        if(client.gameRenderer.getMainCamera().equals(camera)) {
+        if (client.gameRenderer.getMainCamera().equals(camera)) {
             // update the last position matrix used, for future use in the post renderer
             // this is needed for mods that apply additional transformations to the camera
             LAST_POSITION_MATRIX.set(positionMatrix);
         }
 
-        if(frustum == null || camera == null) return;
+        if (frustum == null || camera == null) return;
 
         Firmament firmament = Firmament.fromLevel(level);
-        if(firmament == null) return;
+        if (firmament == null) return;
 
         ProfilerFiller profiler = client.getProfiler();
         profiler.push("starcleave_firmament");
@@ -135,7 +137,7 @@ public class FirmamentRenderer {
         double camz = camera.getPosition().z;
         double firmHeight = firmament.getY();
         AABB box = new AABB(camx - 512, firmHeight - 1, camz - 512, camx + 512, firmHeight + 1, camz + 512);
-        if(frustum.isVisible(box)) {
+        if (frustum.isVisible(box)) {
             /*
             Player player = client.player;
             boolean debugMode_General = client.getDebugOverlay().showDebugScreen() && player != null && player.getMainHandItem().is(OperationStarcleaveItems.FIRMAMENT_MANIPULATOR);
@@ -151,9 +153,9 @@ public class FirmamentRenderer {
             }
             */
             boolean renderSkybox = FirmamentTextureStorage.getInstance().isAnyFilledAndActive();
-            if(renderSkybox) {
+            if (renderSkybox) {
                 profiler.popPush("sky");
-                RenderTarget firmamentFrameBuffer = ((LevelRendererDuck)levelRenderer).operation_starcleave$getFirmamentFramebuffer();
+                RenderTarget firmamentFrameBuffer = ((LevelRendererDuck) levelRenderer).operation_starcleave$getFirmamentFramebuffer();
                 firmamentFrameBuffer.setClearColor(0f, 0.08f, 0.08f, 1f);
                 firmamentFrameBuffer.clear(Minecraft.ON_OSX);
                 Minecraft.getInstance().getMainRenderTarget().bindWrite(true); // make sure to set viewport again
@@ -175,15 +177,15 @@ public class FirmamentRenderer {
     }
 
     public static void renderFirmamentSky(PoseStack matrices, Matrix4f projectionMatrix) {
-        if(STARS_BUFFER == null) {
+        if (STARS_BUFFER == null) {
             createStars();
         }
-        if(LIGHT_SKY_BUFFER == null) {
+        if (LIGHT_SKY_BUFFER == null) {
             createLightSky();
         }
 
         VertexBuffer vb1 = LIGHT_SKY_BUFFER;
-        if(vb1 != null && !vb1.isInvalid()) {
+        if (vb1 != null && !vb1.isInvalid()) {
             float[] fogColor = RenderSystem.getShaderFogColor();
             float fog0 = fogColor[0];
             float fog1 = fogColor[1];
@@ -229,20 +231,20 @@ public class FirmamentRenderer {
         float[] bs = new float[]{1f, 1f, 0.8f};
 
         VertexBuffer vb = STARS_BUFFER;
-        if(vb != null && !vb.isInvalid()) {
+        if (vb != null && !vb.isInvalid()) {
             RenderSystem.depthMask(false);
             RenderSystem.enableBlend();
             RenderSystem.blendFuncSeparate(
                     GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO
             );
 
-            for(int i = 0; i < 12; i++) {
+            for (int i = 0; i < 12; i++) {
                 int j = i % 3;
                 int k = i / 3;
 
                 int n = 20000 * (k + 1);
                 matrices.pushPose();
-                float angle = ((System.currentTimeMillis() % n) / (float)(n) + i / 12f) * 2 * Mth.PI;
+                float angle = ((System.currentTimeMillis() % n) / (float) (n) + i / 12f) * 2 * Mth.PI;
                 matrices.translate(0, Mth.sin(angle) * 20 * k, 0);
                 matrices.mulPose(new Quaternionf().rotateY(angle).rotateZ(Mth.sin(angle) * 0.2f * k));
 
@@ -276,10 +278,10 @@ public class FirmamentRenderer {
         RenderSystem.setShaderColor(0.3f, 0.3f, 0.3f, 1);
         RenderSystem.setShaderTexture(0, OperationStarcleave.id("textures/environment/starry_eye_light.png"));
         BufferBuilder bufferBuilder = tessellator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-        for(int i = 0; i < 7; i++) {
+        for (int i = 0; i < 7; i++) {
             matrices.pushPose();
             int n = 300000;
-            float angle = (((time * 2) % n) / (float)n + (i / 7f)) * Mth.PI * 2;
+            float angle = (((time * 2) % n) / (float) n + (i / 7f)) * Mth.PI * 2;
             matrices.translate(0, -50, 0);
             matrices.mulPose(new Quaternionf().rotateY(-angle));
             matrices.translate(-17, 0, -17);
@@ -287,8 +289,8 @@ public class FirmamentRenderer {
 
             float fl = (time % 4000) / 4000f + (i / 7F);
             float red = Mth.sin(fl * Mth.TWO_PI) * 0.2f + 0.8f;
-            float green = Mth.sin((fl + 1/3f) * Mth.TWO_PI) * 0.2f + 0.8f;
-            float blue = Mth.sin((fl + 2/3f) * Mth.TWO_PI) * 0.2f + 0.8f;
+            float green = Mth.sin((fl + 1 / 3f) * Mth.TWO_PI) * 0.2f + 0.8f;
+            float blue = Mth.sin((fl + 2 / 3f) * Mth.TWO_PI) * 0.2f + 0.8f;
             int col = FastColor.ARGB32.colorFromFloat(1F, red, green, blue);
 
             Matrix4f matrix4f2 = matrices.last().pose();
@@ -303,17 +305,17 @@ public class FirmamentRenderer {
         RenderSystem.setShaderColor(0.5f, 0.5f, 0.5f, 1);
         RenderSystem.setShaderTexture(0, OperationStarcleave.id("textures/environment/starry_eye.png"));
         bufferBuilder = tessellator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-        for(int i = 0; i < 7; i++) {
+        for (int i = 0; i < 7; i++) {
             matrices.pushPose();
             int n = 300000;
-            float angle = ((time % n) / (float)n + (i / 7f)) * Mth.PI * 2;
+            float angle = ((time % n) / (float) n + (i / 7f)) * Mth.PI * 2;
             matrices.mulPose(new Quaternionf().rotateY(-angle));
             matrices.translate(13, 0, 0);
 
             float fl = (time % 4000) / 4000f + (i / 7F);
             float red = Mth.sin(fl * Mth.TWO_PI) * 0.2f + 0.8f;
-            float green = Mth.sin((fl + 1/3f) * Mth.TWO_PI) * 0.2f + 0.8f;
-            float blue = Mth.sin((fl + 2/3f) * Mth.TWO_PI) * 0.2f + 0.8f;
+            float green = Mth.sin((fl + 1 / 3f) * Mth.TWO_PI) * 0.2f + 0.8f;
+            float blue = Mth.sin((fl + 2 / 3f) * Mth.TWO_PI) * 0.2f + 0.8f;
             int col = FastColor.ARGB32.colorFromFloat(1F, red, green, blue);
 
             Matrix4f matrix4f2 = matrices.last().pose();
@@ -484,7 +486,24 @@ public class FirmamentRenderer {
         renderLayer.setupRenderState();
 
         ShaderInstance shaderProgram = RenderSystem.getShader();
-        if(shaderProgram != null) {
+        if (shaderProgram != null) {
+            Minecraft minecraft = Minecraft.getInstance();
+            float renderDistance = minecraft.gameRenderer.getRenderDistance();
+            float farDistance = minecraft.gameRenderer.getDepthFar();
+
+            float fogEnd = RenderSystem.getShaderFogEnd();
+            float fogStart = RenderSystem.getShaderFogStart();
+            FogShape fogShape = RenderSystem.getShaderFogShape();
+            // if fog is distant then make it super distant, but if fog is close then leave it unchanged
+            if (fogEnd >= renderDistance) {
+                RenderSystem.setShaderFogEnd(farDistance);
+                RenderSystem.setShaderFogStart(farDistance * 0.9F);
+                RenderSystem.setShaderFogShape(FogShape.SPHERE);
+            } else if (camera.getFluidInCamera() == FogType.WATER) {
+                // make fog go somewhat further when in water
+                RenderSystem.setShaderFogEnd(farDistance * 0.65F);
+            }
+
             // setup firmament data texture
             int currentTexID0 = RenderSystem.getShaderTexture(0);
 
@@ -497,7 +516,7 @@ public class FirmamentRenderer {
             // setup firmament sky texture
             int currentTexID1 = RenderSystem.getShaderTexture(1);
 
-            RenderTarget firmamentFrameBuffer = ((LevelRendererDuck)levelRenderer).operation_starcleave$getFirmamentFramebuffer();
+            RenderTarget firmamentFrameBuffer = ((LevelRendererDuck) levelRenderer).operation_starcleave$getFirmamentFramebuffer();
             int firmamentSkyTexID = firmamentFrameBuffer.getColorTextureId();
             RenderSystem.setShaderTexture(1, firmamentSkyTexID);
 
@@ -512,10 +531,18 @@ public class FirmamentRenderer {
 
             RenderSystem.setShaderTexture(0, currentTexID0);
             RenderSystem.setShaderTexture(1, currentTexID1);
+
+            RenderSystem.setShaderFogEnd(fogEnd);
+            RenderSystem.setShaderFogStart(fogStart);
+            RenderSystem.setShaderFogShape(fogShape);
         }
 
         renderLayer.clearRenderState();
     }
+
+    private final static int REGIONS = 4; // regions per texture
+    private final static int REGION_WIDTH = 512;
+    private final static float REGION_UV_SIZE = 1.0F / REGIONS;
 
     private static MeshData createMeshData(Camera camera, Firmament firmament) {
         Vec3 camPos = camera.getPosition();
@@ -529,26 +556,26 @@ public class FirmamentRenderer {
         Tesselator tessellator = Tesselator.getInstance();
         BufferBuilder bufferBuilder = tessellator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.BLOCK);
 
-        for(int i = -1; i <= 1; i++) {
-            for(int j = -1; j <= 1; j++) {
-                float ox = (float)(512 * i + relX);
-                float oy = (float)relY;
-                float oz = (float)(512 * j + relZ);
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                float ox = (float) relX + (REGION_WIDTH * i);
+                float oy = (float) relY;
+                float oz = (float) relZ + (REGION_WIDTH * j);
 
-                float u1 = ((regionPos.rx + i) % 4) / 4f;
-                float v1 = ((regionPos.rz + j) % 4) / 4f;
-                float u2 = u1 + 0.25f;
-                float v2 = v1 + 0.25f;
+                float u1 = ((regionPos.rx + i) % REGIONS) * REGION_UV_SIZE;
+                float v1 = ((regionPos.rz + j) % REGIONS) * REGION_UV_SIZE;
+                float u2 = u1 + REGION_UV_SIZE;
+                float v2 = v1 + REGION_UV_SIZE;
 
                 // TODO consider removing normal and lightmap data, as they don't seem to actually get used at all
                 bufferBuilder.addVertex(ox, oy, oz).setColor(255, 255, 255, 255).setUv(u1, v1).setLight(LightTexture.FULL_BRIGHT).setNormal(0, 0, 0);
-                bufferBuilder.addVertex(ox + 512, oy, oz).setColor(255, 255, 255, 255).setUv(u2, v1).setLight(LightTexture.FULL_BRIGHT).setNormal(0, 0, 0);
-                bufferBuilder.addVertex(ox + 512, oy, oz + 512).setColor(255, 255, 255, 255).setUv(u2, v2).setLight(LightTexture.FULL_BRIGHT).setNormal(0, 0, 0);
-                bufferBuilder.addVertex(ox, oy, oz + 512).setColor(255, 255, 255, 255).setUv(u1, v2).setLight(LightTexture.FULL_BRIGHT).setNormal(0, 0, 0);
+                bufferBuilder.addVertex(ox + REGION_WIDTH, oy, oz).setColor(255, 255, 255, 255).setUv(u2, v1).setLight(LightTexture.FULL_BRIGHT).setNormal(0, 0, 0);
+                bufferBuilder.addVertex(ox + REGION_WIDTH, oy, oz + REGION_WIDTH).setColor(255, 255, 255, 255).setUv(u2, v2).setLight(LightTexture.FULL_BRIGHT).setNormal(0, 0, 0);
+                bufferBuilder.addVertex(ox, oy, oz + REGION_WIDTH).setColor(255, 255, 255, 255).setUv(u1, v2).setLight(LightTexture.FULL_BRIGHT).setNormal(0, 0, 0);
 
-                bufferBuilder.addVertex(ox, oy, oz + 512).setColor(255, 255, 255, 255).setUv(u1, v2).setLight(LightTexture.FULL_BRIGHT).setNormal(0, 0, 0);
-                bufferBuilder.addVertex(ox + 512, oy, oz + 512).setColor(255, 255, 255, 255).setUv(u2, v2).setLight(LightTexture.FULL_BRIGHT).setNormal(0, 0, 0);
-                bufferBuilder.addVertex(ox + 512, oy, oz).setColor(255, 255, 255, 255).setUv(u2, v1).setLight(LightTexture.FULL_BRIGHT).setNormal(0, 0, 0);
+                bufferBuilder.addVertex(ox, oy, oz + REGION_WIDTH).setColor(255, 255, 255, 255).setUv(u1, v2).setLight(LightTexture.FULL_BRIGHT).setNormal(0, 0, 0);
+                bufferBuilder.addVertex(ox + REGION_WIDTH, oy, oz + REGION_WIDTH).setColor(255, 255, 255, 255).setUv(u2, v2).setLight(LightTexture.FULL_BRIGHT).setNormal(0, 0, 0);
+                bufferBuilder.addVertex(ox + REGION_WIDTH, oy, oz).setColor(255, 255, 255, 255).setUv(u2, v1).setLight(LightTexture.FULL_BRIGHT).setNormal(0, 0, 0);
                 bufferBuilder.addVertex(ox, oy, oz).setColor(255, 255, 255, 255).setUv(u1, v1).setLight(LightTexture.FULL_BRIGHT).setNormal(0, 0, 0);
             }
         }
