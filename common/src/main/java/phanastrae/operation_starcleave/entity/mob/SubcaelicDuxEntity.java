@@ -221,7 +221,7 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
         }
 
         this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
-        if (this.showBossEvent && this.getHealthFraction() > 0.99 && this.timeSincePlayerAggro > 600) {
+        if (this.showBossEvent && this.getHealthFraction() > 0.99 && this.timeSincePlayerAggro++ > 600) {
             // hide boss bar if dux is almost fully healed and last player aggro was more than 30 seconds ago
             this.showBossEvent = false;
         }
