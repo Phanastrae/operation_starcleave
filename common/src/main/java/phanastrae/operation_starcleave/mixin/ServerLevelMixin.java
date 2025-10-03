@@ -52,7 +52,8 @@ public class ServerLevelMixin implements FirmamentHolder {
         this.customSpawners = ImmutableList.copyOf(newSpawners);
     }
 
-    @Inject(method = "tickChunk", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiling/ProfilerFiller;pop()V", shift = At.Shift.BEFORE))
+    // insert just before tickBlocks (i.e. randomTicks)
+    @Inject(method = "tickChunk", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiling/ProfilerFiller;popPush(Ljava/lang/String;)V", ordinal = 1))
     private void operation_starcleave$starbleachChunk(LevelChunk chunk, int randomTickSpeed, CallbackInfo ci) {
         Starbleach.starbleachChunk((ServerLevel)(Object)this, chunk, randomTickSpeed);
     }
