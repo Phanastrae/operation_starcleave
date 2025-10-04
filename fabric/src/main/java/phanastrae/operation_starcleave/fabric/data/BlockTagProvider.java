@@ -237,6 +237,16 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         STARDUST_BLOCK
                 );
 
+        getOrCreateTagBuilder(OperationStarcleaveBlockTags.HOLY_MOSS_REPLACEABLE)
+                .add(
+                        STELLAR_SEDIMENT
+                );
+
+        getOrCreateTagBuilder(OperationStarcleaveBlockTags.STELLAR_MULCH_REPLACEABLE)
+                .add(
+                        STELLAR_SEDIMENT
+                );
+
         getOrCreateTagBuilder(OperationStarcleaveBlockTags.ALLOWS_BISREED_PLANTING)
                 .addOptionalTag(OperationStarcleaveBlockTags.STARBLEACHED_LOGS)
                 .add(
@@ -291,7 +301,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
     }
 
     private void addTagsForFamilies(boolean isWooden, boolean isStone, BlockFamily... families) {
-        for(BlockFamily family : families) {
+        for (BlockFamily family : families) {
             addTagsForFamily(family, isWooden, isStone);
         }
     }
@@ -314,7 +324,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
     private void addBlockToTags(BlockFamily family, BlockFamily.Variant variant, TagKey<Block> tag) {
         Block block = family.get(variant);
-        if(block != null) {
+        if (block != null) {
             getOrCreateTagBuilder(tag).add(block);
         }
     }
@@ -324,7 +334,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
     }
 
     private void addBlockToTags(@Nullable Block block, boolean isWooden, TagKey<Block> baseTag, TagKey<Block> woodTag) {
-        if(block != null) {
+        if (block != null) {
             getOrCreateTagBuilder(baseTag).add(block);
             if (isWooden) {
                 getOrCreateTagBuilder(woodTag).add(block);
@@ -337,19 +347,19 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
     }
 
     private void addBlockToTags(@Nullable Block block, boolean isWooden, boolean isStone, TagKey<Block> baseTag, TagKey<Block> woodTag, TagKey<Block> stoneTag) {
-        if(block != null) {
+        if (block != null) {
             getOrCreateTagBuilder(baseTag).add(block);
             if (isWooden) {
                 getOrCreateTagBuilder(woodTag).add(block);
             }
-            if(isStone) {
+            if (isStone) {
                 getOrCreateTagBuilder(stoneTag).add(block);
             }
         }
     }
 
     private void addFamiliesToTag(TagKey<Block> tag, BlockFamily... families) {
-        for(BlockFamily family : families) {
+        for (BlockFamily family : families) {
             addFamilyToTag(family, tag);
         }
     }
@@ -366,7 +376,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         }).toList();
 
         builder.add(family.getBaseBlock());
-        for(Block block : blocksSorted) {
+        for (Block block : blocksSorted) {
             builder.add(block);
         }
     }

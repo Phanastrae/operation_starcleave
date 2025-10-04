@@ -7,6 +7,8 @@ import phanastrae.operation_starcleave.OperationStarcleave;
 
 public class OperationStarcleaveBlockTags {
     public static final TagKey<Block> STARBLEACHED = of("starbleached");
+    public static final TagKey<Block> HOLY_MOSS_REPLACEABLE = of("holy_moss_replaceable");
+    public static final TagKey<Block> STELLAR_MULCH_REPLACEABLE = of("stellar_mulch_replaceable");
     public static final TagKey<Block> ALLOWS_BISREED_PLANTING = of("allows_bisreed_planting");
     public static final TagKey<Block> STARBLEACH_IMMUNE = of("starbleach_immune");
     public static final TagKey<Block> PHLOGISTIC_HYPERFLAMMABLES = of("phlogistic_hyperflammables");
