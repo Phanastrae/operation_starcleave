@@ -11,7 +11,7 @@ import net.neoforged.neoforge.common.extensions.IBlockExtension;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import phanastrae.operation_starcleave.block.CustomLogBlock;
-import phanastrae.operation_starcleave.block.OperationStarcleaveLogStripping;
+import phanastrae.operation_starcleave.block.OperationStarcleaveToolActions;
 
 @Mixin(CustomLogBlock.class)
 public abstract class CustomLogBlockMixin extends RotatedPillarBlock implements IBlockExtension {
@@ -27,8 +27,8 @@ public abstract class CustomLogBlockMixin extends RotatedPillarBlock implements 
 
         if(ItemAbilities.AXE_STRIP == itemAbility) {
             Block block = state.getBlock();
-            if(OperationStarcleaveLogStripping.STARCLEAVE_STRIPPABLES.containsKey(block)) {
-                Block newBlock = OperationStarcleaveLogStripping.STARCLEAVE_STRIPPABLES.get(block);
+            if(OperationStarcleaveToolActions.STRIPPABLES.containsKey(block)) {
+                Block newBlock = OperationStarcleaveToolActions.STRIPPABLES.get(block);
                 return newBlock.defaultBlockState().setValue(RotatedPillarBlock.AXIS, state.getValue(RotatedPillarBlock.AXIS));
             }
         }

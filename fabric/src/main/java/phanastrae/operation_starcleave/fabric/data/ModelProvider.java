@@ -62,6 +62,7 @@ public class ModelProvider extends FabricModelProvider {
         BMG.createCrossBlockWithDefaultItem(SHORT_HOLY_MOSS, BlockModelGenerators.TintState.NOT_TINTED);
         createPottedRoot(BMG, SHORT_HOLY_MOSS, POTTED_SHORT_HOLY_MOSS, TintState.NOT_TINTED);
 
+        BMG.blockStateOutput.accept(createRotatedVariant(STELLAR_PATH, ModelLocationUtils.getModelLocation(STELLAR_PATH)));
         registerGrassLikeBlock(BMG, HOLY_MOSS, STELLAR_SEDIMENT);
         registerGrassLikeBlock(BMG, STELLAR_MULCH, STELLAR_SEDIMENT);
 
@@ -86,7 +87,7 @@ public class ModelProvider extends FabricModelProvider {
     }
 
     private void forEach(Consumer<Block> consumer, Block... list) {
-        for(Block block : list) {
+        for (Block block : list) {
             consumer.accept(block);
         }
     }
@@ -228,7 +229,7 @@ public class ModelProvider extends FabricModelProvider {
 
     private void registerStarbleachCauldron(BlockModelGenerators BMG, Block block) {
         PropertyDispatch.C1<Integer> map = PropertyDispatch.property(StarbleachCauldronBlock.LEVEL_7);
-        for(int i = 1; i <= 7; i++) {
+        for (int i = 1; i <= 7; i++) {
             map = map.select(
                     i,
                     Variant.variant()
@@ -279,7 +280,7 @@ public class ModelProvider extends FabricModelProvider {
     }
 
     private void forEach(Consumer<Item> consumer, Item... list) {
-        for(Item item : list) {
+        for (Item item : list) {
             consumer.accept(item);
         }
     }

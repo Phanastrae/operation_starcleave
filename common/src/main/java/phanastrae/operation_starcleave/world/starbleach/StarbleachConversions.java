@@ -63,6 +63,10 @@ public class StarbleachConversions {
                 StateMatchesPredicate.fromBlock(FARMLAND),
                 (l, p, s, r) -> getFarmlandState(l, p)
         );
+        StateConversion pathConversion = new StateConversion(
+                StateMatchesPredicate.fromBlock(DIRT_PATH),
+                SimpleStateProvider.simple(STELLAR_PATH)
+        );
 
         return new StateConversion[]{
                 stellarMulchConversion,
@@ -72,7 +76,8 @@ public class StarbleachConversions {
                 stardustConversion,
                 leavesConversion,
                 logsConversion,
-                farmlandConversion
+                farmlandConversion,
+                pathConversion
         };
     }
 

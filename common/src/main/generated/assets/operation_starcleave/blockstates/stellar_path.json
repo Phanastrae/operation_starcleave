@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "operation_starcleave:block/stellar_path"
+      },
+      {
+        "model": "operation_starcleave:block/stellar_path",
+        "y": 90
+      },
+      {
+        "model": "operation_starcleave:block/stellar_path",
+        "y": 180
+      },
+      {
+        "model": "operation_starcleave:block/stellar_path",
+        "y": 270
+      }
+    ]
+  }
+}

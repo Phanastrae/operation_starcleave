@@ -19,10 +19,11 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import phanastrae.operation_starcleave.OperationStarcleave;
-import phanastrae.operation_starcleave.block.OperationStarcleaveLogStripping;
+import phanastrae.operation_starcleave.block.OperationStarcleaveToolActions;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
 import phanastrae.operation_starcleave.fabric.fluid.OperationStarcleaveFluidVariantAttributes;
 import phanastrae.operation_starcleave.item.OperationStarcleaveCreativeModeTabs;
+import phanastrae.operation_starcleave.mixin.ShovelItemAccessor;
 import phanastrae.operation_starcleave.network.packet.OperationStarcleavePayloads;
 
 import java.util.Collection;
@@ -62,8 +63,10 @@ public class OperationStarcleaveFabric implements ModInitializer {
         OperationStarcleaveEntityTypes.registerEntityAttributes((FabricDefaultAttributeRegistry::register));
 
         // setup log stripping
-        OperationStarcleaveLogStripping.STARCLEAVE_STRIPPABLES.forEach(StrippableBlockRegistry::register);
+        OperationStarcleaveToolActions.STRIPPABLES.forEach(StrippableBlockRegistry::register);
 
+        // setup flattening
+        OperationStarcleaveToolActions.FLATTENABLES.forEach(ShovelItemAccessor.getFLATTENABLES()::put);
 
 
         // world tick start
@@ -83,7 +86,7 @@ public class OperationStarcleaveFabric implements ModInitializer {
             @Override
             public void add(ResourceKey<CreativeModeTab> groupKey, ItemLike... items) {
                 ItemGroupEvents.modifyEntriesEvent(groupKey).register(entries -> {
-                    for(ItemLike item : items) {
+                    for (ItemLike item : items) {
                         entries.accept(item);
                     }
                 });
@@ -97,7 +100,7 @@ public class OperationStarcleaveFabric implements ModInitializer {
             @Override
             public void add(ResourceKey<CreativeModeTab> groupKey, Collection<ItemStack> items) {
                 ItemGroupEvents.modifyEntriesEvent(groupKey).register(entries -> {
-                    for(ItemStack item : items) {
+                    for (ItemStack item : items) {
                         entries.accept(item);
                     }
                 });

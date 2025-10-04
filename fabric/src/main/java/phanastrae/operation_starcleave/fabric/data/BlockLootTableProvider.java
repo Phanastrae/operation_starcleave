@@ -86,6 +86,7 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
         dropNothing(PHLOGISTIC_FIRE);
 
         dropOther(STARBLEACH_CAULDRON, Items.CAULDRON);
+        dropOther(STELLAR_PATH, STELLAR_SEDIMENT);
 
         dropWhenSilkTouch(PLASMA_ICE);
 
@@ -137,7 +138,7 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
     }
 
     private void forEach(Consumer<Block> consumer, Block... list) {
-        for(Block t : list) {
+        for (Block t : list) {
             consumer.accept(t);
         }
     }
@@ -170,13 +171,12 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
 
     private void addLootForFamily(BlockFamily family) {
         this.dropSelf(family.getBaseBlock());
-        for(BlockFamily.Variant variant : BlockFamily.Variant.values()) {
+        for (BlockFamily.Variant variant : BlockFamily.Variant.values()) {
             Block block = family.get(variant);
-            if(block != null) {
-                if(variant == BlockFamily.Variant.DOOR) {
+            if (block != null) {
+                if (variant == BlockFamily.Variant.DOOR) {
                     add(block, createDoorTable(block));
-                } else
-                if(variant == BlockFamily.Variant.SLAB) {
+                } else if (variant == BlockFamily.Variant.SLAB) {
                     add(block, createSlabItemTable(block));
                 } else {
                     this.dropSelf(block);

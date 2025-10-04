@@ -31,6 +31,7 @@
     "ServerLevelMixin",
     "ServerPlayerMixin",
     "ShootTongueMixin",
+    "ShovelItemAccessor",
     "SimpleParticleTypeAccessor",
     "SpawnPlacementsAccessor",
     "StemBlockMixin",

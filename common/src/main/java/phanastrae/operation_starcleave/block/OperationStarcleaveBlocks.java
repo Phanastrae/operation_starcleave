@@ -55,6 +55,18 @@ public class OperationStarcleaveBlocks {
                     .lightLevel(constant(2))
             )
     );
+    public static final Block STELLAR_PATH = register(
+            "stellar_path",
+            new StellarPathBlock(properties()
+                    .strength(1.15F, 2F)
+                    .mapColor(COLOR_PURPLE)
+                    .sound(SoundType.SAND)
+                    .instrument(BASEDRUM)
+                    .isViewBlocking(ALWAYS)
+                    .isSuffocating(ALWAYS)
+                    .lightLevel(constant(2))
+            )
+    );
     public static final Block STELLAR_FARMLAND = register(
             "stellar_farmland",
             new StellarFarmlandBlock(properties()

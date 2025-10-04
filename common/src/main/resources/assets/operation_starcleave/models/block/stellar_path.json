@@ -1,0 +1,9 @@
+{
+  "parent": "block/dirt_path",
+  "textures": {
+    "particle": "operation_starcleave:block/stellar_sediment",
+    "top": "operation_starcleave:block/stellar_path_top",
+    "side": "operation_starcleave:block/stellar_path_side",
+    "bottom": "operation_starcleave:block/stellar_sediment"
+  }
+}
