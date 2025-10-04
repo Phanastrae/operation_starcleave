@@ -1,25 +1,18 @@
 package phanastrae.operation_starcleave.world.starbleach;
 
+import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.FarmBlock;
-import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.Heightmap;
-import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
-import phanastrae.operation_starcleave.block.StarbleachCauldronBlock;
-import phanastrae.operation_starcleave.block.StellarFarmlandBlock;
 import phanastrae.operation_starcleave.block.tag.OperationStarcleaveBlockTags;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
@@ -28,26 +21,17 @@ import phanastrae.operation_starcleave.world.firmament.Firmament;
 import phanastrae.operation_starcleave.world.firmament.FirmamentRegion;
 import phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion;
 
+import java.util.Optional;
+
 public class Starbleach {
 
-    public enum StarbleachTarget {
-        ALL, // convert all blocks. default behaviour beneath fractures
-        ONLY_FILLING, // only fill cauldrons. behaviour beneath fractures if fracture starbleaching is disabled
-        NO_FILLING // convert all blocks except cauldrons. behaviour of splash starbleach bottles
-    }
-
-    public static StarbleachTarget getFractureStarbleachTarget(ServerLevel world) {
-        boolean bl = world.getGameRules().getBoolean(OperationStarcleaveGameRules.DO_FRACTURE_STARBLEACHING);
-        return bl ? StarbleachTarget.ALL : StarbleachTarget.ONLY_FILLING;
-    }
-
-    public static void starbleachChunk(ServerLevel world, LevelChunk chunk, int randomTickSpeed) {
-        Firmament firmament = Firmament.fromLevel(world);
+    public static void starbleachChunk(ServerLevel level, LevelChunk chunk, int randomTickSpeed) {
+        Firmament firmament = Firmament.fromLevel(level);
         if (firmament == null) {
             return;
         }
 
-        world.getProfiler().popPush("starcleave_starbleach");
+        level.getProfiler().popPush("starcleave_starbleach");
 
         ChunkPos chunkPos = chunk.getPos();
         int minX = chunkPos.getMinBlockX();
@@ -55,8 +39,8 @@ public class Starbleach {
         FirmamentSubRegion subRegion = firmament.getSubRegion(minX, minZ);
         if (subRegion == null) return;
 
-        StarbleachTarget starbleachTarget = getFractureStarbleachTarget(world);
-        RandomSource random = world.random;
+        StarbleachTarget starbleachTarget = StarbleachTarget.getFractureStarbleachingTarget(level);
+        RandomSource random = level.random;
 
         for (int k = 0; k < randomTickSpeed; ++k) {
             if (random.nextInt(90) == 0) {
@@ -65,87 +49,65 @@ public class Starbleach {
 
                 int damage = subRegion.getDamage(x & FirmamentRegion.SUBREGION_MASK, z & FirmamentRegion.SUBREGION_MASK);
                 if (damage >= 5) {
-                    int topY = world.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z);
+                    int topY = level.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z);
                     BlockPos targetPos = new BlockPos(x, topY - 1, z);
-                    starbleach(world, targetPos, starbleachTarget, 150);
+                    starbleach(level, targetPos, starbleachTarget, 150);
                 }
             }
         }
     }
 
-    public static void starbleach(ServerLevel world, BlockPos blockPos, StarbleachTarget starbleachTarget, int particleCount) {
-        BlockState blockState = world.getBlockState(blockPos);
+    public static void starbleach(ServerLevel level, BlockPos blockPos, StarbleachTarget starbleachTarget, int particleCount) {
+        BlockState blockState = level.getBlockState(blockPos);
         if (isStarbleached(blockState)) {
-            if (starbleachTarget == StarbleachTarget.ALL || starbleachTarget == StarbleachTarget.NO_FILLING) {
-                if (world.random.nextInt(5) == 0) {
-                    decorate(world, blockPos.above(), 5, OperationStarcleaveBlocks.HOLY_MOSS, OperationStarcleaveBlocks.SHORT_HOLY_MOSS);
-                    decorate(world, blockPos.above(), 10, OperationStarcleaveBlocks.STELLAR_MULCH, OperationStarcleaveBlocks.MULCHBORNE_TUFT);
+            // try to decorate
+            if (starbleachTarget.shouldConvertBlocks()) {
+                if (tryDecorateAtPosition(level, blockPos)) {
                     return;
                 }
             }
 
-            boolean starbleached = true;
-            for (int k = 0; k < 12 && starbleached; k++) {
-                if (world.random.nextInt(6) == 0) {
-                    int x = 0;
-                    int z = 0;
-                    switch (world.random.nextInt(4)) {
-                        case 0 -> x = 1;
-                        case 1 -> x = -1;
-                        case 2 -> z = 1;
-                        case 3 -> z = -1;
-                    }
-                    blockPos = blockPos.offset(x, 0, z);
-                } else {
-                    blockPos = blockPos.offset(0, -1, 0);
-                }
-                blockState = world.getBlockState(blockPos);
-                for (int k2 = 0; k2 < 8; k2++) {
-                    if (blockState.isAir()) {
-                        blockPos = blockPos.offset(0, -1, 0);
-                        blockState = world.getBlockState(blockPos);
-                    }
-                }
-                if (!isStarbleached(blockState)) starbleached = false;
-            }
-            if (starbleached) {
+            // move down through starbleached blocks to (try to) find a non-starbleached block and target that instead
+            Optional<Pair<BlockPos, BlockState>> pairOptional = findNonStarbleachedBlock(level, blockPos);
+            if (pairOptional.isEmpty()) {
                 return;
+            } else {
+                Pair<BlockPos, BlockState> pair = pairOptional.get();
+                blockPos = pair.left();
+                blockState = pair.right();
             }
         }
 
-        BlockState newState = getStarbleachResult(world, blockPos, blockState, world.random, starbleachTarget);
-
+        // try to starbleach target block
+        BlockState newState = StarbleachConversions.getStarbleachResult(level, blockPos, blockState, level.random, starbleachTarget);
         if (newState != null) {
-            if (newState.isAir()) {
-                world.destroyBlock(blockPos, false);
-            } else {
-                world.setBlockAndUpdate(blockPos, newState);
-            }
-            world.playSeededSound(null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), OperationStarcleaveSoundEvents.STARBLEACH, SoundSource.BLOCKS, 0.1F, 1.6F + 0.4F * world.random.nextFloat(), world.random.nextLong());
-            for (Direction direction : Direction.values()) {
-                Vec3i v = direction.getNormal();
-                if (world.getBlockState(blockPos.offset(v)).canBeReplaced()) {
-                    double x = blockPos.getX() + 0.5 + 0.5 * v.getX();
-                    double y = blockPos.getY() + 0.5 + 0.5 * v.getY();
-                    double z = blockPos.getZ() + 0.5 + 0.5 * v.getZ();
-                    world.sendParticles(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER, x, y, z, particleCount,
-                            v.getX() == 0 ? 0.5 : 0,
-                            v.getY() == 0 ? 0.5 : 0,
-                            v.getZ() == 0 ? 0.5 : 0,
-                            0.05);
-                }
-            }
+            convertBlock(level, blockPos, newState, particleCount);
         }
     }
 
-    public static void decorate(ServerLevel world, BlockPos blockPos, int threshold, Block baseBlock, Block decoBlock) {
+    public static boolean isStarbleached(BlockState blockState) {
+        return blockState.is(OperationStarcleaveBlockTags.STARBLEACHED);
+    }
+
+    public static boolean tryDecorateAtPosition(ServerLevel level, BlockPos blockPos) {
+        if (level.random.nextInt(5) == 0) {
+            BlockPos upPos = blockPos.above();
+            decorate(level, upPos, 5, OperationStarcleaveBlocks.HOLY_MOSS, OperationStarcleaveBlocks.SHORT_HOLY_MOSS);
+            decorate(level, upPos, 10, OperationStarcleaveBlocks.STELLAR_MULCH, OperationStarcleaveBlocks.MULCHBORNE_TUFT);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static void decorate(ServerLevel level, BlockPos blockPos, int threshold, Block baseBlock, Block decoBlock) {
         int nearby = 0;
         for (int i = -2; i <= 2; i++) {
             for (int j = -2; j <= 2; j++) {
                 for (int k = -2; k <= 2; k++) {
                     if (i * i + j * j + k * k > 6) continue;
 
-                    if (world.getBlockState(blockPos.offset(i, j, k)).is(decoBlock)) {
+                    if (level.getBlockState(blockPos.offset(i, j, k)).is(decoBlock)) {
                         nearby++;
                     }
                 }
@@ -155,148 +117,99 @@ public class Starbleach {
             return;
         }
 
-        if (world.getBlockState(blockPos).isAir() && world.getBlockState(blockPos.below()).is(baseBlock)) {
-            world.setBlockAndUpdate(blockPos, decoBlock.defaultBlockState());
+        if (level.getBlockState(blockPos).isAir() && level.getBlockState(blockPos.below()).is(baseBlock)) {
+            level.setBlockAndUpdate(blockPos, decoBlock.defaultBlockState());
         }
     }
 
-    public static boolean isStarbleached(BlockState blockState) {
-        return blockState.is(OperationStarcleaveBlockTags.STARBLEACHED);
+    public static Optional<Pair<BlockPos, BlockState>> findNonStarbleachedBlock(ServerLevel level, BlockPos blockPos) {
+        BlockPos.MutableBlockPos mutable = blockPos.mutable();
+        for (int i = 0; i < 12; i++) {
+            // move randomly sideways or downwards
+            boolean moveHorizontal = level.random.nextInt(6) == 0;
+            if (moveHorizontal) {
+                int x = 0;
+                int z = 0;
+                switch (level.random.nextInt(4)) {
+                    case 0 -> x = 1;
+                    case 1 -> x = -1;
+                    case 2 -> z = 1;
+                    case 3 -> z = -1;
+                }
+                mutable.move(x, 0, z);
+            } else {
+                mutable.move(0, -1, 0);
+            }
+
+            BlockState blockState = level.getBlockState(mutable);
+
+            // move downwards until block is not air
+            for (int j = 0; j < 8; j++) {
+                if (blockState.isAir()) {
+                    mutable.move(0, -1, 0);
+                    blockState = level.getBlockState(mutable);
+                } else {
+                    break;
+                }
+            }
+
+            if (!isStarbleached(blockState)) {
+                return Optional.of(Pair.of(mutable.immutable(), blockState));
+            }
+        }
+        return Optional.empty();
     }
 
-    @Nullable
-    public static BlockState getStarbleachResult(Level world, BlockPos blockPos, BlockState blockState, RandomSource random, StarbleachTarget starbleachTarget) {
-        BlockState newBlockstate = null;
-        if (starbleachTarget == StarbleachTarget.ALL || starbleachTarget == StarbleachTarget.ONLY_FILLING) {
-            newBlockstate = getStarbleachCauldronResult(blockState);
-            if (newBlockstate != null) {
-                return newBlockstate;
-            }
+    public static void convertBlock(ServerLevel level, BlockPos blockPos, BlockState newState, int particleCount) {
+        if (newState.isAir()) {
+            level.destroyBlock(blockPos, false);
+        } else {
+            level.setBlockAndUpdate(blockPos, newState);
         }
-        if (starbleachTarget == StarbleachTarget.ALL || starbleachTarget == StarbleachTarget.NO_FILLING) {
-            newBlockstate = getStarbleachBlockResult(world, blockPos, blockState, random);
-            if (newBlockstate != null) {
-                return newBlockstate;
-            }
-        }
-
-        return newBlockstate;
+        level.playSeededSound(null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), OperationStarcleaveSoundEvents.STARBLEACH, SoundSource.BLOCKS, 0.1F, 1.6F + 0.4F * level.random.nextFloat(), level.random.nextLong());
+        spawnParticles(level, blockPos, particleCount);
     }
 
-
-    @Nullable
-    public static BlockState getStarbleachCauldronResult(BlockState blockState) {
-        if (blockState.is(Blocks.CAULDRON)) {
-            return OperationStarcleaveBlocks.STARBLEACH_CAULDRON.defaultBlockState();
-        }
-        if (blockState.is(OperationStarcleaveBlocks.STARBLEACH_CAULDRON)) {
-            if (blockState.getValue(StarbleachCauldronBlock.LEVEL_7) != StarbleachCauldronBlock.MAX_STARBLEACH_LEVEL) {
-                return blockState.cycle(StarbleachCauldronBlock.LEVEL_7);
+    public static void spawnParticles(ServerLevel level, BlockPos blockPos, int particleCount) {
+        for (Direction direction : Direction.values()) {
+            Vec3i v = direction.getNormal();
+            if (level.getBlockState(blockPos.offset(v)).canBeReplaced()) {
+                double x = blockPos.getX() + 0.5 + 0.5 * v.getX();
+                double y = blockPos.getY() + 0.5 + 0.5 * v.getY();
+                double z = blockPos.getZ() + 0.5 + 0.5 * v.getZ();
+                level.sendParticles(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER, x, y, z, particleCount,
+                        v.getX() == 0 ? 0.5 : 0,
+                        v.getY() == 0 ? 0.5 : 0,
+                        v.getZ() == 0 ? 0.5 : 0,
+                        0.05);
             }
         }
-
-        return null;
     }
 
-    @Nullable
-    public static BlockState getStarbleachBlockResult(Level world, BlockPos blockPos, BlockState blockState, RandomSource random) {
-        // TODO implement proper datapack based system for this instead of hardcoding it all
-        if (blockState.is(OperationStarcleaveBlockTags.STARBLEACH_IMMUNE)) {
-            return null;
+    public enum StarbleachTarget {
+        ALL(true, true), // convert all blocks. default behaviour beneath fractures
+        ONLY_FILLING(false, true), // only fill cauldrons. behaviour beneath fractures if fracture starbleaching is disabled
+        NO_FILLING(true, false); // convert all blocks except cauldrons. behaviour of splash starbleach bottles
+
+        private final boolean convertBlocks;
+        private final boolean fillCauldrons;
+
+        StarbleachTarget(boolean convertBlocks, boolean fillCauldrons) {
+            this.convertBlocks = convertBlocks;
+            this.fillCauldrons = fillCauldrons;
         }
 
-        if (blockState.is(Blocks.PODZOL)
-                || blockState.is(Blocks.MYCELIUM)) {
-            return OperationStarcleaveBlocks.STELLAR_MULCH.defaultBlockState();
-        }
-        if (blockState.is(Blocks.GRASS_BLOCK)) {
-            int steepness = 0;
-            for (Direction direction : Direction.values()) {
-                if (direction.getAxis() != Direction.Axis.Y) {
-                    BlockState state = world.getBlockState(blockPos.offset(direction.getStepX(), 1, direction.getStepZ()));
-                    if (!state.canBeReplaced()) {
-                        steepness += 1;
-                    }
-                }
-            }
-            if (random.nextInt(2 + steepness) >= 2) {
-                return OperationStarcleaveBlocks.STELLAR_MULCH.defaultBlockState();
-            }
-
-            int nearbyMulch = 0;
-            for (int x = -1; x <= 1; x++) {
-                for (int z = -1; z <= 1; z++) {
-                    BlockState state = world.getBlockState(blockPos.offset(x, 0, z));
-                    if (state.is(OperationStarcleaveBlocks.STELLAR_MULCH)) {
-                        nearbyMulch += 1;
-                    }
-                }
-            }
-            if (random.nextInt(1 + (9 - nearbyMulch) * (9 - nearbyMulch)) <= 2) {
-                return OperationStarcleaveBlocks.STELLAR_MULCH.defaultBlockState();
-            } else {
-                return OperationStarcleaveBlocks.HOLY_MOSS.defaultBlockState();
-            }
-        }
-        if (blockState.is(Blocks.DIRT)
-                || blockState.is(Blocks.COARSE_DIRT)
-                || blockState.is(Blocks.ROOTED_DIRT)
-                || blockState.is(BlockTags.BASE_STONE_OVERWORLD)
-                || blockState.is(Blocks.END_STONE)) {
-            if (world.getBlockState(blockPos.above()).isAir()) {
-                int nearbyMulch = 0;
-                for (int x = -1; x <= 1; x++) {
-                    for (int z = -1; z <= 1; z++) {
-                        BlockState state = world.getBlockState(blockPos.offset(x, 0, z));
-                        if (state.is(OperationStarcleaveBlocks.STELLAR_MULCH)) {
-                            nearbyMulch += 1;
-                        }
-                    }
-                }
-                if (random.nextInt(1 + (9 - nearbyMulch) * (9 - nearbyMulch)) <= 30) {
-                    return OperationStarcleaveBlocks.STELLAR_MULCH.defaultBlockState();
-                }
-            }
-
-            return OperationStarcleaveBlocks.STELLAR_SEDIMENT.defaultBlockState();
-        }
-        if (blockState.is(Blocks.NETHERRACK)
-                || blockState.is(Blocks.SOUL_SAND)
-                || blockState.is(Blocks.SOUL_SOIL)
-                || blockState.is(Blocks.CRIMSON_NYLIUM)
-                || blockState.is(Blocks.WARPED_NYLIUM)) {
-            return Blocks.AIR.defaultBlockState();
-        }
-        if (blockState.is(BlockTags.SAND)
-                || blockState.is(Blocks.GRAVEL)) {
-            return OperationStarcleaveBlocks.STARDUST_BLOCK.defaultBlockState();
-        }
-        if (blockState.is(BlockTags.LEAVES)
-                || blockState.is(BlockTags.WART_BLOCKS)
-                || blockState.is(Blocks.CHORUS_PLANT)
-                || blockState.is(Blocks.CHORUS_FLOWER)) {
-            if (random.nextInt(3) == 0) {
-                return OperationStarcleaveBlocks.STARBLEACHED_LEAVES.defaultBlockState();
-            } else {
-                return Blocks.AIR.defaultBlockState();
-            }
-        }
-        if (blockState.is(BlockTags.LOGS)) {
-            if (blockState.getProperties().contains(RotatedPillarBlock.AXIS)) {
-                return OperationStarcleaveBlocks.STARBLEACHED_LOG.defaultBlockState().setValue(RotatedPillarBlock.AXIS, blockState.getValue(RotatedPillarBlock.AXIS));
-            } else {
-                return OperationStarcleaveBlocks.STARBLEACHED_LOG.defaultBlockState();
-            }
-        }
-        if (blockState.is(Blocks.FARMLAND)) {
-            Firmament firmament = Firmament.fromLevel(world);
-            if (firmament != null && StellarFarmlandBlock.isStarlit(world, blockPos, firmament)) {
-                return OperationStarcleaveBlocks.STELLAR_FARMLAND.defaultBlockState().setValue(FarmBlock.MOISTURE, 7);
-            } else {
-                return OperationStarcleaveBlocks.STELLAR_FARMLAND.defaultBlockState();
-            }
+        public boolean shouldConvertBlocks() {
+            return this.convertBlocks;
         }
 
-        return null;
+        public boolean shouldFillCauldrons() {
+            return this.fillCauldrons;
+        }
+
+        public static StarbleachTarget getFractureStarbleachingTarget(ServerLevel level) {
+            boolean bl = level.getGameRules().getBoolean(OperationStarcleaveGameRules.DO_FRACTURE_STARBLEACHING);
+            return bl ? StarbleachTarget.ALL : StarbleachTarget.ONLY_FILLING;
+        }
     }
 }
