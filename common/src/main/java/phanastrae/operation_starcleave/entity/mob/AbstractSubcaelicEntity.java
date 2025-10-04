@@ -1,6 +1,7 @@
 package phanastrae.operation_starcleave.entity.mob;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -32,6 +33,10 @@ public abstract class AbstractSubcaelicEntity extends Mob implements Enemy {
     public float tentacleRollAngle;
     public float prevTentacleRollAngle;
 
+    protected Vec3 mouthOffset = Vec3.ZERO;
+    protected Vec3 prevMouthOffset = Vec3.ZERO;
+    protected Vec3 prevVelocity = Vec3.ZERO; // used for trail
+
     protected AbstractSubcaelicEntity(EntityType<? extends AbstractSubcaelicEntity> entityType, Level world) {
         super(entityType, world);
         this.moveControl = new SubcaelicMoveControl(this);
@@ -49,21 +54,21 @@ public abstract class AbstractSubcaelicEntity extends Mob implements Enemy {
         this.prevRollAngle = this.rollAngle;
         this.prevTentacleRollAngle = this.tentacleRollAngle;
 
-        if(this.shouldTickAngles()) {
+        if (this.shouldTickAngles()) {
             Vec3 velocity = this.getDeltaMovement();
             double horizontalSpeed = velocity.horizontalDistance();
             if (horizontalSpeed > 0.01) {
                 double targetYaw = Math.toDegrees(-Mth.atan2(velocity.x, velocity.z));
-                this.yBodyRot = (float)Mth.rotLerp(0.2, this.yBodyRot, targetYaw);
+                this.yBodyRot = (float) Mth.rotLerp(0.2, this.yBodyRot, targetYaw);
                 this.setYRot(this.yBodyRot);
             }
             this.rollAngle += (float) Math.PI * 1.5F;
             this.tentacleRollAngle += (float) Math.PI * 1.75F;
             this.tiltAngle += (Math.toDegrees(-Mth.atan2(horizontalSpeed, velocity.y)) - this.tiltAngle) * 0.1F;
-            this.setXRot( - this.tiltAngle - 90);
+            this.setXRot(-this.tiltAngle - 90);
 
             if (this.level().isClientSide) {
-                spawnTrailParticles();
+                this.spawnTrailParticles();
             }
         }
     }
@@ -92,18 +97,49 @@ public abstract class AbstractSubcaelicEntity extends Mob implements Enemy {
     }
 
     public void spawnTrailParticles() {
-        Vec3 spawnCenter = this.position().add(0.0, this.getBbHeight()*0.5, 0.0).subtract(this.getLookAngle().scale(this.getBbWidth()*0.5));
-        double f = this.getBbWidth() * 0.2;
-        int count = (int)(this.getBbWidth() * 10 * Math.min(1.0, 2.0 * this.getDeltaMovement().length()));
-        for(int i = 0; i < count; ++i) {
-            double x = spawnCenter.x + (this.random.nextDouble() - 0.5) * f;
-            double y = spawnCenter.y + (this.random.nextDouble() - 0.5) * f;
-            double z = spawnCenter.z + (this.random.nextDouble() - 0.5) * f;
-            this.level().addParticle(OperationStarcleaveParticleTypes.GLIMMER_SMOKE, x, y, z,
-                    this.getDeltaMovement().x * - 1.5,
-                    this.getDeltaMovement().y * - 1.5,
-                    this.getDeltaMovement().z * - 1.5);
+        float height = this.getBbHeight();
+        float width = this.getBbWidth();
+        Vec3 pos = this.position();
+        Vec3 velocity = this.getDeltaMovement();
+
+        this.prevMouthOffset = this.mouthOffset;
+        this.mouthOffset = this.getLookAngle().scale(width * -0.5);
+
+        Vec3 spawnCenter = pos.add(0.0, height * 0.5, 0.0).add(this.mouthOffset);
+        Vec3 centerDif = this.prevMouthOffset.subtract(this.mouthOffset).subtract(this.prevVelocity);
+        Vec3 velocityDif = this.prevVelocity.subtract(velocity);
+
+        double randomScale = width * 0.2;
+
+        double clampedWidth = Math.clamp(width, 0.0, 7.0);
+        double clampedVelocity = Math.clamp(velocity.length(), 0.0, 5.0);
+        int count = Math.min((int) (4.0 * clampedWidth * Math.min(1.0, 1.5 * clampedVelocity)), 14);
+        boolean force = this.forceTrailRender();
+        ParticleOptions particle = this.getTrailParticle();
+
+        for (int i = 0; i < count; ++i) {
+            float f = i / (float) count;
+
+            double x = spawnCenter.x + centerDif.x * f + (this.random.nextDouble() - 0.5) * randomScale;
+            double y = spawnCenter.y + centerDif.y * f + (this.random.nextDouble() - 0.5) * randomScale;
+            double z = spawnCenter.z + centerDif.z * f + (this.random.nextDouble() - 0.5) * randomScale;
+
+            this.level().addParticle(
+                    particle, force, x, y, z,
+                    (velocity.x + velocityDif.x * f) * -1.5,
+                    (velocity.y + velocityDif.y * f) * -1.5,
+                    (velocity.z + velocityDif.z * f) * -1.5
+            );
         }
+        this.prevVelocity = velocity;
+    }
+
+    public ParticleOptions getTrailParticle() {
+        return OperationStarcleaveParticleTypes.GLIMMER_SMOKE;
+    }
+
+    public boolean forceTrailRender() {
+        return false;
     }
 
     public abstract double getTurnFactor();
@@ -130,9 +166,9 @@ public abstract class AbstractSubcaelicEntity extends Mob implements Enemy {
                 double lerpFactor = getLerpFactor(movementSpeed);
                 double dragFactor = 0.98;
                 Firmament firmament = Firmament.fromLevel(this.entity.level());
-                if(this.entity.isAlive() && firmament != null) {
+                if (this.entity.isAlive() && firmament != null) {
                     int damage = firmament.getDamage(this.entity.getBlockX(), this.entity.getBlockZ());
-                    dragFactor *= 0.7 + 0.3 * damage/7.0;
+                    dragFactor *= 0.7 + 0.3 * damage / 7.0;
                 }
                 Vec3 velocity = this.entity.getDeltaMovement();
                 double vX = Mth.lerp(lerpFactor, velocity.x, this.aimX * movementSpeed);
@@ -146,8 +182,8 @@ public abstract class AbstractSubcaelicEntity extends Mob implements Enemy {
             double targetAimX = this.wantedX - this.entity.getX();
             double targetAimY = this.wantedY - this.entity.getY();
             double targetAimZ = this.wantedZ - this.entity.getZ();
-            double targetAimSqr = targetAimX*targetAimX + targetAimY*targetAimY + targetAimZ*targetAimZ;
-            if(targetAimSqr > movementSpeed * movementSpeed) {
+            double targetAimSqr = targetAimX * targetAimX + targetAimY * targetAimY + targetAimZ * targetAimZ;
+            if (targetAimSqr > movementSpeed * movementSpeed) {
                 double targetAimLength = Math.sqrt(targetAimSqr);
                 targetAimX /= targetAimLength;
                 targetAimY /= targetAimLength;
@@ -161,7 +197,7 @@ public abstract class AbstractSubcaelicEntity extends Mob implements Enemy {
             double aX = Mth.lerp(turnFactor, this.aimX, targetAimX);
             double aY = Mth.lerp(turnFactor, this.aimY, targetAimY);
             double aZ = Mth.lerp(turnFactor, this.aimZ, targetAimZ);
-            double aSqr = aX*aX + aY*aY + aZ*aZ;
+            double aSqr = aX * aX + aY * aY + aZ * aZ;
             if (aSqr > 1) {
                 double aLength = Math.sqrt(aSqr);
                 aX /= aLength;
@@ -207,9 +243,9 @@ public abstract class AbstractSubcaelicEntity extends Mob implements Enemy {
 
         @Override
         public void tick() {
-            if(needsNewTarget() || this.entity.getRandom().nextInt(reducedTickDelay(40)) == 0) {
+            if (needsNewTarget() || this.entity.getRandom().nextInt(reducedTickDelay(40)) == 0) {
                 Vec3 target = pickTargetPosition();
-                if(target != null) {
+                if (target != null) {
                     this.entity.moveControl.setWantedPosition(target.x, target.y, target.z, 1.0);
                 }
             }
@@ -217,7 +253,7 @@ public abstract class AbstractSubcaelicEntity extends Mob implements Enemy {
 
         protected boolean needsNewTarget() {
             MoveControl moveControl = this.entity.moveControl;
-            if(!moveControl.hasWanted()) {
+            if (!moveControl.hasWanted()) {
                 return true;
             }
             return !isTargetValid(moveControl.getWantedX(), moveControl.getWantedY(), moveControl.getWantedZ());
@@ -234,10 +270,10 @@ public abstract class AbstractSubcaelicEntity extends Mob implements Enemy {
             Vec3 bestTarget = null;
 
             int ATTEMPTS = 7;
-            for(int i = 0; i < ATTEMPTS; i++) {
+            for (int i = 0; i < ATTEMPTS; i++) {
                 Vec3 candidatePosition = getCandidatePosition();
                 double badness = getTargetBadness(candidatePosition);
-                if(badness < leastBadness) {
+                if (badness < leastBadness) {
                     leastBadness = badness;
                     bestTarget = candidatePosition;
                 }
@@ -262,22 +298,22 @@ public abstract class AbstractSubcaelicEntity extends Mob implements Enemy {
 
         protected double getTargetY(double x, double z, double bottomY, double topY) {
             Level world = entity.level();
-            int heightStart = world.getHeight(Heightmap.Types.MOTION_BLOCKING, (int)this.entity.getX(), (int)this.entity.getZ());
-            int heightEnd = world.getHeight(Heightmap.Types.MOTION_BLOCKING, (int)x, (int)z);
-            int height = Math.min(Math.max(heightStart, heightEnd), (int)this.entity.getY() + 12);
+            int heightStart = world.getHeight(Heightmap.Types.MOTION_BLOCKING, (int) this.entity.getX(), (int) this.entity.getZ());
+            int heightEnd = world.getHeight(Heightmap.Types.MOTION_BLOCKING, (int) x, (int) z);
+            int height = Math.min(Math.max(heightStart, heightEnd), (int) this.entity.getY() + 12);
             double h = (height == world.getMinBuildHeight()) ? this.entity.getY() : height + 16;
             return Mth.clamp(h, bottomY, topY);
         }
 
         protected double getTargetBadness(Vec3 target) {
-            Vec3 offset = target.subtract(this.entity.position()).multiply(1.,0.25,1.);
-            if(offset.lengthSqr() > 1) {
+            Vec3 offset = target.subtract(this.entity.position()).multiply(1., 0.25, 1.);
+            if (offset.lengthSqr() > 1) {
                 offset = offset.normalize();
             }
             double dot = offset.dot(this.entity.getViewVector(1F));
 
             Firmament firmament = Firmament.fromLevel(this.entity.level());
-            int damage = firmament == null ? 0 : firmament.getDamage((int)target.x(), (int)target.z());
+            int damage = firmament == null ? 0 : firmament.getDamage((int) target.x(), (int) target.z());
 
             double dotFactor = 0.5 - 0.5 * dot;
             double damageFactor = 1.0 - (damage / 7.0) * (damage / 7.0);
@@ -301,7 +337,7 @@ public abstract class AbstractSubcaelicEntity extends Mob implements Enemy {
         @Override
         public boolean canUse() {
             LivingEntity target = this.entity.getTarget();
-            if(isEntityValid(target)) {
+            if (isEntityValid(target)) {
                 this.targetEntity = target;
                 return true;
             } else {
@@ -325,13 +361,13 @@ public abstract class AbstractSubcaelicEntity extends Mob implements Enemy {
             } else if (!target.isAlive()) {
                 return false;
             } else {
-                return !(target instanceof Player) || !target.isSpectator() && !((Player)target).isCreative();
+                return !(target instanceof Player) || !target.isSpectator() && !((Player) target).isCreative();
             }
         }
 
         @Override
         protected Vec3 getCandidatePosition() {
-            if(targetEntity == null) return this.entity.position();
+            if (targetEntity == null) return this.entity.position();
 
             RandomSource random = this.entity.getRandom();
             double radius = SEARCH_RADIUS_MIN + (SEARCH_RADIUS_MAX - SEARCH_RADIUS_MIN) * random.nextFloat();
@@ -349,17 +385,17 @@ public abstract class AbstractSubcaelicEntity extends Mob implements Enemy {
 
         @Override
         protected double getTargetBadness(Vec3 target) {
-            if(targetEntity == null) return 0.;
+            if (targetEntity == null) return 0.;
 
             Vec3 offset = target.subtract(this.targetEntity.position());
             double offsetFactor = 1.0 - Math.exp(-offset.lengthSqr() * 0.01);
 
             Vec3 offset2 = target.subtract(this.entity.position());
-            if(offset2.lengthSqr() > 1) {
+            if (offset2.lengthSqr() > 1) {
                 offset2 = offset2.normalize();
             }
             Vec3 offset3 = this.targetEntity.position().subtract(this.entity.position());
-            if(offset3.lengthSqr() > 1) {
+            if (offset3.lengthSqr() > 1) {
                 offset3 = offset3.normalize();
             }
 

@@ -2,6 +2,7 @@ package phanastrae.operation_starcleave.entity.mob;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -467,19 +468,13 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
     }
 
     @Override
-    public void spawnTrailParticles() {
-        Vec3 spawnCenter = this.position().add(0.0, this.getBbHeight() * 0.5, 0.0).subtract(this.getLookAngle().scale(this.getBbWidth() * 0.5));
-        double f = this.getBbWidth() * 0.2;
-        int count = (int) (this.getBbWidth() * 4 * Math.min(1.0, 2.0 * this.getDeltaMovement().length()));
-        for (int i = 0; i < count; ++i) {
-            double x = spawnCenter.x + (this.random.nextDouble() - 0.5) * f;
-            double y = spawnCenter.y + (this.random.nextDouble() - 0.5) * f;
-            double z = spawnCenter.z + (this.random.nextDouble() - 0.5) * f;
-            this.level().addParticle(OperationStarcleaveParticleTypes.LARGE_GLIMMER_SMOKE, true, x, y, z,
-                    this.getDeltaMovement().x * -1.5,
-                    this.getDeltaMovement().y * -1.5,
-                    this.getDeltaMovement().z * -1.5);
-        }
+    public ParticleOptions getTrailParticle() {
+        return OperationStarcleaveParticleTypes.LARGE_GLIMMER_SMOKE;
+    }
+
+    @Override
+    public boolean forceTrailRender() {
+        return true;
     }
 
     public void spawnSmokeBurst() {
