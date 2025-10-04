@@ -167,7 +167,7 @@ public class SubcaelicDuxEntity extends AbstractSubcaelicEntity implements Neutr
                 if (starlit) {
                     Vec3 spawnCenter = this.position().add(0.0, this.getBbHeight() * 0.5, 0.0);
                     double f = this.getBbWidth();
-                    int count = (int) (this.getBbWidth() * 8);
+                    int count = 8;
                     for (int i = 0; i < count; ++i) {
                         double x = spawnCenter.x + (this.random.nextDouble() - 0.5) * f;
                         double y = spawnCenter.y + (this.random.nextDouble() - 0.5) * this.getBbHeight();
