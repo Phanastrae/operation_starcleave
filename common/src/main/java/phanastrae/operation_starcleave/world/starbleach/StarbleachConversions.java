@@ -4,19 +4,77 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.stateproviders.SimpleStateProvider;
+import net.minecraft.world.level.levelgen.feature.stateproviders.WeightedStateProvider;
 import org.jetbrains.annotations.Nullable;
-import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.block.StarbleachCauldronBlock;
 import phanastrae.operation_starcleave.block.StellarFarmlandBlock;
 import phanastrae.operation_starcleave.block.tag.OperationStarcleaveBlockTags;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 
+import java.util.function.Predicate;
+
+import static net.minecraft.world.level.block.Blocks.*;
+import static phanastrae.operation_starcleave.block.OperationStarcleaveBlocks.*;
+
 public class StarbleachConversions {
+    // TODO data-drive conversions
+    public static final StateConversion[] ALL_CONVERSIONS = setupConversions();
+
+    public static StateConversion[] setupConversions() {
+        StateConversion stellarMulchConversion = new StateConversion(
+                StateMatchesPredicate.fromBlocks(PODZOL, MYCELIUM),
+                SimpleStateProvider.simple(STELLAR_MULCH)
+        );
+        StateConversion grassySedimentConversion = new StateConversion(
+                StateMatchesPredicate.fromBlock(GRASS_BLOCK),
+                (l, p, s, r) -> getGrassySedimentState(l, p, r)
+        );
+        StateConversion sedimentConversion = new StateConversion(
+                new StateMatchesPredicate.Builder(DIRT, COARSE_DIRT, ROOTED_DIRT, END_STONE).addBlockTag(BlockTags.BASE_STONE_OVERWORLD).build(),
+                (l, p, s, r) -> getSedimentState(l, p, r)
+        );
+        StateConversion airFromNetherConversion = new StateConversion(
+                StateMatchesPredicate.fromBlocks(NETHERRACK, SOUL_SAND, SOUL_SOIL, CRIMSON_NYLIUM, WARPED_NYLIUM),
+                SimpleStateProvider.simple(AIR)
+        );
+        StateConversion stardustConversion = new StateConversion(
+                new StateMatchesPredicate.Builder(GRAVEL).addBlockTag(BlockTags.SAND).build(),
+                SimpleStateProvider.simple(STARDUST_BLOCK)
+        );
+        StateConversion leavesConversion = new StateConversion(
+                new StateMatchesPredicate.Builder(CHORUS_PLANT, CHORUS_FLOWER).addBlockTag(BlockTags.LEAVES).addBlockTag(BlockTags.WART_BLOCKS).build(),
+                new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
+                        .add(STARBLEACHED_LEAVES.defaultBlockState(), 1)
+                        .add(AIR.defaultBlockState(), 2)
+                        .build()
+                )
+        );
+        StateConversion logsConversion = new StateConversion(
+                StateMatchesPredicate.fromBlockTag(BlockTags.LOGS),
+                (l, p, s, r) -> getLogState(s)
+        );
+        StateConversion farmlandConversion = new StateConversion(
+                StateMatchesPredicate.fromBlock(FARMLAND),
+                (l, p, s, r) -> getFarmlandState(l, p)
+        );
+
+        return new StateConversion[]{
+                stellarMulchConversion,
+                grassySedimentConversion,
+                sedimentConversion,
+                airFromNetherConversion,
+                stardustConversion,
+                leavesConversion,
+                logsConversion,
+                farmlandConversion
+        };
+    }
 
     @Nullable
     public static BlockState getStarbleachResult(Level level, BlockPos blockPos, BlockState blockState, RandomSource random, Starbleach.StarbleachTarget starbleachTarget) {
@@ -41,10 +99,10 @@ public class StarbleachConversions {
 
     @Nullable
     public static BlockState getStarbleachCauldronResult(BlockState blockState) {
-        if (blockState.is(Blocks.CAULDRON)) {
-            return OperationStarcleaveBlocks.STARBLEACH_CAULDRON.defaultBlockState();
+        if (blockState.is(CAULDRON)) {
+            return STARBLEACH_CAULDRON.defaultBlockState();
         }
-        if (blockState.is(OperationStarcleaveBlocks.STARBLEACH_CAULDRON)) {
+        if (blockState.is(STARBLEACH_CAULDRON)) {
             if (blockState.getValue(StarbleachCauldronBlock.LEVEL_7) != StarbleachCauldronBlock.MAX_STARBLEACH_LEVEL) {
                 return blockState.cycle(StarbleachCauldronBlock.LEVEL_7);
             }
@@ -55,104 +113,84 @@ public class StarbleachConversions {
 
     @Nullable
     public static BlockState getStarbleachBlockResult(Level level, BlockPos blockPos, BlockState blockState, RandomSource random) {
-        // TODO implement proper datapack based system for this instead of hardcoding it all
         if (blockState.is(OperationStarcleaveBlockTags.STARBLEACH_IMMUNE)) {
             return null;
         }
 
-        if (blockState.is(Blocks.PODZOL)
-                || blockState.is(Blocks.MYCELIUM)) {
-            return OperationStarcleaveBlocks.STELLAR_MULCH.defaultBlockState();
-        }
-        if (blockState.is(Blocks.GRASS_BLOCK)) {
-            int steepness = 0;
-            for (Direction direction : Direction.values()) {
-                if (direction.getAxis() != Direction.Axis.Y) {
-                    BlockState state = level.getBlockState(blockPos.offset(direction.getStepX(), 1, direction.getStepZ()));
-                    if (!state.canBeReplaced()) {
-                        steepness += 1;
-                    }
-                }
-            }
-            if (random.nextInt(2 + steepness) >= 2) {
-                return OperationStarcleaveBlocks.STELLAR_MULCH.defaultBlockState();
-            }
-
-            int nearbyMulch = 0;
-            for (int x = -1; x <= 1; x++) {
-                for (int z = -1; z <= 1; z++) {
-                    BlockState state = level.getBlockState(blockPos.offset(x, 0, z));
-                    if (state.is(OperationStarcleaveBlocks.STELLAR_MULCH)) {
-                        nearbyMulch += 1;
-                    }
-                }
-            }
-            if (random.nextInt(1 + (9 - nearbyMulch) * (9 - nearbyMulch)) <= 2) {
-                return OperationStarcleaveBlocks.STELLAR_MULCH.defaultBlockState();
-            } else {
-                return OperationStarcleaveBlocks.HOLY_MOSS.defaultBlockState();
-            }
-        }
-        if (blockState.is(Blocks.DIRT)
-                || blockState.is(Blocks.COARSE_DIRT)
-                || blockState.is(Blocks.ROOTED_DIRT)
-                || blockState.is(BlockTags.BASE_STONE_OVERWORLD)
-                || blockState.is(Blocks.END_STONE)) {
-            if (level.getBlockState(blockPos.above()).isAir()) {
-                int nearbyMulch = 0;
-                for (int x = -1; x <= 1; x++) {
-                    for (int z = -1; z <= 1; z++) {
-                        BlockState state = level.getBlockState(blockPos.offset(x, 0, z));
-                        if (state.is(OperationStarcleaveBlocks.STELLAR_MULCH)) {
-                            nearbyMulch += 1;
-                        }
-                    }
-                }
-                if (random.nextInt(1 + (9 - nearbyMulch) * (9 - nearbyMulch)) <= 30) {
-                    return OperationStarcleaveBlocks.STELLAR_MULCH.defaultBlockState();
-                }
-            }
-
-            return OperationStarcleaveBlocks.STELLAR_SEDIMENT.defaultBlockState();
-        }
-        if (blockState.is(Blocks.NETHERRACK)
-                || blockState.is(Blocks.SOUL_SAND)
-                || blockState.is(Blocks.SOUL_SOIL)
-                || blockState.is(Blocks.CRIMSON_NYLIUM)
-                || blockState.is(Blocks.WARPED_NYLIUM)) {
-            return Blocks.AIR.defaultBlockState();
-        }
-        if (blockState.is(BlockTags.SAND)
-                || blockState.is(Blocks.GRAVEL)) {
-            return OperationStarcleaveBlocks.STARDUST_BLOCK.defaultBlockState();
-        }
-        if (blockState.is(BlockTags.LEAVES)
-                || blockState.is(BlockTags.WART_BLOCKS)
-                || blockState.is(Blocks.CHORUS_PLANT)
-                || blockState.is(Blocks.CHORUS_FLOWER)) {
-            if (random.nextInt(3) == 0) {
-                return OperationStarcleaveBlocks.STARBLEACHED_LEAVES.defaultBlockState();
-            } else {
-                return Blocks.AIR.defaultBlockState();
-            }
-        }
-        if (blockState.is(BlockTags.LOGS)) {
-            BlockState state = OperationStarcleaveBlocks.STARBLEACHED_LOG.defaultBlockState();
-            if (blockState.getProperties().contains(RotatedPillarBlock.AXIS)) {
-                return state.setValue(RotatedPillarBlock.AXIS, blockState.getValue(RotatedPillarBlock.AXIS));
-            } else {
+        // TODO consider optimising this, currently trying to Starbleach non-Starbleachable blocks iterates through every single conversion
+        for (StateConversion conversion : ALL_CONVERSIONS) {
+            BlockState state = conversion.getState(level, blockPos, blockState, random);
+            if (state != null) {
                 return state;
-            }
-        }
-        if (blockState.is(Blocks.FARMLAND)) {
-            Firmament firmament = Firmament.fromLevel(level);
-            if (firmament != null && StellarFarmlandBlock.isStarlit(level, blockPos, firmament)) {
-                return OperationStarcleaveBlocks.STELLAR_FARMLAND.defaultBlockState().setValue(FarmBlock.MOISTURE, 7);
-            } else {
-                return OperationStarcleaveBlocks.STELLAR_FARMLAND.defaultBlockState();
             }
         }
 
         return null;
+    }
+
+    public static BlockState getGrassySedimentState(Level level, BlockPos blockPos, RandomSource random) {
+        int steepness = 0;
+        for (Direction direction : Direction.Plane.HORIZONTAL) {
+            BlockState state = level.getBlockState(blockPos.offset(direction.getStepX(), 1, direction.getStepZ()));
+            if (!state.canBeReplaced()) {
+                steepness += 1;
+            }
+        }
+        if (random.nextInt(2 + steepness) >= 2) {
+            return STELLAR_MULCH.defaultBlockState();
+        }
+
+        int nearbyMulch = countBlocksInArea(level, blockPos, 1, (state) -> state.is(STELLAR_MULCH));
+        if (random.nextInt(1 + (9 - nearbyMulch) * (9 - nearbyMulch)) <= 2) {
+            return STELLAR_MULCH.defaultBlockState();
+        } else {
+            return HOLY_MOSS.defaultBlockState();
+        }
+    }
+
+    public static BlockState getSedimentState(Level level, BlockPos blockPos, RandomSource random) {
+        if (level.getBlockState(blockPos.above()).isAir()) {
+            int nearbyMulch = countBlocksInArea(level, blockPos, 1, (state) -> state.is(STELLAR_MULCH));
+            if (random.nextInt(1 + (9 - nearbyMulch) * (9 - nearbyMulch)) <= 30) {
+                return STELLAR_MULCH.defaultBlockState();
+            }
+        }
+
+        return STELLAR_SEDIMENT.defaultBlockState();
+    }
+
+    public static int countBlocksInArea(Level level, BlockPos blockPos, int radius, Predicate<BlockState> predicate) {
+        int matches = 0;
+        BlockPos.MutableBlockPos mutable = blockPos.mutable();
+        for (int x = -radius; x <= radius; x++) {
+            mutable.setX(x);
+            for (int z = -radius; z <= radius; z++) {
+                mutable.setZ(z);
+                BlockState state = level.getBlockState(mutable);
+                if (predicate.test(state)) {
+                    matches++;
+                }
+            }
+        }
+        return matches;
+    }
+
+    public static BlockState getLogState(BlockState blockState) {
+        BlockState state = STARBLEACHED_LOG.defaultBlockState();
+        if (blockState.getProperties().contains(RotatedPillarBlock.AXIS)) {
+            return state.setValue(RotatedPillarBlock.AXIS, blockState.getValue(RotatedPillarBlock.AXIS));
+        } else {
+            return state;
+        }
+    }
+
+    public static BlockState getFarmlandState(Level level, BlockPos blockPos) {
+        Firmament firmament = Firmament.fromLevel(level);
+        BlockState farmland = STELLAR_FARMLAND.defaultBlockState();
+        if (firmament != null && StellarFarmlandBlock.isStarlit(level, blockPos, firmament)) {
+            return farmland.setValue(FarmBlock.MOISTURE, 7);
+        } else {
+            return farmland;
+        }
     }
 }
