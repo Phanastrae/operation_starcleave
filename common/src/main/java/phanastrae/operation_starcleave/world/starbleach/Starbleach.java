@@ -9,8 +9,11 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.levelgen.Heightmap;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.block.tag.OperationStarcleaveBlockTags;
@@ -51,22 +54,15 @@ public class Starbleach {
                 if (damage >= 5) {
                     int topY = level.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z);
                     BlockPos targetPos = new BlockPos(x, topY - 1, z);
-                    starbleach(level, targetPos, starbleachTarget, 150);
+                    starbleachWithSeeping(level, targetPos, starbleachTarget, 150);
                 }
             }
         }
     }
 
-    public static void starbleach(ServerLevel level, BlockPos blockPos, StarbleachTarget starbleachTarget, int particleCount) {
+    public static void starbleachWithSeeping(ServerLevel level, BlockPos blockPos, StarbleachTarget starbleachTarget, int particleCount) {
         BlockState blockState = level.getBlockState(blockPos);
         if (isStarbleached(blockState)) {
-            // try to decorate
-            if (starbleachTarget.shouldConvertBlocks()) {
-                if (tryDecorateAtPosition(level, blockPos)) {
-                    return;
-                }
-            }
-
             // move down through starbleached blocks to (try to) find a non-starbleached block and target that instead
             Optional<Pair<BlockPos, BlockState>> pairOptional = findNonStarbleachedBlock(level, blockPos);
             if (pairOptional.isEmpty()) {
@@ -78,48 +74,32 @@ public class Starbleach {
             }
         }
 
-        // try to starbleach target block
+        starbleachPos(level, blockPos, blockState, starbleachTarget, particleCount);
+    }
+
+    public static void starbleachPos(ServerLevel level, BlockPos blockPos, BlockState blockState, StarbleachTarget starbleachTarget, int particleCount) {
         BlockState newState = StarbleachConversions.getStarbleachResult(level, blockPos, blockState, level.random, starbleachTarget);
         if (newState != null) {
-            convertBlock(level, blockPos, newState, particleCount);
+            convertBlock(level, blockPos, blockState, newState, particleCount);
+
+            // TODO make this less hardcoded
+            BlockPos upPos = blockPos.above();
+            BlockState upState = level.getBlockState(upPos);
+            if (upState.is(Blocks.SHORT_GRASS) || (upState.isAir() && level.random.nextInt(3) == 0)) {
+                if (newState.is(OperationStarcleaveBlocks.HOLY_MOSS)) {
+                    level.setBlockAndUpdate(upPos, OperationStarcleaveBlocks.SHORT_HOLY_MOSS.defaultBlockState());
+                } else if (newState.is(OperationStarcleaveBlocks.STELLAR_MULCH)) {
+                    level.setBlockAndUpdate(upPos, OperationStarcleaveBlocks.MULCHBORNE_TUFT.defaultBlockState());
+                }
+            }
+
+            // update block
+            newState.updateNeighbourShapes(level, blockPos, 3);
         }
     }
 
     public static boolean isStarbleached(BlockState blockState) {
         return blockState.is(OperationStarcleaveBlockTags.STARBLEACHED);
-    }
-
-    public static boolean tryDecorateAtPosition(ServerLevel level, BlockPos blockPos) {
-        if (level.random.nextInt(5) == 0) {
-            BlockPos upPos = blockPos.above();
-            decorate(level, upPos, 5, OperationStarcleaveBlocks.HOLY_MOSS, OperationStarcleaveBlocks.SHORT_HOLY_MOSS);
-            decorate(level, upPos, 10, OperationStarcleaveBlocks.STELLAR_MULCH, OperationStarcleaveBlocks.MULCHBORNE_TUFT);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public static void decorate(ServerLevel level, BlockPos blockPos, int threshold, Block baseBlock, Block decoBlock) {
-        int nearby = 0;
-        for (int i = -2; i <= 2; i++) {
-            for (int j = -2; j <= 2; j++) {
-                for (int k = -2; k <= 2; k++) {
-                    if (i * i + j * j + k * k > 6) continue;
-
-                    if (level.getBlockState(blockPos.offset(i, j, k)).is(decoBlock)) {
-                        nearby++;
-                    }
-                }
-            }
-        }
-        if (nearby > threshold) {
-            return;
-        }
-
-        if (level.getBlockState(blockPos).isAir() && level.getBlockState(blockPos.below()).is(baseBlock)) {
-            level.setBlockAndUpdate(blockPos, decoBlock.defaultBlockState());
-        }
     }
 
     public static Optional<Pair<BlockPos, BlockState>> findNonStarbleachedBlock(ServerLevel level, BlockPos blockPos) {
@@ -160,11 +140,11 @@ public class Starbleach {
         return Optional.empty();
     }
 
-    public static void convertBlock(ServerLevel level, BlockPos blockPos, BlockState newState, int particleCount) {
+    public static void convertBlock(ServerLevel level, BlockPos blockPos, BlockState oldState, BlockState newState, int particleCount) {
+        level.setBlock(blockPos, newState, 2 | 16);
         if (newState.isAir()) {
-            level.destroyBlock(blockPos, false);
-        } else {
-            level.setBlockAndUpdate(blockPos, newState);
+            level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, blockPos, Block.getId(oldState));
+            level.gameEvent(GameEvent.BLOCK_DESTROY, blockPos, GameEvent.Context.of(null, oldState));
         }
         level.playSeededSound(null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), OperationStarcleaveSoundEvents.STARBLEACH, SoundSource.BLOCKS, 0.1F, 1.6F + 0.4F * level.random.nextFloat(), level.random.nextLong());
         spawnParticles(level, blockPos, particleCount);

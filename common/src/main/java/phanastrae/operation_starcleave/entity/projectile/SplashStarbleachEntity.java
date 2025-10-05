@@ -122,7 +122,7 @@ public class SplashStarbleachEntity extends ThrowableItemProjectile implements I
                         if(i*i+j*j+k*k >= 11) continue;
                         blockPosMutable.set(blockPos.getX() + i, blockPos.getY() + j, blockPos.getZ() + k);
                         for(int n = 0; n < 4; n++) {
-                            Starbleach.starbleach(serverWorld, blockPosMutable, Starbleach.StarbleachTarget.NO_FILLING, 20);
+                            Starbleach.starbleachWithSeeping(serverWorld, blockPosMutable, Starbleach.StarbleachTarget.NO_FILLING, 20);
                         }
                     }
                 }
