@@ -1,0 +1,21 @@
+{
+  "recipes": [
+    "operation_starcleave:netherite_pumpkin_smithing",
+    "operation_starcleave:stardust_block",
+    "operation_starcleave:firmament_rejuvenator",
+    "operation_starcleave:striped_nucleic_fissurerind",
+    "operation_starcleave:stellar_tiles",
+    "operation_starcleave:stardust_bricks",
+    "operation_starcleave:blessed_cloth_block",
+    "operation_starcleave:nucleic_fissurerind",
+    "operation_starcleave:blessed_cloth",
+    "operation_starcleave:blessed_cloth_carpet",
+    "operation_starcleave:splash_starbleach_bottle",
+    "operation_starcleave:imbued_starbleached_tiles",
+    "operation_starcleave:blessed_cloth_curtain",
+    "operation_starcleave:bismuth_pegasus_armor",
+    "operation_starcleave:starbleached_pearl_block",
+    "operation_starcleave:stellar_repulsor",
+    "operation_starcleave:blessed_bed"
+  ]
+}
