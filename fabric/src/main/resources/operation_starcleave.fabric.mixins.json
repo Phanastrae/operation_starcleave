@@ -8,7 +8,6 @@
     "ClipContextMixin",
     "CropBlockMixin",
     "EntityMixin",
-    "HoeItemMixin",
     "ItemStackMixin",
     "LivingEntityMixin"
   ],

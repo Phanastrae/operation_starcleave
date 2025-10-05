@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
+import net.fabricmc.fabric.api.registry.TillableBlockRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -23,7 +24,6 @@ import phanastrae.operation_starcleave.block.OperationStarcleaveToolActions;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
 import phanastrae.operation_starcleave.fabric.fluid.OperationStarcleaveFluidVariantAttributes;
 import phanastrae.operation_starcleave.item.OperationStarcleaveCreativeModeTabs;
-import phanastrae.operation_starcleave.mixin.ShovelItemAccessor;
 import phanastrae.operation_starcleave.network.packet.OperationStarcleavePayloads;
 
 import java.util.Collection;
@@ -62,11 +62,11 @@ public class OperationStarcleaveFabric implements ModInitializer {
         // entity attributes
         OperationStarcleaveEntityTypes.registerEntityAttributes((FabricDefaultAttributeRegistry::register));
 
-        // setup log stripping
+        // setup stripping
         OperationStarcleaveToolActions.STRIPPABLES.forEach(StrippableBlockRegistry::register);
 
-        // setup flattening
-        OperationStarcleaveToolActions.FLATTENABLES.forEach(ShovelItemAccessor.getFLATTENABLES()::put);
+        // setup tilling
+        OperationStarcleaveToolActions.TILLABLES.forEach(triple -> TillableBlockRegistry.register(triple.getLeft(), triple.getMiddle(), triple.getRight()));
 
 
         // world tick start

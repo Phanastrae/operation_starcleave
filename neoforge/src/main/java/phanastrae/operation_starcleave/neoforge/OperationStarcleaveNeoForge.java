@@ -1,5 +1,6 @@
 package phanastrae.operation_starcleave.neoforge;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -9,33 +10,45 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.neoforged.neoforge.registries.RegisterEvent;
+import org.apache.commons.lang3.tuple.Triple;
 import phanastrae.operation_starcleave.OperationStarcleave;
+import phanastrae.operation_starcleave.block.OperationStarcleaveToolActions;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
 import phanastrae.operation_starcleave.item.OperationStarcleaveCreativeModeTabs;
+import phanastrae.operation_starcleave.mixin.AxeItemAccessor;
 import phanastrae.operation_starcleave.neoforge.client.fluid.OperationStarcleaveFluidTypeExtensions;
 import phanastrae.operation_starcleave.neoforge.fluid.OperationStarcleaveFluidTypes;
 import phanastrae.operation_starcleave.network.packet.OperationStarcleavePayloads;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 @Mod(OperationStarcleave.MOD_ID)
 public class OperationStarcleaveNeoForge {
@@ -52,7 +65,7 @@ public class OperationStarcleaveNeoForge {
             public <T> void addRegistryListener(Registry<T> registry, Consumer<BiConsumer<ResourceLocation, T>> source) {
                 modEventBus.addListener((RegisterEvent event) -> {
                     ResourceKey<? extends Registry<T>> registryKey = registry.key();
-                    if(registryKey.equals(event.getRegistryKey())) {
+                    if (registryKey.equals(event.getRegistryKey())) {
                         source.accept((resourceLocation, t) -> event.register(registryKey, resourceLocation, () -> t));
                     }
                 });
@@ -93,6 +106,9 @@ public class OperationStarcleaveNeoForge {
 
         // add tooltips
         gameEventBus.addListener(this::addTooltips);
+
+        // handle tilling
+        gameEventBus.addListener(this::handleToolModification);
     }
 
     public void neoforgeRegistriesInit(OperationStarcleave.RegistryListenerAdder registryListenerAdder) {
@@ -104,6 +120,15 @@ public class OperationStarcleaveNeoForge {
         event.enqueueWork(() -> {
             OperationStarcleave.init();
             OperationStarcleaveFluidTypes.registerFluidInteractions();
+
+            // setup stripping
+            // need to make sure map is mutable, fabric does this itself but we have to do it manually on neoforge
+            Map<Block, Block> map = AxeItemAccessor.getSTRIPPABLES();
+            if (!(map instanceof HashMap<Block, Block>)) {
+                map = new HashMap<>(map);
+                AxeItemAccessor.setSTRIPPABLES(map);
+            }
+            map.putAll(OperationStarcleaveToolActions.STRIPPABLES);
         });
     }
 
@@ -112,30 +137,31 @@ public class OperationStarcleaveNeoForge {
         OperationStarcleaveCreativeModeTabs.setupEntries(new OperationStarcleaveCreativeModeTabs.Helper() {
             @Override
             public void add(ResourceKey<CreativeModeTab> groupKey, ItemLike item) {
-                if(eventKey.equals(groupKey)) {
+                if (eventKey.equals(groupKey)) {
                     event.accept(item);
                 }
             }
 
             @Override
             public void add(ResourceKey<CreativeModeTab> groupKey, ItemLike... items) {
-                if(eventKey.equals(groupKey)) {
-                    for(ItemLike item : items) {
+                if (eventKey.equals(groupKey)) {
+                    for (ItemLike item : items) {
                         event.accept(item);
                     }
                 }
             }
+
             @Override
             public void add(ResourceKey<CreativeModeTab> groupKey, ItemStack item) {
-                if(eventKey.equals(groupKey)) {
+                if (eventKey.equals(groupKey)) {
                     event.accept(item);
                 }
             }
 
             @Override
             public void add(ResourceKey<CreativeModeTab> groupKey, Collection<ItemStack> items) {
-                if(eventKey.equals(groupKey)) {
-                    for(ItemStack item : items) {
+                if (eventKey.equals(groupKey)) {
+                    for (ItemStack item : items) {
                         event.accept(item);
                     }
                 }
@@ -143,22 +169,22 @@ public class OperationStarcleaveNeoForge {
 
             @Override
             public void addAfter(ItemLike after, ResourceKey<CreativeModeTab> groupKey, ItemLike item) {
-                if(eventKey.equals(groupKey)) {
+                if (eventKey.equals(groupKey)) {
                     event.insertAfter(new ItemStack(after), new ItemStack(item), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
                 }
             }
 
             @Override
             public void addAfter(ItemStack after, ResourceKey<CreativeModeTab> groupKey, ItemStack item) {
-                if(eventKey.equals(groupKey)) {
+                if (eventKey.equals(groupKey)) {
                     event.insertAfter(after, item, CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
                 }
             }
 
             @Override
             public void addAfter(ItemLike after, ResourceKey<CreativeModeTab> groupKey, ItemLike... items) {
-                if(eventKey.equals(groupKey)) {
-                    for(ItemLike item : items) {
+                if (eventKey.equals(groupKey)) {
+                    for (ItemLike item : items) {
                         event.insertAfter(new ItemStack(after), new ItemStack(item), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
                     }
                 }
@@ -166,22 +192,22 @@ public class OperationStarcleaveNeoForge {
 
             @Override
             public void addBefore(ItemLike before, ResourceKey<CreativeModeTab> groupKey, ItemLike item) {
-                if(eventKey.equals(groupKey)) {
+                if (eventKey.equals(groupKey)) {
                     event.insertBefore(new ItemStack(before), new ItemStack(item), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
                 }
             }
 
             @Override
             public void addBefore(ItemStack before, ResourceKey<CreativeModeTab> groupKey, ItemStack item) {
-                if(eventKey.equals(groupKey)) {
+                if (eventKey.equals(groupKey)) {
                     event.insertBefore(before, item, CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
                 }
             }
 
             @Override
             public void addBefore(ItemLike before, ResourceKey<CreativeModeTab> groupKey, ItemLike... items) {
-                if(eventKey.equals(groupKey)) {
-                    for(ItemLike item : items) {
+                if (eventKey.equals(groupKey)) {
+                    for (ItemLike item : items) {
                         event.insertBefore(new ItemStack(before), new ItemStack(item), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
                     }
                 }
@@ -189,7 +215,7 @@ public class OperationStarcleaveNeoForge {
 
             @Override
             public void forTabRun(ResourceKey<CreativeModeTab> groupKey, BiConsumer<CreativeModeTab.ItemDisplayParameters, CreativeModeTab.Output> biConsumer) {
-                if(eventKey.equals(groupKey)) {
+                if (eventKey.equals(groupKey)) {
                     biConsumer.accept(event.getParameters(), event);
                 }
             }
@@ -235,5 +261,25 @@ public class OperationStarcleaveNeoForge {
 
     public void addTooltips(ItemTooltipEvent event) {
         OperationStarcleave.addTooltips(event.getItemStack(), event.getContext(), event.getToolTip()::add, event.getFlags());
+    }
+
+    public void handleToolModification(BlockEvent.BlockToolModificationEvent event) {
+        UseOnContext context = event.getContext();
+        // handle tilling
+        if (event.getItemAbility() == ItemAbilities.HOE_TILL) {
+            Level level = context.getLevel();
+            BlockPos pos = context.getClickedPos();
+            BlockState state = level.getBlockState(pos);
+            for (Triple<Block, Predicate<UseOnContext>, BlockState> action : OperationStarcleaveToolActions.TILLABLES) {
+                Block block = action.getLeft();
+                Predicate<UseOnContext> predicate = action.getMiddle();
+                BlockState newState = action.getRight();
+
+                if (state.is(block) && predicate.test(context)) {
+                    event.setFinalState(newState);
+                    return;
+                }
+            }
+        }
     }
 }

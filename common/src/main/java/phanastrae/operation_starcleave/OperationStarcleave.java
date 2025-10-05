@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import phanastrae.operation_starcleave.advancement.criterion.OperationStarcleaveAdvancementCriteria;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.block.OperationStarcleaveDispenserBehavior;
+import phanastrae.operation_starcleave.block.OperationStarcleaveToolActions;
 import phanastrae.operation_starcleave.block.StarbleachCauldronBlock;
 import phanastrae.operation_starcleave.block.entity.OperationStarcleaveBlockEntityTypes;
 import phanastrae.operation_starcleave.component.OperationStarcleaveComponentTypes;
@@ -29,6 +30,7 @@ import phanastrae.operation_starcleave.fluid.OperationStarcleaveFluids;
 import phanastrae.operation_starcleave.item.OperationStarcleaveArmorMaterials;
 import phanastrae.operation_starcleave.item.OperationStarcleaveCreativeModeTabs;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
+import phanastrae.operation_starcleave.mixin.ShovelItemAccessor;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 import phanastrae.operation_starcleave.recipe.OperationStarcleaveRecipeSerializers;
 import phanastrae.operation_starcleave.recipe.OperationStarcleaveRecipeTypes;
@@ -42,110 +44,113 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class OperationStarcleave {
-	public static final String MOD_ID = "operation_starcleave";
+    public static final String MOD_ID = "operation_starcleave";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     public static ResourceLocation id(String path) {
-    	return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
-	}
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+    }
 
-	public static void initRegistryEntries(RegistryListenerAdder rla) {
-		// sound events
-		rla.addRegistryListener(BuiltInRegistries.SOUND_EVENT, OperationStarcleaveSoundEvents::init);
-		rla.addHolderRegistryListener(BuiltInRegistries.SOUND_EVENT, OperationStarcleaveSoundEvents::initHolders);
+    public static void initRegistryEntries(RegistryListenerAdder rla) {
+        // sound events
+        rla.addRegistryListener(BuiltInRegistries.SOUND_EVENT, OperationStarcleaveSoundEvents::init);
+        rla.addHolderRegistryListener(BuiltInRegistries.SOUND_EVENT, OperationStarcleaveSoundEvents::initHolders);
 
-		// mob effects
-		rla.addHolderRegistryListener(BuiltInRegistries.MOB_EFFECT, OperationStarcleaveStatusEffects::init);
-		// armor materials
-		rla.addHolderRegistryListener(BuiltInRegistries.ARMOR_MATERIAL, OperationStarcleaveArmorMaterials::init);
+        // mob effects
+        rla.addHolderRegistryListener(BuiltInRegistries.MOB_EFFECT, OperationStarcleaveStatusEffects::init);
+        // armor materials
+        rla.addHolderRegistryListener(BuiltInRegistries.ARMOR_MATERIAL, OperationStarcleaveArmorMaterials::init);
 
-		// data components
-		rla.addRegistryListener(BuiltInRegistries.DATA_COMPONENT_TYPE, OperationStarcleaveComponentTypes::init);
+        // data components
+        rla.addRegistryListener(BuiltInRegistries.DATA_COMPONENT_TYPE, OperationStarcleaveComponentTypes::init);
 
-		// creative mode tabs
-		rla.addRegistryListener(BuiltInRegistries.CREATIVE_MODE_TAB, OperationStarcleaveCreativeModeTabs::init);
-		// fluids
-		rla.addRegistryListener(BuiltInRegistries.FLUID, OperationStarcleaveFluids::init);
+        // creative mode tabs
+        rla.addRegistryListener(BuiltInRegistries.CREATIVE_MODE_TAB, OperationStarcleaveCreativeModeTabs::init);
+        // fluids
+        rla.addRegistryListener(BuiltInRegistries.FLUID, OperationStarcleaveFluids::init);
 
-		// blocks
-		rla.addRegistryListener(BuiltInRegistries.BLOCK, OperationStarcleaveBlocks::init);
-		// items
-		rla.addRegistryListener(BuiltInRegistries.ITEM, OperationStarcleaveItems::init);
+        // blocks
+        rla.addRegistryListener(BuiltInRegistries.BLOCK, OperationStarcleaveBlocks::init);
+        // items
+        rla.addRegistryListener(BuiltInRegistries.ITEM, OperationStarcleaveItems::init);
 
-		// block entity types
-		rla.addRegistryListener(BuiltInRegistries.BLOCK_ENTITY_TYPE, OperationStarcleaveBlockEntityTypes::init);
+        // block entity types
+        rla.addRegistryListener(BuiltInRegistries.BLOCK_ENTITY_TYPE, OperationStarcleaveBlockEntityTypes::init);
 
-		// entity types
-		rla.addRegistryListener(BuiltInRegistries.ENTITY_TYPE, OperationStarcleaveEntityTypes::init);
+        // entity types
+        rla.addRegistryListener(BuiltInRegistries.ENTITY_TYPE, OperationStarcleaveEntityTypes::init);
 
-		// particle types
-		rla.addRegistryListener(BuiltInRegistries.PARTICLE_TYPE, OperationStarcleaveParticleTypes::init);
+        // particle types
+        rla.addRegistryListener(BuiltInRegistries.PARTICLE_TYPE, OperationStarcleaveParticleTypes::init);
 
-		// advancement triggers
-		rla.addRegistryListener(BuiltInRegistries.TRIGGER_TYPES, OperationStarcleaveAdvancementCriteria::init);
+        // advancement triggers
+        rla.addRegistryListener(BuiltInRegistries.TRIGGER_TYPES, OperationStarcleaveAdvancementCriteria::init);
 
-		// recipe types
-		rla.addRegistryListener(BuiltInRegistries.RECIPE_TYPE, OperationStarcleaveRecipeTypes::init);
-		// recipe serializers
-		rla.addRegistryListener(BuiltInRegistries.RECIPE_SERIALIZER, OperationStarcleaveRecipeSerializers::init);
-	}
+        // recipe types
+        rla.addRegistryListener(BuiltInRegistries.RECIPE_TYPE, OperationStarcleaveRecipeTypes::init);
+        // recipe serializers
+        rla.addRegistryListener(BuiltInRegistries.RECIPE_SERIALIZER, OperationStarcleaveRecipeSerializers::init);
+    }
 
-	public static void init() {
-		// dispenser behaviors
-		OperationStarcleaveDispenserBehavior.init();
+    public static void init() {
+        // dispenser behaviors
+        OperationStarcleaveDispenserBehavior.init();
 
-		// cauldron interactions
-		StarbleachCauldronBlock.init();
+        // cauldron interactions
+        StarbleachCauldronBlock.init();
 
-		// game rules
-		OperationStarcleaveGameRules.init();
+        // game rules
+        OperationStarcleaveGameRules.init();
 
-		// mob spawn conditions
-		OperationStarcleaveSpawnPlacements.init();
-	}
+        // mob spawn conditions
+        OperationStarcleaveSpawnPlacements.init();
 
-	public static void startLevelTick(Level level) {
-		Firmament firmament = Firmament.fromLevel(level);
-		if(firmament != null) {
-			TickRateManager tickManager = level.tickRateManager();
-			boolean shouldTick = tickManager.runsNormally();
-			level.getProfiler().push("");
-			if (shouldTick) {
-				ProfilerFiller profiler = level.getProfiler();
-				profiler.push("starcleave_fracture");
-				firmament.tick();
-				profiler.pop();
-			}
+        // setup flattening
+        OperationStarcleaveToolActions.FLATTENABLES.forEach(ShovelItemAccessor.getFLATTENABLES()::put);
+    }
 
-			firmament.forEachRegion(FirmamentRegion::flushUpdates);
-		}
-	}
+    public static void startLevelTick(Level level) {
+        Firmament firmament = Firmament.fromLevel(level);
+        if (firmament != null) {
+            TickRateManager tickManager = level.tickRateManager();
+            boolean shouldTick = tickManager.runsNormally();
+            level.getProfiler().push("");
+            if (shouldTick) {
+                ProfilerFiller profiler = level.getProfiler();
+                profiler.push("starcleave_fracture");
+                firmament.tick();
+                profiler.pop();
+            }
 
-	public static void onPlayerChangeDimension(Player player) {
-		((FirmamentWatcher)player).operation_starcleave$getWatchedRegions().unWatchAll();
-	}
+            firmament.forEachRegion(FirmamentRegion::flushUpdates);
+        }
+    }
 
-	public static void addTooltips(ItemStack stack, Item.TooltipContext tooltipContext, Consumer<Component> componentConsumer, TooltipFlag tooltipFlag) {
-		addToTooltip(stack, OperationStarcleaveComponentTypes.STARBLEACH_COMPONENT, tooltipContext, componentConsumer, tooltipFlag);
-	}
+    public static void onPlayerChangeDimension(Player player) {
+        ((FirmamentWatcher) player).operation_starcleave$getWatchedRegions().unWatchAll();
+    }
 
-	private static <T extends TooltipProvider> void addToTooltip(
-			ItemStack stack, DataComponentType<T> component, Item.TooltipContext context, Consumer<Component> tooltipAdder, TooltipFlag tooltipFlag
-	) {
-		T tooltipProvider = stack.get(component);
-		if (tooltipProvider != null) {
-			tooltipProvider.addToTooltip(context, tooltipAdder, tooltipFlag);
-		}
-	}
+    public static void addTooltips(ItemStack stack, Item.TooltipContext tooltipContext, Consumer<Component> componentConsumer, TooltipFlag tooltipFlag) {
+        addToTooltip(stack, OperationStarcleaveComponentTypes.STARBLEACH_COMPONENT, tooltipContext, componentConsumer, tooltipFlag);
+    }
 
-	public interface RegistryListenerAdder {
-		<T> void addRegistryListener(Registry<T> registry, Consumer<BiConsumer<ResourceLocation, T>> source);
+    private static <T extends TooltipProvider> void addToTooltip(
+            ItemStack stack, DataComponentType<T> component, Item.TooltipContext context, Consumer<Component> tooltipAdder, TooltipFlag tooltipFlag
+    ) {
+        T tooltipProvider = stack.get(component);
+        if (tooltipProvider != null) {
+            tooltipProvider.addToTooltip(context, tooltipAdder, tooltipFlag);
+        }
+    }
 
-		<T> void addHolderRegistryListener(Registry<T> registry, Consumer<HolderRegisterHelper<T>> source);
-	}
+    public interface RegistryListenerAdder {
+        <T> void addRegistryListener(Registry<T> registry, Consumer<BiConsumer<ResourceLocation, T>> source);
 
-	@FunctionalInterface
-	public interface HolderRegisterHelper<T> {
-		Holder<T> register(String name, T held);
-	}
+        <T> void addHolderRegistryListener(Registry<T> registry, Consumer<HolderRegisterHelper<T>> source);
+    }
+
+    @FunctionalInterface
+    public interface HolderRegisterHelper<T> {
+        Holder<T> register(String name, T held);
+    }
 }

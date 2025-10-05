@@ -5,14 +5,12 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "CropBlockMixin",
-    "CustomLogBlockMixin",
-    "PetrichoricPlasmaFluidMixin",
-    "StellarSedimentBlockMixin"
+    "PetrichoricPlasmaFluidMixin"
   ],
   "client": [
     "client.LevelRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
-	}
+  }
 }
