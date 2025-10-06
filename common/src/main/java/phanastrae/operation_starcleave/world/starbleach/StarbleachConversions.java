@@ -2,10 +2,14 @@ package phanastrae.operation_starcleave.world.starbleach;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -15,8 +19,10 @@ import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.block.StarbleachCauldronBlock;
 import phanastrae.operation_starcleave.block.StellarFarmlandBlock;
 import phanastrae.operation_starcleave.block.tag.OperationStarcleaveBlockTags;
+import phanastrae.operation_starcleave.mixin.AxeItemAccessor;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 
+import java.util.Map;
 import java.util.function.Predicate;
 
 import static net.minecraft.world.level.block.Blocks.*;
@@ -180,13 +186,33 @@ public class StarbleachConversions {
         return matches;
     }
 
-    public static BlockState getLogState(BlockState blockState) {
-        BlockState state = STARBLEACHED_LOG.defaultBlockState();
-        if (blockState.getProperties().contains(RotatedPillarBlock.AXIS)) {
-            return state.setValue(RotatedPillarBlock.AXIS, blockState.getValue(RotatedPillarBlock.AXIS));
-        } else {
-            return state;
+    // conventional stripped woods tag
+    public static final TagKey<Block> STRIPPED_WOODS = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("c", "stripped_woods"));
+
+    public static boolean isWoodNotLog(BlockState state) {
+        // there is no tag for woods vs logs, but there is a tag for stripped_woods vs stripped_logs, so try stripping the block and check that instead
+        // if block is not strippable, treat it like a log
+        Block block = state.getBlock();
+        Map<Block, Block> strippables = AxeItemAccessor.getSTRIPPABLES();
+        if (strippables.containsKey(block)) {
+            Block stripped = strippables.get(block);
+            return stripped.defaultBlockState().is(STRIPPED_WOODS);
         }
+
+        return false;
+    }
+
+    public static BlockState getLogState(BlockState blockState) {
+        // get either log or wood block
+        boolean isWoodNotLog = isWoodNotLog(blockState);
+        Block newBlock = isWoodNotLog ? STARBLEACHED_WOOD : STARBLEACHED_LOG;
+        BlockState newState = newBlock.defaultBlockState();
+
+        // try to preserve axis
+        if (blockState.getProperties().contains(RotatedPillarBlock.AXIS)) {
+            newState = newState.setValue(RotatedPillarBlock.AXIS, blockState.getValue(RotatedPillarBlock.AXIS));
+        }
+        return newState;
     }
 
     public static BlockState getFarmlandState(Level level, BlockPos blockPos) {
