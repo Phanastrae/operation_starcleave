@@ -12,11 +12,11 @@ import phanastrae.operation_starcleave.mixin.client.RenderTypeAccessor;
 
 public class OperationStarcleaveRenderLayers {
 
-    public static final RenderStateShard.OutputStateShard FIRMAMENT_SKY_TARGET = new RenderStateShard.OutputStateShard("operation_starcleave$firmament_sky_target", () -> {
-        ((LevelRendererDuck)Minecraft.getInstance().levelRenderer).operation_starcleave$getFirmamentFramebuffer().bindWrite(true);
-    }, () -> {
-        Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
-    });
+    public static final RenderStateShard.OutputStateShard FIRMAMENT_SKY_TARGET = new RenderStateShard.OutputStateShard(
+            "operation_starcleave$firmament_sky_target",
+            () -> ((LevelRendererDuck)Minecraft.getInstance().levelRenderer).operation_starcleave$getFirmamentSkyFramebuffer().bindWrite(true),
+            () -> Minecraft.getInstance().getMainRenderTarget().bindWrite(true)
+    );
 
     private static final RenderType FRACTURE = create(
             "operation_starcleave$fracture",

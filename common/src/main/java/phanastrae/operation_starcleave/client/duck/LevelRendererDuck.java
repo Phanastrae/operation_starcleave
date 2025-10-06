@@ -4,5 +4,5 @@ import com.mojang.blaze3d.pipeline.RenderTarget;
 
 public interface LevelRendererDuck {
     RenderTarget operation_starcleave$getDummyFramebuffer();
-    RenderTarget operation_starcleave$getFirmamentFramebuffer();
+    RenderTarget operation_starcleave$getFirmamentSkyFramebuffer();
 }

@@ -28,6 +28,11 @@ import static com.mojang.blaze3d.platform.GlConst.*;
 
 public class FirmamentRenderer {
 
+    private static final int REGIONS = 4; // regions per texture
+    private static final int REGION_WIDTH = 512;
+    private static final float REGION_UV_SIZE = 1.0F / REGIONS;
+    private static final float FIRMAMENT_HEIGHT_RENDER_OFFSET = 1 / 16F;
+
     // we use this to get the position matrix in the post shader, in case somebody is messing with it in a weird way that needs copying
     // TODO consider moving the post shader inside of LevelRenderer so we can just grab this directly, and also have maybe-better compat
     public static Matrix4f LAST_POSITION_MATRIX = new Matrix4f();
@@ -50,202 +55,53 @@ public class FirmamentRenderer {
 
         ProfilerFiller profiler = client.getProfiler();
         profiler.push("starcleave_firmament");
+
         profiler.push("check");
+        if (isFirmamentVisible(firmament, camera, frustum) && FirmamentTextureStorage.getInstance().isAnyFilledAndActive()) {
+            profiler.popPush("sky");
+            renderSky(levelRenderer, projectionMatrix, positionMatrix);
 
-        double camx = camera.getPosition().x;
-        double camz = camera.getPosition().z;
-        double firmHeight = firmament.getY();
-        AABB box = new AABB(camx - 512, firmHeight - 1, camz - 512, camx + 512, firmHeight + 1, camz + 512);
-        if (frustum.isVisible(box)) {
-            /*
-            Player player = client.player;
-            boolean debugMode_General = client.getDebugOverlay().showDebugScreen() && player != null && player.getMainHandItem().is(OperationStarcleaveItems.FIRMAMENT_MANIPULATOR);
-            if(debugMode_General) {
-                profiler.push("starcleave_firmament");
-                profiler.push("debug");
-                // TODO serverside firmament regions broke most of debug, either fix or remove this at some point
-                // TODO apparently i'm passing the wrong matrix and it crashes, i'm just disabling this for now
-                //doRender(level, vertexConsumerProvider, WRCmatrixStack, camera, debugMode_General);
-                profiler.pop();
-                profiler.pop();
-                return;
-            }
-            */
-            boolean renderSkybox = FirmamentTextureStorage.getInstance().isAnyFilledAndActive();
-            if (renderSkybox) {
-                profiler.popPush("sky");
-                RenderTarget firmamentFrameBuffer = ((LevelRendererDuck) levelRenderer).operation_starcleave$getFirmamentFramebuffer();
-                firmamentFrameBuffer.setClearColor(0f, 0.08f, 0.08f, 1f);
-                firmamentFrameBuffer.clear(Minecraft.ON_OSX);
-                Minecraft.getInstance().getMainRenderTarget().bindWrite(true); // make sure to set viewport again
-
-                OperationStarcleaveRenderLayers.FIRMAMENT_SKY_TARGET.setupRenderState();
-
-                PoseStack matrixStack = new PoseStack();
-                matrixStack.mulPose(positionMatrix);
-                FirmamentSkyRenderer.getInstance().renderFirmamentSky(matrixStack, projectionMatrix, System.currentTimeMillis());
-
-                OperationStarcleaveRenderLayers.FIRMAMENT_SKY_TARGET.clearRenderState();
-
-                profiler.popPush("fracture");
-                renderBakedSubRegions(levelRenderer, firmament, camera, projectionMatrix, positionMatrix);
-            }
+            profiler.popPush("fracture");
+            renderFracture(levelRenderer, firmament, camera, projectionMatrix, positionMatrix);
         }
         profiler.pop();
+
         profiler.pop();
     }
 
-    /*
-    public static void doRender(Level level, MultiBufferSource vertexConsumerProvider, PoseStack matrixStack, Camera camera, boolean debugMode_General) {
-        // TODO tidy up, this is mostly unused now
-        Firmament firmament = Firmament.fromLevel(level);
-        if(firmament == null) return;
-
-        Minecraft client = Minecraft.getInstance();
-
-        if(vertexConsumerProvider == null) return;
-        Entity e = client.cameraEntity;
-        if(e == null) return;
-
-        boolean debugMode_Activity = client.getEntityRenderDispatcher().shouldRenderHitBoxes();
-
-        VertexConsumer vertexConsumer = debugMode_General ? vertexConsumerProvider.getBuffer(RenderType.debugQuads()) : vertexConsumerProvider.getBuffer(OperationStarcleaveRenderLayers.getFracture());
-
-        int ex = e.getBlockX();
-        int ez = e.getBlockZ();
-
-        Vec3 camPos = camera.getPosition();
-        matrixStack.pushPose();
-        matrixStack.translate(ex - camPos.x, - camPos.y, ez - camPos.z);
-
-        int tileSize = FirmamentSubRegion.TILE_SIZE;
-        RegionPos camRegionPos = RegionPos.fromWorldCoords(ex, ez);
-        firmament.forEachRegion((firmamentRegion -> {
-            RegionPos regionPos = RegionPos.fromWorldCoords(firmamentRegion.x, firmamentRegion.z);
-            int drx = regionPos.rx - camRegionPos.rx;
-            int drz = regionPos.rz - camRegionPos.rz;
-            if(drx*drx > 1 || drz*drz > 1) {{
-                // only render the 3x3 region are around the player
-                return;
-            }}
-            int[][] damageArray = new int[3][3];
-            firmamentRegion.forEachSubRegion((firmamentSubRegion -> {
-                if(!firmamentSubRegion.hadDamageLastCheck()) {
-                    return;
-                }
-
-                int srdx = firmamentSubRegion.x + 4 - ex;
-                int srdz = firmamentSubRegion.z + 4 - ez;
-                if(srdx*srdx + srdz*srdz > 512*512) {
-                    return;
-                }
-
-                firmamentSubRegion.forEachPosition((x, z, onBorder) -> {
-                    int worldX = x + firmamentSubRegion.x;
-                    int worldZ = z + firmamentSubRegion.z;
-
-                    float damage = Mth.clamp(0, 7, firmamentSubRegion.getDamage(x, z)) / 7f;
-                    if(debugMode_General) {
-                        float drip = Mth.clamp(0, 7, firmamentSubRegion.getDrip(x, z)) / 7f;
-
-                        float displacementY = -firmamentSubRegion.getDisplacement(x, z);
-
-                        boolean updated = debugMode_Activity && firmamentSubRegion.shouldUpdate();
-                        float f = 0.125f * damage;
-
-                        float r = Mth.clamp(0, 1, damage);
-                        float g = Mth.clamp(0, 1, updated ? 1 : 0);
-                        float b = Mth.clamp(0, 1, drip);
-
-                        renderQuadDebug(matrixStack.last().pose(),
-                                vertexConsumer,
-                                worldX - ex + f, worldZ - ez + f,
-                                worldX - ex + tileSize - f, worldZ - ez + tileSize - f,
-                                e.level().getMaxBuildHeight() + 16 + displacementY,
-                                r,
-                                g,
-                                b,
-                                1f);
-                    } else {
-                        if(onBorder) {
-                            for (int i = -1; i <= 1; i++) {
-                                for (int j = -1; j <= 1; j++) {
-                                    damageArray[i + 1][j + 1] = (firmament.getDamage(worldX + i * tileSize, worldZ + j * tileSize) * 15);
-                                }
-                            }
-                        } else {
-                            for (int i = -1; i <= 1; i++) {
-                                for (int j = -1; j <= 1; j++) {
-                                    damageArray[i + 1][j + 1] = (firmamentSubRegion.getDamage(x + i * tileSize, z + j * tileSize) * 15);
-                                }
-                            }
-                        }
-
-                        boolean dam = false;
-                        for(int i = 0; i < 3 && !dam; i++) {
-                            for(int j = 0; j < 3; j++) {
-                                if(damageArray[i][j] != 0) {
-                                    dam = true;
-                                    break;
-                                }
-                            }
-                        }
-                        if(!dam) return;
-
-                        int rbyte = (damageArray[0][0] & 0xF) | ((damageArray[0][1] & 0xF) << 4);
-                        int gbyte = (damageArray[0][2] & 0xF) | ((damageArray[1][0] & 0xF) << 4);
-                        int bbyte = (damageArray[1][1] & 0xF) | ((damageArray[1][2] & 0xF) << 4);
-                        int abyte = (damageArray[2][0] & 0xF) | ((damageArray[2][1] & 0xF) << 4);
-                        int lbyte = (damageArray[2][2] & 0xF);
-
-                        renderQuadReal(matrixStack.last().pose(),
-                                matrixStack.last().normal(),
-                                vertexConsumer,
-                                (worldX - ex), (worldZ - ez),
-                                (worldX - ex) + tileSize, (worldZ - ez) + tileSize,
-                                e.level().getMaxBuildHeight() + 16,
-                                rbyte / 255f,
-                                gbyte / 255f,
-                                bbyte / 255f,
-                                abyte / 255f,
-                                0, 0, 1, 1,
-                                lbyte, -1);
-                    }
-                });
-            }));
-        }));
-
-        matrixStack.popPose();
+    private static boolean isFirmamentVisible(Firmament firmament, Camera camera, Frustum frustum) {
+        return frustum.isVisible(makeFirmamentBoundingBox(camera, firmament));
     }
 
-    public static void renderQuadDebug(Matrix4f positionMatrix, VertexConsumer vertexConsumer, float x1, float z1, float x2, float z2, float y, float r, float g, float b, float a) {
-        vertexConsumer.addVertex(positionMatrix, x1, y, z2).setColor(r, g, b, a);
-        vertexConsumer.addVertex(positionMatrix, x1, y, z1).setColor(r, g, b, a);
-        vertexConsumer.addVertex(positionMatrix, x2, y, z1).setColor(r, g, b, a);
-        vertexConsumer.addVertex(positionMatrix, x2, y, z2).setColor(r, g, b, a);
+    private static AABB makeFirmamentBoundingBox(Camera camera, Firmament firmament) {
+        double camX = camera.getPosition().x;
+        double camZ = camera.getPosition().z;
+        double firmHeight = firmament.getY();
+        return new AABB(camX - 512, firmHeight - 1, camZ - 512, camX + 512, firmHeight + 1, camZ + 512);
     }
 
-    public static void renderQuadReal(Matrix4f positionMatrix, Matrix3f normalMatrix, VertexConsumer vertexConsumer, float x1, float z1, float x2, float z2, float y, float r, float g, float b, float a, float u1, float v1, float u2, float v2, int light, int ny) {
-        Vector4f vec = new Vector4f(x1, y, z2, 1).mul(positionMatrix);
-        Vector3f norm = new Vector3f(0, ny, 0).mul(normalMatrix);
+    private static void renderSky(LevelRenderer levelRenderer, Matrix4f projectionMatrix, Matrix4f positionMatrix) {
+        RenderTarget firmamentFrameBuffer = ((LevelRendererDuck) levelRenderer).operation_starcleave$getFirmamentSkyFramebuffer();
+        firmamentFrameBuffer.setClearColor(0f, 0.08f, 0.08f, 1f);
+        firmamentFrameBuffer.clear(Minecraft.ON_OSX);
+        Minecraft.getInstance().getMainRenderTarget().bindWrite(true); // make sure to set viewport again
 
-        int color = FastColor.ARGB32.colorFromFloat(r, g, b, a);
-        vertexConsumer.addVertex(vec.x, vec.y, vec.z, color, u1, v2, 0, light, norm.x, norm.y, norm.z);
-        vec = new Vector4f(x1, y, z1, 1).mul(positionMatrix);
-        vertexConsumer.addVertex(vec.x, vec.y, vec.z, color, u1, v1, 0, light, norm.x, norm.y, norm.z);
-        vec = new Vector4f(x2, y, z1, 1).mul(positionMatrix);
-        vertexConsumer.addVertex(vec.x, vec.y, vec.z, color, u2, v1, 0, light, norm.x, norm.y, norm.z);
-        vec = new Vector4f(x2, y, z2, 1).mul(positionMatrix);
-        vertexConsumer.addVertex(vec.x, vec.y, vec.z, color, u2, v2, 0, light, norm.x, norm.y, norm.z);
+        OperationStarcleaveRenderLayers.FIRMAMENT_SKY_TARGET.setupRenderState();
+
+        PoseStack matrixStack = new PoseStack();
+        matrixStack.mulPose(positionMatrix);
+        FirmamentSkyRenderer.getInstance().renderFirmamentSky(matrixStack, projectionMatrix, System.currentTimeMillis());
+
+        OperationStarcleaveRenderLayers.FIRMAMENT_SKY_TARGET.clearRenderState();
     }
-    */
 
-    public static void renderBakedSubRegions(LevelRenderer levelRenderer, Firmament firmament, Camera camera, Matrix4f projectionMatrix, Matrix4f positionMatrix) {
+    private static void renderFracture(LevelRenderer levelRenderer, Firmament firmament, Camera camera, Matrix4f projectionMatrix, Matrix4f positionMatrix) {
         RenderType renderLayer = OperationStarcleaveRenderLayers.getFracture();
         renderLayer.setupRenderState();
 
         ShaderInstance shaderProgram = RenderSystem.getShader();
         if (shaderProgram != null) {
+            // setup fog
             Minecraft minecraft = Minecraft.getInstance();
             float renderDistance = minecraft.gameRenderer.getRenderDistance();
             float farDistance = minecraft.gameRenderer.getDepthFar();
@@ -275,10 +131,11 @@ public class FirmamentRenderer {
             // setup firmament sky texture
             int currentTexID1 = RenderSystem.getShaderTexture(1);
 
-            RenderTarget firmamentFrameBuffer = ((LevelRendererDuck) levelRenderer).operation_starcleave$getFirmamentFramebuffer();
+            RenderTarget firmamentFrameBuffer = ((LevelRendererDuck) levelRenderer).operation_starcleave$getFirmamentSkyFramebuffer();
             int firmamentSkyTexID = firmamentFrameBuffer.getColorTextureId();
             RenderSystem.setShaderTexture(1, firmamentSkyTexID);
 
+            // render firmament fractures
             shaderProgram.setDefaultUniforms(VertexFormat.Mode.QUADS, positionMatrix, projectionMatrix, Minecraft.getInstance().getWindow());
             shaderProgram.apply();
 
@@ -299,46 +156,48 @@ public class FirmamentRenderer {
         renderLayer.clearRenderState();
     }
 
-    private final static int REGIONS = 4; // regions per texture
-    private final static int REGION_WIDTH = 512;
-    private final static float REGION_UV_SIZE = 1.0F / REGIONS;
-
     private static MeshData createMeshData(Camera camera, Firmament firmament) {
         Vec3 camPos = camera.getPosition();
-        RegionPos regionPos = RegionPos.fromWorldCoords(Mth.floor(camPos.x), Mth.floor(camPos.z));
+
         int height = firmament.getY();
+        float y = (float) ((height + FIRMAMENT_HEIGHT_RENDER_OFFSET - camPos.y));
 
-        double relX = regionPos.worldX - camPos.x;
-        double relY = height + (1 / 16.0) - camPos.y;
-        double relZ = regionPos.worldZ - camPos.z;
+        RegionPos regionPos = RegionPos.fromWorldCoords(Mth.floor(camPos.x), Mth.floor(camPos.z));
+        double relX = (regionPos.worldX - camPos.x);
+        double relZ = (regionPos.worldZ - camPos.z);
 
-        Tesselator tessellator = Tesselator.getInstance();
-        BufferBuilder bufferBuilder = tessellator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.BLOCK);
+        Tesselator tesselator = Tesselator.getInstance();
+        BufferBuilder bufferBuilder = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.BLOCK);
 
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
-                float ox = (float) relX + (REGION_WIDTH * i);
-                float oy = (float) relY;
-                float oz = (float) relZ + (REGION_WIDTH * j);
+                float x1 = (float) relX + (REGION_WIDTH * i);
+                float x2 = x1 + REGION_WIDTH;
+                float z1 = (float) relZ + (REGION_WIDTH * j);
+                float z2 = z1 + REGION_WIDTH;
 
                 float u1 = ((regionPos.rx + i) % REGIONS) * REGION_UV_SIZE;
                 float v1 = ((regionPos.rz + j) % REGIONS) * REGION_UV_SIZE;
                 float u2 = u1 + REGION_UV_SIZE;
                 float v2 = v1 + REGION_UV_SIZE;
 
-                // TODO consider removing normal and lightmap data, as they don't seem to actually get used at all
-                bufferBuilder.addVertex(ox, oy, oz).setColor(255, 255, 255, 255).setUv(u1, v1).setLight(LightTexture.FULL_BRIGHT).setNormal(0, 0, 0);
-                bufferBuilder.addVertex(ox + REGION_WIDTH, oy, oz).setColor(255, 255, 255, 255).setUv(u2, v1).setLight(LightTexture.FULL_BRIGHT).setNormal(0, 0, 0);
-                bufferBuilder.addVertex(ox + REGION_WIDTH, oy, oz + REGION_WIDTH).setColor(255, 255, 255, 255).setUv(u2, v2).setLight(LightTexture.FULL_BRIGHT).setNormal(0, 0, 0);
-                bufferBuilder.addVertex(ox, oy, oz + REGION_WIDTH).setColor(255, 255, 255, 255).setUv(u1, v2).setLight(LightTexture.FULL_BRIGHT).setNormal(0, 0, 0);
-
-                bufferBuilder.addVertex(ox, oy, oz + REGION_WIDTH).setColor(255, 255, 255, 255).setUv(u1, v2).setLight(LightTexture.FULL_BRIGHT).setNormal(0, 0, 0);
-                bufferBuilder.addVertex(ox + REGION_WIDTH, oy, oz + REGION_WIDTH).setColor(255, 255, 255, 255).setUv(u2, v2).setLight(LightTexture.FULL_BRIGHT).setNormal(0, 0, 0);
-                bufferBuilder.addVertex(ox + REGION_WIDTH, oy, oz).setColor(255, 255, 255, 255).setUv(u2, v1).setLight(LightTexture.FULL_BRIGHT).setNormal(0, 0, 0);
-                bufferBuilder.addVertex(ox, oy, oz).setColor(255, 255, 255, 255).setUv(u1, v1).setLight(LightTexture.FULL_BRIGHT).setNormal(0, 0, 0);
+                drawFractureQuad(bufferBuilder, x1, x2, y, z1, z2, u1, u2, v1, v2);
+                drawFractureQuad(bufferBuilder, x1, x2, y, z2, z1, u1, u2, v2, v1);
             }
         }
 
         return bufferBuilder.buildOrThrow();
+    }
+
+    private static void drawFractureQuad(BufferBuilder bufferBuilder, float x1, float x2, float y, float z1, float z2, float u1, float u2, float v1, float v2) {
+        drawFractureVertex(bufferBuilder, x1, y, z1, u1, v1);
+        drawFractureVertex(bufferBuilder, x2, y, z1, u2, v1);
+        drawFractureVertex(bufferBuilder, x2, y, z2, u2, v2);
+        drawFractureVertex(bufferBuilder, x1, y, z2, u1, v2);
+    }
+
+    private static void drawFractureVertex(BufferBuilder bufferBuilder, float x, float y, float z, float u, float v) {
+        // TODO consider removing normal and lightmap data, as they don't seem to actually get used at all
+        bufferBuilder.addVertex(x, y, z).setColor(255, 255, 255, 255).setUv(u, v).setLight(LightTexture.FULL_BRIGHT).setNormal(0, 0, 0);
     }
 }
