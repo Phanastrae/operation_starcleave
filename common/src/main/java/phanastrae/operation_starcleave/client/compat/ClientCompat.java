@@ -25,6 +25,10 @@ public class ClientCompat {
         return IRIS_LOADED && net.irisshaders.iris.api.v0.IrisApi.getInstance().isShaderPackInUse();
     }
 
+    public static boolean renderingShadows() {
+        return IRIS_LOADED && net.irisshaders.iris.api.v0.IrisApi.getInstance().isRenderingShadowPass();
+    }
+
     public static boolean useAltFractureRendering() {
         return shadersEnabled();
     }

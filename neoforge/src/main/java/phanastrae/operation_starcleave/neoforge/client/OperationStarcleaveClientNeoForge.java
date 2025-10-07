@@ -23,6 +23,7 @@ import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import org.joml.Matrix4f;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.client.OperationStarcleaveClient;
+import phanastrae.operation_starcleave.client.compat.ClientCompat;
 import phanastrae.operation_starcleave.client.particle.OperationStarcleaveParticles;
 import phanastrae.operation_starcleave.client.render.entity.OperationStarcleaveEntityRenderers;
 import phanastrae.operation_starcleave.client.render.entity.model.OperationStarcleaveEntityModelLayers;
@@ -133,15 +134,18 @@ public class OperationStarcleaveClientNeoForge {
 
         RenderLevelStageEvent.Stage stage = event.getStage();
         if(stage.equals(AFTER_CUTOUT_BLOCKS)) {
-            // render before entities
-            OperationStarcleaveClient.renderBeforeEntities(
-                    level,
-                    camera,
-                    frustum,
-                    levelRenderer,
-                    projectionMatrix,
-                    positionMatrix
-            );
+            // iris calls this event during its shadow pass, and we don't want firmament shadows
+            if(!ClientCompat.renderingShadows()) {
+                // render before entities
+                OperationStarcleaveClient.renderBeforeEntities(
+                        level,
+                        camera,
+                        frustum,
+                        levelRenderer,
+                        projectionMatrix,
+                        positionMatrix
+                );
+            }
         } else if(stage.equals(AFTER_ENTITIES)) {
             // render after entities
             OperationStarcleaveClient.renderAfterEntities(level, matrixStack, vertexConsumers, deltaTracker, camera);
