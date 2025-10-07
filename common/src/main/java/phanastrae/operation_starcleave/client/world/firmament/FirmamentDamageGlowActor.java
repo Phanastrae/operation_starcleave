@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import org.joml.Matrix4f;
-import phanastrae.operation_starcleave.client.render.OperationStarcleaveRenderLayers;
+import phanastrae.operation_starcleave.client.render.OperationStarcleaveRenderTypes;
 import phanastrae.operation_starcleave.client.render.firmament.FirmamentActorRenderable;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 import phanastrae.operation_starcleave.world.firmament.FirmamentActor;
@@ -50,7 +50,7 @@ public class FirmamentDamageGlowActor extends FirmamentActor implements Firmamen
         float m = l * l;
         RandomSource random = RandomSource.create(432L);
 
-        VertexConsumer vertexConsumer4 = vertexConsumerProvider.getBuffer(OperationStarcleaveRenderLayers.getSkyRay());
+        VertexConsumer vertexConsumer4 = vertexConsumerProvider.getBuffer(OperationStarcleaveRenderTypes.getSkyRay());
 
         float rayCount = (l + l * l) / 2.0F * 60.0F;
         rayCount *= 5;

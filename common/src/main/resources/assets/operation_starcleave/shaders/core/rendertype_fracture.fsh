@@ -164,8 +164,9 @@ void main() {
 
     if(a != 1.) {
         // render sky
-        vec4 nearlyFinalColor = texture(Sampler1, gl_FragCoord.xy / ScreenSize.xy);
-        fragColor = linear_fog(nearlyFinalColor, vertexDistance, FogStart, FogEnd, FogColor);
+        vec4 skySample = texture(Sampler1, gl_FragCoord.xy / ScreenSize.xy);
+        vec4 opaqueSkySample = vec4(vec3(skySample), 1.0);
+        fragColor = linear_fog(opaqueSkySample, vertexDistance, FogStart, FogEnd, FogColor);
     } else {
         // render border
         vec4 nearlyFinalColor = vec4(color, a);

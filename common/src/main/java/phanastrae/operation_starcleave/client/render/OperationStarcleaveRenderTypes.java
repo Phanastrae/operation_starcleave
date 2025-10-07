@@ -10,7 +10,7 @@ import phanastrae.operation_starcleave.client.render.shader.OperationStarcleaveS
 import phanastrae.operation_starcleave.mixin.client.RenderStateShardAccessor;
 import phanastrae.operation_starcleave.mixin.client.RenderTypeAccessor;
 
-public class OperationStarcleaveRenderLayers {
+public class OperationStarcleaveRenderTypes {
 
     public static final RenderStateShard.OutputStateShard FIRMAMENT_SKY_TARGET = new RenderStateShard.OutputStateShard(
             "operation_starcleave$firmament_sky_target",

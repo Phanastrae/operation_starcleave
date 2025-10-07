@@ -12,7 +12,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 import phanastrae.operation_starcleave.OperationStarcleave;
-import phanastrae.operation_starcleave.client.render.OperationStarcleaveRenderLayers;
+import phanastrae.operation_starcleave.client.render.OperationStarcleaveRenderTypes;
 import phanastrae.operation_starcleave.client.render.entity.layers.SubcaelicDuxLayer;
 import phanastrae.operation_starcleave.client.render.entity.model.OperationStarcleaveEntityModelLayers;
 import phanastrae.operation_starcleave.client.render.entity.model.SubcaelicDuxEntityModel;
@@ -52,7 +52,7 @@ public class SubcaelicDuxEntityRenderer extends MobRenderer<SubcaelicDuxEntity, 
             float l2 = l * l * l * l;
             RandomSource random = RandomSource.create(432L);
 
-            VertexConsumer vertexConsumer4 = vertexConsumerProvider.getBuffer(OperationStarcleaveRenderLayers.getSkyRay());
+            VertexConsumer vertexConsumer4 = vertexConsumerProvider.getBuffer(OperationStarcleaveRenderTypes.getSkyRay());
 
             float rayCount = (l + l2) / 2.0F * 90.0F;
             for (int n = 0; (float) n < rayCount; ++n) {

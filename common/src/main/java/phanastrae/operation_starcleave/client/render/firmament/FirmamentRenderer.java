@@ -6,21 +6,21 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.util.Mth;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.FogType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
+import org.joml.Vector4f;
 import phanastrae.operation_starcleave.client.duck.LevelRendererDuck;
-import phanastrae.operation_starcleave.client.render.OperationStarcleaveRenderLayers;
+import phanastrae.operation_starcleave.client.render.OperationStarcleaveRenderTypes;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 import phanastrae.operation_starcleave.world.firmament.RegionPos;
 
@@ -61,8 +61,14 @@ public class FirmamentRenderer {
             profiler.popPush("sky");
             renderSky(levelRenderer, projectionMatrix, positionMatrix);
 
+            // TODO add proper check
+            boolean usingShaders = Minecraft.getInstance().player instanceof LocalPlayer localPlayer && localPlayer.getMainHandItem().getItem().equals(Items.ENDER_EYE);
             profiler.popPush("fracture");
-            renderFracture(levelRenderer, firmament, camera, projectionMatrix, positionMatrix);
+            if (!usingShaders) {
+                renderFracture(levelRenderer, firmament, camera, projectionMatrix, positionMatrix);
+            } else {
+                renderFractureUsingBuffer(levelRenderer, firmament, camera, projectionMatrix, positionMatrix, profiler);
+            }
         }
         profiler.pop();
 
@@ -86,17 +92,17 @@ public class FirmamentRenderer {
         firmamentFrameBuffer.clear(Minecraft.ON_OSX);
         Minecraft.getInstance().getMainRenderTarget().bindWrite(true); // make sure to set viewport again
 
-        OperationStarcleaveRenderLayers.FIRMAMENT_SKY_TARGET.setupRenderState();
+        OperationStarcleaveRenderTypes.FIRMAMENT_SKY_TARGET.setupRenderState();
 
         PoseStack matrixStack = new PoseStack();
         matrixStack.mulPose(positionMatrix);
         FirmamentSkyRenderer.getInstance().renderFirmamentSky(matrixStack, projectionMatrix, System.currentTimeMillis());
 
-        OperationStarcleaveRenderLayers.FIRMAMENT_SKY_TARGET.clearRenderState();
+        OperationStarcleaveRenderTypes.FIRMAMENT_SKY_TARGET.clearRenderState();
     }
 
     private static void renderFracture(LevelRenderer levelRenderer, Firmament firmament, Camera camera, Matrix4f projectionMatrix, Matrix4f positionMatrix) {
-        RenderType renderLayer = OperationStarcleaveRenderLayers.getFracture();
+        RenderType renderLayer = OperationStarcleaveRenderTypes.getFracture();
         renderLayer.setupRenderState();
 
         ShaderInstance shaderProgram = RenderSystem.getShader();
@@ -199,5 +205,110 @@ public class FirmamentRenderer {
     private static void drawFractureVertex(BufferBuilder bufferBuilder, float x, float y, float z, float u, float v) {
         // TODO consider removing normal and lightmap data, as they don't seem to actually get used at all
         bufferBuilder.addVertex(x, y, z).setColor(255, 255, 255, 255).setUv(u, v).setLight(LightTexture.FULL_BRIGHT).setNormal(0, 0, 0);
+    }
+
+    private static void renderFractureUsingBuffer(LevelRenderer levelRenderer, Firmament firmament, Camera camera, Matrix4f projectionMatrix, Matrix4f positionMatrix, ProfilerFiller profiler) {
+        profiler.push("fracture_setup");
+        Minecraft minecraft = Minecraft.getInstance();
+        RenderTarget mainTarget = minecraft.getMainRenderTarget();
+
+        // write output to dummy buffer
+        RenderTarget dummyBuffer = ((LevelRendererDuck) levelRenderer).operation_starcleave$getDummyFramebuffer();
+        dummyBuffer.setClearColor(0f, 0f, 0f, 0f);
+        dummyBuffer.clear(Minecraft.ON_OSX);
+        dummyBuffer.bindWrite(true);
+
+        dummyBuffer.copyDepthFrom(mainTarget);
+        dummyBuffer.bindWrite(true);
+
+        profiler.popPush("fracture");
+        renderFracture(levelRenderer, firmament, camera, projectionMatrix, positionMatrix);
+
+        profiler.popPush("copy_depth");
+        mainTarget.bindWrite(true); // make sure to set viewport again
+
+        mainTarget.copyDepthFrom(dummyBuffer);
+        mainTarget.bindWrite(true);
+
+        profiler.popPush("draw_texture");
+        // render texture as world geometry
+        RenderSystem.setShader(GameRenderer::getParticleShader);
+        Minecraft.getInstance().gameRenderer.lightTexture().turnOnLightLayer();
+
+        ShaderInstance shaderProgram = RenderSystem.getShader();
+        if (shaderProgram != null) {
+            RenderSystem.disableDepthTest();
+            RenderSystem.depthMask(false);
+
+            // setup fog
+            float fogEnd = RenderSystem.getShaderFogEnd();
+            float fogStart = RenderSystem.getShaderFogStart();
+            RenderSystem.setShaderFogStart(Float.MAX_VALUE);
+            RenderSystem.setShaderFogEnd(Float.MAX_VALUE);
+
+            // setup firmament sky texture
+            int currentTexID0 = RenderSystem.getShaderTexture(1);
+
+            int dummyBufTexID = dummyBuffer.getColorTextureId();
+            RenderSystem.setShaderTexture(0, dummyBufTexID);
+
+            // render geometry
+            shaderProgram.setDefaultUniforms(VertexFormat.Mode.QUADS, positionMatrix, projectionMatrix, Minecraft.getInstance().getWindow());
+            shaderProgram.apply();
+
+            MeshData meshData = createProjectionMeshData(projectionMatrix, positionMatrix);
+            BufferUploader.draw(meshData);
+            VertexBuffer.unbind();
+
+            shaderProgram.clear();
+
+            RenderSystem.setShaderTexture(0, currentTexID0);
+
+            RenderSystem.setShaderFogEnd(fogEnd);
+            RenderSystem.setShaderFogStart(fogStart);
+
+            RenderSystem.depthMask(true);
+            RenderSystem.enableDepthTest();
+        }
+
+        RenderSystem.setShader(() -> null);
+        Minecraft.getInstance().gameRenderer.lightTexture().turnOffLightLayer();
+        profiler.pop();
+    }
+
+    private static MeshData createProjectionMeshData(Matrix4f projectionMatrix, Matrix4f positionMatrix) {
+        Tesselator tesselator = Tesselator.getInstance();
+        BufferBuilder bufferBuilder = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
+
+        Matrix4f invertedProjectionMatrix = new Matrix4f();
+        projectionMatrix.invert(invertedProjectionMatrix);
+
+        Matrix4f invertedPositionMatrix = new Matrix4f();
+        positionMatrix.invert(invertedPositionMatrix);
+
+        drawProjectionVertex(bufferBuilder, invertedProjectionMatrix, invertedPositionMatrix, 0, 0);
+        drawProjectionVertex(bufferBuilder, invertedProjectionMatrix, invertedPositionMatrix, 1, 0);
+        drawProjectionVertex(bufferBuilder, invertedProjectionMatrix, invertedPositionMatrix, 1, 1);
+        drawProjectionVertex(bufferBuilder, invertedProjectionMatrix, invertedPositionMatrix, 0, 1);
+
+        return bufferBuilder.buildOrThrow();
+    }
+
+    private static void drawProjectionVertex(BufferBuilder bufferBuilder, Matrix4f invertedProjectionMatrix, Matrix4f invertedPositionMatrix, float u, float v) {
+        float x = u * 2 - 1;
+        float y = v * 2 - 1;
+
+        Vector4f vec = new Vector4f(x, y, -0.25F, 1F);
+
+        vec.mul(invertedProjectionMatrix);
+        vec.div(vec.w());
+
+        vec.mul(invertedPositionMatrix);
+
+        drawProjectionFractureVertex(bufferBuilder, vec.x, vec.y, vec.z, u, v);
+    }
+
+    private static void drawProjectionFractureVertex(BufferBuilder bufferBuilder, float x, float y, float z, float u, float v) {
+        bufferBuilder.addVertex(x, y, z).setUv(u, v).setColor(255, 255, 255, 255).setLight(LightTexture.FULL_BRIGHT);
     }
 }

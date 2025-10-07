@@ -11,7 +11,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import org.joml.Matrix4f;
 import phanastrae.operation_starcleave.OperationStarcleave;
-import phanastrae.operation_starcleave.client.render.OperationStarcleaveRenderLayers;
+import phanastrae.operation_starcleave.client.render.OperationStarcleaveRenderTypes;
 import phanastrae.operation_starcleave.client.render.entity.layers.SubcaelicTorpedoOverlayLayer;
 import phanastrae.operation_starcleave.client.render.entity.model.OperationStarcleaveEntityModelLayers;
 import phanastrae.operation_starcleave.client.render.entity.model.SubcaelicTorpedoEntityModel;
@@ -38,7 +38,7 @@ public class SubcaelicTorpedoEntityRenderer extends MobRenderer<SubcaelicTorpedo
             float l2 = l * l * l * l;
             RandomSource random = RandomSource.create(432L);
 
-            VertexConsumer vertexConsumer4 = vertexConsumerProvider.getBuffer(OperationStarcleaveRenderLayers.getSkyRay());
+            VertexConsumer vertexConsumer4 = vertexConsumerProvider.getBuffer(OperationStarcleaveRenderTypes.getSkyRay());
 
             float rayCount = (l + l2) / 2.0F * 25.0F;
             for (int n = 0; (float) n < rayCount; ++n) {
