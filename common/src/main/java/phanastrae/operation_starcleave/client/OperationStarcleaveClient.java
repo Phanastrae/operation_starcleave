@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.world.TickRateManager;
 import net.minecraft.world.level.Level;
 import org.joml.Matrix4f;
+import phanastrae.operation_starcleave.client.compat.ClientCompat;
 import phanastrae.operation_starcleave.client.render.ScreenShakeManager;
 import phanastrae.operation_starcleave.client.render.block.OperationStarcleaveBlockRenderTypes;
 import phanastrae.operation_starcleave.client.render.block.entity.OperationStarcleaveBlockEntityRenderers;
@@ -22,6 +23,8 @@ public class OperationStarcleaveClient {
     public static FirmamentOutlineRenderer firmamentOutlineRenderer = new FirmamentOutlineRenderer();
 
     public static void init() {
+        ClientCompat.init();
+
         // register block layers
         OperationStarcleaveBlockRenderTypes.init();
 

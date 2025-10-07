@@ -3,7 +3,23 @@ plugins {
     id 'net.neoforged.moddev'
 }
 
+repositories {
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Modrinth"
+                url = "https://api.modrinth.com/maven"
+            }
+        }
+        filter {
+            includeGroup "maven.modrinth"
+        }
+    }
+}
+
 dependencies {
+    // mods
+    compileOnly "maven.modrinth:iris:${iris_neoforge_version}"
 }
 
 // set commonPath based on the current path, to allow for multi-mod dev env setups

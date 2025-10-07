@@ -6,19 +6,18 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.util.Mth;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.FogType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
+import phanastrae.operation_starcleave.client.compat.ClientCompat;
 import phanastrae.operation_starcleave.client.duck.LevelRendererDuck;
 import phanastrae.operation_starcleave.client.render.OperationStarcleaveRenderTypes;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
@@ -61,10 +60,8 @@ public class FirmamentRenderer {
             profiler.popPush("sky");
             renderSky(levelRenderer, projectionMatrix, positionMatrix);
 
-            // TODO add proper check
-            boolean usingShaders = Minecraft.getInstance().player instanceof LocalPlayer localPlayer && localPlayer.getMainHandItem().getItem().equals(Items.ENDER_EYE);
             profiler.popPush("fracture");
-            if (!usingShaders) {
+            if (!ClientCompat.useAltFractureRendering()) {
                 renderFracture(levelRenderer, firmament, camera, projectionMatrix, positionMatrix);
             } else {
                 renderFractureUsingBuffer(levelRenderer, firmament, camera, projectionMatrix, positionMatrix, profiler);
