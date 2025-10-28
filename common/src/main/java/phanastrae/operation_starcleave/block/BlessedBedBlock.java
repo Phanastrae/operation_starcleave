@@ -13,6 +13,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import phanastrae.operation_starcleave.block.entity.BlessedBedBlockEntity;
 
 public class BlessedBedBlock extends BedBlock {
+    private static final int SECONDS = 20;
+    private static final int MINUTES = 60 * SECONDS;
 
     public BlessedBedBlock(Properties settings) {
         super(DyeColor.YELLOW, settings);
@@ -23,10 +25,24 @@ public class BlessedBedBlock extends BedBlock {
         return new BlessedBedBlockEntity(pos, state);
     }
 
+    public static void attemptBlessedSleep(LivingEntity entity) {
+        Level level = entity.level();
+        if (level.isClientSide()) {
+            return;
+        }
+
+        entity.getSleepingPos().filter(level::hasChunkAt).ifPresent(pos -> {
+            BlockState blockstate = level.getBlockState(pos);
+            if (blockstate.is(OperationStarcleaveBlocks.BLESSED_BED)) {
+                BlessedBedBlock.blessedSleep(entity);
+            }
+        });
+    }
+
     public static void blessedSleep(LivingEntity entity) {
-        entity.addEffect(new MobEffectInstance(MobEffects.LUCK, 36000, 0)); // luck I for 10 minutes
-        entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 18000, 0)); // absorption I for 5 minutes
-        entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 1800, 0)); // regen I for 30 seconds
+        entity.addEffect(new MobEffectInstance(MobEffects.LUCK, 7 * MINUTES + 7 * SECONDS, 0)); // luck I for 7 minutes 7 seconds
+        entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 18 * MINUTES, 0)); // absorption I for 18 minutes
+        entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 25 * SECONDS, 0)); // regen I for 25 seconds
     }
 
     @Override
