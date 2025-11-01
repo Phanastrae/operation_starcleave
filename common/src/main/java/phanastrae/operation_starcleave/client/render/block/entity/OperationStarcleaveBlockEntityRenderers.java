@@ -9,6 +9,7 @@ import phanastrae.operation_starcleave.mixin.client.BlockEntityRenderersAccessor
 public class OperationStarcleaveBlockEntityRenderers {
     public static void init() {
         register(OperationStarcleaveBlockEntityTypes.BLESSED_BED, BlessedBedBlockEntityRenderer::new);
+        register(OperationStarcleaveBlockEntityTypes.STARFLAKED_BISMUTH_BLOCK, StarflakedBismuthBlockEntityRenderer::new);
     }
 
     public static <T extends BlockEntity> void register(BlockEntityType<? extends T> type, BlockEntityRendererProvider<T> factory) {

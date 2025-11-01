@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_starbleached_tiles": {
+    "has_starflaked_bismuth": {
       "conditions": {
         "items": [
           {
-            "items": "operation_starcleave:starbleached_tiles"
+            "items": "operation_starcleave:starflaked_bismuth"
           }
         ]
       },
@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "operation_starcleave:starbleached_tile_stairs_from_starbleached_tiles_stonecutting"
+        "recipe": "operation_starcleave:starflaked_bismuth_block"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,12 +21,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_starbleached_tiles"
+      "has_starflaked_bismuth"
     ]
   ],
   "rewards": {
     "recipes": [
-      "operation_starcleave:starbleached_tile_stairs_from_starbleached_tiles_stonecutting"
+      "operation_starcleave:starflaked_bismuth_block"
     ]
   }
 }

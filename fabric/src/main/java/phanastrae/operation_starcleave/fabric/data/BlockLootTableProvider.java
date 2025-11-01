@@ -75,7 +75,9 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                 STRIPED_NUCLEIC_FISSUREROOT,
                 STRIPED_NUCLEIC_FISSURERIND,
 
-                COAGULATED_PLASMA
+                COAGULATED_PLASMA,
+
+                STARFLAKED_BISMUTH_BLOCK
         );
 
         forEach(this::dropPottedContents,

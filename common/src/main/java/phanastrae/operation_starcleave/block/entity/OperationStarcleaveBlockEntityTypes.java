@@ -12,9 +12,11 @@ import java.util.function.BiConsumer;
 public class OperationStarcleaveBlockEntityTypes {
 
     public static final BlockEntityType<BlessedBedBlockEntity> BLESSED_BED = create("blessed_bed", BlessedBedBlockEntity::new, OperationStarcleaveBlocks.BLESSED_BED);
+    public static final BlockEntityType<StarflakedBismuthBlockEntity> STARFLAKED_BISMUTH_BLOCK = create("starflaked_bismuth_block", StarflakedBismuthBlockEntity::new, OperationStarcleaveBlocks.STARFLAKED_BISMUTH_BLOCK);
 
     public static void init(BiConsumer<ResourceLocation, BlockEntityType<?>> r) {
         r.accept(id("blessed_bed"), BLESSED_BED);
+        r.accept(id("starflaked_bismuth_block"), STARFLAKED_BISMUTH_BLOCK);
     }
 
     private static ResourceLocation id(String path) {

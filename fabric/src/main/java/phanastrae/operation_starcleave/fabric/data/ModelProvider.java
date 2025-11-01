@@ -38,7 +38,8 @@ public class ModelProvider extends FabricModelProvider {
         forEach(BMG::createTrivialCube,
                 IMBUED_STARBLEACHED_TILES,
                 NUCLEOSYNTHESEED,
-                PLASMA_ICE
+                PLASMA_ICE,
+                STARFLAKED_BISMUTH_BLOCK
         );
 
         forEach(BMG::createRotatedVariantBlock,

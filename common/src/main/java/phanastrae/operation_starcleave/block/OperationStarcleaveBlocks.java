@@ -486,6 +486,17 @@ public class OperationStarcleaveBlocks {
             )
     );
 
+    public static final Block STARFLAKED_BISMUTH_BLOCK = register(
+            "starflaked_bismuth_block",
+            new StarflakedBismuthBlock(properties()
+                    .mapColor(COLOR_PINK)
+                    .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
+                    .requiresCorrectToolForDrops()
+                    .strength(2.5F, 3.0F)
+                    .sound(SoundType.METAL)
+            )
+    );
+
     private static <T extends Block> T register(String id, T block) {
         return register(OperationStarcleave.id(id), block);
     }

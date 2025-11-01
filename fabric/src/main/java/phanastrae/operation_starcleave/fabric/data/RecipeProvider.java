@@ -59,6 +59,8 @@ public class RecipeProvider extends FabricRecipeProvider {
         twoByTwoPacker(exporter, RecipeCategory.BUILDING_BLOCKS, BLESSED_CLOTH_BLOCK, BLESSED_CLOTH, 2);
         twoByTwoPacker(exporter, RecipeCategory.BUILDING_BLOCKS, STARDUST_BLOCK, STARDUST_CLUSTER);
 
+        twoByTwoPacker(exporter, RecipeCategory.BUILDING_BLOCKS, STARFLAKED_BISMUTH_BLOCK, STARFLAKED_BISMUTH);
+
         savePolished(STARDUST_BRICKS, STARDUST_BLOCK, exporter);
         savePolished(STELLAR_TILES, STELLAR_SEDIMENT, exporter);
 
@@ -209,13 +211,13 @@ public class RecipeProvider extends FabricRecipeProvider {
     }
 
     private static void scBlocks(RecipeOutput recipeOutput, ItemLike result, int amount, ItemLike... materials) {
-        for(ItemLike material : materials) {
+        for (ItemLike material : materials) {
             scBuildingBlock(recipeOutput, result, material, amount);
         }
     }
 
     private static void scWalls(RecipeOutput recipeOutput, ItemLike result, int amount, ItemLike... materials) {
-        for(ItemLike material : materials) {
+        for (ItemLike material : materials) {
             scDecoration(recipeOutput, result, material, amount);
         }
     }

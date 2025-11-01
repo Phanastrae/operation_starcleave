@@ -14,7 +14,7 @@ public class OperationStarcleaveRenderTypes {
 
     public static final RenderStateShard.OutputStateShard FIRMAMENT_SKY_TARGET = new RenderStateShard.OutputStateShard(
             "operation_starcleave$firmament_sky_target",
-            () -> ((LevelRendererDuck)Minecraft.getInstance().levelRenderer).operation_starcleave$getFirmamentSkyFramebuffer().bindWrite(true),
+            () -> ((LevelRendererDuck) Minecraft.getInstance().levelRenderer).operation_starcleave$getFirmamentSkyFramebuffer().bindWrite(true),
             () -> Minecraft.getInstance().getMainRenderTarget().bindWrite(true)
     );
 
@@ -45,12 +45,31 @@ public class OperationStarcleaveRenderTypes {
                     .createCompositeState(false)
     );
 
+    private static final RenderType IRIDESCENCE = create(
+            "operation_starcleave$iridescense",
+            DefaultVertexFormat.BLOCK,
+            VertexFormat.Mode.QUADS,
+            786432,
+            true,
+            false,
+            RenderType.CompositeState.builder()
+                    .setLightmapState(RenderStateShardAccessor.getLIGHTMAP())
+                    .setShaderState(OperationStarcleaveShaders.IRIDESCENCE_PROGRAM)
+                    .setTextureState(RenderStateShardAccessor.getBLOCK_SHEET())
+                    .setTransparencyState(RenderStateShardAccessor.getTRANSLUCENT_TRANSPARENCY())
+                    .createCompositeState(true)
+    );
+
     public static RenderType getFracture() {
         return FRACTURE;
     }
 
     public static RenderType getSkyRay() {
         return SKY_RAY;
+    }
+
+    public static RenderType getIridescence() {
+        return IRIDESCENCE;
     }
 
 

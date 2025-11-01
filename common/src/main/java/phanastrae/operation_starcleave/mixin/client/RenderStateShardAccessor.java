@@ -30,4 +30,19 @@ public interface RenderStateShardAccessor {
     static RenderStateShard.OutputStateShard getMAIN_TARGET() {
         throw new AssertionError();
     }
+
+    @Accessor
+    static RenderStateShard.LightmapStateShard getLIGHTMAP() {
+        throw new AssertionError();
+    }
+
+    @Accessor
+    static RenderStateShard.ShaderStateShard getRENDERTYPE_CUTOUT_SHADER() {
+        throw new AssertionError();
+    }
+
+    @Accessor
+    static RenderStateShard.TextureStateShard getBLOCK_SHEET() {
+        throw new AssertionError();
+    }
 }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:chiseled_starbleached_tiles_from_starbleached_wood_stonecutting"
+        "recipe": "operation_starcleave:chiseled_starbleached_tiles_from_starbleached_wood_stonecutting"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "minecraft:chiseled_starbleached_tiles_from_starbleached_wood_stonecutting"
+      "operation_starcleave:chiseled_starbleached_tiles_from_starbleached_wood_stonecutting"
     ]
   }
 }

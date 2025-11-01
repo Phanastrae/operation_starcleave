@@ -82,6 +82,8 @@ public class OperationStarcleaveItems {
     public static final Item COAGULATED_PLASMA = registerBlockItem((OperationStarcleaveBlocks.COAGULATED_PLASMA));
     public static final Item PLASMA_ICE = registerBlockItem((OperationStarcleaveBlocks.PLASMA_ICE));
 
+    public static final Item STARFLAKED_BISMUTH_BLOCK = registerBlockItem(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_BLOCK);
+
 
     public static final Item STARCLEAVER_GOLEM_BUCKET = register("starcleaver_golem_bucket", new StarcleaverGolemBucketItem(properties().stacksTo(1)));
 

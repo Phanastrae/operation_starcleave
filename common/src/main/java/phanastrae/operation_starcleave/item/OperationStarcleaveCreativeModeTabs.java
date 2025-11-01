@@ -57,6 +57,7 @@ public class OperationStarcleaveCreativeModeTabs {
                 BISREED_ROOT,
                 BISMUTH_FLAKE,
                 STARFLAKED_BISMUTH,
+                STARFLAKED_BISMUTH_BLOCK,
 
                 STELLAR_TILES,
                 STELLAR_TILE_SLAB,
@@ -162,6 +163,9 @@ public class OperationStarcleaveCreativeModeTabs {
                 BLESSED_CLOTH_BLOCK,
                 BLESSED_CLOTH_CARPET,
                 BLESSED_CLOTH_CURTAIN
+        );
+        helper.addAfter(Items.WAXED_OXIDIZED_COPPER_BULB, BUILDING_BLOCKS,
+                STARFLAKED_BISMUTH_BLOCK
         );
 
         // Natural
