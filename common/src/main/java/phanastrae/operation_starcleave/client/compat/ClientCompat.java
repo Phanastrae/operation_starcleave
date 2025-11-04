@@ -5,6 +5,7 @@ import phanastrae.operation_starcleave.services.XPlatInterface;
 public class ClientCompat {
 
     // mod loaded flags
+    public static boolean SODIUM_LOADED;
     public static boolean IRIS_LOADED;
 
     public static void init() {
@@ -14,6 +15,8 @@ public class ClientCompat {
 
     public static void setupModLoadedFlags() {
         XPlatInterface XPLAT = XPlatInterface.INSTANCE;
+
+        SODIUM_LOADED = XPLAT.isModLoaded("sodium");
         IRIS_LOADED = XPLAT.isModLoaded("iris");
     }
 
