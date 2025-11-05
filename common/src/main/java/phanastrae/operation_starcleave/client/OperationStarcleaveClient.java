@@ -33,7 +33,7 @@ public class OperationStarcleaveClient {
     }
 
     public static void renderBeforeEntities(Level level, Camera camera, Frustum frustum, LevelRenderer levelRenderer, Matrix4f projectionMatrix, Matrix4f positionMatrix) {
-        FirmamentTextureStorage.getInstance().tick();
+        FirmamentTextureStorage.fromLevelRenderer(levelRenderer).tick();
         FirmamentRenderer.render(level, camera, frustum, levelRenderer, projectionMatrix, positionMatrix);
     }
 
@@ -79,12 +79,11 @@ public class OperationStarcleaveClient {
         ScreenShakeManager.getInstance().update();
     }
 
-    public static void invalidateRenderState() {
-        FirmamentTextureStorage.getInstance().clearData();
+    public static void invalidateRenderState(LevelRenderer levelRenderer) {
+        FirmamentTextureStorage.fromLevelRenderer(levelRenderer).clearData();
     }
 
     public static void onClientShutdown(Minecraft client) {
-        FirmamentTextureStorage.getInstance().close();
         FirmamentSkyRenderer.getInstance().close();
     }
 }

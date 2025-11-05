@@ -50,7 +50,7 @@ public class OperationStarcleaveClientPacketHandler {
 
             if (firmamentRegion != null) {
                 firmamentRegion.readFromData(payload.firmamentRegionData());
-                FirmamentTextureStorage.getInstance().onRegionAdded(firmamentRegion, world);
+                FirmamentTextureStorage.getMainInstance().onRegionAdded(firmamentRegion, world);
             }
         }
     }
@@ -73,7 +73,7 @@ public class OperationStarcleaveClientPacketHandler {
             if (firmamentSubRegion != null) {
                 firmamentSubRegion.readFromData(payload.subRegionData());
 
-                FirmamentTextureStorage.getInstance().onSubRegionUpdated(firmamentSubRegion, world);
+                FirmamentTextureStorage.getMainInstance().onSubRegionUpdated(firmamentSubRegion, world);
             }
         }
     }
@@ -149,6 +149,6 @@ public class OperationStarcleaveClientPacketHandler {
     public static void handleBossExtrasPayload(ClientboundBossEventExtrasPayload payload, Player player) {
         Minecraft minecraft = Minecraft.getInstance();
         BossHealthOverlay bossHealthOverlay = minecraft.gui.getBossOverlay();
-        ((BossHealthOverlayDuck)bossHealthOverlay).operation_starcleave$updateExtras(payload);
+        ((BossHealthOverlayDuck) bossHealthOverlay).operation_starcleave$updateExtras(payload);
     }
 }

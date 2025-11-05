@@ -56,7 +56,7 @@ public class FirmamentRenderer {
         profiler.push("starcleave_firmament");
 
         profiler.push("check");
-        if (isFirmamentVisible(firmament, camera, frustum) && FirmamentTextureStorage.getInstance().isAnyFilledAndActive()) {
+        if (isFirmamentVisible(firmament, camera, frustum) && FirmamentTextureStorage.fromLevelRenderer(levelRenderer).isAnyFilledAndActive()) {
             profiler.popPush("sky");
             renderSky(levelRenderer, projectionMatrix, positionMatrix);
 
@@ -125,7 +125,7 @@ public class FirmamentRenderer {
             // setup firmament data texture
             int currentTexID0 = RenderSystem.getShaderTexture(0);
 
-            DynamicTexture firmamentTex = FirmamentTextureStorage.getInstance().getTexture();
+            DynamicTexture firmamentTex = FirmamentTextureStorage.fromLevelRenderer(levelRenderer).getTexture();
             RenderSystem.setShaderTexture(0, firmamentTex.getId());
             firmamentTex.bind();
             RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

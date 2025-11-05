@@ -6,6 +6,7 @@ import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.pipeline.TextureTarget;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.RenderBuffers;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
@@ -13,6 +14,7 @@ import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -20,67 +22,88 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import phanastrae.operation_starcleave.client.OperationStarcleaveClient;
 import phanastrae.operation_starcleave.client.duck.LevelRendererDuck;
+import phanastrae.operation_starcleave.client.render.firmament.FirmamentTextureStorage;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 
 @Mixin(LevelRenderer.class)
 public class LevelRendererMixin implements LevelRendererDuck {
-
     @Shadow
     @Final
     private Minecraft minecraft;
+    @Shadow
+    @Nullable
+    private ClientLevel level;
+
     @Unique
-    RenderTarget operationStarcleave$dummyFramebuffer;
+    RenderTarget operation_starcleave$dummyFramebuffer;
     @Unique
-    RenderTarget operationStarcleave$firmamentSkyFramebuffer;
+    RenderTarget operation_starcleave$firmamentSkyFramebuffer;
+    @Unique
+    FirmamentTextureStorage operation_starcleave$firmamentTextureStorage;
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void operation_starcleave$onInit(Minecraft client, EntityRenderDispatcher entityRenderDispatcher, BlockEntityRenderDispatcher blockEntityRenderDispatcher, RenderBuffers bufferBuilders, CallbackInfo ci) {
-        this.operationStarcleave$dummyFramebuffer = null;
-        this.operationStarcleave$firmamentSkyFramebuffer = null;
+        this.operation_starcleave$dummyFramebuffer = null;
+        this.operation_starcleave$firmamentSkyFramebuffer = null;
+        this.operation_starcleave$firmamentTextureStorage = new FirmamentTextureStorage();
+    }
+
+    @Override
+    public RenderTarget operation_starcleave$getFirmamentSkyFramebuffer() {
+        return this.operation_starcleave$firmamentSkyFramebuffer;
+    }
+
+    @Override
+    public RenderTarget operation_starcleave$getDummyFramebuffer() {
+        return this.operation_starcleave$dummyFramebuffer;
+    }
+
+    @Override
+    public FirmamentTextureStorage operation_starcleave$getFirmamentTextureStorage() {
+        return this.operation_starcleave$firmamentTextureStorage;
     }
 
     @Inject(method = "onResourceManagerReload", at = @At("RETURN"))
     private void operation_starcleave$loadFramebuffers(ResourceManager manager, CallbackInfo ci) {
-        if (this.operationStarcleave$dummyFramebuffer != null) {
-            this.operationStarcleave$dummyFramebuffer.destroyBuffers();
+        if (this.operation_starcleave$dummyFramebuffer != null) {
+            this.operation_starcleave$dummyFramebuffer.destroyBuffers();
         }
-        if (this.operationStarcleave$firmamentSkyFramebuffer != null) {
-            this.operationStarcleave$firmamentSkyFramebuffer.destroyBuffers();
+        if (this.operation_starcleave$firmamentSkyFramebuffer != null) {
+            this.operation_starcleave$firmamentSkyFramebuffer.destroyBuffers();
         }
 
-        this.operationStarcleave$dummyFramebuffer = new TextureTarget(this.minecraft.getWindow().getWidth(), this.minecraft.getWindow().getHeight(), true, Minecraft.ON_OSX);
-        this.operationStarcleave$firmamentSkyFramebuffer = new TextureTarget(this.minecraft.getWindow().getWidth(), this.minecraft.getWindow().getHeight(), true, Minecraft.ON_OSX);
+        this.operation_starcleave$dummyFramebuffer = new TextureTarget(this.minecraft.getWindow().getWidth(), this.minecraft.getWindow().getHeight(), true, Minecraft.ON_OSX);
+        this.operation_starcleave$firmamentSkyFramebuffer = new TextureTarget(this.minecraft.getWindow().getWidth(), this.minecraft.getWindow().getHeight(), true, Minecraft.ON_OSX);
     }
 
     @Inject(method = "close", at = @At("RETURN"))
-    private void operation_starcleave$deleteFramebuffers(CallbackInfo ci) {
-        if (this.operationStarcleave$dummyFramebuffer != null) {
-            this.operationStarcleave$dummyFramebuffer.destroyBuffers();
+    private void operation_starcleave$onClose(CallbackInfo ci) {
+        if (this.operation_starcleave$dummyFramebuffer != null) {
+            this.operation_starcleave$dummyFramebuffer.destroyBuffers();
         }
-        if (this.operationStarcleave$firmamentSkyFramebuffer != null) {
-            this.operationStarcleave$firmamentSkyFramebuffer.destroyBuffers();
+        if (this.operation_starcleave$firmamentSkyFramebuffer != null) {
+            this.operation_starcleave$firmamentSkyFramebuffer.destroyBuffers();
+        }
+        this.operation_starcleave$firmamentTextureStorage.close();
+    }
+
+    @Inject(method = "allChanged", at = @At("HEAD"))
+    private void operation_starcleave$allChanged(CallbackInfo ci) {
+        if (this.level != null) {
+            OperationStarcleaveClient.invalidateRenderState((LevelRenderer) (Object) this);
         }
     }
 
     @Inject(method = "resize", at = @At("RETURN"))
     private void operation_starcleave$resizeFramebuffers(int width, int height, CallbackInfo ci) {
-        if (this.operationStarcleave$dummyFramebuffer != null) {
-            this.operationStarcleave$dummyFramebuffer.resize(width, height, Minecraft.ON_OSX);
+        if (this.operation_starcleave$dummyFramebuffer != null) {
+            this.operation_starcleave$dummyFramebuffer.resize(width, height, Minecraft.ON_OSX);
         }
-        if (this.operationStarcleave$firmamentSkyFramebuffer != null) {
-            this.operationStarcleave$firmamentSkyFramebuffer.resize(width, height, Minecraft.ON_OSX);
+        if (this.operation_starcleave$firmamentSkyFramebuffer != null) {
+            this.operation_starcleave$firmamentSkyFramebuffer.resize(width, height, Minecraft.ON_OSX);
         }
-    }
-
-    @Override
-    public RenderTarget operation_starcleave$getFirmamentSkyFramebuffer() {
-        return this.operationStarcleave$firmamentSkyFramebuffer;
-    }
-
-    @Override
-    public RenderTarget operation_starcleave$getDummyFramebuffer() {
-        return this.operationStarcleave$dummyFramebuffer;
     }
 
     // Stop Rain and Snow from rendering beneath damaged Firmament

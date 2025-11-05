@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.platform.TextureUtil;
 import net.minecraft.client.GraphicsStatus;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
@@ -14,6 +15,7 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.Heightmap;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL30C;
+import phanastrae.operation_starcleave.client.duck.LevelRendererDuck;
 import phanastrae.operation_starcleave.world.firmament.*;
 
 import java.util.ArrayList;
@@ -25,13 +27,12 @@ import static phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion
 
 public class FirmamentTextureStorage {
 
-    private static final FirmamentTextureStorage INSTANCE = new FirmamentTextureStorage();
-
-    private FirmamentTextureStorage() {
+    public static FirmamentTextureStorage getMainInstance() {
+        return fromLevelRenderer(Minecraft.getInstance().levelRenderer);
     }
 
-    public static FirmamentTextureStorage getInstance() {
-        return INSTANCE;
+    public static FirmamentTextureStorage fromLevelRenderer(LevelRenderer levelRenderer) {
+        return ((LevelRendererDuck) levelRenderer).operation_starcleave$getFirmamentTextureStorage();
     }
 
     private final NativeImage image = new NativeImage(NativeImage.Format.RGBA, 512, 512, true);
@@ -465,8 +466,7 @@ public class FirmamentTextureStorage {
     public boolean isAnyFilledAndActive() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                FirmamentTextureStorage fts = FirmamentTextureStorage.getInstance();
-                if (fts.isActive(i, j) && fts.isFilled(i, j)) {
+                if (this.isActive(i, j) && this.isFilled(i, j)) {
                     return true;
                 }
             }

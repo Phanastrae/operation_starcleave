@@ -5,7 +5,10 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.*;
+import net.fabricmc.fabric.api.client.rendering.v1.CoreShaderRegistrationCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
@@ -84,9 +87,6 @@ public class OperationStarcleaveClientFabric implements ClientModInitializer {
 
         // render before block outline
         WorldRenderEvents.BEFORE_BLOCK_OUTLINE.register((worldRenderContext, hitResult) -> OperationStarcleaveClient.renderBeforeBlockOutline(worldRenderContext.blockOutlines(), worldRenderContext.consumers(), worldRenderContext.camera(), worldRenderContext.matrixStack()));
-
-        // invalidate render state
-        InvalidateRenderStateCallback.EVENT.register(OperationStarcleaveClient::invalidateRenderState);
     }
 
     public void registerClientPayloads() {

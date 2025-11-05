@@ -29,12 +29,14 @@ public class FirmamentPostShader {
         ProfilerFiller profiler = client.getProfiler();
         profiler.push("starcleave_post_effect");
 
-        if(client.levelRenderer instanceof LevelRendererDuck operationStarcleaveWorldRenderer) {
+        if(client.levelRenderer instanceof LevelRendererDuck operationStarcleaveLevelRenderer) {
             RenderTarget mainBuffer = client.getMainRenderTarget();
 
-            RenderTarget dummyBuffer = operationStarcleaveWorldRenderer.operation_starcleave$getDummyFramebuffer();
+            RenderTarget dummyBuffer = operationStarcleaveLevelRenderer.operation_starcleave$getDummyFramebuffer();
 
-            if (dummyBuffer != null && canDraw()) {
+            FirmamentTextureStorage firmamentTextureStorage = operationStarcleaveLevelRenderer.operation_starcleave$getFirmamentTextureStorage();
+
+            if (dummyBuffer != null && canDraw(firmamentTextureStorage)) {
                 // this code should do nothing, but just in case the render state is messed up by other mods we reset it here to avoid problems
                 RenderSystem.enableBlend();
                 RenderSystem.disableBlend();
@@ -62,7 +64,7 @@ public class FirmamentPostShader {
 
                 // apply dummy with effect to main
                 mainBuffer.bindWrite(true);
-                draw2(client.getWindow().getWidth(), client.getWindow().getHeight(), false);
+                draw2(client.getWindow().getWidth(), client.getWindow().getHeight(), false, firmamentTextureStorage);
 
                 RenderSystem.disableBlend();
                 RenderSystem.defaultBlendFunc();
@@ -72,12 +74,12 @@ public class FirmamentPostShader {
         profiler.pop();
     }
 
-    public static boolean canDraw() {
-        if(!FirmamentTextureStorage.getInstance().shouldRenderPostOnGraphicsMode()) {
+    public static boolean canDraw(FirmamentTextureStorage firmamentTextureStorage) {
+        if(!firmamentTextureStorage.shouldRenderPostOnGraphicsMode()) {
             return false;
         }
 
-        if(!FirmamentTextureStorage.getInstance().isAnyFilledAndActive()) {
+        if(!firmamentTextureStorage.isAnyFilledAndActive()) {
             // don't render if there is nothing to render
             return false;
         }
@@ -85,16 +87,16 @@ public class FirmamentPostShader {
         return true;
     }
 
-    public static void draw2(int width, int height, boolean disableBlend) {
+    public static void draw2(int width, int height, boolean disableBlend, FirmamentTextureStorage firmamentTextureStorage) {
         RenderSystem.assertOnRenderThreadOrInit();
         if (!RenderSystem.isOnRenderThread()) {
-            RenderSystem.recordRenderCall(() -> drawInternal(width, height, disableBlend));
+            RenderSystem.recordRenderCall(() -> drawInternal(width, height, disableBlend, firmamentTextureStorage));
         } else {
-            drawInternal(width, height, disableBlend);
+            drawInternal(width, height, disableBlend, firmamentTextureStorage);
         }
     }
 
-    private static void drawInternal(int width, int height, boolean disableBlend) {
+    private static void drawInternal(int width, int height, boolean disableBlend, FirmamentTextureStorage firmamentTextureStorage) {
         Minecraft client = Minecraft.getInstance();
         if(!(client.levelRenderer instanceof LevelRendererDuck operationStarcleaveWorldRenderer)) {
             return;
@@ -129,7 +131,7 @@ public class FirmamentPostShader {
         shaderProgram.setSampler("DiffuseSampler0", dummyBuffer.getColorTextureId());
         shaderProgram.setSampler("DiffuseSampler1", dummyBuffer.getDepthTextureId());
 
-        DynamicTexture firmamentTex = FirmamentTextureStorage.getInstance().getTexture();
+        DynamicTexture firmamentTex = firmamentTextureStorage.getTexture();
         RenderSystem.setShaderTexture(0, firmamentTex.getId());
         firmamentTex.bind();
         RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
