@@ -4,7 +4,7 @@ import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
 import phanastrae.operation_starcleave.OperationStarcleave;
-import phanastrae.operation_starcleave.mixin.SimpleParticleTypeAccessor;
+import phanastrae.operation_starcleave.mixin.common.accessor.SimpleParticleTypeAccessor;
 
 import java.util.function.BiConsumer;
 

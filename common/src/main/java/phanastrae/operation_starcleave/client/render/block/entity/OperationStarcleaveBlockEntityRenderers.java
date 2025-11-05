@@ -4,7 +4,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import phanastrae.operation_starcleave.block.entity.OperationStarcleaveBlockEntityTypes;
-import phanastrae.operation_starcleave.mixin.client.BlockEntityRenderersAccessor;
+import phanastrae.operation_starcleave.mixin.client.accessor.BlockEntityRenderersAccessor;
 
 public class OperationStarcleaveBlockEntityRenderers {
     public static void init() {

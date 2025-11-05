@@ -7,8 +7,8 @@ import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import phanastrae.operation_starcleave.client.duck.LevelRendererDuck;
 import phanastrae.operation_starcleave.client.render.shader.OperationStarcleaveShaders;
-import phanastrae.operation_starcleave.mixin.client.RenderStateShardAccessor;
-import phanastrae.operation_starcleave.mixin.client.RenderTypeAccessor;
+import phanastrae.operation_starcleave.mixin.client.accessor.RenderStateShardAccessor;
+import phanastrae.operation_starcleave.mixin.client.accessor.RenderTypeAccessor;
 
 public class OperationStarcleaveRenderTypes {
 

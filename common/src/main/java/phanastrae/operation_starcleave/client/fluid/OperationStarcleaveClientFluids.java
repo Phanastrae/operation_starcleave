@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.fluid.OperationStarcleaveFluids;
-import phanastrae.operation_starcleave.mixin.client.CameraAccessor;
+import phanastrae.operation_starcleave.mixin.client.accessor.CameraAccessor;
 import phanastrae.operation_starcleave.registry.OperationStarcleaveFluidTags;
 
 import java.util.Arrays;

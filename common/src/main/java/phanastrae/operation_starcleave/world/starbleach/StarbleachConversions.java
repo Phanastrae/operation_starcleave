@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.block.StarbleachCauldronBlock;
 import phanastrae.operation_starcleave.block.StellarFarmlandBlock;
 import phanastrae.operation_starcleave.block.tag.OperationStarcleaveBlockTags;
-import phanastrae.operation_starcleave.mixin.AxeItemAccessor;
+import phanastrae.operation_starcleave.mixin.common.accessor.item.AxeItemAccessor;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 
 import java.util.Map;

@@ -2,7 +2,7 @@ package phanastrae.operation_starcleave.entity;
 
 import net.minecraft.world.entity.*;
 import net.minecraft.world.level.levelgen.Heightmap;
-import phanastrae.operation_starcleave.mixin.SpawnPlacementsAccessor;
+import phanastrae.operation_starcleave.mixin.common.accessor.SpawnPlacementsAccessor;
 
 public class OperationStarcleaveSpawnPlacements {
 

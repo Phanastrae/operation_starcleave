@@ -30,7 +30,7 @@ import phanastrae.operation_starcleave.fluid.OperationStarcleaveFluids;
 import phanastrae.operation_starcleave.item.OperationStarcleaveArmorMaterials;
 import phanastrae.operation_starcleave.item.OperationStarcleaveCreativeModeTabs;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
-import phanastrae.operation_starcleave.mixin.ShovelItemAccessor;
+import phanastrae.operation_starcleave.mixin.common.accessor.item.ShovelItemAccessor;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 import phanastrae.operation_starcleave.recipe.OperationStarcleaveRecipeSerializers;
 import phanastrae.operation_starcleave.recipe.OperationStarcleaveRecipeTypes;

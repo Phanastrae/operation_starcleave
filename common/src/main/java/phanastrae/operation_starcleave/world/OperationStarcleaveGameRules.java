@@ -1,8 +1,8 @@
 package phanastrae.operation_starcleave.world;
 
 import net.minecraft.world.level.GameRules;
-import phanastrae.operation_starcleave.mixin.GameRulesAccessor;
-import phanastrae.operation_starcleave.mixin.GameRulesBooleanValueAccessor;
+import phanastrae.operation_starcleave.mixin.common.accessor.gamerules.GameRulesAccessor;
+import phanastrae.operation_starcleave.mixin.common.accessor.gamerules.GameRulesBooleanValueAccessor;
 
 public class OperationStarcleaveGameRules {
     public static final GameRules.Key<GameRules.BooleanValue> ALLOW_STARCLEAVER_GOLEM_FIRMAMENT_FRACTURING =

@@ -38,7 +38,7 @@ import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.block.OperationStarcleaveToolActions;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
 import phanastrae.operation_starcleave.item.OperationStarcleaveCreativeModeTabs;
-import phanastrae.operation_starcleave.mixin.AxeItemAccessor;
+import phanastrae.operation_starcleave.mixin.common.accessor.item.AxeItemAccessor;
 import phanastrae.operation_starcleave.neoforge.client.fluid.OperationStarcleaveFluidTypeExtensions;
 import phanastrae.operation_starcleave.neoforge.fluid.OperationStarcleaveFluidTypes;
 import phanastrae.operation_starcleave.network.packet.OperationStarcleavePayloads;

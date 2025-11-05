@@ -28,7 +28,7 @@ import phanastrae.operation_starcleave.client.particle.OperationStarcleavePartic
 import phanastrae.operation_starcleave.client.render.entity.OperationStarcleaveEntityRenderers;
 import phanastrae.operation_starcleave.client.render.entity.model.OperationStarcleaveEntityModelLayers;
 import phanastrae.operation_starcleave.client.render.shader.OperationStarcleaveShaders;
-import phanastrae.operation_starcleave.mixin.client.LevelRendererAccessor;
+import phanastrae.operation_starcleave.mixin.client.accessor.LevelRendererAccessor;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
