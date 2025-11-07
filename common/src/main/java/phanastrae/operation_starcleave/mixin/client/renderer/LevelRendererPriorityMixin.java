@@ -41,7 +41,13 @@ public class LevelRendererPriorityMixin {
     private void operation_starcleave$setBlocksDirty(int minX, int minY, int minZ, int maxX, int maxY, int maxZ, CallbackInfo ci) {
         // sodium DOES overwrite this method, AND blocks access to setSectionDirty(III)V, so we need to handle things here instead
         if (ClientCompat.SODIUM_LOADED) {
-            ((LevelRendererDuck) this).operation_starcleave$getFirmamentTextureStorage().queueRebuild(minX, minZ, maxX, maxZ);
+            // in vanilla this is only called with minX,Y,Z = maxX,Y,Z, so we check for this first
+            if (minX == maxX && minZ == maxZ) {
+                // we don't actually need to check y here so we don't
+                ((LevelRendererDuck) this).operation_starcleave$getFirmamentTextureStorage().queueRebuild(minX, minZ);
+            } else {
+                ((LevelRendererDuck) this).operation_starcleave$getFirmamentTextureStorage().queueRebuild(minX, minZ, maxX, maxZ);
+            }
         }
     }
 
