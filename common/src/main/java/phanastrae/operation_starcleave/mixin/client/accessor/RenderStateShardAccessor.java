@@ -37,12 +37,12 @@ public interface RenderStateShardAccessor {
     }
 
     @Accessor
-    static RenderStateShard.ShaderStateShard getRENDERTYPE_CUTOUT_SHADER() {
+    static RenderStateShard.TextureStateShard getBLOCK_SHEET_MIPPED() {
         throw new AssertionError();
     }
 
     @Accessor
-    static RenderStateShard.TextureStateShard getBLOCK_SHEET() {
+    static RenderStateShard.DepthTestStateShard getEQUAL_DEPTH_TEST() {
         throw new AssertionError();
     }
 }

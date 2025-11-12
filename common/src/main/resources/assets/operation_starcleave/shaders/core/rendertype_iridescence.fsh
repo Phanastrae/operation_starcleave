@@ -46,11 +46,21 @@ void main() {
 
     vec2 texSize = vec2(textureSize(Sampler0, 0));
     vec2 scaledUV = texCoord0 * texSize;
+    vec2 uv = scaledUV;
+    vec2 dUVdx = dFdx(uv);
+    vec2 dUVdy = dFdy(uv);
+
+    // approximate mip
+    float dms = max(dot(dUVdx, dUVdx), dot(dUVdy, dUVdy));
+    float mml = 0.5 * log2(dms);
+    // sometimes on edges these derivatives are zero and cause artifacts, in which case set fadeout to 1.0
+    float detailFadeout = (dUVdx == 0.0 || dUVdy == 0.0) ? (1.0) : (clamp(mml, 0., 1.));
+
     vec2 texelCenter = floor(scaledUV) + 0.5;
     vec2 texelCenterOffset = texelCenter - scaledUV;
 
     // calc dPdUV
-    mat2 dUVdxy = mat2(dFdx(scaledUV), dFdy(scaledUV));
+    mat2 dUVdxy = mat2(dUVdx, dUVdy);
     mat2 dxydUV = inverse(dUVdxy);
     mat2x3 dPdxy = mat2x3(dFdx(position), dFdy(position));
     mat2x3 dPdUV = dPdxy * dxydUV;
@@ -59,11 +69,11 @@ void main() {
     vec3 dPdU = dPdUV[0];
     vec3 dPdV = dPdUV[1];
     mat3 transformMatrix = mat3(normalize(dPdU), normalize(-dPdV), normal); // need to flip y
-    vec3 actualNormal = transformMatrix * localNormal;
+    vec3 actualNormal = normalize(normal + (detailFadeout < 0.99 ? mix(transformMatrix * localNormal - normal, vec3(0.), detailFadeout) : vec3(0.)));
 
     // calc relative position of texel center
     vec3 dP = dPdUV * texelCenterOffset;
-    vec3 texelCenterPos = position + dP;
+    vec3 texelCenterPos = position + (detailFadeout < 0.99 ? mix(dP, vec3(0.), detailFadeout) : vec3(0.));
     vec3 viewDir = normalize(texelCenterPos);
 
     // calc dot

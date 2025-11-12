@@ -55,8 +55,9 @@ public class OperationStarcleaveRenderTypes {
             RenderType.CompositeState.builder()
                     .setLightmapState(RenderStateShardAccessor.getLIGHTMAP())
                     .setShaderState(OperationStarcleaveShaders.IRIDESCENCE_PROGRAM)
-                    .setTextureState(RenderStateShardAccessor.getBLOCK_SHEET())
+                    .setTextureState(RenderStateShardAccessor.getBLOCK_SHEET_MIPPED())
                     .setTransparencyState(RenderStateShardAccessor.getTRANSLUCENT_TRANSPARENCY())
+                    .setDepthTestState(RenderStateShardAccessor.getEQUAL_DEPTH_TEST())
                     .createCompositeState(true)
     );
 
