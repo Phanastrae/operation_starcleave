@@ -1,0 +1,150 @@
+package phanastrae.operation_starcleave.client.render.extras_baking;
+
+import com.mojang.blaze3d.shaders.Uniform;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.VertexBuffer;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectListIterator;
+import net.minecraft.client.Camera;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraft.client.renderer.culling.Frustum;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.phys.Vec3;
+import org.joml.Matrix4f;
+import phanastrae.operation_starcleave.OperationStarcleave;
+import phanastrae.operation_starcleave.client.compat.ClientCompat;
+import phanastrae.operation_starcleave.client.duck.LevelRendererExtrasDuck;
+import phanastrae.operation_starcleave.client.render.OperationStarcleaveRenderTypes;
+
+import java.util.Collection;
+
+public class RenderExtras {
+
+    public static void renderExtras(LevelRenderer levelRenderer, Matrix4f projectionMatrix, Matrix4f positionMatrix, Camera camera, Frustum frustum) {
+        SectionExtrasRebuildQueue rebuildQueue = ((LevelRendererExtrasDuck) levelRenderer).operation_starcleave$getRebuildQueue();
+        if (rebuildQueue == null) {
+            return;
+        }
+
+        rebuildQueue.updateNonEmptySections();
+        Collection<ExtrasSection> sections = rebuildQueue.getNonEmptySections();
+        if (sections.isEmpty()) {
+            return;
+        }
+
+        Vec3 camPos = camera.getPosition();
+        double camX = camPos.x();
+        double camY = camPos.y();
+        double camZ = camPos.z();
+
+        renderSectionLayer(
+                OperationStarcleaveRenderTypes.getIridescence(),
+                camX, camY, camZ,
+                positionMatrix,
+                projectionMatrix,
+                sections,
+                frustum,
+                camera,
+                rebuildQueue.getViewDistance()
+        );
+    }
+
+    public static void renderSectionLayer(RenderType renderType, double x, double y, double z, Matrix4f frustrumMatrix, Matrix4f projectionMatrix, Collection<ExtrasSection> sections, Frustum frustum, Camera camera, int viewDistance) {
+        RenderSystem.assertOnRenderThread();
+
+        Minecraft minecraft = Minecraft.getInstance();
+        ProfilerFiller profiler = minecraft.getProfiler();
+
+        renderType.setupRenderState();
+
+        profiler.push("filterempty");
+        // frustum cull sections, ideally we'd also do occlusion culling but making that sodium compatible might be tricky
+        BlockPos camPos = camera.getBlockPosition();
+        int cx = camPos.getX() >> 4;
+        int cz = camPos.getZ() >> 4;
+        ExtrasSection[] filteredSections = sections.stream().filter(section -> {
+            BlockPos originPos = section.getOrigin();
+            return isWithinDistance(cx, cz, viewDistance, originPos.getX() >> 4, originPos.getZ() >> 4) && frustum.isVisible(section.getBoundingBox());
+        }).toArray(ExtrasSection[]::new);
+        ObjectArrayList<ExtrasSection> visibleSections = ObjectArrayList.wrap(filteredSections);
+
+        profiler.popPush(() -> "starcleave$render_" + renderType);
+        ObjectListIterator<ExtrasSection> iterator = visibleSections
+                .listIterator(0);
+
+        ShaderInstance shaderInstance = RenderSystem.getShader();
+        shaderInstance.setDefaultUniforms(VertexFormat.Mode.QUADS, frustrumMatrix, projectionMatrix, minecraft.getWindow());
+        shaderInstance.apply();
+        Uniform uniform = shaderInstance.CHUNK_OFFSET;
+
+        while (iterator.hasNext()) {
+            ExtrasSection section = iterator.next();
+            if (!section.getCompiled().isEmpty(renderType)) {
+                VertexBuffer buffer = section.getBuffer(renderType);
+                if (buffer == null) {
+                    OperationStarcleave.LOGGER.warn("Tried to render extra layers on a chunk section, but the buffers were null? This should not happen.");
+                    continue;
+                }
+
+                BlockPos origin = section.getOrigin();
+
+                if (uniform != null) {
+                    if (ClientCompat.SODIUM_LOADED) {
+                        // sodium slightly adjusts these values, so we need to match them to avoid z-fighting
+                        uniform.set(
+                                getSodiumCameraTranslation(origin.getX(), x),
+                                getSodiumCameraTranslation(origin.getY(), y),
+                                getSodiumCameraTranslation(origin.getZ(), z)
+                        );
+                    } else {
+                        uniform.set(
+                                (float) ((double) origin.getX() - x),
+                                (float) ((double) origin.getY() - y),
+                                (float) ((double) origin.getZ() - z)
+                        );
+                    }
+                    uniform.upload();
+                }
+
+                buffer.bind();
+                buffer.draw();
+            }
+        }
+
+        if (uniform != null) {
+            uniform.set(0.0F, 0.0F, 0.0F);
+        }
+
+        shaderInstance.clear();
+        VertexBuffer.unbind();
+        profiler.pop();
+        renderType.clearRenderState();
+    }
+
+    public static float getSodiumCameraTranslation(int blockPos, double camPos) {
+        int camBlock = (int) camPos;
+        float camFrac = (float) (camPos - camBlock);
+        float mod = Math.copySign(8 * 16, camFrac);
+        float adjustedCamFrac = (camFrac + mod) - mod;
+
+        return (blockPos - camBlock) - adjustedCamFrac;
+    }
+
+    static boolean isWithinDistance(int centerX, int centerZ, int viewDistance, int x, int z) {
+        int dxIsh = Math.max(0, Math.abs(x - centerX) - 1);
+        int dzIsh = Math.max(0, Math.abs(z - centerZ) - 1);
+
+        long max = Math.max(dxIsh, dzIsh);
+        long min = Math.min(dxIsh, dzIsh);
+
+        long distSqr = min * min + max * max;
+        int viewDistSqr = viewDistance * viewDistance;
+
+        return distSqr < (long) viewDistSqr;
+    }
+}

@@ -12,3 +12,6 @@ accessible class net/minecraft/client/renderer/RenderStateShard$TransparencyStat
 accessible class net/minecraft/client/renderer/RenderStateShard$WriteMaskStateShard
 accessible class net/minecraft/client/renderer/RenderStateShard$LightmapStateShard
 accessible class net/minecraft/client/renderer/RenderStateShard$TextureStateShard
+accessible class net/minecraft/client/renderer/RenderStateShard$DepthTestStateShard
+accessible class net/minecraft/client/renderer/chunk/SectionRenderDispatcher$SectionTaskResult
+accessible class net/minecraft/client/renderer/chunk/SectionRenderDispatcher$RenderSection$CompileTask

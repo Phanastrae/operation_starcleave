@@ -488,7 +488,7 @@ public class OperationStarcleaveBlocks {
 
     public static final Block STARFLAKED_BISMUTH_BLOCK = register(
             "starflaked_bismuth_block",
-            new StarflakedBismuthBlock(properties()
+            new Block(properties()
                     .mapColor(COLOR_PINK)
                     .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
                     .requiresCorrectToolForDrops()
