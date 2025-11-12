@@ -12,7 +12,6 @@ import net.minecraft.client.renderer.chunk.RenderRegionCache;
 import net.minecraft.client.renderer.chunk.SectionRenderDispatcher;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.SectionPos;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;
@@ -232,7 +231,6 @@ public class LevelRendererPriorityMixin implements LevelRendererExtrasDuck {
         BlockingQueue<ExtrasSection> rebuildQueue = this.operation_starcleave$sectionExtrasRebuildQueue.getRebuildQueue();
         List<ExtrasSection> queue = new ArrayList<>();
         rebuildQueue.drainTo(queue);
-        List<ExtrasSection> reAddToQueue = new ArrayList<>();
 
         for (ExtrasSection extrasSection : queue) {
             extrasSection.setNotInQueue();
@@ -247,35 +245,30 @@ public class LevelRendererPriorityMixin implements LevelRendererExtrasDuck {
             }
 
             BlockPos origin = extrasSection.getOrigin();
-            SectionPos sectionPos = SectionPos.of(origin);
-            if (levelLightEngine.lightOnInSection(sectionPos)) {
-                ChunkAccess chunk = this.level.getChunk(origin);
-                LevelChunkSection chunkSection = chunk.getSection(chunk.getSectionIndex(origin.getY()));
+            ChunkAccess chunk = this.level.getChunk(origin);
+            LevelChunkSection chunkSection = chunk.getSection(chunk.getSectionIndex(origin.getY()));
 
-                boolean maybeHas = chunkSection.maybeHas(state -> state.is(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_BLOCK));
-                extrasSection.setMaybeHadSpecialBlocks(maybeHas);
-                if (!maybeHas) {
-                    extrasSection.setNotDirty();
-                    continue;
-                }
+            boolean maybeHas = chunkSection.maybeHas(state -> state.is(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_BLOCK));
+            extrasSection.setMaybeHadSpecialBlocks(maybeHas);
+            if (!maybeHas) {
+                extrasSection.setNotDirty();
+                continue;
+            }
 
-                PrioritizeChunkUpdates setting = this.minecraft.options.prioritizeChunkUpdates().get();
-                boolean buildSync = false;
-                if (setting == PrioritizeChunkUpdates.NEARBY) {
-                    BlockPos pos = origin.offset(8, 8, 8);
-                    buildSync = pos.distSqr(cameraPos) < 768.0 || extrasSection.isDirtyFromPlayer();
-                } else if (setting == PrioritizeChunkUpdates.PLAYER_AFFECTED) {
-                    buildSync = extrasSection.isDirtyFromPlayer();
-                }
+            PrioritizeChunkUpdates setting = this.minecraft.options.prioritizeChunkUpdates().get();
+            boolean buildSync = false;
+            if (setting == PrioritizeChunkUpdates.NEARBY) {
+                BlockPos pos = origin.offset(8, 8, 8);
+                buildSync = pos.distSqr(cameraPos) < 768.0 || extrasSection.isDirtyFromPlayer();
+            } else if (setting == PrioritizeChunkUpdates.PLAYER_AFFECTED) {
+                buildSync = extrasSection.isDirtyFromPlayer();
+            }
 
-                if (buildSync) {
-                    extrasSection.buildSync(renderRegionCache, this.operation_starcleave$extrasSectionRenderDispatcher);
-                    extrasSection.setNotDirty();
-                } else {
-                    buildAsync.add(extrasSection);
-                }
+            if (buildSync) {
+                extrasSection.buildSync(renderRegionCache, this.operation_starcleave$extrasSectionRenderDispatcher);
+                extrasSection.setNotDirty();
             } else {
-                reAddToQueue.add(extrasSection);
+                buildAsync.add(extrasSection);
             }
         }
 
@@ -287,14 +280,6 @@ public class LevelRendererPriorityMixin implements LevelRendererExtrasDuck {
             section.buildAsync(renderRegionCache, this.operation_starcleave$extrasSectionRenderDispatcher);
             section.setNotDirty();
         }
-
-        profiler.popPush("requeue");
-        reAddToQueue.forEach(section -> {
-            if (!section.isInQueue()) {
-                section.setInQueue();
-                this.operation_starcleave$sectionExtrasRebuildQueue.addToQueue(section);
-            }
-        });
 
         profiler.pop();
         profiler.pop();
