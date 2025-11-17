@@ -19,6 +19,7 @@
     "common.block.stellar_farmland.StemBlockMixin",
     "common.bossevent.BossEventMixin",
     "common.bossevent.ServerBossEventMixin",
+    "common.entity.AbstractArrowMixin",
     "common.entity.EnderManMixin",
     "common.entity.EntityMixin",
     "common.entity.LivingEntityMixin",

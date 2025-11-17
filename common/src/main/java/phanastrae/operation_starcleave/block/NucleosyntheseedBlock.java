@@ -12,6 +12,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
@@ -25,6 +26,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import phanastrae.operation_starcleave.block.tag.OperationStarcleaveBlockTags;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveDamageTypes;
+import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityAttachment;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 import phanastrae.operation_starcleave.world.OperationStarcleaveGameRules;
@@ -89,6 +91,16 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
         }
 
         return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
+    }
+
+    @Override
+    protected void onProjectileHit(Level level, BlockState state, BlockHitResult hit, Projectile projectile) {
+        if (!level.isClientSide) {
+            BlockPos pos = hit.getBlockPos();
+            if (OperationStarcleaveEntityAttachment.fromEntity(projectile).isOnPhlogisticFire() && projectile.mayInteract(level, pos)) {
+                detonate(level, pos, 0);
+            }
+        }
     }
 
     @Override
