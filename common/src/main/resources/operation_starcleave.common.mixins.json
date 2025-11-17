@@ -58,6 +58,7 @@
     "client.renderer.LevelRendererMixin",
     "client.renderer.LevelRendererPriorityMixin",
     "client.renderer.LightTextureMixin",
+    "client.renderer.extras_baking.BlockStateModelLoaderMixin",
     "client.renderer.extras_baking.RenderBuffersMixin",
     "client.renderer.extras_baking.SectionBufferBuilderPackMixin",
     "client.renderer.extras_baking.SectionRenderDispatcherMixin",

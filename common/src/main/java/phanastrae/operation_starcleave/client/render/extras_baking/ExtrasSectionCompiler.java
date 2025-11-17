@@ -2,36 +2,39 @@ package phanastrae.operation_starcleave.client.render.extras_baking;
 
 import com.mojang.blaze3d.vertex.*;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectArrayMap;
-import net.minecraft.client.Minecraft;
+import net.minecraft.CrashReport;
+import net.minecraft.CrashReportCategory;
+import net.minecraft.ReportedException;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.SectionBufferBuilderPack;
+import net.minecraft.client.renderer.block.BlockModelShaper;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.chunk.RenderChunkRegion;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelManager;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
-import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.client.render.OperationStarcleaveRenderTypes;
-import phanastrae.operation_starcleave.client.render.TextureSwappingBufferBuilder;
 
 import java.util.Map;
-import java.util.function.Function;
 
 public class ExtrasSectionCompiler {
 
-    private final BlockRenderDispatcher blockRenderer;
-    private final BlockEntityRenderDispatcher blockEntityRenderer;
+    private final ModelManager modelManager;
+    private final ModelBlockRenderer modelRenderer;
 
     public ExtrasSectionCompiler(BlockRenderDispatcher blockRenderer, BlockEntityRenderDispatcher blockEntityRenderer) {
-        this.blockRenderer = blockRenderer;
-        this.blockEntityRenderer = blockEntityRenderer;
+        this.modelManager = blockRenderer.getBlockModelShaper().getModelManager();
+        this.modelRenderer = blockRenderer.getModelRenderer();
     }
 
     public Results compile(SectionPos sectionPos, RenderChunkRegion region, SectionBufferBuilderPack sectionBufferBuilderPack) {
@@ -64,7 +67,13 @@ public class ExtrasSectionCompiler {
                                 (float) SectionPos.sectionRelative(pMut.getY()),
                                 (float) SectionPos.sectionRelative(pMut.getZ())
                         );
-                        this.blockRenderer.renderBatched(state, pMut, region, poseStack, bufferBuilder, true, random);
+
+                        // TODO: consider caching these models at some point
+                        ResourceLocation resourceLocation = state.getBlock().builtInRegistryHolder().key().location().withSuffix("_iridescence");
+                        ModelResourceLocation modelResourceLocation = BlockModelShaper.stateToModelLocation(resourceLocation, state);
+                        BakedModel model = this.modelManager.getModel(modelResourceLocation);
+                        this.renderBatched(state, pMut, region, poseStack, bufferBuilder, true, random, model);
+
                         poseStack.popPose();
                     }
                 }
@@ -83,16 +92,44 @@ public class ExtrasSectionCompiler {
         return results;
     }
 
+    // pretty much the same as vanilla's renderBatched, except with a custom model input
+    private void renderBatched(
+            BlockState state,
+            BlockPos pos,
+            BlockAndTintGetter level,
+            PoseStack poseStack,
+            VertexConsumer consumer,
+            boolean checkSides,
+            RandomSource random,
+            BakedModel model
+    ) {
+        try {
+            this.modelRenderer
+                    .tesselateBlock(
+                            level,
+                            model,
+                            state,
+                            pos,
+                            poseStack,
+                            consumer,
+                            checkSides,
+                            random,
+                            state.getSeed(pos),
+                            OverlayTexture.NO_OVERLAY
+                    );
+        } catch (Throwable throwable) {
+            CrashReport crashreport = CrashReport.forThrowable(throwable, "(Starcleave extras rendering) Tesselating block in world");
+            CrashReportCategory crashreportcategory = crashreport.addCategory("Block being tesselated");
+            CrashReportCategory.populateBlockDetails(crashreportcategory, level, pos, state);
+            throw new ReportedException(crashreport);
+        }
+    }
+
     private BufferBuilder getOrBeginLayer(Map<RenderType, BufferBuilder> buffers, SectionBufferBuilderPack sectionBufferBuilderPack, RenderType renderType) {
         BufferBuilder bufferBuilder = buffers.get(renderType);
         if (bufferBuilder == null) {
             ByteBufferBuilder byteBufferBuilder = sectionBufferBuilderPack.buffer(renderType);
-
-            // TODO this should probably just be using baked models with the normal texture
-            Function<ResourceLocation, TextureAtlasSprite> func = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS);
-            TextureAtlasSprite bismuthSprite = func.apply(OperationStarcleave.id("block/starflaked_bismuth_block"));
-            TextureAtlasSprite normalSprite = func.apply(OperationStarcleave.id("block/starflaked_bismuth_block_normal"));
-            bufferBuilder = new TextureSwappingBufferBuilder(byteBufferBuilder, VertexFormat.Mode.QUADS, DefaultVertexFormat.BLOCK, bismuthSprite, normalSprite);
+            bufferBuilder = new BufferBuilder(byteBufferBuilder, VertexFormat.Mode.QUADS, DefaultVertexFormat.BLOCK);
 
             buffers.put(renderType, bufferBuilder);
         }
