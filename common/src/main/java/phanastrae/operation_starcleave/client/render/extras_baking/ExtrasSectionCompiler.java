@@ -75,10 +75,7 @@ public class ExtrasSectionCompiler {
                                 (float) SectionPos.sectionRelative(pMut.getZ())
                         );
 
-                        // TODO: consider caching these models at some point
-                        ResourceLocation resourceLocation = state.getBlock().builtInRegistryHolder().key().location().withSuffix("_iridescence");
-                        ModelResourceLocation modelResourceLocation = BlockModelShaper.stateToModelLocation(resourceLocation, state);
-                        BakedModel model = this.modelManager.getModel(modelResourceLocation);
+                        BakedModel model = getModel(state, this.modelManager);
                         this.renderBatched(state, pMut, region, poseStack, bufferBuilder, true, random, model);
 
                         poseStack.popPose();
@@ -97,6 +94,13 @@ public class ExtrasSectionCompiler {
 
         ModelBlockRenderer.clearCache();
         return results;
+    }
+
+    public static BakedModel getModel(BlockState state, ModelManager modelManager) {
+        // TODO: consider caching these models at some point
+        ResourceLocation resourceLocation = state.getBlock().builtInRegistryHolder().key().location().withSuffix("_iridescence");
+        ModelResourceLocation modelResourceLocation = BlockModelShaper.stateToModelLocation(resourceLocation, state);
+        return modelManager.getModel(modelResourceLocation);
     }
 
     // pretty much the same as vanilla's renderBatched, except with a custom model input

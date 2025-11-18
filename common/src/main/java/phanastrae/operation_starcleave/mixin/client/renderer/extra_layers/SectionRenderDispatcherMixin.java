@@ -1,4 +1,4 @@
-package phanastrae.operation_starcleave.mixin.client.renderer.extras_baking;
+package phanastrae.operation_starcleave.mixin.client.renderer.extra_layers;
 
 import net.minecraft.client.renderer.SectionBufferBuilderPool;
 import net.minecraft.client.renderer.chunk.SectionRenderDispatcher;

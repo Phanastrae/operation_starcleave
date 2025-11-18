@@ -1,4 +1,4 @@
-package phanastrae.operation_starcleave.mixin.client.renderer.extras_baking;
+package phanastrae.operation_starcleave.mixin.client.renderer.extra_layers;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
