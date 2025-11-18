@@ -171,7 +171,7 @@ public class LevelRendererPriorityMixin implements LevelRendererExtrasDuck {
                     this.minecraft.getBlockRenderer(),
                     this.minecraft.getBlockEntityRenderDispatcher()
             );
-            ((SectionRenderDispatcherDuck) (this.operation_starcleave$extrasSectionRenderDispatcher)).operation_starcleave$setBufferPool(((RenderBuffersDuck) this.renderBuffers).getExtrasBufferPool());
+            ((SectionRenderDispatcherDuck) (this.operation_starcleave$extrasSectionRenderDispatcher)).operation_starcleave$setBufferPool(((RenderBuffersDuck) this.renderBuffers).operation_starcleave$getExtrasBufferPool());
         } else {
             this.operation_starcleave$extrasSectionRenderDispatcher.setLevel(this.level);
         }

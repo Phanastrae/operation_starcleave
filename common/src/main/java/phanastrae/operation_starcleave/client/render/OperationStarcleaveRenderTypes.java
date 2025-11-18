@@ -2,13 +2,17 @@ package phanastrae.operation_starcleave.client.render;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.resources.ResourceLocation;
 import phanastrae.operation_starcleave.client.duck.LevelRendererDuck;
 import phanastrae.operation_starcleave.client.render.shader.OperationStarcleaveShaders;
 import phanastrae.operation_starcleave.mixin.client.accessor.RenderStateShardAccessor;
 import phanastrae.operation_starcleave.mixin.client.accessor.RenderTypeAccessor;
+
+import java.util.function.Function;
 
 public class OperationStarcleaveRenderTypes {
 
@@ -26,7 +30,7 @@ public class OperationStarcleaveRenderTypes {
             true,
             true,
             RenderType.CompositeState.builder()
-                    .setShaderState(OperationStarcleaveShaders.FRACTURE_PROGRAM)
+                    .setShaderState(OperationStarcleaveShaders.RENDERTYPE_FRACTURE_SHADER)
                     .setTransparencyState(RenderStateShardAccessor.getTRANSLUCENT_TRANSPARENCY())
                     .createCompositeState(true));
 
@@ -53,12 +57,26 @@ public class OperationStarcleaveRenderTypes {
             true,
             false,
             RenderType.CompositeState.builder()
-                    .setLightmapState(RenderStateShardAccessor.getLIGHTMAP())
-                    .setShaderState(OperationStarcleaveShaders.IRIDESCENCE_PROGRAM)
+                    .setShaderState(OperationStarcleaveShaders.RENDERTYPE_IRIDESCENCE_SHADER)
                     .setTextureState(RenderStateShardAccessor.getBLOCK_SHEET_MIPPED())
                     .setTransparencyState(RenderStateShardAccessor.getTRANSLUCENT_TRANSPARENCY())
+                    .setLightmapState(RenderStateShardAccessor.getLIGHTMAP())
                     .setDepthTestState(RenderStateShardAccessor.getEQUAL_DEPTH_TEST())
                     .createCompositeState(true)
+    );
+
+    private static final Function<ResourceLocation, RenderType> ENTITY_IRIDESCENCE = Util.memoize(
+            resourceLocation -> {
+                RenderType.CompositeState compositeState = RenderType.CompositeState.builder()
+                        .setShaderState(OperationStarcleaveShaders.RENDERTYPE_ENTITY_IRIDESCENCE_SHADER)
+                        .setTextureState(new RenderStateShard.TextureStateShard(resourceLocation, false, false))
+                        .setTransparencyState(RenderStateShardAccessor.getTRANSLUCENT_TRANSPARENCY())
+                        .setLightmapState(RenderStateShardAccessor.getLIGHTMAP())
+                        .setOverlayState(RenderStateShardAccessor.getOVERLAY())
+                        .setDepthTestState(RenderStateShardAccessor.getEQUAL_DEPTH_TEST())
+                        .createCompositeState(true);
+                return create("operation_starcleave$entity_iridescence", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 1536, true, false, compositeState);
+            }
     );
 
     public static RenderType getFracture() {
@@ -71,6 +89,10 @@ public class OperationStarcleaveRenderTypes {
 
     public static RenderType getIridescence() {
         return IRIDESCENCE;
+    }
+
+    public static RenderType entityIridescence(ResourceLocation location) {
+        return ENTITY_IRIDESCENCE.apply(location);
     }
 
 

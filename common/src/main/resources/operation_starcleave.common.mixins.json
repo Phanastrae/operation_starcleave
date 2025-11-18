@@ -61,6 +61,7 @@
     "client.renderer.LightTextureMixin",
     "client.renderer.extra_layers.BlockStateModelLoaderMixin",
     "client.renderer.extra_layers.FallingBlockRendererMixin",
+    "client.renderer.extra_layers.ItemRendererMixin",
     "client.renderer.extra_layers.PistonHeadRendererMixin",
     "client.renderer.extra_layers.RenderBuffersMixin",
     "client.renderer.extra_layers.SectionBufferBuilderPackMixin",
