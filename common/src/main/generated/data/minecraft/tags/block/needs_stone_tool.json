@@ -1,6 +1,7 @@
 {
   "values": [
     "operation_starcleave:coagulated_plasma",
-    "operation_starcleave:starflaked_bismuth_block"
+    "operation_starcleave:starflaked_bismuth_block",
+    "operation_starcleave:starflaked_bismuth_tiles"
   ]
 }

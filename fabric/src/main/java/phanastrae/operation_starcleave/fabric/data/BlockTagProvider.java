@@ -137,7 +137,8 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         COAGULATED_PLASMA,
                         PLASMA_ICE,
 
-                        STARFLAKED_BISMUTH_BLOCK
+                        STARFLAKED_BISMUTH_BLOCK,
+                        STARFLAKED_BISMUTH_TILES
                 );
 
         getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_SHOVEL)
@@ -178,7 +179,8 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 .add(
                         COAGULATED_PLASMA,
 
-                        STARFLAKED_BISMUTH_BLOCK
+                        STARFLAKED_BISMUTH_BLOCK,
+                        STARFLAKED_BISMUTH_TILES
                 );
 
         getOrCreateTagBuilder(BlockTags.REPLACEABLE_BY_TREES)

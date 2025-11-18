@@ -60,6 +60,7 @@ public class RecipeProvider extends FabricRecipeProvider {
         twoByTwoPacker(exporter, RecipeCategory.BUILDING_BLOCKS, STARDUST_BLOCK, STARDUST_CLUSTER);
 
         twoByTwoPacker(exporter, RecipeCategory.BUILDING_BLOCKS, STARFLAKED_BISMUTH_BLOCK, STARFLAKED_BISMUTH);
+        twoByTwoPacker(exporter, RecipeCategory.BUILDING_BLOCKS, STARFLAKED_BISMUTH_TILES, STARFLAKED_BISMUTH_BLOCK, 4);
 
         savePolished(STARDUST_BRICKS, STARDUST_BLOCK, exporter);
         savePolished(STELLAR_TILES, STELLAR_SEDIMENT, exporter);

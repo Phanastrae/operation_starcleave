@@ -21,13 +21,20 @@ import net.minecraft.core.SectionPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.client.render.OperationStarcleaveRenderTypes;
 
+import java.util.List;
 import java.util.Map;
 
 public class ExtrasSectionCompiler {
+
+    public static final List<Block> IRIDESCENT_BLOCKS = List.of(
+            OperationStarcleaveBlocks.STARFLAKED_BISMUTH_BLOCK,
+            OperationStarcleaveBlocks.STARFLAKED_BISMUTH_TILES
+    );
 
     private final ModelManager modelManager;
     private final ModelBlockRenderer modelRenderer;
@@ -57,7 +64,7 @@ public class ExtrasSectionCompiler {
                     pMut.setZ(k + mbz);
                     BlockState state = region.getBlockState(pMut);
 
-                    if (state.is(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_BLOCK)) {
+                    if (ExtrasSectionCompiler.isStateIridescent(state)) {
                         RenderType renderType = OperationStarcleaveRenderTypes.getIridescence();
                         BufferBuilder bufferBuilder = this.getOrBeginLayer(map, sectionBufferBuilderPack, renderType);
 
@@ -135,6 +142,11 @@ public class ExtrasSectionCompiler {
         }
 
         return bufferBuilder;
+    }
+
+    public static boolean isStateIridescent(BlockState state) {
+        // TODO: this will probably need to be optimised as IRIDESCENT_BLOCKS grows
+        return IRIDESCENT_BLOCKS.contains(state.getBlock());
     }
 
     public static class Results {

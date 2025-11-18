@@ -77,7 +77,8 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
 
                 COAGULATED_PLASMA,
 
-                STARFLAKED_BISMUTH_BLOCK
+                STARFLAKED_BISMUTH_BLOCK,
+                STARFLAKED_BISMUTH_TILES
         );
 
         forEach(this::dropPottedContents,

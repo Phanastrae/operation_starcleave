@@ -58,6 +58,7 @@ public class OperationStarcleaveCreativeModeTabs {
                 BISMUTH_FLAKE,
                 STARFLAKED_BISMUTH,
                 STARFLAKED_BISMUTH_BLOCK,
+                STARFLAKED_BISMUTH_TILES,
 
                 STELLAR_TILES,
                 STELLAR_TILE_SLAB,
@@ -165,7 +166,8 @@ public class OperationStarcleaveCreativeModeTabs {
                 BLESSED_CLOTH_CURTAIN
         );
         helper.addAfter(Items.WAXED_OXIDIZED_COPPER_BULB, BUILDING_BLOCKS,
-                STARFLAKED_BISMUTH_BLOCK
+                STARFLAKED_BISMUTH_BLOCK,
+                STARFLAKED_BISMUTH_TILES
         );
 
         // Natural

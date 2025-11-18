@@ -27,13 +27,13 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.client.compat.ClientCompat;
 import phanastrae.operation_starcleave.client.duck.LevelRendererDuck;
 import phanastrae.operation_starcleave.client.duck.LevelRendererExtrasDuck;
 import phanastrae.operation_starcleave.client.duck.RenderBuffersDuck;
 import phanastrae.operation_starcleave.client.duck.SectionRenderDispatcherDuck;
 import phanastrae.operation_starcleave.client.render.extras_baking.ExtrasSection;
+import phanastrae.operation_starcleave.client.render.extras_baking.ExtrasSectionCompiler;
 import phanastrae.operation_starcleave.client.render.extras_baking.SectionExtrasRebuildQueue;
 
 import java.util.ArrayList;
@@ -82,7 +82,7 @@ public class LevelRendererPriorityMixin implements LevelRendererExtrasDuck {
     private void operation_starcleave$blockChanged(BlockGetter level, BlockPos pos, BlockState oldState, BlockState newState, int flags, CallbackInfo ci) {
         // this mixin's method calls setBlocksDirty(pos;Z)V, so we don't normally need to call set dirty
         // since only this method calls setBlocksDirty(pos;Z)V and it is private we do not check for special blocks and check here instead, but only if the state is changed
-        if (newState.is(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_BLOCK) && !oldState.is(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_BLOCK)) {
+        if (ExtrasSectionCompiler.isStateIridescent(newState) && !ExtrasSectionCompiler.isStateIridescent(oldState)) {
             this.operation_starcleave$sectionExtrasRebuildQueue.setSectionDirty(pos.getX() >> 4, pos.getY() >> 4, pos.getZ() >> 4, (flags & 8) != 0, true);
         }
     }
@@ -122,7 +122,7 @@ public class LevelRendererPriorityMixin implements LevelRendererExtrasDuck {
         // this mixin's method calls setBlocksDirty(IIIIII)V, so we don't normally need to call set dirty
         // when sodium is installed we will not reach setSectionDirty(III)V, which would normally trigger a check for new special blocks, so we check here but only if the state is changed
         if (ClientCompat.SODIUM_LOADED) {
-            if (newState.is(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_BLOCK) && !oldState.is(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_BLOCK)) {
+            if (ExtrasSectionCompiler.isStateIridescent(newState) && !ExtrasSectionCompiler.isStateIridescent(oldState)) {
                 this.operation_starcleave$sectionExtrasRebuildQueue.setSectionDirty(pos.getX() >> 4, pos.getY() >> 4, pos.getZ() >> 4, false, true);
             }
         }
@@ -248,7 +248,7 @@ public class LevelRendererPriorityMixin implements LevelRendererExtrasDuck {
             ChunkAccess chunk = this.level.getChunk(origin);
             LevelChunkSection chunkSection = chunk.getSection(chunk.getSectionIndex(origin.getY()));
 
-            boolean maybeHas = chunkSection.maybeHas(state -> state.is(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_BLOCK));
+            boolean maybeHas = chunkSection.maybeHas(ExtrasSectionCompiler::isStateIridescent);
             extrasSection.setMaybeHadSpecialBlocks(maybeHas);
             if (!maybeHas) {
                 extrasSection.setNotDirty();
