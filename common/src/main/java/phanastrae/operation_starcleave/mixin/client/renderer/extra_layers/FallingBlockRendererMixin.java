@@ -1,6 +1,5 @@
 package phanastrae.operation_starcleave.mixin.client.renderer.extra_layers;
 
-import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -32,14 +31,17 @@ public class FallingBlockRendererMixin {
 
     @Inject(method = "render(Lnet/minecraft/world/entity/item/FallingBlockEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;popPose()V"))
     private void operation_starcleave$renderExtras(
-            FallingBlockEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight, CallbackInfo ci,
-            @Local Level level, @Local BlockState state, @Local BlockPos pos
+            FallingBlockEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight, CallbackInfo ci
     ) {
+        BlockState state = entity.getBlockState();
         if (ExtrasSectionCompiler.isStateIridescent(state)) {
             RenderType renderType = OperationStarcleaveRenderTypes.getIridescence();
             VertexConsumer vertexConsumer = buffer.getBuffer(renderType);
 
             BakedModel model = ExtrasSectionCompiler.getModel(state, this.dispatcher.getBlockModelShaper().getModelManager());
+
+            Level level = entity.level();
+            BlockPos pos = BlockPos.containing(entity.getX(), entity.getBoundingBox().maxY, entity.getZ());
 
             this.dispatcher
                     .getModelRenderer()
