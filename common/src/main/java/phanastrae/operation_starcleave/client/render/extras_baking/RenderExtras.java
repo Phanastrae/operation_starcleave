@@ -25,6 +25,9 @@ import java.util.Collection;
 
 public class RenderExtras {
 
+    private static float[] posOffset = new float[3];
+    private static boolean inScreen = false;
+
     public static void renderExtras(LevelRenderer levelRenderer, Matrix4f projectionMatrix, Matrix4f positionMatrix, Camera camera, Frustum frustum) {
         SectionExtrasRebuildQueue rebuildQueue = ((LevelRendererExtrasDuck) levelRenderer).operation_starcleave$getRebuildQueue();
         if (rebuildQueue == null) {
@@ -135,7 +138,7 @@ public class RenderExtras {
         return (blockPos - camBlock) - adjustedCamFrac;
     }
 
-    static boolean isWithinDistance(int centerX, int centerZ, int viewDistance, int x, int z) {
+    private static boolean isWithinDistance(int centerX, int centerZ, int viewDistance, int x, int z) {
         int dxIsh = Math.max(0, Math.abs(x - centerX) - 1);
         int dzIsh = Math.max(0, Math.abs(z - centerZ) - 1);
 
@@ -146,5 +149,29 @@ public class RenderExtras {
         int viewDistSqr = viewDistance * viewDistance;
 
         return distSqr < (long) viewDistSqr;
+    }
+
+    public static void resetPosOffset() {
+        posOffset[0] = 0F;
+        posOffset[1] = 0F;
+        posOffset[2] = 0F;
+    }
+
+    public static void setPosOffset(float x, float y, float z) {
+        posOffset[0] = x;
+        posOffset[1] = y;
+        posOffset[2] = z;
+    }
+
+    public static float[] getPosOffset() {
+        return posOffset;
+    }
+
+    public static void setInScreen(boolean value) {
+        inScreen = value;
+    }
+
+    public static boolean isInScreen() {
+        return inScreen;
     }
 }

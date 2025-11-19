@@ -8,6 +8,7 @@ uniform vec4 ColorModulator;
 uniform float FogStart;
 uniform float FogEnd;
 uniform vec4 FogColor;
+uniform vec3 OperationStarcleavePosOffset;
 
 in float vertexDistance;
 in vec4 vertexColor;
@@ -76,6 +77,12 @@ void main() {
     // calc relative position of texel center
     vec3 dP = dPdUV * texelCenterOffset;
     vec3 texelCenterPos = position + (detailFadeout < 0.99 ? mix(dP, vec3(0.), detailFadeout) : vec3(0.));
+
+    // THIS ONLY HAPPENS IN THE ENTITY SHADER
+    // offset the calculated position, used to make stuff render properly in GUIs
+    texelCenterPos += OperationStarcleavePosOffset;
+    // THIS ONLY HAPPENS IN THE ENTITY SHADER
+
     vec3 viewDir = normalize(texelCenterPos);
 
     // calc dot
