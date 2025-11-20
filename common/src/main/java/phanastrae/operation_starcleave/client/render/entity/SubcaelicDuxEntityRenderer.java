@@ -13,6 +13,7 @@ import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.client.render.OperationStarcleaveRenderTypes;
+import phanastrae.operation_starcleave.client.render.entity.layers.SubcaelicDuxIridescenceLayer;
 import phanastrae.operation_starcleave.client.render.entity.layers.SubcaelicDuxLayer;
 import phanastrae.operation_starcleave.client.render.entity.model.OperationStarcleaveEntityModelLayers;
 import phanastrae.operation_starcleave.client.render.entity.model.SubcaelicDuxEntityModel;
@@ -23,20 +24,24 @@ public class SubcaelicDuxEntityRenderer extends MobRenderer<SubcaelicDuxEntity, 
     private static final ResourceLocation GLOW_1_TEXTURE = OperationStarcleave.id("textures/entity/subcaelic_dux/subcaelic_dux_glow_1.png");
     private static final ResourceLocation GLOW_2_TEXTURE = OperationStarcleave.id("textures/entity/subcaelic_dux/subcaelic_dux_glow_2.png");
     private static final ResourceLocation GLOW_3_TEXTURE = OperationStarcleave.id("textures/entity/subcaelic_dux/subcaelic_dux_glow_3.png");
-    private static final float HALF_SQRT_3 = (float)(Math.sqrt(3.0) / 2.0);
+    private static final ResourceLocation IRIDESECENCE_TEXTURE = OperationStarcleave.id("textures/entity/subcaelic_dux/subcaelic_dux_iridescence.png");
+    private static final float HALF_SQRT_3 = (float) (Math.sqrt(3.0) / 2.0);
 
     private final RandomSource random = RandomSource.create();
 
     public SubcaelicDuxEntityRenderer(EntityRendererProvider.Context context) {
         super(context, new SubcaelicDuxEntityModel<>(context.bakeLayer(OperationStarcleaveEntityModelLayers.SUBCAELIC_DUX)), 3f);
         this.addLayer(
-                new SubcaelicDuxLayer<>(this, GLOW_1_TEXTURE, (dux, tickDelta, animationProgress) -> Mth.sin((0.1f * (float)Math.toRadians(Mth.rotLerp(tickDelta, dux.prevTentacleRollAngle, dux.tentacleRollAngle))) * 2f * (float)Math.PI) * 0.5f + 0.5f, SubcaelicDuxEntityModel::getGlowingParts)
+                new SubcaelicDuxLayer<>(this, GLOW_1_TEXTURE, (dux, tickDelta, animationProgress) -> Mth.sin((0.1f * (float) Math.toRadians(Mth.rotLerp(tickDelta, dux.prevTentacleRollAngle, dux.tentacleRollAngle))) * 2f * (float) Math.PI) * 0.5f + 0.5f, SubcaelicDuxEntityModel::getGlowingParts)
         );
         this.addLayer(
-                new SubcaelicDuxLayer<>(this, GLOW_2_TEXTURE, (dux, tickDelta, animationProgress) -> Mth.sin((0.1f * (float)Math.toRadians(Mth.rotLerp(tickDelta, dux.prevTentacleRollAngle, dux.tentacleRollAngle)) + 1/3f) * 2f * (float)Math.PI) * 0.5f + 0.5f, SubcaelicDuxEntityModel::getGlowingParts)
+                new SubcaelicDuxLayer<>(this, GLOW_2_TEXTURE, (dux, tickDelta, animationProgress) -> Mth.sin((0.1f * (float) Math.toRadians(Mth.rotLerp(tickDelta, dux.prevTentacleRollAngle, dux.tentacleRollAngle)) + 1 / 3f) * 2f * (float) Math.PI) * 0.5f + 0.5f, SubcaelicDuxEntityModel::getGlowingParts)
         );
         this.addLayer(
-                new SubcaelicDuxLayer<>(this, GLOW_3_TEXTURE, (dux, tickDelta, animationProgress) -> Mth.sin((0.1f * (float)Math.toRadians(Mth.rotLerp(tickDelta, dux.prevTentacleRollAngle, dux.tentacleRollAngle)) - 1/3f) * 2f * (float)Math.PI) * 0.5f + 0.5f, SubcaelicDuxEntityModel::getGlowingParts)
+                new SubcaelicDuxLayer<>(this, GLOW_3_TEXTURE, (dux, tickDelta, animationProgress) -> Mth.sin((0.1f * (float) Math.toRadians(Mth.rotLerp(tickDelta, dux.prevTentacleRollAngle, dux.tentacleRollAngle)) - 1 / 3f) * 2f * (float) Math.PI) * 0.5f + 0.5f, SubcaelicDuxEntityModel::getGlowingParts)
+        );
+        this.addLayer(
+                new SubcaelicDuxIridescenceLayer<>(this, IRIDESECENCE_TEXTURE, SubcaelicDuxEntityModel::getIridescentParts)
         );
     }
 
@@ -44,7 +49,7 @@ public class SubcaelicDuxEntityRenderer extends MobRenderer<SubcaelicDuxEntity, 
     public void render(SubcaelicDuxEntity entity, float yaw, float tickDelta, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int light) {
         super.render(entity, yaw, tickDelta, matrixStack, vertexConsumerProvider, light);
 
-        if(entity.isDeadOrDying()) {
+        if (entity.isDeadOrDying()) {
             matrixStack.pushPose();
             matrixStack.scale(7, 7, 7);
             matrixStack.translate(0, 0.5, 0);
@@ -120,7 +125,7 @@ public class SubcaelicDuxEntityRenderer extends MobRenderer<SubcaelicDuxEntity, 
         float i = Mth.rotLerp(tickDelta, duxEntity.prevTiltAngle, duxEntity.tiltAngle);
         float j = Mth.rotLerp(tickDelta, duxEntity.prevRollAngle, duxEntity.rollAngle);
         matrixStack.translate(0.0F, 2.5F, 0.0F);
-        matrixStack.mulPose(Axis.YP.rotationDegrees(180.0F -  bodyYaw));
+        matrixStack.mulPose(Axis.YP.rotationDegrees(180.0F - bodyYaw));
         matrixStack.mulPose(Axis.XP.rotationDegrees(i));
         matrixStack.mulPose(Axis.YP.rotationDegrees(j));
         matrixStack.translate(0.0F, -4.0F, 0.0F);
@@ -133,7 +138,7 @@ public class SubcaelicDuxEntityRenderer extends MobRenderer<SubcaelicDuxEntity, 
 
     @Override
     protected float getAttackAnim(SubcaelicDuxEntity entity, float f) {
-        if(entity.isDeadOrDying()) {
+        if (entity.isDeadOrDying()) {
             float d = entity.ticksSinceDeath / 200f;
             return (float) Mth.clamp(d * 1.5, 0.0, 1.0);
         } else {
@@ -155,7 +160,7 @@ public class SubcaelicDuxEntityRenderer extends MobRenderer<SubcaelicDuxEntity, 
     @Override
     protected float getBob(SubcaelicDuxEntity entity, float tickDelta) {
         float a = Mth.rotLerp(tickDelta, entity.prevTentacleRollAngle, entity.tentacleRollAngle);
-        return 0.5f + 0.5f * (float)Math.sin(0.02f * a);
+        return 0.5f + 0.5f * (float) Math.sin(0.02f * a);
     }
 
     @Override

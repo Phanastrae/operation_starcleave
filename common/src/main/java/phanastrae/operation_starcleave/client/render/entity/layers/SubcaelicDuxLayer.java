@@ -1,10 +1,7 @@
 package phanastrae.operation_starcleave.client.render.entity.layers;
 
-import phanastrae.operation_starcleave.entity.mob.SubcaelicDuxEntity;
-import phanastrae.operation_starcleave.client.render.entity.model.SubcaelicDuxEntityModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import java.util.List;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.LightTexture;
@@ -16,8 +13,13 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
+import phanastrae.operation_starcleave.client.render.entity.model.SubcaelicDuxEntityModel;
+import phanastrae.operation_starcleave.entity.mob.SubcaelicDuxEntity;
+
+import java.util.List;
 
 public class SubcaelicDuxLayer<T extends SubcaelicDuxEntity, M extends SubcaelicDuxEntityModel<T>> extends RenderLayer<T, M> {
+
     private final ResourceLocation texture;
     private final SubcaelicDuxLayer.AnimationAngleAdjuster<T> animationAngleAdjuster;
     private final SubcaelicDuxLayer.ModelPartVisibility<T, M> modelPartVisibility;
@@ -37,17 +39,17 @@ public class SubcaelicDuxLayer<T extends SubcaelicDuxEntity, M extends Subcaelic
     public void render(
             PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int light, T dux, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch
     ) {
-        if(dux.isHollow()) return;
+        if (dux.isHollow()) return;
 
         if (!dux.isInvisible()) {
             this.updateModelPartVisibility();
             VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderType.entityTranslucentEmissive(this.texture));
 
             float twopi = 2 * Mth.PI;
-            float f = 0.1f * (float)Math.toRadians(Mth.rotLerp(tickDelta, dux.prevTentacleRollAngle, dux.tentacleRollAngle));
+            float f = 0.1f * (float) Math.toRadians(Mth.rotLerp(tickDelta, dux.prevTentacleRollAngle, dux.tentacleRollAngle));
             float red = Mth.sin(f * twopi) * 0.3f + 0.6f;
-            float green = Mth.sin((f + 1/3f) * twopi) * 0.3f + 0.6f;
-            float blue = Mth.sin((f + 2/3f) * twopi) * 0.3f + 0.6f;
+            float green = Mth.sin((f + 1 / 3f) * twopi) * 0.3f + 0.6f;
+            float blue = Mth.sin((f + 2 / 3f) * twopi) * 0.3f + 0.6f;
 
             float alpha = this.animationAngleAdjuster.apply(dux, tickDelta, animationProgress);
 
@@ -74,10 +76,12 @@ public class SubcaelicDuxLayer<T extends SubcaelicDuxEntity, M extends Subcaelic
         this.getParentModel().root().getAllParts().forEach(part -> part.skipDraw = false);
     }
 
+    @FunctionalInterface
     public interface AnimationAngleAdjuster<T extends SubcaelicDuxEntity> {
         float apply(T dux, float tickDelta, float animationProgress);
     }
 
+    @FunctionalInterface
     public interface ModelPartVisibility<T extends SubcaelicDuxEntity, M extends EntityModel<T>> {
         List<ModelPart> getPartsToDraw(M model);
     }

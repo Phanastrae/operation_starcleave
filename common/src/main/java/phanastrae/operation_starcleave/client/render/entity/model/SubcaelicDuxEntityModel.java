@@ -1,7 +1,7 @@
 package phanastrae.operation_starcleave.client.render.entity.model;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.client.model.*;
+import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartNames;
 import net.minecraft.client.model.geom.PartPose;
@@ -10,7 +10,6 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
-import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.entity.mob.SubcaelicDuxEntity;
 
 import java.util.Arrays;
@@ -31,6 +30,7 @@ public class SubcaelicDuxEntityModel<T extends SubcaelicDuxEntity> extends Hiera
     private final ModelPart[] leftWing = new ModelPart[3];
     private final ModelPart[] rightWing = new ModelPart[3];
     private final List<ModelPart> glowingParts;
+    private final List<ModelPart> iridescentParts;
 
     public SubcaelicDuxEntityModel(ModelPart root) {
         this.root = root;
@@ -48,6 +48,8 @@ public class SubcaelicDuxEntityModel<T extends SubcaelicDuxEntity> extends Hiera
         this.rightWing[2] = this.rightWing[1].getChild(getRightWingName(2));
 
         this.glowingParts = ImmutableList.of(this.leftWing[0], this.leftWing[1], this.leftWing[2], this.rightWing[0], this.rightWing[1], this.rightWing[2], this.halo);
+
+        this.iridescentParts = ImmutableList.of(this.body);
     }
 
     private static String getBaseTentacleName(int index) {
@@ -73,10 +75,10 @@ public class SubcaelicDuxEntityModel<T extends SubcaelicDuxEntity> extends Hiera
         PartDefinition body = root.addOrReplaceChild(
                 PartNames.BODY,
                 CubeListBuilder.create().texOffs(0, 0).addBox(-7.0F, -12.0F, -7.0F, 14.0F, 25.0F, 14.0F)
-                .texOffs(56, 0).addBox(-8.0F, -16.0F, 2.0F, 16.0F, 20.0F, 6.0F)
-                .texOffs(100, 0).addBox(-4.0F, -13.5F, -4.0F, 8.0F, 3.0F, 6.0F)
-                .texOffs(100, 9).addBox(5.5F, -14.0F, -6.0F, 2.0F, 14.0F, 8.0F)
-                .texOffs(100, 9).mirror().addBox(-7.5F, -14.0F, -6.0F, 2.0F, 14.0F, 8.0F).mirror(false),
+                        .texOffs(56, 0).addBox(-8.0F, -16.0F, 2.0F, 16.0F, 20.0F, 6.0F)
+                        .texOffs(100, 0).addBox(-4.0F, -13.5F, -4.0F, 8.0F, 3.0F, 6.0F)
+                        .texOffs(100, 9).addBox(5.5F, -14.0F, -6.0F, 2.0F, 14.0F, 8.0F)
+                        .texOffs(100, 9).mirror().addBox(-7.5F, -14.0F, -6.0F, 2.0F, 14.0F, 8.0F).mirror(false),
                 PartPose.offset(0.0F, 11.0F, 0.0F));
 
         PartDefinition halo = body.addOrReplaceChild(
@@ -130,29 +132,29 @@ public class SubcaelicDuxEntityModel<T extends SubcaelicDuxEntity> extends Hiera
                 PartPose.offset(0.0F, 13.0F, 0.0F));
 
         CubeListBuilder modelPartBuilder = CubeListBuilder.create().texOffs(56, 26).addBox(-1.5F, 0.0F, -1.5F, 3.0F, 26.0F, 3.0F);
-        for(int k = 0; k < 7; ++k) {
+        for (int k = 0; k < 7; ++k) {
             double angle = Math.PI * 2.0 * k / 7.0;
-            float x = (float)Math.sin(angle) * -6.0F;
-            float z = (float)Math.cos(angle) * -6.0F;
+            float x = (float) Math.sin(angle) * -6.0F;
+            float z = (float) Math.cos(angle) * -6.0F;
 
             double angle2 = Math.PI * 2.0 * k / 7.0;
             baseTentacles.addOrReplaceChild(
                     getBaseTentacleName(k),
                     modelPartBuilder,
-                    PartPose.offsetAndRotation(x, 0.0F, z, 0.0F, (float)angle2, 0.0F));
+                    PartPose.offsetAndRotation(x, 0.0F, z, 0.0F, (float) angle2, 0.0F));
         }
 
         modelPartBuilder = CubeListBuilder.create().texOffs(120, 9).addBox(-1.0F, -2.0F, -1.0F, 2.0F, 21.0F, 2.0F);
-        for(int k = 0; k < 7; ++k) {
+        for (int k = 0; k < 7; ++k) {
             double angle = Math.PI * 2.0 * k / 7.0;
-            float x = (float)Math.sin(angle) * 9.5F;
-            float z = (float)Math.cos(angle) * 9.5F;
+            float x = (float) Math.sin(angle) * 9.5F;
+            float z = (float) Math.cos(angle) * 9.5F;
 
             double angle2 = Math.PI * 2.0 * k / 7.0;
             outerTentacles.addOrReplaceChild(
                     getOuterTentacleName(k),
                     modelPartBuilder,
-                    PartPose.offsetAndRotation(x, 0.0F, z, 0.0F, (float)angle2, 0.0F));
+                    PartPose.offsetAndRotation(x, 0.0F, z, 0.0F, (float) angle2, 0.0F));
         }
 
         return LayerDefinition.create(modelData, 128, 64);
@@ -160,27 +162,27 @@ public class SubcaelicDuxEntityModel<T extends SubcaelicDuxEntity> extends Hiera
 
     @Override
     public void setupAnim(SubcaelicDuxEntity entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
-        for(ModelPart tentacle : this.baseTentacles) {
+        for (ModelPart tentacle : this.baseTentacles) {
             tentacle.xRot = -0.15f * animationProgress;
         }
-        for(ModelPart tentacle : this.outerTentacles) {
+        for (ModelPart tentacle : this.outerTentacles) {
             tentacle.xRot = 0.3f * animationProgress;
         }
     }
 
     @Override
     public void prepareMobModel(SubcaelicDuxEntity entity, float limbAngle, float limbDistance, float tickDelta) {
-        float f = (float)Math.toRadians(Mth.rotLerp(tickDelta, entity.prevTentacleRollAngle, entity.tentacleRollAngle));
+        float f = (float) Math.toRadians(Mth.rotLerp(tickDelta, entity.prevTentacleRollAngle, entity.tentacleRollAngle));
         this.baseTentacleRoot.yRot = -f;
         this.outerTentacleRoot.yRot = 2f * f;
 
-        float g = 0.4f * (float)Math.sin(f);
-        for(int i = 0; i < 3; i++) {
+        float g = 0.4f * (float) Math.sin(f);
+        for (int i = 0; i < 3; i++) {
             this.leftWing[i].yRot = g;
             this.rightWing[i].yRot = -g;
         }
 
-        this.halo.zRot = (float)Math.toRadians(Mth.rotLerp(tickDelta, entity.prevHaloAngle, entity.haloAngle));
+        this.halo.zRot = (float) Math.toRadians(Mth.rotLerp(tickDelta, entity.prevHaloAngle, entity.haloAngle));
     }
 
     @Override
@@ -190,5 +192,9 @@ public class SubcaelicDuxEntityModel<T extends SubcaelicDuxEntity> extends Hiera
 
     public List<ModelPart> getGlowingParts() {
         return this.glowingParts;
+    }
+
+    public List<ModelPart> getIridescentParts() {
+        return this.iridescentParts;
     }
 }
