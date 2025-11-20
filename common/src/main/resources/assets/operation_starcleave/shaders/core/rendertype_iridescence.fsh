@@ -27,10 +27,13 @@ vec3 rainbow(float f) {
     return vec3(r, g, b) * 0.4 + 0.6;
 }
 
-vec4 getShineColor(float d, float shineStrength) {
-    float angle = (1. - d) * -TAU * 2.;
-    vec3 shineColor = rainbow(angle);
+vec4 getShineColor(float dot, float shineStrength) {
+    float d = max(0., -dot); // 1 when facing material straight on, 0 when facing from the side
     float shineAlpha = pow(1. - d, 1.) * shineStrength;
+
+    float angle = TAU * -2. * (1. + (dot < 0 ? dot : dot * -0.125));
+    vec3 shineColor = rainbow(angle);
+
     return vec4(shineColor, shineAlpha);
 }
 
@@ -78,9 +81,8 @@ void main() {
 
     // calc dot
     float dot = dot(viewDir, actualNormal);
-    float d = max(0., -dot); // 1 when facing material straight on, 0 when facing from the side
 
-    vec4 shineColor = getShineColor(d, shineStrength);
+    vec4 shineColor = getShineColor(dot, shineStrength);
     // get final pre-fog color
     vec4 color = baseColor * shineColor;
 
