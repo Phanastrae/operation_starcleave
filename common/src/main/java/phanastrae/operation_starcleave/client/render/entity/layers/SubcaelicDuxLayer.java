@@ -53,6 +53,7 @@ public class SubcaelicDuxLayer<T extends SubcaelicDuxEntity, M extends Subcaelic
 
             float alpha = this.animationAngleAdjuster.apply(dux, tickDelta, animationProgress);
 
+            // TODO these colors are not correct...
             int color = FastColor.ARGB32.colorFromFloat(red * alpha, green * alpha, blue * alpha, alpha * alpha * alpha * 0.85f);
             this.getParentModel()
                     .renderToBuffer(

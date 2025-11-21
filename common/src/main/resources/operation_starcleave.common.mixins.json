@@ -54,6 +54,7 @@
     "client.gui.GuiMixin",
     "client.gui.SmithingScreenMixin",
     "client.renderer.GameRendererMixin",
+    "client.renderer.HorseArmorLayerMixin",
     "client.renderer.HorseRendererMixin",
     "client.renderer.ItemBlockRenderTypesMixin",
     "client.renderer.LevelRendererMixin",
