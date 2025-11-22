@@ -14,16 +14,25 @@ import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.client.compat.ClientCompat;
 import phanastrae.operation_starcleave.client.duck.LevelRendererExtrasDuck;
 import phanastrae.operation_starcleave.client.render.OperationStarcleaveRenderTypes;
+import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 
 import java.util.Collection;
+import java.util.List;
 
 public class RenderExtras {
+
+    public static final List<Item> IRIDESCENT_ITEMS = List.of(
+            OperationStarcleaveItems.BISMUTH_FLAKE,
+            OperationStarcleaveItems.STARFLAKED_BISMUTH,
+            OperationStarcleaveItems.BISMUTH_PEGASUS_ARMOR
+    );
 
     private static float[] posOffset = new float[3];
     private static boolean inScreen = false;

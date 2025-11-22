@@ -66,6 +66,7 @@
     "client.renderer.extra_layers.GuiGraphicsMixin",
     "client.renderer.extra_layers.ItemInHandRendererMixin",
     "client.renderer.extra_layers.ItemRendererMixin",
+    "client.renderer.extra_layers.ModelBakeryMixin",
     "client.renderer.extra_layers.PistonHeadRendererMixin",
     "client.renderer.extra_layers.RenderBuffersMixin",
     "client.renderer.extra_layers.SectionBufferBuilderPackMixin",

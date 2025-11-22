@@ -3,6 +3,7 @@ package phanastrae.operation_starcleave.mixin.client.renderer.extra_layers;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,7 +18,8 @@ public class GuiGraphicsMixin {
 
     @Inject(method = "renderItem(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;IIII)V", at = @At("HEAD"))
     private void operation_starcleave$setupRenderItem(LivingEntity entity, Level level, ItemStack stack, int x, int y, int seed, int guiOffset, CallbackInfo ci) {
-        if (stack.getItem() instanceof BlockItem blockItem && ExtrasSectionCompiler.isStateIridescent(blockItem.getBlock().defaultBlockState())) {
+        Item item = stack.getItem();
+        if (RenderExtras.IRIDESCENT_ITEMS.contains(item) || item instanceof BlockItem blockItem && ExtrasSectionCompiler.isStateIridescent(blockItem.getBlock().defaultBlockState())) {
             float progress = (System.currentTimeMillis() % 2000) / 2000F;
             double angle = progress * Math.TAU;
             float dx = (float) Math.cos(angle) * 1600F;
