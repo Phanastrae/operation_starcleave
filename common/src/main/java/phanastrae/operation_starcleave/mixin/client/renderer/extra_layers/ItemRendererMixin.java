@@ -9,19 +9,15 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import phanastrae.operation_starcleave.client.render.OperationStarcleaveSheets;
-import phanastrae.operation_starcleave.client.render.extras_baking.ExtrasSectionCompiler;
 import phanastrae.operation_starcleave.client.render.extras_baking.RenderExtras;
 
 @Mixin(ItemRenderer.class)
@@ -36,18 +32,7 @@ public abstract class ItemRendererMixin {
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/ItemRenderer;renderModelLists(Lnet/minecraft/client/resources/model/BakedModel;Lnet/minecraft/world/item/ItemStack;IILcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;)V", shift = At.Shift.AFTER))
     private void operation_starcleave$renderExtras(ItemStack itemStack, ItemDisplayContext displayContext, boolean leftHand, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay, BakedModel model, CallbackInfo ci) {
         Item item = itemStack.getItem();
-        if (item instanceof BlockItem blockItem) {
-            Block block = blockItem.getBlock();
-            BlockState state = block.defaultBlockState();
-            if (ExtrasSectionCompiler.isStateIridescent(state)) {
-                BakedModel iridescenceModel = ExtrasSectionCompiler.getModel(state, this.getItemModelShaper().getModelManager());
-
-                RenderType renderType = OperationStarcleaveSheets.iridescenceBlockSheet();
-                VertexConsumer vertexconsumer = bufferSource.getBuffer(renderType);
-
-                this.renderModelLists(iridescenceModel, itemStack, combinedLight, combinedOverlay, poseStack, vertexconsumer);
-            }
-        } else if (RenderExtras.IRIDESCENT_ITEMS.contains(item)) {
+        if (RenderExtras.isItemIridescent(item)) {
             ModelResourceLocation location = ModelResourceLocation.inventory(BuiltInRegistries.ITEM.getKey(item).withSuffix("_iridescence"));
             BakedModel iridescenceModel = this.getItemModelShaper().getModelManager().getModel(location);
 

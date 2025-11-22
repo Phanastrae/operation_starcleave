@@ -29,6 +29,9 @@ import java.util.List;
 public class RenderExtras {
 
     public static final List<Item> IRIDESCENT_ITEMS = List.of(
+            OperationStarcleaveItems.STARFLAKED_BISMUTH_BLOCK,
+            OperationStarcleaveItems.STARFLAKED_BISMUTH_TILES,
+
             OperationStarcleaveItems.BISMUTH_FLAKE,
             OperationStarcleaveItems.STARFLAKED_BISMUTH,
             OperationStarcleaveItems.BISMUTH_PEGASUS_ARMOR
@@ -36,6 +39,11 @@ public class RenderExtras {
 
     private static float[] posOffset = new float[3];
     private static boolean inScreen = false;
+
+    public static boolean isItemIridescent(Item item) {
+        // TODO this may need optimising as the list grows
+        return IRIDESCENT_ITEMS.contains(item);
+    }
 
     public static void renderExtras(LevelRenderer levelRenderer, Matrix4f projectionMatrix, Matrix4f positionMatrix, Camera camera, Frustum frustum) {
         SectionExtrasRebuildQueue rebuildQueue = ((LevelRendererExtrasDuck) levelRenderer).operation_starcleave$getRebuildQueue();
