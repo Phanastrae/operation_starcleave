@@ -33,7 +33,8 @@ public class ExtrasSectionCompiler {
 
     public static final List<Block> IRIDESCENT_BLOCKS = List.of(
             OperationStarcleaveBlocks.STARFLAKED_BISMUTH_BLOCK,
-            OperationStarcleaveBlocks.STARFLAKED_BISMUTH_TILES
+            OperationStarcleaveBlocks.STARFLAKED_BISMUTH_TILES,
+            OperationStarcleaveBlocks.BISREEDS
     );
 
     private final ModelManager modelManager;

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "age=2": {
+      "model": "operation_starcleave:block/bisreeds_stage2_iridescence"
+    },
+    "age=3": {
+      "model": "operation_starcleave:block/bisreeds_stage3_iridescence"
+    }
+  }
+}
