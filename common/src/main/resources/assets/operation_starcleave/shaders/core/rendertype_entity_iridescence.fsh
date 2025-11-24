@@ -41,26 +41,25 @@ vec4 getShineColor(float dot, float shineStrength) {
 }
 
 void main() {
+    vec2 texSize = vec2(textureSize(Sampler0, 0));
+    vec2 scaledUV = texCoord0 * texSize;
+    vec2 uv = scaledUV;
+
+    vec2 dUVdx = dFdx(uv);
+    vec2 dUVdy = dFdy(uv);
+    mat2x3 dPdxy = mat2x3(dFdx(position), dFdy(position));
+
     vec4 normalColor = texture(Sampler0, texCoord0);
+    // only discard after the derivatives have been calculated, or else you get artifacts when dFdx == 0 or dFdy == 0
     if (normalColor.a < 0.1) {
         discard;
     }
     vec3 localNormal = normalize(normalColor.rgb * 2. - 1.);
-    float shineStrength = normalColor.a;
-
-    vec4 baseColor = vertexColor * ColorModulator;
-
-    vec2 texSize = vec2(textureSize(Sampler0, 0));
-    vec2 scaledUV = texCoord0 * texSize;
-    vec2 uv = scaledUV;
-    vec2 dUVdx = dFdx(uv);
-    vec2 dUVdy = dFdy(uv);
 
     // approximate mip
     float dms = max(dot(dUVdx, dUVdx), dot(dUVdy, dUVdy));
     float mml = 0.5 * log2(dms);
-    // sometimes on edges these derivatives are zero and cause artifacts, in which case set fadeout to 1.0
-    float detailFadeout = (dUVdx == 0.0 || dUVdy == 0.0) ? (1.0) : (clamp(mml, 0., 1.));
+    float detailFadeout = clamp(mml, 0., 1.);
 
     vec2 texelCenter = floor(scaledUV) + 0.5;
     vec2 texelCenterOffset = texelCenter - scaledUV;
@@ -68,7 +67,6 @@ void main() {
     // calc dPdUV
     mat2 dUVdxy = mat2(dUVdx, dUVdy);
     mat2 dxydUV = inverse(dUVdxy);
-    mat2x3 dPdxy = mat2x3(dFdx(position), dFdy(position));
     mat2x3 dPdUV = dPdxy * dxydUV;
 
     // calc actual normal from base normal, normal texture, and basis vectors
@@ -91,9 +89,10 @@ void main() {
     // calc dot
     float dot = dot(viewDir, actualNormal);
 
+    float shineStrength = normalColor.a;
     vec4 shineColor = getShineColor(dot, shineStrength);
     // get final pre-fog color
-    vec4 color = baseColor * shineColor;
+    vec4 color = vertexColor * ColorModulator * shineColor;
 
     // THIS ONLY HAPPENS IN THE ENTITY SHADER
     color.rgb = mix(overlayColor.rgb, color.rgb, overlayColor.a);
