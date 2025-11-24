@@ -51,15 +51,6 @@ void main() {
     if (normalColor.a < 0.1) {
         discard;
     }
-    vec3 localNormal = normalize(normalColor.rgb * 2. - 1.);
-
-    // approximate mip
-    float dms = max(dot(dUVdx, dUVdx), dot(dUVdy, dUVdy));
-    float mml = 0.5 * log2(dms);
-    float detailFadeout = clamp(mml, 0., 1.);
-
-    vec2 texelCenter = floor(scaledUV) + 0.5;
-    vec2 texelCenterOffset = texelCenter - scaledUV;
 
     // calc dPdUV
     mat2 dUVdxy = mat2(dUVdx, dUVdy);
@@ -70,11 +61,16 @@ void main() {
     vec3 dPdU = dPdUV[0];
     vec3 dPdV = dPdUV[1];
     mat3 transformMatrix = mat3(normalize(dPdU), normalize(-dPdV), normal); // need to flip y
-    vec3 actualNormal = normalize(normal + (detailFadeout < 0.99 ? mix(transformMatrix * localNormal - normal, vec3(0.), detailFadeout) : vec3(0.)));
+    vec3 localNormal = normalize(normalColor.rgb * 2. - 1.);
+    vec3 actualNormal = transformMatrix * localNormal;
 
     // calc relative position of texel center
+    vec2 texelCenter = floor(scaledUV) + 0.5;
+    vec2 texelCenterOffset = texelCenter - scaledUV;
+
     vec3 dP = dPdUV * texelCenterOffset;
-    vec3 texelCenterPos = position + (detailFadeout < 0.99 ? mix(dP, vec3(0.), detailFadeout) : vec3(0.));
+    vec3 texelCenterPos = position + dP;
+
     vec3 viewDir = normalize(texelCenterPos);
 
     // calc dot
