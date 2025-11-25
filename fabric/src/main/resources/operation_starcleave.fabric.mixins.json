@@ -9,7 +9,8 @@
     "CropBlockMixin",
     "EntityMixin",
     "ItemStackMixin",
-    "LivingEntityMixin"
+    "LivingEntityMixin",
+    "client.TextureMappingAccessor"
   ],
   "client": [
     "client.FogRendererMixin",

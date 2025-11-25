@@ -15,15 +15,20 @@ import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.block.StarbleachCauldronBlock;
 import phanastrae.operation_starcleave.block.StarbleachedPearlBlock;
 import phanastrae.operation_starcleave.data.OperationStarcleaveBlockFamilies;
+import phanastrae.operation_starcleave.fabric.mixin.client.TextureMappingAccessor;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import static net.minecraft.data.models.BlockModelGenerators.*;
 import static phanastrae.operation_starcleave.block.OperationStarcleaveBlocks.*;
 
 public class ModelProvider extends FabricModelProvider {
+    private static final String SUFFIX_IRIDESCENCE = "_iridescence";
+
     public ModelProvider(FabricDataOutput output) {
         super(output);
     }
@@ -86,6 +91,13 @@ public class ModelProvider extends FabricModelProvider {
 
         // fluids
         BMG.createNonTemplateModelBlock(PETRICHORIC_PLASMA);
+
+        // iridescence
+        // these functions only create the models, blockstates need to still be done manually
+        createTrivialCubeForSuffix(SUFFIX_IRIDESCENCE, BMG, STARFLAKED_BISMUTH_BLOCK);
+        createTrivialCubeForSuffix(SUFFIX_IRIDESCENCE, BMG, STARFLAKED_BISMUTH_TILES);
+        createCropForSuffix(2, SUFFIX_IRIDESCENCE, BMG, BISREEDS);
+        createCropForSuffix(3, SUFFIX_IRIDESCENCE, BMG, BISREEDS);
     }
 
     private void forEach(Consumer<Block> consumer, Block... list) {
@@ -245,6 +257,39 @@ public class ModelProvider extends FabricModelProvider {
         BMG.blockStateOutput.accept(MultiVariantGenerator.multiVariant(block).with(map));
     }
 
+    private static void createCropForSuffix(int stage, String extraSuffix, BlockModelGenerators BMG, Block block) {
+        TexturedModel.Provider model = TexturedModel.createDefault((b) -> TextureMapping.crop(TextureMapping.getBlockTexture(b)), ModelTemplates.CROP);
+        createTrivialBlockForSuffix("_stage" + stage + extraSuffix, BMG, block, model);
+    }
+
+    private static void createTrivialCubeForSuffix(String suffix, BlockModelGenerators BMG, Block block) {
+        createTrivialBlockForSuffix(suffix, BMG, block, TexturedModel.CUBE);
+    }
+
+    private static void createTrivialBlockForSuffix(String suffix, BlockModelGenerators BMG, Block block, TexturedModel.Provider provider) {
+        TexturedModel model = provider.get(block);
+
+        TextureMapping suffixMapping = createMappingForSuffix(suffix, model.getMapping());
+
+        model.getTemplate().createWithSuffix(block, suffix, suffixMapping, BMG.modelOutput);
+    }
+
+    private static TextureMapping createMappingForSuffix(String suffix, TextureMapping mapping) {
+        TextureMappingAccessor tma = (TextureMappingAccessor) mapping;
+        Map<TextureSlot, ResourceLocation> slots = tma.getSlots();
+        Set<TextureSlot> forcedSlots = tma.getForcedSlots();
+
+        TextureMapping suffixMapping = new TextureMapping();
+        slots.forEach((slot, location) -> {
+            if (forcedSlots.contains(slot)) {
+                suffixMapping.putForced(slot, location.withSuffix(suffix));
+            } else {
+                suffixMapping.put(slot, location.withSuffix(suffix));
+            }
+        });
+        return suffixMapping;
+    }
+
     @Override
     public void generateItemModels(ItemModelGenerators IMG) {
         forEach(item -> generateFlat(IMG, item),
@@ -279,6 +324,18 @@ public class ModelProvider extends FabricModelProvider {
         );
 
         IMG.generateFlatItem(OperationStarcleaveItems.FIRMAMENT_MANIPULATOR, ModelTemplates.FLAT_HANDHELD_ITEM);
+
+        // iridescence
+        forEach(item -> generateFlatForSuffix(SUFFIX_IRIDESCENCE, IMG, item, ModelTemplates.FLAT_ITEM),
+                OperationStarcleaveItems.BISMUTH_FLAKE,
+                OperationStarcleaveItems.STARFLAKED_BISMUTH,
+                OperationStarcleaveItems.BISMUTH_PEGASUS_ARMOR
+        );
+
+        forEach(block -> addDelegateModelForSuffix(SUFFIX_IRIDESCENCE, IMG, block),
+                STARFLAKED_BISMUTH_BLOCK,
+                STARFLAKED_BISMUTH_TILES
+        );
     }
 
     private void forEach(Consumer<Item> consumer, Item... list) {
@@ -289,5 +346,18 @@ public class ModelProvider extends FabricModelProvider {
 
     private static void generateFlat(ItemModelGenerators IMG, Item item) {
         IMG.generateFlatItem(item, ModelTemplates.FLAT_ITEM);
+    }
+
+    private static void generateFlatForSuffix(String suffix, ItemModelGenerators IMG, Item item, ModelTemplate modelTemplate) {
+        modelTemplate.create(
+                ModelLocationUtils.getModelLocation(item).withSuffix(suffix),
+                new TextureMapping().put(TextureSlot.LAYER0, TextureMapping.getItemTexture(item).withSuffix(suffix)),
+                IMG.output
+        );
+    }
+
+    private static void addDelegateModelForSuffix(String suffix, ItemModelGenerators IMG, Block block) {
+        ResourceLocation resourceLocation = ModelLocationUtils.getModelLocation(block.asItem()).withSuffix(suffix);
+        IMG.output.accept(resourceLocation, new DelegatedModel(ModelLocationUtils.getModelLocation(block).withSuffix(suffix)));
     }
 }
