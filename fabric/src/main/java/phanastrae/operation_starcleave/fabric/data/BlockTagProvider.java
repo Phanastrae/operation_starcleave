@@ -31,17 +31,25 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         addTagsForFamilies(false, true,
                 OperationStarcleaveBlockFamilies.STARDUST_BRICKS,
                 OperationStarcleaveBlockFamilies.STARBLEACHED_TILES,
-                OperationStarcleaveBlockFamilies.STELLAR_TILES
+                OperationStarcleaveBlockFamilies.STELLAR_TILES,
+                OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_BLOCK,
+                OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_TILES
         );
 
         addFamiliesToTag(BlockTags.MINEABLE_WITH_PICKAXE,
                 OperationStarcleaveBlockFamilies.STARDUST_BRICKS,
                 OperationStarcleaveBlockFamilies.STARBLEACHED_TILES,
-                OperationStarcleaveBlockFamilies.STELLAR_TILES
+                OperationStarcleaveBlockFamilies.STELLAR_TILES,
+                OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_BLOCK,
+                OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_TILES
         );
         addFamiliesToTag(BlockTags.MINEABLE_WITH_SHOVEL,
                 OperationStarcleaveBlockFamilies.STARDUST_BRICKS,
                 OperationStarcleaveBlockFamilies.STELLAR_TILES
+        );
+        addFamiliesToTag(BlockTags.NEEDS_STONE_TOOL,
+                OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_BLOCK,
+                OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_TILES
         );
 
         // vanilla tags
@@ -135,10 +143,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         STELLAR_REPULSOR,
 
                         COAGULATED_PLASMA,
-                        PLASMA_ICE,
-
-                        STARFLAKED_BISMUTH_BLOCK,
-                        STARFLAKED_BISMUTH_TILES
+                        PLASMA_ICE
                 );
 
         getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_SHOVEL)
@@ -177,10 +182,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
         getOrCreateTagBuilder(BlockTags.NEEDS_STONE_TOOL)
                 .add(
-                        COAGULATED_PLASMA,
-
-                        STARFLAKED_BISMUTH_BLOCK,
-                        STARFLAKED_BISMUTH_TILES
+                        COAGULATED_PLASMA
                 );
 
         getOrCreateTagBuilder(BlockTags.REPLACEABLE_BY_TREES)

@@ -11,6 +11,12 @@
     "operation_starcleave:starbleached_tile_wall",
     "operation_starcleave:stellar_tiles",
     "operation_starcleave:stellar_tile_slab",
+    "operation_starcleave:starflaked_bismuth_block",
+    "operation_starcleave:starflaked_bismuth_slab",
+    "operation_starcleave:starflaked_bismuth_tiles",
+    "operation_starcleave:starflaked_bismuth_tile_slab",
+    "operation_starcleave:starflaked_bismuth_tile_stairs",
+    "operation_starcleave:starflaked_bismuth_tile_wall",
     {
       "id": "#operation_starcleave:starbleached_logs",
       "required": false
@@ -22,8 +28,6 @@
     "operation_starcleave:starbleached_pearl_block",
     "operation_starcleave:stellar_repulsor",
     "operation_starcleave:coagulated_plasma",
-    "operation_starcleave:plasma_ice",
-    "operation_starcleave:starflaked_bismuth_block",
-    "operation_starcleave:starflaked_bismuth_tiles"
+    "operation_starcleave:plasma_ice"
   ]
 }

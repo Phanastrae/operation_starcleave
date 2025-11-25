@@ -31,6 +31,17 @@ public class OperationStarcleaveBlockFamilies {
             .slab(OperationStarcleaveBlocks.STELLAR_TILE_SLAB)
             .getFamily();
 
+    public static final BlockFamily STARFLAKED_BISMUTH_BLOCK = familyBuilder(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_BLOCK)
+            .slab(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_SLAB)
+            .dontGenerateModel()
+            .getFamily();
+
+    public static final BlockFamily STARFLAKED_BISMUTH_TILES = familyBuilder(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_TILES)
+            .stairs(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_TILE_STAIRS)
+            .slab(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_TILE_SLAB)
+            .wall(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_TILE_WALL)
+            .getFamily();
+
     public static BlockFamily.Builder familyBuilder(Block baseBlock) {
         BlockFamily.Builder builder = new BlockFamily.Builder(baseBlock);
         BlockFamily blockFamily = STARCLEAVE_MAP.put(baseBlock, builder.getFamily());

@@ -44,7 +44,9 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
         addLootForFamilies(
                 OperationStarcleaveBlockFamilies.STARDUST_BRICKS,
                 OperationStarcleaveBlockFamilies.STARBLEACHED_TILES,
-                OperationStarcleaveBlockFamilies.STELLAR_TILES
+                OperationStarcleaveBlockFamilies.STELLAR_TILES,
+                OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_BLOCK,
+                OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_TILES
         );
 
         HolderLookup.RegistryLookup<Enchantment> impl = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
@@ -75,10 +77,7 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                 STRIPED_NUCLEIC_FISSUREROOT,
                 STRIPED_NUCLEIC_FISSURERIND,
 
-                COAGULATED_PLASMA,
-
-                STARFLAKED_BISMUTH_BLOCK,
-                STARFLAKED_BISMUTH_TILES
+                COAGULATED_PLASMA
         );
 
         forEach(this::dropPottedContents,

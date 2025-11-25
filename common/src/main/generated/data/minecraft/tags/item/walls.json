@@ -1,6 +1,7 @@
 {
   "values": [
     "operation_starcleave:stardust_brick_wall",
-    "operation_starcleave:starbleached_tile_wall"
+    "operation_starcleave:starbleached_tile_wall",
+    "operation_starcleave:starflaked_bismuth_tile_wall"
   ]
 }

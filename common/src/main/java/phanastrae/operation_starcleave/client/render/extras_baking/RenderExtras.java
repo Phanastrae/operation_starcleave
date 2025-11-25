@@ -30,7 +30,12 @@ public class RenderExtras {
 
     public static final List<Item> IRIDESCENT_ITEMS = List.of(
             OperationStarcleaveItems.STARFLAKED_BISMUTH_BLOCK,
+            OperationStarcleaveItems.STARFLAKED_BISMUTH_SLAB,
+
             OperationStarcleaveItems.STARFLAKED_BISMUTH_TILES,
+            OperationStarcleaveItems.STARFLAKED_BISMUTH_TILE_SLAB,
+            OperationStarcleaveItems.STARFLAKED_BISMUTH_TILE_STAIRS,
+            OperationStarcleaveItems.STARFLAKED_BISMUTH_TILE_WALL,
 
             OperationStarcleaveItems.BISMUTH_FLAKE,
             OperationStarcleaveItems.STARFLAKED_BISMUTH,

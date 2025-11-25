@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/template_wall_post",
+  "textures": {
+    "wall": "operation_starcleave:block/starflaked_bismuth_tiles_iridescence"
+  }
+}

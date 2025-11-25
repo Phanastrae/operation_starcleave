@@ -2,6 +2,8 @@
   "values": [
     "operation_starcleave:stardust_brick_slab",
     "operation_starcleave:starbleached_tile_slab",
-    "operation_starcleave:stellar_tile_slab"
+    "operation_starcleave:stellar_tile_slab",
+    "operation_starcleave:starflaked_bismuth_slab",
+    "operation_starcleave:starflaked_bismuth_tile_slab"
   ]
 }

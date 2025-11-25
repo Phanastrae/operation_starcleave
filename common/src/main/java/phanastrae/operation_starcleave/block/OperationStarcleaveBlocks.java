@@ -496,6 +496,10 @@ public class OperationStarcleaveBlocks {
                     .sound(SoundType.METAL)
             )
     );
+    public static final Block STARFLAKED_BISMUTH_SLAB = register(
+            "starflaked_bismuth_slab",
+            slabOf(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_BLOCK)
+    );
 
     public static final Block STARFLAKED_BISMUTH_TILES = register(
             "starflaked_bismuth_tiles",
@@ -506,6 +510,18 @@ public class OperationStarcleaveBlocks {
                     .strength(2.0F, 2.5F)
                     .sound(SoundType.METAL)
             )
+    );
+    public static final Block STARFLAKED_BISMUTH_TILE_STAIRS = register(
+            "starflaked_bismuth_tile_stairs",
+            stairsOf(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_TILES)
+    );
+    public static final Block STARFLAKED_BISMUTH_TILE_SLAB = register(
+            "starflaked_bismuth_tile_slab",
+            slabOf(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_TILES)
+    );
+    public static final Block STARFLAKED_BISMUTH_TILE_WALL = register(
+            "starflaked_bismuth_tile_wall",
+            wallOf(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_TILES)
     );
 
     private static <T extends Block> T register(String id, T block) {

@@ -15,6 +15,7 @@ import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.block.StarbleachCauldronBlock;
 import phanastrae.operation_starcleave.block.StarbleachedPearlBlock;
 import phanastrae.operation_starcleave.data.OperationStarcleaveBlockFamilies;
+import phanastrae.operation_starcleave.fabric.mixin.client.ModelTemplateAccessor;
 import phanastrae.operation_starcleave.fabric.mixin.client.TextureMappingAccessor;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 
@@ -44,8 +45,8 @@ public class ModelProvider extends FabricModelProvider {
                 IMBUED_STARBLEACHED_TILES,
                 NUCLEOSYNTHESEED,
                 PLASMA_ICE,
-                STARFLAKED_BISMUTH_BLOCK,
-                STARFLAKED_BISMUTH_TILES
+
+                STARFLAKED_BISMUTH_BLOCK
         );
 
         forEach(BMG::createRotatedVariantBlock,
@@ -89,15 +90,33 @@ public class ModelProvider extends FabricModelProvider {
 
         registerStarbleachCauldron(BMG, STARBLEACH_CAULDRON);
 
+        createSplitSlab(BMG, STARFLAKED_BISMUTH_SLAB, STARFLAKED_BISMUTH_BLOCK);
+
         // fluids
         BMG.createNonTemplateModelBlock(PETRICHORIC_PLASMA);
 
         // iridescence
         // these functions only create the models, blockstates need to still be done manually
-        createTrivialCubeForSuffix(SUFFIX_IRIDESCENCE, BMG, STARFLAKED_BISMUTH_BLOCK);
-        createTrivialCubeForSuffix(SUFFIX_IRIDESCENCE, BMG, STARFLAKED_BISMUTH_TILES);
+        forEach(block -> createTrivialCubeForSuffix(SUFFIX_IRIDESCENCE, BMG, block),
+                STARFLAKED_BISMUTH_BLOCK,
+                STARFLAKED_BISMUTH_TILES
+        );
         createCropForSuffix(2, SUFFIX_IRIDESCENCE, BMG, BISREEDS);
         createCropForSuffix(3, SUFFIX_IRIDESCENCE, BMG, BISREEDS);
+
+        createSplitSlabForSuffix(SUFFIX_IRIDESCENCE, BMG, STARFLAKED_BISMUTH_SLAB, STARFLAKED_BISMUTH_BLOCK);
+        createSlabForSuffix(SUFFIX_IRIDESCENCE, BMG, STARFLAKED_BISMUTH_TILE_SLAB, STARFLAKED_BISMUTH_TILES);
+        createStairsForSuffix(SUFFIX_IRIDESCENCE, BMG, STARFLAKED_BISMUTH_TILE_STAIRS, STARFLAKED_BISMUTH_TILES);
+        createWallForSuffix(SUFFIX_IRIDESCENCE, BMG, STARFLAKED_BISMUTH_TILE_WALL, STARFLAKED_BISMUTH_TILES);
+    }
+
+    private static void createSplitSlab(BlockModelGenerators BMG, Block block, Block fullBlock) {
+        TextureMapping cubeMapping = TextureMapping.cube(fullBlock);
+        TextureMapping columnMapping = TextureMapping.column(TextureMapping.getBlockTexture(block, "_side"), cubeMapping.get(TextureSlot.TOP));
+        ResourceLocation bottomRL = ModelTemplates.SLAB_BOTTOM.create(block, columnMapping, BMG.modelOutput);
+        ResourceLocation topRL = ModelTemplates.SLAB_TOP.create(block, columnMapping, BMG.modelOutput);
+        ResourceLocation doubleRL = ModelTemplates.CUBE_COLUMN.createWithOverride(block, "_double", columnMapping, BMG.modelOutput);
+        BMG.blockStateOutput.accept(createSlab(block, bottomRL, topRL, doubleRL));
     }
 
     private void forEach(Consumer<Block> consumer, Block... list) {
@@ -258,20 +277,55 @@ public class ModelProvider extends FabricModelProvider {
     }
 
     private static void createCropForSuffix(int stage, String extraSuffix, BlockModelGenerators BMG, Block block) {
-        TexturedModel.Provider model = TexturedModel.createDefault((b) -> TextureMapping.crop(TextureMapping.getBlockTexture(b)), ModelTemplates.CROP);
-        createTrivialBlockForSuffix("_stage" + stage + extraSuffix, BMG, block, model);
+        createModelForSuffix("_stage" + stage + extraSuffix, BMG, block, TextureMapping.crop(TextureMapping.getBlockTexture(block)), ModelTemplates.CROP);
     }
 
     private static void createTrivialCubeForSuffix(String suffix, BlockModelGenerators BMG, Block block) {
-        createTrivialBlockForSuffix(suffix, BMG, block, TexturedModel.CUBE);
+        createModelForSuffix(suffix, BMG, block, TexturedModel.CUBE);
     }
 
-    private static void createTrivialBlockForSuffix(String suffix, BlockModelGenerators BMG, Block block, TexturedModel.Provider provider) {
+    private static void createSlabForSuffix(String suffix, BlockModelGenerators BMG, Block block, Block fullBlock) {
+        TextureMapping mapping = TextureMapping.cube(fullBlock);
+        createModelForSuffix(suffix, BMG, block, mapping, ModelTemplates.SLAB_BOTTOM);
+        createModelForSuffix(suffix, BMG, block, mapping, ModelTemplates.SLAB_TOP);
+    }
+
+    private static void createSplitSlabForSuffix(String suffix, BlockModelGenerators BMG, Block block, Block fullBlock) {
+        TextureMapping cubeMapping = TextureMapping.cube(fullBlock);
+        TextureMapping columnMapping = TextureMapping.column(TextureMapping.getBlockTexture(block, "_side"), cubeMapping.get(TextureSlot.TOP));
+        createModelForSuffix(suffix, BMG, block, columnMapping, ModelTemplates.SLAB_BOTTOM);
+        createModelForSuffix(suffix, BMG, block, columnMapping, ModelTemplates.SLAB_TOP);
+        createModelForSuffixes(suffix, "_double" + suffix, BMG, block, columnMapping, ModelTemplates.CUBE_COLUMN);
+    }
+
+    private static void createStairsForSuffix(String suffix, BlockModelGenerators BMG, Block block, Block fullBlock) {
+        TextureMapping mapping = TextureMapping.cube(fullBlock);
+        createModelForSuffix(suffix, BMG, block, mapping, ModelTemplates.STAIRS_INNER);
+        createModelForSuffix(suffix, BMG, block, mapping, ModelTemplates.STAIRS_OUTER);
+        createModelForSuffix(suffix, BMG, block, mapping, ModelTemplates.STAIRS_STRAIGHT);
+    }
+
+    private static void createWallForSuffix(String suffix, BlockModelGenerators BMG, Block block, Block fullBlock) {
+        TextureMapping mapping = TextureMapping.cube(fullBlock);
+        createModelForSuffix(suffix, BMG, block, mapping, ModelTemplates.WALL_POST);
+        createModelForSuffix(suffix, BMG, block, mapping, ModelTemplates.WALL_LOW_SIDE);
+        createModelForSuffix(suffix, BMG, block, mapping, ModelTemplates.WALL_TALL_SIDE);
+        createModelForSuffix(suffix, BMG, block, mapping, ModelTemplates.WALL_INVENTORY);
+    }
+
+    private static void createModelForSuffix(String suffix, BlockModelGenerators BMG, Block block, TexturedModel.Provider provider) {
         TexturedModel model = provider.get(block);
+        createModelForSuffix(suffix, BMG, block, model.getMapping(), model.getTemplate());
+    }
 
-        TextureMapping suffixMapping = createMappingForSuffix(suffix, model.getMapping());
+    private static void createModelForSuffix(String suffix, BlockModelGenerators BMG, Block block, TextureMapping mapping, ModelTemplate template) {
+        TextureMapping suffixMapping = createMappingForSuffix(suffix, mapping);
+        template.create(ModelLocationUtils.getModelLocation(block, ((ModelTemplateAccessor) template).getSuffix().orElse("") + suffix), suffixMapping, BMG.modelOutput);
+    }
 
-        model.getTemplate().createWithSuffix(block, suffix, suffixMapping, BMG.modelOutput);
+    private static void createModelForSuffixes(String mappingSuffix, String modelSuffix, BlockModelGenerators BMG, Block block, TextureMapping mapping, ModelTemplate template) {
+        TextureMapping suffixMapping = createMappingForSuffix(mappingSuffix, mapping);
+        template.create(ModelLocationUtils.getModelLocation(block, ((ModelTemplateAccessor) template).getSuffix().orElse("") + modelSuffix), suffixMapping, BMG.modelOutput);
     }
 
     private static TextureMapping createMappingForSuffix(String suffix, TextureMapping mapping) {
@@ -334,8 +388,13 @@ public class ModelProvider extends FabricModelProvider {
 
         forEach(block -> addDelegateModelForSuffix(SUFFIX_IRIDESCENCE, IMG, block),
                 STARFLAKED_BISMUTH_BLOCK,
-                STARFLAKED_BISMUTH_TILES
+                STARFLAKED_BISMUTH_SLAB,
+
+                STARFLAKED_BISMUTH_TILES,
+                STARFLAKED_BISMUTH_TILE_STAIRS,
+                STARFLAKED_BISMUTH_TILE_SLAB
         );
+        addDelegateWallModelForSuffix(SUFFIX_IRIDESCENCE, IMG, STARFLAKED_BISMUTH_TILE_WALL);
     }
 
     private void forEach(Consumer<Item> consumer, Item... list) {
@@ -359,5 +418,10 @@ public class ModelProvider extends FabricModelProvider {
     private static void addDelegateModelForSuffix(String suffix, ItemModelGenerators IMG, Block block) {
         ResourceLocation resourceLocation = ModelLocationUtils.getModelLocation(block.asItem()).withSuffix(suffix);
         IMG.output.accept(resourceLocation, new DelegatedModel(ModelLocationUtils.getModelLocation(block).withSuffix(suffix)));
+    }
+
+    private static void addDelegateWallModelForSuffix(String suffix, ItemModelGenerators IMG, Block block) {
+        ResourceLocation resourceLocation = ModelLocationUtils.getModelLocation(block.asItem()).withSuffix(suffix);
+        IMG.output.accept(resourceLocation, new DelegatedModel(ModelLocationUtils.getModelLocation(block).withSuffix("_inventory" + suffix)));
     }
 }

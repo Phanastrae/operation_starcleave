@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "operation_starcleave:block/starflaked_bismuth_block",
+    "side": "operation_starcleave:block/starflaked_bismuth_slab_side"
+  }
+}

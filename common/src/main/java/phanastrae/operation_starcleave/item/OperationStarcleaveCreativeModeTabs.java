@@ -57,8 +57,14 @@ public class OperationStarcleaveCreativeModeTabs {
                 BISREED_ROOT,
                 BISMUTH_FLAKE,
                 STARFLAKED_BISMUTH,
+
                 STARFLAKED_BISMUTH_BLOCK,
+                STARFLAKED_BISMUTH_SLAB,
+
                 STARFLAKED_BISMUTH_TILES,
+                STARFLAKED_BISMUTH_TILE_STAIRS,
+                STARFLAKED_BISMUTH_TILE_SLAB,
+                STARFLAKED_BISMUTH_TILE_WALL,
 
                 STELLAR_TILES,
                 STELLAR_TILE_SLAB,
@@ -92,8 +98,8 @@ public class OperationStarcleaveCreativeModeTabs {
                 STARBLEACHED_LEAVES,
 
                 STARBLEACHED_TILES,
-                STARBLEACHED_TILE_SLAB,
                 STARBLEACHED_TILE_STAIRS,
+                STARBLEACHED_TILE_SLAB,
                 STARBLEACHED_TILE_WALL,
 
                 CHISELED_STARBLEACHED_TILES,
@@ -167,7 +173,12 @@ public class OperationStarcleaveCreativeModeTabs {
         );
         helper.addAfter(Items.WAXED_OXIDIZED_COPPER_BULB, BUILDING_BLOCKS,
                 STARFLAKED_BISMUTH_BLOCK,
-                STARFLAKED_BISMUTH_TILES
+                STARFLAKED_BISMUTH_SLAB,
+
+                STARFLAKED_BISMUTH_TILES,
+                STARFLAKED_BISMUTH_TILE_STAIRS,
+                STARFLAKED_BISMUTH_TILE_SLAB,
+                STARFLAKED_BISMUTH_TILE_WALL
         );
 
         // Natural

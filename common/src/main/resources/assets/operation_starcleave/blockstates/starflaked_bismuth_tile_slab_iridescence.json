@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "operation_starcleave:block/starflaked_bismuth_tile_slab_iridescence"
+    },
+    "type=double": {
+      "model": "operation_starcleave:block/starflaked_bismuth_tiles_iridescence"
+    },
+    "type=top": {
+      "model": "operation_starcleave:block/starflaked_bismuth_tile_slab_top_iridescence"
+    }
+  }
+}

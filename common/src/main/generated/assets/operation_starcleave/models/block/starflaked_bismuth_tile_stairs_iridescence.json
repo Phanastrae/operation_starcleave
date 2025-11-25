@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "operation_starcleave:block/starflaked_bismuth_tiles_iridescence",
+    "side": "operation_starcleave:block/starflaked_bismuth_tiles_iridescence",
+    "top": "operation_starcleave:block/starflaked_bismuth_tiles_iridescence"
+  }
+}
