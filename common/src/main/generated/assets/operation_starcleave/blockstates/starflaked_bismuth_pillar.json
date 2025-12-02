@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "operation_starcleave:block/starflaked_bismuth_pillar_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "operation_starcleave:block/starflaked_bismuth_pillar"
+    },
+    "axis=z": {
+      "model": "operation_starcleave:block/starflaked_bismuth_pillar_horizontal",
+      "x": 90
+    }
+  }
+}

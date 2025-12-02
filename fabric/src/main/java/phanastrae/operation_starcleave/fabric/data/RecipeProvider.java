@@ -86,6 +86,15 @@ public class RecipeProvider extends FabricRecipeProvider {
                         has(BISMUTH_FLAKE))
                 .save(exporter);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, STARFLAKED_BISMUTH_PILLAR, 2)
+                .define('#', STARFLAKED_BISMUTH_BLOCK)
+                .pattern("#")
+                .pattern("#")
+                .unlockedBy(
+                        getHasName(STARFLAKED_BISMUTH_BLOCK),
+                        has(STARFLAKED_BISMUTH_BLOCK))
+                .save(exporter);
+
         // complex shaped
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, BLESSED_BED)
                 .define('B', BLESSED_CLOTH)

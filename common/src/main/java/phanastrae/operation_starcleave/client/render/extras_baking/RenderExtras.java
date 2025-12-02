@@ -37,6 +37,8 @@ public class RenderExtras {
             OperationStarcleaveItems.STARFLAKED_BISMUTH_TILE_STAIRS,
             OperationStarcleaveItems.STARFLAKED_BISMUTH_TILE_WALL,
 
+            OperationStarcleaveItems.STARFLAKED_BISMUTH_PILLAR,
+
             OperationStarcleaveItems.BISMUTH_FLAKE,
             OperationStarcleaveItems.STARFLAKED_BISMUTH,
             OperationStarcleaveItems.BISMUTH_PEGASUS_ARMOR

@@ -90,6 +90,8 @@ public class OperationStarcleaveItems {
     public static final Item STARFLAKED_BISMUTH_TILE_SLAB = registerBlockItem(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_TILE_SLAB);
     public static final Item STARFLAKED_BISMUTH_TILE_WALL = registerBlockItem(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_TILE_WALL);
 
+    public static final Item STARFLAKED_BISMUTH_PILLAR = registerBlockItem(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_PILLAR);
+
 
     public static final Item STARCLEAVER_GOLEM_BUCKET = register("starcleaver_golem_bucket", new StarcleaverGolemBucketItem(properties().stacksTo(1)));
 

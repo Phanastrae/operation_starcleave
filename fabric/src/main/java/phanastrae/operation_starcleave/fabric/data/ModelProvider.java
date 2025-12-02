@@ -91,6 +91,7 @@ public class ModelProvider extends FabricModelProvider {
         registerStarbleachCauldron(BMG, STARBLEACH_CAULDRON);
 
         createSplitSlab(BMG, STARFLAKED_BISMUTH_SLAB, STARFLAKED_BISMUTH_BLOCK);
+        BMG.createRotatedPillarWithHorizontalVariant(STARFLAKED_BISMUTH_PILLAR, TexturedModel.COLUMN_ALT, TexturedModel.COLUMN_HORIZONTAL_ALT);
 
         // fluids
         BMG.createNonTemplateModelBlock(PETRICHORIC_PLASMA);
@@ -108,6 +109,7 @@ public class ModelProvider extends FabricModelProvider {
         createSlabForSuffix(SUFFIX_IRIDESCENCE, BMG, STARFLAKED_BISMUTH_TILE_SLAB, STARFLAKED_BISMUTH_TILES);
         createStairsForSuffix(SUFFIX_IRIDESCENCE, BMG, STARFLAKED_BISMUTH_TILE_STAIRS, STARFLAKED_BISMUTH_TILES);
         createWallForSuffix(SUFFIX_IRIDESCENCE, BMG, STARFLAKED_BISMUTH_TILE_WALL, STARFLAKED_BISMUTH_TILES);
+        createPillarForSuffix(SUFFIX_IRIDESCENCE, BMG, STARFLAKED_BISMUTH_PILLAR);
     }
 
     private static void createSplitSlab(BlockModelGenerators BMG, Block block, Block fullBlock) {
@@ -313,6 +315,11 @@ public class ModelProvider extends FabricModelProvider {
         createModelForSuffix(suffix, BMG, block, mapping, ModelTemplates.WALL_INVENTORY);
     }
 
+    private static void createPillarForSuffix(String suffix, BlockModelGenerators BMG, Block block) {
+        createModelForSuffix(suffix, BMG, block, TexturedModel.COLUMN_ALT);
+        createModelForSuffix(suffix, BMG, block, TexturedModel.COLUMN_HORIZONTAL_ALT);
+    }
+
     private static void createModelForSuffix(String suffix, BlockModelGenerators BMG, Block block, TexturedModel.Provider provider) {
         TexturedModel model = provider.get(block);
         createModelForSuffix(suffix, BMG, block, model.getMapping(), model.getTemplate());
@@ -392,7 +399,9 @@ public class ModelProvider extends FabricModelProvider {
 
                 STARFLAKED_BISMUTH_TILES,
                 STARFLAKED_BISMUTH_TILE_STAIRS,
-                STARFLAKED_BISMUTH_TILE_SLAB
+                STARFLAKED_BISMUTH_TILE_SLAB,
+
+                STARFLAKED_BISMUTH_PILLAR
         );
         addDelegateWallModelForSuffix(SUFFIX_IRIDESCENCE, IMG, STARFLAKED_BISMUTH_TILE_WALL);
     }

@@ -66,6 +66,8 @@ public class OperationStarcleaveCreativeModeTabs {
                 STARFLAKED_BISMUTH_TILE_SLAB,
                 STARFLAKED_BISMUTH_TILE_WALL,
 
+                STARFLAKED_BISMUTH_PILLAR,
+
                 STELLAR_TILES,
                 STELLAR_TILE_SLAB,
 
@@ -178,7 +180,9 @@ public class OperationStarcleaveCreativeModeTabs {
                 STARFLAKED_BISMUTH_TILES,
                 STARFLAKED_BISMUTH_TILE_STAIRS,
                 STARFLAKED_BISMUTH_TILE_SLAB,
-                STARFLAKED_BISMUTH_TILE_WALL
+                STARFLAKED_BISMUTH_TILE_WALL,
+
+                STARFLAKED_BISMUTH_PILLAR
         );
 
         // Natural

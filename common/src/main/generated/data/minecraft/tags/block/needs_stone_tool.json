@@ -6,6 +6,7 @@
     "operation_starcleave:starflaked_bismuth_tile_slab",
     "operation_starcleave:starflaked_bismuth_tile_stairs",
     "operation_starcleave:starflaked_bismuth_tile_wall",
-    "operation_starcleave:coagulated_plasma"
+    "operation_starcleave:coagulated_plasma",
+    "operation_starcleave:starflaked_bismuth_pillar"
   ]
 }

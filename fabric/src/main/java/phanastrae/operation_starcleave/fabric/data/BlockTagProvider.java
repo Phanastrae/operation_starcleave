@@ -143,7 +143,9 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         STELLAR_REPULSOR,
 
                         COAGULATED_PLASMA,
-                        PLASMA_ICE
+                        PLASMA_ICE,
+
+                        STARFLAKED_BISMUTH_PILLAR
                 );
 
         getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_SHOVEL)
@@ -182,7 +184,9 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
         getOrCreateTagBuilder(BlockTags.NEEDS_STONE_TOOL)
                 .add(
-                        COAGULATED_PLASMA
+                        COAGULATED_PLASMA,
+
+                        STARFLAKED_BISMUTH_PILLAR
                 );
 
         getOrCreateTagBuilder(BlockTags.REPLACEABLE_BY_TREES)

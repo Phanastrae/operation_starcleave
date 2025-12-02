@@ -40,6 +40,8 @@ public class ExtrasSectionCompiler {
             OperationStarcleaveBlocks.STARFLAKED_BISMUTH_TILE_SLAB,
             OperationStarcleaveBlocks.STARFLAKED_BISMUTH_TILE_WALL,
 
+            OperationStarcleaveBlocks.STARFLAKED_BISMUTH_PILLAR,
+
             OperationStarcleaveBlocks.BISREEDS
     );
 
