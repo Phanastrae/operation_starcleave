@@ -1,11 +1,22 @@
 {
   "values": [
     "operation_starcleave:starflaked_bismuth_block",
+    "operation_starcleave:starflaked_bismuth_bricks",
     "operation_starcleave:starflaked_bismuth_slab",
+    "operation_starcleave:starflaked_bismuth_bricks",
+    "operation_starcleave:starflaked_bismuth_brick_slab",
+    "operation_starcleave:starflaked_bismuth_brick_stairs",
+    "operation_starcleave:starflaked_bismuth_brick_wall",
     "operation_starcleave:starflaked_bismuth_tiles",
+    "operation_starcleave:starflaked_bismuth_tiles",
+    "operation_starcleave:starflaked_bismuth_mosaic",
     "operation_starcleave:starflaked_bismuth_tile_slab",
     "operation_starcleave:starflaked_bismuth_tile_stairs",
     "operation_starcleave:starflaked_bismuth_tile_wall",
+    "operation_starcleave:starflaked_bismuth_mosaic",
+    "operation_starcleave:starflaked_bismuth_mosaic_slab",
+    "operation_starcleave:starflaked_bismuth_mosaic_stairs",
+    "operation_starcleave:starflaked_bismuth_mosaic_wall",
     "operation_starcleave:coagulated_plasma",
     "operation_starcleave:starflaked_bismuth_pillar"
   ]

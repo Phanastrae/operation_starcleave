@@ -33,13 +33,28 @@ public class OperationStarcleaveBlockFamilies {
 
     public static final BlockFamily STARFLAKED_BISMUTH_BLOCK = familyBuilder(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_BLOCK)
             .slab(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_SLAB)
+            .polished(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_BRICKS)
             .dontGenerateModel()
+            .getFamily();
+
+    public static final BlockFamily STARFLAKED_BISMUTH_BRICKS = familyBuilder(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_BRICKS)
+            .stairs(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_BRICK_STAIRS)
+            .slab(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_BRICK_SLAB)
+            .wall(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_BRICK_WALL)
+            .polished(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_TILES)
             .getFamily();
 
     public static final BlockFamily STARFLAKED_BISMUTH_TILES = familyBuilder(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_TILES)
             .stairs(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_TILE_STAIRS)
             .slab(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_TILE_SLAB)
             .wall(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_TILE_WALL)
+            .mosaic(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_MOSAIC)
+            .getFamily();
+
+    public static final BlockFamily STARFLAKED_BISMUTH_MOSAIC = familyBuilder(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_MOSAIC)
+            .stairs(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_MOSAIC_STAIRS)
+            .slab(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_MOSAIC_SLAB)
+            .wall(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_MOSAIC_WALL)
             .getFamily();
 
     public static BlockFamily.Builder familyBuilder(Block baseBlock) {

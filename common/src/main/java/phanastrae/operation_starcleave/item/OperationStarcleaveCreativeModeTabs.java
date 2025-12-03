@@ -61,12 +61,22 @@ public class OperationStarcleaveCreativeModeTabs {
                 STARFLAKED_BISMUTH_BLOCK,
                 STARFLAKED_BISMUTH_SLAB,
 
+                STARFLAKED_BISMUTH_PILLAR,
+
+                STARFLAKED_BISMUTH_BRICKS,
+                STARFLAKED_BISMUTH_BRICK_STAIRS,
+                STARFLAKED_BISMUTH_BRICK_SLAB,
+                STARFLAKED_BISMUTH_BRICK_WALL,
+
                 STARFLAKED_BISMUTH_TILES,
                 STARFLAKED_BISMUTH_TILE_STAIRS,
                 STARFLAKED_BISMUTH_TILE_SLAB,
                 STARFLAKED_BISMUTH_TILE_WALL,
 
-                STARFLAKED_BISMUTH_PILLAR,
+                STARFLAKED_BISMUTH_MOSAIC,
+                STARFLAKED_BISMUTH_MOSAIC_STAIRS,
+                STARFLAKED_BISMUTH_MOSAIC_SLAB,
+                STARFLAKED_BISMUTH_MOSAIC_WALL,
 
                 STELLAR_TILES,
                 STELLAR_TILE_SLAB,
@@ -177,12 +187,22 @@ public class OperationStarcleaveCreativeModeTabs {
                 STARFLAKED_BISMUTH_BLOCK,
                 STARFLAKED_BISMUTH_SLAB,
 
+                STARFLAKED_BISMUTH_PILLAR,
+
+                STARFLAKED_BISMUTH_BRICKS,
+                STARFLAKED_BISMUTH_BRICK_STAIRS,
+                STARFLAKED_BISMUTH_BRICK_SLAB,
+                STARFLAKED_BISMUTH_BRICK_WALL,
+
                 STARFLAKED_BISMUTH_TILES,
                 STARFLAKED_BISMUTH_TILE_STAIRS,
                 STARFLAKED_BISMUTH_TILE_SLAB,
                 STARFLAKED_BISMUTH_TILE_WALL,
 
-                STARFLAKED_BISMUTH_PILLAR
+                STARFLAKED_BISMUTH_MOSAIC,
+                STARFLAKED_BISMUTH_MOSAIC_STAIRS,
+                STARFLAKED_BISMUTH_MOSAIC_SLAB,
+                STARFLAKED_BISMUTH_MOSAIC_WALL
         );
 
         // Natural

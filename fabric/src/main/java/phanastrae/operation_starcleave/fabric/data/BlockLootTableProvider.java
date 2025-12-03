@@ -45,8 +45,11 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                 OperationStarcleaveBlockFamilies.STARDUST_BRICKS,
                 OperationStarcleaveBlockFamilies.STARBLEACHED_TILES,
                 OperationStarcleaveBlockFamilies.STELLAR_TILES,
+
                 OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_BLOCK,
-                OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_TILES
+                OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_BRICKS,
+                OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_TILES,
+                OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_MOSAIC
         );
 
         HolderLookup.RegistryLookup<Enchantment> impl = this.registries.lookupOrThrow(Registries.ENCHANTMENT);

@@ -35,12 +35,22 @@ public class ExtrasSectionCompiler {
             OperationStarcleaveBlocks.STARFLAKED_BISMUTH_BLOCK,
             OperationStarcleaveBlocks.STARFLAKED_BISMUTH_SLAB,
 
+            OperationStarcleaveBlocks.STARFLAKED_BISMUTH_PILLAR,
+
+            OperationStarcleaveBlocks.STARFLAKED_BISMUTH_BRICKS,
+            OperationStarcleaveBlocks.STARFLAKED_BISMUTH_BRICK_STAIRS,
+            OperationStarcleaveBlocks.STARFLAKED_BISMUTH_BRICK_SLAB,
+            OperationStarcleaveBlocks.STARFLAKED_BISMUTH_BRICK_WALL,
+
             OperationStarcleaveBlocks.STARFLAKED_BISMUTH_TILES,
             OperationStarcleaveBlocks.STARFLAKED_BISMUTH_TILE_STAIRS,
             OperationStarcleaveBlocks.STARFLAKED_BISMUTH_TILE_SLAB,
             OperationStarcleaveBlocks.STARFLAKED_BISMUTH_TILE_WALL,
 
-            OperationStarcleaveBlocks.STARFLAKED_BISMUTH_PILLAR,
+            OperationStarcleaveBlocks.STARFLAKED_BISMUTH_MOSAIC,
+            OperationStarcleaveBlocks.STARFLAKED_BISMUTH_MOSAIC_STAIRS,
+            OperationStarcleaveBlocks.STARFLAKED_BISMUTH_MOSAIC_SLAB,
+            OperationStarcleaveBlocks.STARFLAKED_BISMUTH_MOSAIC_WALL,
 
             OperationStarcleaveBlocks.BISREEDS
     );

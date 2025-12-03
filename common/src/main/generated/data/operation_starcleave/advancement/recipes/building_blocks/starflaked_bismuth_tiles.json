@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_starflaked_bismuth_block": {
+    "has_starflaked_bismuth_bricks": {
       "conditions": {
         "items": [
           {
-            "items": "operation_starcleave:starflaked_bismuth_block"
+            "items": "operation_starcleave:starflaked_bismuth_bricks"
           }
         ]
       },
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_starflaked_bismuth_block"
+      "has_starflaked_bismuth_bricks"
     ]
   ],
   "rewards": {

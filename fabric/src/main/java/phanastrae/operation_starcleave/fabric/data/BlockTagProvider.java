@@ -32,16 +32,22 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 OperationStarcleaveBlockFamilies.STARDUST_BRICKS,
                 OperationStarcleaveBlockFamilies.STARBLEACHED_TILES,
                 OperationStarcleaveBlockFamilies.STELLAR_TILES,
+
                 OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_BLOCK,
-                OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_TILES
+                OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_BRICKS,
+                OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_TILES,
+                OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_MOSAIC
         );
 
         addFamiliesToTag(BlockTags.MINEABLE_WITH_PICKAXE,
                 OperationStarcleaveBlockFamilies.STARDUST_BRICKS,
                 OperationStarcleaveBlockFamilies.STARBLEACHED_TILES,
                 OperationStarcleaveBlockFamilies.STELLAR_TILES,
+
                 OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_BLOCK,
-                OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_TILES
+                OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_BRICKS,
+                OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_TILES,
+                OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_MOSAIC
         );
         addFamiliesToTag(BlockTags.MINEABLE_WITH_SHOVEL,
                 OperationStarcleaveBlockFamilies.STARDUST_BRICKS,
@@ -49,7 +55,9 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         );
         addFamiliesToTag(BlockTags.NEEDS_STONE_TOOL,
                 OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_BLOCK,
-                OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_TILES
+                OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_BRICKS,
+                OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_TILES,
+                OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_MOSAIC
         );
 
         // vanilla tags

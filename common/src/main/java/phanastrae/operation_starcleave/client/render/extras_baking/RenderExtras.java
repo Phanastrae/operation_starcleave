@@ -32,12 +32,22 @@ public class RenderExtras {
             OperationStarcleaveItems.STARFLAKED_BISMUTH_BLOCK,
             OperationStarcleaveItems.STARFLAKED_BISMUTH_SLAB,
 
+            OperationStarcleaveItems.STARFLAKED_BISMUTH_PILLAR,
+
+            OperationStarcleaveItems.STARFLAKED_BISMUTH_BRICKS,
+            OperationStarcleaveItems.STARFLAKED_BISMUTH_BRICK_SLAB,
+            OperationStarcleaveItems.STARFLAKED_BISMUTH_BRICK_STAIRS,
+            OperationStarcleaveItems.STARFLAKED_BISMUTH_BRICK_WALL,
+
             OperationStarcleaveItems.STARFLAKED_BISMUTH_TILES,
             OperationStarcleaveItems.STARFLAKED_BISMUTH_TILE_SLAB,
             OperationStarcleaveItems.STARFLAKED_BISMUTH_TILE_STAIRS,
             OperationStarcleaveItems.STARFLAKED_BISMUTH_TILE_WALL,
 
-            OperationStarcleaveItems.STARFLAKED_BISMUTH_PILLAR,
+            OperationStarcleaveItems.STARFLAKED_BISMUTH_MOSAIC,
+            OperationStarcleaveItems.STARFLAKED_BISMUTH_MOSAIC_SLAB,
+            OperationStarcleaveItems.STARFLAKED_BISMUTH_MOSAIC_STAIRS,
+            OperationStarcleaveItems.STARFLAKED_BISMUTH_MOSAIC_WALL,
 
             OperationStarcleaveItems.BISMUTH_FLAKE,
             OperationStarcleaveItems.STARFLAKED_BISMUTH,

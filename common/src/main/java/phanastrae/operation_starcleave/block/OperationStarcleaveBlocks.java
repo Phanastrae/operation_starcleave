@@ -501,6 +501,40 @@ public class OperationStarcleaveBlocks {
             slabOf(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_BLOCK)
     );
 
+    public static final Block STARFLAKED_BISMUTH_PILLAR = register(
+            "starflaked_bismuth_pillar",
+            new RotatedPillarBlock(properties()
+                    .mapColor(COLOR_PINK)
+                    .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
+                    .requiresCorrectToolForDrops()
+                    .strength(2.0F, 2.5F)
+                    .sound(SoundType.METAL)
+            )
+    );
+
+    public static final Block STARFLAKED_BISMUTH_BRICKS = register(
+            "starflaked_bismuth_bricks",
+            new Block(properties()
+                    .mapColor(COLOR_PINK)
+                    .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
+                    .requiresCorrectToolForDrops()
+                    .strength(2.0F, 2.5F)
+                    .sound(SoundType.METAL)
+            )
+    );
+    public static final Block STARFLAKED_BISMUTH_BRICK_STAIRS = register(
+            "starflaked_bismuth_brick_stairs",
+            stairsOf(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_BRICKS)
+    );
+    public static final Block STARFLAKED_BISMUTH_BRICK_SLAB = register(
+            "starflaked_bismuth_brick_slab",
+            slabOf(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_BRICKS)
+    );
+    public static final Block STARFLAKED_BISMUTH_BRICK_WALL = register(
+            "starflaked_bismuth_brick_wall",
+            wallOf(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_BRICKS)
+    );
+
     public static final Block STARFLAKED_BISMUTH_TILES = register(
             "starflaked_bismuth_tiles",
             new Block(properties()
@@ -524,15 +558,27 @@ public class OperationStarcleaveBlocks {
             wallOf(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_TILES)
     );
 
-    public static final Block STARFLAKED_BISMUTH_PILLAR = register(
-            "starflaked_bismuth_pillar",
-            new RotatedPillarBlock(properties()
+    public static final Block STARFLAKED_BISMUTH_MOSAIC = register(
+            "starflaked_bismuth_mosaic",
+            new Block(properties()
                     .mapColor(COLOR_PINK)
                     .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
                     .requiresCorrectToolForDrops()
                     .strength(2.0F, 2.5F)
                     .sound(SoundType.METAL)
             )
+    );
+    public static final Block STARFLAKED_BISMUTH_MOSAIC_STAIRS = register(
+            "starflaked_bismuth_mosaic_stairs",
+            stairsOf(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_MOSAIC)
+    );
+    public static final Block STARFLAKED_BISMUTH_MOSAIC_SLAB = register(
+            "starflaked_bismuth_mosaic_slab",
+            slabOf(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_MOSAIC)
+    );
+    public static final Block STARFLAKED_BISMUTH_MOSAIC_WALL = register(
+            "starflaked_bismuth_mosaic_wall",
+            wallOf(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_MOSAIC)
     );
 
     private static <T extends Block> T register(String id, T block) {

@@ -100,16 +100,28 @@ public class ModelProvider extends FabricModelProvider {
         // these functions only create the models, blockstates need to still be done manually
         forEach(block -> createTrivialCubeForSuffix(SUFFIX_IRIDESCENCE, BMG, block),
                 STARFLAKED_BISMUTH_BLOCK,
-                STARFLAKED_BISMUTH_TILES
+                STARFLAKED_BISMUTH_BRICKS,
+                STARFLAKED_BISMUTH_TILES,
+                STARFLAKED_BISMUTH_MOSAIC
         );
         createCropForSuffix(2, SUFFIX_IRIDESCENCE, BMG, BISREEDS);
         createCropForSuffix(3, SUFFIX_IRIDESCENCE, BMG, BISREEDS);
 
         createSplitSlabForSuffix(SUFFIX_IRIDESCENCE, BMG, STARFLAKED_BISMUTH_SLAB, STARFLAKED_BISMUTH_BLOCK);
+
+        createPillarForSuffix(SUFFIX_IRIDESCENCE, BMG, STARFLAKED_BISMUTH_PILLAR);
+
+        createSlabForSuffix(SUFFIX_IRIDESCENCE, BMG, STARFLAKED_BISMUTH_BRICK_SLAB, STARFLAKED_BISMUTH_BRICKS);
+        createStairsForSuffix(SUFFIX_IRIDESCENCE, BMG, STARFLAKED_BISMUTH_BRICK_STAIRS, STARFLAKED_BISMUTH_BRICKS);
+        createWallForSuffix(SUFFIX_IRIDESCENCE, BMG, STARFLAKED_BISMUTH_BRICK_WALL, STARFLAKED_BISMUTH_BRICKS);
+
         createSlabForSuffix(SUFFIX_IRIDESCENCE, BMG, STARFLAKED_BISMUTH_TILE_SLAB, STARFLAKED_BISMUTH_TILES);
         createStairsForSuffix(SUFFIX_IRIDESCENCE, BMG, STARFLAKED_BISMUTH_TILE_STAIRS, STARFLAKED_BISMUTH_TILES);
         createWallForSuffix(SUFFIX_IRIDESCENCE, BMG, STARFLAKED_BISMUTH_TILE_WALL, STARFLAKED_BISMUTH_TILES);
-        createPillarForSuffix(SUFFIX_IRIDESCENCE, BMG, STARFLAKED_BISMUTH_PILLAR);
+
+        createSlabForSuffix(SUFFIX_IRIDESCENCE, BMG, STARFLAKED_BISMUTH_MOSAIC_SLAB, STARFLAKED_BISMUTH_MOSAIC);
+        createStairsForSuffix(SUFFIX_IRIDESCENCE, BMG, STARFLAKED_BISMUTH_MOSAIC_STAIRS, STARFLAKED_BISMUTH_MOSAIC);
+        createWallForSuffix(SUFFIX_IRIDESCENCE, BMG, STARFLAKED_BISMUTH_MOSAIC_WALL, STARFLAKED_BISMUTH_MOSAIC);
     }
 
     private static void createSplitSlab(BlockModelGenerators BMG, Block block, Block fullBlock) {
@@ -397,13 +409,25 @@ public class ModelProvider extends FabricModelProvider {
                 STARFLAKED_BISMUTH_BLOCK,
                 STARFLAKED_BISMUTH_SLAB,
 
+                STARFLAKED_BISMUTH_BRICKS,
+                STARFLAKED_BISMUTH_BRICK_STAIRS,
+                STARFLAKED_BISMUTH_BRICK_SLAB,
+
                 STARFLAKED_BISMUTH_TILES,
                 STARFLAKED_BISMUTH_TILE_STAIRS,
                 STARFLAKED_BISMUTH_TILE_SLAB,
 
+                STARFLAKED_BISMUTH_MOSAIC,
+                STARFLAKED_BISMUTH_MOSAIC_STAIRS,
+                STARFLAKED_BISMUTH_MOSAIC_SLAB,
+
                 STARFLAKED_BISMUTH_PILLAR
         );
-        addDelegateWallModelForSuffix(SUFFIX_IRIDESCENCE, IMG, STARFLAKED_BISMUTH_TILE_WALL);
+        forEach(wallBlock -> addDelegateWallModelForSuffix(SUFFIX_IRIDESCENCE, IMG, wallBlock),
+                STARFLAKED_BISMUTH_BRICK_WALL,
+                STARFLAKED_BISMUTH_TILE_WALL,
+                STARFLAKED_BISMUTH_MOSAIC_WALL
+        );
     }
 
     private void forEach(Consumer<Item> consumer, Item... list) {

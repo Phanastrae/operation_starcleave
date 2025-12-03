@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "operation_starcleave:block/starflaked_bismuth_brick_slab_iridescence"
+    },
+    "type=double": {
+      "model": "operation_starcleave:block/starflaked_bismuth_bricks_iridescence"
+    },
+    "type=top": {
+      "model": "operation_starcleave:block/starflaked_bismuth_brick_slab_top_iridescence"
+    }
+  }
+}
