@@ -7,22 +7,42 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.ItemInHandRenderer;
+import net.minecraft.client.renderer.RenderBuffers;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.Mth;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import phanastrae.operation_starcleave.client.OperationStarcleaveClient;
 import phanastrae.operation_starcleave.client.fluid.OperationStarcleaveClientFluids;
+import phanastrae.operation_starcleave.client.render.GradientsTexture;
 import phanastrae.operation_starcleave.client.render.ScreenShakeManager;
 import phanastrae.operation_starcleave.client.render.shader.FirmamentPostShader;
 
 @Mixin(GameRenderer.class)
 public class GameRendererMixin {
-    @Shadow @Final private Minecraft minecraft;
+    @Shadow
+    @Final
+    Minecraft minecraft;
+
+    @Unique
+    private GradientsTexture operation_starcleave$gradientsTexture;
+
+    @Inject(method = "<init>", at = @At("RETURN"))
+    private void operation_starcleave$init(Minecraft minecraft, ItemInHandRenderer itemInHandRenderer, ResourceManager resourceManager, RenderBuffers renderBuffers, CallbackInfo ci) {
+        operation_starcleave$gradientsTexture = new GradientsTexture(minecraft);
+    }
+
+    @Inject(method = "close", at = @At("RETURN"))
+    private void operation_starcleave$close(CallbackInfo ci) {
+        this.operation_starcleave$gradientsTexture.close();
+    }
 
     @Inject(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;bobHurt(Lcom/mojang/blaze3d/vertex/PoseStack;F)V", shift = At.Shift.AFTER))
     private void operation_starcleave$screenShake(DeltaTracker tickCounter, CallbackInfo ci,
@@ -43,7 +63,7 @@ public class GameRendererMixin {
     @Inject(method = "getFov", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Camera;getFluidInCamera()Lnet/minecraft/world/level/material/FogType;", shift = At.Shift.AFTER))
     private void operation_starcleave$fluidTweakFOV(Camera activeRenderInfo, float partialTicks, boolean useFOVSetting, CallbackInfoReturnable<Double> cir, @Local(ordinal = 0) LocalDoubleRef LDR_d) {
         OperationStarcleaveClientFluids.XPlatGenericClientFluid xpgcf = OperationStarcleaveClientFluids.getXPGCF(activeRenderInfo);
-        if(xpgcf != null) {
+        if (xpgcf != null) {
             LDR_d.set(LDR_d.get() * Mth.lerp(this.minecraft.options.fovEffectScale().get(), 1.0, xpgcf.getFovScaleFactor()));
         }
     }

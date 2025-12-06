@@ -1,17 +1,22 @@
 package phanastrae.operation_starcleave.client.render;
 
+import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
 import phanastrae.operation_starcleave.client.duck.LevelRendererDuck;
 import phanastrae.operation_starcleave.client.render.shader.OperationStarcleaveShaders;
 import phanastrae.operation_starcleave.mixin.client.accessor.RenderStateShardAccessor;
 import phanastrae.operation_starcleave.mixin.client.accessor.RenderTypeAccessor;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 public class OperationStarcleaveRenderTypes {
@@ -58,7 +63,11 @@ public class OperationStarcleaveRenderTypes {
             false,
             RenderType.CompositeState.builder()
                     .setShaderState(OperationStarcleaveShaders.RENDERTYPE_IRIDESCENCE_SHADER)
-                    .setTextureState(RenderStateShardAccessor.getBLOCK_SHEET_MIPPED())
+                    .setTextureState(IndexedMultiTextureStateShard.builder()
+                            .add(0, TextureAtlas.LOCATION_BLOCKS, false, true)
+                            .add(3, GradientsTexture.LOCATION, false, false)
+                            .build()
+                    )
                     .setTransparencyState(RenderStateShardAccessor.getTRANSLUCENT_TRANSPARENCY())
                     .setLightmapState(RenderStateShardAccessor.getLIGHTMAP())
                     .setDepthTestState(RenderStateShardAccessor.getEQUAL_DEPTH_TEST())
@@ -69,7 +78,11 @@ public class OperationStarcleaveRenderTypes {
             resourceLocation -> {
                 RenderType.CompositeState compositeState = RenderType.CompositeState.builder()
                         .setShaderState(OperationStarcleaveShaders.RENDERTYPE_ENTITY_IRIDESCENCE_SHADER)
-                        .setTextureState(new RenderStateShard.TextureStateShard(resourceLocation, false, false))
+                        .setTextureState(IndexedMultiTextureStateShard.builder()
+                                .add(0, resourceLocation, false, false)
+                                .add(3, GradientsTexture.LOCATION, false, false)
+                                .build()
+                        )
                         .setTransparencyState(RenderStateShardAccessor.getTRANSLUCENT_TRANSPARENCY())
                         .setLightmapState(RenderStateShardAccessor.getLIGHTMAP())
                         .setOverlayState(RenderStateShardAccessor.getOVERLAY())
@@ -106,5 +119,49 @@ public class OperationStarcleaveRenderTypes {
             RenderType.CompositeState state
     ) {
         return RenderTypeAccessor.invokeCreate(name, format, mode, bufferSize, affectsCrumbling, sortOnUpload, state);
+    }
+
+    public static class IndexedMultiTextureStateShard extends RenderStateShard.EmptyTextureStateShard {
+        private final Optional<ResourceLocation> cutoutTexture;
+
+        IndexedMultiTextureStateShard(ImmutableList<Entry> textures) {
+            super(() -> {
+                for (Entry entry : textures) {
+                    TextureManager textureManager = Minecraft.getInstance().getTextureManager();
+                    textureManager.getTexture(entry.texture).setFilter(entry.blur, entry.mipmap);
+                    RenderSystem.setShaderTexture(entry.index, entry.texture);
+                }
+            }, () -> {
+                for (Entry entry : textures) {
+                    RenderSystem.setShaderTexture(entry.index, 0);
+                }
+            });
+            this.cutoutTexture = textures.stream().findFirst().map(Entry::texture);
+        }
+
+        @Override
+        protected Optional<ResourceLocation> cutoutTexture() {
+            return this.cutoutTexture;
+        }
+
+        public static IndexedMultiTextureStateShard.Builder builder() {
+            return new IndexedMultiTextureStateShard.Builder();
+        }
+
+        public static final class Builder {
+            private final ImmutableList.Builder<Entry> builder = new ImmutableList.Builder<>();
+
+            public IndexedMultiTextureStateShard.Builder add(int index, ResourceLocation texture, boolean blur, boolean mipmap) {
+                this.builder.add(new Entry(index, texture, blur, mipmap));
+                return this;
+            }
+
+            public IndexedMultiTextureStateShard build() {
+                return new IndexedMultiTextureStateShard(this.builder.build());
+            }
+        }
+
+        public record Entry(int index, ResourceLocation texture, boolean blur, boolean mipmap) {
+        }
     }
 }

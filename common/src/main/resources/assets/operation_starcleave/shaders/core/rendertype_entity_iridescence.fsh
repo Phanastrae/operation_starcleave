@@ -3,6 +3,7 @@
 #moj_import <fog.glsl>
 
 uniform sampler2D Sampler0;
+uniform sampler2D Sampler3;
 
 uniform vec4 ColorModulator;
 uniform float FogStart;
@@ -20,24 +21,11 @@ in vec3 position;
 
 out vec4 fragColor;
 
-#define PI 3.14159265359
-#define TAU 6.28318530718
-
-vec3 rainbow(float f) {
-    float r = sin(f);
-    float g = sin(f + TAU/3.);
-    float b = sin(f - TAU/3.);
-    return vec3(r, g, b) * 0.4 + 0.6;
-}
-
 vec4 getShineColor(float dot, float shineStrength) {
-    float d = max(0., -dot); // 1 when facing material straight on, 0 when facing from the side
-    float shineAlpha = pow(1. - d, 1.) * shineStrength;
+    float f = 0.5 * (1. + dot); // dot = -1 => f = 0, dot = +1 => f = 1
+    vec4 texColor = texture(Sampler3, vec2(f, 0.5));
 
-    float angle = TAU * -2. * (1. + (dot < 0 ? dot : dot * -0.125));
-    vec3 shineColor = rainbow(angle);
-
-    return vec4(shineColor, shineAlpha);
+    return vec4(texColor.rgb, texColor.a * shineStrength);
 }
 
 void main() {
