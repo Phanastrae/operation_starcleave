@@ -60,6 +60,7 @@ public class OperationStarcleaveCreativeModeTabs {
 
                 STARFLAKED_BISMUTH_BLOCK,
                 STARFLAKED_BISMUTH_SLAB,
+                CHISELED_STARFLAKED_BISMUTH_BLOCK,
 
                 STARFLAKED_BISMUTH_PILLAR,
 
@@ -67,6 +68,7 @@ public class OperationStarcleaveCreativeModeTabs {
                 STARFLAKED_BISMUTH_BRICK_STAIRS,
                 STARFLAKED_BISMUTH_BRICK_SLAB,
                 STARFLAKED_BISMUTH_BRICK_WALL,
+                CHISELED_STARFLAKED_BISMUTH_BRICKS,
 
                 STARFLAKED_BISMUTH_TILES,
                 STARFLAKED_BISMUTH_TILE_STAIRS,
@@ -186,6 +188,7 @@ public class OperationStarcleaveCreativeModeTabs {
         helper.addAfter(Items.WAXED_OXIDIZED_COPPER_BULB, BUILDING_BLOCKS,
                 STARFLAKED_BISMUTH_BLOCK,
                 STARFLAKED_BISMUTH_SLAB,
+                CHISELED_STARFLAKED_BISMUTH_BLOCK,
 
                 STARFLAKED_BISMUTH_PILLAR,
 
@@ -193,6 +196,7 @@ public class OperationStarcleaveCreativeModeTabs {
                 STARFLAKED_BISMUTH_BRICK_STAIRS,
                 STARFLAKED_BISMUTH_BRICK_SLAB,
                 STARFLAKED_BISMUTH_BRICK_WALL,
+                CHISELED_STARFLAKED_BISMUTH_BRICKS,
 
                 STARFLAKED_BISMUTH_TILES,
                 STARFLAKED_BISMUTH_TILE_STAIRS,

@@ -46,7 +46,8 @@ public class ModelProvider extends FabricModelProvider {
                 NUCLEOSYNTHESEED,
                 PLASMA_ICE,
 
-                STARFLAKED_BISMUTH_BLOCK
+                STARFLAKED_BISMUTH_BLOCK,
+                CHISELED_STARFLAKED_BISMUTH_BLOCK
         );
 
         forEach(BMG::createRotatedVariantBlock,
@@ -100,7 +101,11 @@ public class ModelProvider extends FabricModelProvider {
         // these functions only create the models, blockstates need to still be done manually
         forEach(block -> createTrivialCubeForSuffix(SUFFIX_IRIDESCENCE, BMG, block),
                 STARFLAKED_BISMUTH_BLOCK,
+                CHISELED_STARFLAKED_BISMUTH_BLOCK,
+
                 STARFLAKED_BISMUTH_BRICKS,
+                CHISELED_STARFLAKED_BISMUTH_BRICKS,
+
                 STARFLAKED_BISMUTH_TILES,
                 STARFLAKED_BISMUTH_MOSAIC
         );
@@ -408,10 +413,12 @@ public class ModelProvider extends FabricModelProvider {
         forEach(block -> addDelegateModelForSuffix(SUFFIX_IRIDESCENCE, IMG, block),
                 STARFLAKED_BISMUTH_BLOCK,
                 STARFLAKED_BISMUTH_SLAB,
+                CHISELED_STARFLAKED_BISMUTH_BLOCK,
 
                 STARFLAKED_BISMUTH_BRICKS,
                 STARFLAKED_BISMUTH_BRICK_STAIRS,
                 STARFLAKED_BISMUTH_BRICK_SLAB,
+                CHISELED_STARFLAKED_BISMUTH_BRICKS,
 
                 STARFLAKED_BISMUTH_TILES,
                 STARFLAKED_BISMUTH_TILE_STAIRS,
