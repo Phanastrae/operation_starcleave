@@ -42,6 +42,8 @@
     "operation_starcleave:stellar_repulsor",
     "operation_starcleave:coagulated_plasma",
     "operation_starcleave:plasma_ice",
-    "operation_starcleave:starflaked_bismuth_pillar"
+    "operation_starcleave:starflaked_bismuth_pillar",
+    "operation_starcleave:starflaked_bismuth_door",
+    "operation_starcleave:starflaked_bismuth_trapdoor"
   ]
 }

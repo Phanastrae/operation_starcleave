@@ -62,6 +62,13 @@ public class RecipeProvider extends FabricRecipeProvider {
         twoByTwoPacker(exporter, RecipeCategory.BUILDING_BLOCKS, STARFLAKED_BISMUTH_BLOCK, STARFLAKED_BISMUTH);
         mosaicBuilder(exporter, RecipeCategory.DECORATIONS, STARFLAKED_BISMUTH_MOSAIC, STARFLAKED_BISMUTH_TILE_SLAB);
 
+        doorBuilder(STARFLAKED_BISMUTH_DOOR, Ingredient.of(STARFLAKED_BISMUTH))
+                .unlockedBy(getHasName(STARFLAKED_BISMUTH), has(STARFLAKED_BISMUTH))
+                .save(exporter);
+        trapdoorBuilder(STARFLAKED_BISMUTH_TRAPDOOR, Ingredient.of(STARFLAKED_BISMUTH))
+                .unlockedBy(getHasName(STARFLAKED_BISMUTH), has(STARFLAKED_BISMUTH))
+                .save(exporter);
+
         savePolished(STARDUST_BRICKS, STARDUST_BLOCK, exporter);
         savePolished(STELLAR_TILES, STELLAR_SEDIMENT, exporter);
 

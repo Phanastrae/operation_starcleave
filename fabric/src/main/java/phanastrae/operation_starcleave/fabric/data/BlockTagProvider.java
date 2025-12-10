@@ -153,7 +153,9 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         COAGULATED_PLASMA,
                         PLASMA_ICE,
 
-                        STARFLAKED_BISMUTH_PILLAR
+                        STARFLAKED_BISMUTH_PILLAR,
+                        STARFLAKED_BISMUTH_DOOR,
+                        STARFLAKED_BISMUTH_TRAPDOOR
                 );
 
         getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_SHOVEL)
@@ -194,7 +196,9 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 .add(
                         COAGULATED_PLASMA,
 
-                        STARFLAKED_BISMUTH_PILLAR
+                        STARFLAKED_BISMUTH_PILLAR,
+                        STARFLAKED_BISMUTH_DOOR,
+                        STARFLAKED_BISMUTH_TRAPDOOR
                 );
 
         getOrCreateTagBuilder(BlockTags.REPLACEABLE_BY_TREES)
@@ -228,6 +232,16 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 .add(
                         POTTED_MULCHBORNE_TUFT,
                         POTTED_SHORT_HOLY_MOSS
+                );
+
+        getOrCreateTagBuilder(BlockTags.DOORS)
+                .add(
+                        STARFLAKED_BISMUTH_DOOR
+                );
+
+        getOrCreateTagBuilder(BlockTags.TRAPDOORS)
+                .add(
+                        STARFLAKED_BISMUTH_TRAPDOOR
                 );
 
         // common

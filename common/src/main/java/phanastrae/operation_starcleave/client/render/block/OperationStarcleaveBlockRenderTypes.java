@@ -15,12 +15,17 @@ public class OperationStarcleaveBlockRenderTypes {
         );
         putBlocks(RenderType.cutout(),
                 BISREEDS,
+
                 MULCHBORNE_TUFT,
                 POTTED_MULCHBORNE_TUFT,
                 SHORT_HOLY_MOSS,
                 POTTED_SHORT_HOLY_MOSS,
+
                 BLESSED_BED,
-                PHLOGISTIC_FIRE
+                PHLOGISTIC_FIRE,
+
+                STARFLAKED_BISMUTH_DOOR,
+                STARFLAKED_BISMUTH_TRAPDOOR
         );
         putBlocks(RenderType.translucent(),
                 PETRICHORIC_VAPOR

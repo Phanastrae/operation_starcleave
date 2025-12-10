@@ -80,6 +80,9 @@ public class OperationStarcleaveCreativeModeTabs {
                 STARFLAKED_BISMUTH_MOSAIC_SLAB,
                 STARFLAKED_BISMUTH_MOSAIC_WALL,
 
+                STARFLAKED_BISMUTH_DOOR,
+                STARFLAKED_BISMUTH_TRAPDOOR,
+
                 STELLAR_TILES,
                 STELLAR_TILE_SLAB,
 
@@ -206,7 +209,10 @@ public class OperationStarcleaveCreativeModeTabs {
                 STARFLAKED_BISMUTH_MOSAIC,
                 STARFLAKED_BISMUTH_MOSAIC_STAIRS,
                 STARFLAKED_BISMUTH_MOSAIC_SLAB,
-                STARFLAKED_BISMUTH_MOSAIC_WALL
+                STARFLAKED_BISMUTH_MOSAIC_WALL,
+
+                STARFLAKED_BISMUTH_DOOR,
+                STARFLAKED_BISMUTH_TRAPDOOR
         );
 
         // Natural

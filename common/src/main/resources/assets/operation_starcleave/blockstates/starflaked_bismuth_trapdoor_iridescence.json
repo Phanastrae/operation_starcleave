@@ -1,0 +1,69 @@
+{
+  "variants": {
+    "facing=east,half=bottom,open=false": {
+      "model": "operation_starcleave:block/starflaked_bismuth_trapdoor_bottom_iridescence",
+      "y": 90
+    },
+    "facing=east,half=bottom,open=true": {
+      "model": "operation_starcleave:block/starflaked_bismuth_trapdoor_open_iridescence",
+      "y": 90
+    },
+    "facing=east,half=top,open=false": {
+      "model": "operation_starcleave:block/starflaked_bismuth_trapdoor_top_iridescence",
+      "y": 90
+    },
+    "facing=east,half=top,open=true": {
+      "model": "operation_starcleave:block/starflaked_bismuth_trapdoor_open_iridescence",
+      "x": 180,
+      "y": 270
+    },
+    "facing=north,half=bottom,open=false": {
+      "model": "operation_starcleave:block/starflaked_bismuth_trapdoor_bottom_iridescence"
+    },
+    "facing=north,half=bottom,open=true": {
+      "model": "operation_starcleave:block/starflaked_bismuth_trapdoor_open_iridescence"
+    },
+    "facing=north,half=top,open=false": {
+      "model": "operation_starcleave:block/starflaked_bismuth_trapdoor_top_iridescence"
+    },
+    "facing=north,half=top,open=true": {
+      "model": "operation_starcleave:block/starflaked_bismuth_trapdoor_open_iridescence",
+      "x": 180,
+      "y": 180
+    },
+    "facing=south,half=bottom,open=false": {
+      "model": "operation_starcleave:block/starflaked_bismuth_trapdoor_bottom_iridescence",
+      "y": 180
+    },
+    "facing=south,half=bottom,open=true": {
+      "model": "operation_starcleave:block/starflaked_bismuth_trapdoor_open_iridescence",
+      "y": 180
+    },
+    "facing=south,half=top,open=false": {
+      "model": "operation_starcleave:block/starflaked_bismuth_trapdoor_top_iridescence",
+      "y": 180
+    },
+    "facing=south,half=top,open=true": {
+      "model": "operation_starcleave:block/starflaked_bismuth_trapdoor_open_iridescence",
+      "x": 180,
+      "y": 0
+    },
+    "facing=west,half=bottom,open=false": {
+      "model": "operation_starcleave:block/starflaked_bismuth_trapdoor_bottom_iridescence",
+      "y": 270
+    },
+    "facing=west,half=bottom,open=true": {
+      "model": "operation_starcleave:block/starflaked_bismuth_trapdoor_open_iridescence",
+      "y": 270
+    },
+    "facing=west,half=top,open=false": {
+      "model": "operation_starcleave:block/starflaked_bismuth_trapdoor_top_iridescence",
+      "y": 270
+    },
+    "facing=west,half=top,open=true": {
+      "model": "operation_starcleave:block/starflaked_bismuth_trapdoor_open_iridescence",
+      "x": 180,
+      "y": 90
+    }
+  }
+}

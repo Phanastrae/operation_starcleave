@@ -20,6 +20,8 @@
     "operation_starcleave:starflaked_bismuth_mosaic_stairs",
     "operation_starcleave:starflaked_bismuth_mosaic_wall",
     "operation_starcleave:coagulated_plasma",
-    "operation_starcleave:starflaked_bismuth_pillar"
+    "operation_starcleave:starflaked_bismuth_pillar",
+    "operation_starcleave:starflaked_bismuth_door",
+    "operation_starcleave:starflaked_bismuth_trapdoor"
   ]
 }

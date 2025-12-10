@@ -82,7 +82,8 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
 
                 COAGULATED_PLASMA,
 
-                STARFLAKED_BISMUTH_PILLAR
+                STARFLAKED_BISMUTH_PILLAR,
+                STARFLAKED_BISMUTH_TRAPDOOR
         );
 
         forEach(this::dropPottedContents,
@@ -107,6 +108,8 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
         dropWithSilkTouchOrShears(NUCLEIC_FISSURELEAVES);
 
         dropWithShears(MULCHBORNE_TUFT);
+
+        this.add(STARFLAKED_BISMUTH_DOOR, this::createDoorTable);
 
         add(SHORT_HOLY_MOSS, block -> createShearsDispatchTable(block,
                         applyExplosionDecay(block,

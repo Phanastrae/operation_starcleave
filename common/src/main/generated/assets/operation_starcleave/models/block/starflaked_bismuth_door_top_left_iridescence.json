@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_top_left",
+  "textures": {
+    "bottom": "operation_starcleave:block/starflaked_bismuth_door_bottom_iridescence",
+    "top": "operation_starcleave:block/starflaked_bismuth_door_top_iridescence"
+  }
+}

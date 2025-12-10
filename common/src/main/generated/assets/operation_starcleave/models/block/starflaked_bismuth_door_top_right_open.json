@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_top_right_open",
+  "textures": {
+    "bottom": "operation_starcleave:block/starflaked_bismuth_door_bottom",
+    "top": "operation_starcleave:block/starflaked_bismuth_door_top"
+  }
+}

@@ -10,6 +10,7 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
@@ -569,6 +570,15 @@ public class OperationStarcleaveBlocks {
             wallOf(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_MOSAIC)
     );
 
+    public static final Block STARFLAKED_BISMUTH_DOOR = register(
+            "starflaked_bismuth_door",
+            doorOf(OperationStarcleaveBlockSetTypes.STARFLAKED_BISMUTH, STARFLAKED_BISMUTH_BLOCK, 2.5F, 3.0F)
+    );
+    public static final Block STARFLAKED_BISMUTH_TRAPDOOR = register(
+            "starflaked_bismuth_trapdoor",
+            trapdoorOf(OperationStarcleaveBlockSetTypes.STARFLAKED_BISMUTH, STARFLAKED_BISMUTH_BLOCK, 2.5F, 3.0F)
+    );
+
     private static <T extends Block> T register(String id, T block) {
         return register(OperationStarcleave.id(id), block);
     }
@@ -618,5 +628,21 @@ public class OperationStarcleaveBlocks {
                 .noOcclusion()
                 .pushReaction(PushReaction.DESTROY);
         return new FlowerPotBlock(potted, props);
+    }
+
+    protected static DoorBlock doorOf(BlockSetType blockSetType, BlockBehaviour block, float destroyTime, float explosionResistance) {
+        return new CustomDoorBlock(blockSetType, copyShallow(block)
+                .strength(destroyTime, explosionResistance)
+                .pushReaction(PushReaction.DESTROY)
+                .noOcclusion()
+        );
+    }
+
+    protected static TrapDoorBlock trapdoorOf(BlockSetType blockSetType, BlockBehaviour block, float destroyTime, float explosionResistance) {
+        return new CustomTrapDoorBlock(blockSetType, copyShallow(block)
+                .strength(destroyTime, explosionResistance)
+                .isValidSpawn(SPAWN_NEVER)
+                .noOcclusion()
+        );
     }
 }

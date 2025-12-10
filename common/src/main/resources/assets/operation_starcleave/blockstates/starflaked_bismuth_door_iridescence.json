@@ -1,0 +1,124 @@
+{
+  "variants": {
+    "facing=east,half=lower,hinge=left,open=false": {
+      "model": "operation_starcleave:block/starflaked_bismuth_door_bottom_left_iridescence"
+    },
+    "facing=east,half=lower,hinge=left,open=true": {
+      "model": "operation_starcleave:block/starflaked_bismuth_door_bottom_left_open_iridescence",
+      "y": 90
+    },
+    "facing=east,half=lower,hinge=right,open=false": {
+      "model": "operation_starcleave:block/starflaked_bismuth_door_bottom_right_iridescence"
+    },
+    "facing=east,half=lower,hinge=right,open=true": {
+      "model": "operation_starcleave:block/starflaked_bismuth_door_bottom_right_open_iridescence",
+      "y": 270
+    },
+    "facing=east,half=upper,hinge=left,open=false": {
+      "model": "operation_starcleave:block/starflaked_bismuth_door_top_left_iridescence"
+    },
+    "facing=east,half=upper,hinge=left,open=true": {
+      "model": "operation_starcleave:block/starflaked_bismuth_door_top_left_open_iridescence",
+      "y": 90
+    },
+    "facing=east,half=upper,hinge=right,open=false": {
+      "model": "operation_starcleave:block/starflaked_bismuth_door_top_right_iridescence"
+    },
+    "facing=east,half=upper,hinge=right,open=true": {
+      "model": "operation_starcleave:block/starflaked_bismuth_door_top_right_open_iridescence",
+      "y": 270
+    },
+    "facing=north,half=lower,hinge=left,open=false": {
+      "model": "operation_starcleave:block/starflaked_bismuth_door_bottom_left_iridescence",
+      "y": 270
+    },
+    "facing=north,half=lower,hinge=left,open=true": {
+      "model": "operation_starcleave:block/starflaked_bismuth_door_bottom_left_open_iridescence"
+    },
+    "facing=north,half=lower,hinge=right,open=false": {
+      "model": "operation_starcleave:block/starflaked_bismuth_door_bottom_right_iridescence",
+      "y": 270
+    },
+    "facing=north,half=lower,hinge=right,open=true": {
+      "model": "operation_starcleave:block/starflaked_bismuth_door_bottom_right_open_iridescence",
+      "y": 180
+    },
+    "facing=north,half=upper,hinge=left,open=false": {
+      "model": "operation_starcleave:block/starflaked_bismuth_door_top_left_iridescence",
+      "y": 270
+    },
+    "facing=north,half=upper,hinge=left,open=true": {
+      "model": "operation_starcleave:block/starflaked_bismuth_door_top_left_open_iridescence"
+    },
+    "facing=north,half=upper,hinge=right,open=false": {
+      "model": "operation_starcleave:block/starflaked_bismuth_door_top_right_iridescence",
+      "y": 270
+    },
+    "facing=north,half=upper,hinge=right,open=true": {
+      "model": "operation_starcleave:block/starflaked_bismuth_door_top_right_open_iridescence",
+      "y": 180
+    },
+    "facing=south,half=lower,hinge=left,open=false": {
+      "model": "operation_starcleave:block/starflaked_bismuth_door_bottom_left_iridescence",
+      "y": 90
+    },
+    "facing=south,half=lower,hinge=left,open=true": {
+      "model": "operation_starcleave:block/starflaked_bismuth_door_bottom_left_open_iridescence",
+      "y": 180
+    },
+    "facing=south,half=lower,hinge=right,open=false": {
+      "model": "operation_starcleave:block/starflaked_bismuth_door_bottom_right_iridescence",
+      "y": 90
+    },
+    "facing=south,half=lower,hinge=right,open=true": {
+      "model": "operation_starcleave:block/starflaked_bismuth_door_bottom_right_open_iridescence"
+    },
+    "facing=south,half=upper,hinge=left,open=false": {
+      "model": "operation_starcleave:block/starflaked_bismuth_door_top_left_iridescence",
+      "y": 90
+    },
+    "facing=south,half=upper,hinge=left,open=true": {
+      "model": "operation_starcleave:block/starflaked_bismuth_door_top_left_open_iridescence",
+      "y": 180
+    },
+    "facing=south,half=upper,hinge=right,open=false": {
+      "model": "operation_starcleave:block/starflaked_bismuth_door_top_right_iridescence",
+      "y": 90
+    },
+    "facing=south,half=upper,hinge=right,open=true": {
+      "model": "operation_starcleave:block/starflaked_bismuth_door_top_right_open_iridescence"
+    },
+    "facing=west,half=lower,hinge=left,open=false": {
+      "model": "operation_starcleave:block/starflaked_bismuth_door_bottom_left_iridescence",
+      "y": 180
+    },
+    "facing=west,half=lower,hinge=left,open=true": {
+      "model": "operation_starcleave:block/starflaked_bismuth_door_bottom_left_open_iridescence",
+      "y": 270
+    },
+    "facing=west,half=lower,hinge=right,open=false": {
+      "model": "operation_starcleave:block/starflaked_bismuth_door_bottom_right_iridescence",
+      "y": 180
+    },
+    "facing=west,half=lower,hinge=right,open=true": {
+      "model": "operation_starcleave:block/starflaked_bismuth_door_bottom_right_open_iridescence",
+      "y": 90
+    },
+    "facing=west,half=upper,hinge=left,open=false": {
+      "model": "operation_starcleave:block/starflaked_bismuth_door_top_left_iridescence",
+      "y": 180
+    },
+    "facing=west,half=upper,hinge=left,open=true": {
+      "model": "operation_starcleave:block/starflaked_bismuth_door_top_left_open_iridescence",
+      "y": 270
+    },
+    "facing=west,half=upper,hinge=right,open=false": {
+      "model": "operation_starcleave:block/starflaked_bismuth_door_top_right_iridescence",
+      "y": 180
+    },
+    "facing=west,half=upper,hinge=right,open=true": {
+      "model": "operation_starcleave:block/starflaked_bismuth_door_top_right_open_iridescence",
+      "y": 90
+    }
+  }
+}
