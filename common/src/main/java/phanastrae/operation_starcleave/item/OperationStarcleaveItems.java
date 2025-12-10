@@ -107,6 +107,8 @@ public class OperationStarcleaveItems {
     public static final Item STARFLAKED_BISMUTH_DOOR = registerBlock(new DoubleHighBlockItem(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_DOOR, properties()));
     public static final Item STARFLAKED_BISMUTH_TRAPDOOR = registerBlockItem(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_TRAPDOOR);
 
+    public static final Item CELESTIAL_OPAL_BLOCK = registerBlockItem(OperationStarcleaveBlocks.CELESTIAL_OPAL_BLOCK);
+
 
     public static final Item STARCLEAVER_GOLEM_BUCKET = register("starcleaver_golem_bucket", new StarcleaverGolemBucketItem(properties().stacksTo(1)));
 

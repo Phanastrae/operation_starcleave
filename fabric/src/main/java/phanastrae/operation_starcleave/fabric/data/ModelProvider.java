@@ -47,7 +47,9 @@ public class ModelProvider extends FabricModelProvider {
                 PLASMA_ICE,
 
                 STARFLAKED_BISMUTH_BLOCK,
-                CHISELED_STARFLAKED_BISMUTH_BLOCK
+                CHISELED_STARFLAKED_BISMUTH_BLOCK,
+
+                CELESTIAL_OPAL_BLOCK
         );
 
         forEach(BMG::createRotatedVariantBlock,
@@ -110,7 +112,9 @@ public class ModelProvider extends FabricModelProvider {
                 CHISELED_STARFLAKED_BISMUTH_BRICKS,
 
                 STARFLAKED_BISMUTH_TILES,
-                STARFLAKED_BISMUTH_MOSAIC
+                STARFLAKED_BISMUTH_MOSAIC,
+
+                CELESTIAL_OPAL_BLOCK
         );
         createCropForSuffix(2, SUFFIX_IRIDESCENCE, BMG, BISREEDS);
         createCropForSuffix(3, SUFFIX_IRIDESCENCE, BMG, BISREEDS);
@@ -468,7 +472,9 @@ public class ModelProvider extends FabricModelProvider {
 
                 STARFLAKED_BISMUTH_MOSAIC,
                 STARFLAKED_BISMUTH_MOSAIC_STAIRS,
-                STARFLAKED_BISMUTH_MOSAIC_SLAB
+                STARFLAKED_BISMUTH_MOSAIC_SLAB,
+
+                CELESTIAL_OPAL_BLOCK
         );
         forEach(wallBlock -> addDelegateWallModelForSuffix(SUFFIX_IRIDESCENCE, IMG, wallBlock),
                 STARFLAKED_BISMUTH_BRICK_WALL,

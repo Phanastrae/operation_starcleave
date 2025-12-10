@@ -122,6 +122,8 @@ public class OperationStarcleaveCreativeModeTabs {
                 CHISELED_STARBLEACHED_TILES,
                 IMBUED_STARBLEACHED_TILES,
 
+                CELESTIAL_OPAL_BLOCK,
+
                 NUCLEOSYNTHESEED,
                 NUCLEIC_FISSUREROOT,
                 NUCLEIC_FISSURERIND,
@@ -212,7 +214,9 @@ public class OperationStarcleaveCreativeModeTabs {
                 STARFLAKED_BISMUTH_MOSAIC_WALL,
 
                 STARFLAKED_BISMUTH_DOOR,
-                STARFLAKED_BISMUTH_TRAPDOOR
+                STARFLAKED_BISMUTH_TRAPDOOR,
+
+                CELESTIAL_OPAL_BLOCK
         );
 
         // Natural
@@ -227,6 +231,9 @@ public class OperationStarcleaveCreativeModeTabs {
                 COAGULATED_PLASMA,
                 PLASMA_ICE
 
+        );
+        helper.addAfter(Items.AMETHYST_CLUSTER, NATURAL_BLOCKS,
+                CELESTIAL_OPAL_BLOCK
         );
         helper.addAfter(Items.WARPED_STEM, NATURAL_BLOCKS,
                 STARBLEACHED_LOG,

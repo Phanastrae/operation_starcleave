@@ -73,6 +73,10 @@ public class StarbleachConversions {
                 StateMatchesPredicate.fromBlock(DIRT_PATH),
                 SimpleStateProvider.simple(STELLAR_PATH)
         );
+        StateConversion opalConversion = new StateConversion(
+                StateMatchesPredicate.fromBlock(AMETHYST_BLOCK),
+                SimpleStateProvider.simple(CELESTIAL_OPAL_BLOCK)
+        );
 
         return new StateConversion[]{
                 stellarMulchConversion,
@@ -83,7 +87,8 @@ public class StarbleachConversions {
                 leavesConversion,
                 logsConversion,
                 farmlandConversion,
-                pathConversion
+                pathConversion,
+                opalConversion
         };
     }
 

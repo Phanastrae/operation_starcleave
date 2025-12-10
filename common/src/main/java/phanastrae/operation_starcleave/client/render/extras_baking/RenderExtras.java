@@ -54,6 +54,8 @@ public class RenderExtras {
             OperationStarcleaveItems.STARFLAKED_BISMUTH_DOOR,
             OperationStarcleaveItems.STARFLAKED_BISMUTH_TRAPDOOR,
 
+            OperationStarcleaveItems.CELESTIAL_OPAL_BLOCK,
+
             OperationStarcleaveItems.BISMUTH_FLAKE,
             OperationStarcleaveItems.STARFLAKED_BISMUTH,
             OperationStarcleaveItems.BISMUTH_PEGASUS_ARMOR
@@ -69,11 +71,20 @@ public class RenderExtras {
     }
 
     public static int getIridescenceId(Item item) {
-        return getBismuthIridescenceId(); // TODO
+        // TODO tidy this
+        if (item.equals(OperationStarcleaveItems.CELESTIAL_OPAL_BLOCK)) {
+            return getOpalIridescenceId();
+        } else {
+            return getBismuthIridescenceId();
+        }
     }
 
     public static int getBismuthIridescenceId() {
         return 1;
+    }
+
+    public static int getOpalIridescenceId() {
+        return 2;
     }
 
     public static void renderExtras(LevelRenderer levelRenderer, Matrix4f projectionMatrix, Matrix4f positionMatrix, Camera camera, Frustum frustum) {

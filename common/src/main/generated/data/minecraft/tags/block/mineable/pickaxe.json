@@ -44,6 +44,7 @@
     "operation_starcleave:plasma_ice",
     "operation_starcleave:starflaked_bismuth_pillar",
     "operation_starcleave:starflaked_bismuth_door",
-    "operation_starcleave:starflaked_bismuth_trapdoor"
+    "operation_starcleave:starflaked_bismuth_trapdoor",
+    "operation_starcleave:celestial_opal_block"
   ]
 }

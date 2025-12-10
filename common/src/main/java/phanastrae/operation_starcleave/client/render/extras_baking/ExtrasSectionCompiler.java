@@ -57,7 +57,9 @@ public class ExtrasSectionCompiler {
             OperationStarcleaveBlocks.STARFLAKED_BISMUTH_DOOR,
             OperationStarcleaveBlocks.STARFLAKED_BISMUTH_TRAPDOOR,
 
-            OperationStarcleaveBlocks.BISREEDS
+            OperationStarcleaveBlocks.BISREEDS,
+
+            OperationStarcleaveBlocks.CELESTIAL_OPAL_BLOCK
     );
 
     private final ModelManager modelManager;
@@ -180,7 +182,12 @@ public class ExtrasSectionCompiler {
     }
 
     public static int getIridescenceId(BlockState state) {
-        return RenderExtras.getBismuthIridescenceId(); // TODO
+        // TODO tidy this
+        if (state.is(OperationStarcleaveBlocks.CELESTIAL_OPAL_BLOCK)) {
+            return RenderExtras.getOpalIridescenceId();
+        } else {
+            return RenderExtras.getBismuthIridescenceId();
+        }
     }
 
     public static class Results {

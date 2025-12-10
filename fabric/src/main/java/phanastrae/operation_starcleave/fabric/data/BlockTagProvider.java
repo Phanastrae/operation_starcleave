@@ -155,7 +155,9 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
                         STARFLAKED_BISMUTH_PILLAR,
                         STARFLAKED_BISMUTH_DOOR,
-                        STARFLAKED_BISMUTH_TRAPDOOR
+                        STARFLAKED_BISMUTH_TRAPDOOR,
+
+                        CELESTIAL_OPAL_BLOCK
                 );
 
         getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_SHOVEL)
@@ -242,6 +244,11 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         getOrCreateTagBuilder(BlockTags.TRAPDOORS)
                 .add(
                         STARFLAKED_BISMUTH_TRAPDOOR
+                );
+
+        getOrCreateTagBuilder(BlockTags.CRYSTAL_SOUND_BLOCKS)
+                .add(
+                        CELESTIAL_OPAL_BLOCK
                 );
 
         // common

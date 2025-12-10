@@ -579,6 +579,17 @@ public class OperationStarcleaveBlocks {
             trapdoorOf(OperationStarcleaveBlockSetTypes.STARFLAKED_BISMUTH, STARFLAKED_BISMUTH_BLOCK, 2.5F, 3.0F)
     );
 
+    public static final Block CELESTIAL_OPAL_BLOCK = register(
+            "celestial_opal_block",
+            new AmethystBlock(properties()
+                    .strength(4.0F)
+                    .mapColor(COLOR_LIGHT_GRAY)
+                    .sound(SoundType.AMETHYST)
+                    .lightLevel(constant(9))
+                    .requiresCorrectToolForDrops()
+            )
+    );
+
     private static <T extends Block> T register(String id, T block) {
         return register(OperationStarcleave.id(id), block);
     }
