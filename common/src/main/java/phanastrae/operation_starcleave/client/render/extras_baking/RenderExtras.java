@@ -58,7 +58,9 @@ public class RenderExtras {
 
             OperationStarcleaveItems.BISMUTH_FLAKE,
             OperationStarcleaveItems.STARFLAKED_BISMUTH,
-            OperationStarcleaveItems.BISMUTH_PEGASUS_ARMOR
+            OperationStarcleaveItems.BISMUTH_PEGASUS_ARMOR,
+
+            OperationStarcleaveItems.CELESTIAL_OPAL_SHARD
     );
 
     private static float[] posOffset = new float[3];
@@ -72,7 +74,7 @@ public class RenderExtras {
 
     public static int getIridescenceId(Item item) {
         // TODO tidy this
-        if (item.equals(OperationStarcleaveItems.CELESTIAL_OPAL_BLOCK)) {
+        if (item.equals(OperationStarcleaveItems.CELESTIAL_OPAL_BLOCK) || item.equals(OperationStarcleaveItems.CELESTIAL_OPAL_SHARD)) {
             return getOpalIridescenceId();
         } else {
             return getBismuthIridescenceId();

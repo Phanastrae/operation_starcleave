@@ -74,6 +74,8 @@ public class RecipeProvider extends FabricRecipeProvider {
 
         carpet(exporter, BLESSED_CLOTH_CARPET, BLESSED_CLOTH_BLOCK);
 
+        twoByTwoPacker(exporter, RecipeCategory.BUILDING_BLOCKS, CELESTIAL_OPAL_BLOCK, CELESTIAL_OPAL_SHARD);
+
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, BLESSED_CLOTH_CURTAIN, 16)
                 .define('#', BLESSED_CLOTH)
                 .pattern("###")

@@ -123,6 +123,7 @@ public class OperationStarcleaveCreativeModeTabs {
                 IMBUED_STARBLEACHED_TILES,
 
                 CELESTIAL_OPAL_BLOCK,
+                CELESTIAL_OPAL_SHARD,
 
                 NUCLEOSYNTHESEED,
                 NUCLEIC_FISSUREROOT,
@@ -321,6 +322,9 @@ public class OperationStarcleaveCreativeModeTabs {
         helper.addAfter(Items.NETHERITE_INGOT, INGREDIENTS,
                 BISMUTH_FLAKE,
                 STARFLAKED_BISMUTH
+        );
+        helper.addAfter(Items.AMETHYST_SHARD, INGREDIENTS,
+                CELESTIAL_OPAL_SHARD
         );
         helper.addAfter(Items.EXPERIENCE_BOTTLE, INGREDIENTS,
                 STARBLEACH_BOTTLE,

@@ -437,6 +437,8 @@ public class ModelProvider extends FabricModelProvider {
 
                 OperationStarcleaveItems.BISMUTH_PEGASUS_ARMOR,
 
+                OperationStarcleaveItems.CELESTIAL_OPAL_SHARD,
+
                 OperationStarcleaveItems.PETRICHORIC_PLASMA_BUCKET,
 
                 OperationStarcleaveItems.NUCLEAR_STORMCLOUD_BOTTLE,
@@ -452,7 +454,9 @@ public class ModelProvider extends FabricModelProvider {
 
                 OperationStarcleaveItems.BISMUTH_FLAKE,
                 OperationStarcleaveItems.STARFLAKED_BISMUTH,
-                OperationStarcleaveItems.BISMUTH_PEGASUS_ARMOR
+                OperationStarcleaveItems.BISMUTH_PEGASUS_ARMOR,
+
+                OperationStarcleaveItems.CELESTIAL_OPAL_SHARD
         );
 
         forEach(block -> addDelegateModelForSuffix(SUFFIX_IRIDESCENCE, IMG, block),

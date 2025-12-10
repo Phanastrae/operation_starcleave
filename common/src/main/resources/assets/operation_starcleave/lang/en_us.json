@@ -117,9 +117,9 @@
 
   "item.operation_starcleave.bismuth_pegasus_armor": "Bismuth Pegasus Armor",
   "item.operation_starcleave.bismuth_flake": "Bismuth Starflake",
-  "item.operation_starcleave.starflaked_bismuth": "Starflaked Bismuth",
   "item.operation_starcleave.bisreed_root": "Bisreed Root",
   "item.operation_starcleave.blessed_cloth": "Blessed Cloth",
+  "item.operation_starcleave.celestial_opal_shard": "Celestial Opal Shard",
   "item.operation_starcleave.firmament_manipulator": "Creative Firmament Manipulator",
   "item.operation_starcleave.firmament_rejuvenator": "Firmament Rejuvenator",
   "item.operation_starcleave.hollowed_sac": "Hollowed Sac",
@@ -132,6 +132,7 @@
   "item.operation_starcleave.starbleached_pearl": "Starbleached Pearl",
   "item.operation_starcleave.starcleaver_golem_bucket": "Bucket of Starcleaver Golem",
   "item.operation_starcleave.starcleaver_golem_spawn_egg": "Starcleaver Golem Spawn Egg",
+  "item.operation_starcleave.starflaked_bismuth": "Starflaked Bismuth",
   "item.operation_starcleave.starfruit": "Starfruit",
   "item.operation_starcleave.subcaelic_dux_spawn_egg": "Subcaelic Dux Spawn Egg",
   "item.operation_starcleave.subcaelic_torpedo_spawn_egg": "Subcaelic Torpedo Spawn Egg",

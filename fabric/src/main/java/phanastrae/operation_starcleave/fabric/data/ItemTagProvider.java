@@ -128,5 +128,10 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
                         BISREED_ROOT,
                         BISMUTH_FLAKE
                 );
+
+        getOrCreateTagBuilder(ConventionalItemTags.GEMS)
+                .add(
+                        CELESTIAL_OPAL_SHARD
+                );
     }
 }

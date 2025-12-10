@@ -136,6 +136,8 @@ public class OperationStarcleaveItems {
     public static final Item HOLLOWED_SAC = register("hollowed_sac", new HollowedSacItem(properties()));
     public static final Item PHLOGISTON_SAC = register("phlogiston_sac", new PhlogistonSacItem(properties()));
 
+    public static final Item CELESTIAL_OPAL_SHARD = register("celestial_opal_shard", new Item(properties()));
+
     public static final Item PETRICHORIC_PLASMA_BUCKET = register("petrichoric_plasma_bucket", new PetrichoricPlasmaBucketItem(OperationStarcleaveFluids.PETRICHORIC_PLASMA, properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
     public static final Item NUCLEAR_STORMCLOUD_BOTTLE = register("nuclear_stormcloud_bottle", new NuclearStormcloudBottleItem(properties().rarity(EPIC)));
