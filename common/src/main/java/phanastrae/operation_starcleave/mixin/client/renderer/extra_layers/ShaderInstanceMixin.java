@@ -26,15 +26,24 @@ public abstract class ShaderInstanceMixin {
     @Nullable
     public Uniform operation_starcleave$POS_OFFSET;
 
+    @Unique
+    @Nullable
+    public Uniform operation_starcleave$IRIDESCENCE_ID;
+
     @Inject(method = "<init>", at = @At("RETURN"))
     private void operation_starcleave$init(ResourceProvider resourceProvider, String name, VertexFormat vertexFormat, CallbackInfo ci) {
         this.operation_starcleave$POS_OFFSET = this.getUniform("OperationStarcleavePosOffset");
+        this.operation_starcleave$IRIDESCENCE_ID = this.getUniform("OperationStarcleaveIridescenceId");
     }
 
     @Inject(method = "setDefaultUniforms", at = @At("RETURN"))
     private void operation_starcleave$setup(VertexFormat.Mode mode, Matrix4f projectionMatrix, Matrix4f frustrumMatrix, Window window, CallbackInfo ci) {
         if (this.operation_starcleave$POS_OFFSET != null) {
             this.operation_starcleave$POS_OFFSET.set(RenderExtras.getPosOffset());
+        }
+
+        if (this.operation_starcleave$IRIDESCENCE_ID != null) {
+            this.operation_starcleave$IRIDESCENCE_ID.set(RenderExtras.getIridescenceId());
         }
     }
 }

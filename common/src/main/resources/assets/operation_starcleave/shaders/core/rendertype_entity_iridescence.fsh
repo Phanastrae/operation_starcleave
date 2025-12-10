@@ -10,6 +10,7 @@ uniform float FogStart;
 uniform float FogEnd;
 uniform vec4 FogColor;
 uniform vec3 OperationStarcleavePosOffset;
+uniform int OperationStarcleaveIridescenceId;
 
 in float vertexDistance;
 in vec4 vertexColor;
@@ -23,7 +24,12 @@ out vec4 fragColor;
 
 vec4 getShineColor(float dot, float shineStrength) {
     float f = 0.5 * (1. + dot); // dot = -1 => f = 0, dot = +1 => f = 1
-    vec4 texColor = texture(Sampler3, vec2(f, 0.5));
+
+    float iridescenceTx = f * textureSize(Sampler3, 0).x;
+
+    vec4 texColorFloor = texelFetch(Sampler3, ivec2(int(floor(iridescenceTx)), OperationStarcleaveIridescenceId), 0);
+    vec4 texColorCeil = texelFetch(Sampler3, ivec2(int(ceil(iridescenceTx)), OperationStarcleaveIridescenceId), 0);
+    vec4 texColor = mix(texColorFloor, texColorCeil, fract(iridescenceTx));
 
     return vec4(texColor.rgb, texColor.a * shineStrength);
 }

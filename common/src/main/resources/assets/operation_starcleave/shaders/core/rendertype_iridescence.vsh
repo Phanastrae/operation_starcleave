@@ -6,6 +6,7 @@
 in vec3 Position;
 in vec4 Color;
 in vec2 UV0;
+in ivec2 UV1;
 in ivec2 UV2;
 in vec3 Normal;
 
@@ -21,6 +22,7 @@ out vec4 vertexColor;
 out vec2 texCoord0;
 out vec3 normal;
 out vec3 position;
+out float iridescenceId;
 
 void main() {
     vec3 pos = Position + ChunkOffset;
@@ -31,4 +33,5 @@ void main() {
     texCoord0 = UV0;
     normal = Normal;
     position = pos;
+    iridescenceId = float(UV1.y) + 0.5;
 }

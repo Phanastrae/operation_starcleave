@@ -43,6 +43,7 @@ public class FallingBlockRendererMixin {
             Level level = entity.level();
             BlockPos pos = BlockPos.containing(entity.getX(), entity.getBoundingBox().maxY, entity.getZ());
 
+            int iridescenceId = ExtrasSectionCompiler.getIridescenceId(state);
             this.dispatcher
                     .getModelRenderer()
                     .tesselateBlock(
@@ -55,7 +56,7 @@ public class FallingBlockRendererMixin {
                             false,
                             RandomSource.create(),
                             state.getSeed(entity.getStartPos()),
-                            OverlayTexture.NO_OVERLAY
+                            OverlayTexture.pack(0, iridescenceId)
                     );
         }
     }

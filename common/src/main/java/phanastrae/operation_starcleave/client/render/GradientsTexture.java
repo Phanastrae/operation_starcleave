@@ -10,7 +10,7 @@ import phanastrae.operation_starcleave.OperationStarcleave;
 public class GradientsTexture implements AutoCloseable {
     public static final ResourceLocation LOCATION = OperationStarcleave.id("gradients_texture");
     private static final int WIDTH = 128;
-    private static final int GRADIENTS = 1;
+    private static final int GRADIENTS = 2;
 
     private final DynamicTexture texture;
     private final NativeImage pixels;
@@ -35,7 +35,13 @@ public class GradientsTexture implements AutoCloseable {
     public void updateTexture() {
         for (int j = 0; j < GRADIENTS; j++) {
             for (int i = 0; i < WIDTH; i++) {
-                int color = getBismuthIridescenceColorABGR(i / (float) WIDTH);
+                int color;
+                if(j == 0) {
+                    // black and magenta missing gradient
+                    color = (((i >> 2) & 0x1) == 0) ? 0x000000FF : 0xFF00FFFF;
+                } else {
+                    color = getBismuthIridescenceColorABGR(i / (float) WIDTH);
+                }
 
                 this.pixels.setPixelRGBA(i, j, color);
             }

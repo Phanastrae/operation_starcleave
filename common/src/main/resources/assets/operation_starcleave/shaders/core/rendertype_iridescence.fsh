@@ -15,12 +15,19 @@ in vec4 vertexColor;
 in vec2 texCoord0;
 in vec3 normal;
 in vec3 position;
+in float iridescenceId;
 
 out vec4 fragColor;
 
 vec4 getShineColor(float dot, float shineStrength) {
     float f = 0.5 * (1. + dot); // dot = -1 => f = 0, dot = +1 => f = 1
-    vec4 texColor = texture(Sampler3, vec2(f, 0.5));
+
+    int id = int(iridescenceId);
+    float iridescenceTx = f * textureSize(Sampler3, 0).x;
+
+    vec4 texColorFloor = texelFetch(Sampler3, ivec2(int(floor(iridescenceTx)), id), 0);
+    vec4 texColorCeil = texelFetch(Sampler3, ivec2(int(ceil(iridescenceTx)), id), 0);
+    vec4 texColor = mix(texColorFloor, texColorCeil, fract(iridescenceTx));
 
     return vec4(texColor.rgb, texColor.a * shineStrength);
 }

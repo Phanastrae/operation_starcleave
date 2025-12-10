@@ -61,10 +61,19 @@ public class RenderExtras {
 
     private static float[] posOffset = new float[3];
     private static boolean inScreen = false;
+    private static int iridescenceId = 0;
 
     public static boolean isItemIridescent(Item item) {
         // TODO this may need optimising as the list grows
         return IRIDESCENT_ITEMS.contains(item);
+    }
+
+    public static int getIridescenceId(Item item) {
+        return getBismuthIridescenceId(); // TODO
+    }
+
+    public static int getBismuthIridescenceId() {
+        return 1;
     }
 
     public static void renderExtras(LevelRenderer levelRenderer, Matrix4f projectionMatrix, Matrix4f positionMatrix, Camera camera, Frustum frustum) {
@@ -212,5 +221,13 @@ public class RenderExtras {
 
     public static boolean isInScreen() {
         return inScreen;
+    }
+
+    public static int getIridescenceId() {
+        return iridescenceId;
+    }
+
+    public static void setIridescenceId(int id) {
+        iridescenceId = id;
     }
 }

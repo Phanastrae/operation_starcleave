@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import phanastrae.operation_starcleave.client.duck.RenderBuffersDuck;
 import phanastrae.operation_starcleave.client.render.OperationStarcleaveSheets;
 import phanastrae.operation_starcleave.client.render.extras_baking.ExtrasSectionBufferBuilderPack;
+import phanastrae.operation_starcleave.client.render.extras_baking.RenderExtras;
 
 @Mixin(RenderBuffers.class)
 public abstract class RenderBuffersMixin implements RenderBuffersDuck {
@@ -37,6 +38,6 @@ public abstract class RenderBuffersMixin implements RenderBuffersDuck {
 
     @Inject(method = {"method_54639", "lambda$new$1"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderType;armorEntityGlint()Lnet/minecraft/client/renderer/RenderType;"))
     private void operation_starcleave$addIridescence(Object2ObjectLinkedOpenHashMap map, CallbackInfo ci) {
-        put(map, OperationStarcleaveSheets.iridescenceBlockSheet());
+        put(map, OperationStarcleaveSheets.iridescenceBlockSheet(RenderExtras.getBismuthIridescenceId()));
     }
 }

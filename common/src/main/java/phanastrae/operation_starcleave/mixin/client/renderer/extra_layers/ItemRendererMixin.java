@@ -36,7 +36,7 @@ public abstract class ItemRendererMixin {
             ModelResourceLocation location = ModelResourceLocation.inventory(BuiltInRegistries.ITEM.getKey(item).withSuffix("_iridescence"));
             BakedModel iridescenceModel = this.getItemModelShaper().getModelManager().getModel(location);
 
-            RenderType renderType = OperationStarcleaveSheets.iridescenceBlockSheet();
+            RenderType renderType = OperationStarcleaveSheets.iridescenceBlockSheet(RenderExtras.getIridescenceId(item));
             VertexConsumer vertexconsumer = bufferSource.getBuffer(renderType);
 
             this.renderModelLists(iridescenceModel, itemStack, combinedLight, combinedOverlay, poseStack, vertexconsumer);

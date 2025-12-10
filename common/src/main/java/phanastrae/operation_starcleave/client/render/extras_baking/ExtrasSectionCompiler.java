@@ -100,7 +100,8 @@ public class ExtrasSectionCompiler {
                         );
 
                         BakedModel model = getModel(state, this.modelManager);
-                        this.renderBatched(state, pMut, region, poseStack, bufferBuilder, true, random, model);
+                        int iridescenceId = getIridescenceId(state);
+                        this.renderBatched(state, pMut, region, poseStack, bufferBuilder, true, random, model, OverlayTexture.pack(0, iridescenceId));
 
                         poseStack.popPose();
                     }
@@ -136,7 +137,8 @@ public class ExtrasSectionCompiler {
             VertexConsumer consumer,
             boolean checkSides,
             RandomSource random,
-            BakedModel model
+            BakedModel model,
+            int overlay
     ) {
         try {
             this.modelRenderer
@@ -150,7 +152,7 @@ public class ExtrasSectionCompiler {
                             checkSides,
                             random,
                             state.getSeed(pos),
-                            OverlayTexture.NO_OVERLAY
+                            overlay
                     );
         } catch (Throwable throwable) {
             CrashReport crashreport = CrashReport.forThrowable(throwable, "(Starcleave extras rendering) Tesselating block in world");
@@ -164,7 +166,7 @@ public class ExtrasSectionCompiler {
         BufferBuilder bufferBuilder = buffers.get(renderType);
         if (bufferBuilder == null) {
             ByteBufferBuilder byteBufferBuilder = sectionBufferBuilderPack.buffer(renderType);
-            bufferBuilder = new BufferBuilder(byteBufferBuilder, VertexFormat.Mode.QUADS, DefaultVertexFormat.BLOCK);
+            bufferBuilder = new BufferBuilder(byteBufferBuilder, renderType.mode(), renderType.format());
 
             buffers.put(renderType, bufferBuilder);
         }
@@ -175,6 +177,10 @@ public class ExtrasSectionCompiler {
     public static boolean isStateIridescent(BlockState state) {
         // TODO: this will probably need to be optimised as IRIDESCENT_BLOCKS grows
         return IRIDESCENT_BLOCKS.contains(state.getBlock());
+    }
+
+    public static int getIridescenceId(BlockState state) {
+        return RenderExtras.getBismuthIridescenceId(); // TODO
     }
 
     public static class Results {

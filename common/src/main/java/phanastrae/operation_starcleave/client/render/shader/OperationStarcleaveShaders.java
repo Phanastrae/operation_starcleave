@@ -52,7 +52,7 @@ public class OperationStarcleaveShaders {
 
     public static void registerShaders(RegistrationContext registrationCallback) throws IOException {
         register(registrationCallback, "rendertype_fracture", DefaultVertexFormat.BLOCK, s -> OperationStarcleaveShaders.fractureShader = s);
-        register(registrationCallback, "rendertype_iridescence", DefaultVertexFormat.BLOCK, s -> OperationStarcleaveShaders.iridescenceShader = s);
+        register(registrationCallback, "rendertype_iridescence", DefaultVertexFormat.NEW_ENTITY, s -> OperationStarcleaveShaders.iridescenceShader = s);
         register(registrationCallback, "rendertype_entity_iridescence", DefaultVertexFormat.NEW_ENTITY, s -> OperationStarcleaveShaders.entityIridescenceShader = s);
         register(registrationCallback, "fracture_post", DefaultVertexFormat.POSITION_TEX_COLOR, s -> OperationStarcleaveShaders.fracturePostShader = s);
     }

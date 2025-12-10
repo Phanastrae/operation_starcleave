@@ -12,6 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import phanastrae.operation_starcleave.client.render.OperationStarcleaveRenderTypes;
 import phanastrae.operation_starcleave.client.render.entity.model.SubcaelicDuxEntityModel;
+import phanastrae.operation_starcleave.client.render.extras_baking.RenderExtras;
 import phanastrae.operation_starcleave.entity.mob.SubcaelicDuxEntity;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public class SubcaelicDuxIridescenceLayer<T extends SubcaelicDuxEntity, M extend
     ) {
         if (!entity.isInvisible()) {
             this.updateModelPartVisibility();
-            VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(OperationStarcleaveRenderTypes.entityIridescence(this.texture));
+            VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(OperationStarcleaveRenderTypes.entityIridescence(this.texture, RenderExtras.getBismuthIridescenceId()));
 
             this.getParentModel()
                     .renderToBuffer(

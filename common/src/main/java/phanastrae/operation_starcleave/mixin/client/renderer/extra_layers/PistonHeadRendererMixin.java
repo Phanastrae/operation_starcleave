@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.PistonHeadRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
@@ -35,6 +36,7 @@ public class PistonHeadRendererMixin {
 
             BakedModel model = ExtrasSectionCompiler.getModel(state, this.blockRenderer.getBlockModelShaper().getModelManager());
 
+            int iridescenceId = ExtrasSectionCompiler.getIridescenceId(state);
             this.blockRenderer
                     .getModelRenderer()
                     .tesselateBlock(
@@ -47,7 +49,7 @@ public class PistonHeadRendererMixin {
                             extended,
                             RandomSource.create(),
                             state.getSeed(pos),
-                            packedOverlay
+                            OverlayTexture.pack(0, iridescenceId)
                     );
         }
     }
