@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import phanastrae.operation_starcleave.client.render.extras_baking.Iridescence;
 import phanastrae.operation_starcleave.client.render.extras_baking.RenderExtras;
 
 @Mixin(GuiGraphics.class)
@@ -17,7 +18,7 @@ public class GuiGraphicsMixin {
     @Inject(method = "renderItem(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;IIII)V", at = @At("HEAD"))
     private void operation_starcleave$setupRenderItem(LivingEntity entity, Level level, ItemStack stack, int x, int y, int seed, int guiOffset, CallbackInfo ci) {
         Item item = stack.getItem();
-        if (RenderExtras.isItemIridescent(item)) {
+        if (Iridescence.isItemIridescent(item)) {
             float progress = (System.currentTimeMillis() % 2000) / 2000F;
             double angle = progress * Math.TAU;
             float dx = (float) Math.cos(angle) * 1600F;

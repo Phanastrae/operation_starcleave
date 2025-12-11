@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import phanastrae.operation_starcleave.client.render.extras_baking.ExtrasSectionCompiler;
+import phanastrae.operation_starcleave.client.render.extras_baking.Iridescence;
 
 @Mixin(BlockStateModelLoader.class)
 public abstract class BlockStateModelLoaderMixin {
@@ -20,7 +20,7 @@ public abstract class BlockStateModelLoaderMixin {
 
     @Inject(method = "loadAllBlockStates", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiling/ProfilerFiller;pop()V"))
     private void operation_starcleave$loadBonusModels(CallbackInfo ci) {
-        for (Block block : ExtrasSectionCompiler.IRIDESCENT_BLOCKS) {
+        for (Block block : Iridescence.IRIDESCENCE_BLOCK_ID_MAP.keySet()) {
             this.loadBlockStateDefinitions(block.builtInRegistryHolder().key().location().withSuffix("_iridescence"), block.getStateDefinition());
         }
     }

@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import phanastrae.operation_starcleave.OperationStarcleave;
+import phanastrae.operation_starcleave.client.render.extras_baking.Iridescence;
 
 public class GradientsTexture implements AutoCloseable {
     public static final ResourceLocation LOCATION = OperationStarcleave.id("gradients_texture");
@@ -36,14 +37,15 @@ public class GradientsTexture implements AutoCloseable {
         for (int j = 0; j < GRADIENTS; j++) {
             for (int i = 0; i < WIDTH; i++) {
                 float progress = i / (float) WIDTH;
+
                 int color;
-                if (j == 0) {
+                if (j == Iridescence.getBismuthIridescenceId()) {
+                    color = getBismuthIridescenceColorABGR(progress);
+                } else if (j == Iridescence.getOpalIridescenceId()) {
+                    color = getOpalIridescenceColorABGR(progress);
+                } else {
                     // black and magenta missing gradient
                     color = (((i >> 2) & 0x1) == 0) ? 0x000000FF : 0xFF00FFFF;
-                } else if (j == 1) {
-                    color = getBismuthIridescenceColorABGR(progress);
-                } else {
-                    color = getOpalIridescenceColorABGR(progress);
                 }
 
                 this.pixels.setPixelRGBA(i, j, color);

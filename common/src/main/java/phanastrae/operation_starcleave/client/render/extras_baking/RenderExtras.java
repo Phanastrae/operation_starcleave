@@ -14,80 +14,20 @@ import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.client.compat.ClientCompat;
 import phanastrae.operation_starcleave.client.duck.LevelRendererExtrasDuck;
 import phanastrae.operation_starcleave.client.render.OperationStarcleaveRenderTypes;
-import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 
 import java.util.Collection;
-import java.util.List;
 
 public class RenderExtras {
-
-    public static final List<Item> IRIDESCENT_ITEMS = List.of(
-            OperationStarcleaveItems.STARFLAKED_BISMUTH_BLOCK,
-            OperationStarcleaveItems.STARFLAKED_BISMUTH_SLAB,
-            OperationStarcleaveItems.CHISELED_STARFLAKED_BISMUTH_BLOCK,
-
-            OperationStarcleaveItems.STARFLAKED_BISMUTH_PILLAR,
-
-            OperationStarcleaveItems.STARFLAKED_BISMUTH_BRICKS,
-            OperationStarcleaveItems.STARFLAKED_BISMUTH_BRICK_SLAB,
-            OperationStarcleaveItems.STARFLAKED_BISMUTH_BRICK_STAIRS,
-            OperationStarcleaveItems.STARFLAKED_BISMUTH_BRICK_WALL,
-            OperationStarcleaveItems.CHISELED_STARFLAKED_BISMUTH_BRICKS,
-
-            OperationStarcleaveItems.STARFLAKED_BISMUTH_TILES,
-            OperationStarcleaveItems.STARFLAKED_BISMUTH_TILE_SLAB,
-            OperationStarcleaveItems.STARFLAKED_BISMUTH_TILE_STAIRS,
-            OperationStarcleaveItems.STARFLAKED_BISMUTH_TILE_WALL,
-
-            OperationStarcleaveItems.STARFLAKED_BISMUTH_MOSAIC,
-            OperationStarcleaveItems.STARFLAKED_BISMUTH_MOSAIC_SLAB,
-            OperationStarcleaveItems.STARFLAKED_BISMUTH_MOSAIC_STAIRS,
-            OperationStarcleaveItems.STARFLAKED_BISMUTH_MOSAIC_WALL,
-
-            OperationStarcleaveItems.STARFLAKED_BISMUTH_DOOR,
-            OperationStarcleaveItems.STARFLAKED_BISMUTH_TRAPDOOR,
-
-            OperationStarcleaveItems.CELESTIAL_OPAL_BLOCK,
-
-            OperationStarcleaveItems.BISMUTH_FLAKE,
-            OperationStarcleaveItems.STARFLAKED_BISMUTH,
-            OperationStarcleaveItems.BISMUTH_PEGASUS_ARMOR,
-
-            OperationStarcleaveItems.CELESTIAL_OPAL_SHARD
-    );
 
     private static float[] posOffset = new float[3];
     private static boolean inScreen = false;
     private static int iridescenceId = 0;
-
-    public static boolean isItemIridescent(Item item) {
-        // TODO this may need optimising as the list grows
-        return IRIDESCENT_ITEMS.contains(item);
-    }
-
-    public static int getIridescenceId(Item item) {
-        // TODO tidy this
-        if (item.equals(OperationStarcleaveItems.CELESTIAL_OPAL_BLOCK) || item.equals(OperationStarcleaveItems.CELESTIAL_OPAL_SHARD)) {
-            return getOpalIridescenceId();
-        } else {
-            return getBismuthIridescenceId();
-        }
-    }
-
-    public static int getBismuthIridescenceId() {
-        return 1;
-    }
-
-    public static int getOpalIridescenceId() {
-        return 2;
-    }
 
     public static void renderExtras(LevelRenderer levelRenderer, Matrix4f projectionMatrix, Matrix4f positionMatrix, Camera camera, Frustum frustum) {
         SectionExtrasRebuildQueue rebuildQueue = ((LevelRendererExtrasDuck) levelRenderer).operation_starcleave$getRebuildQueue();

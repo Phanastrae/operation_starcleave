@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.client.render.OperationStarcleaveRenderTypes;
-import phanastrae.operation_starcleave.client.render.extras_baking.RenderExtras;
+import phanastrae.operation_starcleave.client.render.extras_baking.Iridescence;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 
 @Mixin(HorseArmorLayer.class)
@@ -38,7 +38,7 @@ public class HorseArmorLayerMixin {
             @Local AnimalArmorItem animalArmorItem
     ) {
         if (animalArmorItem.equals(OperationStarcleaveItems.BISMUTH_PEGASUS_ARMOR)) {
-            VertexConsumer vertexConsumer = buffer.getBuffer(OperationStarcleaveRenderTypes.entityIridescence(operation_starcleave$PEGASUS_ARMOR_IRIDESCENCE, RenderExtras.getBismuthIridescenceId()));
+            VertexConsumer vertexConsumer = buffer.getBuffer(OperationStarcleaveRenderTypes.entityIridescence(operation_starcleave$PEGASUS_ARMOR_IRIDESCENCE, Iridescence.getBismuthIridescenceId()));
             this.model.renderToBuffer(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, -1);
         }
     }

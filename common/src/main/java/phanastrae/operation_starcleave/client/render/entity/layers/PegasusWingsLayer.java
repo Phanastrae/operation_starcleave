@@ -18,7 +18,7 @@ import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.client.render.OperationStarcleaveRenderTypes;
 import phanastrae.operation_starcleave.client.render.entity.model.OperationStarcleaveEntityModelLayers;
 import phanastrae.operation_starcleave.client.render.entity.model.PegasusWingsModel;
-import phanastrae.operation_starcleave.client.render.extras_baking.RenderExtras;
+import phanastrae.operation_starcleave.client.render.extras_baking.Iridescence;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityAttachment;
 
 public class PegasusWingsLayer<T extends AbstractHorse, M extends EntityModel<T>> extends RenderLayer<T, M> {
@@ -43,7 +43,7 @@ public class PegasusWingsLayer<T extends AbstractHorse, M extends EntityModel<T>
             VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityCutoutNoCull(WINGS_LOCATION));
             this.model.renderToBuffer(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, -1);
 
-            VertexConsumer iridescenceVertexConsumer = buffer.getBuffer(OperationStarcleaveRenderTypes.entityIridescence(WINGS_IRIDESCENCE_LOCATION, RenderExtras.getBismuthIridescenceId()));
+            VertexConsumer iridescenceVertexConsumer = buffer.getBuffer(OperationStarcleaveRenderTypes.entityIridescence(WINGS_IRIDESCENCE_LOCATION, Iridescence.getBismuthIridescenceId()));
             this.model.renderToBuffer(poseStack, iridescenceVertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, -1);
 
             float twopi = 2 * Mth.PI;

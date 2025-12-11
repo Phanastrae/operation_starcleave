@@ -20,6 +20,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import phanastrae.operation_starcleave.client.render.OperationStarcleaveRenderTypes;
 import phanastrae.operation_starcleave.client.render.extras_baking.ExtrasSectionCompiler;
+import phanastrae.operation_starcleave.client.render.extras_baking.Iridescence;
 
 @Mixin(PistonHeadRenderer.class)
 public class PistonHeadRendererMixin {
@@ -30,13 +31,13 @@ public class PistonHeadRendererMixin {
 
     @Inject(method = "renderBlock", at = @At("RETURN"))
     private void operation_starcleave$renderExtras(BlockPos pos, BlockState state, PoseStack poseStack, MultiBufferSource bufferSource, Level level, boolean extended, int packedOverlay, CallbackInfo ci) {
-        if (ExtrasSectionCompiler.isStateIridescent(state)) {
+        if (Iridescence.isStateIridescent(state)) {
             RenderType renderType = OperationStarcleaveRenderTypes.getIridescence();
             VertexConsumer vertexConsumer = bufferSource.getBuffer(renderType);
 
             BakedModel model = ExtrasSectionCompiler.getModel(state, this.blockRenderer.getBlockModelShaper().getModelManager());
 
-            int iridescenceId = ExtrasSectionCompiler.getIridescenceId(state);
+            int iridescenceId = Iridescence.getIridescenceId(state);
             this.blockRenderer
                     .getModelRenderer()
                     .tesselateBlock(

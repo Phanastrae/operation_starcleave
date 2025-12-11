@@ -21,6 +21,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import phanastrae.operation_starcleave.client.render.OperationStarcleaveRenderTypes;
 import phanastrae.operation_starcleave.client.render.extras_baking.ExtrasSectionCompiler;
+import phanastrae.operation_starcleave.client.render.extras_baking.Iridescence;
 
 @Mixin(FallingBlockRenderer.class)
 public class FallingBlockRendererMixin {
@@ -34,7 +35,7 @@ public class FallingBlockRendererMixin {
             FallingBlockEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight, CallbackInfo ci
     ) {
         BlockState state = entity.getBlockState();
-        if (ExtrasSectionCompiler.isStateIridescent(state)) {
+        if (Iridescence.isStateIridescent(state)) {
             RenderType renderType = OperationStarcleaveRenderTypes.getIridescence();
             VertexConsumer vertexConsumer = buffer.getBuffer(renderType);
 
@@ -43,7 +44,7 @@ public class FallingBlockRendererMixin {
             Level level = entity.level();
             BlockPos pos = BlockPos.containing(entity.getX(), entity.getBoundingBox().maxY, entity.getZ());
 
-            int iridescenceId = ExtrasSectionCompiler.getIridescenceId(state);
+            int iridescenceId = Iridescence.getIridescenceId(state);
             this.dispatcher
                     .getModelRenderer()
                     .tesselateBlock(
