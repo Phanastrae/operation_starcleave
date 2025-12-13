@@ -55,11 +55,16 @@ void main() {
     mat2x3 dPdUV = dPdxy * dxydUV;
 
     // calc actual normal from base normal, normal texture, and basis vectors
-    vec3 dPdU = dPdUV[0];
-    vec3 dPdV = dPdUV[1];
-    mat3 transformMatrix = mat3(normalize(dPdU), normalize(-dPdV), normal); // need to flip y
+    vec3 tangent = normalize(dPdUV[0]);
+    vec3 bitangent = normalize(-dPdUV[1]); // need to flip y
+    // normal can sometimes be incorrect (e.g. on block models with rotated planes, the normal will be axis aligned)
+    // correct this here by calculating normal from tangent and bitangent, and just using the input normal to correct the sign
+    vec3 correctedNormal = cross(tangent, bitangent);
+    correctedNormal = (dot(correctedNormal, normal) >= 0.) ? correctedNormal : -correctedNormal;
+
+    mat3 transformMatrix = mat3(tangent, bitangent, correctedNormal);
     vec3 localNormal = normalize(normalColor.rgb * 2. - 1.);
-    vec3 actualNormal = transformMatrix * localNormal;
+    vec3 finalNormal = transformMatrix * localNormal;
 
     // calc relative position of texel center
     vec2 texelCenter = floor(scaledUV) + 0.5;
@@ -76,7 +81,7 @@ void main() {
     vec3 viewDir = normalize(texelCenterPos);
 
     // calc dot
-    float dot = dot(viewDir, actualNormal);
+    float dot = dot(viewDir, finalNormal);
 
     float shineStrength = normalColor.a;
     vec4 shineColor = getShineColor(dot, shineStrength);
