@@ -109,6 +109,11 @@ public class OperationStarcleaveItems {
 
     public static final Item CELESTIAL_OPAL_BLOCK = registerBlockItem(OperationStarcleaveBlocks.CELESTIAL_OPAL_BLOCK);
 
+    public static final Item CELESTIAL_OPAL_CLUSTER = registerBlockItem(OperationStarcleaveBlocks.CELESTIAL_OPAL_CLUSTER);
+    public static final Item LARGE_CELESTIAL_OPAL_BUD = registerBlockItem(OperationStarcleaveBlocks.LARGE_CELESTIAL_OPAL_BUD);
+    public static final Item MEDIUM_CELESTIAL_OPAL_BUD = registerBlockItem(OperationStarcleaveBlocks.MEDIUM_CELESTIAL_OPAL_BUD);
+    public static final Item SMALL_CELESTIAL_OPAL_BUD = registerBlockItem(OperationStarcleaveBlocks.SMALL_CELESTIAL_OPAL_BUD);
+
 
     public static final Item STARCLEAVER_GOLEM_BUCKET = register("starcleaver_golem_bucket", new StarcleaverGolemBucketItem(properties().stacksTo(1)));
 

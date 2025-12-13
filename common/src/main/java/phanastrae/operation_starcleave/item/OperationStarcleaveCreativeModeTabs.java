@@ -123,6 +123,12 @@ public class OperationStarcleaveCreativeModeTabs {
                 IMBUED_STARBLEACHED_TILES,
 
                 CELESTIAL_OPAL_BLOCK,
+
+                SMALL_CELESTIAL_OPAL_BUD,
+                MEDIUM_CELESTIAL_OPAL_BUD,
+                LARGE_CELESTIAL_OPAL_BUD,
+                CELESTIAL_OPAL_CLUSTER,
+
                 CELESTIAL_OPAL_SHARD,
 
                 NUCLEOSYNTHESEED,
@@ -234,7 +240,12 @@ public class OperationStarcleaveCreativeModeTabs {
 
         );
         helper.addAfter(Items.AMETHYST_CLUSTER, NATURAL_BLOCKS,
-                CELESTIAL_OPAL_BLOCK
+                CELESTIAL_OPAL_BLOCK,
+
+                SMALL_CELESTIAL_OPAL_BUD,
+                MEDIUM_CELESTIAL_OPAL_BUD,
+                LARGE_CELESTIAL_OPAL_BUD,
+                CELESTIAL_OPAL_CLUSTER
         );
         helper.addAfter(Items.WARPED_STEM, NATURAL_BLOCKS,
                 STARBLEACHED_LOG,

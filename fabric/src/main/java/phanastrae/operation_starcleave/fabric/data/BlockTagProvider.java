@@ -157,7 +157,13 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         STARFLAKED_BISMUTH_DOOR,
                         STARFLAKED_BISMUTH_TRAPDOOR,
 
-                        CELESTIAL_OPAL_BLOCK
+                        CELESTIAL_OPAL_BLOCK,
+
+                        CELESTIAL_OPAL_SPIRE,
+                        CELESTIAL_OPAL_CLUSTER,
+                        LARGE_CELESTIAL_OPAL_BUD,
+                        MEDIUM_CELESTIAL_OPAL_BUD,
+                        SMALL_CELESTIAL_OPAL_BUD
                 );
 
         getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_SHOVEL)
@@ -251,7 +257,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         CELESTIAL_OPAL_BLOCK
                 );
 
-        // common
+        // conventional
         getOrCreateTagBuilder(ConventionalBlockTags.STRIPPED_LOGS)
                 .add(
                         STRIPED_NUCLEIC_FISSUREROOT
@@ -259,6 +265,17 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         getOrCreateTagBuilder(ConventionalBlockTags.STRIPPED_WOODS)
                 .add(
                         STRIPED_NUCLEIC_FISSURERIND
+                );
+        getOrCreateTagBuilder(ConventionalBlockTags.CLUSTERS)
+                .add(
+                        CELESTIAL_OPAL_CLUSTER,
+                        CELESTIAL_OPAL_SPIRE
+                );
+        getOrCreateTagBuilder(ConventionalBlockTags.BUDS)
+                .add(
+                        LARGE_CELESTIAL_OPAL_BUD,
+                        MEDIUM_CELESTIAL_OPAL_BUD,
+                        SMALL_CELESTIAL_OPAL_BUD
                 );
 
 

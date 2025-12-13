@@ -25,7 +25,13 @@ public class OperationStarcleaveBlockRenderTypes {
                 PHLOGISTIC_FIRE,
 
                 STARFLAKED_BISMUTH_DOOR,
-                STARFLAKED_BISMUTH_TRAPDOOR
+                STARFLAKED_BISMUTH_TRAPDOOR,
+
+                CELESTIAL_OPAL_SPIRE,
+                CELESTIAL_OPAL_CLUSTER,
+                LARGE_CELESTIAL_OPAL_BUD,
+                MEDIUM_CELESTIAL_OPAL_BUD,
+                SMALL_CELESTIAL_OPAL_BUD
         );
         putBlocks(RenderType.translucent(),
                 PETRICHORIC_VAPOR

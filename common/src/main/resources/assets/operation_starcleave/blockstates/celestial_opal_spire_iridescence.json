@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "operation_starcleave:block/celestial_opal_spire_iridescence",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "operation_starcleave:block/celestial_opal_spire_iridescence",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "operation_starcleave:block/celestial_opal_spire_iridescence",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "operation_starcleave:block/celestial_opal_spire_iridescence",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "operation_starcleave:block/celestial_opal_spire_iridescence"
+    },
+    "facing=west": {
+      "model": "operation_starcleave:block/celestial_opal_spire_iridescence",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

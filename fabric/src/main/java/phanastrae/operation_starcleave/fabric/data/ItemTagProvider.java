@@ -9,6 +9,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.block.tag.OperationStarcleaveBlockTags;
+import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 import phanastrae.operation_starcleave.item.tag.OperationStarcleaveItemTags;
 
 import java.util.concurrent.CompletableFuture;
@@ -86,6 +87,8 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
         this.copy(ConventionalBlockTags.STRIPPED_LOGS, ConventionalItemTags.STRIPPED_LOGS);
         this.copy(ConventionalBlockTags.STRIPPED_WOODS, ConventionalItemTags.STRIPPED_WOODS);
+        // do not copy CLUSTERS as it contains a block without an item, do it manually instead
+        this.copy(ConventionalBlockTags.BUDS, ConventionalItemTags.BUDS);
 
         this.copy(OperationStarcleaveBlockTags.STARBLEACHED_LOGS, OperationStarcleaveItemTags.STARBLEACHED_LOGS);
         this.copy(OperationStarcleaveBlockTags.NUCLEIC_FISSUREROOTS, OperationStarcleaveItemTags.NUCLEIC_FISSUREROOTS);
@@ -97,6 +100,12 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
                 );
 
         // convention
+        // add CLUSTERS manually as the block tag includes a block without an item
+        getOrCreateTagBuilder(ConventionalItemTags.CLUSTERS)
+                .add(
+                        OperationStarcleaveItems.CELESTIAL_OPAL_CLUSTER
+                );
+
         getOrCreateTagBuilder(ConventionalItemTags.FOODS)
                 .add(
                         STARFRUIT

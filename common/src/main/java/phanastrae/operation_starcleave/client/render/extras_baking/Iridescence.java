@@ -46,7 +46,13 @@ public class Iridescence {
                 OperationStarcleaveBlocks.STARFLAKED_BISMUTH_TRAPDOOR
         ));
         iridescentOpalBlockItems.addAll(List.of(
-                OperationStarcleaveBlocks.CELESTIAL_OPAL_BLOCK
+                OperationStarcleaveBlocks.CELESTIAL_OPAL_BLOCK,
+
+                OperationStarcleaveBlocks.CELESTIAL_OPAL_SPIRE,
+                OperationStarcleaveBlocks.CELESTIAL_OPAL_CLUSTER,
+                OperationStarcleaveBlocks.LARGE_CELESTIAL_OPAL_BUD,
+                OperationStarcleaveBlocks.MEDIUM_CELESTIAL_OPAL_BUD,
+                OperationStarcleaveBlocks.SMALL_CELESTIAL_OPAL_BUD
         ));
 
         // list iridescent blocks

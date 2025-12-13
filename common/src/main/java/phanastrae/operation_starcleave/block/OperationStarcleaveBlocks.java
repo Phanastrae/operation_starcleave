@@ -590,6 +590,54 @@ public class OperationStarcleaveBlocks {
             )
     );
 
+    public static final Block CELESTIAL_OPAL_SPIRE = register(
+            "celestial_opal_spire",
+            new CelestialOpalClusterBlock(
+                    16.0F,
+                    3.0F,
+                    BlockBehaviour.Properties.of()
+                            .strength(4.0F)
+                            .mapColor(COLOR_LIGHT_GRAY)
+                            .sound(SoundType.AMETHYST_CLUSTER)
+                            .pushReaction(PushReaction.DESTROY)
+                            .lightLevel(constant(11))
+                            .forceSolidOn()
+                            .noOcclusion()
+            )
+    );
+    public static final Block CELESTIAL_OPAL_CLUSTER = register(
+            "celestial_opal_cluster",
+            new CelestialOpalClusterBlock(
+                    7.0F,
+                    3.0F,
+                    BlockBehaviour.Properties.ofLegacyCopy(CELESTIAL_OPAL_SPIRE)
+            )
+    );
+    public static final Block LARGE_CELESTIAL_OPAL_BUD = register(
+            "large_celestial_opal_bud",
+            new CelestialOpalBudBlock(
+                    5.0F, 3.0F, BlockBehaviour.Properties.ofLegacyCopy(CELESTIAL_OPAL_CLUSTER)
+                    .sound(SoundType.MEDIUM_AMETHYST_BUD) // same as in vanilla - for some reason large buds have medium sounds?
+                    .lightLevel(constant(8))
+            )
+    );
+    public static final Block MEDIUM_CELESTIAL_OPAL_BUD = register(
+            "medium_celestial_opal_bud",
+            new CelestialOpalBudBlock(
+                    4.0F, 3.0F, BlockBehaviour.Properties.ofLegacyCopy(CELESTIAL_OPAL_CLUSTER)
+                    .sound(SoundType.LARGE_AMETHYST_BUD) // same as in vanilla - for some reason medium buds have large sounds?
+                    .lightLevel(constant(5))
+            )
+    );
+    public static final Block SMALL_CELESTIAL_OPAL_BUD = register(
+            "small_celestial_opal_bud",
+            new CelestialOpalBudBlock(
+                    3.0F, 4.0F, BlockBehaviour.Properties.ofLegacyCopy(CELESTIAL_OPAL_CLUSTER)
+                    .sound(SoundType.SMALL_AMETHYST_BUD)
+                    .lightLevel(constant(2))
+            )
+    );
+
     private static <T extends Block> T register(String id, T block) {
         return register(OperationStarcleave.id(id), block);
     }

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "operation_starcleave:block/celestial_opal_spire"
+  }
+}

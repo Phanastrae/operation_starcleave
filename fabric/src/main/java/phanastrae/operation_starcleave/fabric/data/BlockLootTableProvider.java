@@ -2,12 +2,15 @@ package phanastrae.operation_starcleave.fabric.data;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
+import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.BlockFamily;
 import net.minecraft.data.loot.BlockLootSubProvider;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -20,9 +23,11 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
+import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import phanastrae.operation_starcleave.block.BisreedBlock;
@@ -52,8 +57,8 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                 OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_MOSAIC
         );
 
-        HolderLookup.RegistryLookup<Enchantment> impl = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
-        Holder<Enchantment> fortune = impl.getOrThrow(Enchantments.FORTUNE);
+        HolderLookup.RegistryLookup<Enchantment> registryLookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
+        Holder<Enchantment> fortune = registryLookup.getOrThrow(Enchantments.FORTUNE);
 
         forEach(this::dropSelf,
                 NETHERITE_PUMPKIN,
@@ -93,12 +98,18 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                 POTTED_SHORT_HOLY_MOSS
         );
 
+        forEach(this::dropWhenSilkTouch,
+                PLASMA_ICE,
+
+                LARGE_CELESTIAL_OPAL_BUD,
+                MEDIUM_CELESTIAL_OPAL_BUD,
+                SMALL_CELESTIAL_OPAL_BUD
+        );
+
         dropNothing(PHLOGISTIC_FIRE);
 
         dropOther(STARBLEACH_CAULDRON, Items.CAULDRON);
         dropOther(STELLAR_PATH, STELLAR_SEDIMENT);
-
-        dropWhenSilkTouch(PLASMA_ICE);
 
         dropWhenSilkTouch(HOLY_MOSS, STELLAR_SEDIMENT);
         dropWhenSilkTouch(STELLAR_MULCH, STELLAR_SEDIMENT);
@@ -147,6 +158,9 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                                 )
                         )
         ));
+
+        addClusterDrops(registryLookup, CELESTIAL_OPAL_CLUSTER, OperationStarcleaveItems.CELESTIAL_OPAL_SHARD);
+        addClusterDrops(registryLookup, CELESTIAL_OPAL_SPIRE, OperationStarcleaveItems.CELESTIAL_OPAL_SHARD);
     }
 
     private void forEach(Consumer<Block> consumer, Block... list) {
@@ -173,6 +187,24 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
 
     private LootTable.Builder createSilkTouchOrShearsDrop(ItemLike item) {
         return lootTable().withPool(lootPool().setRolls(ConstantValue.exactly(1.0F)).when(hasShearsOrSilkTouch()).add(item(item)));
+    }
+
+    private void addClusterDrops(HolderLookup.RegistryLookup<Enchantment> registryLookup, Block cluster, Item item) {
+        this.add(
+                cluster,
+                block -> this.createSilkTouchDispatchTable(
+                        block,
+                        LootItem.lootTableItem(item)
+                                .apply(SetItemCountFunction.setCount(ConstantValue.exactly(4.0F)))
+                                .apply(ApplyBonusCount.addOreBonusCount(registryLookup.getOrThrow(Enchantments.FORTUNE)))
+                                .when(MatchTool.toolMatches(ItemPredicate.Builder.item().of(ItemTags.CLUSTER_MAX_HARVESTABLES)))
+                                .otherwise(
+                                        this.applyExplosionDecay(
+                                                block, LootItem.lootTableItem(item).apply(SetItemCountFunction.setCount(ConstantValue.exactly(2.0F)))
+                                        )
+                                )
+                )
+        );
     }
 
     private void addLootForFamilies(BlockFamily... families) {

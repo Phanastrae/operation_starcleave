@@ -99,6 +99,14 @@ public class ModelProvider extends FabricModelProvider {
         BMG.createDoor(STARFLAKED_BISMUTH_DOOR);
         BMG.createOrientableTrapdoor(STARFLAKED_BISMUTH_TRAPDOOR);
 
+        forEach(BMG::createAmethystCluster,
+                CELESTIAL_OPAL_SPIRE,
+                CELESTIAL_OPAL_CLUSTER,
+                LARGE_CELESTIAL_OPAL_BUD,
+                MEDIUM_CELESTIAL_OPAL_BUD,
+                SMALL_CELESTIAL_OPAL_BUD
+        );
+
         // fluids
         BMG.createNonTemplateModelBlock(PETRICHORIC_PLASMA);
 
@@ -137,6 +145,14 @@ public class ModelProvider extends FabricModelProvider {
 
         createDoorForSuffix(SUFFIX_IRIDESCENCE, BMG, STARFLAKED_BISMUTH_DOOR);
         createOrientableTrapdoorForSuffix(SUFFIX_IRIDESCENCE, BMG, STARFLAKED_BISMUTH_TRAPDOOR);
+
+        forEach(block -> createGemClusterForSuffix(SUFFIX_IRIDESCENCE, BMG, block),
+                CELESTIAL_OPAL_SPIRE,
+                CELESTIAL_OPAL_CLUSTER,
+                LARGE_CELESTIAL_OPAL_BUD,
+                MEDIUM_CELESTIAL_OPAL_BUD,
+                SMALL_CELESTIAL_OPAL_BUD
+        );
     }
 
     private static void createSplitSlab(BlockModelGenerators BMG, Block block, Block fullBlock) {
@@ -365,13 +381,17 @@ public class ModelProvider extends FabricModelProvider {
         );
     }
 
-    public void createOrientableTrapdoorForSuffix(String suffix, BlockModelGenerators BMG, Block trapdoorBlock) {
+    private static void createOrientableTrapdoorForSuffix(String suffix, BlockModelGenerators BMG, Block trapdoorBlock) {
         TextureMapping textureMapping = TextureMapping.defaultTexture(trapdoorBlock);
         createModelsForSuffix(suffix, BMG, trapdoorBlock, textureMapping,
                 ModelTemplates.ORIENTABLE_TRAPDOOR_TOP,
                 ModelTemplates.ORIENTABLE_TRAPDOOR_BOTTOM,
                 ModelTemplates.ORIENTABLE_TRAPDOOR_OPEN
         );
+    }
+
+    private static void createGemClusterForSuffix(String suffix, BlockModelGenerators BMG, Block clusterBlock) {
+        createModelForSuffix(suffix, BMG, clusterBlock, TextureMapping.cross(clusterBlock), ModelTemplates.CROSS);
     }
 
     private static void createModelForSuffix(String suffix, BlockModelGenerators BMG, Block block, TexturedModel.Provider provider) {

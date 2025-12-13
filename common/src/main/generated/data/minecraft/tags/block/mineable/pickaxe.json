@@ -45,6 +45,11 @@
     "operation_starcleave:starflaked_bismuth_pillar",
     "operation_starcleave:starflaked_bismuth_door",
     "operation_starcleave:starflaked_bismuth_trapdoor",
-    "operation_starcleave:celestial_opal_block"
+    "operation_starcleave:celestial_opal_block",
+    "operation_starcleave:celestial_opal_spire",
+    "operation_starcleave:celestial_opal_cluster",
+    "operation_starcleave:large_celestial_opal_bud",
+    "operation_starcleave:medium_celestial_opal_bud",
+    "operation_starcleave:small_celestial_opal_bud"
   ]
 }

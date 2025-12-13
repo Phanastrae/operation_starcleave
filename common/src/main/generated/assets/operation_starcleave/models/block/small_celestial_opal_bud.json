@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "operation_starcleave:block/small_celestial_opal_bud"
+  }
+}
