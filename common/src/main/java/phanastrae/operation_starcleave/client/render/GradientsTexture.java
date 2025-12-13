@@ -70,13 +70,15 @@ public class GradientsTexture implements AutoCloseable {
 
     private static int getOpalIridescenceColorABGR(float progress) {
         double dot = getDotFromProgress(progress);
-        double colorAngle = Math.TAU * -3. * (1. + (dot < 0 ? dot : dot * -0.125));
-
-        double r = wave(colorAngle, 0.0, 0.45, 1.0);
-        double g = wave(colorAngle, 4.0 / 9.0, 0.45, 1.0);
-        double b = wave(colorAngle, -1.0 / 9.0, 0.45, 1.0);
+        double colorAngle = Math.TAU * -2. * (1. + (dot < 0 ? dot : dot * -0.125));
 
         double a = (1. + Math.min(0., dot)); // dot = 1 => a = 0, dot <= 0 => a = 1
+
+        double r = wave(colorAngle, 0.0, 0.65, 1.0) * (0.65 + 0.35 * a);
+        double g = wave(colorAngle, 4.0 / 9.0, 0.65, 1.0) * (0.65 + 0.35 * a);
+        double b = wave(colorAngle, -1.0 / 9.0, 0.65, 1.0) * (1.0 - 0.4 * a);
+
+        a = Math.sqrt(a);
 
         return packABGR(a, b, g, r);
     }
