@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.levelgen.feature.stateproviders.SimpleStateProvider;
 import net.minecraft.world.level.levelgen.feature.stateproviders.WeightedStateProvider;
 import org.jetbrains.annotations.Nullable;
@@ -73,9 +74,29 @@ public class StarbleachConversions {
                 StateMatchesPredicate.fromBlock(DIRT_PATH),
                 SimpleStateProvider.simple(STELLAR_PATH)
         );
-        StateConversion opalConversion = new StateConversion(
+        StateConversion opalBlockConversion = new StateConversion(
                 StateMatchesPredicate.fromBlock(AMETHYST_BLOCK),
                 SimpleStateProvider.simple(CELESTIAL_OPAL_BLOCK)
+        );
+        StateConversion opalBuddingConversion = new StateConversion(
+                StateMatchesPredicate.fromBlock(BUDDING_AMETHYST),
+                SimpleStateProvider.simple(BUDDING_CELESTIAL_OPAL)
+        );
+        StateConversion opalSmallConversion = new StateConversion(
+                StateMatchesPredicate.fromBlock(SMALL_AMETHYST_BUD),
+                (l, p, s, r) -> getClusterState(s, SMALL_CELESTIAL_OPAL_BUD)
+        );
+        StateConversion opalMediumConversion = new StateConversion(
+                StateMatchesPredicate.fromBlock(MEDIUM_AMETHYST_BUD),
+                (l, p, s, r) -> getClusterState(s, MEDIUM_CELESTIAL_OPAL_BUD)
+        );
+        StateConversion opalLargeConversion = new StateConversion(
+                StateMatchesPredicate.fromBlock(LARGE_AMETHYST_BUD),
+                (l, p, s, r) -> getClusterState(s, LARGE_CELESTIAL_OPAL_BUD)
+        );
+        StateConversion opalClusterConversion = new StateConversion(
+                StateMatchesPredicate.fromBlock(AMETHYST_CLUSTER),
+                (l, p, s, r) -> getClusterState(s, CELESTIAL_OPAL_CLUSTER)
         );
 
         return new StateConversion[]{
@@ -88,7 +109,12 @@ public class StarbleachConversions {
                 logsConversion,
                 farmlandConversion,
                 pathConversion,
-                opalConversion
+                opalBlockConversion,
+                opalBuddingConversion,
+                opalSmallConversion,
+                opalMediumConversion,
+                opalLargeConversion,
+                opalClusterConversion
         };
     }
 
@@ -228,5 +254,17 @@ public class StarbleachConversions {
         } else {
             return farmland;
         }
+    }
+
+    public static BlockState getClusterState(BlockState blockState, Block newBlock) {
+        BlockState newState = newBlock.defaultBlockState();
+        // try to preserve waterlogged and facing
+        if (blockState.getProperties().contains(BlockStateProperties.WATERLOGGED)) {
+            newState = newState.setValue(BlockStateProperties.WATERLOGGED, blockState.getValue(BlockStateProperties.WATERLOGGED));
+        }
+        if (blockState.getProperties().contains(BlockStateProperties.FACING)) {
+            newState = newState.setValue(BlockStateProperties.FACING, blockState.getValue(BlockStateProperties.FACING));
+        }
+        return newState;
     }
 }
