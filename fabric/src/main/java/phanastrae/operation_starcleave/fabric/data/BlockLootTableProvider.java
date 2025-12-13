@@ -106,7 +106,10 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                 SMALL_CELESTIAL_OPAL_BUD
         );
 
-        dropNothing(PHLOGISTIC_FIRE);
+        forEach(this::dropNothing,
+                PHLOGISTIC_FIRE,
+                BUDDING_CELESTIAL_OPAL
+        );
 
         dropOther(STARBLEACH_CAULDRON, Items.CAULDRON);
         dropOther(STELLAR_PATH, STELLAR_SEDIMENT);

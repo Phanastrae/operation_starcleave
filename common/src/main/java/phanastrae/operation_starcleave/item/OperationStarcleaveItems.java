@@ -108,6 +108,7 @@ public class OperationStarcleaveItems {
     public static final Item STARFLAKED_BISMUTH_TRAPDOOR = registerBlockItem(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_TRAPDOOR);
 
     public static final Item CELESTIAL_OPAL_BLOCK = registerBlockItem(OperationStarcleaveBlocks.CELESTIAL_OPAL_BLOCK);
+    public static final Item BUDDING_CELESTIAL_OPAL = registerBlockItem(OperationStarcleaveBlocks.BUDDING_CELESTIAL_OPAL);
 
     public static final Item CELESTIAL_OPAL_CLUSTER = registerBlockItem(OperationStarcleaveBlocks.CELESTIAL_OPAL_CLUSTER);
     public static final Item LARGE_CELESTIAL_OPAL_BUD = registerBlockItem(OperationStarcleaveBlocks.LARGE_CELESTIAL_OPAL_BUD);

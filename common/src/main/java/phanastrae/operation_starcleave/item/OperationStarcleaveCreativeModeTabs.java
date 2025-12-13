@@ -123,6 +123,7 @@ public class OperationStarcleaveCreativeModeTabs {
                 IMBUED_STARBLEACHED_TILES,
 
                 CELESTIAL_OPAL_BLOCK,
+                BUDDING_CELESTIAL_OPAL,
 
                 SMALL_CELESTIAL_OPAL_BUD,
                 MEDIUM_CELESTIAL_OPAL_BUD,
@@ -241,6 +242,7 @@ public class OperationStarcleaveCreativeModeTabs {
         );
         helper.addAfter(Items.AMETHYST_CLUSTER, NATURAL_BLOCKS,
                 CELESTIAL_OPAL_BLOCK,
+                BUDDING_CELESTIAL_OPAL,
 
                 SMALL_CELESTIAL_OPAL_BUD,
                 MEDIUM_CELESTIAL_OPAL_BUD,

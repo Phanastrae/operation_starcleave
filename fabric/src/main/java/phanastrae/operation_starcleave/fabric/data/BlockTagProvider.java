@@ -158,6 +158,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         STARFLAKED_BISMUTH_TRAPDOOR,
 
                         CELESTIAL_OPAL_BLOCK,
+                        BUDDING_CELESTIAL_OPAL,
 
                         CELESTIAL_OPAL_SPIRE,
                         CELESTIAL_OPAL_CLUSTER,
@@ -254,7 +255,8 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
         getOrCreateTagBuilder(BlockTags.CRYSTAL_SOUND_BLOCKS)
                 .add(
-                        CELESTIAL_OPAL_BLOCK
+                        CELESTIAL_OPAL_BLOCK,
+                        BUDDING_CELESTIAL_OPAL
                 );
 
         // conventional
@@ -265,6 +267,10 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         getOrCreateTagBuilder(ConventionalBlockTags.STRIPPED_WOODS)
                 .add(
                         STRIPED_NUCLEIC_FISSURERIND
+                );
+        getOrCreateTagBuilder(ConventionalBlockTags.BUDDING_BLOCKS)
+                .add(
+                        BUDDING_CELESTIAL_OPAL
                 );
         getOrCreateTagBuilder(ConventionalBlockTags.CLUSTERS)
                 .add(

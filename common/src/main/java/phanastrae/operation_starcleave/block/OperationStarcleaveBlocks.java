@@ -590,6 +590,14 @@ public class OperationStarcleaveBlocks {
             )
     );
 
+    public static final Block BUDDING_CELESTIAL_OPAL = register(
+            "budding_celestial_opal",
+            new BuddingCelestialOpalBlock(copyShallow(CELESTIAL_OPAL_BLOCK)
+                    .pushReaction(DESTROY)
+                    .randomTicks()
+            )
+    );
+
     public static final Block CELESTIAL_OPAL_SPIRE = register(
             "celestial_opal_spire",
             new CelestialOpalClusterBlock(

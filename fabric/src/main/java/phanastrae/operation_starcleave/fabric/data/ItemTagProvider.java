@@ -87,6 +87,7 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
         this.copy(ConventionalBlockTags.STRIPPED_LOGS, ConventionalItemTags.STRIPPED_LOGS);
         this.copy(ConventionalBlockTags.STRIPPED_WOODS, ConventionalItemTags.STRIPPED_WOODS);
+        this.copy(ConventionalBlockTags.BUDDING_BLOCKS, ConventionalItemTags.BUDDING_BLOCKS);
         // do not copy CLUSTERS as it contains a block without an item, do it manually instead
         this.copy(ConventionalBlockTags.BUDS, ConventionalItemTags.BUDS);
 

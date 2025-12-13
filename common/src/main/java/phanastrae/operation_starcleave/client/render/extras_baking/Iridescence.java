@@ -47,6 +47,7 @@ public class Iridescence {
         ));
         iridescentOpalBlockItems.addAll(List.of(
                 OperationStarcleaveBlocks.CELESTIAL_OPAL_BLOCK,
+                OperationStarcleaveBlocks.BUDDING_CELESTIAL_OPAL,
 
                 OperationStarcleaveBlocks.CELESTIAL_OPAL_SPIRE,
                 OperationStarcleaveBlocks.CELESTIAL_OPAL_CLUSTER,
