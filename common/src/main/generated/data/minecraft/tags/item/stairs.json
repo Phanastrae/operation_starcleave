@@ -4,6 +4,9 @@
     "operation_starcleave:starbleached_tile_stairs",
     "operation_starcleave:starflaked_bismuth_brick_stairs",
     "operation_starcleave:starflaked_bismuth_tile_stairs",
-    "operation_starcleave:starflaked_bismuth_mosaic_stairs"
+    "operation_starcleave:starflaked_bismuth_mosaic_stairs",
+    "operation_starcleave:celestial_opal_stairs",
+    "operation_starcleave:polished_celestial_opal_stairs",
+    "operation_starcleave:polished_celestial_opal_brick_stairs"
   ]
 }

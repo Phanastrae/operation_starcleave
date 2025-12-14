@@ -108,12 +108,27 @@ public class OperationStarcleaveItems {
     public static final Item STARFLAKED_BISMUTH_TRAPDOOR = registerBlockItem(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_TRAPDOOR);
 
     public static final Item CELESTIAL_OPAL_BLOCK = registerBlockItem(OperationStarcleaveBlocks.CELESTIAL_OPAL_BLOCK);
+    public static final Item CELESTIAL_OPAL_STAIRS = registerBlockItem(OperationStarcleaveBlocks.CELESTIAL_OPAL_STAIRS);
+    public static final Item CELESTIAL_OPAL_SLAB = registerBlockItem(OperationStarcleaveBlocks.CELESTIAL_OPAL_SLAB);
+    public static final Item CELESTIAL_OPAL_WALL = registerBlockItem(OperationStarcleaveBlocks.CELESTIAL_OPAL_WALL);
+
     public static final Item BUDDING_CELESTIAL_OPAL = registerBlockItem(OperationStarcleaveBlocks.BUDDING_CELESTIAL_OPAL);
 
     public static final Item CELESTIAL_OPAL_CLUSTER = registerBlockItem(OperationStarcleaveBlocks.CELESTIAL_OPAL_CLUSTER);
     public static final Item LARGE_CELESTIAL_OPAL_BUD = registerBlockItem(OperationStarcleaveBlocks.LARGE_CELESTIAL_OPAL_BUD);
     public static final Item MEDIUM_CELESTIAL_OPAL_BUD = registerBlockItem(OperationStarcleaveBlocks.MEDIUM_CELESTIAL_OPAL_BUD);
     public static final Item SMALL_CELESTIAL_OPAL_BUD = registerBlockItem(OperationStarcleaveBlocks.SMALL_CELESTIAL_OPAL_BUD);
+
+    public static final Item POLISHED_CELESTIAL_OPAL_BLOCK = registerBlockItem(OperationStarcleaveBlocks.POLISHED_CELESTIAL_OPAL_BLOCK);
+    public static final Item POLISHED_CELESTIAL_OPAL_STAIRS = registerBlockItem(OperationStarcleaveBlocks.POLISHED_CELESTIAL_OPAL_STAIRS);
+    public static final Item POLISHED_CELESTIAL_OPAL_SLAB = registerBlockItem(OperationStarcleaveBlocks.POLISHED_CELESTIAL_OPAL_SLAB);
+
+    public static final Item POLISHED_CELESTIAL_OPAL_BRICKS = registerBlockItem(OperationStarcleaveBlocks.POLISHED_CELESTIAL_OPAL_BRICKS);
+    public static final Item POLISHED_CELESTIAL_OPAL_BRICK_STAIRS = registerBlockItem(OperationStarcleaveBlocks.POLISHED_CELESTIAL_OPAL_BRICK_STAIRS);
+    public static final Item POLISHED_CELESTIAL_OPAL_BRICK_SLAB = registerBlockItem(OperationStarcleaveBlocks.POLISHED_CELESTIAL_OPAL_BRICK_SLAB);
+    public static final Item POLISHED_CELESTIAL_OPAL_BRICK_WALL = registerBlockItem(OperationStarcleaveBlocks.POLISHED_CELESTIAL_OPAL_BRICK_WALL);
+
+    public static final Item POLISHED_CELESTIAL_OPAL_PILLAR = registerBlockItem(OperationStarcleaveBlocks.POLISHED_CELESTIAL_OPAL_PILLAR);
 
 
     public static final Item STARCLEAVER_GOLEM_BUCKET = register("starcleaver_golem_bucket", new StarcleaverGolemBucketItem(properties().stacksTo(1)));

@@ -47,13 +47,28 @@ public class Iridescence {
         ));
         iridescentOpalBlockItems.addAll(List.of(
                 OperationStarcleaveBlocks.CELESTIAL_OPAL_BLOCK,
+                OperationStarcleaveBlocks.CELESTIAL_OPAL_STAIRS,
+                OperationStarcleaveBlocks.CELESTIAL_OPAL_SLAB,
+                OperationStarcleaveBlocks.CELESTIAL_OPAL_WALL,
+
                 OperationStarcleaveBlocks.BUDDING_CELESTIAL_OPAL,
 
                 OperationStarcleaveBlocks.CELESTIAL_OPAL_SPIRE,
                 OperationStarcleaveBlocks.CELESTIAL_OPAL_CLUSTER,
                 OperationStarcleaveBlocks.LARGE_CELESTIAL_OPAL_BUD,
                 OperationStarcleaveBlocks.MEDIUM_CELESTIAL_OPAL_BUD,
-                OperationStarcleaveBlocks.SMALL_CELESTIAL_OPAL_BUD
+                OperationStarcleaveBlocks.SMALL_CELESTIAL_OPAL_BUD,
+
+                OperationStarcleaveBlocks.POLISHED_CELESTIAL_OPAL_BLOCK,
+                OperationStarcleaveBlocks.POLISHED_CELESTIAL_OPAL_STAIRS,
+                OperationStarcleaveBlocks.POLISHED_CELESTIAL_OPAL_SLAB,
+
+                OperationStarcleaveBlocks.POLISHED_CELESTIAL_OPAL_BRICKS,
+                OperationStarcleaveBlocks.POLISHED_CELESTIAL_OPAL_BRICK_STAIRS,
+                OperationStarcleaveBlocks.POLISHED_CELESTIAL_OPAL_BRICK_SLAB,
+                OperationStarcleaveBlocks.POLISHED_CELESTIAL_OPAL_BRICK_WALL,
+
+                OperationStarcleaveBlocks.POLISHED_CELESTIAL_OPAL_PILLAR
         ));
 
         // list iridescent blocks

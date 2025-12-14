@@ -1,6 +1,19 @@
 {
   "values": [
     "operation_starcleave:celestial_opal_block",
-    "operation_starcleave:budding_celestial_opal"
+    "operation_starcleave:celestial_opal_slab",
+    "operation_starcleave:celestial_opal_stairs",
+    "operation_starcleave:celestial_opal_wall",
+    "operation_starcleave:polished_celestial_opal_block",
+    "operation_starcleave:polished_celestial_opal_block",
+    "operation_starcleave:polished_celestial_opal_bricks",
+    "operation_starcleave:polished_celestial_opal_slab",
+    "operation_starcleave:polished_celestial_opal_stairs",
+    "operation_starcleave:polished_celestial_opal_bricks",
+    "operation_starcleave:polished_celestial_opal_brick_slab",
+    "operation_starcleave:polished_celestial_opal_brick_stairs",
+    "operation_starcleave:polished_celestial_opal_brick_wall",
+    "operation_starcleave:budding_celestial_opal",
+    "operation_starcleave:polished_celestial_opal_pillar"
   ]
 }

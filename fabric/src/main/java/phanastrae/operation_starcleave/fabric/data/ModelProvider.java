@@ -49,7 +49,6 @@ public class ModelProvider extends FabricModelProvider {
                 STARFLAKED_BISMUTH_BLOCK,
                 CHISELED_STARFLAKED_BISMUTH_BLOCK,
 
-                CELESTIAL_OPAL_BLOCK,
                 BUDDING_CELESTIAL_OPAL
         );
 
@@ -108,6 +107,8 @@ public class ModelProvider extends FabricModelProvider {
                 SMALL_CELESTIAL_OPAL_BUD
         );
 
+        BMG.createRotatedPillarWithHorizontalVariant(POLISHED_CELESTIAL_OPAL_PILLAR, TexturedModel.COLUMN_ALT, TexturedModel.COLUMN_HORIZONTAL_ALT);
+
         // fluids
         BMG.createNonTemplateModelBlock(PETRICHORIC_PLASMA);
 
@@ -123,7 +124,6 @@ public class ModelProvider extends FabricModelProvider {
                 STARFLAKED_BISMUTH_TILES,
                 STARFLAKED_BISMUTH_MOSAIC,
 
-                CELESTIAL_OPAL_BLOCK,
                 BUDDING_CELESTIAL_OPAL
         );
         createCropForSuffix(2, SUFFIX_IRIDESCENCE, BMG, BISREEDS);
@@ -155,6 +155,31 @@ public class ModelProvider extends FabricModelProvider {
                 MEDIUM_CELESTIAL_OPAL_BUD,
                 SMALL_CELESTIAL_OPAL_BUD
         );
+
+        createFamilyBlocksForSuffix(SUFFIX_IRIDESCENCE, BMG, OperationStarcleaveBlockFamilies.CELESTIAL_OPAL_BLOCK);
+        createFamilyBlocksForSuffix(SUFFIX_IRIDESCENCE, BMG, OperationStarcleaveBlockFamilies.POLISHED_CELESTIAL_OPAL_BLOCK);
+        createFamilyBlocksForSuffix(SUFFIX_IRIDESCENCE, BMG, OperationStarcleaveBlockFamilies.POLISHED_CELESTIAL_OPAL_BRICKS);
+        createPillarForSuffix(SUFFIX_IRIDESCENCE, BMG, POLISHED_CELESTIAL_OPAL_PILLAR);
+    }
+
+    protected static void createFamilyBlocksForSuffix(String suffix, BlockModelGenerators BMG, BlockFamily family) {
+        Block baseBlock = family.getBaseBlock();
+        createTrivialCubeForSuffix(suffix, BMG, baseBlock);
+
+        Block slab = family.get(BlockFamily.Variant.SLAB);
+        if (slab != null) {
+            createSlabForSuffix(SUFFIX_IRIDESCENCE, BMG, slab, baseBlock);
+        }
+
+        Block stairs = family.get(BlockFamily.Variant.STAIRS);
+        if (stairs != null) {
+            createStairsForSuffix(SUFFIX_IRIDESCENCE, BMG, stairs, baseBlock);
+        }
+
+        Block wall = family.get(BlockFamily.Variant.WALL);
+        if (wall != null) {
+            createWallForSuffix(SUFFIX_IRIDESCENCE, BMG, wall, baseBlock);
+        }
     }
 
     private static void createSplitSlab(BlockModelGenerators BMG, Block block, Block fullBlock) {
@@ -501,12 +526,27 @@ public class ModelProvider extends FabricModelProvider {
                 STARFLAKED_BISMUTH_MOSAIC_SLAB,
 
                 CELESTIAL_OPAL_BLOCK,
-                BUDDING_CELESTIAL_OPAL
+                CELESTIAL_OPAL_STAIRS,
+                CELESTIAL_OPAL_SLAB,
+
+                BUDDING_CELESTIAL_OPAL,
+
+                POLISHED_CELESTIAL_OPAL_BLOCK,
+                POLISHED_CELESTIAL_OPAL_STAIRS,
+                POLISHED_CELESTIAL_OPAL_SLAB,
+
+                POLISHED_CELESTIAL_OPAL_BRICKS,
+                POLISHED_CELESTIAL_OPAL_BRICK_STAIRS,
+                POLISHED_CELESTIAL_OPAL_BRICK_SLAB,
+
+                POLISHED_CELESTIAL_OPAL_PILLAR
         );
         forEach(wallBlock -> addDelegateWallModelForSuffix(SUFFIX_IRIDESCENCE, IMG, wallBlock),
                 STARFLAKED_BISMUTH_BRICK_WALL,
                 STARFLAKED_BISMUTH_TILE_WALL,
-                STARFLAKED_BISMUTH_MOSAIC_WALL
+                STARFLAKED_BISMUTH_MOSAIC_WALL,
+                CELESTIAL_OPAL_WALL,
+                POLISHED_CELESTIAL_OPAL_BRICK_WALL
         );
         addDelegateTrapDoorModelForSuffix(SUFFIX_IRIDESCENCE, IMG, STARFLAKED_BISMUTH_TRAPDOOR);
     }

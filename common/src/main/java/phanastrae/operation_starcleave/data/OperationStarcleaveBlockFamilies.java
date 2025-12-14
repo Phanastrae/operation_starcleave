@@ -59,6 +59,25 @@ public class OperationStarcleaveBlockFamilies {
             .wall(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_MOSAIC_WALL)
             .getFamily();
 
+    public static final BlockFamily CELESTIAL_OPAL_BLOCK = familyBuilder(OperationStarcleaveBlocks.CELESTIAL_OPAL_BLOCK)
+            .stairs(OperationStarcleaveBlocks.CELESTIAL_OPAL_STAIRS)
+            .slab(OperationStarcleaveBlocks.CELESTIAL_OPAL_SLAB)
+            .wall(OperationStarcleaveBlocks.CELESTIAL_OPAL_WALL)
+            .polished(OperationStarcleaveBlocks.POLISHED_CELESTIAL_OPAL_BLOCK)
+            .getFamily();
+
+    public static final BlockFamily POLISHED_CELESTIAL_OPAL_BLOCK = familyBuilder(OperationStarcleaveBlocks.POLISHED_CELESTIAL_OPAL_BLOCK)
+            .stairs(OperationStarcleaveBlocks.POLISHED_CELESTIAL_OPAL_STAIRS)
+            .slab(OperationStarcleaveBlocks.POLISHED_CELESTIAL_OPAL_SLAB)
+            .polished(OperationStarcleaveBlocks.POLISHED_CELESTIAL_OPAL_BRICKS)
+            .getFamily();
+
+    public static final BlockFamily POLISHED_CELESTIAL_OPAL_BRICKS = familyBuilder(OperationStarcleaveBlocks.POLISHED_CELESTIAL_OPAL_BRICKS)
+            .stairs(OperationStarcleaveBlocks.POLISHED_CELESTIAL_OPAL_BRICK_STAIRS)
+            .slab(OperationStarcleaveBlocks.POLISHED_CELESTIAL_OPAL_BRICK_SLAB)
+            .wall(OperationStarcleaveBlocks.POLISHED_CELESTIAL_OPAL_BRICK_WALL)
+            .getFamily();
+
     public static BlockFamily.Builder familyBuilder(Block baseBlock) {
         BlockFamily.Builder builder = new BlockFamily.Builder(baseBlock);
         BlockFamily blockFamily = STARCLEAVE_MAP.put(baseBlock, builder.getFamily());

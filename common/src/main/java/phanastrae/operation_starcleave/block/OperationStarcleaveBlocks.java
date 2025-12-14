@@ -18,6 +18,8 @@ import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.fluid.OperationStarcleaveFluids;
 
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.function.ToIntFunction;
 
 import static net.minecraft.world.level.block.SoundType.*;
@@ -211,7 +213,7 @@ public class OperationStarcleaveBlocks {
     );
     public static final Block STARBLEACHED_WOOD = register(
             "starbleached_wood",
-            new RotatedPillarBlock(copyShallow(STARBLEACHED_LOG))
+            new RotatedPillarBlock(legacyCopy(STARBLEACHED_LOG))
     );
 
     public static final Block STARBLEACHED_LEAVES = register(
@@ -257,7 +259,7 @@ public class OperationStarcleaveBlocks {
 
     public static final Block CHISELED_STARBLEACHED_TILES = register(
             "chiseled_starbleached_tiles",
-            new Block(copyShallow(STARBLEACHED_TILES))
+            new Block(legacyCopy(STARBLEACHED_TILES))
     );
 
     public static final Block IMBUED_STARBLEACHED_TILES = register(
@@ -286,7 +288,7 @@ public class OperationStarcleaveBlocks {
 
     public static final Block STARBLEACH_CAULDRON = register(
             "starbleach_cauldron",
-            new StarbleachCauldronBlock(copyShallow(Blocks.CAULDRON)
+            new StarbleachCauldronBlock(legacyCopy(Blocks.CAULDRON)
                     .lightLevel(constant(13))
             )
     );
@@ -433,18 +435,18 @@ public class OperationStarcleaveBlocks {
     );
     public static final Block NUCLEIC_FISSURERIND = register(
             "nucleic_fissurerind",
-            new NucleicFissurerootBlock(copyShallow(NUCLEIC_FISSUREROOT)
+            new NucleicFissurerootBlock(legacyCopy(NUCLEIC_FISSUREROOT)
                     .mapColor(state -> COLOR_LIGHT_GREEN)
             )
     );
     // striped[sic]
     public static final Block STRIPED_NUCLEIC_FISSUREROOT = register(
             "striped_nucleic_fissureroot",
-            new NucleicFissurerootBlock(copyShallow(NUCLEIC_FISSUREROOT))
+            new NucleicFissurerootBlock(legacyCopy(NUCLEIC_FISSUREROOT))
     );
     public static final Block STRIPED_NUCLEIC_FISSURERIND = register(
             "striped_nucleic_fissurerind",
-            new NucleicFissurerootBlock(copyShallow(NUCLEIC_FISSURERIND))
+            new NucleicFissurerootBlock(legacyCopy(NUCLEIC_FISSURERIND))
     );
     public static final Block NUCLEIC_FISSURELEAVES = register(
             "nucleic_fissureleaves",
@@ -589,10 +591,22 @@ public class OperationStarcleaveBlocks {
                     .requiresCorrectToolForDrops()
             )
     );
+    public static final Block CELESTIAL_OPAL_STAIRS = register(
+            "celestial_opal_stairs",
+            stairsOf(CELESTIAL_OPAL_BLOCK, GemstoneStairBlock::new)
+    );
+    public static final Block CELESTIAL_OPAL_SLAB = register(
+            "celestial_opal_slab",
+            slabOf(CELESTIAL_OPAL_BLOCK, GemstoneSlabBlock::new)
+    );
+    public static final Block CELESTIAL_OPAL_WALL = register(
+            "celestial_opal_wall",
+            wallOf(CELESTIAL_OPAL_BLOCK, GemstoneWallBlock::new)
+    );
 
     public static final Block BUDDING_CELESTIAL_OPAL = register(
             "budding_celestial_opal",
-            new BuddingCelestialOpalBlock(copyShallow(CELESTIAL_OPAL_BLOCK)
+            new BuddingCelestialOpalBlock(legacyCopy(CELESTIAL_OPAL_BLOCK)
                     .pushReaction(DESTROY)
                     .randomTicks()
             )
@@ -618,13 +632,13 @@ public class OperationStarcleaveBlocks {
             new CelestialOpalClusterBlock(
                     7.0F,
                     3.0F,
-                    BlockBehaviour.Properties.ofLegacyCopy(CELESTIAL_OPAL_SPIRE)
+                    legacyCopy(CELESTIAL_OPAL_SPIRE)
             )
     );
     public static final Block LARGE_CELESTIAL_OPAL_BUD = register(
             "large_celestial_opal_bud",
             new CelestialOpalBudBlock(
-                    5.0F, 3.0F, BlockBehaviour.Properties.ofLegacyCopy(CELESTIAL_OPAL_CLUSTER)
+                    5.0F, 3.0F, legacyCopy(CELESTIAL_OPAL_CLUSTER)
                     .sound(SoundType.MEDIUM_AMETHYST_BUD) // same as in vanilla - for some reason large buds have medium sounds?
                     .lightLevel(constant(8))
             )
@@ -632,7 +646,7 @@ public class OperationStarcleaveBlocks {
     public static final Block MEDIUM_CELESTIAL_OPAL_BUD = register(
             "medium_celestial_opal_bud",
             new CelestialOpalBudBlock(
-                    4.0F, 3.0F, BlockBehaviour.Properties.ofLegacyCopy(CELESTIAL_OPAL_CLUSTER)
+                    4.0F, 3.0F, legacyCopy(CELESTIAL_OPAL_CLUSTER)
                     .sound(SoundType.LARGE_AMETHYST_BUD) // same as in vanilla - for some reason medium buds have large sounds?
                     .lightLevel(constant(5))
             )
@@ -640,10 +654,47 @@ public class OperationStarcleaveBlocks {
     public static final Block SMALL_CELESTIAL_OPAL_BUD = register(
             "small_celestial_opal_bud",
             new CelestialOpalBudBlock(
-                    3.0F, 4.0F, BlockBehaviour.Properties.ofLegacyCopy(CELESTIAL_OPAL_CLUSTER)
+                    3.0F, 4.0F, legacyCopy(CELESTIAL_OPAL_CLUSTER)
                     .sound(SoundType.SMALL_AMETHYST_BUD)
                     .lightLevel(constant(2))
             )
+    );
+
+    public static final Block POLISHED_CELESTIAL_OPAL_BLOCK = register(
+            "polished_celestial_opal_block",
+            new AmethystBlock(legacyCopy(CELESTIAL_OPAL_BLOCK)
+                    .strength(2.5F, 4.0F)
+            )
+    );
+    public static final Block POLISHED_CELESTIAL_OPAL_STAIRS = register(
+            "polished_celestial_opal_stairs",
+            stairsOf(POLISHED_CELESTIAL_OPAL_BLOCK, GemstoneStairBlock::new)
+    );
+    public static final Block POLISHED_CELESTIAL_OPAL_SLAB = register(
+            "polished_celestial_opal_slab",
+            slabOf(POLISHED_CELESTIAL_OPAL_BLOCK, GemstoneSlabBlock::new)
+    );
+
+    public static final Block POLISHED_CELESTIAL_OPAL_BRICKS = register(
+            "polished_celestial_opal_bricks",
+            new AmethystBlock(legacyCopy(POLISHED_CELESTIAL_OPAL_BLOCK))
+    );
+    public static final Block POLISHED_CELESTIAL_OPAL_BRICK_STAIRS = register(
+            "polished_celestial_opal_brick_stairs",
+            stairsOf(POLISHED_CELESTIAL_OPAL_BRICKS, GemstoneStairBlock::new)
+    );
+    public static final Block POLISHED_CELESTIAL_OPAL_BRICK_SLAB = register(
+            "polished_celestial_opal_brick_slab",
+            slabOf(POLISHED_CELESTIAL_OPAL_BRICKS, GemstoneSlabBlock::new)
+    );
+    public static final Block POLISHED_CELESTIAL_OPAL_BRICK_WALL = register(
+            "polished_celestial_opal_brick_wall",
+            wallOf(POLISHED_CELESTIAL_OPAL_BRICKS, GemstoneWallBlock::new)
+    );
+
+    public static final Block POLISHED_CELESTIAL_OPAL_PILLAR = register(
+            "polished_celestial_opal_pillar",
+            new GemstoneRotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(POLISHED_CELESTIAL_OPAL_BLOCK))
     );
 
     private static <T extends Block> T register(String id, T block) {
@@ -672,20 +723,32 @@ public class OperationStarcleaveBlocks {
         return BlockBehaviour.Properties.of();
     }
 
-    protected static BlockBehaviour.Properties copyShallow(BlockBehaviour settings) {
+    protected static BlockBehaviour.Properties legacyCopy(BlockBehaviour settings) {
         return BlockBehaviour.Properties.ofLegacyCopy(settings);
     }
 
+    protected static <T extends StairBlock> T stairsOf(Block block, BiFunction<BlockState, BlockBehaviour.Properties, T> constructor) {
+        return constructor.apply(block.defaultBlockState(), legacyCopy(block));
+    }
+
     protected static StairBlock stairsOf(Block block) {
-        return new CustomStairBlock(block.defaultBlockState(), copyShallow(block));
+        return stairsOf(block, CustomStairBlock::new);
+    }
+
+    protected static <T extends SlabBlock> T slabOf(BlockBehaviour block, Function<BlockBehaviour.Properties, T> constructor) {
+        return constructor.apply(legacyCopy(block));
     }
 
     protected static SlabBlock slabOf(BlockBehaviour block) {
-        return new SlabBlock(copyShallow(block));
+        return slabOf(block, SlabBlock::new);
+    }
+
+    protected static <T extends WallBlock> T wallOf(BlockBehaviour block, Function<BlockBehaviour.Properties, T> constructor) {
+        return constructor.apply(legacyCopy(block).forceSolidOn());
     }
 
     protected static WallBlock wallOf(BlockBehaviour block) {
-        return new WallBlock(copyShallow(block).forceSolidOn());
+        return wallOf(block, WallBlock::new);
     }
 
     protected static Block flowerPot(Block potted, int lightLevel) {
@@ -698,7 +761,7 @@ public class OperationStarcleaveBlocks {
     }
 
     protected static DoorBlock doorOf(BlockSetType blockSetType, BlockBehaviour block, float destroyTime, float explosionResistance) {
-        return new CustomDoorBlock(blockSetType, copyShallow(block)
+        return new CustomDoorBlock(blockSetType, legacyCopy(block)
                 .strength(destroyTime, explosionResistance)
                 .pushReaction(PushReaction.DESTROY)
                 .noOcclusion()
@@ -706,7 +769,7 @@ public class OperationStarcleaveBlocks {
     }
 
     protected static TrapDoorBlock trapdoorOf(BlockSetType blockSetType, BlockBehaviour block, float destroyTime, float explosionResistance) {
-        return new CustomTrapDoorBlock(blockSetType, copyShallow(block)
+        return new CustomTrapDoorBlock(blockSetType, legacyCopy(block)
                 .strength(destroyTime, explosionResistance)
                 .isValidSpawn(SPAWN_NEVER)
                 .noOcclusion()

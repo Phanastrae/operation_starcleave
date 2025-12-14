@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "operation_starcleave:block/celestial_opal_slab"
+    },
+    "type=double": {
+      "model": "operation_starcleave:block/celestial_opal_block"
+    },
+    "type=top": {
+      "model": "operation_starcleave:block/celestial_opal_slab_top"
+    }
+  }
+}

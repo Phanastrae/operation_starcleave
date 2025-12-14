@@ -54,7 +54,11 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                 OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_BLOCK,
                 OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_BRICKS,
                 OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_TILES,
-                OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_MOSAIC
+                OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_MOSAIC,
+
+                OperationStarcleaveBlockFamilies.CELESTIAL_OPAL_BLOCK,
+                OperationStarcleaveBlockFamilies.POLISHED_CELESTIAL_OPAL_BLOCK,
+                OperationStarcleaveBlockFamilies.POLISHED_CELESTIAL_OPAL_BRICKS
         );
 
         HolderLookup.RegistryLookup<Enchantment> registryLookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
@@ -90,7 +94,7 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                 STARFLAKED_BISMUTH_PILLAR,
                 STARFLAKED_BISMUTH_TRAPDOOR,
 
-                CELESTIAL_OPAL_BLOCK
+                POLISHED_CELESTIAL_OPAL_PILLAR
         );
 
         forEach(this::dropPottedContents,

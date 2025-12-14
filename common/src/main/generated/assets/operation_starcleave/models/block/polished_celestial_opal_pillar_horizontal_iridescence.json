@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column_horizontal",
+  "textures": {
+    "end": "operation_starcleave:block/polished_celestial_opal_pillar_top_iridescence",
+    "side": "operation_starcleave:block/polished_celestial_opal_pillar_iridescence"
+  }
+}

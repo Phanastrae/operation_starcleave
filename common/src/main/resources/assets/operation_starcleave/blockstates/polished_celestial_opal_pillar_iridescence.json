@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "operation_starcleave:block/polished_celestial_opal_pillar_horizontal_iridescence",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "operation_starcleave:block/polished_celestial_opal_pillar_iridescence"
+    },
+    "axis=z": {
+      "model": "operation_starcleave:block/polished_celestial_opal_pillar_horizontal_iridescence",
+      "x": 90
+    }
+  }
+}

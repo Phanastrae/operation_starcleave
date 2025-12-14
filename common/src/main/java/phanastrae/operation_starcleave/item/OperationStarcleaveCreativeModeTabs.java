@@ -123,6 +123,10 @@ public class OperationStarcleaveCreativeModeTabs {
                 IMBUED_STARBLEACHED_TILES,
 
                 CELESTIAL_OPAL_BLOCK,
+                CELESTIAL_OPAL_STAIRS,
+                CELESTIAL_OPAL_SLAB,
+                CELESTIAL_OPAL_WALL,
+
                 BUDDING_CELESTIAL_OPAL,
 
                 SMALL_CELESTIAL_OPAL_BUD,
@@ -131,6 +135,17 @@ public class OperationStarcleaveCreativeModeTabs {
                 CELESTIAL_OPAL_CLUSTER,
 
                 CELESTIAL_OPAL_SHARD,
+
+                POLISHED_CELESTIAL_OPAL_BLOCK,
+                POLISHED_CELESTIAL_OPAL_STAIRS,
+                POLISHED_CELESTIAL_OPAL_SLAB,
+
+                POLISHED_CELESTIAL_OPAL_BRICKS,
+                POLISHED_CELESTIAL_OPAL_BRICK_STAIRS,
+                POLISHED_CELESTIAL_OPAL_BRICK_SLAB,
+                POLISHED_CELESTIAL_OPAL_BRICK_WALL,
+
+                POLISHED_CELESTIAL_OPAL_PILLAR,
 
                 NUCLEOSYNTHESEED,
                 NUCLEIC_FISSUREROOT,
@@ -224,7 +239,21 @@ public class OperationStarcleaveCreativeModeTabs {
                 STARFLAKED_BISMUTH_DOOR,
                 STARFLAKED_BISMUTH_TRAPDOOR,
 
-                CELESTIAL_OPAL_BLOCK
+                CELESTIAL_OPAL_BLOCK,
+                CELESTIAL_OPAL_STAIRS,
+                CELESTIAL_OPAL_SLAB,
+                CELESTIAL_OPAL_WALL,
+
+                POLISHED_CELESTIAL_OPAL_BLOCK,
+                POLISHED_CELESTIAL_OPAL_STAIRS,
+                POLISHED_CELESTIAL_OPAL_SLAB,
+
+                POLISHED_CELESTIAL_OPAL_BRICKS,
+                POLISHED_CELESTIAL_OPAL_BRICK_STAIRS,
+                POLISHED_CELESTIAL_OPAL_BRICK_SLAB,
+                POLISHED_CELESTIAL_OPAL_BRICK_WALL,
+
+                POLISHED_CELESTIAL_OPAL_PILLAR
         );
 
         // Natural

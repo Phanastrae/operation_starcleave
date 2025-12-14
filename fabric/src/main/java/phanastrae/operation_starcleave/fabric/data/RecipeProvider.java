@@ -76,6 +76,9 @@ public class RecipeProvider extends FabricRecipeProvider {
 
         twoByTwoPacker(exporter, RecipeCategory.BUILDING_BLOCKS, CELESTIAL_OPAL_BLOCK, CELESTIAL_OPAL_SHARD);
 
+        savePillar(exporter, STARFLAKED_BISMUTH_PILLAR, STARFLAKED_BISMUTH_BLOCK);
+        savePillar(exporter, POLISHED_CELESTIAL_OPAL_PILLAR, POLISHED_CELESTIAL_OPAL_BLOCK);
+
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, BLESSED_CLOTH_CURTAIN, 16)
                 .define('#', BLESSED_CLOTH)
                 .pattern("###")
@@ -93,15 +96,6 @@ public class RecipeProvider extends FabricRecipeProvider {
                 .unlockedBy(
                         getHasName(BISMUTH_FLAKE),
                         has(BISMUTH_FLAKE))
-                .save(exporter);
-
-        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, STARFLAKED_BISMUTH_PILLAR, 2)
-                .define('#', STARFLAKED_BISMUTH_BLOCK)
-                .pattern("#")
-                .pattern("#")
-                .unlockedBy(
-                        getHasName(STARFLAKED_BISMUTH_BLOCK),
-                        has(STARFLAKED_BISMUTH_BLOCK))
                 .save(exporter);
 
         // complex shaped
@@ -227,6 +221,17 @@ public class RecipeProvider extends FabricRecipeProvider {
                 .pattern("##")
                 .unlockedBy(getHasName(unpacked), has(unpacked))
                 .save(recipeOutput);
+    }
+
+    protected static void savePillar(RecipeOutput exporter, ItemLike pillarBlock, ItemLike baseBlock) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, pillarBlock, 2)
+                .define('#', baseBlock)
+                .pattern("#")
+                .pattern("#")
+                .unlockedBy(
+                        getHasName(baseBlock),
+                        has(baseBlock))
+                .save(exporter);
     }
 
     private static void scBlocks(RecipeOutput recipeOutput, ItemLike result, int amount, ItemLike... materials) {

@@ -6,6 +6,9 @@
     "operation_starcleave:starflaked_bismuth_slab",
     "operation_starcleave:starflaked_bismuth_brick_slab",
     "operation_starcleave:starflaked_bismuth_tile_slab",
-    "operation_starcleave:starflaked_bismuth_mosaic_slab"
+    "operation_starcleave:starflaked_bismuth_mosaic_slab",
+    "operation_starcleave:celestial_opal_slab",
+    "operation_starcleave:polished_celestial_opal_slab",
+    "operation_starcleave:polished_celestial_opal_brick_slab"
   ]
 }

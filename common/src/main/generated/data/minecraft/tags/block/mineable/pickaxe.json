@@ -30,6 +30,19 @@
     "operation_starcleave:starflaked_bismuth_mosaic_slab",
     "operation_starcleave:starflaked_bismuth_mosaic_stairs",
     "operation_starcleave:starflaked_bismuth_mosaic_wall",
+    "operation_starcleave:celestial_opal_block",
+    "operation_starcleave:celestial_opal_slab",
+    "operation_starcleave:celestial_opal_stairs",
+    "operation_starcleave:celestial_opal_wall",
+    "operation_starcleave:polished_celestial_opal_block",
+    "operation_starcleave:polished_celestial_opal_block",
+    "operation_starcleave:polished_celestial_opal_bricks",
+    "operation_starcleave:polished_celestial_opal_slab",
+    "operation_starcleave:polished_celestial_opal_stairs",
+    "operation_starcleave:polished_celestial_opal_bricks",
+    "operation_starcleave:polished_celestial_opal_brick_slab",
+    "operation_starcleave:polished_celestial_opal_brick_stairs",
+    "operation_starcleave:polished_celestial_opal_brick_wall",
     {
       "id": "#operation_starcleave:starbleached_logs",
       "required": false
@@ -45,12 +58,12 @@
     "operation_starcleave:starflaked_bismuth_pillar",
     "operation_starcleave:starflaked_bismuth_door",
     "operation_starcleave:starflaked_bismuth_trapdoor",
-    "operation_starcleave:celestial_opal_block",
     "operation_starcleave:budding_celestial_opal",
     "operation_starcleave:celestial_opal_spire",
     "operation_starcleave:celestial_opal_cluster",
     "operation_starcleave:large_celestial_opal_bud",
     "operation_starcleave:medium_celestial_opal_bud",
-    "operation_starcleave:small_celestial_opal_bud"
+    "operation_starcleave:small_celestial_opal_bud",
+    "operation_starcleave:polished_celestial_opal_pillar"
   ]
 }

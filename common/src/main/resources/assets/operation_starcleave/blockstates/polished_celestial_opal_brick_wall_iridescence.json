@@ -1,0 +1,90 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "operation_starcleave:block/polished_celestial_opal_brick_wall_post_iridescence"
+      },
+      "when": {
+        "up": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "operation_starcleave:block/polished_celestial_opal_brick_wall_side_iridescence",
+        "uvlock": true
+      },
+      "when": {
+        "north": "low"
+      }
+    },
+    {
+      "apply": {
+        "model": "operation_starcleave:block/polished_celestial_opal_brick_wall_side_iridescence",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "east": "low"
+      }
+    },
+    {
+      "apply": {
+        "model": "operation_starcleave:block/polished_celestial_opal_brick_wall_side_iridescence",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "south": "low"
+      }
+    },
+    {
+      "apply": {
+        "model": "operation_starcleave:block/polished_celestial_opal_brick_wall_side_iridescence",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "west": "low"
+      }
+    },
+    {
+      "apply": {
+        "model": "operation_starcleave:block/polished_celestial_opal_brick_wall_side_tall_iridescence",
+        "uvlock": true
+      },
+      "when": {
+        "north": "tall"
+      }
+    },
+    {
+      "apply": {
+        "model": "operation_starcleave:block/polished_celestial_opal_brick_wall_side_tall_iridescence",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "east": "tall"
+      }
+    },
+    {
+      "apply": {
+        "model": "operation_starcleave:block/polished_celestial_opal_brick_wall_side_tall_iridescence",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "south": "tall"
+      }
+    },
+    {
+      "apply": {
+        "model": "operation_starcleave:block/polished_celestial_opal_brick_wall_side_tall_iridescence",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "west": "tall"
+      }
+    }
+  ]
+}
