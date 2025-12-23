@@ -68,7 +68,7 @@ public class SectionExtrasRebuildQueue {
             for (int sy = 0; sy < this.sectionGridSizeY; sy++) {
                 for (int sz = 0; sz < this.sectionGridSizeXZ; sz++) {
                     int index = getSectionIndex(sx, sy, sz);
-                    ExtrasSection newSection = new ExtrasSection(this, index, sx * 16, this.level.getMinBuildHeight() + sy * 16, sz * 16);
+                    ExtrasSection newSection = new ExtrasSection(this, sx * 16, this.level.getMinBuildHeight() + sy * 16, sz * 16);
                     this.sections[index] = newSection;
                     newSection.setDirty(false, true);
                 }

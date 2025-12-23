@@ -28,9 +28,8 @@ import java.util.stream.Collectors;
 
 public class ExtrasSection {
 
-    public final int index;
     private final SectionExtrasRebuildQueue queue;
-    private final BlockPos.MutableBlockPos origin;
+    private final BlockPos.MutableBlockPos origin = new BlockPos.MutableBlockPos(-1, -1, -1);
     private final BlockPos.MutableBlockPos[] relativeOrigins = Util.make(new BlockPos.MutableBlockPos[6], array -> {
         for (int i = 0; i < array.length; i++) {
             array[i] = new BlockPos.MutableBlockPos();
@@ -58,11 +57,9 @@ public class ExtrasSection {
         return list;
     }
 
-    public ExtrasSection(SectionExtrasRebuildQueue queue, int index, int x, int y, int z) {
-        this.index = index;
+    public ExtrasSection(SectionExtrasRebuildQueue queue, int x, int y, int z) {
         this.queue = queue;
-        this.origin = new BlockPos.MutableBlockPos(x, y, z);
-        this.sectionPos = SectionPos.of(this.origin);
+        this.setOrigin(x, y, z);
     }
 
     public void setOrigin(int x, int y, int z) {
