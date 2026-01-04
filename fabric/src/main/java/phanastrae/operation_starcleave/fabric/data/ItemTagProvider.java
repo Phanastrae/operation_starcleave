@@ -100,6 +100,12 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
                         BISREED_ROOT
                 );
 
+        getOrCreateTagBuilder(ItemTags.MEAT)
+                .add(
+                        MUCKY_SINGUTS,
+                        CLEANSED_SINGUTS
+                );
+
         // convention
         // add CLUSTERS manually as the block tag includes a block without an item
         getOrCreateTagBuilder(ConventionalItemTags.CLUSTERS)
@@ -109,12 +115,20 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
         getOrCreateTagBuilder(ConventionalItemTags.FOODS)
                 .add(
-                        STARFRUIT
+                        STARFRUIT,
+                        MUCKY_SINGUTS,
+                        CLEANSED_SINGUTS
                 );
 
         getOrCreateTagBuilder(ConventionalItemTags.FRUIT_FOODS)
                 .add(
                         STARFRUIT
+                );
+
+        getOrCreateTagBuilder(ConventionalItemTags.RAW_MEAT_FOODS)
+                .add(
+                        MUCKY_SINGUTS,
+                        CLEANSED_SINGUTS
                 );
 
         getOrCreateTagBuilder(ConventionalItemTags.CANDY_FOODS)
@@ -124,7 +138,8 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
         getOrCreateTagBuilder(ConventionalItemTags.FOOD_POISONING_FOODS)
                 .add(
-                        STARFRUIT
+                        STARFRUIT,
+                        MUCKY_SINGUTS
                 );
 
         getOrCreateTagBuilder(ConventionalItemTags.BUCKETS)

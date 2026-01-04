@@ -133,7 +133,7 @@ public class OperationStarcleaveItems {
 
     public static final Item STARCLEAVER_GOLEM_BUCKET = register("starcleaver_golem_bucket", new StarcleaverGolemBucketItem(properties().stacksTo(1)));
 
-    public static final Item STARBLEACH_BOTTLE = register("starbleach_bottle", new StarbleachBottleItem(properties().stacksTo(16).craftRemainder(Items.GLASS_BOTTLE).food(StarbleachBottleItem.STARBLEACH_BOTTLE)));
+    public static final Item STARBLEACH_BOTTLE = register("starbleach_bottle", new StarbleachBottleItem(properties().stacksTo(16).craftRemainder(Items.GLASS_BOTTLE).food(OperationStarcleaveFoods.STARBLEACH_BOTTLE)));
     public static final Item SPLASH_STARBLEACH_BOTTLE = register("splash_starbleach_bottle", new SplashStarbleachBottleItem(properties().stacksTo(16)));
 
     public static final Item BISMUTH_FLAKE = register("bismuth_flake", new Item(properties()));
@@ -143,7 +143,7 @@ public class OperationStarcleaveItems {
     public static final Item BLESSED_CLOTH = register("blessed_cloth", new Item(properties()));
 
     public static final Item STARBLEACHED_PEARL = register("starbleached_pearl", new StarbleachedPearlItem(properties().stacksTo(16)));
-    public static final Item STARFRUIT = register("starfruit", new StarfruitItem(properties().food(StarfruitItem.STARFRUIT)));
+    public static final Item STARFRUIT = register("starfruit", new StarfruitItem(properties().food(OperationStarcleaveFoods.STARFRUIT)));
 
     public static final Item FIRMAMENT_REJUVENATOR = register("firmament_rejuvenator", new FirmamentRejuvenatorItem(properties().stacksTo(8).rarity(RARE)));
 
@@ -158,6 +158,9 @@ public class OperationStarcleaveItems {
     public static final Item PHLOGISTON_SAC = register("phlogiston_sac", new PhlogistonSacItem(properties()));
 
     public static final Item CELESTIAL_OPAL_SHARD = register("celestial_opal_shard", new Item(properties()));
+
+    public static final Item MUCKY_SINGUTS = register("mucky_singuts", new Item(properties().food(OperationStarcleaveFoods.MUCKY_SINGUTS)));
+    public static final Item CLEANSED_SINGUTS = register("cleansed_singuts", new Item(properties().food(OperationStarcleaveFoods.CLEANSED_SINGUTS)));
 
     public static final Item PETRICHORIC_PLASMA_BUCKET = register("petrichoric_plasma_bucket", new PetrichoricPlasmaBucketItem(OperationStarcleaveFluids.PETRICHORIC_PLASMA, properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 

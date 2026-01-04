@@ -67,6 +67,15 @@ public class EntityLootTableProvider extends SimpleFabricLootTableProvider {
         lootTableBiConsumer.accept(
                 SINEATER.getDefaultLootTable(),
                 LootTable.lootTable()
+                        .withPool(
+                                LootPool.lootPool()
+                                        .setRolls(ConstantValue.exactly(1.0F))
+                                        .add(
+                                                LootItem.lootTableItem(MUCKY_SINGUTS)
+                                                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 3.0F)))
+                                                        .apply(EnchantedCountIncreaseFunction.lootingMultiplier(registries, UniformGenerator.between(0.0F, 1.0F)))
+                                        )
+                        )
         );
         lootTableBiConsumer.accept(OperationStarcleaveLootTables.SINEATER_GOLDEN, createSineaterTable(BLESSED_CLOTH, 1, 2, registries));
         lootTableBiConsumer.accept(OperationStarcleaveLootTables.SINEATER_SPECTRAL, createSineaterTable(BLESSED_CLOTH, 1, 4, registries));

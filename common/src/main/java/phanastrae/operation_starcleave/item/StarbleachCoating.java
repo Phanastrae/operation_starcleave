@@ -17,11 +17,11 @@ import static net.minecraft.core.component.DataComponents.FOOD;
 public class StarbleachCoating {
 
     public static void onEat(LivingEntity livingEntity, Level world, ItemStack itemStack) {
-        if(world.isClientSide) {
+        if (world.isClientSide) {
             return;
         }
 
-        if(hasStarbleachCoating(itemStack)) {
+        if (hasStarbleachCoating(itemStack)) {
             livingEntity.addEffect(new MobEffectInstance(OperationStarcleaveStatusEffects.STARBLEACHED_INSIDES_ENTRY, 200, 1));
         }
     }
@@ -36,23 +36,32 @@ public class StarbleachCoating {
 
     public static boolean canAddStarbleach(ItemStack itemStack) {
         FoodProperties foodComponent = itemStack.get(FOOD);
-        if(foodComponent == null) {
+        if (foodComponent == null) {
             return false;
         }
 
-        if(hasStarbleachCoating(itemStack)) {
+        if (hasStarbleachCoating(itemStack)) {
             return false;
         }
 
-        if(itemStack.is(OperationStarcleaveItems.STARBLEACH_BOTTLE)) {
+        // TODO add a tag and do this less manually
+        if (itemStack.is(OperationStarcleaveItems.STARBLEACH_BOTTLE)) {
             return false;
         }
 
-        if(itemStack.is(OperationStarcleaveItems.STARFRUIT)) {
+        if (itemStack.is(OperationStarcleaveItems.STARFRUIT)) {
             return false;
         }
 
-        if(itemStack.is(Items.CHORUS_FRUIT)) {
+        if (itemStack.is(Items.CHORUS_FRUIT)) {
+            return false;
+        }
+
+        if (itemStack.is(OperationStarcleaveItems.CLEANSED_SINGUTS)) {
+            return false;
+        }
+
+        if (itemStack.is(OperationStarcleaveItems.MUCKY_SINGUTS)) {
             return false;
         }
 
@@ -66,12 +75,12 @@ public class StarbleachCoating {
     public static Component getText(String key) {
         float fl = (System.currentTimeMillis() % 4000) / 4000f;
         float red = Mth.sin(fl * Mth.TWO_PI) * 0.2f + 0.8f;
-        float green = Mth.sin((fl + 1/3f) * Mth.TWO_PI) * 0.2f + 0.8f;
-        float blue = Mth.sin((fl + 2/3f) * Mth.TWO_PI) * 0.2f + 0.8f;
+        float green = Mth.sin((fl + 1 / 3f) * Mth.TWO_PI) * 0.2f + 0.8f;
+        float blue = Mth.sin((fl + 2 / 3f) * Mth.TWO_PI) * 0.2f + 0.8f;
 
-        int r = (int)(red * 255f) & 0xFF;
-        int g = (int)(green * 255f) & 0xFF;
-        int b = (int)(blue * 255f) & 0xFF;
+        int r = (int) (red * 255f) & 0xFF;
+        int g = (int) (green * 255f) & 0xFF;
+        int b = (int) (blue * 255f) & 0xFF;
 
         return Component.translatable(key).withColor(r | (g << 8) | (b << 16) | (0xFF << 24));
     }

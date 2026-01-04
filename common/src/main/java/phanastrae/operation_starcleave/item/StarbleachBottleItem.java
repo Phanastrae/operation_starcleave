@@ -7,13 +7,10 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
-import phanastrae.operation_starcleave.entity.effect.OperationStarcleaveStatusEffects;
 import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
 
 import java.util.List;
@@ -76,6 +73,4 @@ public class StarbleachBottleItem extends Item {
         tooltip.add(StarbleachCoating.getText("operation_starcleave.tooltip.starbleach"));
         super.appendHoverText(stack, context, tooltip, type);
     }
-
-    public static final FoodProperties STARBLEACH_BOTTLE = new FoodProperties.Builder().nutrition(12).saturationModifier(5F).effect(new MobEffectInstance(OperationStarcleaveStatusEffects.STARBLEACHED_INSIDES_ENTRY, 6000, 5), 1).alwaysEdible().build();
 }

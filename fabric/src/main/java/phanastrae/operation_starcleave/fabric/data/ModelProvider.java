@@ -486,6 +486,9 @@ public class ModelProvider extends FabricModelProvider {
 
                 OperationStarcleaveItems.CELESTIAL_OPAL_SHARD,
 
+                OperationStarcleaveItems.MUCKY_SINGUTS,
+                OperationStarcleaveItems.CLEANSED_SINGUTS,
+
                 OperationStarcleaveItems.PETRICHORIC_PLASMA_BUCKET,
 
                 OperationStarcleaveItems.NUCLEAR_STORMCLOUD_BOTTLE,

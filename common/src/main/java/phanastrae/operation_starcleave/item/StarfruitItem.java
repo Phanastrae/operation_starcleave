@@ -4,7 +4,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -48,7 +47,7 @@ public class StarfruitItem extends Item {
         } else {
             Vec3 pos = user.getEyePosition();
             RandomSource random = user.getRandom();
-            for(int i = 0; i < 500; i++) {
+            for (int i = 0; i < 500; i++) {
                 world.addParticle(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER, pos.x, pos.y, pos.z, -lookVec.x * 0.1f + random.nextGaussian() * 0.2f, -lookVec.y * 0.1f + random.nextGaussian() * 0.2f, -lookVec.z * 0.1f + random.nextGaussian() * 0.2f);
             }
         }
@@ -60,6 +59,4 @@ public class StarfruitItem extends Item {
     public int getUseDuration(ItemStack stack, LivingEntity user) {
         return 12;
     }
-
-    public static final FoodProperties STARFRUIT = new FoodProperties.Builder().nutrition(2).saturationModifier(0.5F).alwaysEdible().fast().build();
 }

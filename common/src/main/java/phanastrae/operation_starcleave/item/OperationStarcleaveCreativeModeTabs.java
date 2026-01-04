@@ -168,6 +168,9 @@ public class OperationStarcleaveCreativeModeTabs {
                 PHLOGISTON_SAC,
                 SUBCAELIC_PHLOGLIGHT,
 
+                MUCKY_SINGUTS,
+                CLEANSED_SINGUTS,
+
                 COAGULATED_PLASMA,
                 PLASMA_ICE,
                 PETRICHORIC_PLASMA_BUCKET,
@@ -355,6 +358,10 @@ public class OperationStarcleaveCreativeModeTabs {
         // Food and Drink
         helper.addAfter(Items.CHORUS_FRUIT, FOOD_AND_DRINKS,
                 STARFRUIT
+        );
+        helper.addBefore(Items.COD, FOOD_AND_DRINKS,
+                MUCKY_SINGUTS,
+                CLEANSED_SINGUTS
         );
         helper.add(FOOD_AND_DRINKS,
                 STARBLEACH_BOTTLE,
