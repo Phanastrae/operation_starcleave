@@ -47,6 +47,13 @@ public class OperationStarcleaveSoundEvents {
     public static final SoundEvent SUBCAELIC_TORPEDO_PRIMED = create("entity.subcaelic_torpedo.primed");
     public static final SoundEvent SUBCAELIC_TORPEDO_BEEP = create("entity.subcaelic_torpedo.beep");
 
+    public static final SoundEvent SINEATER_AMBIENT = create("entity.sineater.ambient");
+    public static final SoundEvent SINEATER_DEATH = create("entity.sineater.death");
+    public static final SoundEvent SINEATER_HURT = create("entity.sineater.hurt");
+    public static final SoundEvent SINEATER_STEP = create("entity.sineater.step");
+    public static final SoundEvent SINEATER_PREPARE_JUMP = create("entity.sineater.prepare_jump");
+    public static final SoundEvent SINEATER_JUMP = create("entity.sineater.jump");
+
     public static final SoundEvent FIRMAMENT_CLEAVE = create("firmament.cleave");
     public static final SoundEvent FIRMAMENT_TILE_BREAK = create("firmament.tile.break");
 
@@ -56,7 +63,7 @@ public class OperationStarcleaveSoundEvents {
     public static void init(BiConsumer<ResourceLocation, SoundEvent> r) {
         Consumer<SoundEvent> reg = (event) -> r.accept(event.getLocation(), event);
 
-        for(SoundEvent event : ALL_EVENTS) {
+        for (SoundEvent event : ALL_EVENTS) {
             reg.accept(event);
         }
     }
@@ -71,7 +78,7 @@ public class OperationStarcleaveSoundEvents {
 
     private static SoundEvent create(ResourceLocation location, boolean register) {
         SoundEvent event = SoundEvent.createVariableRangeEvent(location);
-        if(register) {
+        if (register) {
             ALL_EVENTS.add(event);
         }
         return event;

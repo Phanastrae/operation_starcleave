@@ -125,6 +125,95 @@
       "item/trident/thunder2"
     ]
   },
+  "entity.sineater.ambient": {
+    "subtitle": "subtitles.operation_starcleave.entity.sineater.ambient",
+    "sounds": [
+      {
+        "name": "mob/camel/ambient1",
+        "volume": 0.45
+      },
+      {
+        "name": "mob/camel/ambient2",
+        "volume": 0.45
+      },
+      {
+        "name": "mob/camel/ambient3",
+        "volume": 0.5
+      },
+      {
+        "name": "mob/camel/ambient4",
+        "volume": 0.5
+      },
+      {
+        "name": "mob/camel/ambient5",
+        "volume": 0.5
+      },
+      {
+        "name": "mob/camel/ambient6",
+        "volume": 0.5
+      },
+      {
+        "name": "mob/camel/ambient7",
+        "volume": 0.3
+      },
+      {
+        "name": "mob/camel/ambient8",
+        "volume": 0.3
+      }
+    ]
+  },
+  "entity.sineater.death": {
+    "subtitle": "subtitles.operation_starcleave.entity.sineater.death",
+    "sounds": [
+      "mob/sniffer/death1",
+      "mob/sniffer/death2"
+    ]
+  },
+  "entity.sineater.hurt": {
+    "subtitle": "subtitles.operation_starcleave.entity.sineater.hurt",
+    "sounds": [
+      "mob/camel/hurt1",
+      "mob/camel/hurt2",
+      "mob/camel/hurt3",
+      "mob/camel/hurt4"
+    ]
+  },
+  "entity.sineater.jump": {
+    "subtitle": "subtitles.operation_starcleave.entity.sineater.jump",
+    "sounds": [
+      "mob/camel/dash1",
+      "mob/camel/dash2",
+      "mob/camel/dash3",
+      "mob/camel/dash4",
+      "mob/camel/dash5",
+      "mob/camel/dash6"
+    ]
+  },
+  "entity.sineater.prepare_jump": {
+    "subtitle": "subtitles.operation_starcleave.entity.sineater.prepare_jump",
+    "sounds": [
+      "mob/breeze/inhale1",
+      {
+        "name": "mob/breeze/inhale1",
+        "pitch": 1.1
+      },
+      "mob/breeze/inhale2",
+      {
+        "name": "mob/breeze/inhale2",
+        "pitch": 1.1
+      }
+    ]
+  },
+  "entity.sineater.step": {
+    "subtitle": "subtitles.operation_starcleave.entity.sineater.step",
+    "sounds": [
+      "mob/zoglin/step1",
+      "mob/zoglin/step2",
+      "mob/zoglin/step3",
+      "mob/zoglin/step4",
+      "mob/zoglin/step5"
+    ]
+  },
   "entity.starcleaver_golem.ambient": {
     "subtitle": "subtitles.operation_starcleave.entity.starcleaver_golem.ambient",
     "sounds": [

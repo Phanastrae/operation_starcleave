@@ -8,6 +8,7 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.OperationStarcleave;
+import phanastrae.operation_starcleave.entity.mob.SineaterEntity;
 import phanastrae.operation_starcleave.entity.mob.StarcleaverGolemEntity;
 import phanastrae.operation_starcleave.entity.mob.SubcaelicDuxEntity;
 import phanastrae.operation_starcleave.entity.mob.SubcaelicTorpedoEntity;
@@ -35,18 +36,25 @@ public class OperationStarcleaveEntityTypes {
 
     public static final ResourceLocation SUBCAELIC_DUX_KEY = id("subcaelic_dux");
     public static final EntityType<SubcaelicDuxEntity> SUBCAELIC_DUX =
-        createBuilder(SubcaelicDuxEntity::new, MobCategory.MONSTER)
-                .sized(7f, 7f)
-                .clientTrackingRange(10)
-                .build(getStr(SUBCAELIC_DUX_KEY));
+            createBuilder(SubcaelicDuxEntity::new, MobCategory.MONSTER)
+                    .sized(7f, 7f)
+                    .clientTrackingRange(10)
+                    .build(getStr(SUBCAELIC_DUX_KEY));
+
+    public static final ResourceLocation SINEATER_KEY = id("sineater");
+    public static final EntityType<SineaterEntity> SINEATER =
+            createBuilder(SineaterEntity::new, MobCategory.MONSTER)
+                    .sized(2.2f, 1.65f)
+                    .clientTrackingRange(10)
+                    .build(getStr(SINEATER_KEY));
 
     public static final ResourceLocation SPLASH_STARBLEACH_KEY = id("splash_starbleach_bottle");
     public static final EntityType<SplashStarbleachEntity> SPLASH_STARBLEACH =
-        EntityType.Builder.<SplashStarbleachEntity>of(SplashStarbleachEntity::new, MobCategory.MISC)
-                .sized(0.25F, 0.25F)
-                .clientTrackingRange(4)
-                .updateInterval(10)
-                .build(getStr(SPLASH_STARBLEACH_KEY));
+            EntityType.Builder.<SplashStarbleachEntity>of(SplashStarbleachEntity::new, MobCategory.MISC)
+                    .sized(0.25F, 0.25F)
+                    .clientTrackingRange(4)
+                    .updateInterval(10)
+                    .build(getStr(SPLASH_STARBLEACH_KEY));
 
     public static final ResourceLocation STARBLEACHED_PEARL_KEY = id("starbleached_pearl");
     public static final EntityType<StarbleachedPearlEntity> STARBLEACHED_PEARL =
@@ -94,6 +102,7 @@ public class OperationStarcleaveEntityTypes {
 
         r.accept(SUBCAELIC_TORPEDO_KEY, SUBCAELIC_TORPEDO);
         r.accept(SUBCAELIC_DUX_KEY, SUBCAELIC_DUX);
+        r.accept(SINEATER_KEY, SINEATER);
 
         // projectiles
         r.accept(SPLASH_STARBLEACH_KEY, SPLASH_STARBLEACH);
@@ -110,6 +119,7 @@ public class OperationStarcleaveEntityTypes {
         r.accept(STARCLEAVER_GOLEM, StarcleaverGolemEntity.createAttributes());
         r.accept(SUBCAELIC_TORPEDO, SubcaelicTorpedoEntity.createAttributes());
         r.accept(SUBCAELIC_DUX, SubcaelicDuxEntity.createAttributes());
+        r.accept(SINEATER, SineaterEntity.createAttributes());
     }
 
     private static ResourceLocation id(String path) {
@@ -120,7 +130,7 @@ public class OperationStarcleaveEntityTypes {
     private static String getStr(ResourceLocation resourceLocation) {
         // sending null on neoforge crashes, but sending a string on fabric logs an error
         String loader = XPlatInterface.INSTANCE.getLoader();
-        if(loader.equals("fabric")) {
+        if (loader.equals("fabric")) {
             return null;
         } else {
             return resourceLocation.toString();

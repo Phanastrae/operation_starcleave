@@ -11,6 +11,7 @@ public class FirmamentMobSpawning {
 
     public static final WeightedRandomList<MobSpawnSettings.SpawnerData> STARLIGHT_MONSTERS = WeightedRandomList.create(
             new MobSpawnSettings.SpawnerData(OperationStarcleaveEntityTypes.SUBCAELIC_TORPEDO, 35, 3, 7),
+            new MobSpawnSettings.SpawnerData(OperationStarcleaveEntityTypes.SINEATER, 40, 2, 4),
             new MobSpawnSettings.SpawnerData(EntityType.ENDERMAN, 10, 1, 4),
             new MobSpawnSettings.SpawnerData(OperationStarcleaveEntityTypes.SUBCAELIC_DUX, 2, 1, 1)
     );

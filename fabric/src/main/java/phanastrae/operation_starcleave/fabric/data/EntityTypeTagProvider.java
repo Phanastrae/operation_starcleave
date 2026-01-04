@@ -3,12 +3,12 @@ package phanastrae.operation_starcleave.fabric.data;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.core.HolderLookup;
-import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
 
 import java.util.concurrent.CompletableFuture;
 
 import static net.minecraft.tags.EntityTypeTags.*;
 import static phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypeTags.PHLOGISTIC_FIRE_IMMUNE;
+import static phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes.*;
 
 public class EntityTypeTagProvider extends FabricTagProvider.EntityTypeTagProvider {
     public EntityTypeTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> completableFuture) {
@@ -19,30 +19,44 @@ public class EntityTypeTagProvider extends FabricTagProvider.EntityTypeTagProvid
     protected void addTags(HolderLookup.Provider arg) {
         // vanilla tags
         getOrCreateTagBuilder(IMPACT_PROJECTILES)
-                .add(OperationStarcleaveEntityTypes.PHLOGISTIC_SPARK);
+                .add(PHLOGISTIC_SPARK);
 
         getOrCreateTagBuilder(FREEZE_IMMUNE_ENTITY_TYPES)
-                .add(OperationStarcleaveEntityTypes.STARCLEAVER_GOLEM);
+                .add(
+                        STARCLEAVER_GOLEM,
+                        SINEATER
+                );
 
         getOrCreateTagBuilder(FROG_FOOD)
-                .add(OperationStarcleaveEntityTypes.SUBCAELIC_TORPEDO);
+                .add(SUBCAELIC_TORPEDO);
 
         getOrCreateTagBuilder(FALL_DAMAGE_IMMUNE)
-                .add(OperationStarcleaveEntityTypes.STARCLEAVER_GOLEM)
-                .add(OperationStarcleaveEntityTypes.SUBCAELIC_TORPEDO)
-                .add(OperationStarcleaveEntityTypes.SUBCAELIC_DUX);
+                .add(
+                        STARCLEAVER_GOLEM,
+                        SUBCAELIC_TORPEDO,
+                        SUBCAELIC_DUX
+                );
 
         getOrCreateTagBuilder(AQUATIC)
-                .add(OperationStarcleaveEntityTypes.SUBCAELIC_DUX)
-                .add(OperationStarcleaveEntityTypes.SUBCAELIC_TORPEDO);
+                .add(
+                        SUBCAELIC_DUX,
+                        SUBCAELIC_TORPEDO
+                );
+
+        getOrCreateTagBuilder(ARTHROPOD)
+                .add(
+                        SINEATER
+                );
 
         getOrCreateTagBuilder(REDIRECTABLE_PROJECTILE)
-                .add(OperationStarcleaveEntityTypes.PHLOGISTIC_SPARK);
+                .add(PHLOGISTIC_SPARK);
 
         // starcleave tags
         getOrCreateTagBuilder(PHLOGISTIC_FIRE_IMMUNE)
-                .add(OperationStarcleaveEntityTypes.STARCLEAVER_GOLEM)
-                .add(OperationStarcleaveEntityTypes.SUBCAELIC_TORPEDO)
-                .add(OperationStarcleaveEntityTypes.SUBCAELIC_DUX);
+                .add(
+                        STARCLEAVER_GOLEM,
+                        SUBCAELIC_TORPEDO,
+                        SUBCAELIC_DUX
+                );
     }
 }

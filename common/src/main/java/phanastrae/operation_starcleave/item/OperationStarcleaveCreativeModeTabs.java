@@ -178,7 +178,8 @@ public class OperationStarcleaveCreativeModeTabs {
 
                 STARCLEAVER_GOLEM_SPAWN_EGG,
                 SUBCAELIC_TORPEDO_SPAWN_EGG,
-                SUBCAELIC_DUX_SPAWN_EGG
+                SUBCAELIC_DUX_SPAWN_EGG,
+                SINEATER_SPAWN_EGG
         );
 
         // Building Blocks
@@ -378,7 +379,8 @@ public class OperationStarcleaveCreativeModeTabs {
         helper.add(SPAWN_EGGS,
                 STARCLEAVER_GOLEM_SPAWN_EGG,
                 SUBCAELIC_TORPEDO_SPAWN_EGG,
-                SUBCAELIC_DUX_SPAWN_EGG
+                SUBCAELIC_DUX_SPAWN_EGG,
+                SINEATER_SPAWN_EGG
         );
 
         // Operator
