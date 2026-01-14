@@ -17,6 +17,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.*;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.GameShuttingDownEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
@@ -29,6 +30,7 @@ import phanastrae.operation_starcleave.client.render.entity.OperationStarcleaveE
 import phanastrae.operation_starcleave.client.render.entity.model.OperationStarcleaveEntityModelLayers;
 import phanastrae.operation_starcleave.client.render.shader.OperationStarcleaveShaders;
 import phanastrae.operation_starcleave.mixin.client.accessor.LevelRendererAccessor;
+import phanastrae.operation_starcleave.neoforge.client.fluid.OperationStarcleaveFluidTypeExtensions;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -62,6 +64,9 @@ public class OperationStarcleaveClientNeoForge {
 
         // register shaders
         modEventBus.addListener(this::registerShaders);
+
+        // register client extensions
+        modEventBus.addListener(this::registerClientExtensions);
     }
 
     public void setupGameBusEvents(IEventBus gameEventBus) {
@@ -109,23 +114,27 @@ public class OperationStarcleaveClientNeoForge {
         }
     }
 
+    public void registerClientExtensions(RegisterClientExtensionsEvent event) {
+        OperationStarcleaveFluidTypeExtensions.init(event::registerFluidType);
+    }
+
     public void onGameShutdown(GameShuttingDownEvent event) {
         OperationStarcleaveClient.onClientShutdown(Minecraft.getInstance());
     }
 
     public void startClientTick(LevelTickEvent.Pre event) {
-        if(event.getLevel().isClientSide) {
+        if (event.getLevel().isClientSide) {
             OperationStarcleaveClient.startLevelTick(event.getLevel());
         }
     }
 
     public void renderLevel(RenderLevelStageEvent event) {
         ClientLevel level = Minecraft.getInstance().level;
-        if(level == null) return;
+        if (level == null) return;
 
         PoseStack matrixStack = event.getPoseStack();
         LevelRenderer levelRenderer = event.getLevelRenderer();
-        MultiBufferSource vertexConsumers = ((LevelRendererAccessor)levelRenderer).getRenderBuffers().bufferSource();
+        MultiBufferSource vertexConsumers = ((LevelRendererAccessor) levelRenderer).getRenderBuffers().bufferSource();
         DeltaTracker deltaTracker = event.getPartialTick();
         Camera camera = event.getCamera();
         Matrix4f projectionMatrix = event.getProjectionMatrix();
@@ -133,9 +142,9 @@ public class OperationStarcleaveClientNeoForge {
         Frustum frustum = event.getFrustum();
 
         RenderLevelStageEvent.Stage stage = event.getStage();
-        if(stage.equals(AFTER_CUTOUT_BLOCKS)) {
+        if (stage.equals(AFTER_CUTOUT_BLOCKS)) {
             // iris calls this event during its shadow pass, and we don't want firmament shadows
-            if(!ClientCompat.renderingShadows()) {
+            if (!ClientCompat.renderingShadows()) {
                 // render before entities
                 OperationStarcleaveClient.renderBeforeEntities(
                         level,
@@ -146,7 +155,7 @@ public class OperationStarcleaveClientNeoForge {
                         positionMatrix
                 );
             }
-        } else if(stage.equals(AFTER_ENTITIES)) {
+        } else if (stage.equals(AFTER_ENTITIES)) {
             // render after entities
             OperationStarcleaveClient.renderAfterEntities(level, matrixStack, vertexConsumers, deltaTracker, camera);
         }

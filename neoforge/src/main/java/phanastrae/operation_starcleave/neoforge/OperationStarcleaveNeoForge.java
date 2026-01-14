@@ -21,7 +21,6 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
@@ -42,7 +41,6 @@ import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
 import phanastrae.operation_starcleave.item.OperationStarcleaveCreativeModeTabs;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 import phanastrae.operation_starcleave.mixin.common.accessor.item.AxeItemAccessor;
-import phanastrae.operation_starcleave.neoforge.client.fluid.OperationStarcleaveFluidTypeExtensions;
 import phanastrae.operation_starcleave.neoforge.fluid.OperationStarcleaveFluidTypes;
 import phanastrae.operation_starcleave.neoforge.fluid.PetrichoricPlasmaFluidBucketWrapper;
 import phanastrae.operation_starcleave.network.packet.OperationStarcleavePayloads;
@@ -95,10 +93,7 @@ public class OperationStarcleaveNeoForge {
         modEventBus.addListener(this::registerPayloadHandlers);
 
         // entity attributes
-        modEventBus.addListener(this::entityAttributeCreation);
-
-        // register client extensions // TODO move this to client?
-        modEventBus.addListener(this::registerClientExtensions);
+        modEventBus.addListener(this::registerEntityAttributes);
 
         // register capabilities
         modEventBus.addListener(this::registerCapabilities);
@@ -251,12 +246,8 @@ public class OperationStarcleaveNeoForge {
         });
     }
 
-    public void entityAttributeCreation(EntityAttributeCreationEvent event) {
+    public void registerEntityAttributes(EntityAttributeCreationEvent event) {
         OperationStarcleaveEntityTypes.registerEntityAttributes(((entityType, builder) -> event.put(entityType, builder.build())));
-    }
-
-    public void registerClientExtensions(RegisterClientExtensionsEvent event) {
-        OperationStarcleaveFluidTypeExtensions.init(event::registerFluidType);
     }
 
     public void registerCapabilities(RegisterCapabilitiesEvent event) {
