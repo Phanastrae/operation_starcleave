@@ -12,7 +12,6 @@ public class PetrichoricPlasmaFluidBucketWrapper extends FluidBucketWrapper {
     }
 
     @Override
-
     protected void setFluid(FluidStack fluidStack) {
         if (fluidStack.isEmpty())
             container = new ItemStack(Items.AIR);

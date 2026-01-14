@@ -1,7 +1,9 @@
 package phanastrae.operation_starcleave.neoforge.fluid;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.neoforged.neoforge.common.SoundActions;
 import net.neoforged.neoforge.fluids.FluidType;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.fluid.OperationStarcleaveFluids;
@@ -12,6 +14,8 @@ public class OperationStarcleaveFluidTypes {
 
     public static final FluidType PETRICHORIC_PLASMA = new FluidType(propertiesFromXPlat(OperationStarcleaveFluids.PETRICHORIC_PLASMA_XPGF)
             .descriptionId("block.operation_starcleave.petrichoric_plasma")
+            .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
+            .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
     ) {
         @Override
         public void setItemMovement(ItemEntity entity) {
