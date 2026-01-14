@@ -44,8 +44,8 @@ public class GradientsTexture implements AutoCloseable {
                 } else if (j == Iridescence.getOpalIridescenceId()) {
                     color = getOpalIridescenceColorABGR(progress);
                 } else {
-                    // black and magenta missing gradient
-                    color = (((i >> 2) & 0x1) == 0) ? 0x000000FF : 0xFF00FFFF;
+                    // black and magenta debug gradient
+                    color = (((i >> 2) & 0x1) == 0) ? 0xFF000000 : 0xFFFF00FF;
                 }
 
                 this.pixels.setPixelRGBA(i, j, color);
