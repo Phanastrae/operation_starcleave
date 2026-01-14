@@ -19,6 +19,8 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.NeoForge;
@@ -38,9 +40,11 @@ import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.block.OperationStarcleaveToolActions;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
 import phanastrae.operation_starcleave.item.OperationStarcleaveCreativeModeTabs;
+import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 import phanastrae.operation_starcleave.mixin.common.accessor.item.AxeItemAccessor;
 import phanastrae.operation_starcleave.neoforge.client.fluid.OperationStarcleaveFluidTypeExtensions;
 import phanastrae.operation_starcleave.neoforge.fluid.OperationStarcleaveFluidTypes;
+import phanastrae.operation_starcleave.neoforge.fluid.PetrichoricPlasmaFluidBucketWrapper;
 import phanastrae.operation_starcleave.network.packet.OperationStarcleavePayloads;
 
 import java.util.Collection;
@@ -93,8 +97,11 @@ public class OperationStarcleaveNeoForge {
         // entity attributes
         modEventBus.addListener(this::entityAttributeCreation);
 
-        // register client extensions
+        // register client extensions // TODO move this to client?
         modEventBus.addListener(this::registerClientExtensions);
+
+        // register capabilities
+        modEventBus.addListener(this::registerCapabilities);
     }
 
     public void setupGameBusEvents(IEventBus gameEventBus) {
@@ -250,6 +257,10 @@ public class OperationStarcleaveNeoForge {
 
     public void registerClientExtensions(RegisterClientExtensionsEvent event) {
         OperationStarcleaveFluidTypeExtensions.init(event::registerFluidType);
+    }
+
+    public void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerItem(Capabilities.FluidHandler.ITEM, (stack, ctx) -> new PetrichoricPlasmaFluidBucketWrapper(stack), OperationStarcleaveItems.PETRICHORIC_PLASMA_BUCKET);
     }
 
     public void tickLevel(LevelTickEvent.Pre event) {
