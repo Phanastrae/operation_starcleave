@@ -20,8 +20,8 @@ public class PetrichoricPlasmaBucketItem extends BucketItem {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         InteractionResultHolder<ItemStack> result = super.use(level, player, hand);
         ItemStack stack = result.getObject();
-        if(stack.is(Items.BUCKET)) {
-            stack = ItemStack.EMPTY;
+        if (stack.is(Items.BUCKET)) {
+            stack.shrink(1);
             level.playSound(
                     player,
                     player,
