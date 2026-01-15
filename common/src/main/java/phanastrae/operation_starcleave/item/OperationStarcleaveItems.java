@@ -163,6 +163,7 @@ public class OperationStarcleaveItems {
     public static final Item CLEANSED_SINGUTS = register("cleansed_singuts", new Item(properties().food(OperationStarcleaveFoods.CLEANSED_SINGUTS)));
 
     public static final Item PETRICHORIC_PLASMA_BUCKET = register("petrichoric_plasma_bucket", new PetrichoricPlasmaBucketItem(OperationStarcleaveFluids.PETRICHORIC_PLASMA, properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+    public static final Item LIMESLAGGED_BUCKET = register("limeslagged_bucket", new Item(properties().stacksTo(16)));
 
     public static final Item NUCLEAR_STORMCLOUD_BOTTLE = register("nuclear_stormcloud_bottle", new NuclearStormcloudBottleItem(properties().rarity(EPIC)));
     public static final Item FIRMAMENT_MANIPULATOR = register("firmament_manipulator", new FirmamentManipulatorItem(properties().stacksTo(1).rarity(EPIC)));

@@ -174,6 +174,7 @@ public class OperationStarcleaveCreativeModeTabs {
                 COAGULATED_PLASMA,
                 PLASMA_ICE,
                 PETRICHORIC_PLASMA_BUCKET,
+                LIMESLAGGED_BUCKET,
 
 
                 NUCLEAR_STORMCLOUD_BOTTLE,
@@ -335,7 +336,8 @@ public class OperationStarcleaveCreativeModeTabs {
                 STARCLEAVER_GOLEM_BUCKET
         );
         helper.addAfter(Items.LAVA_BUCKET, TOOLS_AND_UTILITIES,
-                PETRICHORIC_PLASMA_BUCKET
+                PETRICHORIC_PLASMA_BUCKET,
+                LIMESLAGGED_BUCKET
         );
         helper.add(TOOLS_AND_UTILITIES,
                 STARBLEACHED_PEARL,

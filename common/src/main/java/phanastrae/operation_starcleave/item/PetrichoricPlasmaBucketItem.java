@@ -21,7 +21,7 @@ public class PetrichoricPlasmaBucketItem extends BucketItem {
         InteractionResultHolder<ItemStack> result = super.use(level, player, hand);
         ItemStack stack = result.getObject();
         if (stack.is(Items.BUCKET)) {
-            stack.shrink(1);
+            stack = stack.transmuteCopy(OperationStarcleaveItems.LIMESLAGGED_BUCKET);
             level.playSound(
                     player,
                     player,

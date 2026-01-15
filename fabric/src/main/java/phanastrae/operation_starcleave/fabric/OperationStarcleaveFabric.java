@@ -22,7 +22,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.block.OperationStarcleaveToolActions;
@@ -178,8 +177,7 @@ public class OperationStarcleaveFabric implements ModInitializer {
     }
 
     public void setupFluidStorages() {
-        // TODO replace iron nugget with a different item, and make consistent across all interactions
         // specifically do NOT use the combinedItemApiProvider here, to make sure that the default bucket behaviour does NOT get run.
-        FluidStorage.ITEM.registerForItems(((itemStack, context) -> new FullItemFluidStorage(context, Items.IRON_NUGGET, FluidVariant.of(OperationStarcleaveFluids.PETRICHORIC_PLASMA), FluidConstants.BUCKET)), OperationStarcleaveItems.PETRICHORIC_PLASMA_BUCKET);
+        FluidStorage.ITEM.registerForItems(((itemStack, context) -> new FullItemFluidStorage(context, OperationStarcleaveItems.LIMESLAGGED_BUCKET, FluidVariant.of(OperationStarcleaveFluids.PETRICHORIC_PLASMA), FluidConstants.BUCKET)), OperationStarcleaveItems.PETRICHORIC_PLASMA_BUCKET);
     }
 }

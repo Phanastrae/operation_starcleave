@@ -45,8 +45,7 @@ public class OperationStarcleaveDispenserBehavior {
                             1.0F
                     );
 
-                    stack.shrink(1);
-                    return stack;
+                    return this.consumeWithRemainder(blockSource, stack, new ItemStack(OperationStarcleaveItems.LIMESLAGGED_BUCKET));
                 } else {
                     return this.defaultDispenseItemBehavior.dispense(blockSource, stack);
                 }
