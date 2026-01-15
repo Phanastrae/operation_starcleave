@@ -9,6 +9,10 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
 import net.fabricmc.fabric.api.registry.TillableBlockRegistry;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.fluid.base.FullItemFluidStorage;
 import net.minecraft.core.Registry;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -18,12 +22,15 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.block.OperationStarcleaveToolActions;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
 import phanastrae.operation_starcleave.fabric.fluid.OperationStarcleaveFluidVariantAttributes;
+import phanastrae.operation_starcleave.fluid.OperationStarcleaveFluids;
 import phanastrae.operation_starcleave.item.OperationStarcleaveCreativeModeTabs;
+import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 import phanastrae.operation_starcleave.network.packet.OperationStarcleavePayloads;
 
 import java.util.Collection;
@@ -67,6 +74,9 @@ public class OperationStarcleaveFabric implements ModInitializer {
 
         // setup tilling
         OperationStarcleaveToolActions.TILLABLES.forEach(triple -> TillableBlockRegistry.register(triple.getLeft(), triple.getMiddle(), triple.getRight()));
+
+        // setup fluid storages
+        setupFluidStorages();
 
 
         // world tick start
@@ -165,5 +175,11 @@ public class OperationStarcleaveFabric implements ModInitializer {
                 ServerPlayNetworking.registerGlobalReceiver(id, (payload, context) -> serverCallback.accept(payload, context.player()));
             }
         });
+    }
+
+    public void setupFluidStorages() {
+        // TODO replace iron nugget with a different item, and make consistent across all interactions
+        // specifically do NOT use the combinedItemApiProvider here, to make sure that the default bucket behaviour does NOT get run.
+        FluidStorage.ITEM.registerForItems(((itemStack, context) -> new FullItemFluidStorage(context, Items.IRON_NUGGET, FluidVariant.of(OperationStarcleaveFluids.PETRICHORIC_PLASMA), FluidConstants.BUCKET)), OperationStarcleaveItems.PETRICHORIC_PLASMA_BUCKET);
     }
 }
