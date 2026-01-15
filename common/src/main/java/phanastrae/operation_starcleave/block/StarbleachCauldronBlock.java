@@ -1,16 +1,6 @@
 package phanastrae.operation_starcleave.block;
 
 import com.mojang.serialization.MapCodec;
-import org.jetbrains.annotations.Nullable;
-import phanastrae.operation_starcleave.entity.OperationStarcleaveDamageTypes;
-import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
-import phanastrae.operation_starcleave.item.StarbleachCoating;
-import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
-import phanastrae.operation_starcleave.recipe.ItemStarbleachingRecipe;
-import phanastrae.operation_starcleave.recipe.OperationStarcleaveRecipeTypes;
-import phanastrae.operation_starcleave.recipe.input.ItemStarbleachingRecipeInput;
-
-import java.util.Optional;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.server.level.ServerLevel;
@@ -22,6 +12,7 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.Items;
@@ -37,7 +28,17 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
+import phanastrae.operation_starcleave.entity.OperationStarcleaveDamageTypes;
+import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
+import phanastrae.operation_starcleave.item.StarbleachCoating;
+import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
+import phanastrae.operation_starcleave.recipe.ItemStarbleachingRecipe;
+import phanastrae.operation_starcleave.recipe.OperationStarcleaveRecipeTypes;
+import phanastrae.operation_starcleave.recipe.input.ItemStarbleachingRecipeInput;
 import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
+
+import java.util.Optional;
 
 import static net.minecraft.core.cauldron.CauldronInteraction.newInteractionMap;
 
@@ -86,18 +87,18 @@ public class StarbleachCauldronBlock extends AbstractCauldronBlock {
 
     @Override
     public void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
-        if(world.isClientSide) {
+        if (world.isClientSide) {
             return;
         }
 
         if (this.isEntityInsideContent(state, pos, entity)) {
-            if(entity instanceof ItemEntity itemEntity) {
+            if (entity instanceof ItemEntity itemEntity) {
                 ItemStack itemStack = itemEntity.getItem();
 
                 Entity owner = itemEntity.getOwner();
-                Player playerOwner = owner instanceof Player ? (Player)owner : null;
+                Player playerOwner = owner instanceof Player ? (Player) owner : null;
                 Optional<ItemStack> optionalItemStack = attemptCraft(world, itemStack, pos, playerOwner, true);
-                if(optionalItemStack.isPresent()) {
+                if (optionalItemStack.isPresent()) {
                     ItemStack outputStack = optionalItemStack.get();
                     ItemEntity newEntity = new ItemEntity(world,
                             pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5,
@@ -113,7 +114,7 @@ public class StarbleachCauldronBlock extends AbstractCauldronBlock {
             }
 
             entity.hurt(OperationStarcleaveDamageTypes.source(world, OperationStarcleaveDamageTypes.INTERNAL_STARBLEACHING), 0.25f * state.getValue(LEVEL_7));
-            if(!entity.isAlive() && world instanceof ServerLevel serverWorld) {
+            if (!entity.isAlive() && world instanceof ServerLevel serverWorld) {
                 spawnParticles(serverWorld, pos);
             }
         }
@@ -125,10 +126,10 @@ public class StarbleachCauldronBlock extends AbstractCauldronBlock {
 
         boolean creativeMode = player.getAbilities().instabuild;
         Optional<ItemStack> optionalItemStack = attemptCraft(world, itemStack, pos, player, !creativeMode);
-        if(optionalItemStack.isPresent()) {
-            if(!world.isClientSide) {
+        if (optionalItemStack.isPresent()) {
+            if (!world.isClientSide) {
                 ItemStack outputStack = optionalItemStack.get();
-                if(creativeMode) {
+                if (creativeMode) {
                     if (!player.getInventory().contains(outputStack)) {
                         player.getInventory().add(outputStack);
                     }
@@ -155,9 +156,9 @@ public class StarbleachCauldronBlock extends AbstractCauldronBlock {
     // If the recipe fails, returns an empty Optional
     public Optional<ItemStack> attemptCraft(Level world, ItemStack input, BlockPos pos, @Nullable Player player, boolean decrement) {
         ItemStarbleachingRecipe recipe = getRecipe(world, input);
-        if(recipe != null) {
-            if(canEmptyCauldron(world, pos, recipe.getRequiredStarbleachToAttemptCraft())) {
-                if(!world.isClientSide) {
+        if (recipe != null) {
+            if (canEmptyCauldron(world, pos, recipe.getRequiredStarbleachToAttemptCraft())) {
+                if (!world.isClientSide) {
                     craft(world, pos, recipe.getStarbleachCost(), !recipe.getIsFillingRecipe(), input, player, decrement);
                     return Optional.of(recipe.getOutputStack());
                 } else {
@@ -166,9 +167,9 @@ public class StarbleachCauldronBlock extends AbstractCauldronBlock {
             }
         }
 
-        if(StarbleachCoating.canAddStarbleach(input)) {
-            if(canEmptyCauldron(world, pos, 1)) {
-                if(!world.isClientSide) {
+        if (StarbleachCoating.canAddStarbleach(input)) {
+            if (canEmptyCauldron(world, pos, 1)) {
+                if (!world.isClientSide) {
                     ItemStack coatedStack = input.copy();
                     coatedStack.setCount(1);
                     StarbleachCoating.addStarbleach(coatedStack);
@@ -185,12 +186,12 @@ public class StarbleachCauldronBlock extends AbstractCauldronBlock {
     }
 
     public void craft(Level world, BlockPos blockPos, float starbleachCost, boolean spawnParticles, ItemStack input, @Nullable Player player, boolean decrement) {
-        if(player != null) {
+        if (player != null) {
             incrementStats(player, input);
         }
         emptyCauldron(world, blockPos, ItemStarbleachingRecipe.getConsumedStarbleach(world.getRandom(), starbleachCost), spawnParticles);
 
-        if(decrement) {
+        if (decrement) {
             input.shrink(1);
         }
     }
@@ -211,15 +212,23 @@ public class StarbleachCauldronBlock extends AbstractCauldronBlock {
                 0.005);
     }
 
-    private static CauldronInteraction getFillingBehaviour() {
+    private static CauldronInteraction getBottleFillingBehavior() {
+        return getFillingBehavior(1, Items.GLASS_BOTTLE);
+    }
+
+    private static CauldronInteraction getBucketFillingBehavior() {
+        return getFillingBehavior(4, Items.BUCKET);
+    }
+
+    private static CauldronInteraction getFillingBehavior(int fillAmount, Item output) {
         return (state, world, pos, player, hand, stack) ->
         {
-            if (canFillCauldron(world, pos)) {
+            if (canFillCauldron(world, pos, fillAmount)) {
                 if (!world.isClientSide) {
                     incrementStats(player, stack);
                     player.awardStat(Stats.FILL_CAULDRON);
-                    fillCauldron(world, pos);
-                    ItemStack outputStack = Items.GLASS_BOTTLE.getDefaultInstance();
+                    fillCauldron(world, pos, fillAmount);
+                    ItemStack outputStack = output.getDefaultInstance();
                     player.setItemInHand(hand, ItemUtils.createFilledResult(stack, player, outputStack));
                 }
 
@@ -231,16 +240,16 @@ public class StarbleachCauldronBlock extends AbstractCauldronBlock {
     }
 
     public static void incrementStats(Player player, @Nullable ItemStack itemStack) {
-        if(itemStack != null && !itemStack.isEmpty()) {
+        if (itemStack != null && !itemStack.isEmpty()) {
             player.awardStat(Stats.ITEM_USED.get(itemStack.getItem()));
         }
     }
 
-    public static void fillCauldron(Level world, BlockPos blockPos) {
+    public static void fillCauldron(Level world, BlockPos blockPos, int fillAmount) {
         BlockState state = world.getBlockState(blockPos);
         int currentStarbleachLevel = getStarbleachLevel(state);
 
-        world.setBlockAndUpdate(blockPos, getStateWithStarbleachLevel(currentStarbleachLevel + 1));
+        world.setBlockAndUpdate(blockPos, getStateWithStarbleachLevel(currentStarbleachLevel + fillAmount));
 
         world.gameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Context.of(state));
         world.gameEvent(null, GameEvent.FLUID_PLACE, blockPos);
@@ -257,24 +266,24 @@ public class StarbleachCauldronBlock extends AbstractCauldronBlock {
         world.gameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Context.of(state));
         world.gameEvent(null, GameEvent.FLUID_PICKUP, blockPos);
 
-        if(spawnParticles) {
+        if (spawnParticles) {
             world.playSound(null, blockPos, OperationStarcleaveSoundEvents.STARBLEACH_CAULDRON_COLLECT, SoundSource.BLOCKS, 1.0F, 1.5F);
         } else {
             world.playSound(null, blockPos, SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
 
-        if(spawnParticles) {
-            if(world instanceof ServerLevel serverWorld) {
+        if (spawnParticles) {
+            if (world instanceof ServerLevel serverWorld) {
                 spawnParticles(serverWorld, blockPos);
             }
         }
     }
 
-    public static boolean canFillCauldron(Level world, BlockPos blockPos) {
+    public static boolean canFillCauldron(Level world, BlockPos blockPos, int fillAmount) {
         BlockState blockState = world.getBlockState(blockPos);
-        if(blockState.is(Blocks.CAULDRON) || blockState.is(OperationStarcleaveBlocks.STARBLEACH_CAULDRON)) {
+        if (blockState.is(Blocks.CAULDRON) || blockState.is(OperationStarcleaveBlocks.STARBLEACH_CAULDRON)) {
             int currentStarbleachLevel = getStarbleachLevel(blockState);
-            return currentStarbleachLevel != MAX_STARBLEACH_LEVEL;
+            return currentStarbleachLevel + fillAmount <= MAX_STARBLEACH_LEVEL;
         } else {
             return false;
         }
@@ -282,7 +291,7 @@ public class StarbleachCauldronBlock extends AbstractCauldronBlock {
 
     public static boolean canEmptyCauldron(Level world, BlockPos blockPos, int amount) {
         BlockState blockState = world.getBlockState(blockPos);
-        if(blockState.is(OperationStarcleaveBlocks.STARBLEACH_CAULDRON)) {
+        if (blockState.is(OperationStarcleaveBlocks.STARBLEACH_CAULDRON)) {
             int currentStarbleachLevel = getStarbleachLevel(blockState);
 
             return currentStarbleachLevel >= amount;
@@ -292,7 +301,7 @@ public class StarbleachCauldronBlock extends AbstractCauldronBlock {
     }
 
     public static int getStarbleachLevel(BlockState state) {
-        if(state.is(OperationStarcleaveBlocks.STARBLEACH_CAULDRON)) {
+        if (state.is(OperationStarcleaveBlocks.STARBLEACH_CAULDRON)) {
             return state.getValue(LEVEL_7);
         } else {
             return 0;
@@ -300,17 +309,19 @@ public class StarbleachCauldronBlock extends AbstractCauldronBlock {
     }
 
     public static BlockState getStateWithStarbleachLevel(int level) {
-        if(level <= 0) {
+        if (level <= 0) {
             return Blocks.CAULDRON.defaultBlockState();
         } else {
-            if(level > MAX_STARBLEACH_LEVEL) level = MAX_STARBLEACH_LEVEL;
+            if (level > MAX_STARBLEACH_LEVEL) level = MAX_STARBLEACH_LEVEL;
             return OperationStarcleaveBlocks.STARBLEACH_CAULDRON.defaultBlockState().setValue(LEVEL_7, level);
         }
     }
 
     public static void init() {
-        CauldronInteraction.EMPTY.map().put(OperationStarcleaveItems.STARBLEACH_BOTTLE, getFillingBehaviour());
+        CauldronInteraction.EMPTY.map().put(OperationStarcleaveItems.STARBLEACH_BOTTLE, getBottleFillingBehavior());
+        CauldronInteraction.EMPTY.map().put(OperationStarcleaveItems.STARBLEACH_BUCKET, getBucketFillingBehavior());
 
-        StarbleachCauldronBlock.STARBLEACH_CAULDRON_BEHAVIOR.map().put(OperationStarcleaveItems.STARBLEACH_BOTTLE, getFillingBehaviour());
+        StarbleachCauldronBlock.STARBLEACH_CAULDRON_BEHAVIOR.map().put(OperationStarcleaveItems.STARBLEACH_BOTTLE, getBottleFillingBehavior());
+        StarbleachCauldronBlock.STARBLEACH_CAULDRON_BEHAVIOR.map().put(OperationStarcleaveItems.STARBLEACH_BUCKET, getBucketFillingBehavior());
     }
 }

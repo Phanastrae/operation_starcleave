@@ -26,6 +26,13 @@ public class OperationStarcleaveClientFluids {
 
     private static final List<XPlatGenericClientFluid> XPGCF_LIST = new ObjectArrayList<>();
 
+    public static final XPlatGenericClientFluid STARBLEACH = new XPlatGenericClientFluid(OperationStarcleaveFluidTags.STARBLEACH, OperationStarcleaveFluids.STARBLEACH, null)
+            .setTint(0xFFFFFFFF)
+            .setFogColorInt(148, 224, 214)
+            .setStillTexture(OperationStarcleave.id("block/starbleach_still"))
+            .setFlowTexture(OperationStarcleave.id("block/starbleach_flow"))
+            .setOverlayTexture(null);
+
     public static final XPlatGenericClientFluid PETRICHORIC_PLASMA = new XPlatGenericClientFluid(OperationStarcleaveFluidTags.PETRICHORIC_PLASMA, OperationStarcleaveFluids.PETRICHORIC_PLASMA, OperationStarcleaveFluids.FLOWING_PETRICHORIC_PLASMA)
             .setTint(0xFFFFFFFF)
             .setFogStart(-2.0F)
@@ -37,6 +44,7 @@ public class OperationStarcleaveClientFluids {
 
     public static void init() {
         addXPGCFsToLists(
+                STARBLEACH,
                 PETRICHORIC_PLASMA
         );
     }
@@ -51,21 +59,21 @@ public class OperationStarcleaveClientFluids {
 
     @Nullable
     public static XPlatGenericClientFluid getXPGCF(Camera camera) {
-        BlockGetter level = ((CameraAccessor)camera).getLevel();
-        if(level == null) {
+        BlockGetter level = ((CameraAccessor) camera).getLevel();
+        if (level == null) {
             return null;
         }
 
         BlockPos cameraBlockPos = camera.getBlockPosition();
         FluidState cameraFluidState = level.getFluidState(cameraBlockPos);
-        if(cameraFluidState.isEmpty() || cameraFluidState.is(FluidTags.WATER) || cameraFluidState.is(FluidTags.LAVA)) {
+        if (cameraFluidState.isEmpty() || cameraFluidState.is(FluidTags.WATER) || cameraFluidState.is(FluidTags.LAVA)) {
             return null;
         }
 
         double fluidHeight = cameraBlockPos.getY() + cameraFluidState.getHeight(level, cameraBlockPos);
         double camHeight = camera.getPosition().y();
 
-        if(camHeight >= fluidHeight) {
+        if (camHeight >= fluidHeight) {
             return null;
         }
 
@@ -74,8 +82,8 @@ public class OperationStarcleaveClientFluids {
 
     @Nullable
     public static XPlatGenericClientFluid getXPGCF(FluidState fluidState) {
-        for(XPlatGenericClientFluid xpgcf : XPGCF_LIST) {
-            if(fluidState.is(xpgcf.getFluidTag())) {
+        for (XPlatGenericClientFluid xpgcf : XPGCF_LIST) {
+            if (fluidState.is(xpgcf.getFluidTag())) {
                 return xpgcf;
             }
         }
@@ -87,6 +95,7 @@ public class OperationStarcleaveClientFluids {
 
         private final TagKey<Fluid> fluidTag;
         private final Fluid still;
+        @Nullable
         private final Fluid flow;
 
         private ResourceLocation stillTexture = ResourceLocation.withDefaultNamespace("block/water_still");
@@ -103,7 +112,7 @@ public class OperationStarcleaveClientFluids {
 
         private float fovScaleFactor = 0.85714287F; // vanilla default
 
-        public XPlatGenericClientFluid(TagKey<Fluid> fluidTag, Fluid still, Fluid flow) {
+        public XPlatGenericClientFluid(TagKey<Fluid> fluidTag, Fluid still, @Nullable Fluid flow) {
             this.fluidTag = fluidTag;
             this.still = still;
             this.flow = flow;
@@ -117,6 +126,7 @@ public class OperationStarcleaveClientFluids {
             return still;
         }
 
+        @Nullable
         public Fluid getFlow() {
             return flow;
         }
@@ -198,7 +208,7 @@ public class OperationStarcleaveClientFluids {
         }
 
         public XPlatGenericClientFluid setFogColorInt(int r, int g, int b) {
-            return this.setFogColor(r/255F, g/255F, b/255F);
+            return this.setFogColor(r / 255F, g / 255F, b / 255F);
         }
 
         public float getFovScaleFactor() {

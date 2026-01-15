@@ -19,6 +19,15 @@ public class OperationStarcleaveFluids {
     private static final Map<TagKey<Fluid>, XPlatGenericFluid> XPGF_MAP = new Object2ObjectOpenHashMap<>();
     private static final Map<TagKey<Fluid>, XPlatGenericFluid> XPGF_ZERO_FALL_DAMAGE_MAP = new Object2ObjectOpenHashMap<>();
 
+    public static final Fluid STARBLEACH = new StarbleachFluid();
+    public static final XPlatGenericFluid STARBLEACH_XPGF = new XPlatGenericFluid(OperationStarcleaveFluids.STARBLEACH, OperationStarcleaveFluidTags.STARBLEACH)
+            .setMotionScale(0.0)
+            .setDensity(77)
+            .setTemperature(277)
+            .setViscosity(777)
+            .setLuminance(13)
+            .setCanExtinguish(true);
+
     public static final FlowingFluid PETRICHORIC_PLASMA = new PetrichoricPlasmaFluid.Source();
     public static final FlowingFluid FLOWING_PETRICHORIC_PLASMA = new PetrichoricPlasmaFluid.Flowing();
     public static final XPlatGenericFluid PETRICHORIC_PLASMA_XPGF = new XPlatGenericFluid(OperationStarcleaveFluids.PETRICHORIC_PLASMA, OperationStarcleaveFluidTags.PETRICHORIC_PLASMA)
@@ -31,10 +40,12 @@ public class OperationStarcleaveFluids {
             .setFallDistanceModifier(0.3F);
 
     public static void init(BiConsumer<ResourceLocation, Fluid> r) {
+        r.accept(id("starbleach"), STARBLEACH);
         r.accept(id("petrichoric_plasma"), PETRICHORIC_PLASMA);
         r.accept(id("flowing_petrichoric_plasma"), FLOWING_PETRICHORIC_PLASMA);
 
         addXPGFsToMaps(
+                STARBLEACH_XPGF,
                 PETRICHORIC_PLASMA_XPGF
         );
     }
@@ -48,12 +59,12 @@ public class OperationStarcleaveFluids {
     }
 
     public static boolean fluidStateIsStarcleaveZeroFallDamage(FluidState fluidState) {
-        if(fluidState.is(FluidTags.WATER)) {
+        if (fluidState.is(FluidTags.WATER)) {
             return false;
         }
 
-        for(XPlatGenericFluid xpgf : XPGF_ZERO_FALL_DAMAGE_MAP.values()) {
-            if(fluidState.is(xpgf.fluidTag)) {
+        for (XPlatGenericFluid xpgf : XPGF_ZERO_FALL_DAMAGE_MAP.values()) {
+            if (fluidState.is(xpgf.fluidTag)) {
                 return true;
             }
         }
@@ -62,10 +73,10 @@ public class OperationStarcleaveFluids {
     }
 
     private static void addXPGFsToMaps(XPlatGenericFluid... xpgfs) {
-        for(XPlatGenericFluid xpgf : xpgfs) {
+        for (XPlatGenericFluid xpgf : xpgfs) {
             TagKey<Fluid> tag = xpgf.getFluidTag();
             XPGF_MAP.put(tag, xpgf);
-            if(xpgf.getFallDistanceModifier() == 0) {
+            if (xpgf.getFallDistanceModifier() == 0) {
                 XPGF_ZERO_FALL_DAMAGE_MAP.put(tag, xpgf);
             }
         }

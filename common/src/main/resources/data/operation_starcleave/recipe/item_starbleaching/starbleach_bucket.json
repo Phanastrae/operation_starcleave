@@ -1,0 +1,12 @@
+{
+  "type": "operation_starcleave:item_starbleaching",
+  "is_filling_recipe" : true,
+  "ingredient": {
+    "item": "minecraft:bucket"
+  },
+  "starbleach_cost": 4,
+  "result": {
+    "id": "operation_starcleave:starbleach_bucket",
+    "count": 1
+  }
+}

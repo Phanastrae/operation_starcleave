@@ -145,7 +145,9 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
         getOrCreateTagBuilder(ConventionalItemTags.BUCKETS)
                 .add(
                         STARCLEAVER_GOLEM_BUCKET,
-                        PETRICHORIC_PLASMA_BUCKET
+                        STARBLEACH_BUCKET,
+                        PETRICHORIC_PLASMA_BUCKET,
+                        LIMESLAGGED_BUCKET
                 );
 
         getOrCreateTagBuilder(ConventionalItemTags.CROPS)

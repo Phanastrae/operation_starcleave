@@ -489,6 +489,7 @@ public class ModelProvider extends FabricModelProvider {
                 OperationStarcleaveItems.MUCKY_SINGUTS,
                 OperationStarcleaveItems.CLEANSED_SINGUTS,
 
+                OperationStarcleaveItems.STARBLEACH_BUCKET,
                 OperationStarcleaveItems.PETRICHORIC_PLASMA_BUCKET,
                 OperationStarcleaveItems.LIMESLAGGED_BUCKET,
 

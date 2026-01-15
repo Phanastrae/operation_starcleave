@@ -25,6 +25,24 @@ public class OperationStarcleaveDispenserBehavior {
         registerProjectileBehavior(OperationStarcleaveItems.SPLASH_STARBLEACH_BOTTLE);
         registerProjectileBehavior(OperationStarcleaveItems.FIRMAMENT_REJUVENATOR);
 
+        DispenseItemBehavior fluidBucketBehaviour = new DefaultDispenseItemBehavior() {
+            private final DefaultDispenseItemBehavior defaultDispenseItemBehavior = new DefaultDispenseItemBehavior();
+
+            @Override
+            public ItemStack execute(BlockSource p_338850_, ItemStack p_338251_) {
+                DispensibleContainerItem dispensiblecontaineritem = (DispensibleContainerItem) p_338251_.getItem();
+                BlockPos blockpos = p_338850_.pos().relative(p_338850_.state().getValue(DispenserBlock.FACING));
+                Level level = p_338850_.level();
+                if (dispensiblecontaineritem.emptyContents(null, level, blockpos, null)) {
+                    dispensiblecontaineritem.checkExtraContent(null, level, p_338251_, blockpos);
+                    return this.consumeWithRemainder(p_338850_, p_338251_, new ItemStack(Items.BUCKET));
+                } else {
+                    return this.defaultDispenseItemBehavior.dispense(p_338850_, p_338251_);
+                }
+            }
+        };
+        DispenserBlock.registerBehavior(OperationStarcleaveItems.STARBLEACH_BUCKET, fluidBucketBehaviour);
+
         register(OperationStarcleaveItems.PETRICHORIC_PLASMA_BUCKET, new DefaultDispenseItemBehavior() {
             private final DefaultDispenseItemBehavior defaultDispenseItemBehavior = new DefaultDispenseItemBehavior();
 
@@ -84,8 +102,8 @@ public class OperationStarcleaveDispenserBehavior {
             public ItemStack execute(BlockSource pointer, ItemStack stack) {
                 ServerLevel world = pointer.level();
                 BlockPos blockPos = pointer.pos().relative(pointer.state().getValue(DispenserBlock.FACING));
-                if (StarbleachCauldronBlock.canFillCauldron(world, blockPos)) {
-                    StarbleachCauldronBlock.fillCauldron(world, blockPos);
+                if (StarbleachCauldronBlock.canFillCauldron(world, blockPos, 1)) {
+                    StarbleachCauldronBlock.fillCauldron(world, blockPos, 1);
                     this.setSuccess(true);
                     return this.replace(pointer, stack, new ItemStack(Items.GLASS_BOTTLE));
                 } else {

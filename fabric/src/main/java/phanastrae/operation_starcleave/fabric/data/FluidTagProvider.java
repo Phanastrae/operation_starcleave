@@ -17,6 +17,11 @@ public class FluidTagProvider extends FabricTagProvider.FluidTagProvider {
     @Override
     protected void addTags(HolderLookup.Provider wrapperLookup) {
         // starcleave
+        getOrCreateTagBuilder(OperationStarcleaveFluidTags.STARBLEACH)
+                .add(
+                        OperationStarcleaveFluids.STARBLEACH
+                );
+
         getOrCreateTagBuilder(OperationStarcleaveFluidTags.PETRICHORIC_PLASMA)
                 .add(
                         OperationStarcleaveFluids.PETRICHORIC_PLASMA,

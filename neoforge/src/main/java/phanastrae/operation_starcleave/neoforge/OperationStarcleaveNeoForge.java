@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
@@ -29,6 +30,8 @@ import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
+import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.fluids.RegisterCauldronFluidContentEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -36,13 +39,17 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import org.apache.commons.lang3.tuple.Triple;
 import phanastrae.operation_starcleave.OperationStarcleave;
+import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.block.OperationStarcleaveToolActions;
+import phanastrae.operation_starcleave.block.StarbleachCauldronBlock;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
+import phanastrae.operation_starcleave.fluid.OperationStarcleaveFluids;
 import phanastrae.operation_starcleave.item.OperationStarcleaveCreativeModeTabs;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 import phanastrae.operation_starcleave.mixin.common.accessor.item.AxeItemAccessor;
 import phanastrae.operation_starcleave.neoforge.fluid.OperationStarcleaveFluidTypes;
 import phanastrae.operation_starcleave.neoforge.fluid.PetrichoricPlasmaFluidBucketWrapper;
+import phanastrae.operation_starcleave.neoforge.fluid.StarbleachBottleWrapper;
 import phanastrae.operation_starcleave.network.packet.OperationStarcleavePayloads;
 
 import java.util.Collection;
@@ -97,6 +104,9 @@ public class OperationStarcleaveNeoForge {
 
         // register capabilities
         modEventBus.addListener(this::registerCapabilities);
+
+        // register cauldron fluids
+        modEventBus.addListener(this::registerCauldronFluidContent);
     }
 
     public void setupGameBusEvents(IEventBus gameEventBus) {
@@ -251,7 +261,14 @@ public class OperationStarcleaveNeoForge {
     }
 
     public void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerItem(Capabilities.FluidHandler.ITEM, (stack, ctx) -> new StarbleachBottleWrapper(stack), Items.GLASS_BOTTLE);
+        event.registerItem(Capabilities.FluidHandler.ITEM, (stack, ctx) -> new StarbleachBottleWrapper(stack), OperationStarcleaveItems.STARBLEACH_BOTTLE);
+
         event.registerItem(Capabilities.FluidHandler.ITEM, (stack, ctx) -> new PetrichoricPlasmaFluidBucketWrapper(stack), OperationStarcleaveItems.PETRICHORIC_PLASMA_BUCKET);
+    }
+
+    public void registerCauldronFluidContent(RegisterCauldronFluidContentEvent event) {
+        event.register(OperationStarcleaveBlocks.STARBLEACH_CAULDRON, OperationStarcleaveFluids.STARBLEACH, FluidType.BUCKET_VOLUME * 7 / 4, StarbleachCauldronBlock.LEVEL_7);
     }
 
     public void tickLevel(LevelTickEvent.Pre event) {

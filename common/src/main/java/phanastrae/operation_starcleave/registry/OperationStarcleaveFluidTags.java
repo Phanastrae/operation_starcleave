@@ -6,6 +6,7 @@ import net.minecraft.world.level.material.Fluid;
 import phanastrae.operation_starcleave.OperationStarcleave;
 
 public class OperationStarcleaveFluidTags {
+    public static final TagKey<Fluid> STARBLEACH = of("starbleach");
     public static final TagKey<Fluid> PETRICHORIC_PLASMA = of("petrichoric_plasma");
 
     private static TagKey<Fluid> of(String id) {

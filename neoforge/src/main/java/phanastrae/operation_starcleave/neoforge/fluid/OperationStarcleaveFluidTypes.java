@@ -12,6 +12,12 @@ import java.util.function.BiConsumer;
 
 public class OperationStarcleaveFluidTypes {
 
+    public static final FluidType STARBLEACH = new FluidType(propertiesFromXPlat(OperationStarcleaveFluids.STARBLEACH_XPGF)
+            .descriptionId("block.operation_starcleave.starbleach")
+            .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
+            .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
+    );
+
     public static final FluidType PETRICHORIC_PLASMA = new FluidType(propertiesFromXPlat(OperationStarcleaveFluids.PETRICHORIC_PLASMA_XPGF)
             .descriptionId("block.operation_starcleave.petrichoric_plasma")
             .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
@@ -29,6 +35,7 @@ public class OperationStarcleaveFluidTypes {
     };
 
     public static void init(BiConsumer<ResourceLocation, FluidType> r) {
+        r.accept(id("starbleach"), STARBLEACH);
         r.accept(id("petrichoric_plasma"), PETRICHORIC_PLASMA);
     }
 
