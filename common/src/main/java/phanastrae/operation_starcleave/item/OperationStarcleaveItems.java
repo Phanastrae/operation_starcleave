@@ -162,7 +162,7 @@ public class OperationStarcleaveItems {
     public static final Item MUCKY_SINGUTS = register("mucky_singuts", new Item(properties().food(OperationStarcleaveFoods.MUCKY_SINGUTS)));
     public static final Item CLEANSED_SINGUTS = register("cleansed_singuts", new Item(properties().food(OperationStarcleaveFoods.CLEANSED_SINGUTS)));
 
-    public static final Item STARBLEACH_BUCKET = register("starbleach_bucket", new BucketItem(OperationStarcleaveFluids.STARBLEACH, properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+    public static final Item STARBLEACH_BUCKET = register("starbleach_bucket", new StarbleachBucketItem(OperationStarcleaveFluids.STARBLEACH, properties().craftRemainder(Items.BUCKET).stacksTo(1).food(OperationStarcleaveFoods.STARBLEACH_BUCKET)));
     public static final Item PETRICHORIC_PLASMA_BUCKET = register("petrichoric_plasma_bucket", new PetrichoricPlasmaBucketItem(OperationStarcleaveFluids.PETRICHORIC_PLASMA, properties().craftRemainder(Items.BUCKET).stacksTo(1)));
     public static final Item LIMESLAGGED_BUCKET = register("limeslagged_bucket", new Item(properties().stacksTo(16)));
 

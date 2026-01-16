@@ -21,7 +21,7 @@ public class OperationStarcleaveSoundEvents {
 
     public static final SoundEvent HOLLOWED_SAC_USE = create("item.hollowed_sac.use");
     public static final SoundEvent PHLOGISTON_SAC_USE = create("item.phlogiston_sac.use");
-    public static final SoundEvent STARBLEACH_DRINK = create("item.starbleach_bottle.drink");
+    public static final SoundEvent STARBLEACH_BOTTLE_DRINK = create("item.starbleach_bottle.drink");
     public static final SoundEvent STARFRUIT_BURST = create("item.starfruit.burst");
 
     public static final SoundEvent REJUVENATOR_THROW = create("entity.firmament_rejuvenator.throw");

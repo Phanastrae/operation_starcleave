@@ -11,14 +11,15 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.Fluid;
 import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
 
 import java.util.List;
 
-public class StarbleachBottleItem extends Item {
+public class StarbleachBucketItem extends BucketItem {
 
-    public StarbleachBottleItem(Properties settings) {
-        super(settings);
+    public StarbleachBucketItem(Fluid content, Properties properties) {
+        super(content, properties);
     }
 
     @Override
@@ -30,10 +31,10 @@ public class StarbleachBottleItem extends Item {
         }
 
         if (stack.isEmpty()) {
-            return new ItemStack(Items.GLASS_BOTTLE);
+            return new ItemStack(Items.BUCKET);
         } else {
             if (user instanceof Player playerEntity && !playerEntity.getAbilities().instabuild) {
-                ItemStack itemStack = new ItemStack(Items.GLASS_BOTTLE);
+                ItemStack itemStack = new ItemStack(Items.BUCKET);
                 if (!playerEntity.getInventory().add(itemStack)) {
                     playerEntity.drop(itemStack, false);
                 }

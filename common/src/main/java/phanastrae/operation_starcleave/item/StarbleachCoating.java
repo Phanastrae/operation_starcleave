@@ -48,6 +48,9 @@ public class StarbleachCoating {
         if (itemStack.is(OperationStarcleaveItems.STARBLEACH_BOTTLE)) {
             return false;
         }
+        if (itemStack.is(OperationStarcleaveItems.STARBLEACH_BUCKET)) {
+            return false;
+        }
 
         if (itemStack.is(OperationStarcleaveItems.STARFRUIT)) {
             return false;
