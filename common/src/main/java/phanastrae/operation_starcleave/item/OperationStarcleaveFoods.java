@@ -14,15 +14,15 @@ public class OperationStarcleaveFoods {
             .build();
 
     public static final FoodProperties STARBLEACH_BOTTLE = new FoodProperties.Builder()
-            .nutrition(12)
-            .saturationModifier(5F)
+            .nutrition(6)
+            .saturationModifier(1.5F)
             .effect(new MobEffectInstance(OperationStarcleaveStatusEffects.STARBLEACHED_INSIDES_ENTRY, 6000, 5), 1)
             .alwaysEdible()
             .build();
 
     public static final FoodProperties STARBLEACH_BUCKET = new FoodProperties.Builder()
-            .nutrition(48)
-            .saturationModifier(5F)
+            .nutrition(24)
+            .saturationModifier(1.5F)
             .effect(new MobEffectInstance(OperationStarcleaveStatusEffects.STARBLEACHED_INSIDES_ENTRY, 18000, 9), 1)
             .alwaysEdible()
             .build();
