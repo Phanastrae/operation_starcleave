@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -67,6 +68,13 @@ public class ItemStarbleachingRecipe implements Recipe<ItemStarbleachingRecipeIn
         return ItemStack.EMPTY;
     }
 
+    @Override
+    public NonNullList<Ingredient> getIngredients() {
+        NonNullList<Ingredient> nonnulllist = NonNullList.create();
+        nonnulllist.add(this.ingredient);
+        return nonnulllist;
+    }
+
     public ItemStack getOutputStack() {
         return this.result.copy();
     }
@@ -76,8 +84,8 @@ public class ItemStarbleachingRecipe implements Recipe<ItemStarbleachingRecipeIn
     }
 
     public int getRequiredStarbleachToAttemptCraft() {
-        if(this.starbleachCost <= 0) return 0;
-        return (int)Math.ceil(this.starbleachCost);
+        if (this.starbleachCost <= 0) return 0;
+        return (int) Math.ceil(this.starbleachCost);
     }
 
     public float getStarbleachCost() {
@@ -85,19 +93,19 @@ public class ItemStarbleachingRecipe implements Recipe<ItemStarbleachingRecipeIn
     }
 
     public static int getConsumedStarbleach(RandomSource random, float cost) {
-        if(cost <= 0) return 0;
+        if (cost <= 0) return 0;
 
         // return randomly either floor(cost) or ceil(cost), with expectation equal to cost
 
-        int minConsumed = (int)Math.floor(cost);
+        int minConsumed = (int) Math.floor(cost);
         float probabilityForBonusUnit = cost - minConsumed;
-        if(probabilityForBonusUnit == 0) {
+        if (probabilityForBonusUnit == 0) {
             // if starbleachCost is an integer just return it directly
             return minConsumed;
         }
 
         boolean consumeAdditionalUnit = random.nextFloat() < probabilityForBonusUnit;
-        if(consumeAdditionalUnit) {
+        if (consumeAdditionalUnit) {
             return minConsumed + 1;
         } else {
             return minConsumed;

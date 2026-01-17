@@ -9,8 +9,6 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.Collection;
-
 public interface XPlatInterface {
     XPlatInterface INSTANCE = Services.load(XPlatInterface.class);
 
@@ -29,4 +27,6 @@ public interface XPlatInterface {
     boolean canBurn(BlockState state);
 
     void sendToPlayersTrackingEntity(Entity entity, CustomPacketPayload payload);
+
+    int getBucketSize();
 }

@@ -59,4 +59,10 @@ public class XPlatNeoForge implements XPlatInterface {
     public void sendToPlayersTrackingEntity(Entity entity, CustomPacketPayload payload) {
         PacketDistributor.sendToPlayersTrackingEntity(entity, payload);
     }
+
+    @Override
+    public int getBucketSize() {
+        // mb
+        return 1000;
+    }
 }

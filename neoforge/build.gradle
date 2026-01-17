@@ -15,11 +15,18 @@ repositories {
             includeGroup "maven.modrinth"
         }
     }
+    maven {
+        name = "TerraformersMC"
+        url = "https://maven.terraformersmc.com/"
+    }
 }
 
 dependencies {
     // mods
     compileOnly "maven.modrinth:iris:${iris_neoforge_version}"
+
+    compileOnly "dev.emi:emi-neoforge:${emi_version}:api"
+    runtimeOnly "dev.emi:emi-neoforge:${emi_version}"
 }
 
 // set commonPath based on the current path, to allow for multi-mod dev env setups

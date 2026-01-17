@@ -24,6 +24,9 @@
 		],
 		"fabric-datagen": [
 			"phanastrae.operation_starcleave.fabric.data.OperationStarcleaveDataGenerator"
+		],
+		"emi": [
+			"phanastrae.operation_starcleave.client.compat.emi.OperationStarcleaveEMIPlugin"
 		]
 	},
 	"accessWidener": "${mod_id}.accesswidener",

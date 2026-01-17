@@ -118,6 +118,8 @@
 
   "effect.operation_starcleave.starbleached_insides": "Starbleached Insides",
 
+  "emi.category.operation_starcleave.item_starbleaching": "Starbleaching",
+
   "entity.operation_starcleave.firmament_rejuvenator": "Firmament Rejuvenator",
   "entity.operation_starcleave.nuclear_stardrop": "Nuclear Stardrop",
   "entity.operation_starcleave.nuclear_stormcloud": "Nuclear Stormcloud",
@@ -207,6 +209,7 @@
   "subtitles.operation_starcleave.firmament.tile.break": "Firmament Fracture... fractures??",
 
   "tag.fluid.operation_starcleave.petrichoric_plasma": "Petrichoric Plasma",
+  "tag.fluid.operation_starcleave.starbleach": "Starbleach",
   "tag.item.operation_starcleave.starbleached_logs": "Starbleached Logs",
   "tag.item.operation_starcleave.nucleic_fissureroots": "Nucleic Fissureroots"
 }

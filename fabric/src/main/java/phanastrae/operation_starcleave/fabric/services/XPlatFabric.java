@@ -58,4 +58,10 @@ public class XPlatFabric implements XPlatInterface {
             XPlatInterface.INSTANCE.sendPayload(serverPlayer, payload);
         }
     }
+
+    @Override
+    public int getBucketSize() {
+        // droplets
+        return 81000;
+    }
 }

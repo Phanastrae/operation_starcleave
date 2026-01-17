@@ -19,6 +19,10 @@ repositories {
         name = 'ParchmentMC'
         url = 'https://maven.parchmentmc.org'
     }
+    maven {
+        name = "TerraformersMC"
+        url = "https://maven.terraformersmc.com/"
+    }
 }
 
 dependencies {
@@ -35,6 +39,9 @@ dependencies {
 
     // mods
     modCompileOnly "maven.modrinth:iris:${iris_fabric_version}"
+
+    modCompileOnly "dev.emi:emi-fabric:${emi_version}:api"
+    modLocalRuntime "dev.emi:emi-fabric:${emi_version}"
 }
 
 // set commonPath based on the current path, to allow for multi-mod dev env setups
