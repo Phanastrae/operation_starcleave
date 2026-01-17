@@ -30,11 +30,12 @@ public class ItemStarbleachingEMIRecipe extends BasicEmiRecipe {
         this.inputs.add(EmiIngredient.of(recipe.getIngredients().getFirst()));
         this.outputs.add(EmiStack.of(outputStack));
 
+        // for filling recipes, display cost in terms of fluid, instead of starbleach bottles
+        boolean isFillingRecipe = recipe.getIsFillingRecipe();
         int starbleachBottleCapacity = XPlatInterface.INSTANCE.getBucketSize() / 4;
-        boolean inputIsFluidContainer = outputStack.is(OperationStarcleaveItems.STARBLEACH_BOTTLE) || outputStack.is(OperationStarcleaveItems.STARBLEACH_BUCKET);
 
         if (this.minStarbleachCost > 0) {
-            if (inputIsFluidContainer) {
+            if (isFillingRecipe) {
                 this.inputs.add(EmiStack.of(OperationStarcleaveFluids.STARBLEACH, (long) starbleachBottleCapacity * this.minStarbleachCost));
             } else {
                 this.inputs.add(EmiStack.of(OperationStarcleaveItems.STARBLEACH_BOTTLE, this.minStarbleachCost));
@@ -42,7 +43,7 @@ public class ItemStarbleachingEMIRecipe extends BasicEmiRecipe {
             }
         }
         if (this.chanceStarbleachCost > 0) {
-            if (inputIsFluidContainer) {
+            if (isFillingRecipe) {
                 this.inputs.add(EmiStack.of(OperationStarcleaveFluids.STARBLEACH, starbleachBottleCapacity).setChance(this.chanceStarbleachCost));
             } else {
                 this.inputs.add(EmiStack.of(OperationStarcleaveItems.STARBLEACH_BOTTLE).setChance(this.chanceStarbleachCost));
