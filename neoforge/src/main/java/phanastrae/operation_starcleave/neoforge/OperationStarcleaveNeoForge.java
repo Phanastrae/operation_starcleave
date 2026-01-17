@@ -32,6 +32,7 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.RegisterCauldronFluidContentEvent;
+import net.neoforged.neoforge.fluids.capability.wrappers.FluidBucketWrapper;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -264,7 +265,9 @@ public class OperationStarcleaveNeoForge {
         event.registerItem(Capabilities.FluidHandler.ITEM, (stack, ctx) -> new StarbleachBottleWrapper(stack), Items.GLASS_BOTTLE);
         event.registerItem(Capabilities.FluidHandler.ITEM, (stack, ctx) -> new StarbleachBottleWrapper(stack), OperationStarcleaveItems.STARBLEACH_BOTTLE);
 
+        // capabilities are only auto-registered for the exact class BucketItem, classes that extend it must be done manually
         event.registerItem(Capabilities.FluidHandler.ITEM, (stack, ctx) -> new PetrichoricPlasmaFluidBucketWrapper(stack), OperationStarcleaveItems.PETRICHORIC_PLASMA_BUCKET);
+        event.registerItem(Capabilities.FluidHandler.ITEM, (stack, ctx) -> new FluidBucketWrapper(stack), OperationStarcleaveItems.STARBLEACH_BUCKET);
     }
 
     public void registerCauldronFluidContent(RegisterCauldronFluidContentEvent event) {
