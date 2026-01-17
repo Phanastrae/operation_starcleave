@@ -1,0 +1,11 @@
+{
+  "type": "operation_starcleave:item_starbleaching",
+  "ingredient": {
+    "item": "minecraft:small_amethyst_bud"
+  },
+  "result": {
+    "count": 1,
+    "id": "operation_starcleave:small_celestial_opal_bud"
+  },
+  "starbleach_cost": 0.1
+}

@@ -1,0 +1,11 @@
+{
+  "type": "operation_starcleave:item_starbleaching",
+  "ingredient": {
+    "item": "minecraft:farmland"
+  },
+  "result": {
+    "count": 1,
+    "id": "operation_starcleave:stellar_farmland"
+  },
+  "starbleach_cost": 0.04
+}

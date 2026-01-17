@@ -1,0 +1,11 @@
+{
+  "type": "operation_starcleave:item_starbleaching",
+  "ingredient": {
+    "item": "minecraft:amethyst_shard"
+  },
+  "result": {
+    "count": 1,
+    "id": "operation_starcleave:celestial_opal_shard"
+  },
+  "starbleach_cost": 0.7
+}

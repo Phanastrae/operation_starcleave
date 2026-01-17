@@ -1,0 +1,11 @@
+{
+  "type": "operation_starcleave:item_starbleaching",
+  "ingredient": {
+    "item": "minecraft:short_grass"
+  },
+  "result": {
+    "count": 1,
+    "id": "operation_starcleave:short_holy_moss"
+  },
+  "starbleach_cost": 0.1
+}

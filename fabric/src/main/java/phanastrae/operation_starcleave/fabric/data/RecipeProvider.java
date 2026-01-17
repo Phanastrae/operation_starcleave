@@ -260,6 +260,17 @@ public class RecipeProvider extends FabricRecipeProvider {
                 0.125F,
                 HOLY_MOSS
         );
+        saveStarbleachRecipe(exporter,
+                Items.PODZOL,
+                0.125F,
+                STELLAR_MULCH
+        );
+
+        saveStarbleachRecipe(exporter,
+                Items.SHORT_GRASS,
+                0.1F,
+                SHORT_HOLY_MOSS
+        );
 
         saveStarbleachRecipe(exporter,
                 ItemTags.LEAVES,
@@ -272,9 +283,55 @@ public class RecipeProvider extends FabricRecipeProvider {
                 STELLAR_SEDIMENT
         );
         saveStarbleachRecipe(exporter,
+                Items.FARMLAND,
+                0.04F,
+                STELLAR_FARMLAND
+        );
+        saveStarbleachRecipe(exporter,
+                Items.DIRT_PATH,
+                0.04F,
+                STELLAR_PATH
+        );
+        saveStarbleachRecipe(exporter,
                 Items.SAND,
                 0.01F,
                 STARDUST_BLOCK
+        );
+
+        saveStarbleachRecipe(exporter,
+                Items.BUDDING_AMETHYST,
+                3,
+                BUDDING_CELESTIAL_OPAL
+        );
+        saveStarbleachRecipe(exporter,
+                Items.AMETHYST_BLOCK,
+                1,
+                CELESTIAL_OPAL_BLOCK
+        );
+        saveStarbleachRecipe(exporter,
+                Items.SMALL_AMETHYST_BUD,
+                0.1F,
+                SMALL_CELESTIAL_OPAL_BUD
+        );
+        saveStarbleachRecipe(exporter,
+                Items.MEDIUM_AMETHYST_BUD,
+                0.2F,
+                MEDIUM_CELESTIAL_OPAL_BUD
+        );
+        saveStarbleachRecipe(exporter,
+                Items.LARGE_AMETHYST_BUD,
+                0.3F,
+                LARGE_CELESTIAL_OPAL_BUD
+        );
+        saveStarbleachRecipe(exporter,
+                Items.AMETHYST_CLUSTER,
+                0.4F,
+                CELESTIAL_OPAL_CLUSTER
+        );
+        saveStarbleachRecipe(exporter,
+                Items.AMETHYST_SHARD,
+                0.7F,
+                CELESTIAL_OPAL_SHARD
         );
         // endregion
     }
