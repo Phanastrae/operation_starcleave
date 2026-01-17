@@ -4,7 +4,7 @@
     "item": "operation_starcleave:mucky_singuts"
   },
   "result": {
-    "id": "operation_starcleave:cleansed_singuts",
-    "count": 1
+    "count": 1,
+    "id": "operation_starcleave:cleansed_singuts"
   }
 }

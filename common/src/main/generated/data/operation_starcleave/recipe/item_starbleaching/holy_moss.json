@@ -3,9 +3,9 @@
   "ingredient": {
     "item": "minecraft:grass_block"
   },
-  "starbleach_cost": 0.125,
   "result": {
-    "id": "operation_starcleave:holy_moss",
-    "count": 1
-  }
+    "count": 1,
+    "id": "operation_starcleave:holy_moss"
+  },
+  "starbleach_cost": 0.125
 }

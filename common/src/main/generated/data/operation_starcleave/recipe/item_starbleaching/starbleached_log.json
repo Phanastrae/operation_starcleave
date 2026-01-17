@@ -3,9 +3,9 @@
   "ingredient": {
     "tag": "minecraft:logs"
   },
-  "starbleach_cost": 0.125,
   "result": {
-    "id": "operation_starcleave:starbleached_log",
-    "count": 1
-  }
+    "count": 1,
+    "id": "operation_starcleave:starbleached_log"
+  },
+  "starbleach_cost": 0.125
 }

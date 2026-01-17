@@ -3,9 +3,9 @@
   "ingredient": {
     "tag": "minecraft:leaves"
   },
-  "starbleach_cost": 0.04,
   "result": {
-    "id": "operation_starcleave:starbleached_leaves",
-    "count": 1
-  }
+    "count": 1,
+    "id": "operation_starcleave:starbleached_leaves"
+  },
+  "starbleach_cost": 0.04
 }

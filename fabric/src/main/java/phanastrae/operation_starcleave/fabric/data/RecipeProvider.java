@@ -3,16 +3,22 @@ package phanastrae.operation_starcleave.fabric.data;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.BlockFamily;
 import net.minecraft.data.recipes.*;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.data.OperationStarcleaveBlockFamilies;
 import phanastrae.operation_starcleave.item.tag.OperationStarcleaveItemTags;
+import phanastrae.operation_starcleave.recipe.ItemStarbleachingRecipe;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -208,6 +214,69 @@ public class RecipeProvider extends FabricRecipeProvider {
                 )
                 .save(exporter, OperationStarcleave.id("netherite_pumpkin_smithing"));
         // endregion
+
+        // region starbleaching
+        saveStarbleachRecipe(exporter,
+                Ingredient.of(Items.GLASS_BOTTLE),
+                1,
+                new ItemStack(STARBLEACH_BOTTLE),
+                true
+        );
+        saveStarbleachRecipe(exporter,
+                Ingredient.of(Items.BUCKET),
+                4,
+                new ItemStack(STARBLEACH_BUCKET),
+                true
+        );
+
+        saveStarbleachRecipe(exporter,
+                Items.ENDER_PEARL,
+                1,
+                STARBLEACHED_PEARL
+        );
+        saveStarbleachRecipe(exporter,
+                Items.CHORUS_FRUIT,
+                1,
+                STARFRUIT
+        );
+        saveStarbleachRecipe(exporter,
+                Items.INK_SAC,
+                1,
+                HOLLOWED_SAC
+        );
+        saveStarbleachRecipe(exporter,
+                MUCKY_SINGUTS,
+                1,
+                CLEANSED_SINGUTS
+        );
+
+        saveStarbleachRecipe(exporter,
+                ItemTags.LOGS,
+                0.125F,
+                STARBLEACHED_LOG
+        );
+        saveStarbleachRecipe(exporter,
+                Items.GRASS_BLOCK,
+                0.125F,
+                HOLY_MOSS
+        );
+
+        saveStarbleachRecipe(exporter,
+                ItemTags.LEAVES,
+                0.04F,
+                STARBLEACHED_LEAVES
+        );
+        saveStarbleachRecipe(exporter,
+                Items.DIRT,
+                0.04F,
+                STELLAR_SEDIMENT
+        );
+        saveStarbleachRecipe(exporter,
+                Items.SAND,
+                0.01F,
+                STARDUST_BLOCK
+        );
+        // endregion
     }
 
     private static void savePolished(ItemLike polished, ItemLike material, RecipeOutput exporter) {
@@ -254,5 +323,36 @@ public class RecipeProvider extends FabricRecipeProvider {
     private static void scDecoration(RecipeOutput recipeOutput, ItemLike result, ItemLike material, int amount) {
         // use this for walls
         stonecutterResultFromBase(recipeOutput, RecipeCategory.DECORATIONS, result, material, amount);
+    }
+
+    public static void saveStarbleachRecipe(RecipeOutput recipeOutput, TagKey<Item> input, float starbleachCost, Item output) {
+        saveStarbleachRecipe(recipeOutput, Ingredient.of(input), starbleachCost, new ItemStack(output));
+    }
+
+    public static void saveStarbleachRecipe(RecipeOutput recipeOutput, Item input, float starbleachCost, Item output) {
+        saveStarbleachRecipe(recipeOutput, Ingredient.of(input), starbleachCost, new ItemStack(output));
+    }
+
+    public static void saveStarbleachRecipe(RecipeOutput recipeOutput, Ingredient input, float starbleachCost, ItemStack output) {
+        saveStarbleachRecipe(recipeOutput, input, starbleachCost, output, false);
+    }
+
+    public static void saveStarbleachRecipe(RecipeOutput recipeOutput, Ingredient input, float starbleachCost, ItemStack output, boolean isFillingRecipe) {
+        Item outputItem = output.getItem();
+        ResourceLocation key = BuiltInRegistries.ITEM.getKey(outputItem);
+
+        saveStarbleachRecipe(recipeOutput, OperationStarcleave.id(key.getPath()).withPrefix("item_starbleaching/"), input, starbleachCost, output, isFillingRecipe);
+    }
+
+    public static void saveStarbleachRecipe(RecipeOutput recipeOutput, ResourceLocation location, Ingredient input, float starbleachCost, ItemStack output, boolean isFillingRecipe) {
+        recipeOutput.accept(
+                location,
+                new ItemStarbleachingRecipe(
+                        input,
+                        starbleachCost,
+                        output,
+                        isFillingRecipe
+                ),
+                null);
     }
 }

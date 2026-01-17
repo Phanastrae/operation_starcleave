@@ -3,9 +3,9 @@
   "ingredient": {
     "item": "minecraft:sand"
   },
-  "starbleach_cost": 0.01,
   "result": {
-    "id": "operation_starcleave:stardust_block",
-    "count": 1
-  }
+    "count": 1,
+    "id": "operation_starcleave:stardust_block"
+  },
+  "starbleach_cost": 0.01
 }

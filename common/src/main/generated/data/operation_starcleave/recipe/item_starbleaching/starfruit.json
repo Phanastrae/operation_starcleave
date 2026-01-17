@@ -4,7 +4,7 @@
     "item": "minecraft:chorus_fruit"
   },
   "result": {
-    "id": "operation_starcleave:starfruit",
-    "count": 1
+    "count": 1,
+    "id": "operation_starcleave:starfruit"
   }
 }
