@@ -130,6 +130,7 @@
   "entity.operation_starcleave.starcleaver_golem": "Starcleaver Golem",
   "entity.operation_starcleave.subcaelic_dux": "Subcaelic Dux",
   "entity.operation_starcleave.subcaelic_torpedo": "Subcaelic Torpedo",
+  "entity.operation_starcleave.tractorbloom": "Tractorbloom",
 
   "gamerule.operation_starcleave:allowStarcleaverGolemFirmamentFracturing": "Starcleaver Golems can Fracture the Firmament",
   "gamerule.operation_starcleave:doFractureStarbleaching": "Firmament Fractures Starbleach",
@@ -162,6 +163,7 @@
   "item.operation_starcleave.starfruit": "Starfruit",
   "item.operation_starcleave.subcaelic_dux_spawn_egg": "Subcaelic Dux Spawn Egg",
   "item.operation_starcleave.subcaelic_torpedo_spawn_egg": "Subcaelic Torpedo Spawn Egg",
+  "item.operation_starcleave.tractorbloom_spawn_egg": "Tractorbloom Spawn Egg",
 
   "itemGroup.operation_starcleave.group": "Operation: Starcleave",
 
@@ -205,6 +207,9 @@
   "subtitles.operation_starcleave.entity.subcaelic_torpedo.death": "Subcaelic Torpedo dies",
   "subtitles.operation_starcleave.entity.subcaelic_torpedo.hurt": "Subcaelic Torpedo hurts",
   "subtitles.operation_starcleave.entity.subcaelic_torpedo.primed": "Subcaelic Torpedo hisses",
+  "subtitles.operation_starcleave.entity.tractorbloom.ambient": "Tractorbloom chirps",
+  "subtitles.operation_starcleave.entity.tractorbloom.death": "Tractorbloom dies",
+  "subtitles.operation_starcleave.entity.tractorbloom.hurt": "Tractorbloom hurts",
   "subtitles.operation_starcleave.firmament.cleave": "Firmament fractures",
   "subtitles.operation_starcleave.firmament.tile.break": "Firmament Fracture... fractures??",
 

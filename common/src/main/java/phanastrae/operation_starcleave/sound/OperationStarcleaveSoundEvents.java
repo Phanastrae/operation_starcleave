@@ -54,6 +54,10 @@ public class OperationStarcleaveSoundEvents {
     public static final SoundEvent SINEATER_PREPARE_JUMP = create("entity.sineater.prepare_jump");
     public static final SoundEvent SINEATER_JUMP = create("entity.sineater.jump");
 
+    public static final SoundEvent TRACTORBLOOM_AMBIENT = create("entity.tractorbloom.ambient");
+    public static final SoundEvent TRACTORBLOOM_DEATH = create("entity.tractorbloom.death");
+    public static final SoundEvent TRACTORBLOOM_HURT = create("entity.tractorbloom.hurt");
+
     public static final SoundEvent FIRMAMENT_CLEAVE = create("firmament.cleave");
     public static final SoundEvent FIRMAMENT_TILE_BREAK = create("firmament.tile.break");
 

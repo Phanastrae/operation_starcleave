@@ -348,6 +348,31 @@
       "block/amethyst/step14"
     ]
   },
+  "entity.tractorbloom.ambient": {
+    "subtitle": "subtitles.operation_starcleave.entity.tractorbloom.ambient",
+    "sounds": [
+      {
+        "name": "entity.vex.ambient",
+        "pitch": 1.6,
+        "type": "event",
+        "volume": 0.8
+      }
+    ]
+  },
+  "entity.tractorbloom.death": {
+    "subtitle": "subtitles.operation_starcleave.entity.tractorbloom.death",
+    "sounds": [
+      "mob/vex/death1",
+      "mob/vex/death2"
+    ]
+  },
+  "entity.tractorbloom.hurt": {
+    "subtitle": "subtitles.operation_starcleave.entity.tractorbloom.hurt",
+    "sounds": [
+      "mob/vex/hurt1",
+      "mob/vex/hurt2"
+    ]
+  },
   "firmament.cleave": {
     "subtitle": "subtitles.operation_starcleave.firmament.cleave",
     "sounds": [

@@ -173,6 +173,7 @@ public class OperationStarcleaveItems {
     public static final Item SUBCAELIC_TORPEDO_SPAWN_EGG = register("subcaelic_torpedo_spawn_egg", spawnEggItem(OperationStarcleaveEntityTypes.SUBCAELIC_TORPEDO, 0xDFDFDF, 0x1FAF7F));
     public static final Item SUBCAELIC_DUX_SPAWN_EGG = register("subcaelic_dux_spawn_egg", spawnEggItem(OperationStarcleaveEntityTypes.SUBCAELIC_DUX, 0xDFEF9F, 0x6FFFDF));
     public static final Item SINEATER_SPAWN_EGG = register("sineater_spawn_egg", spawnEggItem(OperationStarcleaveEntityTypes.SINEATER, 0x852869, 0xFAE861));
+    public static final Item TRACTORBLOOM_SPAWN_EGG = register("tractorbloom_spawn_egg", spawnEggItem(OperationStarcleaveEntityTypes.TRACTORBLOOM, 0xDE2377, 0x36F5DF));
 
     private static Item registerBlockItem(Block block) {
         return registerBlock(new BlockItem(block, properties()));

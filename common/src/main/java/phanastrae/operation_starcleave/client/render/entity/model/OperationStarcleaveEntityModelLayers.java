@@ -19,6 +19,8 @@ public class OperationStarcleaveEntityModelLayers {
 
     public static final ModelLayerLocation SINEATER = createMainLayer("sineater");
 
+    public static final ModelLayerLocation TRACTORBLOOM = createMainLayer("tractorbloom");
+
     public static final ModelLayerLocation PEGASUS_WINGS = createMainLayer("pegasus_wings");
 
     public static final ModelLayerLocation BLESSED_BED_HEAD = createMainLayer("blessed_bed_head");
@@ -33,6 +35,8 @@ public class OperationStarcleaveEntityModelLayers {
         r.accept(SUBCAELIC_DUX, SubcaelicDuxEntityModel::getTexturedModelData);
 
         r.accept(SINEATER, SineaterEntityModel::getTexturedModelData);
+
+        r.accept(TRACTORBLOOM, TractorbloomEntityModel::getTexturedModelData);
 
         r.accept(PEGASUS_WINGS, PegasusWingsModel::getTexturedModelData);
 

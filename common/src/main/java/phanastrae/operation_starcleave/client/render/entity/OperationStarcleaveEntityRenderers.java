@@ -14,6 +14,7 @@ public class OperationStarcleaveEntityRenderers {
         r.accept(OperationStarcleaveEntityTypes.SUBCAELIC_TORPEDO, SubcaelicTorpedoEntityRenderer::new);
         r.accept(OperationStarcleaveEntityTypes.SUBCAELIC_DUX, SubcaelicDuxEntityRenderer::new);
         r.accept(OperationStarcleaveEntityTypes.SINEATER, SineaterEntityRenderer::new);
+        r.accept(OperationStarcleaveEntityTypes.TRACTORBLOOM, TractorbloomEntityRenderer::new);
 
         // projectiles
         r.accept(OperationStarcleaveEntityTypes.SPLASH_STARBLEACH, ThrownItemRenderer::new);

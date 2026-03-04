@@ -8,10 +8,7 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.OperationStarcleave;
-import phanastrae.operation_starcleave.entity.mob.SineaterEntity;
-import phanastrae.operation_starcleave.entity.mob.StarcleaverGolemEntity;
-import phanastrae.operation_starcleave.entity.mob.SubcaelicDuxEntity;
-import phanastrae.operation_starcleave.entity.mob.SubcaelicTorpedoEntity;
+import phanastrae.operation_starcleave.entity.mob.*;
 import phanastrae.operation_starcleave.entity.projectile.*;
 import phanastrae.operation_starcleave.services.XPlatInterface;
 
@@ -47,6 +44,13 @@ public class OperationStarcleaveEntityTypes {
                     .sized(2.2f, 1.65f)
                     .clientTrackingRange(10)
                     .build(getStr(SINEATER_KEY));
+
+    public static final ResourceLocation TRACTORBLOOM_KEY = id("tractorbloom");
+    public static final EntityType<TractorbloomEntity> TRACTORBLOOM =
+            createBuilder(TractorbloomEntity::new, MobCategory.MONSTER)
+                    .sized(2.5f, 1.375f)
+                    .clientTrackingRange(10)
+                    .build(getStr(TRACTORBLOOM_KEY));
 
     public static final ResourceLocation SPLASH_STARBLEACH_KEY = id("splash_starbleach_bottle");
     public static final EntityType<SplashStarbleachEntity> SPLASH_STARBLEACH =
@@ -103,6 +107,7 @@ public class OperationStarcleaveEntityTypes {
         r.accept(SUBCAELIC_TORPEDO_KEY, SUBCAELIC_TORPEDO);
         r.accept(SUBCAELIC_DUX_KEY, SUBCAELIC_DUX);
         r.accept(SINEATER_KEY, SINEATER);
+        r.accept(TRACTORBLOOM_KEY, TRACTORBLOOM);
 
         // projectiles
         r.accept(SPLASH_STARBLEACH_KEY, SPLASH_STARBLEACH);
@@ -120,6 +125,7 @@ public class OperationStarcleaveEntityTypes {
         r.accept(SUBCAELIC_TORPEDO, SubcaelicTorpedoEntity.createAttributes());
         r.accept(SUBCAELIC_DUX, SubcaelicDuxEntity.createAttributes());
         r.accept(SINEATER, SineaterEntity.createAttributes());
+        r.accept(TRACTORBLOOM, TractorbloomEntity.createAttributes());
     }
 
     private static ResourceLocation id(String path) {

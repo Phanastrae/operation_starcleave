@@ -34,7 +34,8 @@ public class EntityTypeTagProvider extends FabricTagProvider.EntityTypeTagProvid
                 .add(
                         STARCLEAVER_GOLEM,
                         SUBCAELIC_TORPEDO,
-                        SUBCAELIC_DUX
+                        SUBCAELIC_DUX,
+                        TRACTORBLOOM
                 );
 
         getOrCreateTagBuilder(AQUATIC)
