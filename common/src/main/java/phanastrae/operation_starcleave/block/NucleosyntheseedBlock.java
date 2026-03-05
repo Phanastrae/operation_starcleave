@@ -498,6 +498,21 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
                 OperationStarcleaveParticleTypes.LARGE_NUCLEAR_SMOKE,
                 SoundEvents.GENERIC_EXPLODE
         );
+
+        // spawn lightning particles
+        if (level instanceof ServerLevel serverLevel) {
+            serverLevel.sendParticles(
+                    OperationStarcleaveParticleTypes.NUCLEO_LIGHTNING,
+                    pos.getX() + 0.5,
+                    pos.getY() + 0.5,
+                    pos.getZ() + 0.5,
+                    9,
+                    0.25,
+                    0.25,
+                    0.25,
+                    2.25
+            );
+        }
     }
 
     public static boolean canBurrowThrough(BlockState state) {

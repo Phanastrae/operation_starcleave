@@ -100,6 +100,21 @@ public class NuclearStardropEntity extends AbstractHurtingProjectile {
 
                 if (level.isEmptyBlock(pos)) {
                     level.setBlockAndUpdate(pos, OperationStarcleaveBlocks.NUCLEOSYNTHESEED.defaultBlockState());
+
+                    // spawn lightning particles
+                    if (level instanceof ServerLevel serverLevel) {
+                        serverLevel.sendParticles(
+                                OperationStarcleaveParticleTypes.NUCLEO_LIGHTNING,
+                                pos.getX() + 0.5,
+                                pos.getY() + 0.5,
+                                pos.getZ() + 0.5,
+                                7,
+                                0.25,
+                                0.25,
+                                0.25,
+                                0.9
+                        );
+                    }
                 }
             }
         }

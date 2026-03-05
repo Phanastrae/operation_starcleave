@@ -86,37 +86,63 @@ public class NuclearStormcloudEntity extends Entity {
         for(int i = 0; i < 30; i++) {
             level.addParticle(
                     random.nextInt(20) == 0 ? OperationStarcleaveParticleTypes.LARGE_GLIMMER_SMOKE : OperationStarcleaveParticleTypes.NUCLEAR_SMOKE,
-                    this.getX() + (random.nextFloat() * 2 - 1) * this.getBbWidth() / 2F,
-                    this.getY() + (random.nextFloat() * 2) * this.getBbHeight(),
-                    this.getZ() + (random.nextFloat() * 2 - 1) * this.getBbWidth() / 2F,
+                    getRandomX(random),
+                    getRandomY(random),
+                    getRandomZ(random),
                     random.nextGaussian() * 0.15,
                     random.nextGaussian() * 0.15,
                     random.nextGaussian() * 0.15
             );
         }
+
         if(random.nextInt(3) == 0) {
             level.addParticle(
                     OperationStarcleaveParticleTypes.LARGE_NUCLEAR_SMOKE,
                     true,
-                    this.getX() + (random.nextFloat() * 2 - 1) * this.getBbWidth() / 2F,
-                    this.getY() + (random.nextFloat() * 2) * this.getBbHeight(),
-                    this.getZ() + (random.nextFloat() * 2 - 1) * this.getBbWidth() / 2F,
+                    getRandomX(random),
+                    getRandomY(random),
+                    getRandomZ(random),
                     random.nextGaussian() * 0.15,
                     random.nextGaussian() * 0.15,
                     random.nextGaussian() * 0.15
             );
         }
+
         for(int i = 0; i < 10; i++) {
             level.addParticle(
                     OperationStarcleaveParticleTypes.PLASMA_DUST,
-                    this.getX() + (random.nextFloat() * 2 - 1) * this.getBbWidth() / 2F,
+                    getRandomX(random),
                     this.getY() + 0.25 * (random.nextFloat() * 2) * this.getBbHeight(),
-                    this.getZ() + (random.nextFloat() * 2 - 1) * this.getBbWidth() / 2F,
+                    getRandomZ(random),
                     random.nextGaussian() * 0.15,
                     random.nextGaussian() * 0.05,
                     random.nextGaussian() * 0.15
             );
         }
+
+        if(random.nextInt(9) == 0) {
+            level.addParticle(
+                    OperationStarcleaveParticleTypes.NUCLEO_LIGHTNING,
+                    getRandomX(random),
+                    getRandomY(random),
+                    getRandomZ(random),
+                    random.nextGaussian() * 1.5,
+                    0.3 - random.nextFloat() * 4.5,
+                    random.nextGaussian() * 1.5
+            );
+        }
+    }
+
+    protected double getRandomX(RandomSource random) {
+        return this.getX() + (random.nextFloat() * 2 - 1) * this.getBbWidth() / 2F;
+    }
+
+    protected double getRandomY(RandomSource random) {
+        return this.getY() + (random.nextFloat() * 2) * this.getBbHeight();
+    }
+
+    protected double getRandomZ(RandomSource random) {
+        return this.getZ() + (random.nextFloat() * 2 - 1) * this.getBbWidth() / 2F;
     }
 
     public void adjustVelocity() {
