@@ -17,6 +17,7 @@ public class OperationStarcleaveParticles {
         r.register(OperationStarcleaveParticleTypes.PLASMA_DUST, PlasmaDustFactory::new);
         r.register(OperationStarcleaveParticleTypes.NUCLEAR_SMOKE, NuclearSmokeFactory::new);
         r.register(OperationStarcleaveParticleTypes.LARGE_NUCLEAR_SMOKE, LargeNuclearSmokeParticle.LargeNuclearSmokeFactory::new);
+        r.register(OperationStarcleaveParticleTypes.NUCLEO_LIGHTNING, NucleoLightningParticle.Provider::new);
     }
 
     public static class FirmamentGlimmerFactory extends SuspendedParticle.UnderwaterProvider {
@@ -27,11 +28,11 @@ public class OperationStarcleaveParticles {
 
         public Particle createParticle(SimpleParticleType simpleParticleType, ClientLevel clientLevel, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
             Particle particle = super.createParticle(simpleParticleType, clientLevel, x, y, z, xSpeed, ySpeed, zSpeed);
-            if(particle != null) {
+            if (particle != null) {
                 float ang = clientLevel.random.nextFloat();
                 float red = Mth.sin(ang * Mth.TWO_PI) * 0.2f + 0.8f;
-                float green = Mth.sin((ang + 1/3f) * Mth.TWO_PI) * 0.2f + 0.8f;
-                float blue = Mth.sin((ang + 2/3f) * Mth.TWO_PI) * 0.2f + 0.8f;
+                float green = Mth.sin((ang + 1 / 3f) * Mth.TWO_PI) * 0.2f + 0.8f;
+                float blue = Mth.sin((ang + 2 / 3f) * Mth.TWO_PI) * 0.2f + 0.8f;
                 particle.setColor(red, green, blue);
                 particle.setParticleSpeed(xSpeed, ySpeed, zSpeed);
             }
@@ -47,13 +48,13 @@ public class OperationStarcleaveParticles {
 
         public Particle createParticle(SimpleParticleType simpleParticleType, ClientLevel clientLevel, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
             Particle particle = super.createParticle(simpleParticleType, clientLevel, x, y, z, xSpeed, ySpeed, zSpeed);
-            if(particle != null) {
+            if (particle != null) {
                 float ang = clientLevel.random.nextFloat();
                 float baseBrightness = 0.6f + 0.2f * clientLevel.random.nextFloat();
                 float rgbBrightness = (1 - baseBrightness);
                 float red = Mth.sin(ang * Mth.TWO_PI) * rgbBrightness + baseBrightness;
-                float green = Mth.sin((ang + 1/3f) * Mth.TWO_PI) * rgbBrightness + baseBrightness;
-                float blue = Mth.sin((ang + 2/3f) * Mth.TWO_PI) * rgbBrightness + baseBrightness;
+                float green = Mth.sin((ang + 1 / 3f) * Mth.TWO_PI) * rgbBrightness + baseBrightness;
+                float blue = Mth.sin((ang + 2 / 3f) * Mth.TWO_PI) * rgbBrightness + baseBrightness;
                 particle.setColor(red, green, blue);
                 particle.setParticleSpeed(xSpeed, ySpeed, zSpeed);
             }
@@ -69,13 +70,13 @@ public class OperationStarcleaveParticles {
 
         public Particle createParticle(SimpleParticleType simpleParticleType, ClientLevel clientLevel, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
             Particle particle = super.createParticle(simpleParticleType, clientLevel, x, y, z, xSpeed, ySpeed, zSpeed);
-            if(particle != null) {
+            if (particle != null) {
                 float ang = clientLevel.random.nextFloat();
                 float baseBrightness = 0.6f + 0.2f * clientLevel.random.nextFloat();
                 float rgbBrightness = (1 - baseBrightness);
                 float red = Mth.sin(ang * Mth.TWO_PI) * rgbBrightness + baseBrightness;
-                float green = Mth.sin((ang + 1/3f) * Mth.TWO_PI) * rgbBrightness + baseBrightness;
-                float blue = Mth.sin((ang + 2/3f) * Mth.TWO_PI) * rgbBrightness + baseBrightness;
+                float green = Mth.sin((ang + 1 / 3f) * Mth.TWO_PI) * rgbBrightness + baseBrightness;
+                float blue = Mth.sin((ang + 2 / 3f) * Mth.TWO_PI) * rgbBrightness + baseBrightness;
                 particle.setColor(red, green, blue);
                 particle.setParticleSpeed(xSpeed, ySpeed, zSpeed);
             }
@@ -91,7 +92,7 @@ public class OperationStarcleaveParticles {
 
         public Particle createParticle(SimpleParticleType simpleParticleType, ClientLevel clientLevel, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
             Particle particle = super.createParticle(simpleParticleType, clientLevel, x, y, z, xSpeed, ySpeed, zSpeed);
-            if(particle != null) {
+            if (particle != null) {
                 float l = clientLevel.random.nextFloat();
                 float red = Mth.lerp(l, 111, 204) / 255F;
                 float green = Mth.lerp(l, 186, 240) / 255F;
@@ -111,7 +112,7 @@ public class OperationStarcleaveParticles {
 
         public Particle createParticle(SimpleParticleType simpleParticleType, ClientLevel clientLevel, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
             Particle particle = super.createParticle(simpleParticleType, clientLevel, x, y, z, xSpeed, ySpeed, zSpeed);
-            if(particle != null) {
+            if (particle != null) {
                 float l = clientLevel.random.nextFloat();
                 float red = Mth.lerp(l * l, 14, 127) / 255F;
                 float green = Mth.lerp(l * l, 56, 212) / 255F;

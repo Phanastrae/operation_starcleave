@@ -3,6 +3,7 @@ package phanastrae.operation_starcleave.block;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
@@ -78,8 +79,8 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
 
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-        if(player.getAbilities().mayBuild) {
-            if(stack.is(OperationStarcleaveItems.PHLOGISTON_SAC)) {
+        if (player.getAbilities().mayBuild) {
+            if (stack.is(OperationStarcleaveItems.PHLOGISTON_SAC)) {
                 detonate(level, pos, 0);
 
                 Item item = stack.getItem();
@@ -120,45 +121,56 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
 
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-        for (Direction direction : Direction.values()) {
-            BlockPos adjPos = pos.relative(direction);
-            BlockState adjState = level.getBlockState(adjPos);
-            if (!adjState.isFaceSturdy(level, pos, direction.getOpposite())) {
-                for (int i = 0; i < 3 + random.nextInt(6); i++) {
-                    level.addParticle(
-                            OperationStarcleaveParticleTypes.PLASMA_DUST,
-                            pos.getX() + 0.5,
-                            pos.getY() + 0.5,
-                            pos.getZ() + 0.5,
-                            random.nextGaussian() * 0.1,
-                            random.nextGaussian() * 0.1,
-                            random.nextGaussian() * 0.1
-                    );
-                }
-            }
+        Direction direction = Direction.getRandom(random);
+
+        BlockPos adjPos = pos.relative(direction);
+        BlockState adjState = level.getBlockState(adjPos);
+        if (!adjState.isFaceSturdy(level, pos, direction.getOpposite())) {
+            Vec3i normal = direction.getNormal();
+
+            double xOffset = normal.getX() == 0 ? random.nextFloat() - 0.5 : normal.getX() * 0.5;
+            double yOffset = normal.getY() == 0 ? random.nextFloat() - 0.5 : normal.getY() * 0.5;
+            double zOffset = normal.getZ() == 0 ? random.nextFloat() - 0.5 : normal.getZ() * 0.5;
+
+            double xSpeed = xOffset * 0.7 + normal.getX() * 0.3;
+            double ySpeed = yOffset * 0.7 + normal.getY() * 0.3;
+            double zSpeed = zOffset * 0.7 + normal.getZ() * 0.3;
+
+            double speed = Math.sqrt(xSpeed * xSpeed + ySpeed * ySpeed + zSpeed * zSpeed);
+            double targetSpeed = 0.5F + 0.7F * random.nextFloat();
+
+            level.addParticle(
+                    OperationStarcleaveParticleTypes.NUCLEO_LIGHTNING,
+                    pos.getX() + 0.5 + xOffset,
+                    pos.getY() + 0.5 + yOffset,
+                    pos.getZ() + 0.5 + zOffset,
+                    xSpeed * targetSpeed / speed,
+                    ySpeed * targetSpeed / speed,
+                    zSpeed * targetSpeed / speed
+            );
         }
     }
 
     public static void trySpread(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, boolean forceGrowth) {
-        if(!level.getGameRules().getBoolean(OperationStarcleaveGameRules.DO_NUCLEOSYNTHESEED_GROWTH) && !forceGrowth) {
+        if (!level.getGameRules().getBoolean(OperationStarcleaveGameRules.DO_NUCLEOSYNTHESEED_GROWTH) && !forceGrowth) {
             return;
         }
 
-        if(state.getValue(AGE) == MAX_AGE) {
+        if (state.getValue(AGE) == MAX_AGE) {
             return;
         }
 
         boolean growsDown = state.getValue(GROWS_DOWN);
 
-        if(random.nextInt(8) <= (growsDown ? 1 : 2)) {
+        if (random.nextInt(8) <= (growsDown ? 1 : 2)) {
             if (trySpread(state, level, pos, random, growsDown ? Direction.DOWN : Direction.UP)) {
                 return;
             }
         }
 
         List<Direction> directions = Direction.Plane.HORIZONTAL.shuffledCopy(random);
-        for(Direction direction : directions) {
-            if(trySpread(state, level, pos, random, direction)) {
+        for (Direction direction : directions) {
+            if (trySpread(state, level, pos, random, direction)) {
                 return;
             }
         }
@@ -174,22 +186,22 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
         BlockPos adjPos = pos.relative(direction);
         BlockState adjState = level.getBlockState(adjPos);
 
-        if(canBurrowThrough(adjState)) {
+        if (canBurrowThrough(adjState)) {
             level.setBlockAndUpdate(adjPos, newState);
             level.scheduleTick(adjPos, newState.getBlock(), 30 + random.nextInt(120));
             level.setBlockAndUpdate(pos, OperationStarcleaveBlocks.NUCLEIC_FISSUREROOT.defaultBlockState().setValue(RotatedPillarBlock.AXIS, direction.getAxis()));
-            if(!growsDown) {
+            if (!growsDown) {
                 spawnLeaves(level, adjPos, random);
             }
 
             boolean vertical = direction.getAxis() != Direction.Axis.Y;
-            if(vertical || growsDown) {
+            if (vertical || growsDown) {
                 BlockPos oppPos = pos.relative(direction.getOpposite());
                 BlockState oppState = level.getBlockState(oppPos);
                 if (canBurrowThrough(oppState)) {
                     if (random.nextInt(3) == 0 || (vertical && growsDown && age <= 2)) {
                         int newAge;
-                        if(random.nextInt(3) == 0) {
+                        if (random.nextInt(3) == 0) {
                             newAge = MAX_AGE;
                         } else {
                             newAge = Math.min(age + 5 + random.nextInt(5), MAX_AGE);
@@ -197,14 +209,14 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
 
                         BlockState nState = state.setValue(AGE, newAge);
                         boolean makeGrowUp = vertical && growsDown;
-                        if(makeGrowUp) {
+                        if (makeGrowUp) {
                             nState = nState.setValue(GROWS_DOWN, false);
                         }
                         level.setBlockAndUpdate(oppPos, nState);
                         level.scheduleTick(oppPos, newState.getBlock(), 30 + random.nextInt(120));
 
-                        if(makeGrowUp || !growsDown) {
-                            if(random.nextInt(5) <= 1) {
+                        if (makeGrowUp || !growsDown) {
+                            if (random.nextInt(5) <= 1) {
                                 spawnLeaves(level, oppPos, random);
                             }
                         }
@@ -219,23 +231,23 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
 
     public static void spawnLeaves(Level level, BlockPos pos, RandomSource random) {
         // place direct neighbours
-        for(Direction direction : Direction.values()) {
+        for (Direction direction : Direction.values()) {
             BlockPos adjPos = pos.relative(direction);
-            if(random.nextInt(5) != 0) {
+            if (random.nextInt(5) != 0) {
                 trySpawnLeavesAtPos(level, adjPos);
             }
         }
 
         // place plane-diagonal blocks
-        for(int i = -1; i <= 1; i++) {
-            for(int j = -1; j <= 1; j++) {
-                for(int k = -1; k <= 1; k++) {
-                    int distSqr = i*i + j*j + k*k;
-                    if(distSqr != 2) continue; // only check the blocks next to the directional blocks
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                for (int k = -1; k <= 1; k++) {
+                    int distSqr = i * i + j * j + k * k;
+                    if (distSqr != 2) continue; // only check the blocks next to the directional blocks
 
                     BlockPos adjPos = pos.offset(i, j, k);
-                    if(random.nextInt(3) != 0) {
-                        if(countAdjacentLeaves(level, adjPos) >= 1) {
+                    if (random.nextInt(3) != 0) {
+                        if (countAdjacentLeaves(level, adjPos) >= 1) {
                             trySpawnLeavesAtPos(level, adjPos);
                         }
                     }
@@ -244,15 +256,15 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
         }
 
         // place 3-axis-diagonal blocks
-        for(int i = -1; i <= 1; i++) {
-            if(i == 0) continue;
-            for(int j = -1; j <= 1; j++) {
-                if(j == 0) continue;
-                for(int k = -1; k <= 1; k++) {
-                    if(k == 0) continue;
+        for (int i = -1; i <= 1; i++) {
+            if (i == 0) continue;
+            for (int j = -1; j <= 1; j++) {
+                if (j == 0) continue;
+                for (int k = -1; k <= 1; k++) {
+                    if (k == 0) continue;
                     BlockPos adjPos = pos.offset(i, j, k);
-                    if(random.nextInt(2) != 0) {
-                        if(countAdjacentLeaves(level, adjPos) >= 2) {
+                    if (random.nextInt(2) != 0) {
+                        if (countAdjacentLeaves(level, adjPos) >= 2) {
                             trySpawnLeavesAtPos(level, adjPos);
                         }
                     }
@@ -263,10 +275,10 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
 
     public static int countAdjacentLeaves(Level level, BlockPos pos) {
         int count = 0;
-        for(Direction direction : Direction.values()) {
+        for (Direction direction : Direction.values()) {
             BlockPos adjPos = pos.relative(direction);
             BlockState adjState = level.getBlockState(adjPos);
-            if(adjState.is(OperationStarcleaveBlocks.NUCLEIC_FISSURELEAVES)) {
+            if (adjState.is(OperationStarcleaveBlocks.NUCLEIC_FISSURELEAVES)) {
                 count++;
             }
         }
@@ -275,9 +287,9 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
 
     public static void trySpawnLeavesAtPos(Level level, BlockPos pos) {
         BlockState adjState = level.getBlockState(pos);
-        if(adjState.isAir() || adjState.is(BlockTags.REPLACEABLE_BY_TREES)) {
+        if (adjState.isAir() || adjState.is(BlockTags.REPLACEABLE_BY_TREES)) {
             BlockState leafState = OperationStarcleaveBlocks.NUCLEIC_FISSURELEAVES.defaultBlockState();
-            if(adjState.getFluidState().is(FluidTags.WATER)) {
+            if (adjState.getFluidState().is(FluidTags.WATER)) {
                 leafState = leafState.setValue(LeavesBlock.WATERLOGGED, true);
             }
             level.setBlockAndUpdate(pos, leafState);
@@ -301,13 +313,13 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
         Set<BlockPos> positionsLast = new HashSet<>();
         positionsLast.add(locateStartPos(level, pos));
 
-        for(int i = 0; i < 19; i++) {
+        for (int i = 0; i < 19; i++) {
             // clear blocks below
-            for(BlockPos targetPos : positionsLast) {
+            for (BlockPos targetPos : positionsLast) {
                 BlockPos downPos = targetPos.below();
                 BlockState downState = level.getBlockState(downPos);
-                if(canErode(downState)) {
-                    if(!downState.is(OperationStarcleaveBlocks.PHLOGISTIC_FIRE)) {
+                if (canErode(downState)) {
+                    if (!downState.is(OperationStarcleaveBlocks.PHLOGISTIC_FIRE)) {
                         level.setBlockAndUpdate(downPos, Blocks.AIR.defaultBlockState());
                         potentiallySpawnParticle(level, downPos);
                         coagulateHorizontallyAdjacentPlasma(level, downPos);
@@ -319,14 +331,14 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
             positionsLast.clear();
 
             // spread outwards
-            for(BlockPos targetPos : positions) {
-                for(Direction direction : Direction.Plane.HORIZONTAL) {
+            for (BlockPos targetPos : positions) {
+                for (Direction direction : Direction.Plane.HORIZONTAL) {
                     BlockPos adjPos = targetPos.relative(direction);
-                    if(!positionsLast.contains(adjPos)) {
+                    if (!positionsLast.contains(adjPos)) {
                         BlockState adjState = level.getBlockState(adjPos);
-                        if(canErode(adjState)) {
-                            if(random.nextInt(5) <= 1) {
-                                if(!adjState.is(OperationStarcleaveBlocks.PHLOGISTIC_FIRE)) {
+                        if (canErode(adjState)) {
+                            if (random.nextInt(5) <= 1) {
+                                if (!adjState.is(OperationStarcleaveBlocks.PHLOGISTIC_FIRE)) {
                                     level.setBlockAndUpdate(adjPos, Blocks.AIR.defaultBlockState());
                                     potentiallySpawnParticle(level, adjPos);
                                     coagulateHorizontallyAdjacentPlasma(level, adjPos);
@@ -341,16 +353,16 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
             positionsLast.addAll(positions);
             positions.clear();
 
-            if(positionsLast.isEmpty()) {
+            if (positionsLast.isEmpty()) {
                 break;
             }
         }
 
         positions.addAll(positionsLast);
 
-        for(int i = 0; i < 15; i++) {
+        for (int i = 0; i < 15; i++) {
             // spread inwards
-            for(BlockPos targetPos : positions) {
+            for (BlockPos targetPos : positions) {
                 for (Direction direction : Direction.Plane.HORIZONTAL) {
                     BlockPos adjPos = targetPos.relative(direction);
                     if (!positions.contains(adjPos)) {
@@ -359,8 +371,8 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
 
                             BlockPos downPos = targetPos.below();
                             BlockState downState = level.getBlockState(downPos);
-                            if(canErode(downState) && !((downState.canBeReplaced() || !downState.canOcclude()) && i <= 1)) {
-                                if(!downState.is(OperationStarcleaveBlocks.PHLOGISTIC_FIRE)) {
+                            if (canErode(downState) && !((downState.canBeReplaced() || !downState.canOcclude()) && i <= 1)) {
+                                if (!downState.is(OperationStarcleaveBlocks.PHLOGISTIC_FIRE)) {
                                     level.setBlockAndUpdate(downPos, OperationStarcleaveBlocks.COAGULATED_PLASMA.defaultBlockState());
                                     potentiallySpawnParticle(level, downPos);
                                     coagulateHorizontallyAdjacentPlasma(level, downPos);
@@ -374,16 +386,16 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
             positions.clear();
 
             // clear blocks below
-            for(BlockPos targetPos : positionsLast) {
+            for (BlockPos targetPos : positionsLast) {
                 BlockPos downPos = targetPos.below();
                 BlockState downState = level.getBlockState(downPos);
                 boolean spawnsPlasmaAtHeight = i >= 2;
-                if(canErode(downState) && !((downState.canBeReplaced() || !downState.canOcclude()) && !spawnsPlasmaAtHeight)) {
+                if (canErode(downState) && !((downState.canBeReplaced() || !downState.canOcclude()) && !spawnsPlasmaAtHeight)) {
                     BlockState state = (!spawnsPlasmaAtHeight ? Blocks.AIR : (i < 14 ? OperationStarcleaveBlocks.PETRICHORIC_PLASMA : OperationStarcleaveBlocks.COAGULATED_PLASMA)).defaultBlockState();
-                    if(!downState.is(OperationStarcleaveBlocks.PHLOGISTIC_FIRE) || spawnsPlasmaAtHeight) {
+                    if (!downState.is(OperationStarcleaveBlocks.PHLOGISTIC_FIRE) || spawnsPlasmaAtHeight) {
                         level.setBlockAndUpdate(downPos, state);
                         potentiallySpawnParticle(level, downPos);
-                        if(!spawnsPlasmaAtHeight) {
+                        if (!spawnsPlasmaAtHeight) {
                             coagulateHorizontallyAdjacentPlasma(level, downPos);
                         }
                     }
@@ -394,7 +406,7 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
             positionsLast.clear();
             positionsLast.addAll(positions);
 
-            if(positionsLast.isEmpty()) {
+            if (positionsLast.isEmpty()) {
                 break;
             }
         }
@@ -402,7 +414,7 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
 
     public static void potentiallySpawnParticle(Level level, BlockPos pos) {
         RandomSource random = level.random;
-        if(random.nextInt(32) == 0 && level instanceof ServerLevel serverLevel) {
+        if (random.nextInt(32) == 0 && level instanceof ServerLevel serverLevel) {
             serverLevel.sendParticles(
                     OperationStarcleaveParticleTypes.LARGE_NUCLEAR_SMOKE,
                     pos.getX() + 0.5,
@@ -418,11 +430,11 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
     }
 
     public static void coagulateHorizontallyAdjacentPlasma(Level level, BlockPos pos) {
-        for(Direction direction : Direction.Plane.HORIZONTAL) {
+        for (Direction direction : Direction.Plane.HORIZONTAL) {
             BlockPos adjPos = pos.relative(direction);
             BlockState adjState = level.getBlockState(adjPos);
             FluidState adjFState = level.getFluidState(adjPos);
-            if(adjState.is(OperationStarcleaveBlocks.PETRICHORIC_PLASMA) && !adjFState.isEmpty() && adjFState.isSource()) {
+            if (adjState.is(OperationStarcleaveBlocks.PETRICHORIC_PLASMA) && !adjFState.isEmpty() && adjFState.isSource()) {
                 level.setBlockAndUpdate(adjPos, OperationStarcleaveBlocks.COAGULATED_PLASMA.defaultBlockState());
             }
         }
@@ -430,10 +442,10 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
 
     public static BlockPos locateStartPos(Level level, BlockPos pos) {
         BlockPos startPos = pos;
-        for(int i = 0; i < 7; i++) {
+        for (int i = 0; i < 7; i++) {
             BlockPos upPos = startPos.above();
             BlockState upState = level.getBlockState(upPos);
-            if(canErode(upState)) {
+            if (canErode(upState)) {
                 startPos = upPos;
             }
         }
@@ -444,18 +456,18 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
         BlockPos.MutableBlockPos mutableBlockPos = pos.mutable();
 
         int searchRadius = 3;
-        for(int i = -searchRadius; i <= searchRadius; i++) {
+        for (int i = -searchRadius; i <= searchRadius; i++) {
             mutableBlockPos.setX(pos.getX() + i);
-            for(int j = -searchRadius; j <= searchRadius; j++) {
+            for (int j = -searchRadius; j <= searchRadius; j++) {
                 mutableBlockPos.setY(pos.getY() + j);
-                for(int k = -searchRadius; k < searchRadius; k++) {
-                    int distSqr = i*i + j*j + k*k;
+                for (int k = -searchRadius; k < searchRadius; k++) {
+                    int distSqr = i * i + j * j + k * k;
 
-                    if(distSqr <= searchRadius * searchRadius) {
+                    if (distSqr <= searchRadius * searchRadius) {
                         mutableBlockPos.setZ(pos.getZ() + k);
 
                         BlockState currentState = level.getBlockState(mutableBlockPos);
-                        if(currentState.is(OperationStarcleaveBlockTags.PHLOGISTIC_HYPERFLAMMABLES) && !currentState.is(OperationStarcleaveBlocks.NUCLEOSYNTHESEED)) {
+                        if (currentState.is(OperationStarcleaveBlockTags.PHLOGISTIC_HYPERFLAMMABLES) && !currentState.is(OperationStarcleaveBlocks.NUCLEOSYNTHESEED)) {
                             level.setBlockAndUpdate(mutableBlockPos, PhlogisticFireBlock.getStateWithAge(level, mutableBlockPos, fireAge));
                         }
                     }
@@ -494,7 +506,7 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
 
     public static boolean canErode(BlockState state) {
         // do destroy coagulated plasma
-        if(state.is(OperationStarcleaveBlocks.COAGULATED_PLASMA)) {
+        if (state.is(OperationStarcleaveBlocks.COAGULATED_PLASMA)) {
             return true;
         }
 
@@ -503,17 +515,17 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
 
     public static boolean canDestroy(BlockState state) {
         // do not destroy roots or seeds or phlogistic fire
-        if(state.is(OperationStarcleaveBlockTags.NUCLEOSYNTHESEED_BLAST_IMMUNE)) {
+        if (state.is(OperationStarcleaveBlockTags.NUCLEOSYNTHESEED_BLAST_IMMUNE)) {
             return false;
         }
 
         // do destroy petrichoric blocks
-        if(state.is(OperationStarcleaveBlocks.PETRICHORIC_PLASMA) || state.is(OperationStarcleaveBlocks.PETRICHORIC_VAPOR)) {
+        if (state.is(OperationStarcleaveBlocks.PETRICHORIC_PLASMA) || state.is(OperationStarcleaveBlocks.PETRICHORIC_VAPOR)) {
             return true;
         }
 
         // destroy replaceable blocks
-        if(state.canBeReplaced()) {
+        if (state.canBeReplaced()) {
             return true;
         }
 
@@ -522,7 +534,7 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
 
     public static boolean mayDestroy(BlockState state) {
         // do not destroy boss immune blocks
-        if(state.is(BlockTags.WITHER_IMMUNE) || state.is(BlockTags.DRAGON_IMMUNE)) {
+        if (state.is(BlockTags.WITHER_IMMUNE) || state.is(BlockTags.DRAGON_IMMUNE)) {
             return false;
         }
 

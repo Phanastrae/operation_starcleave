@@ -16,6 +16,7 @@ public class OperationStarcleaveParticleTypes {
     public static final SimpleParticleType PLASMA_DUST = simple(false);
     public static final SimpleParticleType NUCLEAR_SMOKE = simple(false);
     public static final SimpleParticleType LARGE_NUCLEAR_SMOKE = simple(false);
+    public static final SimpleParticleType NUCLEO_LIGHTNING = simple(false);
 
     public static void init(BiConsumer<ResourceLocation, ParticleType<?>> r) {
         r.accept(id("firmament_glimmer"), FIRMAMENT_GLIMMER);
@@ -24,6 +25,7 @@ public class OperationStarcleaveParticleTypes {
         r.accept(id("plasma_dust"), PLASMA_DUST);
         r.accept(id("nuclear_smoke"), NUCLEAR_SMOKE);
         r.accept(id("large_nuclear_smoke"), LARGE_NUCLEAR_SMOKE);
+        r.accept(id("nucleo_lightning"), NUCLEO_LIGHTNING);
     }
 
     private static ResourceLocation id(String path) {
