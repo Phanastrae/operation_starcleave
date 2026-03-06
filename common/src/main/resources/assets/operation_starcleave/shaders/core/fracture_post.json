@@ -4,21 +4,17 @@
         "srcrgb": "srcalpha",
         "dstrgb": "1-srcalpha"
     },
-    "vertex": "operation_starcleave:fracture_post",
+    "vertex": "blit_screen",
     "fragment": "operation_starcleave:fracture_post",
     "attributes": [
-        "Position",
-        "UV",
-        "Color"
+        "Position"
     ],
     "samplers": [
-        { "name": "DiffuseSampler0" },
-        { "name": "DiffuseSampler1" },
-        { "name": "Sampler0" }
+        { "name": "DiffuseSampler" },
+        { "name": "DepthSampler" },
+        { "name": "FirmamentSampler" }
     ],
     "uniforms": [
-        { "name": "ModelViewMat", "type": "matrix4x4", "count": 16, "values": [ 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 ] },
-        { "name": "ProjMat", "type": "matrix4x4", "count": 16, "values": [ 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 ] },
         { "name": "ColorModulator", "type": "float", "count": 4, "values": [ 1.0, 1.0, 1.0, 1.0 ] },
 
         { "name": "IMat", "type": "matrix4x4", "count": 16, "values": [ 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 ] },

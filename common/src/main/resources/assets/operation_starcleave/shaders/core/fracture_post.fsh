@@ -1,8 +1,8 @@
 #version 150
 
-uniform sampler2D DiffuseSampler0;
-uniform sampler2D DiffuseSampler1;
-uniform sampler2D Sampler0;
+uniform sampler2D DiffuseSampler;
+uniform sampler2D DepthSampler;
+uniform sampler2D FirmamentSampler;
 
 uniform mat4 IMat;
 uniform vec3 FirmamentPos;
@@ -11,8 +11,6 @@ uniform float GameTime;
 uniform vec4 ColorModulator;
 
 in vec2 texCoord;
-in vec4 vertexColor;
-in vec3 pos;
 
 out vec4 fragColor;
 
@@ -40,7 +38,7 @@ float getRandom(float time, vec2 pos) {
 vec2 sampleDamage(float x, float z, float mipLevel) {
     float rx = x / 2048.0;
     float rz = z / 2048.0;
-    vec2 col = textureLod(Sampler0, vec2(rx, rz), mipLevel).xy;
+    vec2 col = textureLod(FirmamentSampler, vec2(rx, rz), mipLevel).xy;
 
     col.x = (col.x * 255.) / 7.;
     col.y = (col.y * 255.) * 3. + 16. - 3.;
@@ -162,9 +160,9 @@ vec3 getChromatic(float avgDam) {
     float g = f * 0.707;
 
     // sample 3 points (1 directly above, 2 diagonally below)
-    vec4 m = textureGrad(DiffuseSampler0, texCoord + vec2(f, 0.), vec2(0.), vec2(0.));
-    vec4 y = textureGrad(DiffuseSampler0, texCoord + vec2(-g, g), vec2(0.), vec2(0.));
-    vec4 c = textureGrad(DiffuseSampler0, texCoord + vec2(-g, -g), vec2(0.), vec2(0.));
+    vec4 m = textureGrad(DiffuseSampler, texCoord + vec2(f, 0.), vec2(0.), vec2(0.));
+    vec4 y = textureGrad(DiffuseSampler, texCoord + vec2(-g, g), vec2(0.), vec2(0.));
+    vec4 c = textureGrad(DiffuseSampler, texCoord + vec2(-g, -g), vec2(0.), vec2(0.));
 
     // combine colors
     return vec3((m.r + y.r) * 0.5, (y.g + c.g) * 0.5, (c.b + m.b) * 0.5);
@@ -205,7 +203,7 @@ void main() {
     float borderDistance = 512.;
 
     // calculate the fragment's worldspace (with camera as origin) coordinates
-    vec3 position = posFromNDC(getNDC(texCoord, DiffuseSampler1));
+    vec3 position = posFromNDC(getNDC(texCoord, DepthSampler));
     float distance = length(position);
     float horizontalDistance = length(position.xz);
     float heightOffset = position.y;
@@ -227,7 +225,7 @@ void main() {
     float effectIntensity = calcEffectIntensity(borderDistance, distance, verticality, theta, random, nov);
 
     // apply chromatic abberation
-    vec3 baseColor = texture(DiffuseSampler0, texCoord).rgb;
+    vec3 baseColor = texture(DiffuseSampler, texCoord).rgb;
     vec3 chromaticColor = getChromatic(effectIntensity);
     vec3 colorWithChromatic = mix(baseColor, chromaticColor, effectIntensity);
 
