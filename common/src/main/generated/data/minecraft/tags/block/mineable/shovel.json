@@ -13,6 +13,10 @@
     "operation_starcleave:holy_moss",
     "operation_starcleave:stellar_repulsor",
     "operation_starcleave:stardust_block",
-    "operation_starcleave:coagulated_plasma"
+    "operation_starcleave:coagulated_plasma",
+    "operation_starcleave:mucky_singut_coil",
+    "operation_starcleave:mucky_singut_block",
+    "operation_starcleave:cleansed_singut_coil",
+    "operation_starcleave:cleansed_singut_block"
   ]
 }

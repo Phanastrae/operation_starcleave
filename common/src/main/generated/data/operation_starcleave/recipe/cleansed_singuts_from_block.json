@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "operation_starcleave:cleansed_singut_block"
+    }
+  ],
+  "result": {
+    "count": 2,
+    "id": "operation_starcleave:cleansed_singuts"
+  }
+}

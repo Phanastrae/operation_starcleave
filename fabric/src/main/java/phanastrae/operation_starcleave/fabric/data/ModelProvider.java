@@ -49,7 +49,10 @@ public class ModelProvider extends FabricModelProvider {
                 STARFLAKED_BISMUTH_BLOCK,
                 CHISELED_STARFLAKED_BISMUTH_BLOCK,
 
-                BUDDING_CELESTIAL_OPAL
+                BUDDING_CELESTIAL_OPAL,
+
+                MUCKY_SINGUT_BLOCK,
+                CLEANSED_SINGUT_BLOCK
         );
 
         forEach(BMG::createRotatedVariantBlock,
@@ -62,6 +65,11 @@ public class ModelProvider extends FabricModelProvider {
         forEach(block -> BMG.createTrivialBlock(block, TexturedModel.LEAVES),
                 STARBLEACHED_LEAVES,
                 NUCLEIC_FISSURELEAVES
+        );
+
+        forEach(block -> BMG.createRotatedPillarWithHorizontalVariant(block, TexturedModel.COLUMN_ALT, TexturedModel.COLUMN_HORIZONTAL_ALT),
+                MUCKY_SINGUT_COIL,
+                CLEANSED_SINGUT_COIL
         );
 
         BMG.woodProvider(STARBLEACHED_LOG).logWithHorizontal(STARBLEACHED_LOG).wood(STARBLEACHED_WOOD);

@@ -169,7 +169,12 @@ public class OperationStarcleaveCreativeModeTabs {
                 SUBCAELIC_PHLOGLIGHT,
 
                 MUCKY_SINGUTS,
+                MUCKY_SINGUT_COIL,
+                MUCKY_SINGUT_BLOCK,
+
                 CLEANSED_SINGUTS,
+                CLEANSED_SINGUT_COIL,
+                CLEANSED_SINGUT_BLOCK,
 
                 COAGULATED_PLASMA,
                 PLASMA_ICE,
@@ -260,7 +265,12 @@ public class OperationStarcleaveCreativeModeTabs {
                 POLISHED_CELESTIAL_OPAL_BRICK_SLAB,
                 POLISHED_CELESTIAL_OPAL_BRICK_WALL,
 
-                POLISHED_CELESTIAL_OPAL_PILLAR
+                POLISHED_CELESTIAL_OPAL_PILLAR,
+
+                MUCKY_SINGUT_BLOCK,
+                MUCKY_SINGUT_COIL,
+                CLEANSED_SINGUT_BLOCK,
+                CLEANSED_SINGUT_COIL
         );
 
         // Natural

@@ -147,7 +147,12 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_HOE)
                 .add(
                         STARBLEACHED_LEAVES,
-                        NUCLEIC_FISSURELEAVES
+                        NUCLEIC_FISSURELEAVES,
+
+                        MUCKY_SINGUT_COIL,
+                        MUCKY_SINGUT_BLOCK,
+                        CLEANSED_SINGUT_COIL,
+                        CLEANSED_SINGUT_BLOCK
                 );
 
         getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_PICKAXE)
@@ -194,14 +199,24 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
                         STARDUST_BLOCK,
 
-                        COAGULATED_PLASMA
+                        COAGULATED_PLASMA,
+
+                        MUCKY_SINGUT_COIL,
+                        MUCKY_SINGUT_BLOCK,
+                        CLEANSED_SINGUT_COIL,
+                        CLEANSED_SINGUT_BLOCK
                 );
 
         getOrCreateTagBuilder(BlockTags.SWORD_EFFICIENT)
                 .add(
                         NETHERITE_PUMPKIN,
                         MULCHBORNE_TUFT,
-                        SHORT_HOLY_MOSS
+                        SHORT_HOLY_MOSS,
+
+                        MUCKY_SINGUT_COIL,
+                        MUCKY_SINGUT_BLOCK,
+                        CLEANSED_SINGUT_COIL,
+                        CLEANSED_SINGUT_BLOCK
                 );
 
         getOrCreateTagBuilder(BlockTags.NEEDS_DIAMOND_TOOL)

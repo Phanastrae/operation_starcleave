@@ -697,6 +697,34 @@ public class OperationStarcleaveBlocks {
             new GemstoneRotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(POLISHED_CELESTIAL_OPAL_BLOCK))
     );
 
+    public static final Block MUCKY_SINGUT_COIL = register(
+            "mucky_singut_coil",
+            new RotatedPillarBlock(properties()
+                    .mapColor(COLOR_PURPLE)
+                    .strength(1.3F)
+                    .sound(SLIME_BLOCK)
+            )
+    );
+
+    public static final Block MUCKY_SINGUT_BLOCK = register(
+            "mucky_singut_block",
+            new Block(BlockBehaviour.Properties.ofFullCopy(MUCKY_SINGUT_COIL))
+    );
+
+    public static final Block CLEANSED_SINGUT_COIL = register(
+            "cleansed_singut_coil",
+            new RotatedPillarBlock(properties()
+                    .mapColor(TERRACOTTA_WHITE)
+                    .strength(1.1F)
+                    .sound(SLIME_BLOCK)
+            )
+    );
+
+    public static final Block CLEANSED_SINGUT_BLOCK = register(
+            "cleansed_singut_block",
+            new Block(BlockBehaviour.Properties.ofFullCopy(CLEANSED_SINGUT_COIL))
+    );
+
     private static <T extends Block> T register(String id, T block) {
         return register(OperationStarcleave.id(id), block);
     }

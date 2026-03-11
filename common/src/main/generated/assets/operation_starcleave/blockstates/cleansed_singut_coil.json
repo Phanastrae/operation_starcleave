@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "operation_starcleave:block/cleansed_singut_coil_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "operation_starcleave:block/cleansed_singut_coil"
+    },
+    "axis=z": {
+      "model": "operation_starcleave:block/cleansed_singut_coil_horizontal",
+      "x": 90
+    }
+  }
+}

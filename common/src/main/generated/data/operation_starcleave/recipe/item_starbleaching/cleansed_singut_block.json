@@ -1,0 +1,11 @@
+{
+  "type": "operation_starcleave:item_starbleaching",
+  "ingredient": {
+    "item": "operation_starcleave:mucky_singut_block"
+  },
+  "result": {
+    "count": 1,
+    "id": "operation_starcleave:cleansed_singut_block"
+  },
+  "starbleach_cost": 2.0
+}

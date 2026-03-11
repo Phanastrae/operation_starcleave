@@ -1,6 +1,10 @@
 {
   "values": [
     "operation_starcleave:starbleached_leaves",
-    "operation_starcleave:nucleic_fissureleaves"
+    "operation_starcleave:nucleic_fissureleaves",
+    "operation_starcleave:mucky_singut_coil",
+    "operation_starcleave:mucky_singut_block",
+    "operation_starcleave:cleansed_singut_coil",
+    "operation_starcleave:cleansed_singut_block"
   ]
 }

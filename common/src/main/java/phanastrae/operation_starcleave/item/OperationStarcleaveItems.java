@@ -130,6 +130,11 @@ public class OperationStarcleaveItems {
 
     public static final Item POLISHED_CELESTIAL_OPAL_PILLAR = registerBlockItem(OperationStarcleaveBlocks.POLISHED_CELESTIAL_OPAL_PILLAR);
 
+    public static final Item CLEANSED_SINGUT_COIL = registerBlockItem(OperationStarcleaveBlocks.CLEANSED_SINGUT_COIL);
+    public static final Item CLEANSED_SINGUT_BLOCK = registerBlockItem(OperationStarcleaveBlocks.CLEANSED_SINGUT_BLOCK);
+    public static final Item MUCKY_SINGUT_COIL = registerBlockItem(OperationStarcleaveBlocks.MUCKY_SINGUT_COIL);
+    public static final Item MUCKY_SINGUT_BLOCK = registerBlockItem(OperationStarcleaveBlocks.MUCKY_SINGUT_BLOCK);
+
 
     public static final Item STARCLEAVER_GOLEM_BUCKET = register("starcleaver_golem_bucket", new StarcleaverGolemBucketItem(properties().stacksTo(1)));
 

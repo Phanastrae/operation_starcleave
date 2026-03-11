@@ -94,7 +94,12 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                 STARFLAKED_BISMUTH_PILLAR,
                 STARFLAKED_BISMUTH_TRAPDOOR,
 
-                POLISHED_CELESTIAL_OPAL_PILLAR
+                POLISHED_CELESTIAL_OPAL_PILLAR,
+
+                MUCKY_SINGUT_COIL,
+                MUCKY_SINGUT_BLOCK,
+                CLEANSED_SINGUT_COIL,
+                CLEANSED_SINGUT_BLOCK
         );
 
         forEach(this::dropPottedContents,

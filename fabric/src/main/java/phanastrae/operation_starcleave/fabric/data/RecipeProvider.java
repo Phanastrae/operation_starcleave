@@ -40,6 +40,11 @@ public class RecipeProvider extends FabricRecipeProvider {
         // region shapeless crafting
         planksFromLog(exporter, STARBLEACHED_TILES, OperationStarcleaveItemTags.STARBLEACHED_LOGS, 4);
 
+        simpleShapelessWithSuffix(exporter, RecipeCategory.MISC, MUCKY_SINGUT_COIL, MUCKY_SINGUTS, 2, "_from_coil");
+        simpleShapelessWithSuffix(exporter, RecipeCategory.MISC, MUCKY_SINGUT_BLOCK, MUCKY_SINGUTS, 2, "_from_block");
+        simpleShapelessWithSuffix(exporter, RecipeCategory.MISC, CLEANSED_SINGUT_COIL, CLEANSED_SINGUTS, 2, "_from_coil");
+        simpleShapelessWithSuffix(exporter, RecipeCategory.MISC, CLEANSED_SINGUT_BLOCK, CLEANSED_SINGUTS, 2, "_from_block");
+
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, SPLASH_STARBLEACH_BOTTLE, 5)
                 .requires(Items.GUNPOWDER)
                 .requires(STARBLEACH_BOTTLE, 5)
@@ -84,6 +89,11 @@ public class RecipeProvider extends FabricRecipeProvider {
 
         savePillar(exporter, STARFLAKED_BISMUTH_PILLAR, STARFLAKED_BISMUTH_BLOCK);
         savePillar(exporter, POLISHED_CELESTIAL_OPAL_PILLAR, POLISHED_CELESTIAL_OPAL_BLOCK);
+
+        eightCircle(exporter, MUCKY_SINGUT_COIL, MUCKY_SINGUTS, 4);
+        twoByTwoPacker(exporter, RecipeCategory.BUILDING_BLOCKS, MUCKY_SINGUT_BLOCK, MUCKY_SINGUT_COIL, 4);
+        eightCircle(exporter, CLEANSED_SINGUT_COIL, CLEANSED_SINGUTS, 4);
+        twoByTwoPacker(exporter, RecipeCategory.BUILDING_BLOCKS, CLEANSED_SINGUT_BLOCK, CLEANSED_SINGUT_COIL, 4);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, BLESSED_CLOTH_CURTAIN, 16)
                 .define('#', BLESSED_CLOTH)
@@ -249,6 +259,16 @@ public class RecipeProvider extends FabricRecipeProvider {
                 1,
                 CLEANSED_SINGUTS
         );
+        saveStarbleachRecipe(exporter,
+                MUCKY_SINGUT_COIL,
+                2,
+                CLEANSED_SINGUT_COIL
+        );
+        saveStarbleachRecipe(exporter,
+                MUCKY_SINGUT_BLOCK,
+                2,
+                CLEANSED_SINGUT_BLOCK
+        );
 
         saveStarbleachRecipe(exporter,
                 ItemTags.LOGS,
@@ -340,12 +360,37 @@ public class RecipeProvider extends FabricRecipeProvider {
         polished(exporter, RecipeCategory.BUILDING_BLOCKS, polished, material);
     }
 
+    private static void simpleShapeless(RecipeOutput recipeOutput, RecipeCategory category, ItemLike input, ItemLike output, int count) {
+        simpleShapeless(recipeOutput, category, input, output, count, RecipeBuilder.getDefaultRecipeId(output));
+    }
+
+    private static void simpleShapelessWithSuffix(RecipeOutput recipeOutput, RecipeCategory category, ItemLike input, ItemLike output, int count, String suffix) {
+        simpleShapeless(recipeOutput, category, input, output, count, RecipeBuilder.getDefaultRecipeId(output).withSuffix(suffix));
+    }
+
+    private static void simpleShapeless(RecipeOutput recipeOutput, RecipeCategory category, ItemLike input, ItemLike output, int count, ResourceLocation recipeId) {
+        ShapelessRecipeBuilder.shapeless(category, output, count)
+                .requires(input)
+                .unlockedBy(getHasName(input), has(input))
+                .save(recipeOutput, recipeId);
+    }
+
     private static void twoByTwoPacker(RecipeOutput recipeOutput, RecipeCategory category, ItemLike packed, ItemLike unpacked, int count) {
         ShapedRecipeBuilder.shaped(category, packed, count)
                 .define('#', unpacked)
                 .pattern("##")
                 .pattern("##")
                 .unlockedBy(getHasName(unpacked), has(unpacked))
+                .save(recipeOutput);
+    }
+
+    private static void eightCircle(RecipeOutput recipeOutput, ItemLike grateBlock, ItemLike material, int count) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, grateBlock, count)
+                .define('#', material)
+                .pattern("###")
+                .pattern("# #")
+                .pattern("###")
+                .unlockedBy(getHasName(material), has(material))
                 .save(recipeOutput);
     }
 
