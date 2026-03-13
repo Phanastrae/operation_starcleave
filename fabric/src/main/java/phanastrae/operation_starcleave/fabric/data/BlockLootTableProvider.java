@@ -125,7 +125,6 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
 
         dropWhenSilkTouch(HOLY_MOSS, STELLAR_SEDIMENT);
         dropWhenSilkTouch(STELLAR_MULCH, STELLAR_SEDIMENT);
-        dropWhenSilkTouch(NUCLEOSYNTHESEED, NUCLEIC_FISSUREROOT);
 
         add(STELLAR_FARMLAND, createSingleItemTableWithSilkTouch(STELLAR_MULCH, STELLAR_SEDIMENT));
         add(STARDUST_BLOCK, block -> createSingleItemTableWithSilkTouch(block, OperationStarcleaveItems.STARDUST_CLUSTER, UniformGenerator.between(1.0F, 4.0F)));
@@ -170,6 +169,19 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                                 )
                         )
         ));
+
+        this.add(
+                NUCLEOSYNTHESEED,
+                block -> this.createSilkTouchDispatchTable(
+                        block,
+                        this.applyExplosionDecay(
+                                block,
+                                LootItem.lootTableItem(OperationStarcleaveItems.OURANIC_CHIP)
+                                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 4.0F)))
+                                        .apply(ApplyBonusCount.addUniformBonusCount(fortune, 2))
+                        )
+                )
+        );
 
         addClusterDrops(registryLookup, CELESTIAL_OPAL_CLUSTER, OperationStarcleaveItems.CELESTIAL_OPAL_SHARD);
         addClusterDrops(registryLookup, CELESTIAL_OPAL_SPIRE, OperationStarcleaveItems.CELESTIAL_OPAL_SHARD);

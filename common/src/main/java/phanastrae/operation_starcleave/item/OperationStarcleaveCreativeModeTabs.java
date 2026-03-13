@@ -147,6 +147,8 @@ public class OperationStarcleaveCreativeModeTabs {
 
                 POLISHED_CELESTIAL_OPAL_PILLAR,
 
+                OURANIC_CHIP,
+
                 NUCLEOSYNTHESEED,
                 NUCLEIC_FISSUREROOT,
                 NUCLEIC_FISSURERIND,
@@ -386,7 +388,9 @@ public class OperationStarcleaveCreativeModeTabs {
         // Ingredients
         helper.addAfter(Items.NETHERITE_INGOT, INGREDIENTS,
                 BISMUTH_FLAKE,
-                STARFLAKED_BISMUTH
+                STARFLAKED_BISMUTH,
+
+                OURANIC_CHIP
         );
         helper.addAfter(Items.AMETHYST_SHARD, INGREDIENTS,
                 CELESTIAL_OPAL_SHARD
