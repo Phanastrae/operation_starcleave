@@ -79,6 +79,20 @@ public class OperationStarcleaveItems {
     public static final Item STRIPED_NUCLEIC_FISSURERIND = registerBlockItem(OperationStarcleaveBlocks.STRIPED_NUCLEIC_FISSURERIND);
     public static final Item NUCLEIC_FISSURELEAVES = registerBlockItem(OperationStarcleaveBlocks.NUCLEIC_FISSURELEAVES);
 
+    public static final Item OURANIC_CHIP_BLOCK = registerBlockItem(OperationStarcleaveBlocks.OURANIC_CHIP_BLOCK);
+    public static final Item OURANIC_CHIP_STAIRS = registerBlockItem(OperationStarcleaveBlocks.OURANIC_CHIP_STAIRS);
+    public static final Item OURANIC_CHIP_SLAB = registerBlockItem(OperationStarcleaveBlocks.OURANIC_CHIP_SLAB);
+    public static final Item OURANIC_CHIP_WALL = registerBlockItem(OperationStarcleaveBlocks.OURANIC_CHIP_WALL);
+
+    public static final Item CHISELED_OURANIC_CHIP_BLOCK = registerBlockItem(OperationStarcleaveBlocks.CHISELED_OURANIC_CHIP_BLOCK);
+
+    public static final Item OURANIC_BRICKS = registerBlockItem(OperationStarcleaveBlocks.OURANIC_BRICKS);
+    public static final Item OURANIC_BRICK_STAIRS = registerBlockItem(OperationStarcleaveBlocks.OURANIC_BRICK_STAIRS);
+    public static final Item OURANIC_BRICK_SLAB = registerBlockItem(OperationStarcleaveBlocks.OURANIC_BRICK_SLAB);
+    public static final Item OURANIC_BRICK_WALL = registerBlockItem(OperationStarcleaveBlocks.OURANIC_BRICK_WALL);
+
+    public static final Item OURANIC_PILLAR = registerBlockItem(OperationStarcleaveBlocks.OURANIC_PILLAR);
+
     public static final Item COAGULATED_PLASMA = registerBlockItem((OperationStarcleaveBlocks.COAGULATED_PLASMA));
     public static final Item PLASMA_ICE = registerBlockItem((OperationStarcleaveBlocks.PLASMA_ICE));
 

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_ouranic_chip_slab": {
+      "conditions": {
+        "items": [
+          {
+            "items": "operation_starcleave:ouranic_chip_slab"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "operation_starcleave:chiseled_ouranic_chip_block"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_ouranic_chip_slab"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "operation_starcleave:chiseled_ouranic_chip_block"
+    ]
+  }
+}

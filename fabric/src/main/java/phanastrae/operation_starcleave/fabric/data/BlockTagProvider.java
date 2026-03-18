@@ -40,7 +40,10 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
                 OperationStarcleaveBlockFamilies.CELESTIAL_OPAL_BLOCK,
                 OperationStarcleaveBlockFamilies.POLISHED_CELESTIAL_OPAL_BLOCK,
-                OperationStarcleaveBlockFamilies.POLISHED_CELESTIAL_OPAL_BRICKS
+                OperationStarcleaveBlockFamilies.POLISHED_CELESTIAL_OPAL_BRICKS,
+
+                OperationStarcleaveBlockFamilies.OURANIC_CHIP_BLOCK,
+                OperationStarcleaveBlockFamilies.OURANIC_BRICKS
         );
 
         addFamiliesToTag(BlockTags.MINEABLE_WITH_PICKAXE,
@@ -55,17 +58,28 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
                 OperationStarcleaveBlockFamilies.CELESTIAL_OPAL_BLOCK,
                 OperationStarcleaveBlockFamilies.POLISHED_CELESTIAL_OPAL_BLOCK,
-                OperationStarcleaveBlockFamilies.POLISHED_CELESTIAL_OPAL_BRICKS
+                OperationStarcleaveBlockFamilies.POLISHED_CELESTIAL_OPAL_BRICKS,
+
+                OperationStarcleaveBlockFamilies.OURANIC_CHIP_BLOCK,
+                OperationStarcleaveBlockFamilies.OURANIC_BRICKS
         );
         addFamiliesToTag(BlockTags.MINEABLE_WITH_SHOVEL,
                 OperationStarcleaveBlockFamilies.STARDUST_BRICKS,
                 OperationStarcleaveBlockFamilies.STELLAR_TILES
+        );
+        addFamiliesToTag(BlockTags.MINEABLE_WITH_AXE,
+                OperationStarcleaveBlockFamilies.OURANIC_CHIP_BLOCK,
+                OperationStarcleaveBlockFamilies.OURANIC_BRICKS
         );
         addFamiliesToTag(BlockTags.NEEDS_STONE_TOOL,
                 OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_BLOCK,
                 OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_BRICKS,
                 OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_TILES,
                 OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_MOSAIC
+        );
+        addFamiliesToTag(BlockTags.NEEDS_IRON_TOOL,
+                OperationStarcleaveBlockFamilies.OURANIC_CHIP_BLOCK,
+                OperationStarcleaveBlockFamilies.OURANIC_BRICKS
         );
         addFamiliesToTag(BlockTags.CRYSTAL_SOUND_BLOCKS,
                 OperationStarcleaveBlockFamilies.CELESTIAL_OPAL_BLOCK,
@@ -141,7 +155,9 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         MULCHBORNE_TUFT,
                         SHORT_HOLY_MOSS,
                         BISREEDS,
-                        NUCLEOSYNTHESEED
+                        NUCLEOSYNTHESEED,
+
+                        OURANIC_PILLAR
                 );
 
         getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_HOE)
@@ -183,7 +199,9 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         MEDIUM_CELESTIAL_OPAL_BUD,
                         SMALL_CELESTIAL_OPAL_BUD,
 
-                        POLISHED_CELESTIAL_OPAL_PILLAR
+                        POLISHED_CELESTIAL_OPAL_PILLAR,
+
+                        OURANIC_PILLAR
                 );
 
         getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_SHOVEL)
@@ -227,7 +245,10 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         getOrCreateTagBuilder(BlockTags.NEEDS_IRON_TOOL)
                 .addOptionalTag(OperationStarcleaveBlockTags.NUCLEIC_FISSUREROOTS)
                 .add(
-                        NUCLEOSYNTHESEED
+                        NUCLEOSYNTHESEED,
+
+                        OURANIC_BRICKS,
+                        OURANIC_PILLAR
                 );
 
         getOrCreateTagBuilder(BlockTags.NEEDS_STONE_TOOL)

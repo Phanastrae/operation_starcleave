@@ -78,6 +78,20 @@ public class OperationStarcleaveBlockFamilies {
             .wall(OperationStarcleaveBlocks.POLISHED_CELESTIAL_OPAL_BRICK_WALL)
             .getFamily();
 
+    public static final BlockFamily OURANIC_CHIP_BLOCK = familyBuilder(OperationStarcleaveBlocks.OURANIC_CHIP_BLOCK)
+            .stairs(OperationStarcleaveBlocks.OURANIC_CHIP_STAIRS)
+            .slab(OperationStarcleaveBlocks.OURANIC_CHIP_SLAB)
+            .wall(OperationStarcleaveBlocks.OURANIC_CHIP_WALL)
+            .chiseled(OperationStarcleaveBlocks.CHISELED_OURANIC_CHIP_BLOCK)
+            .polished(OperationStarcleaveBlocks.OURANIC_BRICKS)
+            .getFamily();
+
+    public static final BlockFamily OURANIC_BRICKS = familyBuilder(OperationStarcleaveBlocks.OURANIC_BRICKS)
+            .stairs(OperationStarcleaveBlocks.OURANIC_BRICK_STAIRS)
+            .slab(OperationStarcleaveBlocks.OURANIC_BRICK_SLAB)
+            .wall(OperationStarcleaveBlocks.OURANIC_BRICK_WALL)
+            .getFamily();
+
     public static BlockFamily.Builder familyBuilder(Block baseBlock) {
         BlockFamily.Builder builder = new BlockFamily.Builder(baseBlock);
         BlockFamily blockFamily = STARCLEAVE_MAP.put(baseBlock, builder.getFamily());

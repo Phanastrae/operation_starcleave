@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "operation_starcleave:block/ouranic_bricks",
+    "side": "operation_starcleave:block/ouranic_bricks",
+    "top": "operation_starcleave:block/ouranic_bricks"
+  }
+}

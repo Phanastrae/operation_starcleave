@@ -58,7 +58,10 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
 
                 OperationStarcleaveBlockFamilies.CELESTIAL_OPAL_BLOCK,
                 OperationStarcleaveBlockFamilies.POLISHED_CELESTIAL_OPAL_BLOCK,
-                OperationStarcleaveBlockFamilies.POLISHED_CELESTIAL_OPAL_BRICKS
+                OperationStarcleaveBlockFamilies.POLISHED_CELESTIAL_OPAL_BRICKS,
+
+                OperationStarcleaveBlockFamilies.OURANIC_CHIP_BLOCK,
+                OperationStarcleaveBlockFamilies.OURANIC_BRICKS
         );
 
         HolderLookup.RegistryLookup<Enchantment> registryLookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
@@ -99,7 +102,9 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                 MUCKY_SINGUT_COIL,
                 MUCKY_SINGUT_BLOCK,
                 CLEANSED_SINGUT_COIL,
-                CLEANSED_SINGUT_BLOCK
+                CLEANSED_SINGUT_BLOCK,
+
+                OURANIC_PILLAR
         );
 
         forEach(this::dropPottedContents,

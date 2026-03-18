@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "operation_starcleave:block/ouranic_chip_slab"
+    },
+    "type=double": {
+      "model": "operation_starcleave:block/ouranic_chip_block"
+    },
+    "type=top": {
+      "model": "operation_starcleave:block/ouranic_chip_slab_top"
+    }
+  }
+}

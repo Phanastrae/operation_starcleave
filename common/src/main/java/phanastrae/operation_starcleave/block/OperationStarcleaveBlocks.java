@@ -465,6 +465,57 @@ public class OperationStarcleaveBlocks {
             )
     );
 
+    public static final Block OURANIC_CHIP_BLOCK = register(
+            "ouranic_chip_block",
+            new OuranicBlock(properties()
+                    .strength(2.5F, 5.0F)
+                    .mapColor(DyeColor.LIME)
+                    .instrument(BASEDRUM)
+                    .sound(COPPER)
+                    .lightLevel(constant(12))
+                    .requiresCorrectToolForDrops()
+            )
+    );
+    public static final Block OURANIC_CHIP_STAIRS = register(
+            "ouranic_chip_stairs",
+            stairsOf(OURANIC_CHIP_BLOCK, OuranicStairBlock::new)
+    );
+    public static final Block OURANIC_CHIP_SLAB = register(
+            "ouranic_chip_slab",
+            slabOf(OURANIC_CHIP_BLOCK, OuranicSlabBlock::new)
+    );
+    public static final Block OURANIC_CHIP_WALL = register(
+            "ouranic_chip_wall",
+            wallOf(OURANIC_CHIP_BLOCK, OuranicWallBlock::new)
+    );
+
+    public static final Block CHISELED_OURANIC_CHIP_BLOCK = register(
+            "chiseled_ouranic_chip_block",
+            new OuranicBlock(BlockBehaviour.Properties.ofFullCopy(OURANIC_CHIP_BLOCK))
+    );
+
+    public static final Block OURANIC_BRICKS = register(
+            "ouranic_bricks",
+            new OuranicBlock(BlockBehaviour.Properties.ofFullCopy(OURANIC_CHIP_BLOCK))
+    );
+    public static final Block OURANIC_BRICK_STAIRS = register(
+            "ouranic_brick_stairs",
+            stairsOf(OURANIC_BRICKS, OuranicStairBlock::new)
+    );
+    public static final Block OURANIC_BRICK_SLAB = register(
+            "ouranic_brick_slab",
+            slabOf(OURANIC_BRICKS, OuranicSlabBlock::new)
+    );
+    public static final Block OURANIC_BRICK_WALL = register(
+            "ouranic_brick_wall",
+            wallOf(OURANIC_BRICKS, OuranicWallBlock::new)
+    );
+
+    public static final Block OURANIC_PILLAR = register(
+            "ouranic_pillar",
+            new OuranicPillarBlock(BlockBehaviour.Properties.ofFullCopy(OURANIC_CHIP_BLOCK))
+    );
+
     public static final Block COAGULATED_PLASMA = register(
             "coagulated_plasma",
             new CoagulatedPlasmaBlock(properties()

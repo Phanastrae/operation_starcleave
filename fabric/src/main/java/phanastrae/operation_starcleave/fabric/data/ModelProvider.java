@@ -69,7 +69,8 @@ public class ModelProvider extends FabricModelProvider {
 
         forEach(block -> BMG.createRotatedPillarWithHorizontalVariant(block, TexturedModel.COLUMN_ALT, TexturedModel.COLUMN_HORIZONTAL_ALT),
                 MUCKY_SINGUT_COIL,
-                CLEANSED_SINGUT_COIL
+                CLEANSED_SINGUT_COIL,
+                OURANIC_PILLAR
         );
 
         BMG.woodProvider(STARBLEACHED_LOG).logWithHorizontal(STARBLEACHED_LOG).wood(STARBLEACHED_WOOD);

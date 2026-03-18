@@ -25,6 +25,8 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import phanastrae.operation_starcleave.block.tag.OperationStarcleaveBlockTags;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveDamageTypes;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityAttachment;
@@ -35,6 +37,7 @@ import phanastrae.operation_starcleave.world.OperationStarcleaveGameRules;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
     public static final MapCodec<NucleosyntheseedBlock> CODEC = simpleCodec(NucleosyntheseedBlock::new);
@@ -121,34 +124,111 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
 
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        spawnLightningParticles(pos, random, level, state, true, 0.3);
+    }
+
+
+    public static void spawnLightningParticles(
+            BlockPos pos, RandomSource random, Level level, BlockState state
+    ) {
+        spawnLightningParticles(pos, random, level, state, false);
+    }
+
+
+    public static void spawnLightningParticles(
+            BlockPos pos, RandomSource random, Level level, BlockState state, boolean skipSelfCollisionCheck
+    ) {
+        spawnLightningParticles(pos, random, level, state, skipSelfCollisionCheck, 0.5);
+    }
+
+    public static void spawnLightningParticles(
+            BlockPos pos, RandomSource random, Level level, BlockState state, boolean skipSelfCollisionCheck, double normalAngleContribution
+    ) {
         Direction direction = Direction.getRandom(random);
 
         BlockPos adjPos = pos.relative(direction);
         BlockState adjState = level.getBlockState(adjPos);
         if (!adjState.isFaceSturdy(level, pos, direction.getOpposite())) {
             Vec3i normal = direction.getNormal();
+            double rx = random.nextFloat();
+            double ry = random.nextFloat();
+            double rz = random.nextFloat();
 
-            double xOffset = normal.getX() == 0 ? random.nextFloat() - 0.5 : normal.getX() * 0.5;
-            double yOffset = normal.getY() == 0 ? random.nextFloat() - 0.5 : normal.getY() * 0.5;
-            double zOffset = normal.getZ() == 0 ? random.nextFloat() - 0.5 : normal.getZ() * 0.5;
-
-            double xSpeed = xOffset * 0.7 + normal.getX() * 0.3;
-            double ySpeed = yOffset * 0.7 + normal.getY() * 0.3;
-            double zSpeed = zOffset * 0.7 + normal.getZ() * 0.3;
-
-            double speed = Math.sqrt(xSpeed * xSpeed + ySpeed * ySpeed + zSpeed * zSpeed);
-            double targetSpeed = 0.5F + 0.7F * random.nextFloat();
-
-            level.addParticle(
-                    OperationStarcleaveParticleTypes.NUCLEO_LIGHTNING,
-                    pos.getX() + 0.5 + xOffset,
-                    pos.getY() + 0.5 + yOffset,
-                    pos.getZ() + 0.5 + zOffset,
-                    xSpeed * targetSpeed / speed,
-                    ySpeed * targetSpeed / speed,
-                    zSpeed * targetSpeed / speed
-            );
+            VoxelShape shape = state.getVisualShape(level, pos, CollisionContext.empty());
+            double midX = (shape.min(Direction.Axis.X) + shape.max(Direction.Axis.X)) * 0.5;
+            double midY = (shape.min(Direction.Axis.Y) + shape.max(Direction.Axis.Y)) * 0.5;
+            double midZ = (shape.min(Direction.Axis.Z) + shape.max(Direction.Axis.Z)) * 0.5;
+            shape.forAllBoxes((x1, y1, z1, x2, y2, z2) -> spawnLightningParticles(
+                    pos, random, level, skipSelfCollisionCheck, shape, normalAngleContribution,
+                    normal, rx, ry, rz, midX, midY, midZ,
+                    x1, y1, z1, x2, y2, z2
+            ));
         }
+    }
+
+    public static boolean pointInsideShape(VoxelShape shape, double x, double y, double z) {
+        AtomicBoolean bl = new AtomicBoolean(false);
+        shape.forAllBoxes((x1, y1, z1, x2, y2, z2) -> {
+            if (bl.get()) return;
+            if (pointInsideBox(x, y, z, x1, y1, z1, x2, y2, z2)) {
+                bl.set(true);
+            }
+        });
+        return bl.get();
+    }
+
+    public static boolean pointInsideBox(double x, double y, double z, double x1, double y1, double z1, double x2, double y2, double z2) {
+        if (x < x1 || x2 < x) return false;
+        if (y < y1 || y2 < x) return false;
+        if (z < z1 || z2 < x) return false;
+
+        return true;
+    }
+
+    public static void spawnLightningParticles(
+            BlockPos pos, RandomSource random, Level level, boolean skipSelfCollisionCheck, VoxelShape shape, double normalAngleContribution,
+            Vec3i normal, double rx, double ry, double rz, double midX, double midY, double midZ,
+            double x1, double y1, double z1, double x2, double y2, double z2
+    ) {
+        if (!pointInsideBox(rx, ry, rz, x1, y1, z1, x2, y2, z2)) {
+            return;
+        }
+
+        int nx = normal.getX();
+        int ny = normal.getX();
+        int nz = normal.getX();
+
+        double xOffset = nx == 0 ? rx : x1 + (nx + 1) * 0.5 * (x2 - x1);
+        double yOffset = ny == 0 ? ry : y1 + (ny + 1) * 0.5 * (y2 - y1);
+        double zOffset = nz == 0 ? rz : z1 + (nz + 1) * 0.5 * (z2 - z1);
+
+        // expand point outwards slightly from middle
+        if (!skipSelfCollisionCheck && pointInsideShape(shape,
+                (xOffset - midX) * 1.01 + midX,
+                (yOffset - midY) * 1.01 + midY,
+                (zOffset - midZ) * 1.01 + midZ
+        )) {
+            // avoid any self-intersections
+            return;
+        }
+
+        double offsetAngleContribution = 1.0 - normalAngleContribution;
+        double xSpeed = (xOffset - midX) * offsetAngleContribution + nx * normalAngleContribution;
+        double ySpeed = (yOffset - midY) * offsetAngleContribution + ny * normalAngleContribution;
+        double zSpeed = (zOffset - midZ) * offsetAngleContribution + nz * normalAngleContribution;
+
+        double speed = Math.sqrt(xSpeed * xSpeed + ySpeed * ySpeed + zSpeed * zSpeed);
+        double targetSpeed = 0.5F + 0.7F * random.nextFloat();
+
+        level.addParticle(
+                OperationStarcleaveParticleTypes.NUCLEO_LIGHTNING,
+                pos.getX() + xOffset,
+                pos.getY() + yOffset,
+                pos.getZ() + zOffset,
+                xSpeed * targetSpeed / speed,
+                ySpeed * targetSpeed / speed,
+                zSpeed * targetSpeed / speed
+        );
     }
 
     public static void trySpread(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, boolean forceGrowth) {

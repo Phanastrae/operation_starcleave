@@ -89,6 +89,9 @@ public class RecipeProvider extends FabricRecipeProvider {
 
         savePillar(exporter, STARFLAKED_BISMUTH_PILLAR, STARFLAKED_BISMUTH_BLOCK);
         savePillar(exporter, POLISHED_CELESTIAL_OPAL_PILLAR, POLISHED_CELESTIAL_OPAL_BLOCK);
+        savePillar(exporter, OURANIC_PILLAR, OURANIC_CHIP_BLOCK);
+
+        twoByTwoPacker(exporter, RecipeCategory.BUILDING_BLOCKS, OURANIC_CHIP_BLOCK, OURANIC_CHIP);
 
         eightCircle(exporter, MUCKY_SINGUT_COIL, MUCKY_SINGUTS, 4);
         twoByTwoPacker(exporter, RecipeCategory.BUILDING_BLOCKS, MUCKY_SINGUT_BLOCK, MUCKY_SINGUT_COIL, 4);
@@ -214,6 +217,21 @@ public class RecipeProvider extends FabricRecipeProvider {
 
         // stellar tiles
         scBlocks(exporter, STELLAR_TILE_SLAB, 2, STELLAR_TILES);
+
+        // ouranic chip blocks
+        scBlocks(exporter, OURANIC_CHIP_STAIRS, 1, OURANIC_CHIP_BLOCK);
+        scBlocks(exporter, OURANIC_CHIP_SLAB, 2, OURANIC_CHIP_BLOCK);
+        scWalls(exporter, OURANIC_CHIP_WALL, 1, OURANIC_CHIP_BLOCK);
+
+        scBlocks(exporter, CHISELED_OURANIC_CHIP_BLOCK, 1, OURANIC_CHIP_BLOCK);
+        scBlocks(exporter, OURANIC_PILLAR, 1, OURANIC_CHIP_BLOCK);
+
+        // ouranic bricks
+        scBlocks(exporter, OURANIC_BRICKS, 1, OURANIC_CHIP_BLOCK);
+
+        scBlocks(exporter, OURANIC_BRICK_STAIRS, 1, OURANIC_BRICKS, OURANIC_CHIP_BLOCK);
+        scBlocks(exporter, OURANIC_BRICK_SLAB, 2, OURANIC_BRICKS, OURANIC_CHIP_BLOCK);
+        scWalls(exporter, OURANIC_BRICK_WALL, 1, OURANIC_BRICKS, OURANIC_CHIP_BLOCK);
         // endregion
 
         // region smithing

@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "operation_starcleave:ouranic_chip_block"
+  },
+  "result": {
+    "count": 1,
+    "id": "operation_starcleave:ouranic_brick_stairs"
+  }
+}

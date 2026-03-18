@@ -147,14 +147,28 @@ public class OperationStarcleaveCreativeModeTabs {
 
                 POLISHED_CELESTIAL_OPAL_PILLAR,
 
-                OURANIC_CHIP,
-
                 NUCLEOSYNTHESEED,
                 NUCLEIC_FISSUREROOT,
                 NUCLEIC_FISSURERIND,
                 STRIPED_NUCLEIC_FISSUREROOT,
                 STRIPED_NUCLEIC_FISSURERIND,
                 NUCLEIC_FISSURELEAVES,
+
+                OURANIC_CHIP,
+
+                OURANIC_CHIP_BLOCK,
+                OURANIC_CHIP_STAIRS,
+                OURANIC_CHIP_SLAB,
+                OURANIC_CHIP_WALL,
+
+                CHISELED_OURANIC_CHIP_BLOCK,
+
+                OURANIC_BRICKS,
+                OURANIC_BRICK_STAIRS,
+                OURANIC_BRICK_SLAB,
+                OURANIC_BRICK_WALL,
+
+                OURANIC_PILLAR,
 
                 STARBLEACHED_PEARL,
                 STARFRUIT,
@@ -268,6 +282,20 @@ public class OperationStarcleaveCreativeModeTabs {
                 POLISHED_CELESTIAL_OPAL_BRICK_WALL,
 
                 POLISHED_CELESTIAL_OPAL_PILLAR,
+
+                OURANIC_CHIP_BLOCK,
+                OURANIC_CHIP_STAIRS,
+                OURANIC_CHIP_SLAB,
+                OURANIC_CHIP_WALL,
+
+                CHISELED_OURANIC_CHIP_BLOCK,
+
+                OURANIC_BRICKS,
+                OURANIC_BRICK_STAIRS,
+                OURANIC_BRICK_SLAB,
+                OURANIC_BRICK_WALL,
+
+                OURANIC_PILLAR,
 
                 MUCKY_SINGUT_BLOCK,
                 MUCKY_SINGUT_COIL,
