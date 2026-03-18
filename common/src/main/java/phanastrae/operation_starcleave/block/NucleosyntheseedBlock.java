@@ -10,6 +10,8 @@ import net.minecraft.stats.Stats;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -45,6 +47,8 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
     public static final IntegerProperty AGE = BlockStateProperties.AGE_15;
     public static final BooleanProperty GROWS_DOWN = BooleanProperty.create("grows_down");
 
+    private final IntProvider xpRange;
+
     @Override
     protected MapCodec<? extends NucleosyntheseedBlock> codec() {
         return CODEC;
@@ -57,6 +61,8 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
                         .setValue(AGE, 0)
                         .setValue(GROWS_DOWN, true)
         );
+
+        this.xpRange = UniformInt.of(2, 5);
     }
 
     @Override
@@ -108,6 +114,14 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
     }
 
     @Override
+    protected void spawnAfterBreak(BlockState state, ServerLevel level, BlockPos pos, ItemStack stack, boolean dropExperience) {
+        super.spawnAfterBreak(state, level, pos, stack, dropExperience);
+        if (dropExperience) {
+            this.tryDropExperience(level, pos, stack, this.xpRange);
+        }
+    }
+
+    @Override
     public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
         return true;
     }
@@ -126,7 +140,6 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         spawnLightningParticles(pos, random, level, state, true, 0.3);
     }
-
 
     public static void spawnLightningParticles(
             BlockPos pos, RandomSource random, Level level, BlockState state
