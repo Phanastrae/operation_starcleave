@@ -192,8 +192,8 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
 
     public static boolean pointInsideBox(double x, double y, double z, double x1, double y1, double z1, double x2, double y2, double z2) {
         if (x < x1 || x2 < x) return false;
-        if (y < y1 || y2 < x) return false;
-        if (z < z1 || z2 < x) return false;
+        if (y < y1 || y2 < y) return false;
+        if (z < z1 || z2 < z) return false;
 
         return true;
     }
@@ -208,8 +208,8 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
         }
 
         int nx = normal.getX();
-        int ny = normal.getX();
-        int nz = normal.getX();
+        int ny = normal.getY();
+        int nz = normal.getZ();
 
         double xOffset = nx == 0 ? rx : x1 + (nx + 1) * 0.5 * (x2 - x1);
         double yOffset = ny == 0 ? ry : y1 + (ny + 1) * 0.5 * (y2 - y1);
@@ -217,9 +217,9 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
 
         // expand point outwards slightly from middle
         if (!skipSelfCollisionCheck && pointInsideShape(shape,
-                (xOffset - midX) * 1.01 + midX,
-                (yOffset - midY) * 1.01 + midY,
-                (zOffset - midZ) * 1.01 + midZ
+                xOffset + 0.01 * nx,
+                yOffset + 0.01 * ny,
+                zOffset + 0.01 * nz
         )) {
             // avoid any self-intersections
             return;
