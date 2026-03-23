@@ -195,7 +195,6 @@ public class OperationStarcleaveBlocks {
                     .lightLevel(constant(15))
                     .replaceable()
                     .instabreak()
-                    .noLootTable()
                     .noOcclusion()
             )
     );
