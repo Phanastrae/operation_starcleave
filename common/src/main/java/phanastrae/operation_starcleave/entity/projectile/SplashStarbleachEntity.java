@@ -62,10 +62,21 @@ public class SplashStarbleachEntity extends ThrowableItemProjectile implements I
         if(world.isClientSide) {
             Vec3 vel = this.getDeltaMovement();
             RandomSource random = this.random;
-            for(int i = 0; i < 6; i++) {
+            for(int i = 0; i < 4; i++) {
                 world.addParticle(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER,
                         this.getX(), this.getY(), this.getZ(),
-                        vel.x * -0.2 + random.nextFloat() * 0.06 - 0.03, vel.y * -0.2 + random.nextFloat() * 0.06 - 0.03, vel.z * -0.2 + random.nextFloat() * 0.06 - 0.03);
+                        vel.x * -0.2 + random.nextFloat() * 0.06 - 0.03,
+                        vel.y * -0.2 + random.nextFloat() * 0.06 - 0.03,
+                        vel.z * -0.2 + random.nextFloat() * 0.06 - 0.03
+                );
+            }
+            if(random.nextBoolean()) {
+                world.addParticle(OperationStarcleaveParticleTypes.STARBLEACH_SWIRL,
+                        this.getX(), this.getY(), this.getZ(),
+                        vel.x * -0.1 + random.nextFloat() * 0.04 - 0.02,
+                        vel.y * -0.1 + random.nextFloat() * 0.04 - 0.01,
+                        vel.z * -0.1 + random.nextFloat() * 0.04 - 0.02
+                );
             }
         }
         super.tick();
@@ -127,7 +138,21 @@ public class SplashStarbleachEntity extends ThrowableItemProjectile implements I
                     }
                 }
             }
-            serverWorld.sendParticles(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER, blockPos.getX()+0.5, blockPos.getY()+0.5, blockPos.getZ()+0.5, 400, 2, 1, 2, 0.01);
+
+            double x = blockPos.getX() + 0.5;
+            double y = blockPos.getY() + 0.5;
+            double z = blockPos.getZ() + 0.5;
+            serverWorld.sendParticles(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER, x, y, z,
+                    60,
+                    1, 0.5, 1,
+                    0.02
+            );
+            serverWorld.sendParticles(OperationStarcleaveParticleTypes.STARBLEACH_SWIRL, x, y, z,
+                    25,
+                    0.7, 0.5, 0.7,
+                    0.08
+            );
+
             world.playSeededSound(null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), SoundEvents.SPLASH_POTION_BREAK, SoundSource.BLOCKS, 2f, 1.2F + 0.3F * world.random.nextFloat(), world.random.nextLong());
         }
     }

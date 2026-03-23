@@ -3,10 +3,12 @@ package phanastrae.operation_starcleave.block;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.cauldron.CauldronInteraction;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -27,7 +29,6 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveDamageTypes;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
@@ -82,7 +83,7 @@ public class StarbleachCauldronBlock extends AbstractCauldronBlock {
 
     @Override
     protected double getContentHeight(BlockState state) {
-        return (8.0 + state.getValue(LEVEL_7)) / 16.0;
+        return getFluidHeight(state);
     }
 
     @Override
@@ -114,8 +115,9 @@ public class StarbleachCauldronBlock extends AbstractCauldronBlock {
             }
 
             entity.hurt(OperationStarcleaveDamageTypes.source(world, OperationStarcleaveDamageTypes.INTERNAL_STARBLEACHING), 0.25f * state.getValue(LEVEL_7));
-            if (!entity.isAlive() && world instanceof ServerLevel serverWorld) {
-                spawnParticles(serverWorld, pos);
+            if (!entity.isAlive() && world instanceof ServerLevel serverLevel) {
+                // spawn particles on entity death
+                spawnParticles(serverLevel, pos, getFluidHeight(state));
             }
         }
     }
@@ -203,13 +205,44 @@ public class StarbleachCauldronBlock extends AbstractCauldronBlock {
         return recipeEntryOptional.map(RecipeHolder::value).orElse(null);
     }
 
-    public static void spawnParticles(ServerLevel world, BlockPos blockPos) {
-        Vec3 pos = Vec3.atCenterOf(blockPos);
-        world.sendParticles(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER,
-                pos.x(), pos.y(), pos.z(),
-                400,
-                0.2, 0.4, 0.2,
-                0.005);
+    public static void spawnParticles(ServerLevel level, BlockPos blockPos, double contentHeight) {
+        double x = blockPos.getX() + 0.5;
+        double y = blockPos.getY() + contentHeight;
+        double z = blockPos.getZ() + 0.5;
+        level.sendParticles(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER, x, y + 0.4, z,
+                60,
+                0.15, 0.6, 0.15,
+                0.005
+        );
+        level.sendParticles(OperationStarcleaveParticleTypes.STARBLEACH_SWIRL, x, y + 0.1, z,
+                6,
+                0.15, 0.2, 0.15,
+                0.02
+        );
+    }
+
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        int starbleachLevel = getStarbleachLevel(state);
+        if(random.nextInt(14 + 3 * (7 - starbleachLevel)) == 0) {
+            double contentHeight = getFluidHeight(starbleachLevel);
+
+            double x = pos.getX() + 0.2 + 0.6 * random.nextFloat();
+            double y = pos.getY() + contentHeight + 0.1 * random.nextFloat();
+            double z = pos.getZ() + 0.2 + 0.6 * random.nextFloat();
+            double vx = random.nextGaussian() * 0.0005;
+            double vy = 0.002 + 0.005 * random.nextFloat();
+            double vz = random.nextGaussian() * 0.0005;
+
+            SimpleParticleType particleType;
+            if (random.nextInt(4) == 0) {
+                particleType = OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER;
+            } else {
+                particleType = OperationStarcleaveParticleTypes.STARBLEACH_SWIRL;
+            }
+
+            level.addParticle(particleType, x, y, z, vx, vy, vz);
+        }
     }
 
     private static CauldronInteraction getBottleFillingBehavior() {
@@ -274,7 +307,7 @@ public class StarbleachCauldronBlock extends AbstractCauldronBlock {
 
         if (spawnParticles) {
             if (world instanceof ServerLevel serverWorld) {
-                spawnParticles(serverWorld, blockPos);
+                spawnParticles(serverWorld, blockPos, getFluidHeight(state));
             }
         }
     }
@@ -298,6 +331,14 @@ public class StarbleachCauldronBlock extends AbstractCauldronBlock {
         } else {
             return false;
         }
+    }
+
+    public static double getFluidHeight(BlockState state) {
+        return getFluidHeight(getStarbleachLevel(state));
+    }
+
+    public static double getFluidHeight(int starbleachLevel) {
+        return (8.0 + starbleachLevel) / 16.0;
     }
 
     public static int getStarbleachLevel(BlockState state) {

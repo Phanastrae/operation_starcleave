@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -157,13 +158,22 @@ public class Starbleach {
                 double x = blockPos.getX() + 0.5 + 0.5 * v.getX();
                 double y = blockPos.getY() + 0.5 + 0.5 * v.getY();
                 double z = blockPos.getZ() + 0.5 + 0.5 * v.getZ();
-                level.sendParticles(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER, x, y, z, particleCount,
-                        v.getX() == 0 ? 0.5 : 0,
-                        v.getY() == 0 ? 0.5 : 0,
-                        v.getZ() == 0 ? 0.5 : 0,
-                        0.05);
+
+                // TODO adjust these counts perhaps to not just be arbitrary proportions of particleCount
+                spawnParticles(level, OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER, x, y, z, v, particleCount / 10, 0.05);
+                spawnParticles(level, OperationStarcleaveParticleTypes.STARBLEACH_SWIRL, x, y, z, v, particleCount / 15, 0.035);
             }
         }
+    }
+
+    private static void spawnParticles(ServerLevel level, SimpleParticleType type, double x, double y, double z, Vec3i normal, int count, double speed) {
+        level.sendParticles(type, x, y, z,
+                count,
+                normal.getX() == 0 ? 0.5 : 0,
+                normal.getY() == 0 ? 0.5 : 0,
+                normal.getZ() == 0 ? 0.5 : 0,
+                speed
+        );
     }
 
     public enum StarbleachTarget {
