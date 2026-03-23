@@ -13,6 +13,7 @@ public class OperationStarcleaveParticleTypes {
     public static final SimpleParticleType FIRMAMENT_GLIMMER = simple(false);
     public static final SimpleParticleType GLIMMER_SMOKE = simple(false);
     public static final SimpleParticleType LARGE_GLIMMER_SMOKE = simple(false);
+    public static final SimpleParticleType STARBLEACH_SWIRL = simple(false);
     public static final SimpleParticleType PLASMA_DUST = simple(false);
     public static final SimpleParticleType NUCLEAR_SMOKE = simple(false);
     public static final SimpleParticleType LARGE_NUCLEAR_SMOKE = simple(false);
@@ -22,6 +23,7 @@ public class OperationStarcleaveParticleTypes {
         r.accept(id("firmament_glimmer"), FIRMAMENT_GLIMMER);
         r.accept(id("glimmer_smoke"), GLIMMER_SMOKE);
         r.accept(id("large_glimmer_smoke"), LARGE_GLIMMER_SMOKE);
+        r.accept(id("starbleach_swirl"), STARBLEACH_SWIRL);
         r.accept(id("plasma_dust"), PLASMA_DUST);
         r.accept(id("nuclear_smoke"), NUCLEAR_SMOKE);
         r.accept(id("large_nuclear_smoke"), LARGE_NUCLEAR_SMOKE);

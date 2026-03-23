@@ -14,6 +14,7 @@ public class OperationStarcleaveParticles {
         r.register(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER, FirmamentGlimmerFactory::new);
         r.register(OperationStarcleaveParticleTypes.GLIMMER_SMOKE, GlimmerSmokeFactory::new);
         r.register(OperationStarcleaveParticleTypes.LARGE_GLIMMER_SMOKE, LargeGlimmerSmokeFactory::new);
+        r.register(OperationStarcleaveParticleTypes.STARBLEACH_SWIRL, StarbleachSwirlFactory::new);
         r.register(OperationStarcleaveParticleTypes.PLASMA_DUST, PlasmaDustFactory::new);
         r.register(OperationStarcleaveParticleTypes.NUCLEAR_SMOKE, NuclearSmokeFactory::new);
         r.register(OperationStarcleaveParticleTypes.LARGE_NUCLEAR_SMOKE, LargeNuclearSmokeParticle.LargeNuclearSmokeFactory::new);
@@ -73,6 +74,28 @@ public class OperationStarcleaveParticles {
             if (particle != null) {
                 float ang = clientLevel.random.nextFloat();
                 float baseBrightness = 0.6f + 0.2f * clientLevel.random.nextFloat();
+                float rgbBrightness = (1 - baseBrightness);
+                float red = Mth.sin(ang * Mth.TWO_PI) * rgbBrightness + baseBrightness;
+                float green = Mth.sin((ang + 1 / 3f) * Mth.TWO_PI) * rgbBrightness + baseBrightness;
+                float blue = Mth.sin((ang + 2 / 3f) * Mth.TWO_PI) * rgbBrightness + baseBrightness;
+                particle.setColor(red, green, blue);
+                particle.setParticleSpeed(xSpeed, ySpeed, zSpeed);
+            }
+            return particle;
+        }
+    }
+
+    public static class StarbleachSwirlFactory extends SpellParticle.Provider {
+
+        public StarbleachSwirlFactory(SpriteSet spriteProvider) {
+            super(spriteProvider);
+        }
+
+        public Particle createParticle(SimpleParticleType simpleParticleType, ClientLevel clientLevel, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+            Particle particle = super.createParticle(simpleParticleType, clientLevel, x, y, z, xSpeed, ySpeed, zSpeed);
+            if (particle != null) {
+                float ang = clientLevel.random.nextFloat();
+                float baseBrightness = 0.75f + 0.2f * clientLevel.random.nextFloat();
                 float rgbBrightness = (1 - baseBrightness);
                 float red = Mth.sin(ang * Mth.TWO_PI) * rgbBrightness + baseBrightness;
                 float green = Mth.sin((ang + 1 / 3f) * Mth.TWO_PI) * rgbBrightness + baseBrightness;
