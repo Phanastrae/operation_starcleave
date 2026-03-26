@@ -400,6 +400,11 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         PHLOGISTIC_FIRE
                 );
 
+        getOrCreateTagBuilder(OperationStarcleaveBlockTags.ALSO_PRESERVES_LEAVES)
+                .add(
+                        NUCLEOSYNTHESEED
+                );
+
 
         getOrCreateTagBuilder(OperationStarcleaveBlockTags.STARBLEACHED_LOGS)
                 .add(

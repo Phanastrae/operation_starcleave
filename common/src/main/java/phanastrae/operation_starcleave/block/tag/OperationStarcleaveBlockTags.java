@@ -13,6 +13,7 @@ public class OperationStarcleaveBlockTags {
     public static final TagKey<Block> STARBLEACH_IMMUNE = of("starbleach_immune");
     public static final TagKey<Block> PHLOGISTIC_HYPERFLAMMABLES = of("phlogistic_hyperflammables");
     public static final TagKey<Block> NUCLEOSYNTHESEED_BLAST_IMMUNE = of("nucleosyntheseed_blast_immune");
+    public static final TagKey<Block> ALSO_PRESERVES_LEAVES = of("also_preserves_leaves");
 
     public static final TagKey<Block> STARBLEACHED_LOGS = of("starbleached_logs");
     public static final TagKey<Block> NUCLEIC_FISSUREROOTS = of("nucleic_fissureroots");
