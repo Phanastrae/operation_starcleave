@@ -25,6 +25,7 @@ public class OperationStarcleaveEntityRenderers {
 
         // misc
         r.accept(OperationStarcleaveEntityTypes.NUCLEAR_STORMCLOUD, InvisibleRenderer::new);
+        r.accept(OperationStarcleaveEntityTypes.NUCLEOSYNTHESEED, NucleosyntheseedEntityRenderer::new);
     }
 
     @FunctionalInterface

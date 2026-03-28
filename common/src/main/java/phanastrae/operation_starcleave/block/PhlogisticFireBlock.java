@@ -385,7 +385,7 @@ public class PhlogisticFireBlock extends BaseFireBlock implements SimpleWaterlog
             }
 
             if(blockState.is(OperationStarcleaveBlocks.NUCLEOSYNTHESEED)) {
-                NucleosyntheseedBlock.detonate(level, pos, currentAge);
+                NucleosyntheseedBlock.detonate(level, pos, currentAge, null, true);
             }
         }
     }

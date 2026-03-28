@@ -100,6 +100,16 @@ public class OperationStarcleaveEntityTypes {
                     .updateInterval(2)
                     .build(getStr(NUCLEAR_STORMCLOUD_KEY));
 
+    public static final ResourceLocation NUCLEOSYNTHESEED_KEY = id("nucleosyntheseed");
+    public static final EntityType<NucleosyntheseedEntity> NUCLEOSYNTHESEED =
+            EntityType.Builder.<NucleosyntheseedEntity>of(NucleosyntheseedEntity::new, MobCategory.MISC)
+                    .sized(0.98F, 0.98F)
+                    .eyeHeight(0.15F)
+                    .clientTrackingRange(10)
+                    .updateInterval(4)
+                    .fireImmune()
+                    .build(getStr(NUCLEOSYNTHESEED_KEY));
+
     public static void init(BiConsumer<ResourceLocation, EntityType<?>> r) {
         // mobs
         r.accept(STARCLEAVER_GOLEM_KEY, STARCLEAVER_GOLEM);
@@ -118,6 +128,7 @@ public class OperationStarcleaveEntityTypes {
 
         // misc
         r.accept(NUCLEAR_STORMCLOUD_KEY, NUCLEAR_STORMCLOUD);
+        r.accept(NUCLEOSYNTHESEED_KEY, NUCLEOSYNTHESEED);
     }
 
     public static void registerEntityAttributes(org.apache.logging.log4j.util.BiConsumer<EntityType<? extends LivingEntity>, AttributeSupplier.Builder> r) {

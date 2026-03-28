@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
@@ -14,23 +15,28 @@ import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.*;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.block.tag.OperationStarcleaveBlockTags;
-import phanastrae.operation_starcleave.entity.OperationStarcleaveDamageTypes;
+import phanastrae.operation_starcleave.entity.NucleosyntheseedEntity;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityAttachment;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
@@ -90,7 +96,7 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (player.getAbilities().mayBuild) {
             if (stack.is(OperationStarcleaveItems.PHLOGISTON_SAC)) {
-                detonate(level, pos, 0);
+                detonate(level, pos, 0, null, false);
 
                 Item item = stack.getItem();
                 stack.consume(1, player);
@@ -108,7 +114,8 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
         if (!level.isClientSide) {
             BlockPos pos = hit.getBlockPos();
             if (OperationStarcleaveEntityAttachment.fromEntity(projectile).isOnPhlogisticFire() && projectile.mayInteract(level, pos)) {
-                detonate(level, pos, 0);
+                Entity owner = projectile.getOwner();
+                detonate(level, pos, 0, owner instanceof LivingEntity livingEntity ? livingEntity : null, false);
             }
         }
     }
@@ -389,17 +396,55 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
         }
     }
 
-    public static void detonate(Level level, BlockPos pos, int ignitingFireAge) {
-        // TODO optimise this at some point
+    public static void detonate(Level level, BlockPos pos, int ignitingFireAge, @Nullable LivingEntity entity, boolean replaceWithFire) {
+        if (!level.isClientSide()) {
+            // replace seed with air or fire
+            int newFireAge = Math.min(ignitingFireAge + 3, 6);
+            BlockState replaceState = replaceWithFire ? PhlogisticFireBlock.getStateWithAge(level, pos, newFireAge) : Blocks.AIR.defaultBlockState();
+            level.setBlockAndUpdate(pos, replaceState);
 
-        // replace seed with fire
-        int newFireAge = Math.min(ignitingFireAge + 3, 6);
-        level.setBlockAndUpdate(pos, PhlogisticFireBlock.getStateWithAge(level, pos, newFireAge));
-        // replace nearby hyperflammables (that are not also seeds) with fire
-        instantlyIgniteNearbyHyperflammables(level, pos, newFireAge);
+            // spawn seed entity
+            NucleosyntheseedEntity seed = new NucleosyntheseedEntity(level, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, entity);
+            level.addFreshEntity(seed);
+            level.playSound(null, seed.getX(), seed.getY(), seed.getZ(), SoundEvents.TNT_PRIMED, SoundSource.BLOCKS, 1.0F, 1.0F);
+            level.gameEvent(entity, GameEvent.PRIME_FUSE, pos);
+        }
+    }
 
-        explode(level, pos);
+    public static void instantlyIgniteNearbyHyperflammables(Level level, BlockPos pos, int fireAge) {
+        BlockPos.MutableBlockPos mutableBlockPos = pos.mutable();
 
+        int searchRadius = 3;
+        for (int i = -searchRadius; i <= searchRadius; i++) {
+            mutableBlockPos.setX(pos.getX() + i);
+            for (int j = -searchRadius; j <= searchRadius; j++) {
+                mutableBlockPos.setY(pos.getY() + j);
+                for (int k = -searchRadius; k < searchRadius; k++) {
+                    int distSqr = i * i + j * j + k * k;
+
+                    if (distSqr <= searchRadius * searchRadius) {
+                        mutableBlockPos.setZ(pos.getZ() + k);
+
+                        BlockState currentState = level.getBlockState(mutableBlockPos);
+                        if (currentState.is(OperationStarcleaveBlocks.NUCLEOSYNTHESEED)) {
+                            detonate(level, mutableBlockPos, fireAge, null, true);
+                        } else {
+                            if (currentState.is(OperationStarcleaveBlockTags.PHLOGISTIC_HYPERFLAMMABLES)) {
+                                level.setBlockAndUpdate(mutableBlockPos, PhlogisticFireBlock.getStateWithAge(level, mutableBlockPos, fireAge));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public static void detonate(Level level, BlockPos pos) {
+        // TODO
+        //  - optimise this at some point
+        //  - improve
+        //  - move elsewhere?
+        //  - (re)implement entity damage of some sort
         RandomSource random = level.getRandom();
 
         Set<BlockPos> positions = new HashSet<>();
@@ -543,69 +588,6 @@ public class NucleosyntheseedBlock extends Block implements BonemealableBlock {
             }
         }
         return startPos;
-    }
-
-    public static void instantlyIgniteNearbyHyperflammables(Level level, BlockPos pos, int fireAge) {
-        BlockPos.MutableBlockPos mutableBlockPos = pos.mutable();
-
-        int searchRadius = 3;
-        for (int i = -searchRadius; i <= searchRadius; i++) {
-            mutableBlockPos.setX(pos.getX() + i);
-            for (int j = -searchRadius; j <= searchRadius; j++) {
-                mutableBlockPos.setY(pos.getY() + j);
-                for (int k = -searchRadius; k < searchRadius; k++) {
-                    int distSqr = i * i + j * j + k * k;
-
-                    if (distSqr <= searchRadius * searchRadius) {
-                        mutableBlockPos.setZ(pos.getZ() + k);
-
-                        BlockState currentState = level.getBlockState(mutableBlockPos);
-                        if (currentState.is(OperationStarcleaveBlockTags.PHLOGISTIC_HYPERFLAMMABLES) && !currentState.is(OperationStarcleaveBlocks.NUCLEOSYNTHESEED)) {
-                            level.setBlockAndUpdate(mutableBlockPos, PhlogisticFireBlock.getStateWithAge(level, mutableBlockPos, fireAge));
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    public static void explode(Level level, BlockPos pos) {
-        ExplosionDamageCalculator damageCalculator = new ExplosionDamageCalculator() {
-            @Override
-            public boolean shouldBlockExplode(Explosion explosion, BlockGetter reader, BlockPos pos, BlockState state, float power) {
-                return state.is(OperationStarcleaveBlockTags.NUCLEOSYNTHESEED_BLAST_IMMUNE)
-                        ? false
-                        : super.shouldBlockExplode(explosion, reader, pos, state, power);
-            }
-        };
-
-        level.explode(
-                null,
-                OperationStarcleaveDamageTypes.source(level, OperationStarcleaveDamageTypes.IN_PHLOGISTIC_FIRE),
-                damageCalculator,
-                pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
-                4,
-                false,
-                Level.ExplosionInteraction.TNT,
-                OperationStarcleaveParticleTypes.NUCLEAR_SMOKE,
-                OperationStarcleaveParticleTypes.LARGE_NUCLEAR_SMOKE,
-                SoundEvents.GENERIC_EXPLODE
-        );
-
-        // spawn lightning particles
-        if (level instanceof ServerLevel serverLevel) {
-            serverLevel.sendParticles(
-                    OperationStarcleaveParticleTypes.NUCLEO_LIGHTNING,
-                    pos.getX() + 0.5,
-                    pos.getY() + 0.5,
-                    pos.getZ() + 0.5,
-                    9,
-                    0.25,
-                    0.25,
-                    0.25,
-                    2.25
-            );
-        }
     }
 
     public static boolean canBurrowThrough(BlockState state) {
