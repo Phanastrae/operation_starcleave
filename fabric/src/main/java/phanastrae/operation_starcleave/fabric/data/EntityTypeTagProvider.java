@@ -52,6 +52,7 @@ public class EntityTypeTagProvider extends FabricTagProvider.EntityTypeTagProvid
 
         getOrCreateTagBuilder(ARTHROPOD)
                 .add(
+                        STARCLEAVER_GOLEM,
                         SINEATER,
                         HAMMERTAIL_GOLEM
                 );
