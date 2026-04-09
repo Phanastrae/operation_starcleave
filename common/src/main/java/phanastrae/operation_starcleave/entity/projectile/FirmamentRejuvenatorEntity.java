@@ -21,7 +21,7 @@ public class FirmamentRejuvenatorEntity extends ThrowableItemProjectile {
 
     public static final int MAX_AGE = 140;
 
-    public FirmamentRejuvenatorEntity(EntityType<? extends ThrowableItemProjectile> entityType, Level world) {
+    public FirmamentRejuvenatorEntity(EntityType<? extends FirmamentRejuvenatorEntity> entityType, Level world) {
         super(entityType, world);
     }
 

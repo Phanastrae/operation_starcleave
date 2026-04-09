@@ -12,145 +12,115 @@ import phanastrae.operation_starcleave.entity.mob.*;
 import phanastrae.operation_starcleave.entity.projectile.*;
 import phanastrae.operation_starcleave.services.XPlatInterface;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.BiConsumer;
 
 public class OperationStarcleaveEntityTypes {
+    private static final Map<ResourceLocation, EntityType<? extends Entity>> UNREGISTERED_ENTITY_TYPES = new HashMap<>();
 
-    public static final ResourceLocation STARCLEAVER_GOLEM_KEY = id("starcleaver_golem");
-    public static final EntityType<StarcleaverGolemEntity> STARCLEAVER_GOLEM =
+    public static final EntityType<StarcleaverGolemEntity> STARCLEAVER_GOLEM = register(id("starcleaver_golem"),
             createBuilder(StarcleaverGolemEntity::new, MobCategory.MISC)
                     .sized(0.6f, 0.6f)
                     .clientTrackingRange(10)
                     .fireImmune()
-                    .build(getStr(STARCLEAVER_GOLEM_KEY));
+    );
 
-    public static final ResourceLocation SUBCAELIC_TORPEDO_KEY = id("subcaelic_torpedo");
-    public static final EntityType<SubcaelicTorpedoEntity> SUBCAELIC_TORPEDO =
+    public static final EntityType<SubcaelicTorpedoEntity> SUBCAELIC_TORPEDO = register(id("subcaelic_torpedo"),
             createBuilder(SubcaelicTorpedoEntity::new, MobCategory.MONSTER)
                     .sized(1f, 1f)
                     .clientTrackingRange(10)
-                    .build(getStr(SUBCAELIC_TORPEDO_KEY));
+    );
 
-    public static final ResourceLocation SUBCAELIC_DUX_KEY = id("subcaelic_dux");
-    public static final EntityType<SubcaelicDuxEntity> SUBCAELIC_DUX =
+    public static final EntityType<SubcaelicDuxEntity> SUBCAELIC_DUX = register(id("subcaelic_dux"),
             createBuilder(SubcaelicDuxEntity::new, MobCategory.MONSTER)
                     .sized(7f, 7f)
                     .clientTrackingRange(10)
-                    .build(getStr(SUBCAELIC_DUX_KEY));
+    );
 
-    public static final ResourceLocation SINEATER_KEY = id("sineater");
-    public static final EntityType<SineaterEntity> SINEATER =
+    public static final EntityType<SineaterEntity> SINEATER = register(id("sineater"),
             createBuilder(SineaterEntity::new, MobCategory.MONSTER)
                     .sized(2.2f, 1.65f)
                     .clientTrackingRange(10)
-                    .build(getStr(SINEATER_KEY));
+    );
 
-    public static final ResourceLocation TRACTORBLOOM_KEY = id("tractorbloom");
-    public static final EntityType<TractorbloomEntity> TRACTORBLOOM =
+    public static final EntityType<TractorbloomEntity> TRACTORBLOOM = register(id("tractorbloom"),
             createBuilder(TractorbloomEntity::new, MobCategory.MONSTER)
                     .sized(2.5f, 1.375f)
                     .clientTrackingRange(10)
-                    .build(getStr(TRACTORBLOOM_KEY));
+    );
 
-    public static final ResourceLocation HAMMERTAIL_GOLEM_KEY = id("hammertail_golem");
-    public static final EntityType<HammertailGolemEntity> HAMMERTAIL_GOLEM =
+    public static final EntityType<HammertailGolemEntity> HAMMERTAIL_GOLEM = register(id("hammertail_golem"),
             createBuilder(HammertailGolemEntity::new, MobCategory.MISC)
                     .sized(0.8f, 2.2f)
                     .clientTrackingRange(10)
                     .fireImmune()
-                    .build(getStr(HAMMERTAIL_GOLEM_KEY));
+    );
 
-    public static final ResourceLocation SPLASH_STARBLEACH_KEY = id("splash_starbleach_bottle");
-    public static final EntityType<SplashStarbleachEntity> SPLASH_STARBLEACH =
+    public static final EntityType<SplashStarbleachEntity> SPLASH_STARBLEACH = register(id("splash_starbleach_bottle"),
             EntityType.Builder.<SplashStarbleachEntity>of(SplashStarbleachEntity::new, MobCategory.MISC)
                     .sized(0.25F, 0.25F)
                     .clientTrackingRange(4)
                     .updateInterval(10)
-                    .build(getStr(SPLASH_STARBLEACH_KEY));
+    );
 
-    public static final ResourceLocation STARBLEACHED_PEARL_KEY = id("starbleached_pearl");
-    public static final EntityType<StarbleachedPearlEntity> STARBLEACHED_PEARL =
+    public static final EntityType<StarbleachedPearlEntity> STARBLEACHED_PEARL = register(id("starbleached_pearl"),
             EntityType.Builder.<StarbleachedPearlEntity>of(StarbleachedPearlEntity::new, MobCategory.MISC)
                     .sized(0.25F, 0.25F)
                     .clientTrackingRange(4)
                     .updateInterval(10)
-                    .build(getStr(STARBLEACHED_PEARL_KEY));
+    );
 
-    public static final ResourceLocation FIRMAMENT_REJUVENATOR_KEY = id("firmament_rejuvenator");
-    public static final EntityType<FirmamentRejuvenatorEntity> FIRMAMENT_REJUVENATOR =
+    public static final EntityType<FirmamentRejuvenatorEntity> FIRMAMENT_REJUVENATOR = register(id("firmament_rejuvenator"),
             EntityType.Builder.<FirmamentRejuvenatorEntity>of(FirmamentRejuvenatorEntity::new, MobCategory.MISC)
                     .sized(0.25F, 0.25F)
                     .clientTrackingRange(12)
                     .updateInterval(10)
-                    .build(getStr(FIRMAMENT_REJUVENATOR_KEY));
+    );
 
-    public static final ResourceLocation PHLOGISTIC_SPARK_KEY = id("phlogistic_spark");
-    public static final EntityType<PhlogisticSparkEntity> PHLOGISTIC_SPARK =
+    public static final EntityType<PhlogisticSparkEntity> PHLOGISTIC_SPARK = register(id("phlogistic_spark"),
             EntityType.Builder.<PhlogisticSparkEntity>of(PhlogisticSparkEntity::new, MobCategory.MISC)
                     .sized(0.5F, 0.5F)
                     .clientTrackingRange(4)
                     .updateInterval(10)
-                    .build(getStr(PHLOGISTIC_SPARK_KEY));
+    );
 
-    public static final ResourceLocation NUCLEAR_STARDROP_KEY = id("nuclear_stardrop");
-    public static final EntityType<NuclearStardropEntity> NUCLEAR_STARDROP =
+    public static final EntityType<NuclearStardropEntity> NUCLEAR_STARDROP = register(id("nuclear_stardrop"),
             EntityType.Builder.<NuclearStardropEntity>of(NuclearStardropEntity::new, MobCategory.MISC)
                     .sized(0.5F, 0.5F)
                     .clientTrackingRange(4)
                     .updateInterval(10)
-                    .build(getStr(NUCLEAR_STARDROP_KEY));
+    );
 
-    public static final ResourceLocation NUCLEAR_STORMCLOUD_KEY = id("nuclear_stormcloud");
-    public static final EntityType<NuclearStormcloudEntity> NUCLEAR_STORMCLOUD =
+    public static final EntityType<NuclearStormcloudEntity> NUCLEAR_STORMCLOUD = register(id("nuclear_stormcloud"),
             EntityType.Builder.<NuclearStormcloudEntity>of(NuclearStormcloudEntity::new, MobCategory.MISC)
                     .sized(5F, 3F)
                     .clientTrackingRange(16)
                     .updateInterval(2)
-                    .build(getStr(NUCLEAR_STORMCLOUD_KEY));
+    );
 
-    public static final ResourceLocation NUCLEOSYNTHESEED_KEY = id("nucleosyntheseed");
-    public static final EntityType<NucleosyntheseedEntity> NUCLEOSYNTHESEED =
+    public static final EntityType<NucleosyntheseedEntity> NUCLEOSYNTHESEED = register(id("nucleosyntheseed"),
             EntityType.Builder.<NucleosyntheseedEntity>of(NucleosyntheseedEntity::new, MobCategory.MISC)
                     .sized(0.98F, 0.98F)
                     .eyeHeight(0.15F)
                     .clientTrackingRange(10)
                     .updateInterval(4)
                     .fireImmune()
-                    .build(getStr(NUCLEOSYNTHESEED_KEY));
+    );
 
-    public static final ResourceLocation BISMUTH_BLAST_KEY = id("bismuth_blast");
-    public static final EntityType<BismuthBlastEntity> BISMUTH_BLAST =
+    public static final EntityType<BismuthBlastEntity> BISMUTH_BLAST = register(id("bismuth_blast"),
             EntityType.Builder.<BismuthBlastEntity>of(BismuthBlastEntity::new, MobCategory.MISC)
                     .sized(0.4F, 0.4F)
                     .clientTrackingRange(4)
                     .updateInterval(10)
-                    .build(getStr(BISMUTH_BLAST_KEY));
+    );
 
     public static void init(BiConsumer<ResourceLocation, EntityType<?>> r) {
-        // mobs
-        r.accept(STARCLEAVER_GOLEM_KEY, STARCLEAVER_GOLEM);
-
-        r.accept(SUBCAELIC_TORPEDO_KEY, SUBCAELIC_TORPEDO);
-        r.accept(SUBCAELIC_DUX_KEY, SUBCAELIC_DUX);
-        r.accept(SINEATER_KEY, SINEATER);
-        r.accept(TRACTORBLOOM_KEY, TRACTORBLOOM);
-
-        r.accept(HAMMERTAIL_GOLEM_KEY, HAMMERTAIL_GOLEM);
-
-        // projectiles
-        r.accept(SPLASH_STARBLEACH_KEY, SPLASH_STARBLEACH);
-        r.accept(STARBLEACHED_PEARL_KEY, STARBLEACHED_PEARL);
-        r.accept(FIRMAMENT_REJUVENATOR_KEY, FIRMAMENT_REJUVENATOR);
-        r.accept(PHLOGISTIC_SPARK_KEY, PHLOGISTIC_SPARK);
-        r.accept(NUCLEAR_STARDROP_KEY, NUCLEAR_STARDROP);
-        r.accept(BISMUTH_BLAST_KEY, BISMUTH_BLAST);
-
-        // misc
-        r.accept(NUCLEAR_STORMCLOUD_KEY, NUCLEAR_STORMCLOUD);
-        r.accept(NUCLEOSYNTHESEED_KEY, NUCLEOSYNTHESEED);
+        UNREGISTERED_ENTITY_TYPES.forEach(r);
+        UNREGISTERED_ENTITY_TYPES.clear();
     }
 
-    public static void registerEntityAttributes(org.apache.logging.log4j.util.BiConsumer<EntityType<? extends LivingEntity>, AttributeSupplier.Builder> r) {
+    public static void registerEntityAttributes(BiConsumer<EntityType<? extends LivingEntity>, AttributeSupplier.Builder> r) {
         r.accept(STARCLEAVER_GOLEM, StarcleaverGolemEntity.createAttributes());
         r.accept(SUBCAELIC_TORPEDO, SubcaelicTorpedoEntity.createAttributes());
         r.accept(SUBCAELIC_DUX, SubcaelicDuxEntity.createAttributes());
@@ -161,6 +131,15 @@ public class OperationStarcleaveEntityTypes {
 
     private static ResourceLocation id(String path) {
         return OperationStarcleave.id(path);
+    }
+
+    private static <T extends Entity> EntityType<T> register(ResourceLocation location, EntityType.Builder<T> builder) {
+        return register(location, builder.build(getStr(location)));
+    }
+
+    private static <T extends Entity> EntityType<T> register(ResourceLocation location, EntityType<T> type) {
+        UNREGISTERED_ENTITY_TYPES.put(location, type);
+        return type;
     }
 
     @Nullable

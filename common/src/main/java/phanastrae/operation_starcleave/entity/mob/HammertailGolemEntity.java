@@ -38,7 +38,7 @@ public class HammertailGolemEntity extends AbstractGolem implements RangedAttack
     private boolean pushable = false;
     private boolean yawNeedsSyncing = true;
 
-    public HammertailGolemEntity(EntityType<? extends AbstractGolem> entityType, Level world) {
+    public HammertailGolemEntity(EntityType<? extends HammertailGolemEntity> entityType, Level world) {
         super(entityType, world);
         this.lookControl = new HammertailLookControl();
     }

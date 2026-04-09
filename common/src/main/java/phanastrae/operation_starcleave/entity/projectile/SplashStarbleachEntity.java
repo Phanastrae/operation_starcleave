@@ -28,7 +28,7 @@ public class SplashStarbleachEntity extends ThrowableItemProjectile implements I
 
     boolean canStarbleach = false;
 
-    public SplashStarbleachEntity(EntityType<? extends ThrowableItemProjectile> entityType, Level world) {
+    public SplashStarbleachEntity(EntityType<? extends SplashStarbleachEntity> entityType, Level world) {
         super(entityType, world);
     }
 

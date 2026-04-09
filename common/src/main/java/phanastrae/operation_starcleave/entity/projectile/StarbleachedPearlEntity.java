@@ -22,7 +22,7 @@ import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
 import java.util.function.Predicate;
 
 public class StarbleachedPearlEntity extends ThrowableItemProjectile {
-    public StarbleachedPearlEntity(EntityType<? extends ThrowableItemProjectile> entityType, Level world) {
+    public StarbleachedPearlEntity(EntityType<? extends StarbleachedPearlEntity> entityType, Level world) {
         super(entityType, world);
     }
 

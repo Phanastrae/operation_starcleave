@@ -51,7 +51,7 @@ public class SineaterEntity extends PathfinderMob implements Enemy {
     public float prevSquishiness = 0F;
     public float squishiness = 0F;
 
-    public SineaterEntity(EntityType<? extends PathfinderMob> entityType, Level level) {
+    public SineaterEntity(EntityType<? extends SineaterEntity> entityType, Level level) {
         super(entityType, level);
         this.xpReward = Enemy.XP_REWARD_MEDIUM;
     }

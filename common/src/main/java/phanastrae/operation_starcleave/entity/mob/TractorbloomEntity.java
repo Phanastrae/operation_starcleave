@@ -40,7 +40,7 @@ public class TractorbloomEntity extends PathfinderMob implements Enemy {
     public float prevDeltaX;
     public float prevDeltaZ;
 
-    public TractorbloomEntity(EntityType<? extends PathfinderMob> entityType, Level level) {
+    public TractorbloomEntity(EntityType<? extends TractorbloomEntity> entityType, Level level) {
         super(entityType, level);
         this.xpReward = Enemy.XP_REWARD_MEDIUM;
         this.moveControl = new FlyingMoveControl(this, 5, false);

@@ -76,7 +76,7 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
 
     private final List<UUID> launcherUuids = new ArrayList<>();
 
-    public StarcleaverGolemEntity(EntityType<? extends AbstractGolem> entityType, Level world) {
+    public StarcleaverGolemEntity(EntityType<? extends StarcleaverGolemEntity> entityType, Level world) {
         super(entityType, world);
         this.setPathfindingMalus(PathType.WATER, 0.0F);
         this.setPathfindingMalus(PathType.LAVA, 0.0F);
