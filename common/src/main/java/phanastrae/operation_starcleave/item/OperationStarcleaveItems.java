@@ -11,7 +11,9 @@ import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
 import phanastrae.operation_starcleave.fluid.OperationStarcleaveFluids;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
@@ -20,6 +22,7 @@ import static net.minecraft.world.item.Rarity.RARE;
 
 public class OperationStarcleaveItems {
     private static final Map<ResourceLocation, Item> UNREGISTERED_ITEMS = new HashMap<>();
+    public static final List<SpawnEggItem> SPAWN_EGGS = new ArrayList<>();
 
     public static final Item NETHERITE_PUMPKIN = registerBlock(new NetheritePumpkinItem(OperationStarcleaveBlocks.NETHERITE_PUMPKIN, properties().rarity(Rarity.UNCOMMON).fireResistant()));
 
@@ -237,6 +240,8 @@ public class OperationStarcleaveItems {
     }
 
     protected static SpawnEggItem spawnEggItem(EntityType<? extends Mob> entityType, int primaryColor, int secondaryColor) {
-        return new SpawnEggItem(entityType, primaryColor, secondaryColor, properties());
+        SpawnEggItem item = new SpawnEggItem(entityType, primaryColor, secondaryColor, properties());
+        SPAWN_EGGS.add(item);
+        return item;
     }
 }

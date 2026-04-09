@@ -1,21 +1,22 @@
 package phanastrae.operation_starcleave.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.DispensibleContainerItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.gameevent.GameEvent;
+import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 
 public class OperationStarcleaveDispenserBehavior {
@@ -111,6 +112,30 @@ public class OperationStarcleaveDispenserBehavior {
                 }
             }
         });
+
+        // spawn eggs
+        DefaultDispenseItemBehavior defaultDispenseItemBehavior = new DefaultDispenseItemBehavior() {
+            @Override
+            public ItemStack execute(BlockSource blockSource, ItemStack item) {
+                Direction direction = blockSource.state().getValue(DispenserBlock.FACING);
+                EntityType<?> entityType = ((SpawnEggItem) item.getItem()).getType(item);
+
+                try {
+                    entityType.spawn(blockSource.level(), item, null, blockSource.pos().relative(direction), MobSpawnType.DISPENSER, direction != Direction.UP, false);
+                } catch (Exception exception) {
+                    OperationStarcleave.LOGGER.error("Error while dispensing spawn egg from dispenser at {}", blockSource.pos(), exception);
+                    return ItemStack.EMPTY;
+                }
+
+                item.shrink(1);
+                blockSource.level().gameEvent(null, GameEvent.ENTITY_PLACE, blockSource.pos());
+                return item;
+            }
+        };
+
+        for (SpawnEggItem item : OperationStarcleaveItems.SPAWN_EGGS) {
+            register(item, defaultDispenseItemBehavior);
+        }
     }
 
     public static void register(ItemLike provider, DispenseItemBehavior behavior) {
