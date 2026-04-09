@@ -11,6 +11,10 @@
     {
       "id": "operation_starcleave:on_phlogistic_fire",
       "required": false
+    },
+    {
+      "id": "operation_starcleave:bismuth_blast",
+      "required": false
     }
   ]
 }

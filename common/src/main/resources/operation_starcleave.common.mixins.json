@@ -23,6 +23,7 @@
     "common.bossevent.BossEventMixin",
     "common.bossevent.ServerBossEventMixin",
     "common.entity.AbstractArrowMixin",
+    "common.entity.CombatRulesMixin",
     "common.entity.EnderManMixin",
     "common.entity.EntityMixin",
     "common.entity.LivingEntityMixin",

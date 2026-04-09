@@ -104,12 +104,65 @@
       "random/glass3"
     ]
   },
+  "entity.bismuth_blast.fizz": {
+    "subtitle": "subtitles.operation_starcleave.entity.bismuth_blast.fizz",
+    "sounds": [
+      "random/fizz"
+    ]
+  },
+  "entity.bismuth_blast.travel": {
+    "subtitle": "subtitles.operation_starcleave.entity.bismuth_blast.travel",
+    "sounds": [
+      "note/bit"
+    ]
+  },
   "entity.firmament_rejuvenator.throw": {
     "subtitle": "subtitles.operation_starcleave.entity.firmament_rejuvenator.throw",
     "sounds": [
       "ambient/weather/thunder1",
       "ambient/weather/thunder2",
       "ambient/weather/thunder3"
+    ]
+  },
+  "entity.hammertail_golem.ambient": {
+    "subtitle": "subtitles.operation_starcleave.entity.hammertail_golem.ambient",
+    "sounds": [
+      "operation_starcleave:mob/starcleaver_golem/say1",
+      "operation_starcleave:mob/starcleaver_golem/say2",
+      "operation_starcleave:mob/starcleaver_golem/say3"
+    ]
+  },
+  "entity.hammertail_golem.big_fall": {
+    "subtitle": "subtitles.operation_starcleave.entity.hammertail_golem.fall",
+    "sounds": [
+      "item/mace/smash_ground_heavy"
+    ]
+  },
+  "entity.hammertail_golem.death": {
+    "subtitle": "subtitles.operation_starcleave.entity.hammertail_golem.death",
+    "sounds": [
+      "mob/irongolem/death"
+    ]
+  },
+  "entity.hammertail_golem.hurt": {
+    "subtitle": "subtitles.operation_starcleave.entity.hammertail_golem.hurt",
+    "sounds": [
+      "mob/irongolem/hit1",
+      "mob/irongolem/hit2",
+      "mob/irongolem/hit3",
+      "mob/irongolem/hit4"
+    ]
+  },
+  "entity.hammertail_golem.shoot": {
+    "subtitle": "subtitles.operation_starcleave.entity.hammertail_golem.shoot",
+    "sounds": [
+      "note/bit"
+    ]
+  },
+  "entity.hammertail_golem.small_fall": {
+    "subtitle": "subtitles.operation_starcleave.entity.hammertail_golem.fall",
+    "sounds": [
+      "item/mace/smash_ground4"
     ]
   },
   "entity.starbleached_pearl.throw": {

@@ -21,6 +21,9 @@ public class DamageTypeTagProvider extends FabricTagProvider<DamageType> {
     @Override
     protected void addTags(HolderLookup.Provider arg) {
         // vanilla tags
+        getOrCreateTagBuilder(DAMAGES_HELMET)
+                .addOptional(FALLING_MOB);
+
         getOrCreateTagBuilder(BYPASSES_ARMOR)
                 .addOptional(ON_PHLOGISTIC_FIRE)
                 .addOptional(INTERNAL_STARBLEACHING);
@@ -28,9 +31,13 @@ public class DamageTypeTagProvider extends FabricTagProvider<DamageType> {
         getOrCreateTagBuilder(BYPASSES_EFFECTS)
                 .addOptional(INTERNAL_STARBLEACHING);
 
+        getOrCreateTagBuilder(BYPASSES_SHIELD)
+                .addOptional(FALLING_MOB);
+
         getOrCreateTagBuilder(IS_PROJECTILE)
                 .addOptional(UNATTRIBUTED_PHLOGISTIC_SPARK)
-                .addOptional(PHLOGISTIC_SPARK);
+                .addOptional(PHLOGISTIC_SPARK)
+                .addOptional(BISMUTH_BLAST);
 
         getOrCreateTagBuilder(IGNITES_ARMOR_STANDS)
                 .addOptional(IN_PHLOGISTIC_FIRE);
@@ -41,14 +48,17 @@ public class DamageTypeTagProvider extends FabricTagProvider<DamageType> {
         getOrCreateTagBuilder(NO_KNOCKBACK)
                 .addOptional(INTERNAL_STARBLEACHING)
                 .addOptional(IN_PHLOGISTIC_FIRE)
-                .addOptional(ON_PHLOGISTIC_FIRE);
+                .addOptional(ON_PHLOGISTIC_FIRE)
+                .addOptional(BISMUTH_BLAST);
 
         getOrCreateTagBuilder(ALWAYS_KILLS_ARMOR_STANDS)
-                .addOptional(PHLOGISTIC_SPARK);
+                .addOptional(PHLOGISTIC_SPARK)
+                .addOptional(BISMUTH_BLAST);
 
         getOrCreateTagBuilder(PANIC_CAUSES)
                 .addOptional(UNATTRIBUTED_PHLOGISTIC_SPARK)
-                .addOptional(PHLOGISTIC_SPARK);
+                .addOptional(PHLOGISTIC_SPARK)
+                .addOptional(BISMUTH_BLAST);
 
         // starcleave tags
         getOrCreateTagBuilder(OperationStarcleaveDamageTypeTags.IS_PHLOGISTIC_FIRE)
@@ -56,5 +66,11 @@ public class DamageTypeTagProvider extends FabricTagProvider<DamageType> {
                 .addOptional(ON_PHLOGISTIC_FIRE)
                 .addOptional(UNATTRIBUTED_PHLOGISTIC_SPARK)
                 .addOptional(PHLOGISTIC_SPARK);
+
+        getOrCreateTagBuilder(OperationStarcleaveDamageTypeTags.REDUCED_COOLDOWN)
+                .addOptional(BISMUTH_BLAST);
+
+        getOrCreateTagBuilder(OperationStarcleaveDamageTypeTags.PARTIALLY_BYPASSES_ARMOR)
+                .addOptional(BISMUTH_BLAST);
     }
 }

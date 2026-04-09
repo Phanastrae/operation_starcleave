@@ -206,7 +206,8 @@ public class OperationStarcleaveCreativeModeTabs {
                 SUBCAELIC_TORPEDO_SPAWN_EGG,
                 SUBCAELIC_DUX_SPAWN_EGG,
                 SINEATER_SPAWN_EGG,
-                TRACTORBLOOM_SPAWN_EGG
+                TRACTORBLOOM_SPAWN_EGG,
+                HAMMERTAIL_GOLEM_SPAWN_EGG
         );
 
         // Building Blocks
@@ -435,7 +436,8 @@ public class OperationStarcleaveCreativeModeTabs {
                 SUBCAELIC_TORPEDO_SPAWN_EGG,
                 SUBCAELIC_DUX_SPAWN_EGG,
                 SINEATER_SPAWN_EGG,
-                TRACTORBLOOM_SPAWN_EGG
+                TRACTORBLOOM_SPAWN_EGG,
+                HAMMERTAIL_GOLEM_SPAWN_EGG
         );
 
         // Operator

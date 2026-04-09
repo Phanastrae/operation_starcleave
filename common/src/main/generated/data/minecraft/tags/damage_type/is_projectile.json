@@ -7,6 +7,10 @@
     {
       "id": "operation_starcleave:phlogistic_spark",
       "required": false
+    },
+    {
+      "id": "operation_starcleave:bismuth_blast",
+      "required": false
     }
   ]
 }

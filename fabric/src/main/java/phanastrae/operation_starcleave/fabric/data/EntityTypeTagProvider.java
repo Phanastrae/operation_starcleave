@@ -19,7 +19,10 @@ public class EntityTypeTagProvider extends FabricTagProvider.EntityTypeTagProvid
     protected void addTags(HolderLookup.Provider arg) {
         // vanilla tags
         getOrCreateTagBuilder(IMPACT_PROJECTILES)
-                .add(PHLOGISTIC_SPARK);
+                .add(
+                        PHLOGISTIC_SPARK,
+                        BISMUTH_BLAST
+                );
 
         getOrCreateTagBuilder(FREEZE_IMMUNE_ENTITY_TYPES)
                 .add(
@@ -28,14 +31,17 @@ public class EntityTypeTagProvider extends FabricTagProvider.EntityTypeTagProvid
                 );
 
         getOrCreateTagBuilder(FROG_FOOD)
-                .add(SUBCAELIC_TORPEDO);
+                .add(
+                        SUBCAELIC_TORPEDO
+                );
 
         getOrCreateTagBuilder(FALL_DAMAGE_IMMUNE)
                 .add(
                         STARCLEAVER_GOLEM,
                         SUBCAELIC_TORPEDO,
                         SUBCAELIC_DUX,
-                        TRACTORBLOOM
+                        TRACTORBLOOM,
+                        HAMMERTAIL_GOLEM
                 );
 
         getOrCreateTagBuilder(AQUATIC)
@@ -46,18 +52,22 @@ public class EntityTypeTagProvider extends FabricTagProvider.EntityTypeTagProvid
 
         getOrCreateTagBuilder(ARTHROPOD)
                 .add(
-                        SINEATER
+                        SINEATER,
+                        HAMMERTAIL_GOLEM
                 );
 
         getOrCreateTagBuilder(REDIRECTABLE_PROJECTILE)
-                .add(PHLOGISTIC_SPARK);
+                .add(
+                        PHLOGISTIC_SPARK
+                );
 
         // starcleave tags
         getOrCreateTagBuilder(PHLOGISTIC_FIRE_IMMUNE)
                 .add(
                         STARCLEAVER_GOLEM,
                         SUBCAELIC_TORPEDO,
-                        SUBCAELIC_DUX
+                        SUBCAELIC_DUX,
+                        HAMMERTAIL_GOLEM
                 );
     }
 }

@@ -52,6 +52,14 @@ public class OperationStarcleaveEntityTypes {
                     .clientTrackingRange(10)
                     .build(getStr(TRACTORBLOOM_KEY));
 
+    public static final ResourceLocation HAMMERTAIL_GOLEM_KEY = id("hammertail_golem");
+    public static final EntityType<HammertailGolemEntity> HAMMERTAIL_GOLEM =
+            createBuilder(HammertailGolemEntity::new, MobCategory.MISC)
+                    .sized(0.8f, 2.2f)
+                    .clientTrackingRange(10)
+                    .fireImmune()
+                    .build(getStr(HAMMERTAIL_GOLEM_KEY));
+
     public static final ResourceLocation SPLASH_STARBLEACH_KEY = id("splash_starbleach_bottle");
     public static final EntityType<SplashStarbleachEntity> SPLASH_STARBLEACH =
             EntityType.Builder.<SplashStarbleachEntity>of(SplashStarbleachEntity::new, MobCategory.MISC)
@@ -110,6 +118,14 @@ public class OperationStarcleaveEntityTypes {
                     .fireImmune()
                     .build(getStr(NUCLEOSYNTHESEED_KEY));
 
+    public static final ResourceLocation BISMUTH_BLAST_KEY = id("bismuth_blast");
+    public static final EntityType<BismuthBlastEntity> BISMUTH_BLAST =
+            EntityType.Builder.<BismuthBlastEntity>of(BismuthBlastEntity::new, MobCategory.MISC)
+                    .sized(0.4F, 0.4F)
+                    .clientTrackingRange(4)
+                    .updateInterval(10)
+                    .build(getStr(BISMUTH_BLAST_KEY));
+
     public static void init(BiConsumer<ResourceLocation, EntityType<?>> r) {
         // mobs
         r.accept(STARCLEAVER_GOLEM_KEY, STARCLEAVER_GOLEM);
@@ -119,12 +135,15 @@ public class OperationStarcleaveEntityTypes {
         r.accept(SINEATER_KEY, SINEATER);
         r.accept(TRACTORBLOOM_KEY, TRACTORBLOOM);
 
+        r.accept(HAMMERTAIL_GOLEM_KEY, HAMMERTAIL_GOLEM);
+
         // projectiles
         r.accept(SPLASH_STARBLEACH_KEY, SPLASH_STARBLEACH);
         r.accept(STARBLEACHED_PEARL_KEY, STARBLEACHED_PEARL);
         r.accept(FIRMAMENT_REJUVENATOR_KEY, FIRMAMENT_REJUVENATOR);
         r.accept(PHLOGISTIC_SPARK_KEY, PHLOGISTIC_SPARK);
         r.accept(NUCLEAR_STARDROP_KEY, NUCLEAR_STARDROP);
+        r.accept(BISMUTH_BLAST_KEY, BISMUTH_BLAST);
 
         // misc
         r.accept(NUCLEAR_STORMCLOUD_KEY, NUCLEAR_STORMCLOUD);
@@ -137,6 +156,7 @@ public class OperationStarcleaveEntityTypes {
         r.accept(SUBCAELIC_DUX, SubcaelicDuxEntity.createAttributes());
         r.accept(SINEATER, SineaterEntity.createAttributes());
         r.accept(TRACTORBLOOM, TractorbloomEntity.createAttributes());
+        r.accept(HAMMERTAIL_GOLEM, HammertailGolemEntity.createAttributes());
     }
 
     private static ResourceLocation id(String path) {

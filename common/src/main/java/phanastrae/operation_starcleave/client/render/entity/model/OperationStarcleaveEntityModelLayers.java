@@ -21,7 +21,11 @@ public class OperationStarcleaveEntityModelLayers {
 
     public static final ModelLayerLocation TRACTORBLOOM = createMainLayer("tractorbloom");
 
+    public static final ModelLayerLocation HAMMERTAIL_GOLEM = createMainLayer("hammertail_golem");
+
     public static final ModelLayerLocation PEGASUS_WINGS = createMainLayer("pegasus_wings");
+
+    public static final ModelLayerLocation BISMUTH_BLAST = createMainLayer("bismuth_blast");
 
     public static final ModelLayerLocation BLESSED_BED_HEAD = createMainLayer("blessed_bed_head");
     public static final ModelLayerLocation BLESSED_BED_FOOT = createMainLayer("blessed_bed_foot");
@@ -38,7 +42,11 @@ public class OperationStarcleaveEntityModelLayers {
 
         r.accept(TRACTORBLOOM, TractorbloomEntityModel::getTexturedModelData);
 
+        r.accept(HAMMERTAIL_GOLEM, HammertailGolemEntityModel::getTexturedModelData);
+
         r.accept(PEGASUS_WINGS, PegasusWingsModel::getTexturedModelData);
+
+        r.accept(BISMUTH_BLAST, BismuthBlastEntityModel::getTexturedModelData);
 
         r.accept(BLESSED_BED_HEAD, BlessedBedBlockEntityRenderer::getHeadTexturedModelData);
         r.accept(BLESSED_BED_FOOT, BlessedBedBlockEntityRenderer::getFootTexturedModelData);

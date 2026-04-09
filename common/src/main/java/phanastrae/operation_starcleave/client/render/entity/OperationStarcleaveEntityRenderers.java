@@ -15,6 +15,7 @@ public class OperationStarcleaveEntityRenderers {
         r.accept(OperationStarcleaveEntityTypes.SUBCAELIC_DUX, SubcaelicDuxEntityRenderer::new);
         r.accept(OperationStarcleaveEntityTypes.SINEATER, SineaterEntityRenderer::new);
         r.accept(OperationStarcleaveEntityTypes.TRACTORBLOOM, TractorbloomEntityRenderer::new);
+        r.accept(OperationStarcleaveEntityTypes.HAMMERTAIL_GOLEM, HammertailGolemEntityRenderer::new);
 
         // projectiles
         r.accept(OperationStarcleaveEntityTypes.SPLASH_STARBLEACH, ThrownItemRenderer::new);
@@ -22,6 +23,7 @@ public class OperationStarcleaveEntityRenderers {
         r.accept(OperationStarcleaveEntityTypes.FIRMAMENT_REJUVENATOR, ThrownItemRenderer::new);
         r.accept(OperationStarcleaveEntityTypes.PHLOGISTIC_SPARK, InvisibleRenderer::new);
         r.accept(OperationStarcleaveEntityTypes.NUCLEAR_STARDROP, InvisibleRenderer::new);
+        r.accept(OperationStarcleaveEntityTypes.BISMUTH_BLAST, BismuthBlastEntityRenderer::new);
 
         // misc
         r.accept(OperationStarcleaveEntityTypes.NUCLEAR_STORMCLOUD, InvisibleRenderer::new);

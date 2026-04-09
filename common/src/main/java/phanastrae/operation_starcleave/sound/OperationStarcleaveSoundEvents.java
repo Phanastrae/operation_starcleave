@@ -29,6 +29,9 @@ public class OperationStarcleaveSoundEvents {
     public static final SoundEvent STARBLEACHED_PEARL_THROW = create("entity.starbleached_pearl.throw");
     public static final SoundEvent STARBLEACHED_PEARL_REPEL = create("entity.starbleached_pearl.repel");
 
+    public static final SoundEvent BISMUTH_BLAST_TRAVEL = create("entity.bismuth_blast.travel");
+    public static final SoundEvent BISMUTH_BLAST_FIZZ = create("entity.bismuth_blast.fizz");
+
     public static final SoundEvent STARCLEAVER_GOLEM_AMBIENT = create("entity.starcleaver_golem.ambient");
     public static final SoundEvent STARCLEAVER_GOLEM_DEATH = create("entity.starcleaver_golem.death");
     public static final SoundEvent STARCLEAVER_GOLEM_HURT = create("entity.starcleaver_golem.hurt");
@@ -57,6 +60,13 @@ public class OperationStarcleaveSoundEvents {
     public static final SoundEvent TRACTORBLOOM_AMBIENT = create("entity.tractorbloom.ambient");
     public static final SoundEvent TRACTORBLOOM_DEATH = create("entity.tractorbloom.death");
     public static final SoundEvent TRACTORBLOOM_HURT = create("entity.tractorbloom.hurt");
+
+    public static final SoundEvent HAMMERTAIL_GOLEM_AMBIENT = create("entity.hammertail_golem.ambient");
+    public static final SoundEvent HAMMERTAIL_GOLEM_DEATH = create("entity.hammertail_golem.death");
+    public static final SoundEvent HAMMERTAIL_GOLEM_HURT = create("entity.hammertail_golem.hurt");
+    public static final SoundEvent HAMMERTAIL_GOLEM_SHOOT = create("entity.hammertail_golem.shoot");
+    public static final SoundEvent HAMMERTAIL_GOLEM_SMALL_FALL = create("entity.hammertail_golem.small_fall");
+    public static final SoundEvent HAMMERTAIL_GOLEM_BIG_FALL = create("entity.hammertail_golem.big_fall");
 
     public static final SoundEvent FIRMAMENT_CLEAVE = create("firmament.cleave");
     public static final SoundEvent FIRMAMENT_TILE_BREAK = create("firmament.tile.break");

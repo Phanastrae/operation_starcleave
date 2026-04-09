@@ -110,4 +110,11 @@ public abstract class LivingEntityMixin extends Entity {
             localRef.set(damage);
         }
     }
+
+    @Inject(method = "hurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;actuallyHurt(Lnet/minecraft/world/damagesource/DamageSource;F)V", ordinal = 1))
+    private void operation_starcleave$reduceCooldown(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        if (source.is(OperationStarcleaveDamageTypeTags.REDUCED_COOLDOWN)) {
+            this.invulnerableTime = 15;
+        }
+    }
 }

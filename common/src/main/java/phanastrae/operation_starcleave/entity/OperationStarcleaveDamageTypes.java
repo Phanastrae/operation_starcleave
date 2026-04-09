@@ -10,6 +10,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.OperationStarcleave;
+import phanastrae.operation_starcleave.entity.projectile.BismuthBlastEntity;
 import phanastrae.operation_starcleave.entity.projectile.PhlogisticSparkEntity;
 
 public class OperationStarcleaveDamageTypes {
@@ -19,9 +20,19 @@ public class OperationStarcleaveDamageTypes {
     public static ResourceKey<DamageType> IN_PHLOGISTIC_FIRE = create(id("in_phlogistic_fire"));
     public static ResourceKey<DamageType> PHLOGISTIC_SPARK = create(id("phlogistic_spark"));
     public static ResourceKey<DamageType> UNATTRIBUTED_PHLOGISTIC_SPARK = create(id("unattributed_phlogistic_spark"));
+    public static ResourceKey<DamageType> BISMUTH_BLAST = create(id("bismuth_blast"));
+    public static ResourceKey<DamageType> FALLING_MOB = create(id("falling_mob"));
 
     public static DamageSource phlogisticSpark(Level level, PhlogisticSparkEntity phlogisticSpark, @Nullable Entity thrower) {
         return thrower == null ? source(level, UNATTRIBUTED_PHLOGISTIC_SPARK, phlogisticSpark) : source(level, PHLOGISTIC_SPARK, phlogisticSpark, thrower);
+    }
+
+    public static DamageSource bismuthBlast(Level level, BismuthBlastEntity bismuthBlast, @Nullable Entity thrower) {
+        return source(level, BISMUTH_BLAST, bismuthBlast, thrower);
+    }
+
+    public static DamageSource fallingMob(Level level, @Nullable Entity entity) {
+        return source(level, FALLING_MOB, entity);
     }
 
     public static DamageSource source(Level level, ResourceKey<DamageType> damageTypeKey) {
