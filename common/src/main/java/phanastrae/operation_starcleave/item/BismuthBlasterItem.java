@@ -57,8 +57,20 @@ public class BismuthBlasterItem extends ProjectileWeaponItem {
         return 7;
     }
 
-    public static int getCanisterLoadTime() {
-        return 2;
+    public static int getLoadSetupTime(ItemStack stack, LivingEntity shooter) {
+        // base time of 0.05 + 0.4 = 0.45s (9 ticks)
+        // with quick charge III, time is reduced to 0.05 + 0.4 * 0.25s = 0.15s (3 ticks)
+        float time = 0.05F + 0.4F * EnchantmentHelper.modifyCrossbowChargingTime(stack, shooter, 1.0F);
+        // minimum value of 0 ticks of setup time
+        return Math.max(0, Mth.floor(time * 20.0F));
+    }
+
+    public static int getCanisterLoadTime(ItemStack stack, LivingEntity shooter) {
+        // base time of 0.2s (4 ticks)
+        // with quick charge III, time is reduced to 0.2 * 0.25s = 0.05s (1 tick)
+        float time = 0.2F * EnchantmentHelper.modifyCrossbowChargingTime(stack, shooter, 1.0F);
+        // minimum value of 1 tick per load
+        return Math.max(1, Mth.floor(time * 20.0F));
     }
 
     public static int getAmmoFiredPerShot() {
@@ -67,12 +79,7 @@ public class BismuthBlasterItem extends ProjectileWeaponItem {
 
     @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
-        return getLoadSetupTime(stack, entity) + getStoreSize() * getCanisterLoadTime() + 3;
-    }
-
-    public static int getLoadSetupTime(ItemStack stack, LivingEntity shooter) {
-        float time = EnchantmentHelper.modifyCrossbowChargingTime(stack, shooter, 0.3F);
-        return Mth.floor(time * 20.0F);
+        return getLoadSetupTime(stack, entity) + (getStoreSize() - 1) * getCanisterLoadTime(stack, entity) + 3;
     }
 
     @Override
@@ -80,9 +87,9 @@ public class BismuthBlasterItem extends ProjectileWeaponItem {
         int usedTicks = this.getUseDuration(stack, livingEntity) - remainingUseDuration + 1;
 
         int loadSetupTime = getLoadSetupTime(stack, livingEntity);
-        int canisterLoadTime = getCanisterLoadTime();
+        int canisterLoadTime = getCanisterLoadTime(stack, livingEntity);
 
-        if (usedTicks > loadSetupTime && (usedTicks - loadSetupTime) % canisterLoadTime == 0) {
+        if (usedTicks >= loadSetupTime && (usedTicks - loadSetupTime) % canisterLoadTime == 0) {
             if (this.tryLoadProjectiles(livingEntity, stack)) {
                 this.playLoadAmmoSound(livingEntity);
                 if (!canInsertInto(stack)) {

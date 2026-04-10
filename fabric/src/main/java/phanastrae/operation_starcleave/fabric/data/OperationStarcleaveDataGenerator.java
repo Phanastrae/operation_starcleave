@@ -15,6 +15,7 @@ public class OperationStarcleaveDataGenerator implements DataGeneratorEntrypoint
         pack.addProvider(((output, registriesFuture) -> new ItemTagProvider(output, registriesFuture, btp)));
         pack.addProvider(EntityTypeTagProvider::new);
         pack.addProvider(DamageTypeTagProvider::new);
+        pack.addProvider(EnchantmentTagProvider::new);
 
         pack.addProvider(BlockLootTableProvider::new);
         pack.addProvider(EntityLootTableProvider::new);

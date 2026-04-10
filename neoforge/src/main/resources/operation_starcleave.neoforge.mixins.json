@@ -4,6 +4,7 @@
   "package": "phanastrae.operation_starcleave.neoforge.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "BismuthBlasterItemMixin",
     "CropBlockMixin",
     "FluidUtilMixin",
     "PetrichoricPlasmaFluidMixin",
