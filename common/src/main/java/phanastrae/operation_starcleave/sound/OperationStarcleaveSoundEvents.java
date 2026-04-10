@@ -24,6 +24,11 @@ public class OperationStarcleaveSoundEvents {
     public static final SoundEvent STARBLEACH_BOTTLE_DRINK = create("item.starbleach_bottle.drink");
     public static final SoundEvent STARFRUIT_BURST = create("item.starfruit.burst");
 
+    public static final SoundEvent BISMUTH_BLASTER_START_LOADING = create("item.bismuth_blaster.start_loading");
+    public static final SoundEvent BISMUTH_BLASTER_LOAD = create("item.bismuth_blaster.load");
+    public static final SoundEvent BISMUTH_BLASTER_FINISH_LOADING = create("item.bismuth_blaster.finish_loading");
+    public static final SoundEvent BISMUTH_BLASTER_SHOOT = create("item.bismuth_blaster.shoot");
+
     public static final SoundEvent REJUVENATOR_THROW = create("entity.firmament_rejuvenator.throw");
 
     public static final SoundEvent STARBLEACHED_PEARL_THROW = create("entity.starbleached_pearl.throw");

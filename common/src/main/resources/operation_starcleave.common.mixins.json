@@ -60,6 +60,7 @@
     "client.renderer.GameRendererMixin",
     "client.renderer.HorseArmorLayerMixin",
     "client.renderer.HorseRendererMixin",
+    "client.renderer.HumanoidModelMixin",
     "client.renderer.ItemBlockRenderTypesMixin",
     "client.renderer.LevelRendererMixin",
     "client.renderer.LevelRendererPriorityMixin",

@@ -24,22 +24,26 @@ import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
 
 public class BismuthBlastEntity extends AbstractHurtingProjectile {
     public static final String KEY_AGE = "age";
+    public static final String KEY_CAN_HIT_HAMMERTAILS = "can_hit_hammertails";
 
     private int age = 0;
+    private boolean canHitHammertails = true;
     private int soundCooldown = -1;
 
     public BismuthBlastEntity(EntityType<? extends BismuthBlastEntity> entityType, Level level) {
         super(entityType, level);
     }
 
-    public BismuthBlastEntity(Level level, LivingEntity owner, Vec3 movement) {
-        super(OperationStarcleaveEntityTypes.BISMUTH_BLAST, owner, movement, level);
+    public BismuthBlastEntity(Level level, LivingEntity owner) {
+        super(OperationStarcleaveEntityTypes.BISMUTH_BLAST, owner, Vec3.ZERO, level);
+        this.setPos(owner.getEyePosition());
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt(KEY_AGE, this.age);
+        compound.putBoolean(KEY_CAN_HIT_HAMMERTAILS, this.canHitHammertails);
     }
 
     @Override
@@ -47,6 +51,9 @@ public class BismuthBlastEntity extends AbstractHurtingProjectile {
         super.readAdditionalSaveData(compound);
         if (compound.contains(KEY_AGE, Tag.TAG_INT)) {
             this.age = compound.getInt(KEY_AGE);
+        }
+        if (compound.contains(KEY_CAN_HIT_HAMMERTAILS, Tag.TAG_BYTE)) {
+            this.canHitHammertails = compound.getBoolean(KEY_CAN_HIT_HAMMERTAILS);
         }
     }
 
@@ -131,10 +138,11 @@ public class BismuthBlastEntity extends AbstractHurtingProjectile {
 
     @Override
     protected boolean canHitEntity(Entity target) {
-        if (target instanceof HammertailGolemEntity) {
+        if (!this.canHitHammertails && target instanceof HammertailGolemEntity) {
             return false;
+        } else {
+            return super.canHitEntity(target);
         }
-        return super.canHitEntity(target);
     }
 
     @Override
@@ -151,5 +159,9 @@ public class BismuthBlastEntity extends AbstractHurtingProjectile {
 
     public int getAge() {
         return this.age;
+    }
+
+    public void setCanHitHammertails(boolean canHitHammertails) {
+        this.canHitHammertails = canHitHammertails;
     }
 }

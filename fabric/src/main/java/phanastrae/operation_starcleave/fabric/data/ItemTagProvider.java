@@ -106,6 +106,10 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
                         CLEANSED_SINGUTS
                 );
 
+        getOrCreateTagBuilder(ItemTags.DURABILITY_ENCHANTABLE).add(
+                BISMUTH_BLASTER
+        );
+
         // convention
         // add CLUSTERS manually as the block tag includes a block without an item
         getOrCreateTagBuilder(ConventionalItemTags.CLUSTERS)

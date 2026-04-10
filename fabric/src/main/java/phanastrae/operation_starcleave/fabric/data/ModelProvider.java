@@ -492,6 +492,7 @@ public class ModelProvider extends FabricModelProvider {
                 OperationStarcleaveItems.PHLOGISTON_SAC,
 
                 OperationStarcleaveItems.BISMUTH_PEGASUS_ARMOR,
+                OperationStarcleaveItems.BISBLAST_CANISTER,
 
                 OperationStarcleaveItems.CELESTIAL_OPAL_SHARD,
 
@@ -509,7 +510,11 @@ public class ModelProvider extends FabricModelProvider {
                 OperationStarcleaveItems.FIRMAMENT_REJUVENATOR
         );
 
-        IMG.generateFlatItem(OperationStarcleaveItems.FIRMAMENT_MANIPULATOR, ModelTemplates.FLAT_HANDHELD_ITEM);
+        forEach(item -> IMG.generateFlatItem(item, ModelTemplates.FLAT_HANDHELD_ITEM),
+                OperationStarcleaveItems.BISMUTH_BLASTER,
+
+                OperationStarcleaveItems.FIRMAMENT_MANIPULATOR
+        );
 
         // iridescence
         forEach(item -> generateFlatForSuffix(SUFFIX_IRIDESCENCE, IMG, item, ModelTemplates.FLAT_ITEM),
@@ -518,8 +523,13 @@ public class ModelProvider extends FabricModelProvider {
                 OperationStarcleaveItems.BISMUTH_FLAKE,
                 OperationStarcleaveItems.STARFLAKED_BISMUTH,
                 OperationStarcleaveItems.BISMUTH_PEGASUS_ARMOR,
+                OperationStarcleaveItems.BISBLAST_CANISTER,
 
                 OperationStarcleaveItems.CELESTIAL_OPAL_SHARD
+        );
+
+        forEach(item -> generateFlatForSuffix(SUFFIX_IRIDESCENCE, IMG, item, ModelTemplates.FLAT_HANDHELD_ITEM),
+                OperationStarcleaveItems.BISMUTH_BLASTER
         );
 
         forEach(block -> addDelegateModelForSuffix(SUFFIX_IRIDESCENCE, IMG, block),

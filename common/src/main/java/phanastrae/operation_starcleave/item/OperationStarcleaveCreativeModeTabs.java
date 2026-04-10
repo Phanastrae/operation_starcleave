@@ -176,6 +176,8 @@ public class OperationStarcleaveCreativeModeTabs {
                 FIRMAMENT_REJUVENATOR,
 
                 BISMUTH_PEGASUS_ARMOR,
+                BISMUTH_BLASTER,
+                BISBLAST_CANISTER,
 
                 STARBLEACHED_PEARL_BLOCK,
                 STELLAR_REPULSOR,
@@ -399,6 +401,10 @@ public class OperationStarcleaveCreativeModeTabs {
         );
         helper.addAfter(Items.DIAMOND_HORSE_ARMOR, COMBAT,
                 BISMUTH_PEGASUS_ARMOR
+        );
+        helper.add(COMBAT,
+                BISMUTH_BLASTER,
+                BISBLAST_CANISTER
         );
 
         // Food and Drink

@@ -86,7 +86,9 @@ public class Iridescence {
         iridescentBismuthItems.addAll(List.of(
                 OperationStarcleaveItems.BISMUTH_FLAKE,
                 OperationStarcleaveItems.STARFLAKED_BISMUTH,
-                OperationStarcleaveItems.BISMUTH_PEGASUS_ARMOR
+                OperationStarcleaveItems.BISMUTH_PEGASUS_ARMOR,
+                OperationStarcleaveItems.BISMUTH_BLASTER,
+                OperationStarcleaveItems.BISBLAST_CANISTER
         ));
 
         iridescentOpalItems.addAll(List.of(

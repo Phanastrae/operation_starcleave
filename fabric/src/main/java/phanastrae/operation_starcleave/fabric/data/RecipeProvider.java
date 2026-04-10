@@ -193,6 +193,31 @@ public class RecipeProvider extends FabricRecipeProvider {
                         has(STARFLAKED_BISMUTH)
                 )
                 .save(exporter);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, BISMUTH_BLASTER)
+                .define('F', BISMUTH_FLAKE)
+                .define('B', STARFLAKED_BISMUTH)
+                .define('O', OURANIC_CHIP)
+                .pattern("  O")
+                .pattern("OBB")
+                .pattern("  F")
+                .unlockedBy(
+                        getHasName(OURANIC_CHIP),
+                        has(OURANIC_CHIP)
+                )
+                .save(exporter);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, BISBLAST_CANISTER, 3)
+                .define('F', BISMUTH_FLAKE)
+                .define('O', OURANIC_CHIP)
+                .pattern("F")
+                .pattern("O")
+                .pattern("F")
+                .unlockedBy(
+                        getHasName(OURANIC_CHIP),
+                        has(OURANIC_CHIP)
+                )
+                .save(exporter);
         // endregion
 
         // region stonecutting

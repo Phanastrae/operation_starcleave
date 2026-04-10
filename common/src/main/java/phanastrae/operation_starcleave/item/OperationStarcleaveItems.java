@@ -1,10 +1,12 @@
 package phanastrae.operation_starcleave.item;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.ChargedProjectiles;
 import net.minecraft.world.level.block.Block;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
@@ -175,6 +177,10 @@ public class OperationStarcleaveItems {
             false,
             properties().stacksTo(1)
     ));
+
+    public static final Item BISMUTH_BLASTER = register("bismuth_blaster", new BismuthBlasterItem(properties().durability(700).component(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.EMPTY)));
+
+    public static final Item BISBLAST_CANISTER = register("bisblast_canister", new Item(properties()));
 
     public static final Item HOLLOWED_SAC = register("hollowed_sac", new HollowedSacItem(properties()));
     public static final Item PHLOGISTON_SAC = register("phlogiston_sac", new PhlogistonSacItem(properties()));

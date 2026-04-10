@@ -163,8 +163,8 @@ public class HammertailGolemEntity extends AbstractGolem implements RangedAttack
         double dot = lookAngle.dot(targetOffset.normalize());
 
         if (dot > 0.85) {
-            BismuthBlastEntity projectile = new BismuthBlastEntity(this.level(), this, Vec3.ZERO);
-            projectile.setPos(this.getEyePosition());
+            BismuthBlastEntity projectile = new BismuthBlastEntity(this.level(), this);
+            projectile.setCanHitHammertails(false);
             projectile.shoot(targetOffset.x, targetOffset.y, targetOffset.z, 0.5F, 7.0F);
             this.playSound(OperationStarcleaveSoundEvents.HAMMERTAIL_GOLEM_SHOOT, 1.0F, 1.2F + 0.8F * random.nextFloat());
             this.level().addFreshEntity(projectile);

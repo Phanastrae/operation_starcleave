@@ -43,6 +43,31 @@
       "item/armor/equip_iron6"
     ]
   },
+  "item.bismuth_blaster.finish_loading": {
+    "subtitle": "subtitles.operation_starcleave.item.bismuth_blaster.finish_loading",
+    "sounds": [
+      "random/click"
+    ]
+  },
+  "item.bismuth_blaster.load": {
+    "subtitle": "subtitles.operation_starcleave.item.bismuth_blaster.load",
+    "sounds": [
+      "block/brewing_stand/brew1",
+      "block/brewing_stand/brew2"
+    ]
+  },
+  "item.bismuth_blaster.shoot": {
+    "subtitle": "subtitles.operation_starcleave.item.bismuth_blaster.shoot",
+    "sounds": [
+      "note/bit"
+    ]
+  },
+  "item.bismuth_blaster.start_loading": {
+    "subtitle": "subtitles.operation_starcleave.item.bismuth_blaster.start_loading",
+    "sounds": [
+      "random/click"
+    ]
+  },
   "item.hollowed_sac.use": {
     "subtitle": "subtitles.operation_starcleave.item.hollowed_sac.use",
     "sounds": [

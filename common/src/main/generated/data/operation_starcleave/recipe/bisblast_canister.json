@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "F": {
+      "item": "operation_starcleave:bismuth_flake"
+    },
+    "O": {
+      "item": "operation_starcleave:ouranic_chip"
+    }
+  },
+  "pattern": [
+    "F",
+    "O",
+    "F"
+  ],
+  "result": {
+    "count": 3,
+    "id": "operation_starcleave:bisblast_canister"
+  }
+}
