@@ -30,6 +30,7 @@ import phanastrae.operation_starcleave.fluid.OperationStarcleaveFluids;
 import phanastrae.operation_starcleave.item.OperationStarcleaveArmorMaterials;
 import phanastrae.operation_starcleave.item.OperationStarcleaveCreativeModeTabs;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
+import phanastrae.operation_starcleave.item.enchantment.OperationStarcleaveEnchantmentEffectComponents;
 import phanastrae.operation_starcleave.mixin.common.accessor.item.ShovelItemAccessor;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 import phanastrae.operation_starcleave.recipe.OperationStarcleaveRecipeSerializers;
@@ -63,6 +64,8 @@ public class OperationStarcleave {
 
         // data components
         rla.addRegistryListener(BuiltInRegistries.DATA_COMPONENT_TYPE, OperationStarcleaveComponentTypes::init);
+        // enchantment effects
+        rla.addRegistryListener(BuiltInRegistries.ENCHANTMENT_EFFECT_COMPONENT_TYPE, OperationStarcleaveEnchantmentEffectComponents::init);
 
         // creative mode tabs
         rla.addRegistryListener(BuiltInRegistries.CREATIVE_MODE_TAB, OperationStarcleaveCreativeModeTabs::init);

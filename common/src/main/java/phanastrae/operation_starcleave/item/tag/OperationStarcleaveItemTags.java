@@ -9,6 +9,8 @@ public class OperationStarcleaveItemTags {
     public static final TagKey<Item> STARBLEACHED_LOGS = of("starbleached_logs");
     public static final TagKey<Item> NUCLEIC_FISSUREROOTS = of("nucleic_fissureroots");
 
+    public static final TagKey<Item> STOCKPILE_ENCHANTABLE = of("enchantable/stockpile");
+
     private static TagKey<Item> of(String id) {
         return TagKey.create(Registries.ITEM, OperationStarcleave.id(id));
     }

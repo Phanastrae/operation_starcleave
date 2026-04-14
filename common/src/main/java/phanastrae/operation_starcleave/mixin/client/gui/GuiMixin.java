@@ -97,21 +97,31 @@ public abstract class GuiMixin {
                 return;
             }
 
-            int maxAmmoCount = BismuthBlasterItem.getStoreSize();
-            int currentAmmoCount = BismuthBlasterItem.currentStoredAmmo(blasterStack);
+            int ammoSlotCount = BismuthBlasterItem.getStoreSize(blasterStack, player);
+            int ammoFilledCount = BismuthBlasterItem.currentStoredAmmo(blasterStack);
+            int occupiedSlotCount = Math.max(ammoSlotCount, ammoFilledCount);
 
             int width = 8;
-            int spacingWidth = 10;
             int height = 8;
-            int x = (guiGraphics.guiWidth() - width) / 2 - spacingWidth * (maxAmmoCount - 1) / 2;
-            int y = (guiGraphics.guiHeight() - height) / 2 + 24;
+            int spacingWidth = 10;
+            int spacingHeight = 9;
+            int baseX = (guiGraphics.guiWidth() - width) / 2;
+            int baseY = (guiGraphics.guiHeight() - height) / 2 + 24;
 
-            for (int i = 0; i < maxAmmoCount || i < currentAmmoCount; i++) {
-                guiGraphics.blitSprite(CROSSHAIR_AMMO_BACKGROUND, x + i * spacingWidth, y, width, height);
-            }
+            int maxRowSize = 7;
+            int rowSize = Math.clamp(ammoSlotCount, 1, maxRowSize);
 
-            for (int i = 0; i < currentAmmoCount; i++) {
-                guiGraphics.blitSprite(CROSSHAIR_AMMO_FULL, x + i * spacingWidth, y, width, height);
+            int x = baseX - (spacingWidth * (rowSize - 1)) / 2;
+
+            for (int i = 0; i < occupiedSlotCount; i++) {
+                int row = i / rowSize;
+                int slotInRow = i - row * rowSize;
+                int y = baseY + row * spacingHeight;
+
+                guiGraphics.blitSprite(CROSSHAIR_AMMO_BACKGROUND, x + slotInRow * spacingWidth, y, width, height);
+                if (i < ammoFilledCount) {
+                    guiGraphics.blitSprite(CROSSHAIR_AMMO_FULL, x + slotInRow * spacingWidth, y, width, height);
+                }
             }
         }
     }

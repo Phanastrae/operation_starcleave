@@ -164,5 +164,11 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
                 .add(
                         CELESTIAL_OPAL_SHARD
                 );
+
+        // starcleave
+        getOrCreateTagBuilder(OperationStarcleaveItemTags.STOCKPILE_ENCHANTABLE)
+                .add(
+                        BISMUTH_BLASTER
+                );
     }
 }

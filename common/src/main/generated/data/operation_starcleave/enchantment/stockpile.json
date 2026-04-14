@@ -1,0 +1,31 @@
+{
+  "anvil_cost": 2,
+  "description": {
+    "translate": "enchantment.operation_starcleave.stockpile"
+  },
+  "effects": {
+    "operation_starcleave:storage_bonus": {
+      "type": "minecraft:add",
+      "value": {
+        "type": "minecraft:linear",
+        "base": 1.0,
+        "per_level_above_first": 1.0
+      }
+    }
+  },
+  "max_cost": {
+    "base": 14,
+    "per_level_above_first": 13
+  },
+  "max_level": 4,
+  "min_cost": {
+    "base": 1,
+    "per_level_above_first": 13
+  },
+  "slots": [
+    "mainhand",
+    "offhand"
+  ],
+  "supported_items": "#operation_starcleave:enchantable/stockpile",
+  "weight": 5
+}

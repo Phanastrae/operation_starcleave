@@ -138,6 +138,8 @@
 
   "emi.category.operation_starcleave.item_starbleaching": "Starbleaching",
 
+  "enchantment.operation_starcleave.stockpile": "Stockpile",
+
   "entity.operation_starcleave.firmament_rejuvenator": "Firmament Rejuvenator",
   "entity.operation_starcleave.hammertail_golem": "Hammertail Golem",
   "entity.operation_starcleave.nuclear_stardrop": "Nuclear Stardrop",
@@ -252,5 +254,6 @@
   "tag.fluid.operation_starcleave.petrichoric_plasma": "Petrichoric Plasma",
   "tag.fluid.operation_starcleave.starbleach": "Starbleach",
   "tag.item.operation_starcleave.starbleached_logs": "Starbleached Logs",
-  "tag.item.operation_starcleave.nucleic_fissureroots": "Nucleic Fissureroots"
+  "tag.item.operation_starcleave.nucleic_fissureroots": "Nucleic Fissureroots",
+  "tag.item.operation_starcleave.enchantable.stockpile": "Stockpile Enchantable"
 }

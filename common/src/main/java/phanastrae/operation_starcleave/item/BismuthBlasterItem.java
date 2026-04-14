@@ -20,6 +20,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.entity.projectile.BismuthBlastEntity;
+import phanastrae.operation_starcleave.item.enchantment.EnchantmentUtil;
 import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
 
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class BismuthBlasterItem extends ProjectileWeaponItem {
         boolean hasAmmoToLoad = !player.getProjectile(stack).isEmpty();
         boolean blasterHasAmmo = !chargedProjectiles.isEmpty();
 
-        if (hasAmmoToLoad && canInsertInto(stack) && (!blasterHasAmmo || player.isCrouching())) {
+        if (hasAmmoToLoad && canInsertInto(stack, player) && (!blasterHasAmmo || player.isCrouching())) {
             this.playStartLoadingSound(player);
             player.startUsingItem(usedHand);
             return InteractionResultHolder.consume(stack);
@@ -53,14 +54,18 @@ public class BismuthBlasterItem extends ProjectileWeaponItem {
         }
     }
 
-    public static int getStoreSize() {
-        return 7;
+    public static int getStoreSize(ItemStack stack, LivingEntity shooter) {
+        int storageBonus = EnchantmentUtil.processStorageBonus(stack, shooter, 0);
+        // base storage of 4
+        // each level N adds another N storage
+        // for a max of 4 + 1 + 2 + 3 + 4 = 14 storage
+        return 4 + storageBonus * (storageBonus + 1) / 2;
     }
 
     public static int getLoadSetupTime(ItemStack stack, LivingEntity shooter) {
-        // base time of 0.05 + 0.4 = 0.45s (9 ticks)
-        // with quick charge III, time is reduced to 0.05 + 0.4 * 0.25s = 0.15s (3 ticks)
-        float time = 0.05F + 0.4F * EnchantmentHelper.modifyCrossbowChargingTime(stack, shooter, 1.0F);
+        // base time of 0.15s + 0.2s = 0.35s (7 ticks)
+        // with quick charge III, time is reduced to 0.15s + 0.2s * 0.25 = 0.2s (4 ticks)
+        float time = 0.15F + 0.2F * EnchantmentHelper.modifyCrossbowChargingTime(stack, shooter, 1.0F);
         // minimum value of 0 ticks of setup time
         return Math.max(0, Mth.floor(time * 20.0F));
     }
@@ -79,7 +84,7 @@ public class BismuthBlasterItem extends ProjectileWeaponItem {
 
     @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
-        return getLoadSetupTime(stack, entity) + (getStoreSize() - 1) * getCanisterLoadTime(stack, entity) + 3;
+        return getLoadSetupTime(stack, entity) + (getStoreSize(stack, entity) - 1) * getCanisterLoadTime(stack, entity) + 3;
     }
 
     @Override
@@ -92,7 +97,7 @@ public class BismuthBlasterItem extends ProjectileWeaponItem {
         if (usedTicks >= loadSetupTime && (usedTicks - loadSetupTime) % canisterLoadTime == 0) {
             if (this.tryLoadProjectiles(livingEntity, stack)) {
                 this.playLoadAmmoSound(livingEntity);
-                if (!canInsertInto(stack)) {
+                if (!canInsertInto(stack, livingEntity)) {
                     this.playFullyLoadedSound(livingEntity);
                 }
             }
@@ -104,13 +109,9 @@ public class BismuthBlasterItem extends ProjectileWeaponItem {
         return stack.is(this);
     }
 
-    private static boolean canInsertInto(ItemStack stack) {
+    private static boolean canInsertInto(ItemStack stack, LivingEntity entity) {
         ChargedProjectiles chargedProjectiles = stack.getOrDefault(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.EMPTY);
-        return canInsertInto(chargedProjectiles);
-    }
-
-    private static boolean canInsertInto(ChargedProjectiles chargedProjectiles) {
-        return currentStoredAmmo(chargedProjectiles) < getStoreSize();
+        return currentStoredAmmo(chargedProjectiles) < getStoreSize(stack, entity);
     }
 
     public static int currentStoredAmmo(ItemStack stack) {
@@ -128,8 +129,7 @@ public class BismuthBlasterItem extends ProjectileWeaponItem {
     }
 
     private boolean tryLoadProjectiles(LivingEntity shooter, ItemStack stack) {
-        ChargedProjectiles chargedProjectiles = stack.getOrDefault(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.EMPTY);
-        if (!canInsertInto(chargedProjectiles)) {
+        if (!canInsertInto(stack, shooter)) {
             return false;
         }
 
@@ -137,6 +137,7 @@ public class BismuthBlasterItem extends ProjectileWeaponItem {
         if (drawnList.isEmpty()) {
             return false;
         } else {
+            ChargedProjectiles chargedProjectiles = stack.getOrDefault(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.EMPTY);
             List<ItemStack> ammoList = new ArrayList<>(chargedProjectiles.getItems());
             ammoList.addAll(drawnList);
 
