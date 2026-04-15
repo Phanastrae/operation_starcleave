@@ -6,14 +6,17 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.level.ItemLike;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.services.XPlatInterface;
 
 import java.util.Collection;
 import java.util.function.BiConsumer;
+import java.util.stream.IntStream;
 
 import static phanastrae.operation_starcleave.item.OperationStarcleaveItems.*;
 
@@ -211,6 +214,19 @@ public class OperationStarcleaveCreativeModeTabs {
                 TRACTORBLOOM_SPAWN_EGG,
                 HAMMERTAIL_GOLEM_SPAWN_EGG
         );
+
+        // add starcleave enchantments to tab
+        helper.forTabRun(OPERATION_STARCLEAVE_RESOURCE_KEY, ((itemDisplayParameters, output) -> {
+            itemDisplayParameters.holders().lookup(Registries.ENCHANTMENT).ifPresent(lookup -> {
+                lookup.listElements()
+                        .filter(enchantmentReference -> enchantmentReference.key().location().getNamespace().equals(OperationStarcleave.MOD_ID))
+                        .flatMap(
+                                enchantmentRef -> IntStream.rangeClosed(enchantmentRef.value().getMinLevel(), enchantmentRef.value().getMaxLevel())
+                                        .mapToObj(level -> EnchantedBookItem.createForEnchantment(new EnchantmentInstance(enchantmentRef, level)))
+                        )
+                        .forEach(output::accept);
+            });
+        }));
 
         // Building Blocks
         helper.addAfter(Items.WARPED_BUTTON, BUILDING_BLOCKS,
