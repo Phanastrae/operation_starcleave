@@ -1,8 +1,5 @@
-package phanastrae.operation_starcleave.world.firmament;
+package phanastrae.operation_starcleave.world.firmament.storage;
 
-import java.io.IOException;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ChunkMap;
 import net.minecraft.server.level.ServerLevel;
@@ -11,6 +8,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.storage.IOWorker;
 import net.minecraft.world.level.chunk.storage.RegionStorageInfo;
 import net.minecraft.world.level.storage.LevelStorageSource;
+import phanastrae.operation_starcleave.duck.FirmamentStorageHolder;
+
+import java.io.IOException;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 public class FirmamentStorage {
 

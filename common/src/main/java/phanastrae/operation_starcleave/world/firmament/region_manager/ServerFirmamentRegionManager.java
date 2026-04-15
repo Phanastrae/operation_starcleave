@@ -1,19 +1,25 @@
-package phanastrae.operation_starcleave.world.firmament;
+package phanastrae.operation_starcleave.world.firmament.region_manager;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.thread.BlockableEventLoop;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
+import phanastrae.operation_starcleave.duck.FirmamentWatcher;
+import phanastrae.operation_starcleave.world.firmament.Firmament;
+import phanastrae.operation_starcleave.world.firmament.FirmamentRegion;
+import phanastrae.operation_starcleave.world.firmament.FirmamentRegionHolder;
+import phanastrae.operation_starcleave.world.firmament.pos.RegionPos;
+import phanastrae.operation_starcleave.world.firmament.storage.FirmamentStorage;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 public class ServerFirmamentRegionManager extends FirmamentRegionManager {
 
@@ -53,7 +59,7 @@ public class ServerFirmamentRegionManager extends FirmamentRegionManager {
     public void tick() {
         // load all regions in a 3x3 radius of all players
         for(ServerPlayer serverPlayerEntity : this.serverWorld.players()) {
-            ((FirmamentWatcher)serverPlayerEntity).operation_starcleave$getWatchedRegions().watchedRegions.forEach(id -> {
+            ((FirmamentWatcher)serverPlayerEntity).operation_starcleave$getWatchedRegions().getWatchedRegions().forEach(id -> {
                 if(this.firmamentRegionHolders.containsKey(id)) {
                     this.firmamentRegionHolders.get(id).recordAccess();
                 } else {
@@ -64,7 +70,7 @@ public class ServerFirmamentRegionManager extends FirmamentRegionManager {
         // keep active regions loaded
         this.firmamentRegionHolders.forEach((id, firmamentRegionHolder) -> {
             FirmamentRegion firmamentRegion = firmamentRegionHolder.getFirmamentRegion();
-            if(firmamentRegion != null && firmamentRegion.shouldUpdate) {
+            if(firmamentRegion != null && firmamentRegion.shouldUpdate()) {
                 firmamentRegionHolder.recordAccess();
             }
         });

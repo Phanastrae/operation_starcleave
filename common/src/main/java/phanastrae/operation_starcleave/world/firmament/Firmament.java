@@ -4,6 +4,10 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.OperationStarcleave;
+import phanastrae.operation_starcleave.duck.FirmamentHolder;
+import phanastrae.operation_starcleave.world.firmament.actor.FirmamentActor;
+import phanastrae.operation_starcleave.world.firmament.pos.RegionPos;
+import phanastrae.operation_starcleave.world.firmament.region_manager.FirmamentRegionManager;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -105,7 +109,7 @@ public class Firmament implements FirmamentAccess {
     @Override
     public void forEachActivePosition(BiConsumer<Integer, Integer> method) {
         forEachRegion(firmamentRegion -> {
-            if (firmamentRegion.active) {
+            if (firmamentRegion.isActive()) {
                 firmamentRegion.forEachActivePosition((x, z) -> method.accept(x + firmamentRegion.x, z + firmamentRegion.z));
             }
         });

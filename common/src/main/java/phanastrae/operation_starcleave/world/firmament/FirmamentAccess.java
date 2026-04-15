@@ -1,5 +1,7 @@
 package phanastrae.operation_starcleave.world.firmament;
 
+import phanastrae.operation_starcleave.world.firmament.actor.FirmamentActor;
+
 import java.util.function.Consumer;
 
 public interface FirmamentAccess extends FirmamentView {

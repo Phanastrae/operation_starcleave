@@ -17,9 +17,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import phanastrae.operation_starcleave.duck.FirmamentWatcher;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityAttachment;
 import phanastrae.operation_starcleave.world.firmament.FirmamentRegionsWatched;
-import phanastrae.operation_starcleave.world.firmament.FirmamentWatcher;
 
 @Mixin(ServerPlayer.class)
 public abstract class ServerPlayerMixin extends Player implements FirmamentWatcher {

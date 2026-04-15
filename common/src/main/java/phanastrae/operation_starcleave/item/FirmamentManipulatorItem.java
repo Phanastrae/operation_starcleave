@@ -18,9 +18,9 @@ import org.joml.Math;
 import phanastrae.operation_starcleave.network.packet.FirmamentCleavedPayload;
 import phanastrae.operation_starcleave.services.XPlatInterface;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
-import phanastrae.operation_starcleave.world.firmament.FirmamentShatterActor;
 import phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion;
-import phanastrae.operation_starcleave.world.firmament.SubRegionPos;
+import phanastrae.operation_starcleave.world.firmament.actor.FirmamentShatterActor;
+import phanastrae.operation_starcleave.world.firmament.pos.SubRegionPos;
 
 import java.util.List;
 

@@ -10,7 +10,7 @@ import phanastrae.operation_starcleave.network.packet.AcknowledgeFirmamentRegion
 import phanastrae.operation_starcleave.network.packet.AttackFirmamentTilePayload;
 import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
-import phanastrae.operation_starcleave.world.firmament.FirmamentTilePos;
+import phanastrae.operation_starcleave.world.firmament.pos.FirmamentTilePos;
 
 public class OperationStarcleaveServerPacketHandler {
 

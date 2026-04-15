@@ -4,8 +4,13 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.util.TriConsumer;
+import phanastrae.operation_starcleave.duck.FirmamentWatcher;
 import phanastrae.operation_starcleave.network.packet.UpdateFirmamentSubRegionPayload;
 import phanastrae.operation_starcleave.services.XPlatInterface;
+import phanastrae.operation_starcleave.world.firmament.actor.FirmamentActor;
+import phanastrae.operation_starcleave.world.firmament.data.FirmamentSubRegionData;
+import phanastrae.operation_starcleave.world.firmament.pos.RegionPos;
+import phanastrae.operation_starcleave.world.firmament.pos.SubRegionPos;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -86,7 +91,7 @@ public class FirmamentSubRegion implements FirmamentAccess {
             }
         }
         this.pendingClientUpdate = true;
-        this.firmamentRegion.pendingClientUpdate = true;
+        this.firmamentRegion.setPendingClientUpdate(true);
         this.clearActors();
     }
 
@@ -331,7 +336,7 @@ public class FirmamentSubRegion implements FirmamentAccess {
 
                 List<ServerPlayer> nearbyPlayers = new ArrayList<>();
                 serverWorld.players().forEach(serverPlayerEntity -> {
-                    if(((FirmamentWatcher)serverPlayerEntity).operation_starcleave$getWatchedRegions().watchedRegions.contains(regionPos.id)) {
+                    if(((FirmamentWatcher)serverPlayerEntity).operation_starcleave$getWatchedRegions().getWatchedRegions().contains(regionPos.id)) {
                         nearbyPlayers.add(serverPlayerEntity);
                     }
                 });

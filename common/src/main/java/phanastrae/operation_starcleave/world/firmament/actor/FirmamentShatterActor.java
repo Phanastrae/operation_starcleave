@@ -1,9 +1,11 @@
-package phanastrae.operation_starcleave.world.firmament;
+package phanastrae.operation_starcleave.world.firmament.actor;
 
 import net.minecraft.world.level.Level;
 import org.joml.Math;
 import phanastrae.operation_starcleave.entity.NuclearStormcloudEntity;
 import phanastrae.operation_starcleave.world.OperationStarcleaveGameRules;
+import phanastrae.operation_starcleave.world.firmament.Firmament;
+import phanastrae.operation_starcleave.world.firmament.FirmamentUpdater;
 
 import java.util.Random;
 

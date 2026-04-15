@@ -7,7 +7,7 @@ import phanastrae.operation_starcleave.client.render.firmament.FirmamentTextureS
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 import phanastrae.operation_starcleave.world.firmament.FirmamentRegion;
 import phanastrae.operation_starcleave.world.firmament.FirmamentRegionHolder;
-import phanastrae.operation_starcleave.world.firmament.FirmamentRegionManager;
+import phanastrae.operation_starcleave.world.firmament.region_manager.FirmamentRegionManager;
 
 import java.util.function.Consumer;
 

@@ -16,7 +16,12 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL30C;
 import phanastrae.operation_starcleave.client.duck.LevelRendererDuck;
-import phanastrae.operation_starcleave.world.firmament.*;
+import phanastrae.operation_starcleave.world.firmament.Firmament;
+import phanastrae.operation_starcleave.world.firmament.FirmamentAccess;
+import phanastrae.operation_starcleave.world.firmament.FirmamentRegion;
+import phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion;
+import phanastrae.operation_starcleave.world.firmament.pos.RegionPos;
+import phanastrae.operation_starcleave.world.firmament.pos.SubRegionPos;
 
 import java.util.ArrayList;
 import java.util.List;

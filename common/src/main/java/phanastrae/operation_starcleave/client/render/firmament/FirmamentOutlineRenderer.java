@@ -18,7 +18,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
-import phanastrae.operation_starcleave.world.firmament.FirmamentTilePos;
+import phanastrae.operation_starcleave.world.firmament.pos.FirmamentTilePos;
 
 public class FirmamentOutlineRenderer {
 

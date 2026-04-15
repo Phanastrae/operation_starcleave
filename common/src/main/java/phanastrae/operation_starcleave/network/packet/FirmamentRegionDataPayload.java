@@ -5,7 +5,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import phanastrae.operation_starcleave.OperationStarcleave;
-import phanastrae.operation_starcleave.world.firmament.FirmamentRegionData;
+import phanastrae.operation_starcleave.world.firmament.data.FirmamentRegionData;
 
 public record FirmamentRegionDataPayload(long regionId, FirmamentRegionData firmamentRegionData) implements CustomPacketPayload {
     public static final StreamCodec<RegistryFriendlyByteBuf, FirmamentRegionDataPayload> PACKET_CODEC = CustomPacketPayload.codec(FirmamentRegionDataPayload::write, FirmamentRegionDataPayload::new);

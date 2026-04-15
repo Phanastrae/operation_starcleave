@@ -1,6 +1,7 @@
-package phanastrae.operation_starcleave.world.firmament;
+package phanastrae.operation_starcleave.world.firmament.pos;
 
 import net.minecraft.world.phys.Vec3;
+import phanastrae.operation_starcleave.world.firmament.Firmament;
 
 public class FirmamentTilePos {
     final public int tileX;

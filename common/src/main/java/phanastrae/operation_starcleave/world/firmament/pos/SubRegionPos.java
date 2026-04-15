@@ -1,4 +1,6 @@
-package phanastrae.operation_starcleave.world.firmament;
+package phanastrae.operation_starcleave.world.firmament.pos;
+
+import phanastrae.operation_starcleave.world.firmament.FirmamentRegion;
 
 public class SubRegionPos {
 

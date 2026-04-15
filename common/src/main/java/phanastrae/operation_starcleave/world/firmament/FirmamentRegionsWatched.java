@@ -1,16 +1,17 @@
 package phanastrae.operation_starcleave.world.firmament;
 
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+import net.minecraft.server.level.ServerPlayer;
 import phanastrae.operation_starcleave.server.network.FirmamentRegionDataSender;
+import phanastrae.operation_starcleave.world.firmament.pos.RegionPos;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import net.minecraft.server.level.ServerPlayer;
 
 public class FirmamentRegionsWatched {
 
-    Collection<Long> watchedRegions;
+    private final Collection<Long> watchedRegions;
     private final ServerPlayer player;
 
     public FirmamentRegionsWatched(ServerPlayer player) {
@@ -78,5 +79,9 @@ public class FirmamentRegionsWatched {
                 FirmamentRegionDataSender.getFirmamentRegionDataSender(player.connection).unload(player, regionPos);
             }
         });
+    }
+
+    public Collection<Long> getWatchedRegions() {
+        return watchedRegions;
     }
 }

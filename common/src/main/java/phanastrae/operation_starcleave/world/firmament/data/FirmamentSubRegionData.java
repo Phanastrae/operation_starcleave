@@ -1,4 +1,4 @@
-package phanastrae.operation_starcleave.world.firmament;
+package phanastrae.operation_starcleave.world.firmament.data;
 
 import net.minecraft.network.FriendlyByteBuf;
 import phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion;

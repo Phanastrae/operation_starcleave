@@ -11,7 +11,7 @@ import org.joml.Matrix4f;
 import phanastrae.operation_starcleave.client.render.OperationStarcleaveRenderTypes;
 import phanastrae.operation_starcleave.client.render.firmament.FirmamentActorRenderable;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
-import phanastrae.operation_starcleave.world.firmament.FirmamentActor;
+import phanastrae.operation_starcleave.world.firmament.actor.FirmamentActor;
 
 public class FirmamentDamageGlowActor extends FirmamentActor implements FirmamentActorRenderable {
 

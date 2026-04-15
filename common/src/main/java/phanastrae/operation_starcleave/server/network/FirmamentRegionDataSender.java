@@ -16,8 +16,8 @@ import phanastrae.operation_starcleave.network.packet.UnloadFirmamentRegionPaylo
 import phanastrae.operation_starcleave.services.XPlatInterface;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 import phanastrae.operation_starcleave.world.firmament.FirmamentRegion;
-import phanastrae.operation_starcleave.world.firmament.FirmamentRegionData;
-import phanastrae.operation_starcleave.world.firmament.RegionPos;
+import phanastrae.operation_starcleave.world.firmament.data.FirmamentRegionData;
+import phanastrae.operation_starcleave.world.firmament.pos.RegionPos;
 
 import java.util.Comparator;
 import java.util.List;

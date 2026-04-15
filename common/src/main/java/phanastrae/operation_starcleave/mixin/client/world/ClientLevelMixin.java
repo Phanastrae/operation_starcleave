@@ -17,9 +17,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import phanastrae.operation_starcleave.client.world.firmament.ClientFirmamentRegionManager;
 import phanastrae.operation_starcleave.client.world.starbleach.StarbleachParticles;
+import phanastrae.operation_starcleave.duck.FirmamentHolder;
 import phanastrae.operation_starcleave.duck.LevelDuckInterface;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
-import phanastrae.operation_starcleave.world.firmament.FirmamentHolder;
 
 import java.util.function.Supplier;
 

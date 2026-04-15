@@ -1,4 +1,6 @@
-package phanastrae.operation_starcleave.world.firmament;
+package phanastrae.operation_starcleave.world.firmament.actor;
+
+import phanastrae.operation_starcleave.world.firmament.Firmament;
 
 public abstract class FirmamentActor {
 

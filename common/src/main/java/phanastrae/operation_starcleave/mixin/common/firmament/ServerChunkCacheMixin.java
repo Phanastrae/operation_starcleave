@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
-import phanastrae.operation_starcleave.world.firmament.ServerFirmamentRegionManager;
+import phanastrae.operation_starcleave.world.firmament.region_manager.ServerFirmamentRegionManager;
 
 @Mixin(ServerChunkCache.class)
 public class ServerChunkCacheMixin {

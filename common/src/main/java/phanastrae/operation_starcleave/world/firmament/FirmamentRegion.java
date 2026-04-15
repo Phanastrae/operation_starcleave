@@ -1,8 +1,13 @@
 package phanastrae.operation_starcleave.world.firmament;
 
+import net.minecraft.nbt.CompoundTag;
+import phanastrae.operation_starcleave.world.firmament.actor.FirmamentActor;
+import phanastrae.operation_starcleave.world.firmament.data.FirmamentRegionData;
+import phanastrae.operation_starcleave.world.firmament.data.FirmamentSubRegionData;
+import phanastrae.operation_starcleave.world.firmament.pos.RegionPos;
+
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import net.minecraft.nbt.CompoundTag;
 
 public class FirmamentRegion implements FirmamentAccess {
     // getter/setter functions should only be called with x and z in range [0, 511]
@@ -16,9 +21,9 @@ public class FirmamentRegion implements FirmamentAccess {
     public static final int SUBREGION_SIZE_BITS = 5;
 
     public FirmamentSubRegion[][] subRegions;
-    boolean shouldUpdate = false;
-    boolean active = false;
-    boolean pendingClientUpdate = false;
+    private boolean shouldUpdate = false;
+    private boolean active = false;
+    private boolean pendingClientUpdate = false;
 
     // world coords of minimum x-z corner
     public final int x;
@@ -218,6 +223,14 @@ public class FirmamentRegion implements FirmamentAccess {
     @Override
     public boolean shouldUpdate() {
         return shouldUpdate;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setPendingClientUpdate(boolean pendingClientUpdate) {
+        this.pendingClientUpdate = pendingClientUpdate;
     }
 
     public void flushUpdates() {

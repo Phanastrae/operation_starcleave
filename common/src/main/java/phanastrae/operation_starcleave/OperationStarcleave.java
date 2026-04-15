@@ -23,6 +23,7 @@ import phanastrae.operation_starcleave.block.OperationStarcleaveToolActions;
 import phanastrae.operation_starcleave.block.StarbleachCauldronBlock;
 import phanastrae.operation_starcleave.block.entity.OperationStarcleaveBlockEntityTypes;
 import phanastrae.operation_starcleave.component.OperationStarcleaveComponentTypes;
+import phanastrae.operation_starcleave.duck.FirmamentWatcher;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveSpawnPlacements;
 import phanastrae.operation_starcleave.entity.effect.OperationStarcleaveStatusEffects;
@@ -39,7 +40,6 @@ import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
 import phanastrae.operation_starcleave.world.OperationStarcleaveGameRules;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 import phanastrae.operation_starcleave.world.firmament.FirmamentRegion;
-import phanastrae.operation_starcleave.world.firmament.FirmamentWatcher;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;

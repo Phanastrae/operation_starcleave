@@ -21,7 +21,7 @@ import phanastrae.operation_starcleave.client.compat.ClientCompat;
 import phanastrae.operation_starcleave.client.duck.LevelRendererDuck;
 import phanastrae.operation_starcleave.client.render.OperationStarcleaveRenderTypes;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
-import phanastrae.operation_starcleave.world.firmament.RegionPos;
+import phanastrae.operation_starcleave.world.firmament.pos.RegionPos;
 
 import static com.mojang.blaze3d.platform.GlConst.*;
 
