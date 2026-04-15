@@ -27,7 +27,6 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import net.neoforged.neoforge.fluids.FluidType;
@@ -113,9 +112,6 @@ public class OperationStarcleaveNeoForge {
     public void setupGameBusEvents(IEventBus gameEventBus) {
         // world tick start
         gameEventBus.addListener(this::tickLevel);
-
-        // player changes dimension
-        gameEventBus.addListener(this::onPlayerChangeLevel);
 
         // add tooltips
         gameEventBus.addListener(this::addTooltips);
@@ -276,10 +272,6 @@ public class OperationStarcleaveNeoForge {
 
     public void tickLevel(LevelTickEvent.Pre event) {
         OperationStarcleave.startLevelTick(event.getLevel());
-    }
-
-    public void onPlayerChangeLevel(PlayerEvent.PlayerChangedDimensionEvent event) {
-        OperationStarcleave.onPlayerChangeDimension(event.getEntity());
     }
 
     public void addTooltips(ItemTooltipEvent event) {

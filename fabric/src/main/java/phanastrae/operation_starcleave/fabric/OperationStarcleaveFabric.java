@@ -1,7 +1,6 @@
 package phanastrae.operation_starcleave.fabric;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
@@ -89,9 +88,6 @@ public class OperationStarcleaveFabric implements ModInitializer {
 
         // world tick start
         ServerTickEvents.START_WORLD_TICK.register((OperationStarcleave::startLevelTick));
-
-        // player changes dimension
-        ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register(((player, origin, destination) -> OperationStarcleave.onPlayerChangeDimension(player)));
     }
 
     public void setupCreativeTabs() {

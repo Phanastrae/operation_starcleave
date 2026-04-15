@@ -1,7 +1,6 @@
 package phanastrae.operation_starcleave.mixin.common.firmament;
 
 import com.mojang.datafixers.DataFixer;
-import net.minecraft.core.SectionPos;
 import net.minecraft.server.level.ChunkMap;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -13,13 +12,13 @@ import net.minecraft.world.level.entity.ChunkStatusUpdateListener;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import net.minecraft.world.level.storage.LevelStorageSource;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import phanastrae.operation_starcleave.duck.FirmamentStorageHolder;
 import phanastrae.operation_starcleave.duck.FirmamentWatcher;
 import phanastrae.operation_starcleave.world.firmament.FirmamentRegionsWatched;
-import phanastrae.operation_starcleave.world.firmament.pos.RegionPos;
 import phanastrae.operation_starcleave.world.firmament.storage.FirmamentStorage;
 
 import java.io.IOException;
@@ -29,6 +28,7 @@ import java.util.function.Supplier;
 @Mixin(ChunkMap.class)
 public class ChunkMapMixin implements FirmamentStorageHolder {
 
+    @Unique
     private FirmamentStorage operation_starcleave$firmament_storage;
 
     @Inject(method = "<init>", at = @At("RETURN"))
@@ -41,15 +41,21 @@ public class ChunkMapMixin implements FirmamentStorageHolder {
         this.operation_starcleave$firmament_storage.close();
     }
 
-    @Inject(method = "updatePlayerPos", at = @At(value = "HEAD"))
-    private void operation_starcleave$updatePosition(ServerPlayer player, CallbackInfo ci) {
-        SectionPos chunkSectionPos1 = player.getLastSectionPos();
-        RegionPos regionPos1 = RegionPos.fromWorldCoords(chunkSectionPos1.minBlockX(), chunkSectionPos1.minBlockZ());
-        SectionPos chunkSectionPos2 = SectionPos.of(player);
-        RegionPos regionPos2 = RegionPos.fromWorldCoords(chunkSectionPos2.minBlockX(), chunkSectionPos2.minBlockZ());
+    @Inject(method = "updatePlayerStatus", at = @At("HEAD"))
+    private void operation_starcleave$onUpdateStatus(ServerPlayer player, boolean track, CallbackInfo ci) {
+        FirmamentRegionsWatched watched = ((FirmamentWatcher) player).operation_starcleave$getWatchedRegions();
+        watched.unWatchAll();
 
-        FirmamentRegionsWatched firmamentRegionsWatched = ((FirmamentWatcher)player).operation_starcleave$getWatchedRegions();
-        firmamentRegionsWatched.onPositionChanged(regionPos1, regionPos2);
+        if (track) {
+            watched.onPositionChanged(player);
+        }
+    }
+
+    @Inject(method = "move", at = @At(value = "HEAD"))
+    private void operation_starcleave$updatePosition(ServerPlayer player, CallbackInfo ci) {
+        FirmamentRegionsWatched watched = ((FirmamentWatcher) player).operation_starcleave$getWatchedRegions();
+
+        watched.onPositionChanged(player);
     }
 
     @Override
