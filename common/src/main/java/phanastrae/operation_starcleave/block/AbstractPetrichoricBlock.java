@@ -34,7 +34,7 @@ public abstract class AbstractPetrichoricBlock extends Block {
         entity.makeStuckInBlock(state, new Vec3(0.85, 0.5, 0.85));
 
         // damage to entities inside block
-        if(entity.hurt(OperationStarcleaveDamageTypes.source(level, OperationStarcleaveDamageTypes.IN_PHLOGISTIC_FIRE), 12.0F)) { // TODO add custom damage type
+        if (entity.hurt(OperationStarcleaveDamageTypes.plasma(level), 12.0F)) {
             if (!(entity instanceof Player player && player.getAbilities().invulnerable && player.getAbilities().flying)) {
                 RandomSource random = level.getRandom();
                 entity.push(random.nextFloat() * 0.8 - 0.4, random.nextFloat() * 0.3 + 0.6, random.nextFloat() * 0.8 - 0.4);
@@ -46,7 +46,7 @@ public abstract class AbstractPetrichoricBlock extends Block {
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         // particles
 
-        if(level.getBlockState(pos.above()).isAir()) {
+        if (level.getBlockState(pos.above()).isAir()) {
             double x = pos.getX() + random.nextDouble();
             double y = pos.getY() + random.nextDouble() * 0.2 + 0.8;
             double z = pos.getZ() + random.nextDouble();
@@ -58,7 +58,7 @@ public abstract class AbstractPetrichoricBlock extends Block {
         int posY = pos.getY();
 
         return BlockPos.breadthFirstTraversal(pos, 2, 65, (currentPos, queuer) -> {
-            for(Direction direction : UPDATE_SHAPE_ORDER) {
+            for (Direction direction : UPDATE_SHAPE_ORDER) {
                 queuer.accept(currentPos.relative(direction));
             }
         }, currentPos -> {
@@ -84,7 +84,7 @@ public abstract class AbstractPetrichoricBlock extends Block {
                         // replace liquids
                         BlockState st = fluidState.isSource() ? newState : vapor;
                         level.setBlock(currentPos, st, Block.UPDATE_ALL);
-                        if(st.is(OperationStarcleaveBlocks.PLASMA_ICE)) {
+                        if (st.is(OperationStarcleaveBlocks.PLASMA_ICE)) {
                             level.scheduleTick(currentPos, newState.getBlock(), random.nextInt(2) + 1);
                         }
                         return true;
@@ -97,7 +97,7 @@ public abstract class AbstractPetrichoricBlock extends Block {
                         BlockEntity blockEntity = blockState.hasBlockEntity() ? level.getBlockEntity(currentPos) : null;
                         dropResources(blockState, level, currentPos, blockEntity);
                         level.setBlock(currentPos, newState, Block.UPDATE_ALL);
-                        if(newState.is(OperationStarcleaveBlocks.PLASMA_ICE)) {
+                        if (newState.is(OperationStarcleaveBlocks.PLASMA_ICE)) {
                             level.scheduleTick(currentPos, newState.getBlock(), random.nextInt(2) + 1);
                         }
                         return true;

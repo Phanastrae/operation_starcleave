@@ -22,6 +22,7 @@ public class OperationStarcleaveDamageTypes {
     public static ResourceKey<DamageType> UNATTRIBUTED_PHLOGISTIC_SPARK = create(id("unattributed_phlogistic_spark"));
     public static ResourceKey<DamageType> BISMUTH_BLAST = create(id("bismuth_blast"));
     public static ResourceKey<DamageType> FALLING_MOB = create(id("falling_mob"));
+    public static ResourceKey<DamageType> PLASMA = create(id("plasma"));
 
     public static DamageSource phlogisticSpark(Level level, PhlogisticSparkEntity phlogisticSpark, @Nullable Entity thrower) {
         return thrower == null ? source(level, UNATTRIBUTED_PHLOGISTIC_SPARK, phlogisticSpark) : source(level, PHLOGISTIC_SPARK, phlogisticSpark, thrower);
@@ -33,6 +34,10 @@ public class OperationStarcleaveDamageTypes {
 
     public static DamageSource fallingMob(Level level, @Nullable Entity entity) {
         return source(level, FALLING_MOB, entity);
+    }
+
+    public static DamageSource plasma(Level level) {
+        return source(level, PLASMA);
     }
 
     public static DamageSource source(Level level, ResourceKey<DamageType> damageTypeKey) {

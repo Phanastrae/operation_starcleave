@@ -30,7 +30,7 @@ public class PetrichoricPlasmaLiquidBlock extends CustomLiquidBlock {
     @Override
     public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
         // damage to entities inside block
-        if(entity.hurt(OperationStarcleaveDamageTypes.source(level, OperationStarcleaveDamageTypes.IN_PHLOGISTIC_FIRE), 12.0F)) { // TODO add custom damage type
+        if (entity.hurt(OperationStarcleaveDamageTypes.plasma(level), 12.0F)) {
             if (!(entity instanceof Player player && player.getAbilities().invulnerable && player.getAbilities().flying)) {
                 RandomSource random = level.getRandom();
                 entity.push(random.nextFloat() * 0.8 - 0.4, random.nextFloat() * 0.3 + 0.6, random.nextFloat() * 0.8 - 0.4);
@@ -41,7 +41,7 @@ public class PetrichoricPlasmaLiquidBlock extends CustomLiquidBlock {
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         // particles
-        if(level.getBlockState(pos.above()).isAir()) {
+        if (level.getBlockState(pos.above()).isAir()) {
             if (random.nextInt(8) == 0) {
                 double x = pos.getX() + random.nextDouble();
                 double y = pos.getY() + random.nextDouble() * 0.2 + 0.8;
