@@ -2,8 +2,6 @@ package phanastrae.operation_starcleave.client.network;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.BossHealthOverlay;
-import net.minecraft.client.multiplayer.ChunkBatchSizeCalculator;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundSource;
@@ -12,10 +10,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import phanastrae.operation_starcleave.client.duck.BossHealthOverlayDuck;
-import phanastrae.operation_starcleave.client.duck.ClientPacketListenerDuck;
 import phanastrae.operation_starcleave.client.render.ScreenShakeManager;
 import phanastrae.operation_starcleave.client.render.firmament.FirmamentTextureStorage;
-import phanastrae.operation_starcleave.client.services.XPlatClientInterface;
 import phanastrae.operation_starcleave.client.world.firmament.ClientFirmamentRegionManager;
 import phanastrae.operation_starcleave.client.world.firmament.FirmamentDamageGlowActor;
 import phanastrae.operation_starcleave.duck.LevelDuckInterface;
@@ -29,12 +25,6 @@ import phanastrae.operation_starcleave.world.firmament.FirmamentRegionHolder;
 import phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion;
 
 public class OperationStarcleaveClientPacketHandler {
-
-    public static void startFirmamentRegionSend(StartFirmamentRegionSendPayload payload, Player player) {
-        if (player instanceof LocalPlayer localPlayer) {
-            ((ClientPacketListenerDuck) localPlayer.connection).operation_starcleave$getFirmamentRegionBatchSizeCalculator().onBatchStart();
-        }
-    }
 
     public static void receiveFirmamentRegionData(FirmamentRegionDataPayload payload, Player player) {
         Level world = player.level();
@@ -52,15 +42,6 @@ public class OperationStarcleaveClientPacketHandler {
                 firmamentRegion.readFromData(payload.firmamentRegionData());
                 FirmamentTextureStorage.getMainInstance().onRegionAdded(firmamentRegion, world);
             }
-        }
-    }
-
-    public static void sentFirmamentRegion(FirmamentRegionSentPayload payload, Player player) {
-        if (player instanceof LocalPlayer localPlayer) {
-            ChunkBatchSizeCalculator firmamentRegionBatchSizeCalculator = ((ClientPacketListenerDuck) localPlayer.connection).operation_starcleave$getFirmamentRegionBatchSizeCalculator();
-            firmamentRegionBatchSizeCalculator.onBatchFinished(payload.batchSize());
-
-            XPlatClientInterface.INSTANCE.sendPayload(new AcknowledgeFirmamentRegionDataPayload(firmamentRegionBatchSizeCalculator.getDesiredChunksPerTick()));
         }
     }
 

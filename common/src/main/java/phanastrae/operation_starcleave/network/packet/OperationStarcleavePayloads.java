@@ -14,9 +14,7 @@ public class OperationStarcleavePayloads {
     public static void init(Helper helper) {
         // s2c
         // firmament data
-        helper.registerS2C(StartFirmamentRegionSendPayload.PACKET_ID, StartFirmamentRegionSendPayload.PACKET_CODEC, OperationStarcleaveClientPacketHandler::startFirmamentRegionSend);
         helper.registerS2C(FirmamentRegionDataPayload.PACKET_ID, FirmamentRegionDataPayload.PACKET_CODEC, OperationStarcleaveClientPacketHandler::receiveFirmamentRegionData);
-        helper.registerS2C(FirmamentRegionSentPayload.PACKET_ID, FirmamentRegionSentPayload.PACKET_CODEC, OperationStarcleaveClientPacketHandler::sentFirmamentRegion);
         helper.registerS2C(UpdateFirmamentSubRegionPayload.PACKET_ID, UpdateFirmamentSubRegionPayload.PACKET_CODEC, OperationStarcleaveClientPacketHandler::updateFirmamentSubRegion);
         helper.registerS2C(UnloadFirmamentRegionPayload.PACKET_ID, UnloadFirmamentRegionPayload.PACKET_CODEC, OperationStarcleaveClientPacketHandler::unloadFirmamentRegion);
         // misc
@@ -29,7 +27,6 @@ public class OperationStarcleavePayloads {
 
         // c2s
         helper.registerC2S(AttackFirmamentTilePayload.PACKET_ID, AttackFirmamentTilePayload.PACKET_CODEC, OperationStarcleaveServerPacketHandler::attackFirmamentTile);
-        helper.registerC2S(AcknowledgeFirmamentRegionDataPayload.PACKET_ID, AcknowledgeFirmamentRegionDataPayload.PACKET_CODEC, OperationStarcleaveServerPacketHandler::acknowledgeFirmamentRegionData);
     }
 
     public interface Helper {
