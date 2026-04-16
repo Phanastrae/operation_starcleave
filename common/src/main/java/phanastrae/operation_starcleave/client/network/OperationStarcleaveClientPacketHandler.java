@@ -2,7 +2,6 @@ package phanastrae.operation_starcleave.client.network;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.BossHealthOverlay;
-import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -27,8 +26,8 @@ import phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion;
 public class OperationStarcleaveClientPacketHandler {
 
     public static void receiveFirmamentRegionData(FirmamentRegionDataPayload payload, Player player) {
-        Level world = player.level();
-        Firmament firmament = Firmament.fromLevel(world);
+        Level level = player.level();
+        Firmament firmament = Firmament.fromLevel(level);
         if (firmament != null) {
             FirmamentRegion firmamentRegion = firmament.getFirmamentRegion(payload.regionId());
             if (firmamentRegion == null) {
@@ -40,21 +39,21 @@ public class OperationStarcleaveClientPacketHandler {
 
             if (firmamentRegion != null) {
                 firmamentRegion.readFromData(payload.firmamentRegionData());
-                FirmamentTextureStorage.getMainInstance().onRegionAdded(firmamentRegion, world);
+                FirmamentTextureStorage.getMainInstance().onRegionAdded(firmamentRegion, level);
             }
         }
     }
 
     public static void updateFirmamentSubRegion(UpdateFirmamentSubRegionPayload payload, Player player) {
-        Level world = player.level();
-        Firmament firmament = Firmament.fromLevel(world);
+        Level level = player.level();
+        Firmament firmament = Firmament.fromLevel(level);
         if (firmament != null) {
             FirmamentSubRegion firmamentSubRegion = firmament.getSubRegionFromId(payload.id());
 
             if (firmamentSubRegion != null) {
                 firmamentSubRegion.readFromData(payload.subRegionData());
 
-                FirmamentTextureStorage.getMainInstance().onSubRegionUpdated(firmamentSubRegion, world);
+                FirmamentTextureStorage.getMainInstance().onSubRegionUpdated(firmamentSubRegion, level);
             }
         }
     }
@@ -69,27 +68,31 @@ public class OperationStarcleaveClientPacketHandler {
     }
 
     public static void onFirmamentCleaved(FirmamentCleavedPayload payload, Player player) {
-        Level world = player.level();
-        ((LevelDuckInterface) world).operation_starcleave$setCleavingFlashTicksLeft(24);
-        Vec3 pos = new Vec3(payload.x(), world.getMaxBuildHeight() + 16, payload.z());
-        world.playLocalSound(
+        Level level = player.level();
+        Firmament firmament = Firmament.fromLevel(level);
+        if(firmament == null) {
+            return;
+        }
+
+        Vec3 pos = new Vec3(payload.x(), firmament.getY(), payload.z());
+
+        ((LevelDuckInterface) level).operation_starcleave$setCleavingFlashTicksLeft(24);
+
+        level.playLocalSound(
                 pos.x,
                 pos.y,
                 pos.z,
                 OperationStarcleaveSoundEvents.FIRMAMENT_CLEAVE,
                 SoundSource.BLOCKS,
                 500.0F,
-                1.6F + world.random.nextFloat() * 0.2F,
+                1.6F + level.random.nextFloat() * 0.2F,
                 false);
 
-        ParticleOptions particleEffect = ParticleTypes.FLASH;
-        world.addAlwaysVisibleParticle(particleEffect, pos.x, pos.y - 1, pos.z, 0, 0, 0);
+        level.addAlwaysVisibleParticle(ParticleTypes.FLASH, pos.x, pos.y - 1, pos.z, 0, 0, 0);
 
         ScreenShakeManager.getInstance().setShakeAmount(3);
-        Firmament firmament = Firmament.fromLevel(world);
-        if (firmament != null) {
-            firmament.addActor(new FirmamentDamageGlowActor(firmament, (int) pos.x, (int) pos.z));
-        }
+
+        firmament.addActor(new FirmamentDamageGlowActor(firmament, (int) pos.x, (int) pos.z));
     }
 
     public static void onStarbleachedPearlLaunch(StarbleachedPearlLaunchPayload payload, Player player) {
@@ -104,24 +107,24 @@ public class OperationStarcleaveClientPacketHandler {
     }
 
     public static void handleEntityPhlogisticFire(EntityPhlogisticFirePayload payload, Player player) {
-        Level world = player.level();
-        Entity entity = world.getEntity(payload.id());
+        Level level = player.level();
+        Entity entity = level.getEntity(payload.id());
         if (entity != null) {
             OperationStarcleaveEntityAttachment.fromEntity(entity).setOnPhlogisticFire(payload.onPhlogisticFire());
         }
     }
 
     public static void handleEntityPegasusGliding(EntityPegasusGlidingPayload payload, Player player) {
-        Level world = player.level();
-        Entity entity = world.getEntity(payload.id());
+        Level level = player.level();
+        Entity entity = level.getEntity(payload.id());
         if (entity != null) {
             OperationStarcleaveEntityAttachment.fromEntity(entity).setPegasusGliding(payload.pegasusGliding());
         }
     }
 
     public static void handleEntityPegasusFlying(EntityPegasusFlyingPayload payload, Player player) {
-        Level world = player.level();
-        Entity entity = world.getEntity(payload.id());
+        Level level = player.level();
+        Entity entity = level.getEntity(payload.id());
         if (entity != null) {
             OperationStarcleaveEntityAttachment.fromEntity(entity).setPegasusFlying(payload.pegasusFlying());
         }

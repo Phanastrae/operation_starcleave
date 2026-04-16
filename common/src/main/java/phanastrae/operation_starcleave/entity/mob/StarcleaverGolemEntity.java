@@ -76,8 +76,8 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
 
     private final List<UUID> launcherUuids = new ArrayList<>();
 
-    public StarcleaverGolemEntity(EntityType<? extends StarcleaverGolemEntity> entityType, Level world) {
-        super(entityType, world);
+    public StarcleaverGolemEntity(EntityType<? extends StarcleaverGolemEntity> entityType, Level level) {
+        super(entityType, level);
         this.setPathfindingMalus(PathType.WATER, 0.0F);
         this.setPathfindingMalus(PathType.LAVA, 0.0F);
         this.setPathfindingMalus(PathType.DANGER_FIRE, 0.0F);
@@ -145,7 +145,7 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
             this.setPlummeting(nbt.getBoolean("Plummeting"));
         }
 
-        if(nbt.contains("GunpowderTicks", Tag.TAG_INT)) {
+        if (nbt.contains("GunpowderTicks", Tag.TAG_INT)) {
             this.setGunpowderTicks(nbt.getInt("GunpowderTicks"));
         }
 
@@ -171,52 +171,52 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
         if (nbt.getBoolean("plummeting")) {
             this.setPlummeting(true);
         }
-        if(nbt.contains("gunpowderTicks", Tag.TAG_INT)) {
+        if (nbt.contains("gunpowderTicks", Tag.TAG_INT)) {
             this.setGunpowderTicks(nbt.getInt("gunpowderTicks"));
         }
     }
 
     @Override
     public void tick() {
-        Level world = this.level();
-        if(this.isAlive()) {
-            if(this.isIgnited()) {
+        Level level = this.level();
+        if (this.isAlive()) {
+            if (this.isIgnited()) {
                 this.push(0, 0.085 + Mth.clamp(this.getDeltaMovement().y - 0.1, 0, 4) * 0.03, 0);
-                if(this.getGunpowderTicks() > 0) {
+                if (this.getGunpowderTicks() > 0) {
                     this.setGunpowderTicks(this.getGunpowderTicks() - 1);
                 }
-                if(this.getGunpowderTicks() <= 0) {
+                if (this.getGunpowderTicks() <= 0) {
                     this.setIgnited(false);
                 }
 
-                if(world.isClientSide) {
-                    world.addParticle(
+                if (level.isClientSide) {
+                    level.addParticle(
                             ParticleTypes.FIREWORK,
-                            this.getX() + Mth.sin((float)Math.toRadians(this.yBodyRot)) * 0.25,
+                            this.getX() + Mth.sin((float) Math.toRadians(this.yBodyRot)) * 0.25,
                             this.getY(),
-                            this.getZ() - Mth.cos((float)Math.toRadians(this.yBodyRot)) * 0.25,
+                            this.getZ() - Mth.cos((float) Math.toRadians(this.yBodyRot)) * 0.25,
                             this.random.nextGaussian() * 0.05,
                             -this.getDeltaMovement().y * 0.5,
                             this.random.nextGaussian() * 0.05
                     );
                 }
 
-                if(!world.isClientSide) {
+                if (!level.isClientSide) {
                     boolean collided = false;
 
-                    for(int i = -1; i <= 1; i++) {
-                        for(int j = -1; j <= 1; j++) {
+                    for (int i = -1; i <= 1; i++) {
+                        for (int j = -1; j <= 1; j++) {
                             float hw = this.getBbWidth() * 0.501f;
 
                             Vec3 drillTarget = this.position().add(hw * i, this.getBbHeight() + 0.125, hw * j);
                             BlockPos blockPos = new BlockPos(Mth.floor(drillTarget.x), Mth.floor(drillTarget.y), Mth.floor(drillTarget.z));
-                            BlockState state = world.getBlockState(blockPos);
+                            BlockState state = level.getBlockState(blockPos);
 
-                            if(state.getCollisionShape(world, blockPos).isEmpty()) continue;
-                            if(this.canDestroy(state, blockPos)) {
-                                world.destroyBlock(blockPos, true, this);
+                            if (state.getCollisionShape(level, blockPos).isEmpty()) continue;
+                            if (this.canDestroy(state, blockPos)) {
+                                level.destroyBlock(blockPos, true, this);
                                 int g = this.getGunpowderTicks() - 10;
-                                if(g < 0) g = 0;
+                                if (g < 0) g = 0;
                                 this.setGunpowderTicks(g);
                             } else {
                                 collided = true;
@@ -224,26 +224,27 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
                         }
                     }
 
-                    if(collided) {
+                    if (collided) {
                         this.setIgnited(false);
                         this.clearLaunchers();
                     }
                 }
 
-                if(!world.isClientSide) {
-                    if(this.position().y > world.getMaxBuildHeight() + 16) {
+                if (!level.isClientSide) {
+                    Firmament firmament = Firmament.fromLevel(level);
+                    if (firmament != null && this.position().y > firmament.getY()) {
                         this.cleave();
                     }
                 }
             }
 
-            if(this.isPlummeting()) {
-                if(!world.isClientSide) {
-                    if(this.onGround()) {
+            if (this.isPlummeting()) {
+                if (!level.isClientSide) {
+                    if (this.onGround()) {
                         this.setPlummeting(false);
-                        world.explode(this, this.getX(), this.getY(), this.getZ(), 3, Level.ExplosionInteraction.MOB);
+                        level.explode(this, this.getX(), this.getY(), this.getZ(), 3, Level.ExplosionInteraction.MOB);
 
-                        if(this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
+                        if (this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
                             for (int i = 0; i < 6; i++) {
                                 BlockPos pos = this.blockPosition().offset(random.nextInt(7) - 3, random.nextInt(7) - 3, random.nextInt(7) - 3);
                                 SplashStarbleachEntity.starbleach(pos, this.level());
@@ -252,9 +253,9 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
                     }
                 }
 
-                if(world.isClientSide) {
-                    for(int i = 0; i < 8; i++) {
-                        world.addParticle(
+                if (level.isClientSide) {
+                    for (int i = 0; i < 8; i++) {
+                        level.addParticle(
                                 ParticleTypes.FLAME,
                                 this.getX(),
                                 this.getY() - 0.25,
@@ -267,7 +268,7 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
                 }
             }
 
-            if(world.isClientSide) {
+            if (level.isClientSide) {
                 updateAnimations();
             }
         }
@@ -276,61 +277,61 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
     }
 
     public void updateAnimations() {
-            prevDrillBasePitch = drillBasePitch;
-            prevDrillTipAngle = drillTipAngle;
-            prevDrillHeadAngle = drillHeadAngle;
+        prevDrillBasePitch = drillBasePitch;
+        prevDrillTipAngle = drillTipAngle;
+        prevDrillHeadAngle = drillHeadAngle;
 
-            if(this.isIgnited() || this.isPlummeting()) {
-                drillBasePitch += 5;
-                if(drillBasePitch > 0) {
-                    drillBasePitch = 0;
-                }
-            } else {
-                drillBasePitch -= 5;
-                if(drillBasePitch < -45) {
-                    drillBasePitch = -45;
+        if (this.isIgnited() || this.isPlummeting()) {
+            drillBasePitch += 5;
+            if (drillBasePitch > 0) {
+                drillBasePitch = 0;
+            }
+        } else {
+            drillBasePitch -= 5;
+            if (drillBasePitch < -45) {
+                drillBasePitch = -45;
+            }
+        }
+
+        if (this.isIgnited()) {
+            drillHeadAngle += 15;
+            if (drillHeadAngle > 360) {
+                drillHeadAngle %= 360;
+            }
+
+            drillTipAngle += 10;
+            if (drillTipAngle > 360) {
+                drillTipAngle %= 360;
+            }
+        } else {
+            if (drillHeadAngle > 0) {
+                drillHeadAngle += 6;
+                if (drillHeadAngle > 360) {
+                    drillHeadAngle = 0;
                 }
             }
 
-            if(this.isIgnited()) {
-                drillHeadAngle += 15;
-                if(drillHeadAngle > 360) {
-                    drillHeadAngle %= 360;
-                }
-
-                drillTipAngle += 10;
-                if(drillTipAngle > 360) {
-                    drillTipAngle %= 360;
-                }
-            } else {
-                if(drillHeadAngle > 0) {
-                    drillHeadAngle += 6;
-                    if(drillHeadAngle > 360) {
-                        drillHeadAngle = 0;
-                    }
-                }
-
-                if(drillTipAngle > 0) {
-                    drillTipAngle += 4;
-                    if(drillTipAngle > 360) {
-                        drillTipAngle = 0;
-                    }
+            if (drillTipAngle > 0) {
+                drillTipAngle += 4;
+                if (drillTipAngle > 360) {
+                    drillTipAngle = 0;
                 }
             }
+        }
 
-            this.prevDoorProgress = this.doorProgress;
-            if(this.openingDoor) {
-                this.doorProgress += 0.25f;
-                if(this.doorProgress >= 1) {
-                    this.doorProgress = 1;
-                    this.openingDoor = false;
-                }
-            } else {
-                this.doorProgress -= 0.25f;
-                if(this.doorProgress <= 0) {
-                    this.doorProgress = 0;
-                }
+        this.prevDoorProgress = this.doorProgress;
+        if (this.openingDoor) {
+            this.doorProgress += 0.25f;
+            if (this.doorProgress >= 1) {
+                this.doorProgress = 1;
+                this.openingDoor = false;
             }
+        } else {
+            this.doorProgress -= 0.25f;
+            if (this.doorProgress <= 0) {
+                this.doorProgress = 0;
+            }
+        }
     }
 
     @Override
@@ -340,7 +341,7 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
 
     @Override
     public boolean isInvulnerableTo(DamageSource damageSource) {
-        if(damageSource.is(DamageTypeTags.IS_EXPLOSION)) {
+        if (damageSource.is(DamageTypeTags.IS_EXPLOSION)) {
             return true;
         }
 
@@ -349,11 +350,11 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
 
     @Override
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
-        if(!this.isAlive()) {
+        if (!this.isAlive()) {
             return InteractionResult.FAIL;
         }
 
-        Level world = this.level();
+        Level level = this.level();
         ItemStack itemStack = player.getItemInHand(hand);
 
         if (itemStack.is(Items.BUCKET) && this.isAlive() && !this.isIgnited() && !this.isPlummeting() && this.isBucketable()) {
@@ -362,24 +363,24 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
             this.saveToBucketTag(itemStack2);
             ItemStack itemStack3 = ItemUtils.createFilledResult(itemStack, player, itemStack2, false);
             player.setItemInHand(hand, itemStack3);
-            if (!world.isClientSide) {
-                CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayer)player, itemStack2);
+            if (!level.isClientSide) {
+                CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayer) player, itemStack2);
             }
 
             this.discard();
-            return InteractionResult.sidedSuccess(world.isClientSide);
+            return InteractionResult.sidedSuccess(level.isClientSide);
         }
 
-        if(itemStack.is(Items.GOLD_NUGGET)) {
+        if (itemStack.is(Items.GOLD_NUGGET)) {
             boolean consumeItem = false;
-            if(!this.isFavorite(player)) {
+            if (!this.isFavorite(player)) {
                 this.setFavorite(player);
                 consumeItem = true;
             }
 
             float oldHealth = this.getHealth();
             this.heal(10.0F);
-            if(this.getHealth() != oldHealth) {
+            if (this.getHealth() != oldHealth) {
                 consumeItem = true;
             }
 
@@ -398,10 +399,10 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
             }
         }
 
-        if(itemStack.is(Items.GUNPOWDER) && this.getGunpowderTicks() + 60 <= 600) {
+        if (itemStack.is(Items.GUNPOWDER) && this.getGunpowderTicks() + 60 <= 600) {
             SoundEvent soundEvent = OperationStarcleaveSoundEvents.STARCLEAVER_GOLEM_EAT;
-            world.playSound(player, this.getX(), this.getY(), this.getZ(), soundEvent, this.getSoundSource(), 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
-            if (!world.isClientSide) {
+            level.playSound(player, this.getX(), this.getY(), this.getZ(), soundEvent, this.getSoundSource(), 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
+            if (!level.isClientSide) {
                 this.setGunpowderTicks(this.getGunpowderTicks() + 60);
             }
             if (!player.getAbilities().instabuild) {
@@ -414,8 +415,8 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
 
         if (player.getAbilities().mayBuild && this.getGunpowderTicks() > 20 && !this.isIgnited() && !this.isPlummeting() && itemStack.is(ItemTags.CREEPER_IGNITERS)) {
             SoundEvent soundEvent = itemStack.is(Items.FIRE_CHARGE) ? SoundEvents.FIRECHARGE_USE : SoundEvents.FLINTANDSTEEL_USE;
-            world.playSound(player, this.getX(), this.getY(), this.getZ(), soundEvent, this.getSoundSource(), 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
-            if (!world.isClientSide) {
+            level.playSound(player, this.getX(), this.getY(), this.getZ(), soundEvent, this.getSoundSource(), 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
+            if (!level.isClientSide) {
                 this.setIgnited(true);
                 if (!itemStack.isDamageableItem()) {
                     itemStack.shrink(1);
@@ -423,12 +424,12 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
                     itemStack.hurtAndBreak(1, player, getSlotForHand(hand));
                 }
 
-                if(player instanceof ServerPlayer serverPlayerEntity) {
+                if (player instanceof ServerPlayer serverPlayerEntity) {
                     OperationStarcleaveAdvancementCriteria.LAUNCH_STARCLEAVER_GOLEM.trigger(serverPlayerEntity);
                     this.addLauncher(serverPlayerEntity);
                 }
-                for(ServerPlayer serverPlayerEntity : world.getEntitiesOfClass(ServerPlayer.class, this.getBoundingBox().inflate(5.0))) {
-                    if(serverPlayerEntity != player) {
+                for (ServerPlayer serverPlayerEntity : level.getEntitiesOfClass(ServerPlayer.class, this.getBoundingBox().inflate(5.0))) {
+                    if (serverPlayerEntity != player) {
                         OperationStarcleaveAdvancementCriteria.LAUNCH_STARCLEAVER_GOLEM.trigger(serverPlayerEntity);
                         this.addLauncher(serverPlayerEntity);
                     }
@@ -472,7 +473,7 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
 
     @Nullable
     public UUID getFavoriteUuid() {
-        return (UUID)((Optional)this.entityData.get(FAVORITE_UUID)).orElse(null);
+        return (UUID) ((Optional) this.entityData.get(FAVORITE_UUID)).orElse(null);
     }
 
     public void setFavoriteUuid(@Nullable UUID uuid) {
@@ -506,9 +507,9 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
     }
 
     public void forEachLauncher(Consumer<ServerPlayer> method) {
-        for(UUID uuid : this.launcherUuids) {
+        for (UUID uuid : this.launcherUuids) {
             Entity e = this.level().getPlayerByUUID(uuid);
-            if(e instanceof ServerPlayer spe) {
+            if (e instanceof ServerPlayer spe) {
                 method.accept(spe);
             }
         }
@@ -519,10 +520,10 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
     }
 
     public boolean canDestroy(BlockState blockState, BlockPos blockPos) {
-        if(!this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
+        if (!this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
             return false;
         }
-        if(blockState.is(BlockTags.WITHER_IMMUNE)) {
+        if (blockState.is(BlockTags.WITHER_IMMUNE)) {
             return false;
         }
 
@@ -532,7 +533,7 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
     public void cleave() {
         boolean canFracture = this.level().getGameRules().getBoolean(OperationStarcleaveGameRules.ALLOW_STARCLEAVER_GOLEM_FIRMAMENT_FRACTURING);
 
-        if(canFracture) {
+        if (canFracture) {
             Firmament firmament = Firmament.fromLevel(this.level());
             if (firmament != null) {
                 FirmamentManipulatorItem.fractureFirmament(firmament, this.getBlockX(), this.getBlockZ(), this.getRandom());
@@ -598,7 +599,7 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
     @Override
     public void loadFromBucketTag(CompoundTag nbt) {
         Bucketable.loadDefaultDataFromBucketTag(this, nbt);
-        if(nbt.contains("GunpowderTicks", Tag.TAG_INT)) {
+        if (nbt.contains("GunpowderTicks", Tag.TAG_INT)) {
             this.setGunpowderTicks(nbt.getInt("GunpowderTicks"));
         }
         if (nbt.hasUUID("Favorite")) {
@@ -644,7 +645,7 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
             particleEffect = ParticleTypes.SMOKE;
         }
 
-        for(int i = 0; i < 7; ++i) {
+        for (int i = 0; i < 7; ++i) {
             double d = this.random.nextGaussian() * 0.02;
             double e = this.random.nextGaussian() * 0.02;
             double f = this.random.nextGaussian() * 0.02;
@@ -661,7 +662,7 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
     public void setLastHurtByMob(@Nullable LivingEntity attacker) {
         if (attacker != null && this.level() instanceof ServerLevel) {
             if (this.isAlive() && attacker instanceof Player) {
-                if(this.isFavorite(attacker)) {
+                if (this.isFavorite(attacker)) {
                     this.level().broadcastEntityEvent(this, EntityEvent.TAMING_FAILED);
                     this.setFavorite(null);
                 }
