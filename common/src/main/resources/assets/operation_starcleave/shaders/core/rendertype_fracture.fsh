@@ -5,19 +5,20 @@
 uniform sampler2D Sampler0;
 uniform sampler2D Sampler1;
 
-uniform float GameTime;
-uniform vec2 ScreenSize;
 uniform float FogStart;
 uniform float FogEnd;
 uniform vec4 FogColor;
 uniform int FogShape;
+uniform float GameTime;
+uniform vec2 ScreenSize;
+uniform float FadeOutStart;
+uniform float FadeOutEnd;
 
 in vec2 texCoord0;
 in vec3 pos;
 
 out vec4 fragColor;
 
-#define PI 3.14159265359
 #define TAU 6.28318530718
 
 float rand(vec2 vec){
@@ -25,9 +26,9 @@ float rand(vec2 vec){
 }
 
 vec3 rainbow(float f) {
-    float r = sin((f) * 2. * PI) * 0.2 + 0.8;
-    float g = sin((f + 1./3.) * 2. * PI) * 0.2 + 0.8;
-    float b = sin((f + 2./3.) * 2. * PI) * 0.2 + 0.8;
+    float r = sin((f) * TAU) * 0.2 + 0.8;
+    float g = sin((f + 1./3.) * TAU) * 0.2 + 0.8;
+    float b = sin((f + 2./3.) * TAU) * 0.2 + 0.8;
     return vec3(r, g, b);
 }
 
@@ -106,9 +107,9 @@ void main() {
     float g = 0.;
     // smooth fade into distance to avoid hard borders
     float distance = length(pos);
-    if(distance > 400.) {
-        float v = distance - 400.;
-        g = v / 100.;
+    if(distance > FadeOutStart) {
+        float v = distance - FadeOutStart;
+        g = v / (FadeOutEnd - FadeOutStart);
         damageAmount -= g;
 
         damageAmount = max(damageAmount, 0.);
@@ -150,14 +151,14 @@ void main() {
         }
     }
 
-    float xAxisSin = sin(texCoord0.x * 64. * 2. * PI);
-    float yAxisSin = sin(texCoord0.y * 64. * 2. * PI);
-    float colorInput = xAxisSin*yAxisSin + (GameTime * 100.) * 2. * PI;
+    float xAxisSin = sin(texCoord0.x * 64. * TAU);
+    float yAxisSin = sin(texCoord0.y * 64. * TAU);
+    float colorInput = xAxisSin*yAxisSin + (GameTime * 100.) * TAU;
 
     vec3 borderColor = rainbow(colorInput) * 0.7 + 0.3;
     borderColor = borderColor + (1. - borderColor) * sqrt(g);
 
-    vec3 edgeColor = rainbow(colorInput + GameTime * 150. * 2. * PI) * 0.5;
+    vec3 edgeColor = rainbow(colorInput + GameTime * 150. * TAU) * 0.5;
 
     float l = min(absDist * 2., 1.);
     vec3 color = borderColor + (edgeColor - borderColor) * l;

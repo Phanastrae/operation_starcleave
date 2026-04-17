@@ -2,6 +2,7 @@ package phanastrae.operation_starcleave.client.render.firmament;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.shaders.FogShape;
+import com.mojang.blaze3d.shaders.Uniform;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Camera;
@@ -137,6 +138,19 @@ public class FirmamentRenderer {
             RenderTarget firmamentFrameBuffer = ((LevelRendererDuck) levelRenderer).operation_starcleave$getFirmamentSkyFramebuffer();
             int firmamentSkyTexID = firmamentFrameBuffer.getColorTextureId();
             RenderSystem.setShaderTexture(1, firmamentSkyTexID);
+
+            // setup uniforms
+            float fadeOutEnd = Math.min(farDistance - 4, 500);
+            float fadeOutStart = fadeOutEnd * 0.8F;
+
+            Uniform uniform = shaderProgram.getUniform("FadeOutEnd");
+            if(uniform != null) {
+                uniform.set(fadeOutEnd);
+            }
+            uniform = shaderProgram.getUniform("FadeOutStart");
+            if(uniform != null) {
+                uniform.set(fadeOutStart);
+            }
 
             // render firmament fractures
             shaderProgram.setDefaultUniforms(VertexFormat.Mode.QUADS, positionMatrix, projectionMatrix, Minecraft.getInstance().getWindow());
