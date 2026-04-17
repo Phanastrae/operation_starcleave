@@ -16,7 +16,10 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.neoforge.client.event.*;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+import net.neoforged.neoforge.client.event.RegisterShadersEvent;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.GameShuttingDownEvent;
@@ -35,8 +38,7 @@ import phanastrae.operation_starcleave.neoforge.client.fluid.OperationStarcleave
 import java.io.IOException;
 import java.io.UncheckedIOException;
 
-import static net.neoforged.neoforge.client.event.RenderLevelStageEvent.Stage.AFTER_CUTOUT_BLOCKS;
-import static net.neoforged.neoforge.client.event.RenderLevelStageEvent.Stage.AFTER_ENTITIES;
+import static net.neoforged.neoforge.client.event.RenderLevelStageEvent.Stage.*;
 
 @Mod(value = OperationStarcleave.MOD_ID, dist = Dist.CLIENT)
 public class OperationStarcleaveClientNeoForge {
@@ -78,9 +80,6 @@ public class OperationStarcleaveClientNeoForge {
 
         // render level
         NeoForge.EVENT_BUS.addListener(this::renderLevel);
-
-        // render before block outline
-        NeoForge.EVENT_BUS.addListener(this::renderBlockHighlight);
     }
 
     public void onClientInit(FMLClientSetupEvent event) {
@@ -105,11 +104,11 @@ public class OperationStarcleaveClientNeoForge {
         });
     }
 
-    public void registerShaders(RegisterShadersEvent event) {
+    public void registerShaders(RegisterShadersEvent event) throws UncheckedIOException {
         try {
             OperationStarcleaveShaders.registerShaders((id, vertexFormat, callback) -> event.registerShader(new ShaderInstance(event.getResourceProvider(), id, vertexFormat), callback));
         } catch (IOException e) {
-            // TODO check if this is fine
+            // this is probably fine...
             throw new UncheckedIOException(e);
         }
     }
@@ -129,8 +128,11 @@ public class OperationStarcleaveClientNeoForge {
     }
 
     public void renderLevel(RenderLevelStageEvent event) {
-        ClientLevel level = Minecraft.getInstance().level;
-        if (level == null) return;
+        Minecraft minecraft = Minecraft.getInstance();
+        ClientLevel level = minecraft.level;
+        if (level == null) {
+            return;
+        }
 
         PoseStack matrixStack = event.getPoseStack();
         LevelRenderer levelRenderer = event.getLevelRenderer();
@@ -156,12 +158,10 @@ public class OperationStarcleaveClientNeoForge {
                 );
             }
         } else if (stage.equals(AFTER_ENTITIES)) {
-            // render after entities
             OperationStarcleaveClient.renderAfterEntities(level, matrixStack, vertexConsumers, deltaTracker, camera);
+        } else if (stage.equals(AFTER_BLOCK_ENTITIES)) {
+            // note: on NeoForge this doesn't cancel the normal block outline rendering, but this doesn't really matter much
+            OperationStarcleaveClient.renderBeforeBlockOutline(vertexConsumers, event.getCamera(), event.getPoseStack());
         }
-    }
-
-    public void renderBlockHighlight(RenderHighlightEvent.Block event) {
-        OperationStarcleaveClient.renderBeforeBlockOutline(true, event.getMultiBufferSource(), event.getCamera(), event.getPoseStack());
     }
 }

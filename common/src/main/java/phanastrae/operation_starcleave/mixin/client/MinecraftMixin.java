@@ -16,13 +16,16 @@ import phanastrae.operation_starcleave.world.firmament.pos.FirmamentTilePos;
 
 @Mixin(Minecraft.class)
 public class MinecraftMixin {
+    @Shadow
+    @Nullable
+    public LocalPlayer player;
 
-    @Shadow @Nullable public LocalPlayer player;
-
-    @Inject(method = "startAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/phys/HitResult;getType()Lnet/minecraft/world/phys/HitResult$Type;", shift = At.Shift.BEFORE), cancellable = true)
+    @Inject(method = "startAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/phys/HitResult;getType()Lnet/minecraft/world/phys/HitResult$Type;"), cancellable = true)
     private void operation_starcleave$handleFirmamentHit(CallbackInfoReturnable<Boolean> cir) {
-        FirmamentTilePos tile = OperationStarcleaveClient.firmamentOutlineRenderer.hitTile;
-        if(tile != null) {
+        if (this.player == null) return;
+
+        FirmamentTilePos tile = OperationStarcleaveClient.FIRMAMENT_OUTLINE_HANDLER.hitTile;
+        if (tile != null) {
             XPlatClientInterface.INSTANCE.sendPayload(new AttackFirmamentTilePayload(tile.tileX, tile.tileZ));
             this.player.swing(InteractionHand.MAIN_HAND);
             cir.setReturnValue(false);

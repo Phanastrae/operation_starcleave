@@ -23,7 +23,7 @@ public class DebugScreenOverlayMixin {
             Firmament firmament = Firmament.fromLevel(client.level);
             if(firmament == null) return;
 
-            FirmamentTilePos tile = OperationStarcleaveClient.firmamentOutlineRenderer.hitTile;
+            FirmamentTilePos tile = OperationStarcleaveClient.FIRMAMENT_OUTLINE_HANDLER.hitTile;
             if (tile != null) {
                 list.add("");
                 list.add(ChatFormatting.UNDERLINE + "Targeted Firmament Tile");

@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.world.TickRateManager;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import phanastrae.operation_starcleave.client.compat.ClientCompat;
 import phanastrae.operation_starcleave.client.render.ScreenShakeManager;
@@ -21,7 +22,7 @@ import phanastrae.operation_starcleave.world.firmament.Firmament;
 
 public class OperationStarcleaveClient {
 
-    public static FirmamentOutlineRenderer firmamentOutlineRenderer = new FirmamentOutlineRenderer();
+    public static FirmamentOutlineHandler FIRMAMENT_OUTLINE_HANDLER = new FirmamentOutlineHandler();
 
     public static void init() {
         ClientCompat.init();
@@ -50,11 +51,12 @@ public class OperationStarcleaveClient {
         }
     }
 
-    public static boolean renderBeforeBlockOutline(boolean blockOutlines, MultiBufferSource vertexConsumers, Camera camera, PoseStack matrixStack) {
-        if (!blockOutlines) return true;
-        if (vertexConsumers == null) return true;
-        OperationStarcleaveClient.firmamentOutlineRenderer.renderOutline(vertexConsumers, camera, matrixStack);
-        return true;
+    public static boolean renderBeforeBlockOutline(@Nullable MultiBufferSource vertexConsumers, Camera camera, PoseStack matrixStack) {
+        if (vertexConsumers == null || Minecraft.getInstance().options.hideGui) {
+            return true;
+        } else {
+            return !FIRMAMENT_OUTLINE_HANDLER.renderOutline(vertexConsumers, camera, matrixStack);
+        }
     }
 
     public static void startLevelTick(Level level) {
@@ -66,10 +68,6 @@ public class OperationStarcleaveClient {
         TickRateManager tickManager = level.tickRateManager();
         boolean bl = tickManager.runsNormally();
         if (bl) {
-            //Profiler profiler = world.getProfiler();
-            //profiler.push("starcleave_fracture");
-            //Firmament.fromWorld(world).tick();
-            //profiler.pop();
             Firmament firmament = Firmament.fromLevel(level);
             if (firmament != null) {
                 firmament.getFirmamentRegionManager().tick();

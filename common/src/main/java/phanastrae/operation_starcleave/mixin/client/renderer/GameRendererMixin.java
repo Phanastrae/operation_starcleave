@@ -52,7 +52,7 @@ public class GameRendererMixin {
 
     @Inject(method = "pick(F)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiling/ProfilerFiller;pop()V", shift = At.Shift.BEFORE))
     private void operation_starcleave$updateFirmamentTarget(float tickDelta, CallbackInfo ci) {
-        OperationStarcleaveClient.firmamentOutlineRenderer.updateHitTile(tickDelta);
+        OperationStarcleaveClient.FIRMAMENT_OUTLINE_HANDLER.updateHitTile(tickDelta);
     }
 
     @Inject(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LevelRenderer;renderLevel(Lnet/minecraft/client/DeltaTracker;ZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;Lorg/joml/Matrix4f;)V", shift = At.Shift.AFTER))

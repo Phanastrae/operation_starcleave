@@ -59,7 +59,6 @@ public class OperationStarcleaveClientFabric implements ClientModInitializer {
         OperationStarcleaveFluidRenderHandlers.init();
 
 
-
         // on client stop
         ClientLifecycleEvents.CLIENT_STOPPING.register(OperationStarcleaveClient::onClientShutdown);
 
@@ -86,7 +85,7 @@ public class OperationStarcleaveClientFabric implements ClientModInitializer {
         ));
 
         // render before block outline
-        WorldRenderEvents.BEFORE_BLOCK_OUTLINE.register((worldRenderContext, hitResult) -> OperationStarcleaveClient.renderBeforeBlockOutline(worldRenderContext.blockOutlines(), worldRenderContext.consumers(), worldRenderContext.camera(), worldRenderContext.matrixStack()));
+        WorldRenderEvents.BEFORE_BLOCK_OUTLINE.register((worldRenderContext, hitResult) -> OperationStarcleaveClient.renderBeforeBlockOutline(worldRenderContext.consumers(), worldRenderContext.camera(), worldRenderContext.matrixStack()));
     }
 
     public void registerClientPayloads() {
