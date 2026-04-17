@@ -12,10 +12,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
+import phanastrae.operation_starcleave.item.FirmamentManipulatorItem;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
-import phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion;
 
 public class FirmamentRejuvenatorEntity extends ThrowableItemProjectile {
 
@@ -35,27 +35,29 @@ public class FirmamentRejuvenatorEntity extends ThrowableItemProjectile {
 
     @Override
     public void tick() {
-        Level world = this.level();
-        if(world != null && world.isClientSide) {
+        Level level = this.level();
+        if (level.isClientSide) {
             Vec3 vel = this.getDeltaMovement();
             RandomSource random = this.random;
-            for(int i = 0; i < 6; i++) {
-                world.addParticle(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER,
+            for (int i = 0; i < 6; i++) {
+                level.addParticle(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER,
                         this.getX(), this.getY(), this.getZ(),
                         vel.x * -0.2 + random.nextFloat() * 0.06 - 0.03, vel.y * -0.2 + random.nextFloat() * 0.06 - 0.03, vel.z * -0.2 + random.nextFloat() * 0.06 - 0.03);
-                world.addParticle(ParticleTypes.SOUL_FIRE_FLAME,
+                level.addParticle(ParticleTypes.SOUL_FIRE_FLAME,
                         this.getX(), this.getY(), this.getZ(),
                         vel.x * -0.2 + random.nextFloat() * 0.06 - 0.03, vel.y * -0.2 + random.nextFloat() * 0.06 - 0.03, vel.z * -0.2 + random.nextFloat() * 0.06 - 0.03);
             }
         }
+
         super.tick();
-        if(!this.isRemoved()) {
-            if(this.tickCount > MAX_AGE) {
+
+        if (!this.isRemoved()) {
+            if (this.tickCount > MAX_AGE) {
                 this.spawnAtLocation(this.getItem());
                 this.discard();
             } else {
                 Firmament firmament = Firmament.fromLevel(this.level());
-                if(firmament != null) {
+                if (firmament != null) {
                     double firmHeight = firmament.getY();
                     double dy = this.position().y - firmHeight;
                     if (Math.abs(dy) < 1) {
@@ -86,28 +88,17 @@ public class FirmamentRejuvenatorEntity extends ThrowableItemProjectile {
     public void explode() {
         if (!this.level().isClientSide) {
             this.level().explode(this.getOwner(), this.getX(), this.getY(), this.getZ(), 4, Level.ExplosionInteraction.NONE);
-            if(this.level() instanceof ServerLevel serverWorld) {
+            if (this.level() instanceof ServerLevel serverLevel) {
                 Vec3 pos = this.position();
-                serverWorld.sendParticles(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER, pos.x(), pos.y(), pos.z(), 400, 2, 1, 2, 0.01);
+                serverLevel.sendParticles(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER, pos.x(), pos.y(), pos.z(), 400, 2, 1, 2, 0.01);
             }
 
             Firmament firmament = Firmament.fromLevel(this.level());
-            if(firmament != null) {
+            if (firmament != null) {
                 double firmHeight = firmament.getY();
                 double dy = this.position().y - firmHeight;
                 if (Math.abs(dy) < 1) {
-                    int x = this.getBlockX();
-                    int z = this.getBlockZ();
-                    int n = 5;
-                    for (int i = -n; i <= n; i++) {
-                        for (int j = -n; j <= n; j++) {
-                            if (i * i + j * j > n * n) continue;
-                            firmament.setDisplacement(x + i * FirmamentSubRegion.TILE_SIZE, z + j * FirmamentSubRegion.TILE_SIZE, 0);
-                            firmament.setVelocity(x + i * FirmamentSubRegion.TILE_SIZE, z + j * FirmamentSubRegion.TILE_SIZE, 0);
-                            firmament.setDrip(x + i * FirmamentSubRegion.TILE_SIZE, z + j * FirmamentSubRegion.TILE_SIZE, 0);
-                            firmament.setDamage(x + i * FirmamentSubRegion.TILE_SIZE, z + j * FirmamentSubRegion.TILE_SIZE, 0);
-                        }
-                    }
+                    FirmamentManipulatorItem.clearFirmamentCircle(firmament, this.getBlockX(), this.getBlockZ(), 5);
                 }
             }
 
