@@ -2,7 +2,6 @@ package phanastrae.operation_starcleave.world.firmament;
 
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
-import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.duck.FirmamentHolder;
 import phanastrae.operation_starcleave.world.firmament.actor.FirmamentActor;
 import phanastrae.operation_starcleave.world.firmament.pos.RegionPos;
@@ -42,7 +41,6 @@ public class Firmament implements FirmamentAccess {
                 if (t % 20 == 0) {
                     this.clearActive();
                 }
-
                 FirmamentUpdater.update(this);
             }
         }
@@ -110,7 +108,7 @@ public class Firmament implements FirmamentAccess {
     public void forEachActivePosition(BiConsumer<Integer, Integer> method) {
         forEachRegion(firmamentRegion -> {
             if (firmamentRegion.isActive()) {
-                firmamentRegion.forEachActivePosition((x, z) -> method.accept(x + firmamentRegion.x, z + firmamentRegion.z));
+                firmamentRegion.forEachActivePosition((x, z) -> method.accept(x + firmamentRegion.minX(), z + firmamentRegion.minZ()));
             }
         });
     }
@@ -243,11 +241,12 @@ public class Firmament implements FirmamentAccess {
         return this.firmamentRegionManager;
     }
 
+    @Nullable
     public static Firmament fromLevel(Level level) {
         if (level instanceof FirmamentHolder firmamentHolder) {
             return firmamentHolder.operation_starcleave$getFirmament();
         } else {
-            OperationStarcleave.LOGGER.info("World " + level.gatherChunkSourceStats() + " has no Firmament!?");
+            // level is apparently not a ServerLevel or a ClientLevel, which is weird but ok
             return null;
         }
     }

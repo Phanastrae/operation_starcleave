@@ -341,7 +341,7 @@ public class FirmamentTextureStorage {
 
         for (int cx = 0; cx < 32; cx++) {
             for (int cz = 0; cz < 32; cz++) {
-                updateChunkData(level, region, FirmamentRegion.REGION_MASK, region.x + 16 * cx, region.z + 16 * cz);
+                updateChunkData(level, region, FirmamentRegion.REGION_MASK, region.minX() + 16 * cx, region.minZ() + 16 * cz);
             }
         }
 
@@ -366,15 +366,15 @@ public class FirmamentTextureStorage {
 
         for (int cx = 0; cx < 2; cx++) {
             for (int cz = 0; cz < 2; cz++) {
-                updateChunkData(level, subRegion, FirmamentRegion.SUBREGION_MASK, subRegion.x + 16 * cx, subRegion.z + 16 * cz);
+                updateChunkData(level, subRegion, FirmamentRegion.SUBREGION_MASK, subRegion.minX() + 16 * cx, subRegion.minZ() + 16 * cz);
             }
         }
 
         this.needsUpdate = true;
         this.regionHadUpdate[gx][gz] = true;
 
-        int sx = (subRegion.x >> FirmamentRegion.SUBREGION_SIZE_BITS) & 0x3F;
-        int sz = (subRegion.z >> FirmamentRegion.SUBREGION_SIZE_BITS) & 0x3F;
+        int sx = (subRegion.minX() >> FirmamentRegion.SUBREGION_SIZE_BITS) & 0x3F;
+        int sz = (subRegion.minZ() >> FirmamentRegion.SUBREGION_SIZE_BITS) & 0x3F;
         this.subregionHadUpdate[sx][sz] = true;
 
         filled[gx][gz] = true;
@@ -423,7 +423,7 @@ public class FirmamentTextureStorage {
     }
 
     public void onSubRegionUpdated(FirmamentSubRegion subRegion, Level level) {
-        long id = RegionPos.fromWorldCoords(subRegion.x, subRegion.z).id;
+        long id = RegionPos.fromSubRegion(subRegion.subRegionPos).id;
         ifRegionLoadedThen(id, (gx, gz) -> updateRegionData(gx, gz, subRegion, level));
     }
 

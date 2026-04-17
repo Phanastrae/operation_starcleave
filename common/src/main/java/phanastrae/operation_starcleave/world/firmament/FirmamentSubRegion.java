@@ -8,7 +8,6 @@ import phanastrae.operation_starcleave.network.packet.UpdateFirmamentSubRegionPa
 import phanastrae.operation_starcleave.services.XPlatInterface;
 import phanastrae.operation_starcleave.world.firmament.actor.FirmamentActor;
 import phanastrae.operation_starcleave.world.firmament.data.FirmamentSubRegionData;
-import phanastrae.operation_starcleave.world.firmament.pos.RegionPos;
 import phanastrae.operation_starcleave.world.firmament.pos.SubRegionPos;
 
 import java.nio.ByteBuffer;
@@ -33,13 +32,13 @@ public class FirmamentSubRegion implements FirmamentAccess {
     // z  0 1 2
     // |  3 4 5
     // \/ 6 7 8
-    public final int[] xOffset = new int[]{
-            -1, 0, SUBREGION_SIZE,
-            -1, 0, SUBREGION_SIZE,
-            -1, 0, SUBREGION_SIZE
+    public static final int[] X_OFFSETS = new int[]{
+            -SUBREGION_SIZE, 0, SUBREGION_SIZE,
+            -SUBREGION_SIZE, 0, SUBREGION_SIZE,
+            -SUBREGION_SIZE, 0, SUBREGION_SIZE
     };
-    public final int[] zOffset = new int[]{
-            -1, -1, -1,
+    public static final int[] Z_OFFSETS = new int[]{
+            -SUBREGION_SIZE, -SUBREGION_SIZE, -SUBREGION_SIZE,
             0, 0, 0,
             SUBREGION_SIZE, SUBREGION_SIZE, SUBREGION_SIZE
     };
@@ -54,29 +53,33 @@ public class FirmamentSubRegion implements FirmamentAccess {
     private final List<FirmamentActor> actors = new ArrayList<>();
     private final List<FirmamentActor> newActors = new ArrayList<>();
 
-    boolean[] active = new boolean[9];
-    boolean shouldUpdate = false;
+    private final boolean[] active = new boolean[9];
+    private boolean shouldUpdate = false;
 
-    boolean pendingClientUpdate = false;
+    private boolean pendingClientUpdate = false;
 
-    boolean hadDamageLastCheck = false;
+    private boolean hadDamageLastCheck = false;
 
-    // world coords of minimum x-z corner
-    public final int x;
-    public final int z;
-
+    public final SubRegionPos subRegionPos;
     public final FirmamentRegion firmamentRegion;
 
-    public FirmamentSubRegion(FirmamentRegion firmamentRegion, int x, int z) {
+    public FirmamentSubRegion(FirmamentRegion firmamentRegion, SubRegionPos subRegionPos) {
         this.firmamentRegion = firmamentRegion;
-        this.x = x;
-        this.z = z;
+        this.subRegionPos = subRegionPos;
 
         this.displacement = new int[TILES][TILES];
         this.velocity = new int[TILES][TILES];
         this.damage = new int[TILES][TILES];
         this.drip = new int[TILES][TILES];
         this.dDrip = new float[TILES][TILES];
+    }
+
+    public int minX() {
+        return this.subRegionPos.minWorldX;
+    }
+
+    public int minZ() {
+        return this.subRegionPos.minWorldZ;
     }
 
     @Override
@@ -174,13 +177,17 @@ public class FirmamentSubRegion implements FirmamentAccess {
         dDrip[x >> TILE_SIZE_BITS][z >> TILE_SIZE_BITS] = value;
     }
 
+    public boolean shouldUpdate() {
+        return this.shouldUpdate;
+    }
+
     public void markShouldUpdate() {
         this.shouldUpdate = true;
     }
 
     @Override
     public void clearShouldUpdate() {
-        shouldUpdate = false;
+        this.shouldUpdate = false;
     }
 
     @Override
@@ -216,7 +223,7 @@ public class FirmamentSubRegion implements FirmamentAccess {
     public void markUpdatesFromActivity() {
         for (int k = 0; k < 9; k++) {
             if (active[k]) {
-                this.firmamentRegion.firmament.markShouldUpdate(x + xOffset[k], z + zOffset[k]);
+                this.firmamentRegion.firmament.markShouldUpdate(this.minX() + X_OFFSETS[k], this.minZ() + Z_OFFSETS[k]);
             }
         }
     }
@@ -264,19 +271,16 @@ public class FirmamentSubRegion implements FirmamentAccess {
             this.pendingClientUpdate = false;
             Level world = this.firmamentRegion.firmament.getLevel();
             if (world instanceof ServerLevel serverWorld) {
-                SubRegionPos subRegionPos = SubRegionPos.fromWorldCoords(this.x, this.z);
-                RegionPos regionPos = RegionPos.fromSubRegion(subRegionPos);
-
                 List<ServerPlayer> nearbyPlayers = new ArrayList<>();
                 serverWorld.players().forEach(serverPlayerEntity -> {
-                    if (((FirmamentWatcher) serverPlayerEntity).operation_starcleave$getWatchedRegions().getWatchedRegions().contains(regionPos.id)) {
+                    if (((FirmamentWatcher) serverPlayerEntity).operation_starcleave$getWatchedRegions().getWatchedRegions().contains(this.firmamentRegion.regionPos.id)) {
                         nearbyPlayers.add(serverPlayerEntity);
                     }
                 });
 
                 if (!nearbyPlayers.isEmpty()) {
                     FirmamentSubRegionData data = new FirmamentSubRegionData(this);
-                    nearbyPlayers.forEach(serverPlayerEntity -> XPlatInterface.INSTANCE.sendPayload(serverPlayerEntity, new UpdateFirmamentSubRegionPayload(subRegionPos.id, data)));
+                    nearbyPlayers.forEach(serverPlayerEntity -> XPlatInterface.INSTANCE.sendPayload(serverPlayerEntity, new UpdateFirmamentSubRegionPayload(this.subRegionPos.id, data)));
                 }
             }
         }

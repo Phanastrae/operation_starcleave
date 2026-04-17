@@ -7,11 +7,13 @@ import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -26,13 +28,17 @@ import java.util.function.Supplier;
 @Mixin(ClientLevel.class)
 public class ClientLevelMixin implements FirmamentHolder {
 
-    @Shadow @Final private Minecraft minecraft;
+    @Shadow
+    @Final
+    private Minecraft minecraft;
+
+    @Unique
     private Firmament operation_starcleave$firmament;
 
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void operation_starcleave$onInit(ClientPacketListener networkHandler, ClientLevel.ClientLevelData properties, ResourceKey registryRef, Holder dimensionTypeEntry, int loadDistance, int simulationDistance, Supplier profiler, LevelRenderer worldRenderer, boolean debugWorld, long seed, CallbackInfo ci) {
-        this.operation_starcleave$firmament = new Firmament((Level)(Object)this, new ClientFirmamentRegionManager((ClientLevel)(Object)this));
+        this.operation_starcleave$firmament = new Firmament((Level) (Object) this, new ClientFirmamentRegionManager((ClientLevel) (Object) this));
     }
 
     @Override
@@ -42,17 +48,17 @@ public class ClientLevelMixin implements FirmamentHolder {
 
     @ModifyReturnValue(method = "getSkyColor", at = @At("RETURN"))
     private Vec3 operation_starcleave$doCleavingFlash(Vec3 original, Vec3 cameraPos, float tickDelta) {
-        int flashTicks = this.minecraft.options.hideLightningFlash().get() ? 0 : ((LevelDuckInterface)this).operation_starcleave$getCleavingFlashTicksLeft();
+        int flashTicks = this.minecraft.options.hideLightningFlash().get() ? 0 : ((LevelDuckInterface) this).operation_starcleave$getCleavingFlashTicksLeft();
         if (flashTicks > 0) {
-            float flashAmount = (float)flashTicks - tickDelta;
+            float flashAmount = (float) flashTicks - tickDelta;
             if (flashAmount > 1.0F) {
                 flashAmount = 1.0F;
             }
 
             flashAmount *= 0.8f;
-            double r = original.x * (1.0F - flashAmount) + 1.0F * flashAmount;
-            double g = original.y * (1.0F - flashAmount) + 0.8F * flashAmount;
-            double b = original.z * (1.0F - flashAmount) + 0.3F * flashAmount;
+            double r = Mth.lerp(flashAmount, original.x, 1.0F);
+            double g = Mth.lerp(flashAmount, original.y, 0.8F);
+            double b = Mth.lerp(flashAmount, original.z, 0.3F);
             return new Vec3(r, g, b);
         }
         return original;
@@ -60,7 +66,7 @@ public class ClientLevelMixin implements FirmamentHolder {
 
     @Inject(method = "animateTick", at = @At("RETURN"))
     private void operation_starcleave$firmamentParticles(int centerX, int centerY, int centerZ, CallbackInfo ci) {
-        ClientLevel clientWorld = (ClientLevel)(Object)this;
+        ClientLevel clientWorld = (ClientLevel) (Object) this;
         StarbleachParticles.spawnParticles(clientWorld, centerX, centerY, centerZ);
     }
 }

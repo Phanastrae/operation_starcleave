@@ -8,23 +8,23 @@ public class RegionPos {
     public final long id;
     public final int rx;
     public final int rz;
-    public final int worldX;
-    public final int worldZ;
+    public final int minWorldX;
+    public final int minWorldZ;
 
     public RegionPos(int rx, int rz) {
         this.rx = rx;
         this.rz = rz;
         this.id = idFromRegionCoords(rx, rz);
-        this.worldX = rx << FirmamentRegion.REGION_SIZE_BITS;
-        this.worldZ = rz << FirmamentRegion.REGION_SIZE_BITS;
+        this.minWorldX = rx << FirmamentRegion.REGION_SIZE_BITS;
+        this.minWorldZ = rz << FirmamentRegion.REGION_SIZE_BITS;
     }
 
     public RegionPos(long id) {
         this.id = id;
         this.rx = (int) (id & 0xFFFFFFFFL);
         this.rz = (int) ((id >>> 32) & 0xFFFFFFFFL);
-        this.worldX = rx << FirmamentRegion.REGION_SIZE_BITS;
-        this.worldZ = rz << FirmamentRegion.REGION_SIZE_BITS;
+        this.minWorldX = this.rx << FirmamentRegion.REGION_SIZE_BITS;
+        this.minWorldZ = this.rz << FirmamentRegion.REGION_SIZE_BITS;
     }
 
     public static long idFromRegionCoords(int rx, int rz) {
@@ -42,7 +42,7 @@ public class RegionPos {
     }
 
     public static RegionPos fromSubRegion(SubRegionPos subRegionPos) {
-        return fromWorldCoords(subRegionPos.worldX, subRegionPos.worldZ);
+        return fromWorldCoords(subRegionPos.minWorldX, subRegionPos.minWorldZ);
     }
 
     public static RegionPos fromEntity(Entity entity) {

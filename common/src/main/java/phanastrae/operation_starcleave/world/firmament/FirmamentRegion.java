@@ -5,6 +5,7 @@ import phanastrae.operation_starcleave.world.firmament.actor.FirmamentActor;
 import phanastrae.operation_starcleave.world.firmament.data.FirmamentRegionData;
 import phanastrae.operation_starcleave.world.firmament.data.FirmamentSubRegionData;
 import phanastrae.operation_starcleave.world.firmament.pos.RegionPos;
+import phanastrae.operation_starcleave.world.firmament.pos.SubRegionPos;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -25,30 +26,33 @@ public class FirmamentRegion implements FirmamentAccess {
     private boolean active = false;
     private boolean pendingClientUpdate = false;
 
-    // world coords of minimum x-z corner
-    public final int x;
-    public final int z;
     public final RegionPos regionPos;
-
     public final Firmament firmament;
 
     public FirmamentRegion(Firmament firmament, RegionPos regionPos) {
         this.firmament = firmament;
         this.regionPos = regionPos;
 
-        this.x = regionPos.worldX;
-        this.z = regionPos.worldZ;
-
         this.subRegions = new FirmamentSubRegion[SUBREGIONS][SUBREGIONS];
         for (int i = 0; i < SUBREGIONS; i++) {
             for (int j = 0; j < SUBREGIONS; j++) {
                 this.subRegions[i][j] = new FirmamentSubRegion(
                         this,
-                        this.x + i * FirmamentSubRegion.SUBREGION_SIZE,
-                        this.z + j * FirmamentSubRegion.SUBREGION_SIZE
+                        SubRegionPos.fromWorldCoords(
+                                this.minX() + i * FirmamentSubRegion.SUBREGION_SIZE,
+                                this.minZ() + j * FirmamentSubRegion.SUBREGION_SIZE
+                        )
                 );
             }
         }
+    }
+
+    public int minX() {
+        return this.regionPos.minWorldX;
+    }
+
+    public int minZ() {
+        return this.regionPos.minWorldZ;
     }
 
     public void forEachSubRegion(Consumer<FirmamentSubRegion> method) {
@@ -92,8 +96,8 @@ public class FirmamentRegion implements FirmamentAccess {
     @Override
     public void forEachActivePosition(BiConsumer<Integer, Integer> method) {
         forEachSubRegion((firmamentSubRegion -> {
-            if (firmamentSubRegion.shouldUpdate) {
-                firmamentSubRegion.forEachActivePosition((x, z) -> method.accept(x + firmamentSubRegion.x - this.x, z + firmamentSubRegion.z - this.z));
+            if (firmamentSubRegion.shouldUpdate()) {
+                firmamentSubRegion.forEachActivePosition((x, z) -> method.accept(x + firmamentSubRegion.minX() - this.minX(), z + firmamentSubRegion.minZ() - this.minZ()));
             }
         }));
     }

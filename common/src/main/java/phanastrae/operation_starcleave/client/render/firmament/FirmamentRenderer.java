@@ -166,8 +166,8 @@ public class FirmamentRenderer {
         float y = (float) ((height + FIRMAMENT_HEIGHT_RENDER_OFFSET - camPos.y));
 
         RegionPos regionPos = RegionPos.fromWorldCoords(Mth.floor(camPos.x), Mth.floor(camPos.z));
-        double relX = (regionPos.worldX - camPos.x);
-        double relZ = (regionPos.worldZ - camPos.z);
+        double relX = (regionPos.minWorldX - camPos.x);
+        double relZ = (regionPos.minWorldZ - camPos.z);
 
         Tesselator tesselator = Tesselator.getInstance();
         BufferBuilder bufferBuilder = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.BLOCK);

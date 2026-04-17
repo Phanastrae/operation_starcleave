@@ -58,11 +58,11 @@ public class FirmamentRegionDataSender {
                 .longStream()
                 .mapToObj((id) -> getRegion(id, firmament))
                 .filter(Objects::nonNull)
-                .sorted(Comparator.comparingInt(region -> getSquaredDistance(RegionPos.idFromWorldCoords(region.x, region.z), playerPos)))
+                .sorted(Comparator.comparingInt(region -> getSquaredDistance(RegionPos.idFromWorldCoords(region.minX(), region.minZ()), playerPos)))
                 .toList();
 
         for (FirmamentRegion region : list) {
-            this.pendingRegions.remove(RegionPos.idFromWorldCoords(region.x, region.z));
+            this.pendingRegions.remove(RegionPos.idFromWorldCoords(region.minX(), region.minZ()));
         }
 
         return list;
