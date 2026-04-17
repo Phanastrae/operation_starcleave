@@ -7,6 +7,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.texture.DynamicTexture;
@@ -21,6 +22,7 @@ import org.joml.Vector4f;
 import phanastrae.operation_starcleave.client.compat.ClientCompat;
 import phanastrae.operation_starcleave.client.duck.LevelRendererDuck;
 import phanastrae.operation_starcleave.client.render.OperationStarcleaveRenderTypes;
+import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 import phanastrae.operation_starcleave.world.firmament.pos.RegionPos;
 
@@ -99,7 +101,19 @@ public class FirmamentRenderer {
         OperationStarcleaveRenderTypes.FIRMAMENT_SKY_TARGET.clearRenderState();
     }
 
+    private static boolean useDebugMode() {
+        Minecraft minecraft = Minecraft.getInstance();
+        LocalPlayer player = minecraft.player;
+        if(player == null) {
+            return false;
+        } else {
+            return !minecraft.options.hideGui && minecraft.getDebugOverlay().showDebugScreen() && !player.isSpectator() && player.getMainHandItem().is(OperationStarcleaveItems.FIRMAMENT_MANIPULATOR);
+        }
+    }
+
     private static void renderFracture(LevelRenderer levelRenderer, Firmament firmament, Camera camera, Matrix4f projectionMatrix, Matrix4f positionMatrix) {
+        boolean isDebugMode = useDebugMode();
+
         RenderType renderLayer = OperationStarcleaveRenderTypes.getFracture();
         renderLayer.setupRenderState();
 
@@ -129,8 +143,13 @@ public class FirmamentRenderer {
             DynamicTexture firmamentTex = FirmamentTextureStorage.fromLevelRenderer(levelRenderer).getTexture();
             RenderSystem.setShaderTexture(0, firmamentTex.getId());
             firmamentTex.bind();
-            RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            if(!isDebugMode) {
+                RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            } else {
+                RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+                RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            }
 
             // setup firmament sky texture
             int currentTexID1 = RenderSystem.getShaderTexture(1);
@@ -150,6 +169,10 @@ public class FirmamentRenderer {
             uniform = shaderProgram.getUniform("FadeOutStart");
             if(uniform != null) {
                 uniform.set(fadeOutStart);
+            }
+            uniform = shaderProgram.getUniform("IsDebugMode");
+            if(uniform != null) {
+                uniform.set(isDebugMode ? 1F : 0F);
             }
 
             // render firmament fractures

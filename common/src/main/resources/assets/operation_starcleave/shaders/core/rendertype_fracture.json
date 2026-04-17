@@ -29,6 +29,7 @@
         { "name": "GameTime", "type": "float", "count": 1, "values": [ 0.0 ] },
         { "name": "ScreenSize", "type": "float",     "count": 2,  "values": [ 1.0, 1.0 ] },
         { "name": "FadeOutStart", "type": "float", "count": 1, "values": [ 0.0 ] },
-        { "name": "FadeOutEnd", "type": "float", "count": 1, "values": [ 0.0 ] }
+        { "name": "FadeOutEnd", "type": "float", "count": 1, "values": [ 0.0 ] },
+        { "name": "IsDebugMode", "type": "float", "count": 1, "values": [ 0.0 ] }
     ]
 }

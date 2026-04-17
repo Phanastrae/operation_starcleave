@@ -13,6 +13,7 @@ uniform float GameTime;
 uniform vec2 ScreenSize;
 uniform float FadeOutStart;
 uniform float FadeOutEnd;
+uniform float IsDebugMode;
 
 in vec2 texCoord0;
 in vec3 pos;
@@ -29,7 +30,7 @@ float getDamage(float x, float z) {
 float getFancyDamage(float x, float z) {
     // output in range [0, 1]
     float damMax = 0.;
-    for(int i = 0; i < 8; i++) {
+    for (int i = 0; i < 8; i++) {
         float fi = float(i);
         float m = float(i % 2 == 0);
 
@@ -82,36 +83,45 @@ void main() {
     // get the fadeout factor: 0 at or before FadeOutStart, 1 at FadeOutEnd, greater than 1 beyond that
     float fadeoutFactor = max(0, (length(pos) - FadeOutStart) / (FadeOutEnd - FadeOutStart));
 
-    // get damage, smooth fade into distance to avoid hard borders
-    float damage = max(getFancyDamage(x, z) - fadeoutFactor, 0.);
-
-    float distFromBorder = getDistFromBorder(damage);
-    float absDist = abs(distFromBorder);
-
-    // random value from 0 to 1
-    float random = getRandom(x, z, GameTime);
-
     vec3 color = vec3(0.);
-    if(absDist > random * 0.75) {
-        if(distFromBorder < 0.) {
-            // render nothing
-            discard;
+    if (IsDebugMode == 0.) {
+        // get damage, smooth fade into distance to avoid hard borders
+        float damage = max(getFancyDamage(x, z) - fadeoutFactor, 0.);
+
+        float distFromBorder = getDistFromBorder(damage);
+        float absDist = abs(distFromBorder);
+
+        // random value from 0 to 1
+        float random = getRandom(x, z, GameTime);
+
+        if (absDist > random * 0.75) {
+            if (distFromBorder < 0.) {
+                // render nothing
+                discard;
+            } else {
+                // render sky
+                color = texture(Sampler1, gl_FragCoord.xy / ScreenSize.xy).rgb;
+            }
         } else {
-            // render sky
-            color = texture(Sampler1, gl_FragCoord.xy / ScreenSize.xy).rgb;
+            // render border
+            float xAxisSin = sin(texCoord0.x * 64. * TAU);
+            float yAxisSin = sin(texCoord0.y * 64. * TAU);
+            float product = xAxisSin*yAxisSin;
+
+            vec3 edgeColor = rainbow(product + GameTime * 1571.) * 0.5;
+            vec3 borderColor = rainbow(product + GameTime * 628.) * 0.7 + 0.3;
+            borderColor = mix(borderColor, vec3(1.), sqrt(fadeoutFactor));
+
+            float l = min(absDist * 2., 1.);
+            color = mix(borderColor, edgeColor, l);
         }
     } else {
-        // render border
-        float xAxisSin = sin(texCoord0.x * 64. * TAU);
-        float yAxisSin = sin(texCoord0.y * 64. * TAU);
-        float product = xAxisSin*yAxisSin;
-
-        vec3 edgeColor = rainbow(product + GameTime * 1571.) * 0.5;
-        vec3 borderColor = rainbow(product + GameTime * 628.) * 0.7 + 0.3;
-        borderColor = mix(borderColor, vec3(1.), sqrt(fadeoutFactor));
-
-        float l = min(absDist * 2., 1.);
-        color = mix(borderColor, edgeColor, l);
+        float damage = getDamage(x, z);
+        if (damage == 0.) {
+            discard;
+        } else {
+            color = vec3(damage);
+        }
     }
 
     vec4 nearlyFinalColor = vec4(color, 1.0);
