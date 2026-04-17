@@ -283,16 +283,29 @@ public abstract class AbstractSubcaelicEntity extends Mob implements Enemy {
         }
 
         protected Vec3 getCandidatePosition() {
+            Level level = this.entity.level();
+            Firmament firmament = Firmament.fromLevel(level);
+            double topY = firmament != null ? firmament.getY() : level.getMaxBuildHeight();
+
+            return getCandidatePosition(
+                    this.entity.getX(),
+                    this.entity.getZ(),
+                    level.getMinBuildHeight(),
+                    topY
+            );
+        }
+
+        protected Vec3 getCandidatePosition(double x, double z, double bottomY, double topY) {
             RandomSource random = this.entity.getRandom();
-            double radius = SEARCH_RADIUS_MIN + (SEARCH_RADIUS_MAX - SEARCH_RADIUS_MIN) * random.nextFloat();
-            double angle = Math.PI * 2 * random.nextFloat();
+            double radius = Mth.lerp(random.nextFloat(), SEARCH_RADIUS_MIN, SEARCH_RADIUS_MAX);
+            double angle = Math.TAU * random.nextFloat();
             double cos = Math.cos(angle);
             double sin = Math.sin(angle);
 
-            double targetX = this.entity.getX() + radius * cos;
-            double targetZ = this.entity.getZ() + radius * sin;
+            double targetX = x + radius * cos;
+            double targetZ = z + radius * sin;
 
-            double targetY = getTargetY(targetX, targetZ, this.entity.level().getMinBuildHeight(), this.entity.level().getMaxBuildHeight());
+            double targetY = getTargetY(targetX, targetZ, bottomY, topY);
             return new Vec3(targetX, targetY, targetZ);
         }
 
@@ -367,20 +380,23 @@ public abstract class AbstractSubcaelicEntity extends Mob implements Enemy {
 
         @Override
         protected Vec3 getCandidatePosition() {
-            if (targetEntity == null) return this.entity.position();
+            if (this.targetEntity == null) {
+                return this.entity.position();
+            }
+
+            Level level = this.entity.level();
+            Firmament firmament = Firmament.fromLevel(level);
+            double topY = firmament != null ? firmament.getY() : level.getMaxBuildHeight();
 
             RandomSource random = this.entity.getRandom();
-            double radius = SEARCH_RADIUS_MIN + (SEARCH_RADIUS_MAX - SEARCH_RADIUS_MIN) * random.nextFloat();
-            double angle = Math.PI * 2 * random.nextFloat();
-            double cos = Math.cos(angle);
-            double sin = Math.sin(angle);
-
             float l = random.nextFloat();
-            double targetX = Mth.lerp(l, this.entity.getX(), this.targetEntity.getX()) + radius * cos;
-            double targetZ = Mth.lerp(l, this.entity.getZ(), this.targetEntity.getZ()) + radius * sin;
 
-            double targetY = getTargetY(targetX, targetZ, this.targetEntity.getY() + 12, this.entity.level().getMaxBuildHeight());
-            return new Vec3(targetX, targetY, targetZ);
+            return getCandidatePosition(
+                    Mth.lerp(l, this.entity.getX(), this.targetEntity.getX()),
+                    Mth.lerp(l, this.entity.getZ(), this.targetEntity.getZ()),
+                    this.targetEntity.getY() + 12,
+                    topY
+            );
         }
 
         @Override
