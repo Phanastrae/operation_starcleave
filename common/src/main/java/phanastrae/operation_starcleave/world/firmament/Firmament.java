@@ -1,6 +1,5 @@
 package phanastrae.operation_starcleave.world.firmament;
 
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.OperationStarcleave;
@@ -52,15 +51,9 @@ public class Firmament implements FirmamentAccess {
         this.firmamentRegionManager.forEachRegion(method);
     }
 
-    public static long getRegionId(int x, int z) {
-        int rx = x >> FirmamentRegion.REGION_SIZE_BITS;
-        int rz = z >> FirmamentRegion.REGION_SIZE_BITS;
-        return ChunkPos.asLong(rx, rz);
-    }
-
     @Nullable
     public FirmamentRegion getFirmamentRegion(int x, int z) {
-        return getFirmamentRegion(getRegionId(x, z));
+        return getFirmamentRegion(RegionPos.idFromWorldCoords(x, z));
     }
 
     @Nullable
@@ -81,7 +74,7 @@ public class Firmament implements FirmamentAccess {
     @Override
     public void addActor(FirmamentActor actor) {
         FirmamentRegion firmamentRegion = getFirmamentRegion(actor.originX, actor.originZ);
-        if(firmamentRegion != null) {
+        if (firmamentRegion != null) {
             firmamentRegion.addActor(actor);
         }
     }
@@ -102,11 +95,6 @@ public class Firmament implements FirmamentAccess {
     }
 
     @Override
-    public void forEachPosition(BiConsumer<Integer, Integer> method) {
-        forEachRegion(firmamentRegion -> firmamentRegion.forEachPosition(method));
-    }
-
-    @Override
     public void forEachActivePosition(BiConsumer<Integer, Integer> method) {
         forEachRegion(firmamentRegion -> {
             if (firmamentRegion.isActive()) {
@@ -118,7 +106,7 @@ public class Firmament implements FirmamentAccess {
     @Override
     public int getDrip(int x, int z) {
         FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
-        if(firmamentRegion != null) {
+        if (firmamentRegion != null) {
             return firmamentRegion.getDrip(x, z);
         } else {
             return 0;
@@ -128,7 +116,7 @@ public class Firmament implements FirmamentAccess {
     @Override
     public int getDamage(int x, int z) {
         FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
-        if(firmamentRegion != null) {
+        if (firmamentRegion != null) {
             return firmamentRegion.getDamage(x, z);
         } else {
             return 0;
@@ -138,7 +126,7 @@ public class Firmament implements FirmamentAccess {
     @Override
     public int getDisplacement(int x, int z) {
         FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
-        if(firmamentRegion != null) {
+        if (firmamentRegion != null) {
             return firmamentRegion.getDisplacement(x, z);
         } else {
             return 0;
@@ -148,7 +136,7 @@ public class Firmament implements FirmamentAccess {
     @Override
     public int getVelocity(int x, int z) {
         FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
-        if(firmamentRegion != null) {
+        if (firmamentRegion != null) {
             return firmamentRegion.getVelocity(x, z);
         } else {
             return 0;
@@ -158,7 +146,7 @@ public class Firmament implements FirmamentAccess {
     @Override
     public float getDDrip(int x, int z) {
         FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
-        if(firmamentRegion != null) {
+        if (firmamentRegion != null) {
             return firmamentRegion.getDDrip(x, z);
         } else {
             return 0;
@@ -168,7 +156,7 @@ public class Firmament implements FirmamentAccess {
     @Override
     public void setDrip(int x, int z, int value) {
         FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
-        if(firmamentRegion != null) {
+        if (firmamentRegion != null) {
             firmamentRegion.setDrip(x & FirmamentRegion.REGION_MASK, z & FirmamentRegion.REGION_MASK, value);
         }
     }
@@ -176,7 +164,7 @@ public class Firmament implements FirmamentAccess {
     @Override
     public void setDamage(int x, int z, int value) {
         FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
-        if(firmamentRegion != null) {
+        if (firmamentRegion != null) {
             firmamentRegion.setDamage(x & FirmamentRegion.REGION_MASK, z & FirmamentRegion.REGION_MASK, value);
         }
     }
@@ -184,7 +172,7 @@ public class Firmament implements FirmamentAccess {
     @Override
     public void setDisplacement(int x, int z, int value) {
         FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
-        if(firmamentRegion != null) {
+        if (firmamentRegion != null) {
             firmamentRegion.setDisplacement(x & FirmamentRegion.REGION_MASK, z & FirmamentRegion.REGION_MASK, value);
         }
     }
@@ -192,7 +180,7 @@ public class Firmament implements FirmamentAccess {
     @Override
     public void setVelocity(int x, int z, int value) {
         FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
-        if(firmamentRegion != null) {
+        if (firmamentRegion != null) {
             firmamentRegion.setVelocity(x & FirmamentRegion.REGION_MASK, z & FirmamentRegion.REGION_MASK, value);
         }
     }
@@ -200,7 +188,7 @@ public class Firmament implements FirmamentAccess {
     @Override
     public void setDDrip(int x, int z, float value) {
         FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
-        if(firmamentRegion != null) {
+        if (firmamentRegion != null) {
             firmamentRegion.setDDrip(x & FirmamentRegion.REGION_MASK, z & FirmamentRegion.REGION_MASK, value);
         }
     }
@@ -208,7 +196,7 @@ public class Firmament implements FirmamentAccess {
     @Override
     public void markActive(int x, int z) {
         FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
-        if(firmamentRegion != null) {
+        if (firmamentRegion != null) {
             firmamentRegion.markActive(x & FirmamentRegion.REGION_MASK, z & FirmamentRegion.REGION_MASK);
         }
     }
@@ -218,17 +206,11 @@ public class Firmament implements FirmamentAccess {
         forEachRegion(FirmamentRegion::clearActive);
     }
 
-    @Override
     public void markShouldUpdate(int x, int z) {
         FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
-        if(firmamentRegion != null) {
+        if (firmamentRegion != null) {
             firmamentRegion.markShouldUpdate(x & FirmamentRegion.REGION_MASK, z & FirmamentRegion.REGION_MASK);
         }
-    }
-
-    @Override
-    public boolean shouldUpdate() {
-        return true;
     }
 
     @Override
@@ -250,7 +232,7 @@ public class Firmament implements FirmamentAccess {
     }
 
     public static Firmament fromLevel(Level level) {
-        if(level instanceof FirmamentHolder firmamentHolder) {
+        if (level instanceof FirmamentHolder firmamentHolder) {
             return firmamentHolder.operation_starcleave$getFirmament();
         } else {
             OperationStarcleave.LOGGER.info("World " + level.gatherChunkSourceStats() + " has no Firmament!?");
@@ -260,8 +242,8 @@ public class Firmament implements FirmamentAccess {
 
     @Nullable
     public FirmamentSubRegion getSubRegionFromId(long id) {
-        int srx = (int)(id & 4294967295L);
-        int srz = (int)((id >>> 32) & 4294967295L);
+        int srx = (int) (id & 4294967295L);
+        int srz = (int) ((id >>> 32) & 4294967295L);
         int x = srx << FirmamentRegion.SUBREGION_SIZE_BITS;
         int z = srz << FirmamentRegion.SUBREGION_SIZE_BITS;
         return this.getSubRegion(x, z);
@@ -270,7 +252,7 @@ public class Firmament implements FirmamentAccess {
     @Nullable
     public FirmamentSubRegion getSubRegion(int x, int z) {
         FirmamentRegion firmamentRegion = this.getFirmamentRegion(x, z);
-        if(firmamentRegion == null) {
+        if (firmamentRegion == null) {
             return null;
         }
         int lx = x & FirmamentRegion.REGION_MASK;
@@ -278,5 +260,9 @@ public class Firmament implements FirmamentAccess {
         int lsrx = lx >> FirmamentRegion.SUBREGION_SIZE_BITS;
         int lsrz = lz >> FirmamentRegion.SUBREGION_SIZE_BITS;
         return firmamentRegion.subRegions[lsrx][lsrz];
+    }
+
+    public void flushUpdates() {
+        this.firmamentRegionManager.forEachRegion(FirmamentRegion::flushUpdates);
     }
 }

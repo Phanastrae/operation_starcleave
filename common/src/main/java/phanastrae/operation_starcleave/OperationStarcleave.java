@@ -37,7 +37,6 @@ import phanastrae.operation_starcleave.recipe.OperationStarcleaveRecipeTypes;
 import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
 import phanastrae.operation_starcleave.world.OperationStarcleaveGameRules;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
-import phanastrae.operation_starcleave.world.firmament.FirmamentRegion;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -123,7 +122,7 @@ public class OperationStarcleave {
                 profiler.pop();
             }
 
-            firmament.forEachRegion(FirmamentRegion::flushUpdates);
+            firmament.flushUpdates();
         }
     }
 

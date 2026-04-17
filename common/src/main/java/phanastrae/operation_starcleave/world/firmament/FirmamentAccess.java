@@ -22,7 +22,6 @@ public interface FirmamentAccess extends FirmamentView {
     void markActive(int x, int z);
     void clearActive();
 
-    void markShouldUpdate(int x, int z);
     void clearShouldUpdate();
 
     void markUpdatesFromActivity();

@@ -14,17 +14,27 @@ public class RegionPos {
     public RegionPos(int rx, int rz) {
         this.rx = rx;
         this.rz = rz;
-        this.id = (long)rx & 4294967295L | ((long)rz & 4294967295L) << 32;
+        this.id = idFromRegionCoords(rx, rz);
         this.worldX = rx << FirmamentRegion.REGION_SIZE_BITS;
         this.worldZ = rz << FirmamentRegion.REGION_SIZE_BITS;
     }
 
     public RegionPos(long id) {
         this.id = id;
-        this.rx = (int)(id & 4294967295L);
-        this.rz = (int)((id >>> 32) & 4294967295L);
+        this.rx = (int) (id & 0xFFFFFFFFL);
+        this.rz = (int) ((id >>> 32) & 0xFFFFFFFFL);
         this.worldX = rx << FirmamentRegion.REGION_SIZE_BITS;
         this.worldZ = rz << FirmamentRegion.REGION_SIZE_BITS;
+    }
+
+    public static long idFromRegionCoords(int rx, int rz) {
+        return (long) rx & 0xFFFFFFFFL | ((long) rz & 0xFFFFFFFFL) << 32;
+    }
+
+    public static long idFromWorldCoords(int x, int z) {
+        int rx = x >> FirmamentRegion.REGION_SIZE_BITS;
+        int rz = z >> FirmamentRegion.REGION_SIZE_BITS;
+        return (long) rx & 0xFFFFFFFFL | ((long) rz & 0xFFFFFFFFL) << 32;
     }
 
     public static RegionPos fromWorldCoords(int x, int z) {

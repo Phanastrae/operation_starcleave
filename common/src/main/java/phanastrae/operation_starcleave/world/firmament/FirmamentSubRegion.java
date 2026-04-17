@@ -3,7 +3,6 @@ package phanastrae.operation_starcleave.world.firmament;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
-import org.apache.logging.log4j.util.TriConsumer;
 import phanastrae.operation_starcleave.duck.FirmamentWatcher;
 import phanastrae.operation_starcleave.network.packet.UpdateFirmamentSubRegionPayload;
 import phanastrae.operation_starcleave.services.XPlatInterface;
@@ -80,25 +79,6 @@ public class FirmamentSubRegion implements FirmamentAccess {
         this.dDrip = new float[TILES][TILES];
     }
 
-    public void clear() {
-        for(int i = 0; i < FirmamentSubRegion.TILES; i++) {
-            for(int j = 0; j < FirmamentSubRegion.TILES; j++) {
-                this.damage[i][j] = 0;
-                this.drip[i][j] = 0;
-                this.dDrip[i][j] = 0;
-                this.displacement[i][j] = 0;
-                this.velocity[i][j] = 0;
-            }
-        }
-        this.pendingClientUpdate = true;
-        this.firmamentRegion.setPendingClientUpdate(true);
-        this.clearActors();
-    }
-
-    public void markShouldUpdate() {
-        this.shouldUpdate = true;
-    }
-
     @Override
     public void clearActors() {
         this.actors.clear();
@@ -120,8 +100,8 @@ public class FirmamentSubRegion implements FirmamentAccess {
 
     @Override
     public void tickActors() {
-        for(FirmamentActor actor : actors) {
-            if(actor.isActive()) {
+        for (FirmamentActor actor : actors) {
+            if (actor.isActive()) {
                 actor.tick();
             }
         }
@@ -129,34 +109,18 @@ public class FirmamentSubRegion implements FirmamentAccess {
 
     @Override
     public void forEachActor(Consumer<FirmamentActor> consumer) {
-        for(FirmamentActor actor : actors) {
+        for (FirmamentActor actor : actors) {
             consumer.accept(actor);
         }
     }
 
     @Override
-    public void forEachPosition(BiConsumer<Integer, Integer> method) {
-        for(int i = 0; i < TILES; i++) {
-            for(int j = 0; j < TILES; j++) {
+    public void forEachActivePosition(BiConsumer<Integer, Integer> method) {
+        for (int i = 0; i < TILES; i++) {
+            for (int j = 0; j < TILES; j++) {
                 method.accept(i * TILE_SIZE, j * TILE_SIZE);
             }
         }
-    }
-
-    public void forEachPosition(TriConsumer<Integer, Integer, Boolean> method) {
-        for(int i = 0; i < TILES; i++) {
-            boolean b1 = i == 0 || i == TILES - 1;
-            for(int j = 0; j < TILES; j++) {
-                boolean b2 = j == 0 || j == TILES - 1;
-                boolean onBorder = b1 || b2;
-                method.accept(i * TILE_SIZE, j * TILE_SIZE, onBorder);
-            }
-        }
-    }
-
-    @Override
-    public void forEachActivePosition(BiConsumer<Integer, Integer> method) {
-        forEachPosition(method);
     }
 
     @Override
@@ -210,19 +174,13 @@ public class FirmamentSubRegion implements FirmamentAccess {
         dDrip[x >> TILE_SIZE_BITS][z >> TILE_SIZE_BITS] = value;
     }
 
-    @Override
-    public void markShouldUpdate(int x, int z) {
-        markShouldUpdate();
+    public void markShouldUpdate() {
+        this.shouldUpdate = true;
     }
 
     @Override
     public void clearShouldUpdate() {
         shouldUpdate = false;
-    }
-
-    @Override
-    public boolean shouldUpdate() {
-        return shouldUpdate;
     }
 
     @Override
@@ -235,57 +193,48 @@ public class FirmamentSubRegion implements FirmamentAccess {
         boolean xMax = tx == 0;
         boolean zMax = tz == TILES - 1;
 
+        active[0] |= xMin && zMin;
+        active[1] |= zMin;
+        active[2] |= xMax && zMin;
+        active[3] |= xMin;
         active[4] = true;
-        if(xMin) {
-            active[3] = true;
-            if(zMin) active[0] = true;
-            if(zMax) active[6] = true;
-        }
-        if(xMax) {
-            active[5] = true;
-            if(zMin) active[2] = true;
-            if(zMax) active[8] = true;
-        }
-        if(zMin) active[1] = true;
-        if(zMax) active[7] = true;
+        active[5] |= xMax;
+        active[6] |= xMin && zMax;
+        active[7] |= zMax;
+        active[8] |= xMax && zMax;
+
     }
 
     @Override
     public void clearActive() {
-        for(int i = 0; i < 9; i++) {
+        for (int i = 0; i < 9; i++) {
             active[i] = false;
         }
     }
 
     @Override
     public void markUpdatesFromActivity() {
-        for(int k = 0; k < 9; k++) {
-            if(active[k]) {
+        for (int k = 0; k < 9; k++) {
+            if (active[k]) {
                 this.firmamentRegion.firmament.markShouldUpdate(x + xOffset[k], z + zOffset[k]);
             }
         }
     }
 
-    public long getPosAsLong() {
-        int srx = this.x >> FirmamentRegion.SUBREGION_SIZE_BITS;
-        int srz = this.z >> FirmamentRegion.SUBREGION_SIZE_BITS;
-        return ((long)srx & 4294967295L) | (((long)srz) << 32);
-    }
-
-    public byte[] getAsByteArray(int[][] target) {
+    public static byte[] getAsByteArray(int[][] target) {
         ByteBuffer byteBuffer = ByteBuffer.allocate(DATA_SIZE_BYTES);
         boolean multipleValues = false;
-        byte val = (byte)target[0][0];
-        for(int i = 0; i < FirmamentSubRegion.TILES; i++) {
-            for(int j = 0; j < FirmamentSubRegion.TILES; j++) {
-                byte b = (byte)target[i][j];
+        byte val = (byte) target[0][0];
+        for (int i = 0; i < FirmamentSubRegion.TILES; i++) {
+            for (int j = 0; j < FirmamentSubRegion.TILES; j++) {
+                byte b = (byte) target[i][j];
                 byteBuffer.put(b);
-                if(b != val) {
+                if (b != val) {
                     multipleValues = true;
                 }
             }
         }
-        if(multipleValues) {
+        if (multipleValues) {
             return byteBuffer.array();
         } else {
             ByteBuffer buffer = ByteBuffer.allocate(1);
@@ -294,65 +243,10 @@ public class FirmamentSubRegion implements FirmamentAccess {
         }
     }
 
-    public void readFromData(FirmamentSubRegionData firmamentSubRegionData) {
-        //this.readFromByteArray(firmamentSubRegionData.displacementData, this.displacement, 0xF);
-        //this.readFromByteArray(firmamentSubRegionData.velocityData, this.velocity, 0xF);
-        this.readFromByteArray(firmamentSubRegionData.damageData, this.damage, 0x7);
-        //this.readFromByteArray(firmamentSubRegionData.dripData, this.drip, 0x7);
-        checkDamage();
-    }
-
-    public void readFromByteArray(byte[] byteArray, int[][] targetArray, int mask) {
-        if(byteArray == null) {
-            return;
-        }
-
-        if(byteArray.length == DATA_SIZE_BYTES) {
-            ByteBuffer byteBuffer = ByteBuffer.allocate(DATA_SIZE_BYTES);
-            byteBuffer.put(byteArray);
-            byteBuffer.position(0);
-            for (int i = 0; i < FirmamentSubRegion.TILES; i++) {
-                for (int j = 0; j < FirmamentSubRegion.TILES; j++) {
-                    targetArray[i][j] = byteBuffer.get() & mask;
-                }
-            }
-        } else if(byteArray.length == 1) {
-            int val = byteArray[0] & mask;
-            for (int i = 0; i < FirmamentSubRegion.TILES; i++) {
-                for (int j = 0; j < FirmamentSubRegion.TILES; j++) {
-                    targetArray[i][j] = val;
-                }
-            }
-        }
-    }
-
-    public void flushUpdates() {
-        if(this.pendingClientUpdate) {
-            this.pendingClientUpdate = false;
-            Level world = this.firmamentRegion.firmament.getLevel();
-            if(world instanceof ServerLevel serverWorld) {
-                SubRegionPos subRegionPos = SubRegionPos.fromWorldCoords(this.x, this.z);
-                RegionPos regionPos = RegionPos.fromSubRegion(subRegionPos);
-
-                List<ServerPlayer> nearbyPlayers = new ArrayList<>();
-                serverWorld.players().forEach(serverPlayerEntity -> {
-                    if(((FirmamentWatcher)serverPlayerEntity).operation_starcleave$getWatchedRegions().getWatchedRegions().contains(regionPos.id)) {
-                        nearbyPlayers.add(serverPlayerEntity);
-                    }
-                });
-
-                if(!nearbyPlayers.isEmpty()) {
-                    FirmamentSubRegionData data = new FirmamentSubRegionData(this);
-                    nearbyPlayers.forEach(serverPlayerEntity -> XPlatInterface.INSTANCE.sendPayload(serverPlayerEntity, new UpdateFirmamentSubRegionPayload(subRegionPos.id, data)));
-                }
-            }
-        }
-    }
-
     public void checkDamage() {
-        for(int i = 0; i < TILES; i++) {
-            for(int j = 0; j < TILES; j++) {
-                if(damage[i][j] != 0) {
+        for (int i = 0; i < TILES; i++) {
+            for (int j = 0; j < TILES; j++) {
+                if (damage[i][j] != 0) {
                     this.hadDamageLastCheck = true;
                     return;
                 }
@@ -363,5 +257,60 @@ public class FirmamentSubRegion implements FirmamentAccess {
 
     public boolean hadDamageLastCheck() {
         return this.hadDamageLastCheck;
+    }
+
+    public void flushUpdates() {
+        if (this.pendingClientUpdate) {
+            this.pendingClientUpdate = false;
+            Level world = this.firmamentRegion.firmament.getLevel();
+            if (world instanceof ServerLevel serverWorld) {
+                SubRegionPos subRegionPos = SubRegionPos.fromWorldCoords(this.x, this.z);
+                RegionPos regionPos = RegionPos.fromSubRegion(subRegionPos);
+
+                List<ServerPlayer> nearbyPlayers = new ArrayList<>();
+                serverWorld.players().forEach(serverPlayerEntity -> {
+                    if (((FirmamentWatcher) serverPlayerEntity).operation_starcleave$getWatchedRegions().getWatchedRegions().contains(regionPos.id)) {
+                        nearbyPlayers.add(serverPlayerEntity);
+                    }
+                });
+
+                if (!nearbyPlayers.isEmpty()) {
+                    FirmamentSubRegionData data = new FirmamentSubRegionData(this);
+                    nearbyPlayers.forEach(serverPlayerEntity -> XPlatInterface.INSTANCE.sendPayload(serverPlayerEntity, new UpdateFirmamentSubRegionPayload(subRegionPos.id, data)));
+                }
+            }
+        }
+    }
+
+    public void readFromData(FirmamentSubRegionData firmamentSubRegionData) {
+        //readFromByteArray(firmamentSubRegionData.displacementData, this.displacement, 0xF);
+        //readFromByteArray(firmamentSubRegionData.velocityData, this.velocity, 0xF);
+        readFromByteArray(firmamentSubRegionData.damageData, this.damage, 0x7);
+        //readFromByteArray(firmamentSubRegionData.dripData, this.drip, 0x7);
+        checkDamage();
+    }
+
+    public static void readFromByteArray(byte[] byteArray, int[][] targetArray, int mask) {
+        if (byteArray == null) {
+            return;
+        }
+
+        if (byteArray.length == DATA_SIZE_BYTES) {
+            ByteBuffer byteBuffer = ByteBuffer.allocate(DATA_SIZE_BYTES);
+            byteBuffer.put(byteArray);
+            byteBuffer.position(0);
+            for (int i = 0; i < FirmamentSubRegion.TILES; i++) {
+                for (int j = 0; j < FirmamentSubRegion.TILES; j++) {
+                    targetArray[i][j] = byteBuffer.get() & mask;
+                }
+            }
+        } else if (byteArray.length == 1) {
+            int val = byteArray[0] & mask;
+            for (int i = 0; i < FirmamentSubRegion.TILES; i++) {
+                for (int j = 0; j < FirmamentSubRegion.TILES; j++) {
+                    targetArray[i][j] = val;
+                }
+            }
+        }
     }
 }

@@ -8,8 +8,5 @@ public interface FirmamentView {
     int getDamage(int x, int z);
     int getDrip(int x, int z);
 
-    void forEachPosition(BiConsumer<Integer, Integer> method);
     void forEachActivePosition(BiConsumer<Integer, Integer> method);
-
-    boolean shouldUpdate();
 }
