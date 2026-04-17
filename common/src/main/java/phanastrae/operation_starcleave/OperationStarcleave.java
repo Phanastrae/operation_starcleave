@@ -113,16 +113,12 @@ public class OperationStarcleave {
         Firmament firmament = Firmament.fromLevel(level);
         if (firmament != null) {
             TickRateManager tickManager = level.tickRateManager();
-            boolean shouldTick = tickManager.runsNormally();
-            level.getProfiler().push("");
-            if (shouldTick) {
-                ProfilerFiller profiler = level.getProfiler();
-                profiler.push("starcleave_fracture");
-                firmament.tick();
-                profiler.pop();
-            }
+            boolean runsNormally = tickManager.runsNormally();
 
-            firmament.flushUpdates();
+            ProfilerFiller profiler = level.getProfiler();
+            profiler.push("starcleave_fracture");
+            firmament.tick(runsNormally);
+            profiler.pop();
         }
     }
 

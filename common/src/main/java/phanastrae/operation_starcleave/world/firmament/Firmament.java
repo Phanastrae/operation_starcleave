@@ -25,25 +25,37 @@ public class Firmament implements FirmamentAccess {
         return this.level.getMaxBuildHeight();
     }
 
-    public void tick() {
-        long t = level.getGameTime();
-        if (t % 2 == 0) {
-            manageActors();
-            tickActors();
+    public void tick(boolean runsNormally) {
+        this.firmamentRegionManager.tick();
 
-            if (t % 20 == 0) {
-                clearShouldUpdate();
+        if (runsNormally) {
+            long t = level.getGameTime();
+            if (t % 2 == 0) {
+                this.manageActors();
+                this.tickActors();
+
+                if (t % 20 == 0) {
+                    this.clearShouldUpdate();
+                }
+                this.markUpdatesFromActivity();
+
+                if (t % 20 == 0) {
+                    this.clearActive();
+                }
+
+                FirmamentUpdater.update(this);
             }
+        }
 
-            markUpdatesFromActivity();
+        this.flushUpdates();
+    }
 
-            if (t % 20 == 0) {
-                clearActive();
-            }
+    public void clientTick(boolean runsNormally) {
+        this.firmamentRegionManager.tick();
 
-            this.firmamentRegionManager.tick();
-
-            FirmamentUpdater.update(this);
+        if (runsNormally) {
+            this.manageActors();
+            this.tickActors();
         }
     }
 

@@ -60,20 +60,16 @@ public class OperationStarcleaveClient {
     }
 
     public static void startLevelTick(Level level) {
-        LevelDuckInterface opscw = (LevelDuckInterface) level;
-        if (opscw.operation_starcleave$getCleavingFlashTicksLeft() > 0) {
-            opscw.operation_starcleave$setCleavingFlashTicksLeft(opscw.operation_starcleave$getCleavingFlashTicksLeft() - 1);
+        LevelDuckInterface levelDuck = (LevelDuckInterface) level;
+        if (levelDuck.operation_starcleave$getCleavingFlashTicksLeft() > 0) {
+            levelDuck.operation_starcleave$setCleavingFlashTicksLeft(levelDuck.operation_starcleave$getCleavingFlashTicksLeft() - 1);
         }
 
-        TickRateManager tickManager = level.tickRateManager();
-        boolean bl = tickManager.runsNormally();
-        if (bl) {
-            Firmament firmament = Firmament.fromLevel(level);
-            if (firmament != null) {
-                firmament.getFirmamentRegionManager().tick();
-                firmament.manageActors();
-                firmament.tickActors();
-            }
+        Firmament firmament = Firmament.fromLevel(level);
+        if (firmament != null) {
+            TickRateManager tickManager = level.tickRateManager();
+            boolean runsNormally = tickManager.runsNormally();
+            firmament.clientTick(runsNormally);
         }
 
         ScreenShakeManager.getInstance().update();
