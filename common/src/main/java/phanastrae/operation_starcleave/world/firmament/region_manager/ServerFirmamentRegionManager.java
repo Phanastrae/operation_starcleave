@@ -67,13 +67,7 @@ public class ServerFirmamentRegionManager extends FirmamentRegionManager {
                 }
             });
         }
-        // keep active regions loaded
-        this.firmamentRegionHolders.forEach((id, firmamentRegionHolder) -> {
-            FirmamentRegion firmamentRegion = firmamentRegionHolder.getFirmamentRegion();
-            if(firmamentRegion != null && firmamentRegion.shouldUpdate()) {
-                firmamentRegionHolder.recordAccess();
-            }
-        });
+        // TODO keep regions with actors loaded? if not, make sure to serialise actors (though that should be added anyways)
         // unload inactive regions
         List<Long> idsToUnload = new ArrayList<>();
         long currentTime = this.serverWorld.getGameTime();

@@ -7,7 +7,6 @@ import phanastrae.operation_starcleave.world.firmament.data.FirmamentSubRegionDa
 import phanastrae.operation_starcleave.world.firmament.pos.RegionPos;
 import phanastrae.operation_starcleave.world.firmament.pos.SubRegionPos;
 
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class FirmamentRegion implements FirmamentAccess {
@@ -22,8 +21,6 @@ public class FirmamentRegion implements FirmamentAccess {
     public static final int SUBREGION_SIZE_BITS = 5;
 
     public FirmamentSubRegion[][] subRegions;
-    private boolean shouldUpdate = false;
-    private boolean active = false;
     private boolean pendingClientUpdate = false;
 
     public final RegionPos regionPos;
@@ -94,61 +91,10 @@ public class FirmamentRegion implements FirmamentAccess {
     }
 
     @Override
-    public void forEachActivePosition(BiConsumer<Integer, Integer> method) {
-        forEachSubRegion((firmamentSubRegion -> {
-            if (firmamentSubRegion.shouldUpdate()) {
-                firmamentSubRegion.forEachActivePosition((x, z) -> method.accept(x + firmamentSubRegion.minX() - this.minX(), z + firmamentSubRegion.minZ() - this.minZ()));
-            }
-        }));
-    }
-
-    @Override
-    public int getDrip(int x, int z) {
-        x = x & REGION_MASK;
-        z = z & REGION_MASK;
-        return subRegions[x >> SUBREGION_SIZE_BITS][z >> SUBREGION_SIZE_BITS].getDrip(x & SUBREGION_MASK, z & SUBREGION_MASK);
-    }
-
-    @Override
     public int getDamage(int x, int z) {
         x = x & REGION_MASK;
         z = z & REGION_MASK;
         return subRegions[x >> SUBREGION_SIZE_BITS][z >> SUBREGION_SIZE_BITS].getDamage(x & SUBREGION_MASK, z & SUBREGION_MASK);
-    }
-
-    @Override
-    public int getDisplacement(int x, int z) {
-        x = x & REGION_MASK;
-        z = z & REGION_MASK;
-        return subRegions[x >> SUBREGION_SIZE_BITS][z >> SUBREGION_SIZE_BITS].getDisplacement(x & SUBREGION_MASK, z & SUBREGION_MASK);
-    }
-
-    @Override
-    public int getVelocity(int x, int z) {
-        x = x & REGION_MASK;
-        z = z & REGION_MASK;
-        return subRegions[x >> SUBREGION_SIZE_BITS][z >> SUBREGION_SIZE_BITS].getVelocity(x & SUBREGION_MASK, z & SUBREGION_MASK);
-    }
-
-    @Override
-    public float getDDrip(int x, int z) {
-        x = x & REGION_MASK;
-        z = z & REGION_MASK;
-        return subRegions[x >> SUBREGION_SIZE_BITS][z >> SUBREGION_SIZE_BITS].getDDrip(x & SUBREGION_MASK, z & SUBREGION_MASK);
-    }
-
-    @Override
-    public void setDrip(int x, int z, int value) {
-        x = x & REGION_MASK;
-        z = z & REGION_MASK;
-        subRegions[x >> SUBREGION_SIZE_BITS][z >> SUBREGION_SIZE_BITS].setDrip(x & SUBREGION_MASK, z & SUBREGION_MASK, value);
-    }
-
-    @Override
-    public void setDDrip(int x, int z, float value) {
-        x = x & REGION_MASK;
-        z = z & REGION_MASK;
-        subRegions[x >> SUBREGION_SIZE_BITS][z >> SUBREGION_SIZE_BITS].setDDrip(x & SUBREGION_MASK, z & SUBREGION_MASK, value);
     }
 
     @Override
@@ -157,66 +103,6 @@ public class FirmamentRegion implements FirmamentAccess {
         z = z & REGION_MASK;
         subRegions[x >> SUBREGION_SIZE_BITS][z >> SUBREGION_SIZE_BITS].setDamage(x & SUBREGION_MASK, z & SUBREGION_MASK, value);
         this.pendingClientUpdate = true;
-    }
-
-    @Override
-    public void setDisplacement(int x, int z, int value) {
-        x = x & REGION_MASK;
-        z = z & REGION_MASK;
-        subRegions[x >> SUBREGION_SIZE_BITS][z >> SUBREGION_SIZE_BITS].setDisplacement(x & SUBREGION_MASK, z & SUBREGION_MASK, value);
-    }
-
-    @Override
-    public void setVelocity(int x, int z, int value) {
-        x = x & REGION_MASK;
-        z = z & REGION_MASK;
-        subRegions[x >> SUBREGION_SIZE_BITS][z >> SUBREGION_SIZE_BITS].setVelocity(x & SUBREGION_MASK, z & SUBREGION_MASK, value);
-    }
-
-    @Override
-    public void markActive(int x, int z) {
-        active = true;
-        x = x & REGION_MASK;
-        z = z & REGION_MASK;
-        subRegions[x >> SUBREGION_SIZE_BITS][z >> SUBREGION_SIZE_BITS].markActive(x & SUBREGION_MASK, z & SUBREGION_MASK);
-    }
-
-    @Override
-    public void clearActive() {
-        if (active) {
-            this.active = false;
-            forEachSubRegion(FirmamentSubRegion::clearActive);
-        }
-    }
-
-    public void markShouldUpdate(int x, int z) {
-        shouldUpdate = true;
-        x = x & REGION_MASK;
-        z = z & REGION_MASK;
-        subRegions[x >> SUBREGION_SIZE_BITS][z >> SUBREGION_SIZE_BITS].markShouldUpdate();
-    }
-
-    @Override
-    public void clearShouldUpdate() {
-        if (this.shouldUpdate) {
-            this.shouldUpdate = false;
-            forEachSubRegion(FirmamentSubRegion::clearShouldUpdate);
-        }
-    }
-
-    @Override
-    public void markUpdatesFromActivity() {
-        if (active) {
-            forEachSubRegion(FirmamentSubRegion::markUpdatesFromActivity);
-        }
-    }
-
-    public boolean shouldUpdate() {
-        return shouldUpdate;
-    }
-
-    public boolean isActive() {
-        return active;
     }
 
     public void flushUpdates() {
@@ -231,10 +117,7 @@ public class FirmamentRegion implements FirmamentAccess {
             for (int j = 0; j < SUBREGIONS; j++) {
                 CompoundTag subregionNbt = nbt.getCompound("subregion_" + i + "_" + j);
                 FirmamentSubRegion subRegion = this.subRegions[i][j];
-                FirmamentSubRegion.readFromByteArray(subregionNbt.getByteArray("displacement"), subRegion.displacement, 0xF);
-                FirmamentSubRegion.readFromByteArray(subregionNbt.getByteArray("velocity"), subRegion.velocity, 0xF);
                 FirmamentSubRegion.readFromByteArray(subregionNbt.getByteArray("damage"), subRegion.damage, 0x7);
-                FirmamentSubRegion.readFromByteArray(subregionNbt.getByteArray("drip"), subRegion.drip, 0x7);
             }
         }
     }
@@ -244,10 +127,7 @@ public class FirmamentRegion implements FirmamentAccess {
             for (int j = 0; j < SUBREGIONS; j++) {
                 CompoundTag subregionNbt = new CompoundTag();
                 FirmamentSubRegion subRegion = this.subRegions[i][j];
-                subregionNbt.putByteArray("displacement", FirmamentSubRegion.getAsByteArray(subRegion.displacement));
-                subregionNbt.putByteArray("velocity", FirmamentSubRegion.getAsByteArray(subRegion.velocity));
                 subregionNbt.putByteArray("damage", FirmamentSubRegion.getAsByteArray(subRegion.damage));
-                subregionNbt.putByteArray("drip", FirmamentSubRegion.getAsByteArray(subRegion.drip));
                 nbt.put("subregion_" + i + "_" + j, subregionNbt);
             }
         }

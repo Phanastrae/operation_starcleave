@@ -7,7 +7,6 @@ import phanastrae.operation_starcleave.world.firmament.actor.FirmamentActor;
 import phanastrae.operation_starcleave.world.firmament.pos.RegionPos;
 import phanastrae.operation_starcleave.world.firmament.region_manager.FirmamentRegionManager;
 
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class Firmament implements FirmamentAccess {
@@ -29,19 +28,10 @@ public class Firmament implements FirmamentAccess {
 
         if (runsNormally) {
             long t = level.getGameTime();
+            // TODO this should probably just run every tick
             if (t % 2 == 0) {
                 this.manageActors();
                 this.tickActors();
-
-                if (t % 20 == 0) {
-                    this.clearShouldUpdate();
-                }
-                this.markUpdatesFromActivity();
-
-                if (t % 20 == 0) {
-                    this.clearActive();
-                }
-                FirmamentUpdater.update(this);
             }
         }
 
@@ -105,25 +95,6 @@ public class Firmament implements FirmamentAccess {
     }
 
     @Override
-    public void forEachActivePosition(BiConsumer<Integer, Integer> method) {
-        forEachRegion(firmamentRegion -> {
-            if (firmamentRegion.isActive()) {
-                firmamentRegion.forEachActivePosition((x, z) -> method.accept(x + firmamentRegion.minX(), z + firmamentRegion.minZ()));
-            }
-        });
-    }
-
-    @Override
-    public int getDrip(int x, int z) {
-        FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
-        if (firmamentRegion != null) {
-            return firmamentRegion.getDrip(x, z);
-        } else {
-            return 0;
-        }
-    }
-
-    @Override
     public int getDamage(int x, int z) {
         FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
         if (firmamentRegion != null) {
@@ -134,103 +105,11 @@ public class Firmament implements FirmamentAccess {
     }
 
     @Override
-    public int getDisplacement(int x, int z) {
-        FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
-        if (firmamentRegion != null) {
-            return firmamentRegion.getDisplacement(x, z);
-        } else {
-            return 0;
-        }
-    }
-
-    @Override
-    public int getVelocity(int x, int z) {
-        FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
-        if (firmamentRegion != null) {
-            return firmamentRegion.getVelocity(x, z);
-        } else {
-            return 0;
-        }
-    }
-
-    @Override
-    public float getDDrip(int x, int z) {
-        FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
-        if (firmamentRegion != null) {
-            return firmamentRegion.getDDrip(x, z);
-        } else {
-            return 0;
-        }
-    }
-
-    @Override
-    public void setDrip(int x, int z, int value) {
-        FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
-        if (firmamentRegion != null) {
-            firmamentRegion.setDrip(x & FirmamentRegion.REGION_MASK, z & FirmamentRegion.REGION_MASK, value);
-        }
-    }
-
-    @Override
     public void setDamage(int x, int z, int value) {
         FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
         if (firmamentRegion != null) {
             firmamentRegion.setDamage(x & FirmamentRegion.REGION_MASK, z & FirmamentRegion.REGION_MASK, value);
         }
-    }
-
-    @Override
-    public void setDisplacement(int x, int z, int value) {
-        FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
-        if (firmamentRegion != null) {
-            firmamentRegion.setDisplacement(x & FirmamentRegion.REGION_MASK, z & FirmamentRegion.REGION_MASK, value);
-        }
-    }
-
-    @Override
-    public void setVelocity(int x, int z, int value) {
-        FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
-        if (firmamentRegion != null) {
-            firmamentRegion.setVelocity(x & FirmamentRegion.REGION_MASK, z & FirmamentRegion.REGION_MASK, value);
-        }
-    }
-
-    @Override
-    public void setDDrip(int x, int z, float value) {
-        FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
-        if (firmamentRegion != null) {
-            firmamentRegion.setDDrip(x & FirmamentRegion.REGION_MASK, z & FirmamentRegion.REGION_MASK, value);
-        }
-    }
-
-    @Override
-    public void markActive(int x, int z) {
-        FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
-        if (firmamentRegion != null) {
-            firmamentRegion.markActive(x & FirmamentRegion.REGION_MASK, z & FirmamentRegion.REGION_MASK);
-        }
-    }
-
-    @Override
-    public void clearActive() {
-        forEachRegion(FirmamentRegion::clearActive);
-    }
-
-    public void markShouldUpdate(int x, int z) {
-        FirmamentRegion firmamentRegion = getFirmamentRegion(x, z);
-        if (firmamentRegion != null) {
-            firmamentRegion.markShouldUpdate(x & FirmamentRegion.REGION_MASK, z & FirmamentRegion.REGION_MASK);
-        }
-    }
-
-    @Override
-    public void clearShouldUpdate() {
-        forEachRegion(FirmamentRegion::clearShouldUpdate);
-    }
-
-    @Override
-    public void markUpdatesFromActivity() {
-        forEachRegion(FirmamentRegion::markUpdatesFromActivity);
     }
 
     public Level getLevel() {

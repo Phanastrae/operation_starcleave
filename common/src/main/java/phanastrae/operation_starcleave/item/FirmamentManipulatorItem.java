@@ -84,9 +84,6 @@ public class FirmamentManipulatorItem extends Item {
                 int z = centerZ + dz * TILE_SIZE;
 
                 firmament.setDamage(x, z, 0);
-                firmament.setDrip(x, z, 0);
-                firmament.setDisplacement(x, z, 0);
-                firmament.setVelocity(x, z, 0);
             }
         }
     }
@@ -103,22 +100,6 @@ public class FirmamentManipulatorItem extends Item {
         firmament.setDamage(x - TILE_SIZE, z + TILE_SIZE, Math.clamp(2, 7, firmament.getDamage(x - TILE_SIZE, z + TILE_SIZE) + 2));
         firmament.setDamage(x + TILE_SIZE, z - TILE_SIZE, Math.clamp(2, 7, firmament.getDamage(x + TILE_SIZE, z - TILE_SIZE) + 2));
         firmament.setDamage(x - TILE_SIZE, z - TILE_SIZE, Math.clamp(2, 7, firmament.getDamage(x - TILE_SIZE, z - TILE_SIZE) + 2));
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                firmament.markActive(x + i * TILE_SIZE, z + j * TILE_SIZE);
-            }
-        }
-
-        int rad = 15;
-        for (int i = -rad; i <= rad; i++) {
-            for (int j = -rad; j <= rad; j++) {
-                float distSqr = i * i + j * j;
-
-                if (distSqr > rad * rad) continue;
-                float fallOff = 1 - (distSqr) / (rad * rad);
-                firmament.setDrip(x + i * TILE_SIZE, z + j * TILE_SIZE, firmament.getDrip(x + i * TILE_SIZE, z + j * TILE_SIZE) + (int) (0.07f * fallOff * fallOff * fallOff));
-            }
-        }
 
         float phase = random.nextFloat();
         int count = 10;

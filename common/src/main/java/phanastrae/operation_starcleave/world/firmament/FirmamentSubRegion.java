@@ -13,7 +13,6 @@ import phanastrae.operation_starcleave.world.firmament.pos.SubRegionPos;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class FirmamentSubRegion implements FirmamentAccess {
@@ -28,33 +27,10 @@ public class FirmamentSubRegion implements FirmamentAccess {
 
     public static final int DATA_SIZE_BYTES = TILES * TILES;
 
-    //    x -->
-    // z  0 1 2
-    // |  3 4 5
-    // \/ 6 7 8
-    public static final int[] X_OFFSETS = new int[]{
-            -SUBREGION_SIZE, 0, SUBREGION_SIZE,
-            -SUBREGION_SIZE, 0, SUBREGION_SIZE,
-            -SUBREGION_SIZE, 0, SUBREGION_SIZE
-    };
-    public static final int[] Z_OFFSETS = new int[]{
-            -SUBREGION_SIZE, -SUBREGION_SIZE, -SUBREGION_SIZE,
-            0, 0, 0,
-            SUBREGION_SIZE, SUBREGION_SIZE, SUBREGION_SIZE
-    };
-
-    public int[][] velocity;
-    public int[][] displacement;
-
     public int[][] damage;
-    public int[][] drip;
-    public float[][] dDrip;
 
     private final List<FirmamentActor> actors = new ArrayList<>();
     private final List<FirmamentActor> newActors = new ArrayList<>();
-
-    private final boolean[] active = new boolean[9];
-    private boolean shouldUpdate = false;
 
     private boolean pendingClientUpdate = false;
 
@@ -67,11 +43,7 @@ public class FirmamentSubRegion implements FirmamentAccess {
         this.firmamentRegion = firmamentRegion;
         this.subRegionPos = subRegionPos;
 
-        this.displacement = new int[TILES][TILES];
-        this.velocity = new int[TILES][TILES];
         this.damage = new int[TILES][TILES];
-        this.drip = new int[TILES][TILES];
-        this.dDrip = new float[TILES][TILES];
     }
 
     public int minX() {
@@ -118,114 +90,14 @@ public class FirmamentSubRegion implements FirmamentAccess {
     }
 
     @Override
-    public void forEachActivePosition(BiConsumer<Integer, Integer> method) {
-        for (int i = 0; i < TILES; i++) {
-            for (int j = 0; j < TILES; j++) {
-                method.accept(i * TILE_SIZE, j * TILE_SIZE);
-            }
-        }
-    }
-
-    @Override
-    public int getDrip(int x, int z) {
-        return drip[x >> TILE_SIZE_BITS][z >> TILE_SIZE_BITS];
-    }
-
-    @Override
     public int getDamage(int x, int z) {
         return damage[x >> TILE_SIZE_BITS][z >> TILE_SIZE_BITS];
-    }
-
-    @Override
-    public int getDisplacement(int x, int z) {
-        return displacement[x >> TILE_SIZE_BITS][z >> TILE_SIZE_BITS];
-    }
-
-    @Override
-    public int getVelocity(int x, int z) {
-        return velocity[x >> TILE_SIZE_BITS][z >> TILE_SIZE_BITS];
-    }
-
-    @Override
-    public float getDDrip(int x, int z) {
-        return dDrip[x >> TILE_SIZE_BITS][z >> TILE_SIZE_BITS];
-    }
-
-    @Override
-    public void setDrip(int x, int z, int value) {
-        drip[x >> TILE_SIZE_BITS][z >> TILE_SIZE_BITS] = value;
     }
 
     @Override
     public void setDamage(int x, int z, int value) {
         this.pendingClientUpdate = true;
         damage[x >> TILE_SIZE_BITS][z >> TILE_SIZE_BITS] = value;
-    }
-
-    @Override
-    public void setDisplacement(int x, int z, int value) {
-        displacement[x >> TILE_SIZE_BITS][z >> TILE_SIZE_BITS] = value;
-    }
-
-    @Override
-    public void setVelocity(int x, int z, int value) {
-        velocity[x >> TILE_SIZE_BITS][z >> TILE_SIZE_BITS] = value;
-    }
-
-    @Override
-    public void setDDrip(int x, int z, float value) {
-        dDrip[x >> TILE_SIZE_BITS][z >> TILE_SIZE_BITS] = value;
-    }
-
-    public boolean shouldUpdate() {
-        return this.shouldUpdate;
-    }
-
-    public void markShouldUpdate() {
-        this.shouldUpdate = true;
-    }
-
-    @Override
-    public void clearShouldUpdate() {
-        this.shouldUpdate = false;
-    }
-
-    @Override
-    public void markActive(int x, int z) {
-        int tx = x >> TILE_SIZE_BITS;
-        int tz = z >> TILE_SIZE_BITS;
-
-        boolean xMin = tx == 0;
-        boolean zMin = tz == TILES - 1;
-        boolean xMax = tx == 0;
-        boolean zMax = tz == TILES - 1;
-
-        active[0] |= xMin && zMin;
-        active[1] |= zMin;
-        active[2] |= xMax && zMin;
-        active[3] |= xMin;
-        active[4] = true;
-        active[5] |= xMax;
-        active[6] |= xMin && zMax;
-        active[7] |= zMax;
-        active[8] |= xMax && zMax;
-
-    }
-
-    @Override
-    public void clearActive() {
-        for (int i = 0; i < 9; i++) {
-            active[i] = false;
-        }
-    }
-
-    @Override
-    public void markUpdatesFromActivity() {
-        for (int k = 0; k < 9; k++) {
-            if (active[k]) {
-                this.firmamentRegion.firmament.markShouldUpdate(this.minX() + X_OFFSETS[k], this.minZ() + Z_OFFSETS[k]);
-            }
-        }
     }
 
     public static byte[] getAsByteArray(int[][] target) {
@@ -287,10 +159,7 @@ public class FirmamentSubRegion implements FirmamentAccess {
     }
 
     public void readFromData(FirmamentSubRegionData firmamentSubRegionData) {
-        //readFromByteArray(firmamentSubRegionData.displacementData, this.displacement, 0xF);
-        //readFromByteArray(firmamentSubRegionData.velocityData, this.velocity, 0xF);
         readFromByteArray(firmamentSubRegionData.damageData, this.damage, 0x7);
-        //readFromByteArray(firmamentSubRegionData.dripData, this.drip, 0x7);
         checkDamage();
     }
 
