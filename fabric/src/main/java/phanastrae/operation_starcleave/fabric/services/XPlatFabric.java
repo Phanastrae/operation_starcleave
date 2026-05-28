@@ -54,8 +54,8 @@ public class XPlatFabric implements XPlatInterface {
 
     @Override
     public void sendToPlayersTrackingEntity(Entity entity, CustomPacketPayload payload) {
-        for(ServerPlayer serverPlayer : PlayerLookup.tracking(entity)) {
-            XPlatInterface.INSTANCE.sendPayload(serverPlayer, payload);
+        for (ServerPlayer serverPlayer : PlayerLookup.tracking(entity)) {
+            this.sendPayload(serverPlayer, payload);
         }
     }
 
