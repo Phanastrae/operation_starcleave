@@ -107,7 +107,7 @@ public class OperationStarcleaveEntityAttachment {
 
     public void sendPairingData(ServerPlayer player) {
         if(this.getPhlogisticFireTicks() > 0) {
-            XPlatInterface.INSTANCE.sendPayload(player, new EntityPegasusGlidingPayload(this.entity.getId(), true));
+            XPlatInterface.INSTANCE.sendPayload(player, new EntityPhlogisticFirePayload(this.entity.getId(), true));
         }
         if(this.pegasusGliding) {
             XPlatInterface.INSTANCE.sendPayload(player, new EntityPegasusGlidingPayload(this.entity.getId(), true));
