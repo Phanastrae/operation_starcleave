@@ -4,7 +4,7 @@ import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.BossEvent;
 import phanastrae.operation_starcleave.duck.BossEventDuck;
-import phanastrae.operation_starcleave.network.packet.ClientboundBossEventExtrasPayload;
+import phanastrae.operation_starcleave.network.packet.s2c.BossEventExtrasPayload;
 import phanastrae.operation_starcleave.services.XPlatInterface;
 
 import java.util.function.Function;
@@ -29,9 +29,9 @@ public class ServerBossEventExtras extends BossEventExtras {
         return this.serverBossEvent;
     }
 
-    private void broadcast(Function<BossEventExtras, ClientboundBossEventExtrasPayload> packetGetter) {
+    private void broadcast(Function<BossEventExtras, BossEventExtrasPayload> packetGetter) {
         if (this.serverBossEvent.isVisible()) {
-            ClientboundBossEventExtrasPayload payload = packetGetter.apply(this);
+            BossEventExtrasPayload payload = packetGetter.apply(this);
 
             for (ServerPlayer player : this.serverBossEvent.getPlayers()) {
                 XPlatInterface.INSTANCE.sendPayload(player, payload);
@@ -41,7 +41,7 @@ public class ServerBossEventExtras extends BossEventExtras {
 
     public void sendExtraPacketsOnAdd(ServerPlayer serverPlayer) {
         if (this.isMini) {
-            ClientboundBossEventExtrasPayload payload = ClientboundBossEventExtrasPayload.createAddBonusPacket(this);
+            BossEventExtrasPayload payload = BossEventExtrasPayload.createAddBonusPacket(this);
             XPlatInterface.INSTANCE.sendPayload(serverPlayer, payload);
         }
     }
@@ -50,7 +50,7 @@ public class ServerBossEventExtras extends BossEventExtras {
     public ServerBossEventExtras setMini(boolean value) {
         if (this.isMini != value) {
             super.setMini(value);
-            this.broadcast(ClientboundBossEventExtrasPayload::createUpdateBonusPropertiesPacket);
+            this.broadcast(BossEventExtrasPayload::createUpdateBonusPropertiesPacket);
         }
         return this;
     }

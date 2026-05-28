@@ -5,7 +5,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import phanastrae.operation_starcleave.network.packet.AttackFirmamentTilePayload;
+import phanastrae.operation_starcleave.network.packet.c2s.AttackFirmamentTilePayload;
 import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 import phanastrae.operation_starcleave.world.firmament.pos.FirmamentTilePos;

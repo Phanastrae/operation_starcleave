@@ -14,7 +14,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Math;
-import phanastrae.operation_starcleave.network.packet.FirmamentCleavedPayload;
+import phanastrae.operation_starcleave.network.packet.s2c.FirmamentCleavedPayload;
 import phanastrae.operation_starcleave.services.XPlatInterface;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 import phanastrae.operation_starcleave.world.firmament.actor.FirmamentShatterActor;

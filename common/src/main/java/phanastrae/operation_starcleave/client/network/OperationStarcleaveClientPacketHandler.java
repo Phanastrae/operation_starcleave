@@ -16,12 +16,14 @@ import phanastrae.operation_starcleave.client.world.firmament.FirmamentDamageGlo
 import phanastrae.operation_starcleave.duck.LevelDuckInterface;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityAttachment;
 import phanastrae.operation_starcleave.entity.projectile.StarbleachedPearlEntity;
-import phanastrae.operation_starcleave.network.packet.*;
+import phanastrae.operation_starcleave.network.packet.s2c.*;
 import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 import phanastrae.operation_starcleave.world.firmament.FirmamentRegion;
 import phanastrae.operation_starcleave.world.firmament.FirmamentRegionHolder;
 import phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion;
+
+import java.util.Optional;
 
 public class OperationStarcleaveClientPacketHandler {
 
@@ -97,13 +99,11 @@ public class OperationStarcleaveClientPacketHandler {
 
     public static void onStarbleachedPearlLaunch(StarbleachedPearlLaunchPayload payload, Player player) {
         Entity except = null;
-        if (payload.exceptExists()) {
-            Entity e = player.level().getEntity(payload.exceptId());
-            if (e != null) {
-                except = e;
-            }
+        Optional<Integer> exceptEntity = payload.exceptId();
+        if (exceptEntity.isPresent()) {
+            except = player.level().getEntity(exceptEntity.get());
         }
-        StarbleachedPearlEntity.doRepulsion(payload.pos(), payload.radius(), payload.maxAddedSpeed(), player.level(), except);
+        StarbleachedPearlEntity.doRepulsion(new Vec3(payload.x(), payload.y(), payload.z()), payload.radius(), payload.maxAddedSpeed(), player.level(), except);
     }
 
     public static void handleEntityPhlogisticFire(EntityPhlogisticFirePayload payload, Player player) {
@@ -130,7 +130,7 @@ public class OperationStarcleaveClientPacketHandler {
         }
     }
 
-    public static void handleBossExtrasPayload(ClientboundBossEventExtrasPayload payload, Player player) {
+    public static void handleBossExtrasPayload(BossEventExtrasPayload payload, Player player) {
         Minecraft minecraft = Minecraft.getInstance();
         BossHealthOverlay bossHealthOverlay = minecraft.gui.getBossOverlay();
         ((BossHealthOverlayDuck) bossHealthOverlay).operation_starcleave$updateExtras(payload);

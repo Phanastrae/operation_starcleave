@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import phanastrae.operation_starcleave.client.duck.BossHealthOverlayDuck;
-import phanastrae.operation_starcleave.network.packet.ClientboundBossEventExtrasPayload;
+import phanastrae.operation_starcleave.network.packet.s2c.BossEventExtrasPayload;
 import phanastrae.operation_starcleave.world.BossEventExtras;
 
 import java.util.Collection;
@@ -111,13 +111,13 @@ public abstract class BossHealthOverlayMixin implements BossHealthOverlayDuck {
     }
 
     @Override
-    public void operation_starcleave$updateExtras(ClientboundBossEventExtrasPayload payload) {
+    public void operation_starcleave$updateExtras(BossEventExtrasPayload payload) {
         UUID uuid = payload.id();
         if (this.events.containsKey(uuid)) {
             BossEvent bossEvent = this.events.get(uuid);
             BossEventExtras extras = BossEventExtras.fromEvent(bossEvent);
 
-            payload.dispatch(new ClientboundBossEventExtrasPayload.Handler() {
+            payload.dispatch(new BossEventExtrasPayload.Handler() {
                 @Override
                 public void add(boolean isMini) {
                     extras.setMini(isMini);

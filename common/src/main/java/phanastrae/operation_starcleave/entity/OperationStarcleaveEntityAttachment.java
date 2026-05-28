@@ -16,9 +16,9 @@ import net.minecraft.world.level.block.LevelEvent;
 import phanastrae.operation_starcleave.duck.EntityDuckInterface;
 import phanastrae.operation_starcleave.entity.projectile.PhlogisticSparkEntity;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
-import phanastrae.operation_starcleave.network.packet.EntityPegasusFlyingPayload;
-import phanastrae.operation_starcleave.network.packet.EntityPegasusGlidingPayload;
-import phanastrae.operation_starcleave.network.packet.EntityPhlogisticFirePayload;
+import phanastrae.operation_starcleave.network.packet.s2c.EntityPegasusFlyingPayload;
+import phanastrae.operation_starcleave.network.packet.s2c.EntityPegasusGlidingPayload;
+import phanastrae.operation_starcleave.network.packet.s2c.EntityPhlogisticFirePayload;
 import phanastrae.operation_starcleave.services.XPlatInterface;
 
 public class OperationStarcleaveEntityAttachment {

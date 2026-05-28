@@ -1,5 +1,6 @@
-package phanastrae.operation_starcleave.network.packet;
+package phanastrae.operation_starcleave.network.packet.s2c;
 
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -10,36 +11,27 @@ import phanastrae.operation_starcleave.world.BossEventExtras;
 
 import java.util.UUID;
 
-public record ClientboundBossEventExtrasPayload(UUID id, Operation operation) implements CustomPacketPayload {
+public record BossEventExtrasPayload(UUID id, Operation operation) implements CustomPacketPayload {
     // this is essentially just the vanilla ClientboundBossEventPacket but with different settings and as a payload
-    public static final StreamCodec<RegistryFriendlyByteBuf, ClientboundBossEventExtrasPayload> PACKET_CODEC = CustomPacketPayload.codec(ClientboundBossEventExtrasPayload::write, ClientboundBossEventExtrasPayload::new);
-    public static final CustomPacketPayload.Type<ClientboundBossEventExtrasPayload> PACKET_ID = new CustomPacketPayload.Type<>(OperationStarcleave.id("boss_event_extras"));
-
-    public ClientboundBossEventExtrasPayload(FriendlyByteBuf buf) {
-        this(buf.readUUID(), readOperation(buf));
-    }
-
-    private static Operation readOperation(FriendlyByteBuf buf) {
-        OperationType type = buf.readEnum(OperationType.class);
-        return type.reader.decode(buf);
-    }
-
-    public void write(FriendlyByteBuf buf) {
-        buf.writeUUID(this.id);
-        buf.writeEnum(operation.getType());
-        this.operation.write(buf);
-    }
+    public static final CustomPacketPayload.Type<BossEventExtrasPayload> TYPE = new CustomPacketPayload.Type<>(OperationStarcleave.id("boss_event_extras"));
+    public static final StreamCodec<RegistryFriendlyByteBuf, BossEventExtrasPayload> STREAM_CODEC = StreamCodec.composite(
+            UUIDUtil.STREAM_CODEC,
+            BossEventExtrasPayload::id,
+            Operation.STREAM_CODEC,
+            BossEventExtrasPayload::operation,
+            BossEventExtrasPayload::new
+    );
 
     @Override
     public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
-        return PACKET_ID;
+        return TYPE;
     }
 
     public void dispatch(Handler handler) {
         this.operation.dispatch(handler);
     }
 
-    static int encodeBonusProperties(boolean isMini) {
+    private static int encodeBonusProperties(boolean isMini) {
         int i = 0;
         if (isMini) {
             i |= 1;
@@ -48,15 +40,15 @@ public record ClientboundBossEventExtrasPayload(UUID id, Operation operation) im
         return i;
     }
 
-    public static ClientboundBossEventExtrasPayload createAddBonusPacket(BossEventExtras extras) {
-        return new ClientboundBossEventExtrasPayload(
+    public static BossEventExtrasPayload createAddBonusPacket(BossEventExtras extras) {
+        return new BossEventExtrasPayload(
                 extras.getEvent().getId(),
                 new AddBonusOperation(extras)
         );
     }
 
-    public static ClientboundBossEventExtrasPayload createUpdateBonusPropertiesPacket(BossEventExtras extras) {
-        return new ClientboundBossEventExtrasPayload(
+    public static BossEventExtrasPayload createUpdateBonusPropertiesPacket(BossEventExtras extras) {
+        return new BossEventExtrasPayload(
                 extras.getEvent().getId(),
                 new UpdateBonusPropertiesOperation(
                         extras.isMini()
@@ -65,16 +57,29 @@ public record ClientboundBossEventExtrasPayload(UUID id, Operation operation) im
     }
 
     public interface Handler {
-        default void add(
-                boolean isMini
-        ) {
+        default void add(boolean isMini) {
         }
 
         default void updateBonusProperties(boolean isMini) {
         }
     }
 
-    interface Operation {
+    private interface Operation {
+        StreamCodec<RegistryFriendlyByteBuf, Operation> STREAM_CODEC = StreamCodec.of(
+                Operation::write,
+                Operation::read
+        );
+
+        private static void write(FriendlyByteBuf buf, Operation operation) {
+            buf.writeEnum(operation.getType());
+            operation.write(buf);
+        }
+
+        private static Operation read(FriendlyByteBuf buf) {
+            OperationType type = buf.readEnum(OperationType.class);
+            return type.reader.decode(buf);
+        }
+
         OperationType getType();
 
         void dispatch(Handler handler);
@@ -82,7 +87,7 @@ public record ClientboundBossEventExtrasPayload(UUID id, Operation operation) im
         void write(FriendlyByteBuf buffer);
     }
 
-    enum OperationType {
+    private enum OperationType {
         ADD_BONUS(AddBonusOperation::new),
         UPDATE_BONUS_PROPERTIES(UpdateBonusPropertiesOperation::new);
 
@@ -93,7 +98,7 @@ public record ClientboundBossEventExtrasPayload(UUID id, Operation operation) im
         }
     }
 
-    static class AddBonusOperation implements Operation {
+    private static class AddBonusOperation implements Operation {
         private final boolean isMini;
 
         AddBonusOperation(BossEventExtras extras) {
@@ -121,7 +126,7 @@ public record ClientboundBossEventExtrasPayload(UUID id, Operation operation) im
         }
     }
 
-    static class UpdateBonusPropertiesOperation implements Operation {
+    private static class UpdateBonusPropertiesOperation implements Operation {
         private final boolean isMini;
 
         UpdateBonusPropertiesOperation(boolean isMini) {

@@ -1,9 +1,15 @@
 package phanastrae.operation_starcleave.world.firmament.data;
 
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import phanastrae.operation_starcleave.world.firmament.FirmamentRegion;
 
 public class FirmamentRegionData {
+    public static final StreamCodec<RegistryFriendlyByteBuf, FirmamentRegionData> STREAM_CODEC = StreamCodec.of(
+            ((buf, data) -> data.write(buf)),
+            FirmamentRegionData::new
+    );
 
     public final FirmamentSubRegionData[][] subRegionData;
     public FirmamentRegionData(FirmamentRegion region) {

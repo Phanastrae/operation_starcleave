@@ -4,7 +4,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import phanastrae.operation_starcleave.duck.FirmamentWatcher;
-import phanastrae.operation_starcleave.network.packet.UpdateFirmamentSubRegionPayload;
+import phanastrae.operation_starcleave.network.packet.s2c.UpdateFirmamentSubRegionPayload;
 import phanastrae.operation_starcleave.services.XPlatInterface;
 import phanastrae.operation_starcleave.world.firmament.actor.FirmamentActor;
 import phanastrae.operation_starcleave.world.firmament.data.FirmamentSubRegionData;

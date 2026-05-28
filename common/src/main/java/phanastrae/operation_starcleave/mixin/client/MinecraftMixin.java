@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import phanastrae.operation_starcleave.client.OperationStarcleaveClient;
 import phanastrae.operation_starcleave.client.services.XPlatClientInterface;
-import phanastrae.operation_starcleave.network.packet.AttackFirmamentTilePayload;
+import phanastrae.operation_starcleave.network.packet.c2s.AttackFirmamentTilePayload;
 import phanastrae.operation_starcleave.world.firmament.pos.FirmamentTilePos;
 
 @Mixin(Minecraft.class)
