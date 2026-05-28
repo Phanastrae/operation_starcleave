@@ -26,6 +26,7 @@ public class OperationStarcleaveEntityRenderers {
         r.accept(OperationStarcleaveEntityTypes.BISMUTH_BLAST, BismuthBlastEntityRenderer::new);
 
         // misc
+        r.accept(OperationStarcleaveEntityTypes.STARBLEACH_CHARGE, InvisibleRenderer::new);
         r.accept(OperationStarcleaveEntityTypes.NUCLEAR_STORMCLOUD, InvisibleRenderer::new);
         r.accept(OperationStarcleaveEntityTypes.NUCLEOSYNTHESEED, NucleosyntheseedEntityRenderer::new);
     }

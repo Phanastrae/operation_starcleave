@@ -64,6 +64,14 @@ public class OperationStarcleaveEntityTypes {
                     .updateInterval(10)
     );
 
+    public static final EntityType<StarbleachChargeEntity> STARBLEACH_CHARGE = register(id("starbleach_charge"),
+            createBuilder(StarbleachChargeEntity::new, MobCategory.MISC)
+                    .fireImmune()
+                    .sized(0.0F, 0.0F)
+                    .clientTrackingRange(0)
+                    .updateInterval(Integer.MAX_VALUE)
+    );
+
     public static final EntityType<StarbleachedPearlEntity> STARBLEACHED_PEARL = register(id("starbleached_pearl"),
             EntityType.Builder.<StarbleachedPearlEntity>of(StarbleachedPearlEntity::new, MobCategory.MISC)
                     .sized(0.25F, 0.25F)

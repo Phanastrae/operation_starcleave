@@ -16,8 +16,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.levelgen.Heightmap;
+import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.block.tag.OperationStarcleaveBlockTags;
+import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
+import phanastrae.operation_starcleave.entity.StarbleachChargeEntity;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
 import phanastrae.operation_starcleave.world.OperationStarcleaveGameRules;
@@ -55,14 +58,21 @@ public class Starbleach {
                 if (damage >= 5) {
                     int topY = level.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z);
                     BlockPos targetPos = new BlockPos(x, topY - 1, z);
-                    starbleachWithSeeping(level, targetPos, starbleachTarget, 150);
+                    starbleachWithSeeping(level, targetPos, starbleachTarget, 150, 20);
                 }
             }
         }
     }
 
-    public static void starbleachWithSeeping(ServerLevel level, BlockPos blockPos, StarbleachTarget starbleachTarget, int particleCount) {
+    public static void starbleachWithSeeping(ServerLevel level, BlockPos blockPos, StarbleachTarget starbleachTarget, int particleCount, int starbleachCharge) {
         BlockState blockState = level.getBlockState(blockPos);
+
+        if (starbleachTarget.shouldFillCauldrons()) {
+            if (starbleachPos(level, blockPos, blockState, StarbleachTarget.ONLY_FILLING, particleCount)) {
+                return;
+            }
+        }
+
         if (isStarbleached(blockState)) {
             // move down through starbleached blocks to (try to) find a non-starbleached block and target that instead
             Optional<Pair<BlockPos, BlockState>> pairOptional = findNonStarbleachedBlock(level, blockPos);
@@ -75,10 +85,24 @@ public class Starbleach {
             }
         }
 
-        starbleachPos(level, blockPos, blockState, starbleachTarget, particleCount);
+        if (starbleachTarget.shouldConvertBlocks() && level.getRandom().nextInt(10) == 0) {
+            spawnCharge(level, blockPos, starbleachCharge);
+        }
     }
 
-    public static void starbleachPos(ServerLevel level, BlockPos blockPos, BlockState blockState, StarbleachTarget starbleachTarget, int particleCount) {
+    @Nullable
+    public static StarbleachChargeEntity spawnCharge(ServerLevel level, BlockPos blockPos, int starbleachCharge) {
+        StarbleachChargeEntity charge = OperationStarcleaveEntityTypes.STARBLEACH_CHARGE.create(level);
+        if (charge != null) {
+            charge.setPos(blockPos.getBottomCenter());
+            charge.setCharge(starbleachCharge);
+            level.addFreshEntity(charge);
+        }
+
+        return charge;
+    }
+
+    public static boolean starbleachPos(ServerLevel level, BlockPos blockPos, BlockState blockState, StarbleachTarget starbleachTarget, int particleCount) {
         BlockState newState = StarbleachConversions.getStarbleachResult(level, blockPos, blockState, level.random, starbleachTarget);
         if (newState != null) {
             convertBlock(level, blockPos, blockState, newState, particleCount);
@@ -96,6 +120,9 @@ public class Starbleach {
 
             // update block
             newState.updateNeighbourShapes(level, blockPos, 3);
+            return true;
+        } else {
+            return false;
         }
     }
 

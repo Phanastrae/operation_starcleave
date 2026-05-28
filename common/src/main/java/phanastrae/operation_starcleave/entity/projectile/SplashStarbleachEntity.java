@@ -20,24 +20,25 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
+import phanastrae.operation_starcleave.entity.StarbleachChargeEntity;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 import phanastrae.operation_starcleave.world.starbleach.Starbleach;
 
 public class SplashStarbleachEntity extends ThrowableItemProjectile implements ItemSupplier {
 
-    boolean canStarbleach = false;
+    private boolean canStarbleach = false;
 
-    public SplashStarbleachEntity(EntityType<? extends SplashStarbleachEntity> entityType, Level world) {
-        super(entityType, world);
+    public SplashStarbleachEntity(EntityType<? extends SplashStarbleachEntity> entityType, Level level) {
+        super(entityType, level);
     }
 
-    public SplashStarbleachEntity(Level world, LivingEntity owner) {
-        super(OperationStarcleaveEntityTypes.SPLASH_STARBLEACH, owner, world);
+    public SplashStarbleachEntity(Level level, LivingEntity owner) {
+        super(OperationStarcleaveEntityTypes.SPLASH_STARBLEACH, owner, level);
     }
 
-    public SplashStarbleachEntity(Level world, double x, double y, double z) {
-        super(OperationStarcleaveEntityTypes.SPLASH_STARBLEACH, x, y, z, world);
+    public SplashStarbleachEntity(Level level, double x, double y, double z) {
+        super(OperationStarcleaveEntityTypes.SPLASH_STARBLEACH, x, y, z, level);
     }
 
     @Override
@@ -49,7 +50,7 @@ public class SplashStarbleachEntity extends ThrowableItemProjectile implements I
     @Override
     public void readAdditionalSaveData(CompoundTag nbt) {
         super.readAdditionalSaveData(nbt);
-        if(nbt.contains("CanStarbleach", Tag.TAG_BYTE)) {
+        if (nbt.contains("CanStarbleach", Tag.TAG_BYTE)) {
             this.canStarbleach = nbt.getBoolean("CanStarbleach");
         } else {
             this.canStarbleach = false;
@@ -58,20 +59,20 @@ public class SplashStarbleachEntity extends ThrowableItemProjectile implements I
 
     @Override
     public void tick() {
-        Level world = this.level();
-        if(world.isClientSide) {
+        Level level = this.level();
+        if (level.isClientSide) {
             Vec3 vel = this.getDeltaMovement();
             RandomSource random = this.random;
-            for(int i = 0; i < 4; i++) {
-                world.addParticle(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER,
+            for (int i = 0; i < 4; i++) {
+                level.addParticle(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER,
                         this.getX(), this.getY(), this.getZ(),
                         vel.x * -0.2 + random.nextFloat() * 0.06 - 0.03,
                         vel.y * -0.2 + random.nextFloat() * 0.06 - 0.03,
                         vel.z * -0.2 + random.nextFloat() * 0.06 - 0.03
                 );
             }
-            if(random.nextBoolean()) {
-                world.addParticle(OperationStarcleaveParticleTypes.STARBLEACH_SWIRL,
+            if (random.nextBoolean()) {
+                level.addParticle(OperationStarcleaveParticleTypes.STARBLEACH_SWIRL,
                         this.getX(), this.getY(), this.getZ(),
                         vel.x * -0.1 + random.nextFloat() * 0.04 - 0.02,
                         vel.y * -0.1 + random.nextFloat() * 0.04 - 0.01,
@@ -96,8 +97,14 @@ public class SplashStarbleachEntity extends ThrowableItemProjectile implements I
     protected void onHit(HitResult hitResult) {
         super.onHit(hitResult);
         if (!this.level().isClientSide) {
-            if(this.canStarbleach) {
-                starbleach(blockPosition(), this.level());
+            if (this.canStarbleach) {
+                BlockPos pos;
+                if (hitResult instanceof BlockHitResult blockHitResult) {
+                    pos = blockHitResult.getBlockPos();
+                } else {
+                    pos = BlockPos.containing(hitResult.getLocation());
+                }
+                starbleach(pos, this.level());
             }
             this.discard();
         }
@@ -111,7 +118,7 @@ public class SplashStarbleachEntity extends ThrowableItemProjectile implements I
             BlockPos blockPos = blockHitResult.getBlockPos().relative(direction);
             this.extinguishFire(blockPos);
             this.extinguishFire(blockPos.relative(direction.getOpposite()));
-            for(Direction direction2 : Direction.Plane.HORIZONTAL) {
+            for (Direction direction2 : Direction.Plane.HORIZONTAL) {
                 this.extinguishFire(blockPos.relative(direction2));
             }
         }
@@ -124,36 +131,42 @@ public class SplashStarbleachEntity extends ThrowableItemProjectile implements I
         }
     }
 
-    public static void starbleach(BlockPos blockPos, Level world) {
-        BlockPos.MutableBlockPos blockPosMutable = new BlockPos.MutableBlockPos();
-        if(world instanceof ServerLevel serverWorld) {
-            for (int i = -3; i <= 3; i++) {
-                for (int j = -2; j <= 2; j++) {
-                    for (int k = -3; k <= 3; k++) {
-                        if(i*i+j*j+k*k >= 11) continue;
+    public static void starbleach(BlockPos blockPos, Level level) {
+        if (level instanceof ServerLevel serverLevel) {
+            // directly bleach aoe
+            BlockPos.MutableBlockPos blockPosMutable = new BlockPos.MutableBlockPos();
+            for (int i = -2; i <= 2; i++) {
+                for (int j = -1; j <= 1; j++) {
+                    for (int k = -2; k <= 2; k++) {
+                        if (i * i + j * j + k * k >= 6) continue;
                         blockPosMutable.set(blockPos.getX() + i, blockPos.getY() + j, blockPos.getZ() + k);
-                        for(int n = 0; n < 4; n++) {
-                            Starbleach.starbleachWithSeeping(serverWorld, blockPosMutable, Starbleach.StarbleachTarget.NO_FILLING, 20);
-                        }
+                        Starbleach.starbleachPos(serverLevel, blockPosMutable, serverLevel.getBlockState(blockPosMutable), Starbleach.StarbleachTarget.NO_FILLING, 20);
                     }
+                }
+            }
+            // spawn charges
+            for (int i = 0; i < 7; i++) {
+                StarbleachChargeEntity charge = Starbleach.spawnCharge(serverLevel, blockPos, 14 + 2 * i * i);
+                if (charge != null) {
+                    charge.setDelay(level.getRandom().nextIntBetweenInclusive(2, 8));
                 }
             }
 
             double x = blockPos.getX() + 0.5;
             double y = blockPos.getY() + 0.5;
             double z = blockPos.getZ() + 0.5;
-            serverWorld.sendParticles(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER, x, y, z,
+            serverLevel.sendParticles(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER, x, y, z,
                     60,
                     1, 0.5, 1,
                     0.02
             );
-            serverWorld.sendParticles(OperationStarcleaveParticleTypes.STARBLEACH_SWIRL, x, y, z,
+            serverLevel.sendParticles(OperationStarcleaveParticleTypes.STARBLEACH_SWIRL, x, y, z,
                     25,
                     0.7, 0.5, 0.7,
                     0.08
             );
 
-            world.playSeededSound(null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), SoundEvents.SPLASH_POTION_BREAK, SoundSource.BLOCKS, 2f, 1.2F + 0.3F * world.random.nextFloat(), world.random.nextLong());
+            level.playSeededSound(null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), SoundEvents.SPLASH_POTION_BREAK, SoundSource.BLOCKS, 2f, 1.2F + 0.3F * level.random.nextFloat(), level.random.nextLong());
         }
     }
 
