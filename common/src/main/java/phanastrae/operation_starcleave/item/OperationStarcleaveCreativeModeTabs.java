@@ -212,7 +212,8 @@ public class OperationStarcleaveCreativeModeTabs {
                 SUBCAELIC_DUX_SPAWN_EGG,
                 SINEATER_SPAWN_EGG,
                 TRACTORBLOOM_SPAWN_EGG,
-                HAMMERTAIL_GOLEM_SPAWN_EGG
+                HAMMERTAIL_GOLEM_SPAWN_EGG,
+                PREECHER_SPAWN_EGG
         );
 
         // add starcleave enchantments to tab
@@ -459,7 +460,8 @@ public class OperationStarcleaveCreativeModeTabs {
                 SUBCAELIC_DUX_SPAWN_EGG,
                 SINEATER_SPAWN_EGG,
                 TRACTORBLOOM_SPAWN_EGG,
-                HAMMERTAIL_GOLEM_SPAWN_EGG
+                HAMMERTAIL_GOLEM_SPAWN_EGG,
+                PREECHER_SPAWN_EGG
         );
 
         // Operator

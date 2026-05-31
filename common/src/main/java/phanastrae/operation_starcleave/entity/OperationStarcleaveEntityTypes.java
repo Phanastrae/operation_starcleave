@@ -57,6 +57,12 @@ public class OperationStarcleaveEntityTypes {
                     .fireImmune()
     );
 
+    public static final EntityType<PreecherEntity> PREECHER = register(id("preecher"),
+            createBuilder(PreecherEntity::new, MobCategory.MONSTER)
+                    .sized(0.6F, 1.7F)
+                    .clientTrackingRange(8)
+    );
+
     public static final EntityType<SplashStarbleachEntity> SPLASH_STARBLEACH = register(id("splash_starbleach_bottle"),
             EntityType.Builder.<SplashStarbleachEntity>of(SplashStarbleachEntity::new, MobCategory.MISC)
                     .sized(0.25F, 0.25F)
@@ -135,6 +141,7 @@ public class OperationStarcleaveEntityTypes {
         r.accept(SINEATER, SineaterEntity.createAttributes());
         r.accept(TRACTORBLOOM, TractorbloomEntity.createAttributes());
         r.accept(HAMMERTAIL_GOLEM, HammertailGolemEntity.createAttributes());
+        r.accept(PREECHER, PreecherEntity.createAttributes());
     }
 
     private static ResourceLocation id(String path) {

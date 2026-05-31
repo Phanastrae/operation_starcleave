@@ -142,13 +142,14 @@
 
   "enchantment.operation_starcleave.stockpile": "Stockpile",
 
+  "entity.operation_starcleave.bismuth_blast": "Bismuth Blast",
   "entity.operation_starcleave.firmament_rejuvenator": "Firmament Rejuvenator",
   "entity.operation_starcleave.hammertail_golem": "Hammertail Golem",
   "entity.operation_starcleave.nuclear_stardrop": "Nuclear Stardrop",
   "entity.operation_starcleave.nuclear_stormcloud": "Nuclear Stormcloud",
   "entity.operation_starcleave.nucleosyntheseed": "Nucleosyntheseed",
-  "entity.operation_starcleave.bismuth_blast": "Bismuth Blast",
   "entity.operation_starcleave.phlogistic_spark": "Phlogistic Spark",
+  "entity.operation_starcleave.preecher": "Preecher",
   "entity.operation_starcleave.splash_starbleach_bottle": "Splash Starbleach Bottle",
   "entity.operation_starcleave.starbleach_charge": "Starbleach Charge",
   "entity.operation_starcleave.starbleached_pearl": "Starbleached Pearl",
@@ -182,6 +183,7 @@
   "item.operation_starcleave.ouranic_chip": "Ouranic Chip",
   "item.operation_starcleave.petrichoric_plasma_bucket": "Petrichoric Plasma Bucket",
   "item.operation_starcleave.phlogiston_sac": "Phlogiston Sac",
+  "item.operation_starcleave.preecher_spawn_egg": "Preecher Spawn Egg",
   "item.operation_starcleave.sineater_spawn_egg": "Sineater Spawn Egg",
   "item.operation_starcleave.splash_starbleach_bottle": "Splash Starbleach Bottle",
   "item.operation_starcleave.starbleach_bottle": "Starbleach Bottle",

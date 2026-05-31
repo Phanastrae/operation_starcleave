@@ -13,6 +13,7 @@ public class OperationStarcleaveSpawnPlacements {
         register(OperationStarcleaveEntityTypes.SINEATER, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
         register(OperationStarcleaveEntityTypes.TRACTORBLOOM, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
         register(OperationStarcleaveEntityTypes.HAMMERTAIL_GOLEM, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
+        register(OperationStarcleaveEntityTypes.PREECHER, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
     }
 
     public static <T extends Mob> void register(

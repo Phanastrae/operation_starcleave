@@ -205,6 +205,7 @@ public class OperationStarcleaveItems {
     public static final Item SINEATER_SPAWN_EGG = register("sineater_spawn_egg", spawnEggItem(OperationStarcleaveEntityTypes.SINEATER, 0x852869, 0xFAE861));
     public static final Item TRACTORBLOOM_SPAWN_EGG = register("tractorbloom_spawn_egg", spawnEggItem(OperationStarcleaveEntityTypes.TRACTORBLOOM, 0xDE2377, 0x36F5DF));
     public static final Item HAMMERTAIL_GOLEM_SPAWN_EGG = register("hammertail_golem_spawn_egg", spawnEggItem(OperationStarcleaveEntityTypes.HAMMERTAIL_GOLEM, 0xAB469A, 0xDFFD66));
+    public static final Item PREECHER_SPAWN_EGG = register("preecher_spawn_egg", spawnEggItem(OperationStarcleaveEntityTypes.PREECHER, 0x3AAEB0, 0xF7F78B));
 
     private static Item registerBlockItem(Block block) {
         return registerBlock(new BlockItem(block, properties()));

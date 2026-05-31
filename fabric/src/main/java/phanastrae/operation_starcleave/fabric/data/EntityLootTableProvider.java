@@ -80,6 +80,18 @@ public class EntityLootTableProvider extends SimpleFabricLootTableProvider {
         lootTableBiConsumer.accept(OperationStarcleaveLootTables.SINEATER_GOLDEN, createSineaterTable(BLESSED_CLOTH, 1, 2, registries));
         lootTableBiConsumer.accept(OperationStarcleaveLootTables.SINEATER_SPECTRAL, createSineaterTable(BLESSED_CLOTH, 1, 4, registries));
         lootTableBiConsumer.accept(OperationStarcleaveLootTables.SINEATER_PHANTASMAL, createSineaterTable(Items.PHANTOM_MEMBRANE, 1, 1, registries));
+
+        lootTableBiConsumer.accept(PREECHER.getDefaultLootTable(), LootTable.lootTable()
+                .withPool(
+                        LootPool.lootPool()
+                                .setRolls(ConstantValue.exactly(1.0F))
+                                .add(
+                                        LootItem.lootTableItem(HOLY_STRANDS)
+                                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 4.0F)))
+                                                .apply(EnchantedCountIncreaseFunction.lootingMultiplier(registries, UniformGenerator.between(1.0F, 2.0F)))
+                                )
+                )
+        );
     }
 
     protected LootItemCondition.Builder killedByFrog() {
