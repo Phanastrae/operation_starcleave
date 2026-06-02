@@ -1,7 +1,10 @@
 package phanastrae.operation_starcleave.mixin.common.entity;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalFloatRef;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -15,19 +18,25 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import phanastrae.operation_starcleave.block.BlessedBedBlock;
+import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.block.StellarRepulsorBlock;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveDamageTypeTags;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityAttachment;
 import phanastrae.operation_starcleave.item.StarbleachCoating;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
@@ -75,6 +84,76 @@ public abstract class LivingEntityMixin extends Entity {
 
             frictionMultiplierRef.set(Mth.lerp(starlight, 0.965F, 0.995F));
         }
+    }
+
+    @WrapOperation(method = "travel", at = @At(value = "INVOKE", ordinal = 1, target = "Lnet/minecraft/world/phys/Vec3;horizontalDistance()D"))
+    private double operation_starcleave$elytraThingy(Vec3 currentVelocity, Operation<Double> original, @Local(ordinal = 2) double originalHorizontalSpeed, @Local(ordinal = 1) Vec3 preDragVelocity) {
+        if (!this.level().isClientSide && operation_starcleave$isSoftLanding(currentVelocity, preDragVelocity)) {
+            // return original horizontal speed so that difference is zero so that damage does not happen
+            return originalHorizontalSpeed;
+        } else {
+            return original.call(currentVelocity);
+        }
+    }
+
+    @Unique
+    private boolean operation_starcleave$isSoftLanding(Vec3 currentVelocity, Vec3 preDragVelocity) {
+        // expand with pre-drag velocity (which is slightly higher than the actual velocity used when moving, but that's fine)
+        AABB box = this.getBoundingBox().expandTowards(preDragVelocity.scale(-1));
+        box = box.inflate(1E-6);
+        Vec3 minPos = box.getMinPosition();
+        Vec3 maxPos = box.getMaxPosition();
+
+        if (Math.abs(currentVelocity.x) < 1E-6 && Math.abs(preDragVelocity.x) >= 1E-6) {
+            // was moving along x-axis, and is not anymore
+            double x = preDragVelocity.x > 0
+                    ? maxPos.x
+                    : minPos.x;
+            if (operation_starcleave$softBlocksInRange(this.level(), new Vec3(x, minPos.y, minPos.z), new Vec3(x, maxPos.y, maxPos.z))) {
+                return true;
+            }
+        }
+
+
+        if (Math.abs(currentVelocity.z) < 1E-6 && Math.abs(preDragVelocity.z) >= 1E-6) {
+            // was moving along z-axis, and is not anymore
+            double z = preDragVelocity.z > 0
+                    ? maxPos.z
+                    : minPos.z;
+            if (operation_starcleave$softBlocksInRange(this.level(), new Vec3(minPos.x, minPos.y, z), new Vec3(maxPos.x, maxPos.y, z))) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Unique
+    private static boolean operation_starcleave$softBlocksInRange(Level level, Vec3 minPos, Vec3 maxPos) {
+        for (BlockPos pos : BlockPos.betweenClosed(BlockPos.containing(minPos), BlockPos.containing(maxPos))) {
+            BlockState state = level.getBlockState(pos);
+            if (state.is(OperationStarcleaveBlocks.BLESSED_CLOTH_BLOCK) || state.is(OperationStarcleaveBlocks.BLESSED_CLOTH_CURTAIN) || state.is(OperationStarcleaveBlocks.BLESSED_CLOTH_CARPET)) {
+                AtomicBoolean hasCollision = new AtomicBoolean(false);
+
+                state.getCollisionShape(level, pos).move(pos.getX(), pos.getY(), pos.getZ())
+                        .forAllBoxes((minX, minY, minZ, maxX, maxY, maxZ) -> {
+                            if (hasCollision.get()) {
+                                // skip if collision is already found
+                                return;
+                            }
+
+                            if (minX <= maxPos.x && minPos.x <= maxX
+                                    && minY <= maxPos.y && minPos.y <= maxY
+                                    && minZ <= maxPos.z && minPos.z <= maxZ) {
+                                // boxes collide
+                                hasCollision.set(true);
+                            }
+                        });
+
+                return hasCollision.get();
+            }
+        }
+        return false;
     }
 
     @Inject(method = "jumpFromGround", at = @At("RETURN"))
