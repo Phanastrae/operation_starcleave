@@ -13,7 +13,6 @@ public class BlessedClothCarpetBlock extends CarpetBlock {
 
     @Override
     public void fallOn(Level world, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
-        // TODO implement properly, this doesn't really work as intended
         entity.causeFallDamage(fallDistance, 0.0F, entity.damageSources().fall());
     }
 }
