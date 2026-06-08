@@ -1,7 +1,10 @@
 package phanastrae.operation_starcleave.fabric.data;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
+import net.minecraft.core.Direction;
 import net.minecraft.data.BlockFamily;
 import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraft.data.models.ItemModelGenerators;
@@ -11,12 +14,15 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.Half;
+import net.minecraft.world.level.block.state.properties.StairsShape;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.block.StarbleachCauldronBlock;
 import phanastrae.operation_starcleave.block.StarbleachedPearlBlock;
 import phanastrae.operation_starcleave.data.OperationStarcleaveBlockFamilies;
 import phanastrae.operation_starcleave.fabric.mixin.client.ModelTemplateAccessor;
 import phanastrae.operation_starcleave.fabric.mixin.client.TextureMappingAccessor;
+import phanastrae.operation_starcleave.fabric.mixin.client.datagen.BlockFamilyProviderAccessor;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 
 import java.util.List;
@@ -29,6 +35,29 @@ import static phanastrae.operation_starcleave.block.OperationStarcleaveBlocks.*;
 
 public class ModelProvider extends FabricModelProvider {
     private static final String SUFFIX_IRIDESCENCE = "_iridescence";
+    public static final Map<Block, TexturedModel> CUSTOM_TEXTURED_MODELS = ImmutableMap.<Block, TexturedModel>builder()
+            .put(FELLCRUST, TexturedModel.TOP_BOTTOM_WITH_WALL.get(FELLCRUST))
+            .put(SMOOTH_FELLCRUST, TexturedModel.createAllSame(TextureMapping.getBlockTexture(FELLCRUST, "_top")))
+            .put(COBBLED_FELLCRUST, TexturedModel.createDefault(
+                            block -> {
+                                ResourceLocation resourceLocation = TextureMapping.getBlockTexture(block);
+                                return new TextureMapping()
+                                        .put(TextureSlot.WALL, resourceLocation)
+                                        .put(TextureSlot.SIDE, resourceLocation)
+                                        .put(TextureSlot.TOP, TextureMapping.getBlockTexture(FELLCRUST, "_bottom"))
+                                        .put(TextureSlot.BOTTOM, TextureMapping.getBlockTexture(FELLCRUST, "_bottom"));
+                            },
+                            ModelTemplates.CUBE_BOTTOM_TOP
+                    ).get(COBBLED_FELLCRUST)
+            )
+            .build();
+    public static final Set<Block> SKIP_FAMILY_MODEL_GENERATION = ImmutableSet.<Block>builder()
+            .add(
+                    FELLCRUST_SLAB,
+                    FELLCRUST_STAIRS,
+                    FELLCRUST_WALL
+            )
+            .build();
 
     public ModelProvider(FabricDataOutput output) {
         super(output);
@@ -39,7 +68,18 @@ public class ModelProvider extends FabricModelProvider {
         OperationStarcleaveBlockFamilies
                 .getAllOperationStarcleaveFamilies()
                 .filter(BlockFamily::shouldGenerateModel)
-                .forEach(blockFamily -> BMG.family(blockFamily.getBaseBlock()).generateFor(blockFamily));
+                .forEach(blockFamily -> {
+                    BlockModelGenerators.BlockFamilyProvider provider = BMG.family(blockFamily.getBaseBlock());
+
+                    Set<Block> skipModels = ((BlockFamilyProviderAccessor) provider).getSkipGeneratingModelsFor();
+                    for (Block block : blockFamily.getVariants().values()) {
+                        if (SKIP_FAMILY_MODEL_GENERATION.contains(block)) {
+                            skipModels.add(block);
+                        }
+                    }
+
+                    provider.generateFor(blockFamily);
+                });
 
         forEach(BMG::createTrivialCube,
                 IMBUED_STARBLEACHED_TILES,
@@ -118,6 +158,16 @@ public class ModelProvider extends FabricModelProvider {
 
         BMG.createRotatedPillarWithHorizontalVariant(POLISHED_CELESTIAL_OPAL_PILLAR, TexturedModel.COLUMN_ALT, TexturedModel.COLUMN_HORIZONTAL_ALT);
 
+        createSplitSlab(BMG, FELLCRUST_SLAB,
+                new TextureMapping()
+                        .put(TextureSlot.SIDE, TextureMapping.getBlockTexture(FELLCRUST_SLAB, "_side"))
+                        .put(TextureSlot.TOP, TextureMapping.getBlockTexture(FELLCRUST, "_top"))
+                        .put(TextureSlot.BOTTOM, TextureMapping.getBlockTexture(FELLCRUST, "_bottom")),
+                ModelTemplates.CUBE_BOTTOM_TOP
+        );
+        createFellcrustStairs(BMG, FELLCRUST_STAIRS);
+        createFellcrustWall(BMG, FELLCRUST_WALL);
+
         // fluids
         BMG.createNonTemplateModelBlock(PETRICHORIC_PLASMA);
 
@@ -191,13 +241,407 @@ public class ModelProvider extends FabricModelProvider {
         }
     }
 
-    private static void createSplitSlab(BlockModelGenerators BMG, Block block, Block fullBlock) {
-        TextureMapping cubeMapping = TextureMapping.cube(fullBlock);
-        TextureMapping columnMapping = TextureMapping.column(TextureMapping.getBlockTexture(block, "_side"), cubeMapping.get(TextureSlot.TOP));
-        ResourceLocation bottomRL = ModelTemplates.SLAB_BOTTOM.create(block, columnMapping, BMG.modelOutput);
-        ResourceLocation topRL = ModelTemplates.SLAB_TOP.create(block, columnMapping, BMG.modelOutput);
-        ResourceLocation doubleRL = ModelTemplates.CUBE_COLUMN.createWithOverride(block, "_double", columnMapping, BMG.modelOutput);
-        BMG.blockStateOutput.accept(createSlab(block, bottomRL, topRL, doubleRL));
+    private static void createSplitSlab(BlockModelGenerators BMG, Block slabBlock, Block fullBlock) {
+        createSplitSlab(BMG, slabBlock, TextureMapping.getBlockTexture(fullBlock));
+    }
+
+    private static void createSplitSlab(BlockModelGenerators BMG, Block slabBlock, ResourceLocation endTextureLocation) {
+        TextureMapping textureMapping = TextureMapping.column(TextureMapping.getBlockTexture(slabBlock, "_side"), endTextureLocation);
+        createSplitSlab(BMG, slabBlock, textureMapping, ModelTemplates.CUBE_COLUMN);
+    }
+
+    private static void createSplitSlab(BlockModelGenerators BMG, Block slabBlock, TextureMapping textureMapping, ModelTemplate modelTemplate) {
+        ResourceLocation bottomLocation = ModelTemplates.SLAB_BOTTOM.create(slabBlock, textureMapping, BMG.modelOutput);
+        ResourceLocation topLocation = ModelTemplates.SLAB_TOP.create(slabBlock, textureMapping, BMG.modelOutput);
+        ResourceLocation doubleLocation = modelTemplate.createWithOverride(slabBlock, "_double", textureMapping, BMG.modelOutput);
+
+        BMG.blockStateOutput.accept(createSlab(slabBlock, bottomLocation, topLocation, doubleLocation));
+    }
+
+    private static void createFellcrustStairs(BlockModelGenerators BMG, Block stairsBlock) {
+        TextureMapping bottomTextureMapping = new TextureMapping()
+                .put(TextureSlot.TOP, TextureMapping.getBlockTexture(FELLCRUST, "_top"))
+                .put(TextureSlot.BOTTOM, TextureMapping.getBlockTexture(FELLCRUST, "_bottom"))
+                .put(TextureSlot.FRONT, TextureMapping.getBlockTexture(FELLCRUST_SLAB, "_side"))
+                .put(TextureSlot.BACK, TextureMapping.getBlockTexture(FELLCRUST))
+                .put(OperationStarcleaveModelTemplates.LEFT, TextureMapping.getBlockTexture(FELLCRUST_STAIRS, "_left"))
+                .put(OperationStarcleaveModelTemplates.RIGHT, TextureMapping.getBlockTexture(FELLCRUST_STAIRS, "_right"));
+
+        TextureMapping topTextureMapping = new TextureMapping() // top and bottom are swapped
+                .put(TextureSlot.SIDE, TextureMapping.getBlockTexture(FELLCRUST))
+                .put(TextureSlot.TOP, TextureMapping.getBlockTexture(FELLCRUST, "_bottom"))
+                .put(TextureSlot.BOTTOM, TextureMapping.getBlockTexture(FELLCRUST, "_top"));
+
+        ResourceLocation bottomInnerLocation = OperationStarcleaveModelTemplates.SIDED_STAIRS_INNER.create(stairsBlock, bottomTextureMapping, BMG.modelOutput);
+        ResourceLocation bottomStraightLocation = OperationStarcleaveModelTemplates.SIDED_STAIRS_STRAIGHT.create(stairsBlock, bottomTextureMapping, BMG.modelOutput);
+        ResourceLocation bottomOuterLocation = OperationStarcleaveModelTemplates.SIDED_STAIRS_OUTER.create(stairsBlock, bottomTextureMapping, BMG.modelOutput);
+
+        ResourceLocation topInnerLocation = ModelTemplates.STAIRS_INNER.createWithSuffix(stairsBlock, "_upper", topTextureMapping, BMG.modelOutput);
+        ResourceLocation topStraightLocation = ModelTemplates.STAIRS_STRAIGHT.createWithSuffix(stairsBlock, "_upper", topTextureMapping, BMG.modelOutput);
+        ResourceLocation topOuterLocation = ModelTemplates.STAIRS_OUTER.createWithSuffix(stairsBlock, "_upper", topTextureMapping, BMG.modelOutput);
+
+        BMG.blockStateOutput.accept(createSplitStairs(stairsBlock, bottomInnerLocation, bottomStraightLocation, bottomOuterLocation, topInnerLocation, topStraightLocation, topOuterLocation));
+        BMG.delegateItemModel(stairsBlock, bottomStraightLocation);
+    }
+
+    private static BlockStateGenerator createSplitStairs(
+            Block stairsBlock, ResourceLocation bottomInnerModelLocation, ResourceLocation bottomStraightModelLocation, ResourceLocation bottomOuterModelLocation, ResourceLocation topInnerModelLocation, ResourceLocation topStraightModelLocation, ResourceLocation topOuterModelLocation
+    ) {
+        return MultiVariantGenerator.multiVariant(stairsBlock)
+                .with(
+                        PropertyDispatch.properties(BlockStateProperties.HORIZONTAL_FACING, BlockStateProperties.HALF, BlockStateProperties.STAIRS_SHAPE)
+                                .select(Direction.EAST, Half.BOTTOM, StairsShape.STRAIGHT, Variant.variant().with(VariantProperties.MODEL, bottomStraightModelLocation))
+                                .select(
+                                        Direction.WEST,
+                                        Half.BOTTOM,
+                                        StairsShape.STRAIGHT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, bottomStraightModelLocation)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(
+                                        Direction.SOUTH,
+                                        Half.BOTTOM,
+                                        StairsShape.STRAIGHT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, bottomStraightModelLocation)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(
+                                        Direction.NORTH,
+                                        Half.BOTTOM,
+                                        StairsShape.STRAIGHT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, bottomStraightModelLocation)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(Direction.EAST, Half.BOTTOM, StairsShape.OUTER_RIGHT, Variant.variant().with(VariantProperties.MODEL, bottomOuterModelLocation))
+                                .select(
+                                        Direction.WEST,
+                                        Half.BOTTOM,
+                                        StairsShape.OUTER_RIGHT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, bottomOuterModelLocation)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(
+                                        Direction.SOUTH,
+                                        Half.BOTTOM,
+                                        StairsShape.OUTER_RIGHT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, bottomOuterModelLocation)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(
+                                        Direction.NORTH,
+                                        Half.BOTTOM,
+                                        StairsShape.OUTER_RIGHT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, bottomOuterModelLocation)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(
+                                        Direction.EAST,
+                                        Half.BOTTOM,
+                                        StairsShape.OUTER_LEFT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, bottomOuterModelLocation)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(
+                                        Direction.WEST,
+                                        Half.BOTTOM,
+                                        StairsShape.OUTER_LEFT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, bottomOuterModelLocation)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(Direction.SOUTH, Half.BOTTOM, StairsShape.OUTER_LEFT, Variant.variant().with(VariantProperties.MODEL, bottomOuterModelLocation))
+                                .select(
+                                        Direction.NORTH,
+                                        Half.BOTTOM,
+                                        StairsShape.OUTER_LEFT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, bottomOuterModelLocation)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(Direction.EAST, Half.BOTTOM, StairsShape.INNER_RIGHT, Variant.variant().with(VariantProperties.MODEL, bottomInnerModelLocation))
+                                .select(
+                                        Direction.WEST,
+                                        Half.BOTTOM,
+                                        StairsShape.INNER_RIGHT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, bottomInnerModelLocation)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(
+                                        Direction.SOUTH,
+                                        Half.BOTTOM,
+                                        StairsShape.INNER_RIGHT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, bottomInnerModelLocation)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(
+                                        Direction.NORTH,
+                                        Half.BOTTOM,
+                                        StairsShape.INNER_RIGHT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, bottomInnerModelLocation)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(
+                                        Direction.EAST,
+                                        Half.BOTTOM,
+                                        StairsShape.INNER_LEFT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, bottomInnerModelLocation)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(
+                                        Direction.WEST,
+                                        Half.BOTTOM,
+                                        StairsShape.INNER_LEFT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, bottomInnerModelLocation)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(Direction.SOUTH, Half.BOTTOM, StairsShape.INNER_LEFT, Variant.variant().with(VariantProperties.MODEL, bottomInnerModelLocation))
+                                .select(
+                                        Direction.NORTH,
+                                        Half.BOTTOM,
+                                        StairsShape.INNER_LEFT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, bottomInnerModelLocation)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(
+                                        Direction.EAST,
+                                        Half.TOP,
+                                        StairsShape.STRAIGHT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, topStraightModelLocation)
+                                                .with(VariantProperties.X_ROT, VariantProperties.Rotation.R180)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(
+                                        Direction.WEST,
+                                        Half.TOP,
+                                        StairsShape.STRAIGHT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, topStraightModelLocation)
+                                                .with(VariantProperties.X_ROT, VariantProperties.Rotation.R180)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(
+                                        Direction.SOUTH,
+                                        Half.TOP,
+                                        StairsShape.STRAIGHT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, topStraightModelLocation)
+                                                .with(VariantProperties.X_ROT, VariantProperties.Rotation.R180)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(
+                                        Direction.NORTH,
+                                        Half.TOP,
+                                        StairsShape.STRAIGHT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, topStraightModelLocation)
+                                                .with(VariantProperties.X_ROT, VariantProperties.Rotation.R180)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(
+                                        Direction.EAST,
+                                        Half.TOP,
+                                        StairsShape.OUTER_RIGHT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, topOuterModelLocation)
+                                                .with(VariantProperties.X_ROT, VariantProperties.Rotation.R180)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(
+                                        Direction.WEST,
+                                        Half.TOP,
+                                        StairsShape.OUTER_RIGHT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, topOuterModelLocation)
+                                                .with(VariantProperties.X_ROT, VariantProperties.Rotation.R180)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(
+                                        Direction.SOUTH,
+                                        Half.TOP,
+                                        StairsShape.OUTER_RIGHT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, topOuterModelLocation)
+                                                .with(VariantProperties.X_ROT, VariantProperties.Rotation.R180)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(
+                                        Direction.NORTH,
+                                        Half.TOP,
+                                        StairsShape.OUTER_RIGHT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, topOuterModelLocation)
+                                                .with(VariantProperties.X_ROT, VariantProperties.Rotation.R180)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(
+                                        Direction.EAST,
+                                        Half.TOP,
+                                        StairsShape.OUTER_LEFT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, topOuterModelLocation)
+                                                .with(VariantProperties.X_ROT, VariantProperties.Rotation.R180)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(
+                                        Direction.WEST,
+                                        Half.TOP,
+                                        StairsShape.OUTER_LEFT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, topOuterModelLocation)
+                                                .with(VariantProperties.X_ROT, VariantProperties.Rotation.R180)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(
+                                        Direction.SOUTH,
+                                        Half.TOP,
+                                        StairsShape.OUTER_LEFT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, topOuterModelLocation)
+                                                .with(VariantProperties.X_ROT, VariantProperties.Rotation.R180)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(
+                                        Direction.NORTH,
+                                        Half.TOP,
+                                        StairsShape.OUTER_LEFT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, topOuterModelLocation)
+                                                .with(VariantProperties.X_ROT, VariantProperties.Rotation.R180)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(
+                                        Direction.EAST,
+                                        Half.TOP,
+                                        StairsShape.INNER_RIGHT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, topInnerModelLocation)
+                                                .with(VariantProperties.X_ROT, VariantProperties.Rotation.R180)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(
+                                        Direction.WEST,
+                                        Half.TOP,
+                                        StairsShape.INNER_RIGHT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, topInnerModelLocation)
+                                                .with(VariantProperties.X_ROT, VariantProperties.Rotation.R180)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(
+                                        Direction.SOUTH,
+                                        Half.TOP,
+                                        StairsShape.INNER_RIGHT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, topInnerModelLocation)
+                                                .with(VariantProperties.X_ROT, VariantProperties.Rotation.R180)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(
+                                        Direction.NORTH,
+                                        Half.TOP,
+                                        StairsShape.INNER_RIGHT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, topInnerModelLocation)
+                                                .with(VariantProperties.X_ROT, VariantProperties.Rotation.R180)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(
+                                        Direction.EAST,
+                                        Half.TOP,
+                                        StairsShape.INNER_LEFT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, topInnerModelLocation)
+                                                .with(VariantProperties.X_ROT, VariantProperties.Rotation.R180)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(
+                                        Direction.WEST,
+                                        Half.TOP,
+                                        StairsShape.INNER_LEFT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, topInnerModelLocation)
+                                                .with(VariantProperties.X_ROT, VariantProperties.Rotation.R180)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(
+                                        Direction.SOUTH,
+                                        Half.TOP,
+                                        StairsShape.INNER_LEFT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, topInnerModelLocation)
+                                                .with(VariantProperties.X_ROT, VariantProperties.Rotation.R180)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                                .select(
+                                        Direction.NORTH,
+                                        Half.TOP,
+                                        StairsShape.INNER_LEFT,
+                                        Variant.variant()
+                                                .with(VariantProperties.MODEL, topInnerModelLocation)
+                                                .with(VariantProperties.X_ROT, VariantProperties.Rotation.R180)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270)
+                                                .with(VariantProperties.UV_LOCK, true)
+                                )
+                );
+    }
+
+    public void createFellcrustWall(BlockModelGenerators BMG, Block wallBlock) {
+        TextureMapping textureMapping = new TextureMapping()
+                .put(TextureSlot.SIDE, TextureMapping.getBlockTexture(FELLCRUST))
+                .put(TextureSlot.TOP, TextureMapping.getBlockTexture(FELLCRUST, "_top"))
+                .put(TextureSlot.BOTTOM, TextureMapping.getBlockTexture(FELLCRUST, "_bottom"))
+                .put(TextureSlot.WALL, TextureMapping.getBlockTexture(FELLCRUST_WALL));
+
+        ResourceLocation postLocation = OperationStarcleaveModelTemplates.SIDED_WALL_POST.create(wallBlock, textureMapping, BMG.modelOutput);
+        ResourceLocation lowLocation = OperationStarcleaveModelTemplates.SIDED_WALL_LOW_SIDE.create(wallBlock, textureMapping, BMG.modelOutput);
+        ResourceLocation tallLocation = OperationStarcleaveModelTemplates.SIDED_WALL_TALL_SIDE.create(wallBlock, textureMapping, BMG.modelOutput);
+        BMG.blockStateOutput.accept(BlockModelGenerators.createWall(wallBlock, postLocation, lowLocation, tallLocation));
+
+        ResourceLocation inventoryLocation = OperationStarcleaveModelTemplates.SIDED_WALL_INVENTORY.create(wallBlock, textureMapping, BMG.modelOutput);
+        BMG.delegateItemModel(wallBlock, inventoryLocation);
     }
 
     private void forEach(Consumer<Block> consumer, Block... list) {
@@ -210,8 +654,8 @@ public class ModelProvider extends FabricModelProvider {
         BMG.createSimpleFlatItemModel(block);
 
         TextureMapping textureMap = TextureMapping.cross(block);
-        ResourceLocation modelId = OperationStarcleaveModels.UNEVEN_CROSS.create(block, textureMap, BMG.modelOutput);
-        ResourceLocation modelId2 = OperationStarcleaveModels.UNEVEN_CROSS_MIRRORED.create(block, textureMap, BMG.modelOutput);
+        ResourceLocation modelId = OperationStarcleaveModelTemplates.UNEVEN_CROSS.create(block, textureMap, BMG.modelOutput);
+        ResourceLocation modelId2 = OperationStarcleaveModelTemplates.UNEVEN_CROSS_MIRRORED.create(block, textureMap, BMG.modelOutput);
         BMG.blockStateOutput.accept(MultiVariantGenerator.multiVariant(
                 block,
                 Variant.variant().with(VariantProperties.MODEL, modelId),
@@ -349,7 +793,7 @@ public class ModelProvider extends FabricModelProvider {
                     Variant.variant()
                             .with(
                                     VariantProperties.MODEL,
-                                    OperationStarcleaveModels.getSevenLevelCauldron(i)
+                                    OperationStarcleaveModelTemplates.getSevenLevelCauldron(i)
                                             .createWithSuffix(block, "_level" + i, TextureMapping.cauldron(OperationStarcleave.id("block/starbleach_still")), BMG.modelOutput)
                             )
             );

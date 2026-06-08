@@ -1,0 +1,8 @@
+{
+  "parent": "operation_starcleave:block/template_sided_wall_side_tall",
+  "textures": {
+    "bottom": "operation_starcleave:block/fellcrust_bottom",
+    "side": "operation_starcleave:block/fellcrust",
+    "top": "operation_starcleave:block/fellcrust_top"
+  }
+}

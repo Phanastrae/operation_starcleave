@@ -220,11 +220,37 @@ public class RecipeProvider extends FabricRecipeProvider {
                 .save(exporter);
         // endregion
 
+        // region smelting
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(FELLCRUST), RecipeCategory.BUILDING_BLOCKS, SMOOTH_FELLCRUST.asItem(), 0.1F, 200)
+                .unlockedBy(getHasName(FELLCRUST), has(FELLCRUST))
+                .save(exporter);
+
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(COBBLED_FELLCRUST), RecipeCategory.BUILDING_BLOCKS, FELLCRUST.asItem(), 0.1F, 200)
+                .unlockedBy(getHasName(COBBLED_FELLCRUST), has(COBBLED_FELLCRUST))
+                .save(exporter);
+        // endregion
+
         // region stonecutting
         // stardust bricks
         scBlocks(exporter, STARDUST_BRICK_STAIRS, 1, STARDUST_BRICKS);
         scBlocks(exporter, STARDUST_BRICK_SLAB, 2, STARDUST_BRICKS);
         scWalls(exporter, STARDUST_BRICK_WALL, 1, STARDUST_BRICKS);
+
+        // fellcrust
+        scBlocks(exporter, FELLCRUST_STAIRS, 1, FELLCRUST);
+        scBlocks(exporter, FELLCRUST_SLAB, 2, FELLCRUST);
+        scWalls(exporter, FELLCRUST_WALL, 1, FELLCRUST);
+
+        // smooth fellcrust
+        scBlocks(exporter, SMOOTH_FELLCRUST_STAIRS, 1, SMOOTH_FELLCRUST);
+        scBlocks(exporter, SMOOTH_FELLCRUST_SLAB, 2, SMOOTH_FELLCRUST);
+        scWalls(exporter, SMOOTH_FELLCRUST_WALL, 1, SMOOTH_FELLCRUST);
+
+        // cobbled fellcrust
+        scBlocks(exporter, COBBLED_FELLCRUST, 1, FELLCRUST);
+        scBlocks(exporter, COBBLED_FELLCRUST_STAIRS, 1, COBBLED_FELLCRUST, FELLCRUST);
+        scBlocks(exporter, COBBLED_FELLCRUST_SLAB, 2, COBBLED_FELLCRUST, FELLCRUST);
+        scWalls(exporter, COBBLED_FELLCRUST_WALL, 1, COBBLED_FELLCRUST, FELLCRUST);
 
         // 1:1 wood:log recipe, slightly better than the normal 3:4 wood:log crafting recipe
         scBlocks(exporter, STARBLEACHED_WOOD, 1, STARBLEACHED_LOG);

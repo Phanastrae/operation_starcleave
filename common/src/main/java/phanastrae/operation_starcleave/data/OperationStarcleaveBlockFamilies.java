@@ -20,6 +20,24 @@ public class OperationStarcleaveBlockFamilies {
             .wall(OperationStarcleaveBlocks.STARDUST_BRICK_WALL)
             .getFamily();
 
+    public static final BlockFamily FELLCRUST = familyBuilder(OperationStarcleaveBlocks.FELLCRUST)
+            .stairs(OperationStarcleaveBlocks.FELLCRUST_STAIRS)
+            .slab(OperationStarcleaveBlocks.FELLCRUST_SLAB)
+            .wall(OperationStarcleaveBlocks.FELLCRUST_WALL)
+            .getFamily();
+
+    public static final BlockFamily SMOOTH_FELLCRUST = familyBuilder(OperationStarcleaveBlocks.SMOOTH_FELLCRUST)
+            .stairs(OperationStarcleaveBlocks.SMOOTH_FELLCRUST_STAIRS)
+            .slab(OperationStarcleaveBlocks.SMOOTH_FELLCRUST_SLAB)
+            .wall(OperationStarcleaveBlocks.SMOOTH_FELLCRUST_WALL)
+            .getFamily();
+
+    public static final BlockFamily COBBLED_FELLCRUST = familyBuilder(OperationStarcleaveBlocks.COBBLED_FELLCRUST)
+            .stairs(OperationStarcleaveBlocks.COBBLED_FELLCRUST_STAIRS)
+            .slab(OperationStarcleaveBlocks.COBBLED_FELLCRUST_SLAB)
+            .wall(OperationStarcleaveBlocks.COBBLED_FELLCRUST_WALL)
+            .getFamily();
+
     public static final BlockFamily STARBLEACHED_TILES = familyBuilder(OperationStarcleaveBlocks.STARBLEACHED_TILES)
             .stairs(OperationStarcleaveBlocks.STARBLEACHED_TILE_STAIRS)
             .slab(OperationStarcleaveBlocks.STARBLEACHED_TILE_SLAB)

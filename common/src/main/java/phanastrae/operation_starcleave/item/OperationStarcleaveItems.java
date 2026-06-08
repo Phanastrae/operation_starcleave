@@ -48,6 +48,21 @@ public class OperationStarcleaveItems {
     public static final Item STARDUST_BRICK_SLAB = registerBlockItem(OperationStarcleaveBlocks.STARDUST_BRICK_SLAB);
     public static final Item STARDUST_BRICK_WALL = registerBlockItem(OperationStarcleaveBlocks.STARDUST_BRICK_WALL);
 
+    public static final Item FELLCRUST = registerBlockItem(OperationStarcleaveBlocks.FELLCRUST);
+    public static final Item FELLCRUST_STAIRS = registerBlockItem(OperationStarcleaveBlocks.FELLCRUST_STAIRS);
+    public static final Item FELLCRUST_SLAB = registerBlockItem(OperationStarcleaveBlocks.FELLCRUST_SLAB);
+    public static final Item FELLCRUST_WALL = registerBlockItem(OperationStarcleaveBlocks.FELLCRUST_WALL);
+
+    public static final Item SMOOTH_FELLCRUST = registerBlockItem(OperationStarcleaveBlocks.SMOOTH_FELLCRUST);
+    public static final Item SMOOTH_FELLCRUST_STAIRS = registerBlockItem(OperationStarcleaveBlocks.SMOOTH_FELLCRUST_STAIRS);
+    public static final Item SMOOTH_FELLCRUST_SLAB = registerBlockItem(OperationStarcleaveBlocks.SMOOTH_FELLCRUST_SLAB);
+    public static final Item SMOOTH_FELLCRUST_WALL = registerBlockItem(OperationStarcleaveBlocks.SMOOTH_FELLCRUST_WALL);
+
+    public static final Item COBBLED_FELLCRUST = registerBlockItem(OperationStarcleaveBlocks.COBBLED_FELLCRUST);
+    public static final Item COBBLED_FELLCRUST_STAIRS = registerBlockItem(OperationStarcleaveBlocks.COBBLED_FELLCRUST_STAIRS);
+    public static final Item COBBLED_FELLCRUST_SLAB = registerBlockItem(OperationStarcleaveBlocks.COBBLED_FELLCRUST_SLAB);
+    public static final Item COBBLED_FELLCRUST_WALL = registerBlockItem(OperationStarcleaveBlocks.COBBLED_FELLCRUST_WALL);
+
     public static final Item STARBLEACHED_LOG = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_LOG);
     public static final Item STARBLEACHED_WOOD = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_WOOD);
 

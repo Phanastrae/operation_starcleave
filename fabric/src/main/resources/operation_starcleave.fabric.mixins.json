@@ -17,7 +17,9 @@
   ],
   "client": [
     "client.FogRendererMixin",
-    "client.ScreenEffectRendererMixin"
+    "client.ScreenEffectRendererMixin",
+    "client.datagen.BlockFamilyProviderAccessor",
+    "client.datagen.BlockModelGeneratorsMixin"
   ],
   "injectors": {
     "defaultRequire": 1

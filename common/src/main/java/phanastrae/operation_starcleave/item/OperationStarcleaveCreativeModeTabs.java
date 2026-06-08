@@ -112,6 +112,21 @@ public class OperationStarcleaveCreativeModeTabs {
                 STARDUST_BRICK_SLAB,
                 STARDUST_BRICK_WALL,
 
+                FELLCRUST,
+                FELLCRUST_STAIRS,
+                FELLCRUST_SLAB,
+                FELLCRUST_WALL,
+
+                SMOOTH_FELLCRUST,
+                SMOOTH_FELLCRUST_STAIRS,
+                SMOOTH_FELLCRUST_SLAB,
+                SMOOTH_FELLCRUST_WALL,
+
+                COBBLED_FELLCRUST,
+                COBBLED_FELLCRUST_STAIRS,
+                COBBLED_FELLCRUST_SLAB,
+                COBBLED_FELLCRUST_WALL,
+
                 STARBLEACHED_LOG,
                 STARBLEACHED_WOOD,
 
@@ -255,6 +270,21 @@ public class OperationStarcleaveCreativeModeTabs {
 
                 STARDUST_CLUSTER,
 
+                FELLCRUST,
+                FELLCRUST_STAIRS,
+                FELLCRUST_SLAB,
+                FELLCRUST_WALL,
+
+                SMOOTH_FELLCRUST,
+                SMOOTH_FELLCRUST_STAIRS,
+                SMOOTH_FELLCRUST_SLAB,
+                SMOOTH_FELLCRUST_WALL,
+
+                COBBLED_FELLCRUST,
+                COBBLED_FELLCRUST_STAIRS,
+                COBBLED_FELLCRUST_SLAB,
+                COBBLED_FELLCRUST_WALL,
+
                 STELLAR_TILES,
                 STELLAR_TILE_SLAB,
                 BLESSED_CLOTH_BLOCK,
@@ -331,6 +361,7 @@ public class OperationStarcleaveCreativeModeTabs {
                 STELLAR_MULCH,
                 HOLY_MOSS,
                 STARDUST_BLOCK,
+                FELLCRUST,
 
                 COAGULATED_PLASMA,
                 PLASMA_ICE

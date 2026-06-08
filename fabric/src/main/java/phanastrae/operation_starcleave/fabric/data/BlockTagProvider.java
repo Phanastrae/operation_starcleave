@@ -30,6 +30,11 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
     protected void addTags(HolderLookup.Provider arg) {
         addTagsForFamilies(false, true,
                 OperationStarcleaveBlockFamilies.STARDUST_BRICKS,
+
+                OperationStarcleaveBlockFamilies.FELLCRUST,
+                OperationStarcleaveBlockFamilies.SMOOTH_FELLCRUST,
+                OperationStarcleaveBlockFamilies.COBBLED_FELLCRUST,
+
                 OperationStarcleaveBlockFamilies.STARBLEACHED_TILES,
                 OperationStarcleaveBlockFamilies.STELLAR_TILES,
 
@@ -48,6 +53,10 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
         addFamiliesToTag(BlockTags.MINEABLE_WITH_PICKAXE,
                 OperationStarcleaveBlockFamilies.STARDUST_BRICKS,
+                OperationStarcleaveBlockFamilies.FELLCRUST,
+                OperationStarcleaveBlockFamilies.SMOOTH_FELLCRUST,
+                OperationStarcleaveBlockFamilies.COBBLED_FELLCRUST,
+
                 OperationStarcleaveBlockFamilies.STARBLEACHED_TILES,
                 OperationStarcleaveBlockFamilies.STELLAR_TILES,
 

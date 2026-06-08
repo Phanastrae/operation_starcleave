@@ -48,6 +48,11 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
     public void generate() {
         addLootForFamilies(
                 OperationStarcleaveBlockFamilies.STARDUST_BRICKS,
+
+                OperationStarcleaveBlockFamilies.FELLCRUST,
+                OperationStarcleaveBlockFamilies.SMOOTH_FELLCRUST,
+                OperationStarcleaveBlockFamilies.COBBLED_FELLCRUST,
+
                 OperationStarcleaveBlockFamilies.STARBLEACHED_TILES,
                 OperationStarcleaveBlockFamilies.STELLAR_TILES,
 

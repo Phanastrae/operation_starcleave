@@ -199,6 +199,72 @@ public class OperationStarcleaveBlocks {
             )
     );
 
+    public static final Block FELLCRUST = register(
+            "fellcrust",
+            new Block(properties()
+                    .strength(1.3F, 4.0F)
+                    .mapColor(COLOR_LIGHT_BLUE)
+                    .instrument(NoteBlockInstrument.BASEDRUM)
+                    .requiresCorrectToolForDrops()
+            )
+    );
+    public static final Block FELLCRUST_STAIRS = register(
+            "fellcrust_stairs",
+            stairsOf(FELLCRUST)
+    );
+    public static final Block FELLCRUST_SLAB = register(
+            "fellcrust_slab",
+            slabOf(FELLCRUST)
+    );
+    public static final Block FELLCRUST_WALL = register(
+            "fellcrust_wall",
+            wallOf(FELLCRUST)
+    );
+
+    public static final Block SMOOTH_FELLCRUST = register(
+            "smooth_fellcrust",
+            new Block(properties()
+                    .strength(3.0F, 5.0F)
+                    .mapColor(COLOR_LIGHT_BLUE)
+                    .instrument(NoteBlockInstrument.BASEDRUM)
+                    .requiresCorrectToolForDrops()
+            )
+    );
+    public static final Block SMOOTH_FELLCRUST_STAIRS = register(
+            "smooth_fellcrust_stairs",
+            stairsOf(SMOOTH_FELLCRUST)
+    );
+    public static final Block SMOOTH_FELLCRUST_SLAB = register(
+            "smooth_fellcrust_slab",
+            slabOf(SMOOTH_FELLCRUST)
+    );
+    public static final Block SMOOTH_FELLCRUST_WALL = register(
+            "smooth_fellcrust_wall",
+            wallOf(SMOOTH_FELLCRUST)
+    );
+
+    public static final Block COBBLED_FELLCRUST = register(
+            "cobbled_fellcrust",
+            new Block(properties()
+                    .strength(1.8F, 4.0F)
+                    .mapColor(COLOR_LIGHT_BLUE)
+                    .instrument(NoteBlockInstrument.BASEDRUM)
+                    .requiresCorrectToolForDrops()
+            )
+    );
+    public static final Block COBBLED_FELLCRUST_STAIRS = register(
+            "cobbled_fellcrust_stairs",
+            stairsOf(COBBLED_FELLCRUST)
+    );
+    public static final Block COBBLED_FELLCRUST_SLAB = register(
+            "cobbled_fellcrust_slab",
+            slabOf(COBBLED_FELLCRUST)
+    );
+    public static final Block COBBLED_FELLCRUST_WALL = register(
+            "cobbled_fellcrust_wall",
+            wallOf(COBBLED_FELLCRUST)
+    );
+
     public static final Block STARBLEACHED_LOG = register(
             "starbleached_log",
             new RotatedPillarBlock(properties()

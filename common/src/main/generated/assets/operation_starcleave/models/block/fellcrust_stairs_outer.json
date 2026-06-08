@@ -1,0 +1,11 @@
+{
+  "parent": "operation_starcleave:block/sided_outer_stairs",
+  "textures": {
+    "back": "operation_starcleave:block/fellcrust",
+    "bottom": "operation_starcleave:block/fellcrust_bottom",
+    "front": "operation_starcleave:block/fellcrust_slab_side",
+    "left": "operation_starcleave:block/fellcrust_stairs_left",
+    "right": "operation_starcleave:block/fellcrust_stairs_right",
+    "top": "operation_starcleave:block/fellcrust_top"
+  }
+}
