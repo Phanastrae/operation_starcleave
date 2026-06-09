@@ -37,6 +37,18 @@ public class ModelProvider extends FabricModelProvider {
     private static final String SUFFIX_IRIDESCENCE = "_iridescence";
     public static final Map<Block, TexturedModel> CUSTOM_TEXTURED_MODELS = ImmutableMap.<Block, TexturedModel>builder()
             .put(FELLCRUST, TexturedModel.TOP_BOTTOM_WITH_WALL.get(FELLCRUST))
+            .put(CHISELED_FELLCRUST, TexturedModel.CUBE_TOP_BOTTOM.get(FELLCRUST)
+                    .updateTextures(mapping -> {
+                        mapping.put(TextureSlot.SIDE, TextureMapping.getBlockTexture(CHISELED_FELLCRUST));
+                        mapping.put(TextureSlot.BOTTOM, TextureMapping.getBlockTexture(CUT_FELLCRUST, "_bottom"));
+                    })
+            )
+            .put(CUT_FELLCRUST, TexturedModel.CUBE_TOP_BOTTOM.get(FELLCRUST)
+                    .updateTextures(mapping -> {
+                        mapping.put(TextureSlot.SIDE, TextureMapping.getBlockTexture(CUT_FELLCRUST));
+                        mapping.put(TextureSlot.BOTTOM, TextureMapping.getBlockTexture(CUT_FELLCRUST, "_bottom"));
+                    })
+            )
             .put(SMOOTH_FELLCRUST, TexturedModel.createAllSame(TextureMapping.getBlockTexture(FELLCRUST, "_top")))
             .put(COBBLED_FELLCRUST, TexturedModel.createDefault(
                             block -> {
@@ -55,7 +67,8 @@ public class ModelProvider extends FabricModelProvider {
             .add(
                     FELLCRUST_SLAB,
                     FELLCRUST_STAIRS,
-                    FELLCRUST_WALL
+                    FELLCRUST_WALL,
+                    CUT_FELLCRUST_STAIRS
             )
             .build();
 
@@ -167,6 +180,7 @@ public class ModelProvider extends FabricModelProvider {
         );
         createFellcrustStairs(BMG, FELLCRUST_STAIRS);
         createFellcrustWall(BMG, FELLCRUST_WALL);
+        createCutFellcrustStairs(BMG, CUT_FELLCRUST_STAIRS);
 
         // fluids
         BMG.createNonTemplateModelBlock(PETRICHORIC_PLASMA);
@@ -275,6 +289,29 @@ public class ModelProvider extends FabricModelProvider {
         ResourceLocation bottomInnerLocation = OperationStarcleaveModelTemplates.SIDED_STAIRS_INNER.create(stairsBlock, bottomTextureMapping, BMG.modelOutput);
         ResourceLocation bottomStraightLocation = OperationStarcleaveModelTemplates.SIDED_STAIRS_STRAIGHT.create(stairsBlock, bottomTextureMapping, BMG.modelOutput);
         ResourceLocation bottomOuterLocation = OperationStarcleaveModelTemplates.SIDED_STAIRS_OUTER.create(stairsBlock, bottomTextureMapping, BMG.modelOutput);
+
+        ResourceLocation topInnerLocation = ModelTemplates.STAIRS_INNER.createWithSuffix(stairsBlock, "_upper", topTextureMapping, BMG.modelOutput);
+        ResourceLocation topStraightLocation = ModelTemplates.STAIRS_STRAIGHT.createWithSuffix(stairsBlock, "_upper", topTextureMapping, BMG.modelOutput);
+        ResourceLocation topOuterLocation = ModelTemplates.STAIRS_OUTER.createWithSuffix(stairsBlock, "_upper", topTextureMapping, BMG.modelOutput);
+
+        BMG.blockStateOutput.accept(createSplitStairs(stairsBlock, bottomInnerLocation, bottomStraightLocation, bottomOuterLocation, topInnerLocation, topStraightLocation, topOuterLocation));
+        BMG.delegateItemModel(stairsBlock, bottomStraightLocation);
+    }
+
+    private static void createCutFellcrustStairs(BlockModelGenerators BMG, Block stairsBlock) {
+        TextureMapping bottomTextureMapping = new TextureMapping()
+                .put(TextureSlot.SIDE, TextureMapping.getBlockTexture(CUT_FELLCRUST))
+                .put(TextureSlot.TOP, TextureMapping.getBlockTexture(FELLCRUST, "_top"))
+                .put(TextureSlot.BOTTOM, TextureMapping.getBlockTexture(CUT_FELLCRUST, "_bottom"));
+
+        TextureMapping topTextureMapping = new TextureMapping() // top and bottom are swapped
+                .put(TextureSlot.SIDE, TextureMapping.getBlockTexture(CUT_FELLCRUST))
+                .put(TextureSlot.TOP, TextureMapping.getBlockTexture(CUT_FELLCRUST, "_bottom"))
+                .put(TextureSlot.BOTTOM, TextureMapping.getBlockTexture(FELLCRUST, "_top"));
+
+        ResourceLocation bottomInnerLocation = ModelTemplates.STAIRS_INNER.create(stairsBlock, bottomTextureMapping, BMG.modelOutput);
+        ResourceLocation bottomStraightLocation = ModelTemplates.STAIRS_STRAIGHT.create(stairsBlock, bottomTextureMapping, BMG.modelOutput);
+        ResourceLocation bottomOuterLocation = ModelTemplates.STAIRS_OUTER.create(stairsBlock, bottomTextureMapping, BMG.modelOutput);
 
         ResourceLocation topInnerLocation = ModelTemplates.STAIRS_INNER.createWithSuffix(stairsBlock, "_upper", topTextureMapping, BMG.modelOutput);
         ResourceLocation topStraightLocation = ModelTemplates.STAIRS_STRAIGHT.createWithSuffix(stairsBlock, "_upper", topTextureMapping, BMG.modelOutput);

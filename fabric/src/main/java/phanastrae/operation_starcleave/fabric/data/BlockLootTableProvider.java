@@ -50,6 +50,7 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                 OperationStarcleaveBlockFamilies.STARDUST_BRICKS,
 
                 OperationStarcleaveBlockFamilies.FELLCRUST,
+                OperationStarcleaveBlockFamilies.CUT_FELLCRUST,
                 OperationStarcleaveBlockFamilies.SMOOTH_FELLCRUST,
                 OperationStarcleaveBlockFamilies.COBBLED_FELLCRUST,
 

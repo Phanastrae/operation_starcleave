@@ -32,6 +32,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 OperationStarcleaveBlockFamilies.STARDUST_BRICKS,
 
                 OperationStarcleaveBlockFamilies.FELLCRUST,
+                OperationStarcleaveBlockFamilies.CUT_FELLCRUST,
                 OperationStarcleaveBlockFamilies.SMOOTH_FELLCRUST,
                 OperationStarcleaveBlockFamilies.COBBLED_FELLCRUST,
 
@@ -53,7 +54,9 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
         addFamiliesToTag(BlockTags.MINEABLE_WITH_PICKAXE,
                 OperationStarcleaveBlockFamilies.STARDUST_BRICKS,
+
                 OperationStarcleaveBlockFamilies.FELLCRUST,
+                OperationStarcleaveBlockFamilies.CUT_FELLCRUST,
                 OperationStarcleaveBlockFamilies.SMOOTH_FELLCRUST,
                 OperationStarcleaveBlockFamilies.COBBLED_FELLCRUST,
 

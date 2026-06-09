@@ -2,6 +2,7 @@
   "values": [
     "operation_starcleave:stardust_brick_stairs",
     "operation_starcleave:fellcrust_stairs",
+    "operation_starcleave:cut_fellcrust_stairs",
     "operation_starcleave:smooth_fellcrust_stairs",
     "operation_starcleave:cobbled_fellcrust_stairs",
     "operation_starcleave:starbleached_tile_stairs",

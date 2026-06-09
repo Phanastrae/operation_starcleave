@@ -24,6 +24,13 @@ public class OperationStarcleaveBlockFamilies {
             .stairs(OperationStarcleaveBlocks.FELLCRUST_STAIRS)
             .slab(OperationStarcleaveBlocks.FELLCRUST_SLAB)
             .wall(OperationStarcleaveBlocks.FELLCRUST_WALL)
+            .chiseled(OperationStarcleaveBlocks.CHISELED_FELLCRUST)
+            .cut(OperationStarcleaveBlocks.CUT_FELLCRUST)
+            .getFamily();
+
+    public static final BlockFamily CUT_FELLCRUST = familyBuilder(OperationStarcleaveBlocks.CUT_FELLCRUST)
+            .stairs(OperationStarcleaveBlocks.CUT_FELLCRUST_STAIRS)
+            .slab(OperationStarcleaveBlocks.CUT_FELLCRUST_SLAB)
             .getFamily();
 
     public static final BlockFamily SMOOTH_FELLCRUST = familyBuilder(OperationStarcleaveBlocks.SMOOTH_FELLCRUST)
