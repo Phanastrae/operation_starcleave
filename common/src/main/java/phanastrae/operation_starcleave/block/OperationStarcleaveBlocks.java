@@ -296,7 +296,7 @@ public class OperationStarcleaveBlocks {
             "cobbled_fellcrust",
             new Block(properties()
                     .strength(1.8F, 4.0F)
-                    .mapColor(COLOR_LIGHT_BLUE)
+                    .mapColor(TERRACOTTA_BLUE)
                     .instrument(NoteBlockInstrument.BASEDRUM)
                     .requiresCorrectToolForDrops()
             )
@@ -318,7 +318,7 @@ public class OperationStarcleaveBlocks {
             "polished_fellcrust",
             new Block(properties()
                     .strength(2.2F, 4.0F)
-                    .mapColor(COLOR_LIGHT_BLUE)
+                    .mapColor(TERRACOTTA_BLUE)
                     .instrument(NoteBlockInstrument.BASEDRUM)
                     .requiresCorrectToolForDrops()
             )
