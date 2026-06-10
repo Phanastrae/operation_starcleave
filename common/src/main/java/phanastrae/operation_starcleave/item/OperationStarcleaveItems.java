@@ -72,6 +72,7 @@ public class OperationStarcleaveItems {
     public static final Item CUT_FELLCRUST = registerBlockItem(OperationStarcleaveBlocks.CUT_FELLCRUST);
     public static final Item CUT_FELLCRUST_STAIRS = registerBlockItem(OperationStarcleaveBlocks.CUT_FELLCRUST_STAIRS);
     public static final Item CUT_FELLCRUST_SLAB = registerBlockItem(OperationStarcleaveBlocks.CUT_FELLCRUST_SLAB);
+    public static final Item CUT_FELLCRUST_WALL = registerBlockItem(OperationStarcleaveBlocks.CUT_FELLCRUST_WALL);
 
     public static final Item COBBLED_FELLCRUST = registerBlockItem(OperationStarcleaveBlocks.COBBLED_FELLCRUST);
     public static final Item COBBLED_FELLCRUST_STAIRS = registerBlockItem(OperationStarcleaveBlocks.COBBLED_FELLCRUST_STAIRS);

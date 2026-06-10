@@ -247,6 +247,7 @@ public class RecipeProvider extends FabricRecipeProvider {
         scBlocks(exporter, CUT_FELLCRUST, 1, FELLCRUST);
         scBlocks(exporter, CUT_FELLCRUST_STAIRS, 1, CUT_FELLCRUST, FELLCRUST);
         scBlocks(exporter, CUT_FELLCRUST_SLAB, 2, CUT_FELLCRUST, FELLCRUST);
+        scWalls(exporter, CUT_FELLCRUST_WALL, 1, CUT_FELLCRUST, FELLCRUST);
 
         // smooth fellcrust
         scBlocks(exporter, SMOOTH_FELLCRUST_STAIRS, 1, SMOOTH_FELLCRUST);

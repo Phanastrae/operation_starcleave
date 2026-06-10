@@ -1,0 +1,9 @@
+{
+  "parent": "operation_starcleave:block/sided_wall_inventory",
+  "textures": {
+    "bottom": "operation_starcleave:block/cut_fellcrust_bottom",
+    "side": "operation_starcleave:block/cut_fellcrust",
+    "top": "operation_starcleave:block/fellcrust_top",
+    "wall": "operation_starcleave:block/cut_fellcrust"
+  }
+}

@@ -2,6 +2,7 @@
   "values": [
     "operation_starcleave:stardust_brick_wall",
     "operation_starcleave:fellcrust_wall",
+    "operation_starcleave:cut_fellcrust_wall",
     "operation_starcleave:smooth_fellcrust_wall",
     "operation_starcleave:smooth_fellcrust_brick_wall",
     "operation_starcleave:cobbled_fellcrust_wall",

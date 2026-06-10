@@ -13,6 +13,7 @@
     "operation_starcleave:cut_fellcrust",
     "operation_starcleave:cut_fellcrust_slab",
     "operation_starcleave:cut_fellcrust_stairs",
+    "operation_starcleave:cut_fellcrust_wall",
     "operation_starcleave:smooth_fellcrust",
     "operation_starcleave:chiseled_smooth_fellcrust",
     "operation_starcleave:smooth_fellcrust_bricks",

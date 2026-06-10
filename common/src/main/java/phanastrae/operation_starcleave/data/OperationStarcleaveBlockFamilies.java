@@ -31,6 +31,7 @@ public class OperationStarcleaveBlockFamilies {
     public static final BlockFamily CUT_FELLCRUST = familyBuilder(OperationStarcleaveBlocks.CUT_FELLCRUST)
             .stairs(OperationStarcleaveBlocks.CUT_FELLCRUST_STAIRS)
             .slab(OperationStarcleaveBlocks.CUT_FELLCRUST_SLAB)
+            .wall(OperationStarcleaveBlocks.CUT_FELLCRUST_WALL)
             .getFamily();
 
     public static final BlockFamily SMOOTH_FELLCRUST = familyBuilder(OperationStarcleaveBlocks.SMOOTH_FELLCRUST)

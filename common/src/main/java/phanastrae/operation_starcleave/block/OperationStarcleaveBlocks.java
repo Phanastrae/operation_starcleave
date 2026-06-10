@@ -287,6 +287,10 @@ public class OperationStarcleaveBlocks {
             "cut_fellcrust_slab",
             slabOf(CUT_FELLCRUST)
     );
+    public static final Block CUT_FELLCRUST_WALL = register(
+            "cut_fellcrust_wall",
+            wallOf(CUT_FELLCRUST)
+    );
 
     public static final Block COBBLED_FELLCRUST = register(
             "cobbled_fellcrust",

@@ -69,7 +69,8 @@ public class ModelProvider extends FabricModelProvider {
                     FELLCRUST_SLAB,
                     FELLCRUST_STAIRS,
                     FELLCRUST_WALL,
-                    CUT_FELLCRUST_STAIRS
+                    CUT_FELLCRUST_STAIRS,
+                    CUT_FELLCRUST_WALL
             )
             .build();
 
@@ -181,8 +182,9 @@ public class ModelProvider extends FabricModelProvider {
                 ModelTemplates.CUBE_BOTTOM_TOP
         );
         createFellcrustStairs(BMG, FELLCRUST_STAIRS);
-        createFellcrustWall(BMG, FELLCRUST_WALL);
+        createFellcrustWall(BMG, FELLCRUST_WALL, FELLCRUST, true);
         createCutFellcrustStairs(BMG, CUT_FELLCRUST_STAIRS);
+        createFellcrustWall(BMG, CUT_FELLCRUST_WALL, CUT_FELLCRUST, false);
 
         // fluids
         BMG.createNonTemplateModelBlock(PETRICHORIC_PLASMA);
@@ -667,12 +669,12 @@ public class ModelProvider extends FabricModelProvider {
                 );
     }
 
-    public void createFellcrustWall(BlockModelGenerators BMG, Block wallBlock) {
+    public void createFellcrustWall(BlockModelGenerators BMG, Block wallBlock, Block fullBlock, boolean useSeparateWallTexture) {
         TextureMapping textureMapping = new TextureMapping()
-                .put(TextureSlot.SIDE, TextureMapping.getBlockTexture(FELLCRUST))
+                .put(TextureSlot.SIDE, TextureMapping.getBlockTexture(fullBlock))
                 .put(TextureSlot.TOP, TextureMapping.getBlockTexture(FELLCRUST, "_top"))
-                .put(TextureSlot.BOTTOM, TextureMapping.getBlockTexture(FELLCRUST, "_bottom"))
-                .put(TextureSlot.WALL, TextureMapping.getBlockTexture(FELLCRUST_WALL));
+                .put(TextureSlot.BOTTOM, TextureMapping.getBlockTexture(fullBlock, "_bottom"))
+                .put(TextureSlot.WALL, TextureMapping.getBlockTexture(useSeparateWallTexture ? wallBlock : fullBlock));
 
         ResourceLocation postLocation = OperationStarcleaveModelTemplates.SIDED_WALL_POST.create(wallBlock, textureMapping, BMG.modelOutput);
         ResourceLocation lowLocation = OperationStarcleaveModelTemplates.SIDED_WALL_LOW_SIDE.create(wallBlock, textureMapping, BMG.modelOutput);
