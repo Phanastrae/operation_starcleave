@@ -60,6 +60,15 @@ public class OperationStarcleaveItems {
     public static final Item SMOOTH_FELLCRUST_SLAB = registerBlockItem(OperationStarcleaveBlocks.SMOOTH_FELLCRUST_SLAB);
     public static final Item SMOOTH_FELLCRUST_WALL = registerBlockItem(OperationStarcleaveBlocks.SMOOTH_FELLCRUST_WALL);
 
+    public static final Item CHISELED_SMOOTH_FELLCRUST = registerBlockItem(OperationStarcleaveBlocks.CHISELED_SMOOTH_FELLCRUST);
+
+    public static final Item SMOOTH_FELLCRUST_BRICKS = registerBlockItem(OperationStarcleaveBlocks.SMOOTH_FELLCRUST_BRICKS);
+    public static final Item SMOOTH_FELLCRUST_BRICK_STAIRS = registerBlockItem(OperationStarcleaveBlocks.SMOOTH_FELLCRUST_BRICK_STAIRS);
+    public static final Item SMOOTH_FELLCRUST_BRICK_SLAB = registerBlockItem(OperationStarcleaveBlocks.SMOOTH_FELLCRUST_BRICK_SLAB);
+    public static final Item SMOOTH_FELLCRUST_BRICK_WALL = registerBlockItem(OperationStarcleaveBlocks.SMOOTH_FELLCRUST_BRICK_WALL);
+
+    public static final Item SMOOTH_FELLCRUST_PILLAR = registerBlockItem(OperationStarcleaveBlocks.SMOOTH_FELLCRUST_PILLAR);
+
     public static final Item CUT_FELLCRUST = registerBlockItem(OperationStarcleaveBlocks.CUT_FELLCRUST);
     public static final Item CUT_FELLCRUST_STAIRS = registerBlockItem(OperationStarcleaveBlocks.CUT_FELLCRUST_STAIRS);
     public static final Item CUT_FELLCRUST_SLAB = registerBlockItem(OperationStarcleaveBlocks.CUT_FELLCRUST_SLAB);

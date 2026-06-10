@@ -124,6 +124,15 @@ public class OperationStarcleaveCreativeModeTabs {
                 SMOOTH_FELLCRUST_SLAB,
                 SMOOTH_FELLCRUST_WALL,
 
+                CHISELED_SMOOTH_FELLCRUST,
+
+                SMOOTH_FELLCRUST_BRICKS,
+                SMOOTH_FELLCRUST_BRICK_STAIRS,
+                SMOOTH_FELLCRUST_BRICK_SLAB,
+                SMOOTH_FELLCRUST_BRICK_WALL,
+
+                SMOOTH_FELLCRUST_PILLAR,
+
                 CUT_FELLCRUST,
                 CUT_FELLCRUST_STAIRS,
                 CUT_FELLCRUST_SLAB,
@@ -287,6 +296,15 @@ public class OperationStarcleaveCreativeModeTabs {
                 SMOOTH_FELLCRUST_STAIRS,
                 SMOOTH_FELLCRUST_SLAB,
                 SMOOTH_FELLCRUST_WALL,
+
+                CHISELED_SMOOTH_FELLCRUST,
+
+                SMOOTH_FELLCRUST_BRICKS,
+                SMOOTH_FELLCRUST_BRICK_STAIRS,
+                SMOOTH_FELLCRUST_BRICK_SLAB,
+                SMOOTH_FELLCRUST_BRICK_WALL,
+
+                SMOOTH_FELLCRUST_PILLAR,
 
                 CUT_FELLCRUST,
                 CUT_FELLCRUST_STAIRS,

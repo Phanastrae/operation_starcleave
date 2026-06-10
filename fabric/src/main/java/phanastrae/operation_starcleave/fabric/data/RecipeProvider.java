@@ -87,6 +87,7 @@ public class RecipeProvider extends FabricRecipeProvider {
 
         twoByTwoPacker(exporter, RecipeCategory.BUILDING_BLOCKS, CELESTIAL_OPAL_BLOCK, CELESTIAL_OPAL_SHARD);
 
+        savePillar(exporter, SMOOTH_FELLCRUST_PILLAR, SMOOTH_FELLCRUST);
         savePillar(exporter, STARFLAKED_BISMUTH_PILLAR, STARFLAKED_BISMUTH_BLOCK);
         savePillar(exporter, POLISHED_CELESTIAL_OPAL_PILLAR, POLISHED_CELESTIAL_OPAL_BLOCK);
         savePillar(exporter, OURANIC_PILLAR, OURANIC_CHIP_BLOCK);
@@ -251,6 +252,14 @@ public class RecipeProvider extends FabricRecipeProvider {
         scBlocks(exporter, SMOOTH_FELLCRUST_STAIRS, 1, SMOOTH_FELLCRUST);
         scBlocks(exporter, SMOOTH_FELLCRUST_SLAB, 2, SMOOTH_FELLCRUST);
         scWalls(exporter, SMOOTH_FELLCRUST_WALL, 1, SMOOTH_FELLCRUST);
+        scBlocks(exporter, CHISELED_SMOOTH_FELLCRUST, 1, SMOOTH_FELLCRUST);
+        scBlocks(exporter, SMOOTH_FELLCRUST_PILLAR, 1, SMOOTH_FELLCRUST);
+
+        // smooth fellcrust bricks
+        scBlocks(exporter, SMOOTH_FELLCRUST_BRICKS, 1, SMOOTH_FELLCRUST);
+        scBlocks(exporter, SMOOTH_FELLCRUST_BRICK_STAIRS, 1, SMOOTH_FELLCRUST_BRICKS, SMOOTH_FELLCRUST);
+        scBlocks(exporter, SMOOTH_FELLCRUST_BRICK_SLAB, 2, SMOOTH_FELLCRUST_BRICKS, SMOOTH_FELLCRUST);
+        scWalls(exporter, SMOOTH_FELLCRUST_BRICK_WALL, 1, SMOOTH_FELLCRUST_BRICKS, SMOOTH_FELLCRUST);
 
         // cobbled fellcrust
         scBlocks(exporter, COBBLED_FELLCRUST, 1, FELLCRUST);

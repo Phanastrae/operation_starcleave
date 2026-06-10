@@ -4,6 +4,7 @@
     "operation_starcleave:fellcrust_slab",
     "operation_starcleave:cut_fellcrust_slab",
     "operation_starcleave:smooth_fellcrust_slab",
+    "operation_starcleave:smooth_fellcrust_brick_slab",
     "operation_starcleave:cobbled_fellcrust_slab",
     "operation_starcleave:starbleached_tile_slab",
     "operation_starcleave:stellar_tile_slab",

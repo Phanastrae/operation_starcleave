@@ -248,6 +248,33 @@ public class OperationStarcleaveBlocks {
             wallOf(SMOOTH_FELLCRUST)
     );
 
+    public static final Block CHISELED_SMOOTH_FELLCRUST = register(
+            "chiseled_smooth_fellcrust",
+            new Block(BlockBehaviour.Properties.ofFullCopy(SMOOTH_FELLCRUST))
+    );
+
+    public static final Block SMOOTH_FELLCRUST_BRICKS = register(
+            "smooth_fellcrust_bricks",
+            new Block(BlockBehaviour.Properties.ofFullCopy(SMOOTH_FELLCRUST))
+    );
+    public static final Block SMOOTH_FELLCRUST_BRICK_STAIRS = register(
+            "smooth_fellcrust_brick_stairs",
+            stairsOf(SMOOTH_FELLCRUST_BRICKS)
+    );
+    public static final Block SMOOTH_FELLCRUST_BRICK_SLAB = register(
+            "smooth_fellcrust_brick_slab",
+            slabOf(SMOOTH_FELLCRUST_BRICKS)
+    );
+    public static final Block SMOOTH_FELLCRUST_BRICK_WALL = register(
+            "smooth_fellcrust_brick_wall",
+            wallOf(SMOOTH_FELLCRUST_BRICKS)
+    );
+
+    public static final Block SMOOTH_FELLCRUST_PILLAR = register(
+            "smooth_fellcrust_pillar",
+            new RotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(SMOOTH_FELLCRUST))
+    );
+
     public static final Block CUT_FELLCRUST = register(
             "cut_fellcrust",
             new Block(BlockBehaviour.Properties.ofFullCopy(FELLCRUST))

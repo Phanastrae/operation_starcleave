@@ -52,6 +52,7 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                 OperationStarcleaveBlockFamilies.FELLCRUST,
                 OperationStarcleaveBlockFamilies.CUT_FELLCRUST,
                 OperationStarcleaveBlockFamilies.SMOOTH_FELLCRUST,
+                OperationStarcleaveBlockFamilies.SMOOTH_FELLCRUST_BRICKS,
                 OperationStarcleaveBlockFamilies.COBBLED_FELLCRUST,
 
                 OperationStarcleaveBlockFamilies.STARBLEACHED_TILES,
@@ -79,6 +80,8 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                 STELLAR_SEDIMENT,
 
                 STARDUST_CLUSTER,
+
+                SMOOTH_FELLCRUST_PILLAR,
 
                 STARBLEACHED_LOG,
                 STARBLEACHED_WOOD,

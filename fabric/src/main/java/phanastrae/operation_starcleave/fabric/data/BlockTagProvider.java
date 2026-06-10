@@ -34,6 +34,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 OperationStarcleaveBlockFamilies.FELLCRUST,
                 OperationStarcleaveBlockFamilies.CUT_FELLCRUST,
                 OperationStarcleaveBlockFamilies.SMOOTH_FELLCRUST,
+                OperationStarcleaveBlockFamilies.SMOOTH_FELLCRUST_BRICKS,
                 OperationStarcleaveBlockFamilies.COBBLED_FELLCRUST,
 
                 OperationStarcleaveBlockFamilies.STARBLEACHED_TILES,
@@ -58,6 +59,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 OperationStarcleaveBlockFamilies.FELLCRUST,
                 OperationStarcleaveBlockFamilies.CUT_FELLCRUST,
                 OperationStarcleaveBlockFamilies.SMOOTH_FELLCRUST,
+                OperationStarcleaveBlockFamilies.SMOOTH_FELLCRUST_BRICKS,
                 OperationStarcleaveBlockFamilies.COBBLED_FELLCRUST,
 
                 OperationStarcleaveBlockFamilies.STARBLEACHED_TILES,
@@ -187,6 +189,8 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 .addOptionalTag(OperationStarcleaveBlockTags.STARBLEACHED_LOGS)
                 .add(
                         NETHERITE_PUMPKIN,
+
+                        SMOOTH_FELLCRUST_PILLAR,
 
                         STARBLEACHED_LEAVES,
                         IMBUED_STARBLEACHED_TILES,
