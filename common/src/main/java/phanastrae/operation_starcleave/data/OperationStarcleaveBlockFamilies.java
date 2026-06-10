@@ -51,6 +51,25 @@ public class OperationStarcleaveBlockFamilies {
             .stairs(OperationStarcleaveBlocks.COBBLED_FELLCRUST_STAIRS)
             .slab(OperationStarcleaveBlocks.COBBLED_FELLCRUST_SLAB)
             .wall(OperationStarcleaveBlocks.COBBLED_FELLCRUST_WALL)
+            .polished(OperationStarcleaveBlocks.POLISHED_FELLCRUST)
+            .getFamily();
+
+    public static final BlockFamily POLISHED_FELLCRUST = familyBuilder(OperationStarcleaveBlocks.POLISHED_FELLCRUST)
+            .stairs(OperationStarcleaveBlocks.POLISHED_FELLCRUST_STAIRS)
+            .slab(OperationStarcleaveBlocks.POLISHED_FELLCRUST_SLAB)
+            .polished(OperationStarcleaveBlocks.POLISHED_FELLCRUST_BRICKS)
+            .getFamily();
+
+    public static final BlockFamily POLISHED_FELLCRUST_BRICKS = familyBuilder(OperationStarcleaveBlocks.POLISHED_FELLCRUST_BRICKS)
+            .stairs(OperationStarcleaveBlocks.POLISHED_FELLCRUST_BRICK_STAIRS)
+            .slab(OperationStarcleaveBlocks.POLISHED_FELLCRUST_BRICK_SLAB)
+            .wall(OperationStarcleaveBlocks.POLISHED_FELLCRUST_BRICK_WALL)
+            .polished(OperationStarcleaveBlocks.CUT_POLISHED_FELLCRUST)
+            .getFamily();
+
+    public static final BlockFamily CUT_POLISHED_FELLCRUST = familyBuilder(OperationStarcleaveBlocks.CUT_POLISHED_FELLCRUST)
+            .stairs(OperationStarcleaveBlocks.CUT_POLISHED_FELLCRUST_STAIRS)
+            .slab(OperationStarcleaveBlocks.CUT_POLISHED_FELLCRUST_SLAB)
             .getFamily();
 
     public static final BlockFamily STARBLEACHED_TILES = familyBuilder(OperationStarcleaveBlocks.STARBLEACHED_TILES)

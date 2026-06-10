@@ -62,6 +62,7 @@ public class ModelProvider extends FabricModelProvider {
                             ModelTemplates.CUBE_BOTTOM_TOP
                     ).get(COBBLED_FELLCRUST)
             )
+            .put(CUT_POLISHED_FELLCRUST, TexturedModel.createAllSame(TextureMapping.getBlockTexture(CUT_FELLCRUST, "_bottom")))
             .build();
     public static final Set<Block> SKIP_FAMILY_MODEL_GENERATION = ImmutableSet.<Block>builder()
             .add(

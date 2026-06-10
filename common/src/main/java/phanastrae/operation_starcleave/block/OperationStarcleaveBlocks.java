@@ -310,6 +310,55 @@ public class OperationStarcleaveBlocks {
             wallOf(COBBLED_FELLCRUST)
     );
 
+    public static final Block POLISHED_FELLCRUST = register(
+            "polished_fellcrust",
+            new Block(properties()
+                    .strength(2.2F, 4.0F)
+                    .mapColor(COLOR_LIGHT_BLUE)
+                    .instrument(NoteBlockInstrument.BASEDRUM)
+                    .requiresCorrectToolForDrops()
+            )
+    );
+    public static final Block POLISHED_FELLCRUST_STAIRS = register(
+            "polished_fellcrust_stairs",
+            stairsOf(POLISHED_FELLCRUST)
+    );
+    public static final Block POLISHED_FELLCRUST_SLAB = register(
+            "polished_fellcrust_slab",
+            slabOf(POLISHED_FELLCRUST)
+    );
+
+    public static final Block POLISHED_FELLCRUST_BRICKS = register(
+            "polished_fellcrust_bricks",
+            new Block(BlockBehaviour.Properties.ofFullCopy(POLISHED_FELLCRUST))
+    );
+    public static final Block POLISHED_FELLCRUST_BRICK_STAIRS = register(
+            "polished_fellcrust_brick_stairs",
+            stairsOf(POLISHED_FELLCRUST_BRICKS)
+    );
+    public static final Block POLISHED_FELLCRUST_BRICK_SLAB = register(
+            "polished_fellcrust_brick_slab",
+            slabOf(POLISHED_FELLCRUST_BRICKS)
+    );
+    public static final Block POLISHED_FELLCRUST_BRICK_WALL = register(
+            "polished_fellcrust_brick_wall",
+            wallOf(POLISHED_FELLCRUST_BRICKS)
+    );
+
+    public static final Block CUT_POLISHED_FELLCRUST = register(
+            "cut_polished_fellcrust",
+            new Block(BlockBehaviour.Properties.ofFullCopy(POLISHED_FELLCRUST)
+            )
+    );
+    public static final Block CUT_POLISHED_FELLCRUST_STAIRS = register(
+            "cut_polished_fellcrust_stairs",
+            stairsOf(CUT_POLISHED_FELLCRUST)
+    );
+    public static final Block CUT_POLISHED_FELLCRUST_SLAB = register(
+            "cut_polished_fellcrust_slab",
+            slabOf(CUT_POLISHED_FELLCRUST)
+    );
+
     public static final Block STARBLEACHED_LOG = register(
             "starbleached_log",
             new RotatedPillarBlock(properties()

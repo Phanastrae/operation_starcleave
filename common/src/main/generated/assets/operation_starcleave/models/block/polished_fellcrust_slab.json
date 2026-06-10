@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "operation_starcleave:block/polished_fellcrust",
+    "side": "operation_starcleave:block/polished_fellcrust",
+    "top": "operation_starcleave:block/polished_fellcrust"
+  }
+}

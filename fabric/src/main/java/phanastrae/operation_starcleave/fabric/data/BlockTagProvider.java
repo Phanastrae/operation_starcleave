@@ -36,6 +36,9 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 OperationStarcleaveBlockFamilies.SMOOTH_FELLCRUST,
                 OperationStarcleaveBlockFamilies.SMOOTH_FELLCRUST_BRICKS,
                 OperationStarcleaveBlockFamilies.COBBLED_FELLCRUST,
+                OperationStarcleaveBlockFamilies.POLISHED_FELLCRUST,
+                OperationStarcleaveBlockFamilies.POLISHED_FELLCRUST_BRICKS,
+                OperationStarcleaveBlockFamilies.CUT_POLISHED_FELLCRUST,
 
                 OperationStarcleaveBlockFamilies.STARBLEACHED_TILES,
                 OperationStarcleaveBlockFamilies.STELLAR_TILES,
@@ -61,6 +64,9 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 OperationStarcleaveBlockFamilies.SMOOTH_FELLCRUST,
                 OperationStarcleaveBlockFamilies.SMOOTH_FELLCRUST_BRICKS,
                 OperationStarcleaveBlockFamilies.COBBLED_FELLCRUST,
+                OperationStarcleaveBlockFamilies.POLISHED_FELLCRUST,
+                OperationStarcleaveBlockFamilies.POLISHED_FELLCRUST_BRICKS,
+                OperationStarcleaveBlockFamilies.CUT_POLISHED_FELLCRUST,
 
                 OperationStarcleaveBlockFamilies.STARBLEACHED_TILES,
                 OperationStarcleaveBlockFamilies.STELLAR_TILES,

@@ -142,6 +142,19 @@ public class OperationStarcleaveCreativeModeTabs {
                 COBBLED_FELLCRUST_SLAB,
                 COBBLED_FELLCRUST_WALL,
 
+                POLISHED_FELLCRUST,
+                POLISHED_FELLCRUST_STAIRS,
+                POLISHED_FELLCRUST_SLAB,
+
+                POLISHED_FELLCRUST_BRICKS,
+                POLISHED_FELLCRUST_BRICK_STAIRS,
+                POLISHED_FELLCRUST_BRICK_SLAB,
+                POLISHED_FELLCRUST_BRICK_WALL,
+
+                CUT_POLISHED_FELLCRUST,
+                CUT_POLISHED_FELLCRUST_STAIRS,
+                CUT_POLISHED_FELLCRUST_SLAB,
+
                 STARBLEACHED_LOG,
                 STARBLEACHED_WOOD,
 
@@ -314,6 +327,19 @@ public class OperationStarcleaveCreativeModeTabs {
                 COBBLED_FELLCRUST_STAIRS,
                 COBBLED_FELLCRUST_SLAB,
                 COBBLED_FELLCRUST_WALL,
+
+                POLISHED_FELLCRUST,
+                POLISHED_FELLCRUST_STAIRS,
+                POLISHED_FELLCRUST_SLAB,
+
+                POLISHED_FELLCRUST_BRICKS,
+                POLISHED_FELLCRUST_BRICK_STAIRS,
+                POLISHED_FELLCRUST_BRICK_SLAB,
+                POLISHED_FELLCRUST_BRICK_WALL,
+
+                CUT_POLISHED_FELLCRUST,
+                CUT_POLISHED_FELLCRUST_STAIRS,
+                CUT_POLISHED_FELLCRUST_SLAB,
 
                 STELLAR_TILES,
                 STELLAR_TILE_SLAB,

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "operation_starcleave:block/cut_fellcrust_bottom",
+    "side": "operation_starcleave:block/cut_fellcrust_bottom",
+    "top": "operation_starcleave:block/cut_fellcrust_bottom"
+  }
+}

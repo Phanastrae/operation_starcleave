@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "operation_starcleave:polished_fellcrust"
+  },
+  "result": {
+    "count": 1,
+    "id": "operation_starcleave:cut_polished_fellcrust"
+  }
+}
