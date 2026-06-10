@@ -363,6 +363,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 );
 
         // starcleave tags
+        // block-only tags
         getOrCreateTagBuilder(OperationStarcleaveBlockTags.STARBLEACHED)
                 .addOptionalTag(OperationStarcleaveBlockTags.STARBLEACHED_LOGS)
                 .add(
@@ -427,7 +428,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         NUCLEOSYNTHESEED
                 );
 
-
+        // block tags that are also item tags
         getOrCreateTagBuilder(OperationStarcleaveBlockTags.STARBLEACHED_LOGS)
                 .add(
                         STARBLEACHED_LOG,
@@ -440,6 +441,66 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         NUCLEIC_FISSURERIND,
                         STRIPED_NUCLEIC_FISSUREROOT,
                         STRIPED_NUCLEIC_FISSURERIND
+                );
+
+        getOrCreateTagBuilder(OperationStarcleaveBlockTags.SB_I_FELLCRUST)
+                .add(
+                        Blocks.SANDSTONE,
+                        Blocks.RED_SANDSTONE
+                );
+
+        getOrCreateTagBuilder(OperationStarcleaveBlockTags.SB_I_FELLCRUST_STAIRS)
+                .add(
+                        Blocks.SANDSTONE_STAIRS,
+                        Blocks.RED_SANDSTONE_STAIRS
+                );
+
+        getOrCreateTagBuilder(OperationStarcleaveBlockTags.SB_I_FELLCRUST_SLAB)
+                .add(
+                        Blocks.SANDSTONE_SLAB,
+                        Blocks.RED_SANDSTONE_SLAB
+                );
+
+        getOrCreateTagBuilder(OperationStarcleaveBlockTags.SB_I_FELLCRUST_WALL)
+                .add(
+                        Blocks.SANDSTONE_WALL,
+                        Blocks.RED_SANDSTONE_WALL
+                );
+
+        getOrCreateTagBuilder(OperationStarcleaveBlockTags.SB_I_CHISELED_FELLCRUST)
+                .add(
+                        Blocks.CHISELED_SANDSTONE,
+                        Blocks.CHISELED_RED_SANDSTONE
+                );
+
+        getOrCreateTagBuilder(OperationStarcleaveBlockTags.SB_I_SMOOTH_FELLCRUST)
+                .add(
+                        Blocks.SMOOTH_SANDSTONE,
+                        Blocks.SMOOTH_RED_SANDSTONE
+                );
+
+        getOrCreateTagBuilder(OperationStarcleaveBlockTags.SB_I_SMOOTH_FELLCRUST_STAIRS)
+                .add(
+                        Blocks.SMOOTH_SANDSTONE_STAIRS,
+                        Blocks.SMOOTH_RED_SANDSTONE_STAIRS
+                );
+
+        getOrCreateTagBuilder(OperationStarcleaveBlockTags.SB_I_SMOOTH_FELLCRUST_SLAB)
+                .add(
+                        Blocks.SMOOTH_SANDSTONE_SLAB,
+                        Blocks.SMOOTH_RED_SANDSTONE_SLAB
+                );
+
+        getOrCreateTagBuilder(OperationStarcleaveBlockTags.SB_I_CUT_FELLCRUST)
+                .add(
+                        Blocks.CUT_SANDSTONE,
+                        Blocks.CUT_RED_SANDSTONE
+                );
+
+        getOrCreateTagBuilder(OperationStarcleaveBlockTags.SB_I_CUT_FELLCRUST_SLAB)
+                .add(
+                        Blocks.CUT_SANDSTONE_SLAB,
+                        Blocks.CUT_RED_SANDSTONE_SLAB
                 );
     }
 

@@ -1,0 +1,14 @@
+{
+  "item": [
+    "operation_starcleave:starbleaches_into/chiseled_fellcrust",
+    "operation_starcleave:starbleaches_into/cut_fellcrust",
+    "operation_starcleave:starbleaches_into/cut_fellcrust_slab",
+    "operation_starcleave:starbleaches_into/fellcrust",
+    "operation_starcleave:starbleaches_into/fellcrust_slab",
+    "operation_starcleave:starbleaches_into/fellcrust_stairs",
+    "operation_starcleave:starbleaches_into/fellcrust_wall",
+    "operation_starcleave:starbleaches_into/smooth_fellcrust",
+    "operation_starcleave:starbleaches_into/smooth_fellcrust_slab",
+    "operation_starcleave:starbleaches_into/smooth_fellcrust_stairs"
+  ]
+}

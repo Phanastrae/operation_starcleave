@@ -1,0 +1,11 @@
+{
+  "type": "operation_starcleave:item_starbleaching",
+  "ingredient": {
+    "tag": "operation_starcleave:starbleaches_into/cut_fellcrust"
+  },
+  "result": {
+    "count": 1,
+    "id": "operation_starcleave:cut_fellcrust"
+  },
+  "starbleach_cost": 0.04
+}

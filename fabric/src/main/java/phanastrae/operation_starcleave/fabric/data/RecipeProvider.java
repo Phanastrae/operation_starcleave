@@ -454,6 +454,66 @@ public class RecipeProvider extends FabricRecipeProvider {
                 0.7F,
                 CELESTIAL_OPAL_SHARD
         );
+
+        saveStarbleachRecipe(exporter,
+                OperationStarcleaveItemTags.SB_I_FELLCRUST,
+                0.04F,
+                FELLCRUST
+        );
+
+        saveStarbleachRecipe(exporter,
+                OperationStarcleaveItemTags.SB_I_FELLCRUST_STAIRS,
+                0.04F,
+                FELLCRUST_STAIRS
+        );
+
+        saveStarbleachRecipe(exporter,
+                OperationStarcleaveItemTags.SB_I_FELLCRUST_SLAB,
+                0.02F,
+                FELLCRUST_SLAB
+        );
+
+        saveStarbleachRecipe(exporter,
+                OperationStarcleaveItemTags.SB_I_FELLCRUST_WALL,
+                0.04F,
+                FELLCRUST_WALL
+        );
+
+        saveStarbleachRecipe(exporter,
+                OperationStarcleaveItemTags.SB_I_CHISELED_FELLCRUST,
+                0.04F,
+                CHISELED_FELLCRUST
+        );
+
+        saveStarbleachRecipe(exporter,
+                OperationStarcleaveItemTags.SB_I_SMOOTH_FELLCRUST,
+                0.04F,
+                SMOOTH_FELLCRUST
+        );
+
+        saveStarbleachRecipe(exporter,
+                OperationStarcleaveItemTags.SB_I_SMOOTH_FELLCRUST_STAIRS,
+                0.04F,
+                SMOOTH_FELLCRUST_STAIRS
+        );
+
+        saveStarbleachRecipe(exporter,
+                OperationStarcleaveItemTags.SB_I_SMOOTH_FELLCRUST_SLAB,
+                0.04F,
+                SMOOTH_FELLCRUST_SLAB
+        );
+
+        saveStarbleachRecipe(exporter,
+                OperationStarcleaveItemTags.SB_I_CUT_FELLCRUST,
+                0.04F,
+                CUT_FELLCRUST
+        );
+
+        saveStarbleachRecipe(exporter,
+                OperationStarcleaveItemTags.SB_I_CUT_FELLCRUST_SLAB,
+                0.04F,
+                CUT_FELLCRUST_SLAB
+        );
         // endregion
     }
 

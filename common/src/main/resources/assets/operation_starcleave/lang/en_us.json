@@ -291,7 +291,18 @@
 
   "tag.fluid.operation_starcleave.petrichoric_plasma": "Petrichoric Plasma",
   "tag.fluid.operation_starcleave.starbleach": "Starbleach",
+
   "tag.item.operation_starcleave.starbleached_logs": "Starbleached Logs",
+  "tag.item.operation_starcleave.starbleaches_into.chiseled_fellcrust": "Starbleaches into Chiseled Fellcrust",
+  "tag.item.operation_starcleave.starbleaches_into.cut_fellcrust": "Starbleaches into Cut Fellcrust",
+  "tag.item.operation_starcleave.starbleaches_into.cut_fellcrust_slab": "Starbleaches into Cut Fellcrust Slab",
+  "tag.item.operation_starcleave.starbleaches_into.fellcrust": "Starbleaches into Fellcrust",
+  "tag.item.operation_starcleave.starbleaches_into.fellcrust_slab": "Starbleaches into Fellcrust Slab",
+  "tag.item.operation_starcleave.starbleaches_into.fellcrust_stairs": "Starbleaches into Fellcrust Stairs",
+  "tag.item.operation_starcleave.starbleaches_into.fellcrust_wall": "Starbleaches into Fellcrust Wall",
+  "tag.item.operation_starcleave.starbleaches_into.smooth_fellcrust": "Starbleaches into Smooth Fellcrust",
+  "tag.item.operation_starcleave.starbleaches_into.smooth_fellcrust_slab": "Starbleaches into Smooth Fellcrust Slab",
+  "tag.item.operation_starcleave.starbleaches_into.smooth_fellcrust_stairs": "Starbleaches into Smooth Fellcrust Stairs",
   "tag.item.operation_starcleave.nucleic_fissureroots": "Nucleic Fissureroots",
   "tag.item.operation_starcleave.enchantable.stockpile": "Stockpile Enchantable"
 }
