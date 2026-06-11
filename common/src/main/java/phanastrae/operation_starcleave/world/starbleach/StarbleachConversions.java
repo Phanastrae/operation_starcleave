@@ -14,6 +14,8 @@ import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.stateproviders.SimpleStateProvider;
 import net.minecraft.world.level.levelgen.feature.stateproviders.WeightedStateProvider;
 import org.jetbrains.annotations.Nullable;
@@ -23,6 +25,8 @@ import phanastrae.operation_starcleave.block.tag.OperationStarcleaveBlockTags;
 import phanastrae.operation_starcleave.mixin.common.accessor.item.AxeItemAccessor;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -31,92 +35,7 @@ import static phanastrae.operation_starcleave.block.OperationStarcleaveBlocks.*;
 
 public class StarbleachConversions {
     // TODO data-drive conversions
-    public static final StateConversion[] ALL_CONVERSIONS = setupConversions();
-
-    public static StateConversion[] setupConversions() {
-        StateConversion stellarMulchConversion = new StateConversion(
-                StateMatchesPredicate.fromBlocks(PODZOL, MYCELIUM),
-                SimpleStateProvider.simple(STELLAR_MULCH)
-        );
-        StateConversion grassySedimentConversion = new StateConversion(
-                StateMatchesPredicate.fromBlock(GRASS_BLOCK),
-                (l, p, s, r) -> getGrassySedimentState(l, p, r)
-        );
-        StateConversion sedimentConversion = new StateConversion(
-                new StateMatchesPredicate.Builder(DIRT, COARSE_DIRT, ROOTED_DIRT, END_STONE).addBlockTag(BlockTags.BASE_STONE_OVERWORLD).build(),
-                (l, p, s, r) -> getSedimentState(l, p, r)
-        );
-        StateConversion airFromNetherConversion = new StateConversion(
-                StateMatchesPredicate.fromBlocks(NETHERRACK, SOUL_SAND, SOUL_SOIL, CRIMSON_NYLIUM, WARPED_NYLIUM),
-                SimpleStateProvider.simple(AIR)
-        );
-        StateConversion stardustConversion = new StateConversion(
-                new StateMatchesPredicate.Builder(GRAVEL).addBlockTag(BlockTags.SAND).build(),
-                SimpleStateProvider.simple(STARDUST_BLOCK)
-        );
-        StateConversion leavesConversion = new StateConversion(
-                new StateMatchesPredicate.Builder(CHORUS_PLANT, CHORUS_FLOWER).addBlockTag(BlockTags.LEAVES).addBlockTag(BlockTags.WART_BLOCKS).build(),
-                new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
-                        .add(STARBLEACHED_LEAVES.defaultBlockState(), 1)
-                        .add(AIR.defaultBlockState(), 2)
-                        .build()
-                )
-        );
-        StateConversion logsConversion = new StateConversion(
-                StateMatchesPredicate.fromBlockTag(BlockTags.LOGS),
-                (l, p, s, r) -> getLogState(s)
-        );
-        StateConversion farmlandConversion = new StateConversion(
-                StateMatchesPredicate.fromBlock(FARMLAND),
-                (l, p, s, r) -> getFarmlandState(l, p)
-        );
-        StateConversion pathConversion = new StateConversion(
-                StateMatchesPredicate.fromBlock(DIRT_PATH),
-                SimpleStateProvider.simple(STELLAR_PATH)
-        );
-        StateConversion opalBlockConversion = new StateConversion(
-                StateMatchesPredicate.fromBlock(AMETHYST_BLOCK),
-                SimpleStateProvider.simple(CELESTIAL_OPAL_BLOCK)
-        );
-        StateConversion opalBuddingConversion = new StateConversion(
-                StateMatchesPredicate.fromBlock(BUDDING_AMETHYST),
-                SimpleStateProvider.simple(BUDDING_CELESTIAL_OPAL)
-        );
-        StateConversion opalSmallConversion = new StateConversion(
-                StateMatchesPredicate.fromBlock(SMALL_AMETHYST_BUD),
-                (l, p, s, r) -> getClusterState(s, SMALL_CELESTIAL_OPAL_BUD)
-        );
-        StateConversion opalMediumConversion = new StateConversion(
-                StateMatchesPredicate.fromBlock(MEDIUM_AMETHYST_BUD),
-                (l, p, s, r) -> getClusterState(s, MEDIUM_CELESTIAL_OPAL_BUD)
-        );
-        StateConversion opalLargeConversion = new StateConversion(
-                StateMatchesPredicate.fromBlock(LARGE_AMETHYST_BUD),
-                (l, p, s, r) -> getClusterState(s, LARGE_CELESTIAL_OPAL_BUD)
-        );
-        StateConversion opalClusterConversion = new StateConversion(
-                StateMatchesPredicate.fromBlock(AMETHYST_CLUSTER),
-                (l, p, s, r) -> getClusterState(s, CELESTIAL_OPAL_CLUSTER)
-        );
-
-        return new StateConversion[]{
-                stellarMulchConversion,
-                grassySedimentConversion,
-                sedimentConversion,
-                airFromNetherConversion,
-                stardustConversion,
-                leavesConversion,
-                logsConversion,
-                farmlandConversion,
-                pathConversion,
-                opalBlockConversion,
-                opalBuddingConversion,
-                opalSmallConversion,
-                opalMediumConversion,
-                opalLargeConversion,
-                opalClusterConversion
-        };
-    }
+    public static final List<StateConversion> ALL_CONVERSIONS = new ArrayList<>();
 
     @Nullable
     public static BlockState getStarbleachResult(Level level, BlockPos blockPos, BlockState blockState, RandomSource random, Starbleach.StarbleachTarget starbleachTarget) {
@@ -170,7 +89,82 @@ public class StarbleachConversions {
         return null;
     }
 
-    public static BlockState getGrassySedimentState(Level level, BlockPos blockPos, RandomSource random) {
+    public static void init() {
+        addConversion(StateMatchesPredicate.fromBlocks(PODZOL, MYCELIUM), STELLAR_MULCH);
+        addConversion(GRASS_BLOCK, StarbleachConversions::getGrassySedimentState);
+        addConversion(
+                new StateMatchesPredicate.Builder(DIRT, COARSE_DIRT, ROOTED_DIRT, END_STONE).addBlockTag(BlockTags.BASE_STONE_OVERWORLD).build(),
+                StarbleachConversions::getSedimentState
+        );
+        addConversion(StateMatchesPredicate.fromBlocks(NETHERRACK, SOUL_SAND, SOUL_SOIL, CRIMSON_NYLIUM, WARPED_NYLIUM), AIR);
+        addConversion(
+                new StateMatchesPredicate.Builder(GRAVEL).addBlockTag(BlockTags.SAND).build(),
+                STARDUST_BLOCK
+        );
+        addConversion(
+                new StateMatchesPredicate.Builder(CHORUS_PLANT, CHORUS_FLOWER).addBlockTag(BlockTags.LEAVES).addBlockTag(BlockTags.WART_BLOCKS).build(),
+                new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
+                        .add(STARBLEACHED_LEAVES.defaultBlockState(), 1)
+                        .add(AIR.defaultBlockState(), 2)
+                        .build()
+                )
+        );
+        addConversion(BlockTags.LOGS, StarbleachConversions::getLogState);
+        addConversion(FARMLAND, StarbleachConversions::getFarmlandState);
+        addConversion(DIRT_PATH, STELLAR_PATH);
+        addConversion(AMETHYST_BLOCK, CELESTIAL_OPAL_BLOCK);
+        addConversion(BUDDING_AMETHYST, BUDDING_CELESTIAL_OPAL);
+        addClusterConversion(SMALL_AMETHYST_BUD, SMALL_CELESTIAL_OPAL_BUD);
+        addClusterConversion(MEDIUM_AMETHYST_BUD, MEDIUM_CELESTIAL_OPAL_BUD);
+        addClusterConversion(LARGE_AMETHYST_BUD, LARGE_CELESTIAL_OPAL_BUD);
+        addClusterConversion(AMETHYST_CLUSTER, CELESTIAL_OPAL_CLUSTER);
+    }
+
+    private static void addConversion(StateConversion conversion) {
+        ALL_CONVERSIONS.add(conversion);
+    }
+
+    private static void addConversion(Predicate<BlockState> predicate, StateConversion.ConversionStateProvider stateProvider) {
+        addConversion(new StateConversion(predicate, stateProvider));
+    }
+
+    private static void addConversion(Predicate<BlockState> predicate, BlockStateProvider provider) {
+        addConversion(predicate, (level, pos, state, random) -> provider.getState(random, pos));
+    }
+
+    private static void addConversion(Predicate<BlockState> predicate, Block result) {
+        addConversion(
+                predicate,
+                SimpleStateProvider.simple(result)
+        );
+    }
+
+    private static void addConversion(Block input, Block result) {
+        addConversion(StateMatchesPredicate.fromBlock(input), result);
+    }
+
+    private static void addConversion(Block input, StateConversion.ConversionStateProvider provider) {
+        addConversion(
+                StateMatchesPredicate.fromBlock(input),
+                provider
+        );
+    }
+
+    private static void addConversion(TagKey<Block> input, StateConversion.ConversionStateProvider provider) {
+        addConversion(
+                StateMatchesPredicate.fromBlockTag(input),
+                provider
+        );
+    }
+
+    private static void addClusterConversion(Block input, Block result) {
+        addConversion(
+                input,
+                (l, p, s, r) -> copyProperties(result, s, BlockStateProperties.WATERLOGGED, BlockStateProperties.FACING)
+        );
+    }
+
+    public static BlockState getGrassySedimentState(Level level, BlockPos blockPos, BlockState blockState, RandomSource random) {
         int steepness = 0;
         for (Direction direction : Direction.Plane.HORIZONTAL) {
             BlockState state = level.getBlockState(blockPos.offset(direction.getStepX(), 1, direction.getStepZ()));
@@ -190,7 +184,7 @@ public class StarbleachConversions {
         }
     }
 
-    public static BlockState getSedimentState(Level level, BlockPos blockPos, RandomSource random) {
+    public static BlockState getSedimentState(Level level, BlockPos blockPos, BlockState blockState, RandomSource random) {
         if (level.getBlockState(blockPos.above()).isAir()) {
             int nearbyMulch = countBlocksInArea(level, blockPos, 1, (state) -> state.is(STELLAR_MULCH));
             if (random.nextInt(1 + (9 - nearbyMulch) * (9 - nearbyMulch)) <= 30) {
@@ -233,20 +227,12 @@ public class StarbleachConversions {
         return false;
     }
 
-    public static BlockState getLogState(BlockState blockState) {
-        // get either log or wood block
-        boolean isWoodNotLog = isWoodNotLog(blockState);
-        Block newBlock = isWoodNotLog ? STARBLEACHED_WOOD : STARBLEACHED_LOG;
-        BlockState newState = newBlock.defaultBlockState();
-
-        // try to preserve axis
-        if (blockState.getProperties().contains(RotatedPillarBlock.AXIS)) {
-            newState = newState.setValue(RotatedPillarBlock.AXIS, blockState.getValue(RotatedPillarBlock.AXIS));
-        }
-        return newState;
+    public static BlockState getLogState(Level level, BlockPos blockPos, BlockState blockState, RandomSource random) {
+        Block newBlock = isWoodNotLog(blockState) ? STARBLEACHED_WOOD : STARBLEACHED_LOG;
+        return copyProperties(newBlock, blockState, RotatedPillarBlock.AXIS);
     }
 
-    public static BlockState getFarmlandState(Level level, BlockPos blockPos) {
+    public static BlockState getFarmlandState(Level level, BlockPos blockPos, BlockState blockState, RandomSource random) {
         Firmament firmament = Firmament.fromLevel(level);
         BlockState farmland = STELLAR_FARMLAND.defaultBlockState();
         if (firmament != null && StellarFarmlandBlock.isStarlit(level, blockPos, firmament)) {
@@ -256,15 +242,23 @@ public class StarbleachConversions {
         }
     }
 
-    public static BlockState getClusterState(BlockState blockState, Block newBlock) {
-        BlockState newState = newBlock.defaultBlockState();
-        // try to preserve waterlogged and facing
-        if (blockState.getProperties().contains(BlockStateProperties.WATERLOGGED)) {
-            newState = newState.setValue(BlockStateProperties.WATERLOGGED, blockState.getValue(BlockStateProperties.WATERLOGGED));
+    public static BlockState copyProperties(Block newBlock, BlockState oldState, Property<?>... properties) {
+        return copyProperties(newBlock.defaultBlockState(), oldState, properties);
+    }
+
+    public static BlockState copyProperties(BlockState newState, BlockState oldState, Property<?>... properties) {
+        for (Property<?> property : properties) {
+            newState = copyProperty(newState, oldState, property);
         }
-        if (blockState.getProperties().contains(BlockStateProperties.FACING)) {
-            newState = newState.setValue(BlockStateProperties.FACING, blockState.getValue(BlockStateProperties.FACING));
+
+        return newState;
+    }
+
+    public static <T extends Comparable<T>> BlockState copyProperty(BlockState newState, BlockState oldState, Property<T> property) {
+        if (oldState.getProperties().contains(property)) {
+            newState = newState.setValue(property, oldState.getValue(property));
         }
+
         return newState;
     }
 }

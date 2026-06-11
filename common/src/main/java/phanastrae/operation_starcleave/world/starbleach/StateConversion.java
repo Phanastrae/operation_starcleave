@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
@@ -17,11 +16,6 @@ public class StateConversion {
     public StateConversion(Predicate<BlockState> predicate, ConversionStateProvider stateProvider) {
         this.predicate = predicate;
         this.stateProvider = stateProvider;
-    }
-
-    public StateConversion(Predicate<BlockState> predicate, BlockStateProvider provider) {
-        this.predicate = predicate;
-        this.stateProvider = (level, pos, state, random) -> provider.getState(random, pos);
     }
 
     @Nullable

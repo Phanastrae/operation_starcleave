@@ -37,6 +37,7 @@ import phanastrae.operation_starcleave.recipe.OperationStarcleaveRecipeTypes;
 import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
 import phanastrae.operation_starcleave.world.OperationStarcleaveGameRules;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
+import phanastrae.operation_starcleave.world.starbleach.StarbleachConversions;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -107,6 +108,9 @@ public class OperationStarcleave {
 
         // setup flattening
         OperationStarcleaveToolActions.FLATTENABLES.forEach(ShovelItemAccessor.getFLATTENABLES()::put);
+
+        // starbleach conversion
+        StarbleachConversions.init();
     }
 
     public static void startLevelTick(Level level) {
