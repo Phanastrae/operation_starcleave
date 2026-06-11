@@ -9,10 +9,13 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.FarmBlock;
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.block.state.properties.Half;
+import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.stateproviders.SimpleStateProvider;
 import net.minecraft.world.level.levelgen.feature.stateproviders.WeightedStateProvider;
@@ -113,21 +116,21 @@ public class StarbleachConversions {
 
         addConversion(AMETHYST_BLOCK, CELESTIAL_OPAL_BLOCK);
         addConversion(BUDDING_AMETHYST, BUDDING_CELESTIAL_OPAL);
-        addClusterConversion(SMALL_AMETHYST_BUD, SMALL_CELESTIAL_OPAL_BUD);
-        addClusterConversion(MEDIUM_AMETHYST_BUD, MEDIUM_CELESTIAL_OPAL_BUD);
-        addClusterConversion(LARGE_AMETHYST_BUD, LARGE_CELESTIAL_OPAL_BUD);
-        addClusterConversion(AMETHYST_CLUSTER, CELESTIAL_OPAL_CLUSTER);
+        addCopyPropertiesConversion(SMALL_AMETHYST_BUD, SMALL_CELESTIAL_OPAL_BUD);
+        addCopyPropertiesConversion(MEDIUM_AMETHYST_BUD, MEDIUM_CELESTIAL_OPAL_BUD);
+        addCopyPropertiesConversion(LARGE_AMETHYST_BUD, LARGE_CELESTIAL_OPAL_BUD);
+        addCopyPropertiesConversion(AMETHYST_CLUSTER, CELESTIAL_OPAL_CLUSTER);
 
         addConversion(OperationStarcleaveBlockTags.SB_I_FELLCRUST, StarbleachConversions::getFellcrustState);
-        addStairsConversion(OperationStarcleaveBlockTags.SB_I_FELLCRUST_STAIRS, FELLCRUST_STAIRS);
-        addSlabConversion(OperationStarcleaveBlockTags.SB_I_FELLCRUST_SLAB, FELLCRUST_SLAB);
-        addWallConversion(OperationStarcleaveBlockTags.SB_I_FELLCRUST_WALL, FELLCRUST_WALL);
+        addConversion(OperationStarcleaveBlockTags.SB_I_FELLCRUST_STAIRS, StarbleachConversions::getFellcrustStairsState);
+        addConversion(OperationStarcleaveBlockTags.SB_I_FELLCRUST_SLAB, StarbleachConversions::getFellcrustSlabState);
+        addConversion(OperationStarcleaveBlockTags.SB_I_FELLCRUST_WALL, StarbleachConversions::getFellcrustWallState);
         addConversion(OperationStarcleaveBlockTags.SB_I_CHISELED_FELLCRUST, CHISELED_FELLCRUST);
         addConversion(OperationStarcleaveBlockTags.SB_I_SMOOTH_FELLCRUST, SMOOTH_FELLCRUST);
-        addStairsConversion(OperationStarcleaveBlockTags.SB_I_SMOOTH_FELLCRUST_STAIRS, SMOOTH_FELLCRUST_STAIRS);
-        addSlabConversion(OperationStarcleaveBlockTags.SB_I_SMOOTH_FELLCRUST_SLAB, SMOOTH_FELLCRUST_SLAB);
+        addCopyPropertiesConversion(OperationStarcleaveBlockTags.SB_I_SMOOTH_FELLCRUST_STAIRS, SMOOTH_FELLCRUST_STAIRS);
+        addCopyPropertiesConversion(OperationStarcleaveBlockTags.SB_I_SMOOTH_FELLCRUST_SLAB, SMOOTH_FELLCRUST_SLAB);
         addConversion(OperationStarcleaveBlockTags.SB_I_CUT_FELLCRUST, CUT_FELLCRUST);
-        addSlabConversion(OperationStarcleaveBlockTags.SB_I_CUT_FELLCRUST_SLAB, CUT_FELLCRUST_SLAB);
+        addCopyPropertiesConversion(OperationStarcleaveBlockTags.SB_I_CUT_FELLCRUST_SLAB, CUT_FELLCRUST_SLAB);
     }
 
     private static void addConversion(StateConversion conversion) {
@@ -171,34 +174,18 @@ public class StarbleachConversions {
         );
     }
 
-    private static void addCopyPropertiesConversion(Block input, Block result, Property<?>... properties) {
+    private static void addCopyPropertiesConversion(Block input, Block result) {
         addConversion(
                 input,
-                (l, p, s, r) -> copyProperties(result, s, properties)
+                (l, p, s, r) -> result.withPropertiesOf(s)
         );
     }
 
-    private static void addCopyPropertiesConversion(TagKey<Block> input, Block result, Property<?>... properties) {
+    private static void addCopyPropertiesConversion(TagKey<Block> input, Block result) {
         addConversion(
                 input,
-                (l, p, s, r) -> copyProperties(result, s, properties)
+                (l, p, s, r) -> result.withPropertiesOf(s)
         );
-    }
-
-    private static void addSlabConversion(TagKey<Block> input, Block result) {
-        addCopyPropertiesConversion(input, result, BlockStateProperties.WATERLOGGED, SlabBlock.TYPE);
-    }
-
-    private static void addStairsConversion(TagKey<Block> input, Block result) {
-        addCopyPropertiesConversion(input, result, BlockStateProperties.WATERLOGGED, StairBlock.FACING, StairBlock.HALF, StairBlock.SHAPE);
-    }
-
-    private static void addWallConversion(TagKey<Block> input, Block result) {
-        addCopyPropertiesConversion(input, result, BlockStateProperties.WATERLOGGED, WallBlock.NORTH_WALL, WallBlock.EAST_WALL, WallBlock.SOUTH_WALL, WallBlock.WEST_WALL, WallBlock.UP);
-    }
-
-    private static void addClusterConversion(Block input, Block result) {
-        addCopyPropertiesConversion(input, result, BlockStateProperties.WATERLOGGED, BlockStateProperties.FACING);
     }
 
     public static BlockState getGrassySedimentState(Level level, BlockPos blockPos, BlockState blockState, RandomSource random) {
@@ -266,7 +253,7 @@ public class StarbleachConversions {
 
     public static BlockState getLogState(Level level, BlockPos blockPos, BlockState blockState, RandomSource random) {
         Block newBlock = isWoodNotLog(blockState) ? STARBLEACHED_WOOD : STARBLEACHED_LOG;
-        return copyProperties(newBlock, blockState, RotatedPillarBlock.AXIS);
+        return newBlock.withPropertiesOf(blockState);
     }
 
     public static BlockState getFarmlandState(Level level, BlockPos blockPos, BlockState blockState, RandomSource random) {
@@ -279,29 +266,31 @@ public class StarbleachConversions {
         }
     }
 
-    public static BlockState getFellcrustState(Level level, BlockPos blockPos, BlockState blockState, RandomSource random) {
+    public static boolean hasFellcrustAbove(Level level, BlockPos blockPos, boolean includeWalls) {
         BlockState upState = level.getBlockState(blockPos.above());
-        Block newBlock = upState.is(OperationStarcleaveBlockTags.SB_I_FELLCRUST) || upState.is(FELLCRUST) || upState.is(COBBLED_FELLCRUST) ? COBBLED_FELLCRUST : FELLCRUST;
+        return upState.is(OperationStarcleaveBlockTags.SB_I_FELLCRUST) || upState.is(FELLCRUST) || upState.is(COBBLED_FELLCRUST)
+                || ((upState.is(OperationStarcleaveBlockTags.SB_I_FELLCRUST_SLAB) || upState.is(FELLCRUST_SLAB) || upState.is(COBBLED_FELLCRUST_SLAB)) && upState.getValue(SlabBlock.TYPE) != SlabType.TOP)
+                || ((upState.is(OperationStarcleaveBlockTags.SB_I_FELLCRUST_STAIRS) || upState.is(FELLCRUST_STAIRS) || upState.is(COBBLED_FELLCRUST_STAIRS)) && upState.getValue(StairBlock.HALF) == Half.BOTTOM)
+                || (includeWalls && (upState.is(OperationStarcleaveBlockTags.SB_I_FELLCRUST_WALL) || upState.is(FELLCRUST_WALL) || upState.is(COBBLED_FELLCRUST_WALL)));
+    }
+
+    public static BlockState getFellcrustState(Level level, BlockPos blockPos, BlockState blockState, RandomSource random) {
+        Block newBlock = hasFellcrustAbove(level, blockPos, false) ? COBBLED_FELLCRUST : FELLCRUST;
         return newBlock.defaultBlockState();
     }
 
-    public static BlockState copyProperties(Block newBlock, BlockState oldState, Property<?>... properties) {
-        return copyProperties(newBlock.defaultBlockState(), oldState, properties);
+    public static BlockState getFellcrustSlabState(Level level, BlockPos blockPos, BlockState blockState, RandomSource random) {
+        Block newBlock = (blockState.hasProperty(SlabBlock.TYPE) && blockState.getValue(SlabBlock.TYPE) == SlabType.BOTTOM) || !hasFellcrustAbove(level, blockPos, false) ? FELLCRUST_SLAB : COBBLED_FELLCRUST_SLAB;
+        return newBlock.withPropertiesOf(blockState);
     }
 
-    public static BlockState copyProperties(BlockState newState, BlockState oldState, Property<?>... properties) {
-        for (Property<?> property : properties) {
-            newState = copyProperty(newState, oldState, property);
-        }
-
-        return newState;
+    public static BlockState getFellcrustStairsState(Level level, BlockPos blockPos, BlockState blockState, RandomSource random) {
+        Block newBlock = (blockState.hasProperty(StairBlock.HALF) && blockState.getValue(StairBlock.HALF) == Half.BOTTOM) || !hasFellcrustAbove(level, blockPos, false) ? FELLCRUST_STAIRS : COBBLED_FELLCRUST_STAIRS;
+        return newBlock.withPropertiesOf(blockState);
     }
 
-    public static <T extends Comparable<T>> BlockState copyProperty(BlockState newState, BlockState oldState, Property<T> property) {
-        if (oldState.getProperties().contains(property)) {
-            newState = newState.setValue(property, oldState.getValue(property));
-        }
-
-        return newState;
+    public static BlockState getFellcrustWallState(Level level, BlockPos blockPos, BlockState blockState, RandomSource random) {
+        Block newBlock = hasFellcrustAbove(level, blockPos, true) ? COBBLED_FELLCRUST_WALL : FELLCRUST_WALL;
+        return newBlock.withPropertiesOf(blockState);
     }
 }
