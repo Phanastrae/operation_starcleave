@@ -9,9 +9,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.FarmBlock;
-import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
@@ -112,12 +110,24 @@ public class StarbleachConversions {
         addConversion(BlockTags.LOGS, StarbleachConversions::getLogState);
         addConversion(FARMLAND, StarbleachConversions::getFarmlandState);
         addConversion(DIRT_PATH, STELLAR_PATH);
+
         addConversion(AMETHYST_BLOCK, CELESTIAL_OPAL_BLOCK);
         addConversion(BUDDING_AMETHYST, BUDDING_CELESTIAL_OPAL);
         addClusterConversion(SMALL_AMETHYST_BUD, SMALL_CELESTIAL_OPAL_BUD);
         addClusterConversion(MEDIUM_AMETHYST_BUD, MEDIUM_CELESTIAL_OPAL_BUD);
         addClusterConversion(LARGE_AMETHYST_BUD, LARGE_CELESTIAL_OPAL_BUD);
         addClusterConversion(AMETHYST_CLUSTER, CELESTIAL_OPAL_CLUSTER);
+
+        addConversion(OperationStarcleaveBlockTags.SB_I_FELLCRUST, StarbleachConversions::getFellcrustState);
+        addStairsConversion(OperationStarcleaveBlockTags.SB_I_FELLCRUST_STAIRS, FELLCRUST_STAIRS);
+        addSlabConversion(OperationStarcleaveBlockTags.SB_I_FELLCRUST_SLAB, FELLCRUST_SLAB);
+        addWallConversion(OperationStarcleaveBlockTags.SB_I_FELLCRUST_WALL, FELLCRUST_WALL);
+        addConversion(OperationStarcleaveBlockTags.SB_I_CHISELED_FELLCRUST, CHISELED_FELLCRUST);
+        addConversion(OperationStarcleaveBlockTags.SB_I_SMOOTH_FELLCRUST, SMOOTH_FELLCRUST);
+        addStairsConversion(OperationStarcleaveBlockTags.SB_I_SMOOTH_FELLCRUST_STAIRS, SMOOTH_FELLCRUST_STAIRS);
+        addSlabConversion(OperationStarcleaveBlockTags.SB_I_SMOOTH_FELLCRUST_SLAB, SMOOTH_FELLCRUST_SLAB);
+        addConversion(OperationStarcleaveBlockTags.SB_I_CUT_FELLCRUST, CUT_FELLCRUST);
+        addSlabConversion(OperationStarcleaveBlockTags.SB_I_CUT_FELLCRUST_SLAB, CUT_FELLCRUST_SLAB);
     }
 
     private static void addConversion(StateConversion conversion) {
@@ -143,6 +153,10 @@ public class StarbleachConversions {
         addConversion(StateMatchesPredicate.fromBlock(input), result);
     }
 
+    private static void addConversion(TagKey<Block> input, Block result) {
+        addConversion(StateMatchesPredicate.fromBlockTag(input), result);
+    }
+
     private static void addConversion(Block input, StateConversion.ConversionStateProvider provider) {
         addConversion(
                 StateMatchesPredicate.fromBlock(input),
@@ -157,11 +171,34 @@ public class StarbleachConversions {
         );
     }
 
-    private static void addClusterConversion(Block input, Block result) {
+    private static void addCopyPropertiesConversion(Block input, Block result, Property<?>... properties) {
         addConversion(
                 input,
-                (l, p, s, r) -> copyProperties(result, s, BlockStateProperties.WATERLOGGED, BlockStateProperties.FACING)
+                (l, p, s, r) -> copyProperties(result, s, properties)
         );
+    }
+
+    private static void addCopyPropertiesConversion(TagKey<Block> input, Block result, Property<?>... properties) {
+        addConversion(
+                input,
+                (l, p, s, r) -> copyProperties(result, s, properties)
+        );
+    }
+
+    private static void addSlabConversion(TagKey<Block> input, Block result) {
+        addCopyPropertiesConversion(input, result, BlockStateProperties.WATERLOGGED, SlabBlock.TYPE);
+    }
+
+    private static void addStairsConversion(TagKey<Block> input, Block result) {
+        addCopyPropertiesConversion(input, result, BlockStateProperties.WATERLOGGED, StairBlock.FACING, StairBlock.HALF, StairBlock.SHAPE);
+    }
+
+    private static void addWallConversion(TagKey<Block> input, Block result) {
+        addCopyPropertiesConversion(input, result, BlockStateProperties.WATERLOGGED, WallBlock.NORTH_WALL, WallBlock.EAST_WALL, WallBlock.SOUTH_WALL, WallBlock.WEST_WALL, WallBlock.UP);
+    }
+
+    private static void addClusterConversion(Block input, Block result) {
+        addCopyPropertiesConversion(input, result, BlockStateProperties.WATERLOGGED, BlockStateProperties.FACING);
     }
 
     public static BlockState getGrassySedimentState(Level level, BlockPos blockPos, BlockState blockState, RandomSource random) {
@@ -240,6 +277,12 @@ public class StarbleachConversions {
         } else {
             return farmland;
         }
+    }
+
+    public static BlockState getFellcrustState(Level level, BlockPos blockPos, BlockState blockState, RandomSource random) {
+        BlockState upState = level.getBlockState(blockPos.above());
+        Block newBlock = upState.is(OperationStarcleaveBlockTags.SB_I_FELLCRUST) || upState.is(FELLCRUST) || upState.is(COBBLED_FELLCRUST) ? COBBLED_FELLCRUST : FELLCRUST;
+        return newBlock.defaultBlockState();
     }
 
     public static BlockState copyProperties(Block newBlock, BlockState oldState, Property<?>... properties) {
