@@ -5,21 +5,21 @@
   "refmap": "${mod_id}.refmap.json",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "BismuthBlasterItemMixin",
-    "ClipContextMixin",
-    "CropBlockMixin",
-    "EntityMixin",
-    "FluidStorageUtilMixin",
-    "ItemStackMixin",
-    "LivingEntityMixin",
-    "client.ModelTemplateAccessor",
-    "client.TextureMappingAccessor"
+    "common.ClipContextMixin",
+    "common.CropBlockMixin",
+    "common.EntityMixin",
+    "common.ItemStackMixin",
+    "common.LivingEntityMixin",
+    "common.fabric.FluidStorageUtilMixin",
+    "common.operation_starcleave.BismuthBlasterItemMixin",
+    "datagen.BlockModelGeneratorsMixin",
+    "datagen.accessor.BlockFamilyProviderAccessor",
+    "datagen.accessor.ModelTemplateAccessor",
+    "datagen.accessor.TextureMappingAccessor"
   ],
   "client": [
     "client.FogRendererMixin",
-    "client.ScreenEffectRendererMixin",
-    "client.datagen.BlockFamilyProviderAccessor",
-    "client.datagen.BlockModelGeneratorsMixin"
+    "client.ScreenEffectRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

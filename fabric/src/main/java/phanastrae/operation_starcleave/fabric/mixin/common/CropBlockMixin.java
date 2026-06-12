@@ -1,7 +1,8 @@
-package phanastrae.operation_starcleave.neoforge.mixin;
+package phanastrae.operation_starcleave.fabric.mixin.common;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -15,7 +16,7 @@ import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 public class CropBlockMixin {
 
     @Inject(method = "getGrowthSpeed", at = @At("HEAD"), cancellable = true)
-    private static void operation_starcleave$getAvailableMoisture(BlockState blockState, BlockGetter world, BlockPos pos, CallbackInfoReturnable<Float> cir) {
+    private static void operation_starcleave$getAvailableMoisture(Block block, BlockGetter world, BlockPos pos, CallbackInfoReturnable<Float> cir) {
         BlockState state = world.getBlockState(pos.below());
         if(state.is(OperationStarcleaveBlocks.STELLAR_FARMLAND)) {
             if(state.getValue(FarmBlock.MOISTURE) < 7) {

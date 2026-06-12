@@ -1,4 +1,4 @@
-package phanastrae.operation_starcleave.fabric.mixin.client.datagen;
+package phanastrae.operation_starcleave.fabric.mixin.datagen.accessor;
 
 import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraft.world.level.block.Block;

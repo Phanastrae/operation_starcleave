@@ -1,4 +1,4 @@
-package phanastrae.operation_starcleave.fabric.mixin;
+package phanastrae.operation_starcleave.fabric.mixin.common;
 
 import com.google.common.util.concurrent.AtomicDouble;
 import com.llamalad7.mixinextras.sugar.Local;

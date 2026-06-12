@@ -1,4 +1,4 @@
-package phanastrae.operation_starcleave.neoforge.mixin;
+package phanastrae.operation_starcleave.neoforge.mixin.common.neoforge;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.sounds.SoundSource;

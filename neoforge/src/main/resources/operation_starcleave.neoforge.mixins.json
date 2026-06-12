@@ -4,11 +4,11 @@
   "package": "phanastrae.operation_starcleave.neoforge.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "BismuthBlasterItemMixin",
-    "CropBlockMixin",
-    "FluidUtilMixin",
-    "PetrichoricPlasmaFluidMixin",
-    "StarbleachFluidMixin"
+    "common.CropBlockMixin",
+    "common.neoforge.FluidUtilMixin",
+    "common.operation_starcleave.BismuthBlasterItemMixin",
+    "common.operation_starcleave.PetrichoricPlasmaFluidMixin",
+    "common.operation_starcleave.StarbleachFluidMixin"
   ],
   "client": [
   ],

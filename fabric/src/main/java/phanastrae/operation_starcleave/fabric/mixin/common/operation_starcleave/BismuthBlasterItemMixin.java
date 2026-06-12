@@ -1,4 +1,4 @@
-package phanastrae.operation_starcleave.fabric.mixin;
+package phanastrae.operation_starcleave.fabric.mixin.common.operation_starcleave;
 
 import net.fabricmc.fabric.api.item.v1.EnchantingContext;
 import net.fabricmc.fabric.api.item.v1.FabricItem;

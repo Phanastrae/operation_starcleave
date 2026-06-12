@@ -1,4 +1,4 @@
-package phanastrae.operation_starcleave.fabric.mixin.client;
+package phanastrae.operation_starcleave.fabric.mixin.datagen.accessor;
 
 import net.minecraft.data.models.model.ModelTemplate;
 import org.spongepowered.asm.mixin.Mixin;

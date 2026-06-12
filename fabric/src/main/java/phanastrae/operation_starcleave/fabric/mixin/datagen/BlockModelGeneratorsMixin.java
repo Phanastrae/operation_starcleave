@@ -1,4 +1,4 @@
-package phanastrae.operation_starcleave.fabric.mixin.client.datagen;
+package phanastrae.operation_starcleave.fabric.mixin.datagen;
 
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.data.models.BlockModelGenerators;

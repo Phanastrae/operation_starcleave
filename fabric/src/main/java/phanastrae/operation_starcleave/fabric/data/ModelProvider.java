@@ -20,9 +20,9 @@ import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.block.StarbleachCauldronBlock;
 import phanastrae.operation_starcleave.block.StarbleachedPearlBlock;
 import phanastrae.operation_starcleave.data.OperationStarcleaveBlockFamilies;
-import phanastrae.operation_starcleave.fabric.mixin.client.ModelTemplateAccessor;
-import phanastrae.operation_starcleave.fabric.mixin.client.TextureMappingAccessor;
-import phanastrae.operation_starcleave.fabric.mixin.client.datagen.BlockFamilyProviderAccessor;
+import phanastrae.operation_starcleave.fabric.mixin.datagen.accessor.BlockFamilyProviderAccessor;
+import phanastrae.operation_starcleave.fabric.mixin.datagen.accessor.ModelTemplateAccessor;
+import phanastrae.operation_starcleave.fabric.mixin.datagen.accessor.TextureMappingAccessor;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 
 import java.util.List;

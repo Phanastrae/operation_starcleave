@@ -1,4 +1,4 @@
-package phanastrae.operation_starcleave.neoforge.mixin;
+package phanastrae.operation_starcleave.neoforge.mixin.common.operation_starcleave;
 
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.ItemStack;

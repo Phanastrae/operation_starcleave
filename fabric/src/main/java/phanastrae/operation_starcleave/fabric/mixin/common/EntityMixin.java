@@ -1,4 +1,4 @@
-package phanastrae.operation_starcleave.fabric.mixin;
+package phanastrae.operation_starcleave.fabric.mixin.common;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;

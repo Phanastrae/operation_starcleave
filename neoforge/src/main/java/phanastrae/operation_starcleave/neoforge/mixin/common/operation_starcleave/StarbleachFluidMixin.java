@@ -1,4 +1,4 @@
-package phanastrae.operation_starcleave.neoforge.mixin;
+package phanastrae.operation_starcleave.neoforge.mixin.common.operation_starcleave;
 
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.common.extensions.IFluidExtension;

@@ -1,4 +1,4 @@
-package phanastrae.operation_starcleave.fabric.mixin;
+package phanastrae.operation_starcleave.fabric.mixin.common;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
