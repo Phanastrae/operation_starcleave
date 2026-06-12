@@ -1,7 +1,7 @@
 {
   "parent": "operation_starcleave:block/template_sided_wall_post",
   "textures": {
-    "bottom": "operation_starcleave:block/cut_fellcrust_bottom",
+    "bottom": "operation_starcleave:block/cut_polished_fellcrust",
     "side": "operation_starcleave:block/cut_fellcrust",
     "top": "operation_starcleave:block/fellcrust_top"
   }

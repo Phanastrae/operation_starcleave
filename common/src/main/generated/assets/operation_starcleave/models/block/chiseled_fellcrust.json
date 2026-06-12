@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/cube_bottom_top",
   "textures": {
-    "bottom": "operation_starcleave:block/cut_fellcrust_bottom",
+    "bottom": "operation_starcleave:block/cut_polished_fellcrust",
     "side": "operation_starcleave:block/chiseled_fellcrust",
     "top": "operation_starcleave:block/fellcrust_top"
   }

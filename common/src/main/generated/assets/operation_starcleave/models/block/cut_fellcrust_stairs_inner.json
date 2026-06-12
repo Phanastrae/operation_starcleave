@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/inner_stairs",
   "textures": {
-    "bottom": "operation_starcleave:block/cut_fellcrust_bottom",
+    "bottom": "operation_starcleave:block/cut_polished_fellcrust",
     "side": "operation_starcleave:block/cut_fellcrust",
     "top": "operation_starcleave:block/fellcrust_top"
   }
