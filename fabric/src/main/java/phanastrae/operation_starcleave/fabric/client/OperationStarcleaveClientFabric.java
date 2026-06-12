@@ -3,6 +3,7 @@ package phanastrae.operation_starcleave.fabric.client;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.CoreShaderRegistrationCallback;
@@ -10,6 +11,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -20,10 +22,12 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import phanastrae.operation_starcleave.client.OperationStarcleaveClient;
 import phanastrae.operation_starcleave.client.particle.OperationStarcleaveParticles;
+import phanastrae.operation_starcleave.client.render.block.BlockAoOverides;
 import phanastrae.operation_starcleave.client.render.entity.OperationStarcleaveEntityRenderers;
 import phanastrae.operation_starcleave.client.render.entity.model.OperationStarcleaveEntityModelLayers;
 import phanastrae.operation_starcleave.client.render.shader.OperationStarcleaveShaders;
 import phanastrae.operation_starcleave.fabric.client.fluid.OperationStarcleaveFluidRenderHandlers;
+import phanastrae.operation_starcleave.fabric.client.renderer.ForceAoBakedModel;
 import phanastrae.operation_starcleave.network.packet.OperationStarcleavePayloads;
 
 import java.util.function.BiConsumer;
@@ -57,6 +61,10 @@ public class OperationStarcleaveClientFabric implements ClientModInitializer {
 
         // fluid rendering
         OperationStarcleaveFluidRenderHandlers.init();
+
+
+        // setup model loading
+        setupModelLoading();
 
 
         // on client stop
@@ -104,5 +112,16 @@ public class OperationStarcleaveClientFabric implements ClientModInitializer {
 
     public <E extends Entity> void registerEntityRenderer(EntityType<? extends E> entityType, EntityRendererProvider<E> entityRendererFactory) {
         EntityRendererRegistry.register(entityType, entityRendererFactory);
+    }
+
+    public void setupModelLoading() {
+        ModelLoadingPlugin.register(pluginContext -> pluginContext.modifyModelAfterBake().register((original, context) -> {
+            ModelResourceLocation location = context.topLevelId();
+            if (original != null && location != null && (BlockAoOverides.MODELS_TO_OVERRIDE.contains(location))) {
+                return new ForceAoBakedModel(original);
+            } else {
+                return original;
+            }
+        }));
     }
 }

@@ -7,21 +7,25 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.client.renderer.culling.Frustum;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
-import net.neoforged.neoforge.client.event.RegisterShadersEvent;
-import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+import net.neoforged.neoforge.client.model.BakedModelWrapper;
+import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.neoforge.event.GameShuttingDownEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import org.joml.Matrix4f;
@@ -29,6 +33,7 @@ import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.client.OperationStarcleaveClient;
 import phanastrae.operation_starcleave.client.compat.ClientCompat;
 import phanastrae.operation_starcleave.client.particle.OperationStarcleaveParticles;
+import phanastrae.operation_starcleave.client.render.block.BlockAoOverides;
 import phanastrae.operation_starcleave.client.render.entity.OperationStarcleaveEntityRenderers;
 import phanastrae.operation_starcleave.client.render.entity.model.OperationStarcleaveEntityModelLayers;
 import phanastrae.operation_starcleave.client.render.shader.OperationStarcleaveShaders;
@@ -37,6 +42,7 @@ import phanastrae.operation_starcleave.neoforge.client.fluid.OperationStarcleave
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.Map;
 
 import static net.neoforged.neoforge.client.event.RenderLevelStageEvent.Stage.*;
 
@@ -69,6 +75,9 @@ public class OperationStarcleaveClientNeoForge {
 
         // register client extensions
         modEventBus.addListener(this::registerClientExtensions);
+
+        // setup model loading
+        modEventBus.addListener(this::setupModelLoading);
     }
 
     public void setupGameBusEvents(IEventBus gameEventBus) {
@@ -115,6 +124,24 @@ public class OperationStarcleaveClientNeoForge {
 
     public void registerClientExtensions(RegisterClientExtensionsEvent event) {
         OperationStarcleaveFluidTypeExtensions.init(event::registerFluidType);
+    }
+
+    public void setupModelLoading(ModelEvent.ModifyBakingResult event) {
+        Map<ModelResourceLocation, BakedModel> map = event.getModels();
+        for (ModelResourceLocation location : BlockAoOverides.MODELS_TO_OVERRIDE) {
+            if (map.containsKey(location)) {
+                BakedModel model = map.remove(location);
+                BakedModel newModel = new BakedModelWrapper<>(model) {
+                    @Override
+                    public TriState useAmbientOcclusion(BlockState state, ModelData data, RenderType renderType) {
+                        return TriState.TRUE;
+                    }
+                };
+                map.put(location, newModel);
+            } else {
+                OperationStarcleave.LOGGER.warn("Failed to find block model at location {}", location);
+            }
+        }
     }
 
     public void onGameShutdown(GameShuttingDownEvent event) {

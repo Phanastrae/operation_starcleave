@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import phanastrae.operation_starcleave.client.compat.ClientCompat;
 import phanastrae.operation_starcleave.client.render.ScreenShakeManager;
+import phanastrae.operation_starcleave.client.render.block.BlockAoOverides;
 import phanastrae.operation_starcleave.client.render.block.OperationStarcleaveBlockRenderTypes;
 import phanastrae.operation_starcleave.client.render.block.entity.OperationStarcleaveBlockEntityRenderers;
 import phanastrae.operation_starcleave.client.render.extras_baking.RenderExtras;
@@ -32,6 +33,8 @@ public class OperationStarcleaveClient {
 
         // register block entity renderers
         OperationStarcleaveBlockEntityRenderers.init();
+
+        BlockAoOverides.init();
     }
 
     public static void renderBeforeEntities(Level level, Camera camera, Frustum frustum, LevelRenderer levelRenderer, Matrix4f projectionMatrix, Matrix4f positionMatrix) {
