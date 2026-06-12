@@ -458,7 +458,7 @@ public class OperationStarcleaveBlocks {
 
     public static final Block STELLAR_TILES = register(
             "stellar_tiles",
-            new Block(properties()
+            new StellarTilesBlock(properties()
                     .strength(1.75F, 6F)
                     .mapColor(COLOR_PURPLE)
                     .sound(SoundType.DEEPSLATE)
@@ -468,7 +468,7 @@ public class OperationStarcleaveBlocks {
     );
     public static final Block STELLAR_TILE_SLAB = register(
             "stellar_tile_slab",
-            slabOf(STELLAR_TILES)
+            slabOf(STELLAR_TILES, StellarTileSlabBlock::new)
     );
 
     public static final Block STELLAR_REPULSOR = register(

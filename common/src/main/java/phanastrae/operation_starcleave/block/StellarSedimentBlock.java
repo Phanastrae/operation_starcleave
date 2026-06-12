@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -46,5 +47,10 @@ public class StellarSedimentBlock extends Block implements BonemealableBlock {
                 .registry(Registries.CONFIGURED_FEATURE)
                 .flatMap(feature -> feature.getHolder(OperationStarcleaveVegetationFeatures.SMALL_STELLAR_MULCH_PATCH_BONEMEAL))
                 .ifPresent(feature -> feature.value().place(level, level.getChunkSource().getGenerator(), random, pos.above()));
+    }
+
+    @Override
+    protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
+        return 0.8F;
     }
 }

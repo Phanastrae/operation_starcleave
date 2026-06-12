@@ -103,4 +103,9 @@ public class StarbleachedLeavesBlock extends FallingBlock implements SimpleWater
     public int getDustColor(BlockState state, BlockGetter world, BlockPos pos) {
         return 0xEF9FCFFF;
     }
+
+    @Override
+    protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
+        return 0.6F;
+    }
 }

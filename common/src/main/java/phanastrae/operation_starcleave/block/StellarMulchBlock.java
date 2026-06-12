@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -44,5 +45,10 @@ public class StellarMulchBlock extends StellarSedimentBlock {
                 .registry(Registries.CONFIGURED_FEATURE)
                 .flatMap(feature -> feature.getHolder(OperationStarcleaveVegetationFeatures.STELLAR_MULCH_PATCH_BONEMEAL))
                 .ifPresent(feature -> feature.value().place(level, level.getChunkSource().getGenerator(), random, pos.above()));
+    }
+
+    @Override
+    protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
+        return 0.7F;
     }
 }
