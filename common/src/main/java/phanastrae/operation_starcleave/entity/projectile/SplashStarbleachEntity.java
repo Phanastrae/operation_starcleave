@@ -15,17 +15,22 @@ import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
+import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityAttachment;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
 import phanastrae.operation_starcleave.entity.StarbleachChargeEntity;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 import phanastrae.operation_starcleave.world.starbleach.Starbleach;
 
+import java.util.function.Predicate;
+
 public class SplashStarbleachEntity extends ThrowableItemProjectile implements ItemSupplier {
+    public static final Predicate<LivingEntity> ON_PHLOGISTIC_FIRE = entity -> OperationStarcleaveEntityAttachment.fromEntity(entity).getPhlogisticFireTicks() > 0;
 
     private boolean canStarbleach = false;
 
@@ -98,16 +103,20 @@ public class SplashStarbleachEntity extends ThrowableItemProjectile implements I
         super.onHit(hitResult);
         Level level = this.level();
         if (!level.isClientSide && level instanceof ServerLevel serverLevel) {
+            applyStarbleach();
+
             BlockPos pos;
             if (hitResult instanceof BlockHitResult blockHitResult) {
                 pos = blockHitResult.getBlockPos();
             } else {
                 pos = BlockPos.containing(hitResult.getLocation());
             }
+
             if (this.canStarbleach) {
                 starbleach(pos, serverLevel);
             }
             createStarbleachEffects(pos, serverLevel);
+
             this.discard();
         }
     }
@@ -122,6 +131,23 @@ public class SplashStarbleachEntity extends ThrowableItemProjectile implements I
             this.extinguishFire(blockPos.relative(direction.getOpposite()));
             for (Direction direction2 : Direction.Plane.HORIZONTAL) {
                 this.extinguishFire(blockPos.relative(direction2));
+            }
+        }
+    }
+
+    private void applyStarbleach() {
+        AABB aabb = this.getBoundingBox().inflate(4.0, 2.0, 4.0);
+
+        for (LivingEntity entity : this.level().getEntitiesOfClass(LivingEntity.class, aabb, ON_PHLOGISTIC_FIRE)) {
+            double distSqr = this.distanceToSqr(entity);
+            if (distSqr < 16.0) {
+                OperationStarcleaveEntityAttachment osea = OperationStarcleaveEntityAttachment.fromEntity(entity);
+                if (entity.isAlive()) {
+                    RandomSource random = entity.getRandom();
+                    entity.playSound(SoundEvents.GENERIC_EXTINGUISH_FIRE, 0.7F, 1.6F + (random.nextFloat() - random.nextFloat()) * 0.4F);
+
+                    osea.setPhlogisticFireTicks(0);
+                }
             }
         }
     }
