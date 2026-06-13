@@ -96,16 +96,18 @@ public class SplashStarbleachEntity extends ThrowableItemProjectile implements I
     @Override
     protected void onHit(HitResult hitResult) {
         super.onHit(hitResult);
-        if (!this.level().isClientSide) {
-            if (this.canStarbleach) {
-                BlockPos pos;
-                if (hitResult instanceof BlockHitResult blockHitResult) {
-                    pos = blockHitResult.getBlockPos();
-                } else {
-                    pos = BlockPos.containing(hitResult.getLocation());
-                }
-                starbleach(pos, this.level());
+        Level level = this.level();
+        if (!level.isClientSide && level instanceof ServerLevel serverLevel) {
+            BlockPos pos;
+            if (hitResult instanceof BlockHitResult blockHitResult) {
+                pos = blockHitResult.getBlockPos();
+            } else {
+                pos = BlockPos.containing(hitResult.getLocation());
             }
+            if (this.canStarbleach) {
+                starbleach(pos, serverLevel);
+            }
+            createStarbleachEffects(pos, serverLevel);
             this.discard();
         }
     }
@@ -131,43 +133,44 @@ public class SplashStarbleachEntity extends ThrowableItemProjectile implements I
         }
     }
 
-    public static void starbleach(BlockPos blockPos, Level level) {
-        if (level instanceof ServerLevel serverLevel) {
-            // directly bleach aoe
-            BlockPos.MutableBlockPos blockPosMutable = new BlockPos.MutableBlockPos();
-            for (int i = -2; i <= 2; i++) {
-                for (int j = -1; j <= 1; j++) {
-                    for (int k = -2; k <= 2; k++) {
-                        if (i * i + j * j + k * k >= 6) continue;
-                        blockPosMutable.set(blockPos.getX() + i, blockPos.getY() + j, blockPos.getZ() + k);
-                        Starbleach.starbleachPos(serverLevel, blockPosMutable, serverLevel.getBlockState(blockPosMutable), Starbleach.StarbleachTarget.NO_FILLING, 20);
-                    }
+    public static void starbleach(BlockPos blockPos, ServerLevel level) {
+        // directly bleach aoe
+        BlockPos.MutableBlockPos blockPosMutable = new BlockPos.MutableBlockPos();
+        for (int i = -2; i <= 2; i++) {
+            for (int j = -1; j <= 1; j++) {
+                for (int k = -2; k <= 2; k++) {
+                    if (i * i + j * j + k * k >= 6) continue;
+                    blockPosMutable.set(blockPos.getX() + i, blockPos.getY() + j, blockPos.getZ() + k);
+                    Starbleach.starbleachPos(level, blockPosMutable, level.getBlockState(blockPosMutable), Starbleach.StarbleachTarget.NO_FILLING, 20);
                 }
             }
-            // spawn charges
-            for (int i = 0; i < 7; i++) {
-                StarbleachChargeEntity charge = Starbleach.spawnCharge(serverLevel, blockPos, 14 + 2 * i * i);
-                if (charge != null) {
-                    charge.setDelay(level.getRandom().nextIntBetweenInclusive(2, 8));
-                }
-            }
-
-            double x = blockPos.getX() + 0.5;
-            double y = blockPos.getY() + 0.5;
-            double z = blockPos.getZ() + 0.5;
-            serverLevel.sendParticles(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER, x, y, z,
-                    60,
-                    1, 0.5, 1,
-                    0.02
-            );
-            serverLevel.sendParticles(OperationStarcleaveParticleTypes.STARBLEACH_SWIRL, x, y, z,
-                    25,
-                    0.7, 0.5, 0.7,
-                    0.08
-            );
-
-            level.playSeededSound(null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), SoundEvents.SPLASH_POTION_BREAK, SoundSource.BLOCKS, 2f, 1.2F + 0.3F * level.random.nextFloat(), level.random.nextLong());
         }
+        // spawn charges
+        for (int i = 0; i < 7; i++) {
+            StarbleachChargeEntity charge = Starbleach.spawnCharge(level, blockPos, 14 + 2 * i * i);
+            if (charge != null) {
+                charge.setDelay(level.getRandom().nextIntBetweenInclusive(2, 8));
+            }
+        }
+    }
+
+    public static void createStarbleachEffects(BlockPos blockPos, ServerLevel level) {
+        double x = blockPos.getX() + 0.5;
+        double y = blockPos.getY() + 0.5;
+        double z = blockPos.getZ() + 0.5;
+
+        level.sendParticles(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER, x, y, z,
+                60,
+                1, 0.5, 1,
+                0.02
+        );
+        level.sendParticles(OperationStarcleaveParticleTypes.STARBLEACH_SWIRL, x, y, z,
+                25,
+                0.7, 0.5, 0.7,
+                0.08
+        );
+
+        level.playSeededSound(null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), SoundEvents.SPLASH_POTION_BREAK, SoundSource.BLOCKS, 2f, 1.2F + 0.3F * level.random.nextFloat(), level.random.nextLong());
     }
 
     public void setCanStarbleach(boolean canStarbleach) {

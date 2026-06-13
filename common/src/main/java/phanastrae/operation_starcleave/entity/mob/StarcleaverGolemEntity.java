@@ -239,7 +239,7 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
             }
 
             if (this.isPlummeting()) {
-                if (!level.isClientSide) {
+                if (!level.isClientSide && level instanceof ServerLevel serverLevel) {
                     if (this.onGround()) {
                         this.setPlummeting(false);
                         level.explode(this, this.getX(), this.getY(), this.getZ(), 3, Level.ExplosionInteraction.MOB);
@@ -247,7 +247,7 @@ public class StarcleaverGolemEntity extends AbstractGolem implements Bucketable 
                         if (this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
                             for (int i = 0; i < 6; i++) {
                                 BlockPos pos = this.blockPosition().offset(random.nextInt(7) - 3, random.nextInt(7) - 3, random.nextInt(7) - 3);
-                                SplashStarbleachEntity.starbleach(pos, this.level());
+                                SplashStarbleachEntity.starbleach(pos, serverLevel);
                             }
                         }
                     }

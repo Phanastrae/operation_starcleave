@@ -5,6 +5,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
@@ -264,15 +265,16 @@ public class SubcaelicTorpedoEntity extends AbstractSubcaelicEntity {
     }
 
     public void explode() {
-        if (!this.level().isClientSide) {
+        Level level = this.level();
+        if (!level.isClientSide && level instanceof ServerLevel serverLevel) {
             this.dead = true;
             LivingEntity attacker = (this.dux != null && !this.dux.isRemoved()) ? this.dux : this;
-            this.level().explode(attacker, this.getX(), this.getY() + this.getBbHeight() / 2, this.getZ(), 1.5f, Level.ExplosionInteraction.NONE);
-            StarbleachedPearlEntity.doRepulsion(this.position(), 4f, 2.0f, this.level(), this, EntitySelector.NO_SPECTATORS.and((entity -> !(entity instanceof AbstractSubcaelicEntity))));
-            if (this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && this.getTarget() instanceof Player) {
-                SplashStarbleachEntity.starbleach(blockPosition(), this.level());
+            level.explode(attacker, this.getX(), this.getY() + this.getBbHeight() / 2, this.getZ(), 1.5f, Level.ExplosionInteraction.NONE);
+            StarbleachedPearlEntity.doRepulsion(this.position(), 4f, 2.0f, level, this, EntitySelector.NO_SPECTATORS.and((entity -> !(entity instanceof AbstractSubcaelicEntity))));
+            if (level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && this.getTarget() instanceof Player) {
+                SplashStarbleachEntity.starbleach(blockPosition(), serverLevel);
             }
-            this.level().broadcastEntityEvent(this, EntityEvent.FIREWORKS_EXPLODE);
+            level.broadcastEntityEvent(this, EntityEvent.FIREWORKS_EXPLODE);
             this.discard();
         }
     }
