@@ -1,7 +1,6 @@
 package phanastrae.operation_starcleave.entity.projectile;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
@@ -105,33 +104,23 @@ public class SplashStarbleachEntity extends ThrowableItemProjectile implements I
         if (!level.isClientSide && level instanceof ServerLevel serverLevel) {
             applyStarbleach();
 
-            BlockPos pos;
-            if (hitResult instanceof BlockHitResult blockHitResult) {
-                pos = blockHitResult.getBlockPos();
-            } else {
-                pos = BlockPos.containing(hitResult.getLocation());
-            }
-
             if (this.canStarbleach) {
-                starbleach(pos, serverLevel);
+                BlockPos starbleachPos;
+                BlockPos extinguishPos;
+                if (hitResult instanceof BlockHitResult blockHitResult) {
+                    starbleachPos = blockHitResult.getBlockPos();
+                    extinguishPos = starbleachPos.offset(blockHitResult.getDirection().getNormal());
+                } else {
+                    starbleachPos = BlockPos.containing(hitResult.getLocation());
+                    extinguishPos = starbleachPos;
+                }
+
+                starbleach(starbleachPos, serverLevel);
+                extinguishFire(extinguishPos);
             }
-            createStarbleachEffects(pos, serverLevel);
+            createStarbleachEffects(hitResult.getLocation(), serverLevel);
 
             this.discard();
-        }
-    }
-
-    @Override
-    protected void onHitBlock(BlockHitResult blockHitResult) {
-        super.onHitBlock(blockHitResult);
-        if (!this.level().isClientSide) {
-            Direction direction = blockHitResult.getDirection();
-            BlockPos blockPos = blockHitResult.getBlockPos().relative(direction);
-            this.extinguishFire(blockPos);
-            this.extinguishFire(blockPos.relative(direction.getOpposite()));
-            for (Direction direction2 : Direction.Plane.HORIZONTAL) {
-                this.extinguishFire(blockPos.relative(direction2));
-            }
         }
     }
 
@@ -153,9 +142,14 @@ public class SplashStarbleachEntity extends ThrowableItemProjectile implements I
     }
 
     private void extinguishFire(BlockPos pos) {
-        BlockState blockState = this.level().getBlockState(pos);
-        if (blockState.is(OperationStarcleaveBlocks.PHLOGISTIC_FIRE)) {
-            this.level().destroyBlock(pos, false, this);
+        Level level = this.level();
+        for (BlockPos targetPos : BlockPos.betweenClosed(pos.offset(-2, -1, -2), pos.offset(2, 1, 2))) {
+            if (pos.distSqr(targetPos) < 16.0) {
+                BlockState blockState = level.getBlockState(targetPos);
+                if (blockState.is(OperationStarcleaveBlocks.PHLOGISTIC_FIRE)) {
+                    level.destroyBlock(targetPos, false, this);
+                }
+            }
         }
     }
 
@@ -180,23 +174,19 @@ public class SplashStarbleachEntity extends ThrowableItemProjectile implements I
         }
     }
 
-    public static void createStarbleachEffects(BlockPos blockPos, ServerLevel level) {
-        double x = blockPos.getX() + 0.5;
-        double y = blockPos.getY() + 0.5;
-        double z = blockPos.getZ() + 0.5;
-
-        level.sendParticles(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER, x, y, z,
+    public static void createStarbleachEffects(Vec3 pos, ServerLevel level) {
+        level.sendParticles(OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER, pos.x, pos.y, pos.z,
                 60,
                 1, 0.5, 1,
                 0.02
         );
-        level.sendParticles(OperationStarcleaveParticleTypes.STARBLEACH_SWIRL, x, y, z,
+        level.sendParticles(OperationStarcleaveParticleTypes.STARBLEACH_SWIRL, pos.x, pos.y, pos.z,
                 25,
                 0.7, 0.5, 0.7,
                 0.08
         );
 
-        level.playSeededSound(null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), SoundEvents.SPLASH_POTION_BREAK, SoundSource.BLOCKS, 2f, 1.2F + 0.3F * level.random.nextFloat(), level.random.nextLong());
+        level.playSeededSound(null, pos.x, pos.y, pos.z, SoundEvents.SPLASH_POTION_BREAK, SoundSource.BLOCKS, 2f, 1.2F + 0.3F * level.random.nextFloat(), level.random.nextLong());
     }
 
     public void setCanStarbleach(boolean canStarbleach) {
