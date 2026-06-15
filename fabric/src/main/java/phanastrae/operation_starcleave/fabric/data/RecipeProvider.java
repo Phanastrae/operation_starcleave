@@ -68,6 +68,7 @@ public class RecipeProvider extends FabricRecipeProvider {
 
         twoByTwoPacker(exporter, RecipeCategory.MISC, BLESSED_CLOTH, HOLY_STRANDS);
         twoByTwoPacker(exporter, RecipeCategory.BUILDING_BLOCKS, BLESSED_CLOTH_BLOCK, BLESSED_CLOTH, 2);
+        twoByTwoPacker(exporter, RecipeCategory.BUILDING_BLOCKS, BLESSED_CLOTH_PADDING, BLESSED_CLOTH_BLOCK, 4);
         twoByTwoPacker(exporter, RecipeCategory.BUILDING_BLOCKS, STARDUST_BLOCK, STARDUST_CLUSTER);
 
         twoByTwoPacker(exporter, RecipeCategory.BUILDING_BLOCKS, STARFLAKED_BISMUTH_BLOCK, STARFLAKED_BISMUTH);
@@ -84,6 +85,7 @@ public class RecipeProvider extends FabricRecipeProvider {
         savePolished(STELLAR_TILES, STELLAR_SEDIMENT, exporter);
 
         carpet(exporter, BLESSED_CLOTH_CARPET, BLESSED_CLOTH_BLOCK);
+        carpet(exporter, BLESSED_CLOTH_CARPET_PADDING, BLESSED_CLOTH_PADDING);
 
         twoByTwoPacker(exporter, RecipeCategory.BUILDING_BLOCKS, CELESTIAL_OPAL_BLOCK, CELESTIAL_OPAL_SHARD);
 

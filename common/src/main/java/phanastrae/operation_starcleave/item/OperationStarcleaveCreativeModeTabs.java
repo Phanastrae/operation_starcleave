@@ -100,6 +100,8 @@ public class OperationStarcleaveCreativeModeTabs {
 
                 BLESSED_CLOTH_BLOCK,
                 BLESSED_CLOTH_CARPET,
+                BLESSED_CLOTH_PADDING,
+                BLESSED_CLOTH_CARPET_PADDING,
                 BLESSED_CLOTH_CURTAIN,
 
                 BLESSED_BED,
@@ -345,8 +347,11 @@ public class OperationStarcleaveCreativeModeTabs {
 
                 STELLAR_TILES,
                 STELLAR_TILE_SLAB,
+
                 BLESSED_CLOTH_BLOCK,
                 BLESSED_CLOTH_CARPET,
+                BLESSED_CLOTH_PADDING,
+                BLESSED_CLOTH_CARPET_PADDING,
                 BLESSED_CLOTH_CURTAIN
         );
         helper.addAfter(Items.WAXED_OXIDIZED_COPPER_BULB, BUILDING_BLOCKS,
@@ -466,8 +471,11 @@ public class OperationStarcleaveCreativeModeTabs {
         helper.add(FUNCTIONAL_BLOCKS,
                 STARDUST_CLUSTER,
                 STARBLEACHED_LEAVES,
+
                 BLESSED_CLOTH_BLOCK,
-                BLESSED_CLOTH_CARPET
+                BLESSED_CLOTH_CARPET,
+                BLESSED_CLOTH_PADDING,
+                BLESSED_CLOTH_CARPET_PADDING
         );
         helper.addAfter(Items.PINK_BED, FUNCTIONAL_BLOCKS,
                 BLESSED_BED

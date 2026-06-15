@@ -15,6 +15,7 @@ public class OperationStarcleaveBlockTags {
     public static final TagKey<Block> PHLOGISTIC_HYPERFLAMMABLES = of("phlogistic_hyperflammables");
     public static final TagKey<Block> NUCLEOSYNTHESEED_BLAST_IMMUNE = of("nucleosyntheseed_blast_immune");
     public static final TagKey<Block> ALSO_PRESERVES_LEAVES = of("also_preserves_leaves");
+    public static final TagKey<Block> PREVENTS_ELYTRA_WALL_DAMAGE = of("prevents_elytra_wall_damage");
 
     // block tags that are also item tags
     public static final TagKey<Block> STARBLEACHED_LOGS = of("starbleached_logs");

@@ -150,6 +150,7 @@ public class ModelProvider extends FabricModelProvider {
         registerStarbleachedPearlBlock(BMG, STARBLEACHED_PEARL_BLOCK);
 
         registerClothBlocks(BMG, BLESSED_CLOTH_BLOCK, BLESSED_CLOTH_CARPET, BLESSED_CLOTH_CURTAIN);
+        registerClothBlocks(BMG, BLESSED_CLOTH_PADDING, BLESSED_CLOTH_CARPET_PADDING);
 
         registerStellarFarmland(BMG, STELLAR_FARMLAND, STELLAR_SEDIMENT);
 
@@ -747,10 +748,17 @@ public class ModelProvider extends FabricModelProvider {
                 .accept(MultiVariantGenerator.multiVariant(block).with(createBooleanModelDispatch(StarbleachedPearlBlock.TRIGGERED, on, off)));
     }
 
-    private void registerClothBlocks(BlockModelGenerators BMG, Block wool, Block carpet, Block curtain) {
-        BMG.createTrivialCube(wool);
+    private void registerClothBlocks(BlockModelGenerators BMG, Block fullBlock, Block carpet) {
+        BMG.createTrivialCube(fullBlock);
 
-        TextureMapping textureMap = new TextureMapping().put(TextureSlot.PANE, TextureMapping.getBlockTexture(curtain)).put(TextureSlot.EDGE, TextureMapping.getBlockTexture(wool));
+        ResourceLocation carpetModel = TexturedModel.CARPET.get(fullBlock).create(carpet, BMG.modelOutput);
+        BMG.blockStateOutput.accept(createSimpleBlock(carpet, carpetModel));
+    }
+
+    private void registerClothBlocks(BlockModelGenerators BMG, Block fullBlock, Block carpet, Block curtain) {
+        registerClothBlocks(BMG, fullBlock, carpet);
+
+        TextureMapping textureMap = new TextureMapping().put(TextureSlot.PANE, TextureMapping.getBlockTexture(curtain)).put(TextureSlot.EDGE, TextureMapping.getBlockTexture(fullBlock));
 
         ResourceLocation postModel = ModelTemplates.STAINED_GLASS_PANE_POST.create(curtain, textureMap, BMG.modelOutput);
         ResourceLocation sideModel = ModelTemplates.STAINED_GLASS_PANE_SIDE.create(curtain, textureMap, BMG.modelOutput);
@@ -785,9 +793,6 @@ public class ModelProvider extends FabricModelProvider {
                                         Variant.variant().with(VariantProperties.MODEL, noSideModel).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270)
                                 )
                 );
-
-        ResourceLocation carpetModel = TexturedModel.CARPET.get(wool).create(carpet, BMG.modelOutput);
-        BMG.blockStateOutput.accept(createSimpleBlock(carpet, carpetModel));
     }
 
     private void registerStellarFarmland(BlockModelGenerators BMG, Block block, Block dirtBlock) {

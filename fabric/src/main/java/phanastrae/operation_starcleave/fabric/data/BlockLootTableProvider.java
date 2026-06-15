@@ -97,6 +97,8 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
 
                 BLESSED_CLOTH_BLOCK,
                 BLESSED_CLOTH_CARPET,
+                BLESSED_CLOTH_PADDING,
+                BLESSED_CLOTH_CARPET_PADDING,
                 BLESSED_CLOTH_CURTAIN,
 
                 SUBCAELIC_PHLOGLIGHT,

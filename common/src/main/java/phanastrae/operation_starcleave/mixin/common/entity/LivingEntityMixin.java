@@ -29,8 +29,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import phanastrae.operation_starcleave.block.BlessedBedBlock;
-import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.block.StellarRepulsorBlock;
+import phanastrae.operation_starcleave.block.tag.OperationStarcleaveBlockTags;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveDamageTypeTags;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityAttachment;
 import phanastrae.operation_starcleave.item.StarbleachCoating;
@@ -132,7 +132,7 @@ public abstract class LivingEntityMixin extends Entity {
     private static boolean operation_starcleave$softBlocksInRange(Level level, Vec3 minPos, Vec3 maxPos) {
         for (BlockPos pos : BlockPos.betweenClosed(BlockPos.containing(minPos), BlockPos.containing(maxPos))) {
             BlockState state = level.getBlockState(pos);
-            if (state.is(OperationStarcleaveBlocks.BLESSED_CLOTH_BLOCK) || state.is(OperationStarcleaveBlocks.BLESSED_CLOTH_CURTAIN) || state.is(OperationStarcleaveBlocks.BLESSED_CLOTH_CARPET)) {
+            if (state.is(OperationStarcleaveBlockTags.PREVENTS_ELYTRA_WALL_DAMAGE)) {
                 AtomicBoolean hasCollision = new AtomicBoolean(false);
 
                 state.getCollisionShape(level, pos).move(pos.getX(), pos.getY(), pos.getZ())

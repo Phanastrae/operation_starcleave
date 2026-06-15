@@ -110,12 +110,14 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         // vanilla tags
         getOrCreateTagBuilder(BlockTags.WOOL)
                 .add(
-                        BLESSED_CLOTH_BLOCK
+                        BLESSED_CLOTH_BLOCK,
+                        BLESSED_CLOTH_PADDING
                 );
 
         getOrCreateTagBuilder(BlockTags.WOOL_CARPETS)
                 .add(
-                        BLESSED_CLOTH_CARPET
+                        BLESSED_CLOTH_CARPET,
+                        BLESSED_CLOTH_CARPET_PADDING
                 );
 
         getOrCreateTagBuilder(BlockTags.LOGS)
@@ -149,18 +151,22 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
         getOrCreateTagBuilder(BlockTags.COMBINATION_STEP_SOUND_BLOCKS)
                 .add(
-                        BLESSED_CLOTH_CARPET
+                        BLESSED_CLOTH_CARPET,
+                        BLESSED_CLOTH_CARPET_PADDING
                 );
 
         getOrCreateTagBuilder(BlockTags.OCCLUDES_VIBRATION_SIGNALS)
                 .add(
-                        BLESSED_CLOTH_BLOCK
+                        BLESSED_CLOTH_BLOCK,
+                        BLESSED_CLOTH_PADDING
                 );
 
         getOrCreateTagBuilder(BlockTags.DAMPENS_VIBRATIONS)
                 .add(
                         BLESSED_CLOTH_BLOCK,
                         BLESSED_CLOTH_CARPET,
+                        BLESSED_CLOTH_PADDING,
+                        BLESSED_CLOTH_CARPET_PADDING,
                         BLESSED_CLOTH_CURTAIN
                 );
 
@@ -426,6 +432,15 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         getOrCreateTagBuilder(OperationStarcleaveBlockTags.ALSO_PRESERVES_LEAVES)
                 .add(
                         NUCLEOSYNTHESEED
+                );
+
+        getOrCreateTagBuilder(OperationStarcleaveBlockTags.PREVENTS_ELYTRA_WALL_DAMAGE)
+                .add(
+                        BLESSED_CLOTH_BLOCK,
+                        BLESSED_CLOTH_CARPET,
+                        BLESSED_CLOTH_PADDING,
+                        BLESSED_CLOTH_CARPET_PADDING,
+                        BLESSED_CLOTH_CURTAIN
                 );
 
         // block tags that are also item tags

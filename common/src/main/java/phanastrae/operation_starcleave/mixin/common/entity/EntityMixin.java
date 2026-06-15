@@ -21,6 +21,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import phanastrae.operation_starcleave.block.BlessedClothCarpetBlock;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.duck.EntityDuckInterface;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveDamageTypeTags;
@@ -110,7 +111,7 @@ public abstract class EntityMixin implements EntityDuckInterface {
 
     @WrapOperation(method = "checkFallDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;fallOn(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/Entity;F)V"))
     private void operation_starcleave$cancelFallDamage(Block instance, Level level, BlockState state, BlockPos pos, Entity entity, float fallDistance, Operation<Void> original) {
-        if (level.getBlockState(pos.above()).is(OperationStarcleaveBlocks.BLESSED_CLOTH_CARPET)) {
+        if (level.getBlockState(pos.above()).getBlock() instanceof BlessedClothCarpetBlock) {
             fallDistance = 0;
         }
 

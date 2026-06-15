@@ -499,6 +499,16 @@ public class OperationStarcleaveBlocks {
                     .sound(SoundType.WOOL)
             )
     );
+
+    public static final Block BLESSED_CLOTH_PADDING = register(
+            "blessed_cloth_padding",
+            new BlessedClothBlock(BlockBehaviour.Properties.ofFullCopy(BLESSED_CLOTH_BLOCK))
+    );
+    public static final Block BLESSED_CLOTH_CARPET_PADDING = register(
+            "blessed_cloth_carpet_padding",
+            new BlessedClothCarpetBlock(BlockBehaviour.Properties.ofFullCopy(BLESSED_CLOTH_CARPET))
+    );
+
     public static final Block BLESSED_CLOTH_CURTAIN = register(
             "blessed_cloth_curtain",
             new BlessedClothCurtainBlock(properties()
