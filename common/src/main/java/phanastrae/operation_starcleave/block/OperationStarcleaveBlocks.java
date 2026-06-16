@@ -491,6 +491,14 @@ public class OperationStarcleaveBlocks {
                     .instrument(GUITAR)
             )
     );
+    public static final Block BLESSED_CLOTH_STAIRS = register(
+            "blessed_cloth_stairs",
+            stairsOf(BLESSED_CLOTH_BLOCK, BlessedClothStairs::new)
+    );
+    public static final Block BLESSED_CLOTH_SLAB = register(
+            "blessed_cloth_slab",
+            slabOf(BLESSED_CLOTH_BLOCK, BlessedClothSlab::new)
+    );
     public static final Block BLESSED_CLOTH_CARPET = register(
             "blessed_cloth_carpet",
             new BlessedClothCarpetBlock(properties()
@@ -503,6 +511,14 @@ public class OperationStarcleaveBlocks {
     public static final Block BLESSED_CLOTH_PADDING = register(
             "blessed_cloth_padding",
             new BlessedClothBlock(BlockBehaviour.Properties.ofFullCopy(BLESSED_CLOTH_BLOCK))
+    );
+    public static final Block BLESSED_CLOTH_PADDING_STAIRS = register(
+            "blessed_cloth_padding_stairs",
+            stairsOf(BLESSED_CLOTH_PADDING, BlessedClothStairs::new)
+    );
+    public static final Block BLESSED_CLOTH_PADDING_SLAB = register(
+            "blessed_cloth_padding_slab",
+            slabOf(BLESSED_CLOTH_PADDING, BlessedClothSlab::new)
     );
     public static final Block BLESSED_CLOTH_CARPET_PADDING = register(
             "blessed_cloth_carpet_padding",

@@ -43,6 +43,9 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 OperationStarcleaveBlockFamilies.STARBLEACHED_TILES,
                 OperationStarcleaveBlockFamilies.STELLAR_TILES,
 
+                OperationStarcleaveBlockFamilies.BLESSED_CLOTH,
+                OperationStarcleaveBlockFamilies.BLESSED_CLOTH_PADDING,
+
                 OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_BLOCK,
                 OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_BRICKS,
                 OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_TILES,
@@ -158,15 +161,26 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         getOrCreateTagBuilder(BlockTags.OCCLUDES_VIBRATION_SIGNALS)
                 .add(
                         BLESSED_CLOTH_BLOCK,
-                        BLESSED_CLOTH_PADDING
+                        BLESSED_CLOTH_STAIRS,
+                        BLESSED_CLOTH_SLAB,
+
+                        BLESSED_CLOTH_PADDING,
+                        BLESSED_CLOTH_PADDING_STAIRS,
+                        BLESSED_CLOTH_PADDING_SLAB
                 );
 
         getOrCreateTagBuilder(BlockTags.DAMPENS_VIBRATIONS)
                 .add(
                         BLESSED_CLOTH_BLOCK,
+                        BLESSED_CLOTH_STAIRS,
+                        BLESSED_CLOTH_SLAB,
                         BLESSED_CLOTH_CARPET,
+
                         BLESSED_CLOTH_PADDING,
+                        BLESSED_CLOTH_PADDING,
+                        BLESSED_CLOTH_PADDING_STAIRS,
                         BLESSED_CLOTH_CARPET_PADDING,
+
                         BLESSED_CLOTH_CURTAIN
                 );
 
@@ -437,9 +451,15 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         getOrCreateTagBuilder(OperationStarcleaveBlockTags.PREVENTS_ELYTRA_WALL_DAMAGE)
                 .add(
                         BLESSED_CLOTH_BLOCK,
+                        BLESSED_CLOTH_STAIRS,
+                        BLESSED_CLOTH_SLAB,
                         BLESSED_CLOTH_CARPET,
+
                         BLESSED_CLOTH_PADDING,
+                        BLESSED_CLOTH_PADDING,
+                        BLESSED_CLOTH_PADDING_STAIRS,
                         BLESSED_CLOTH_CARPET_PADDING,
+
                         BLESSED_CLOTH_CURTAIN
                 );
 

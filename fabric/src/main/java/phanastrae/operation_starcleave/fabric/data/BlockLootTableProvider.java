@@ -61,6 +61,9 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                 OperationStarcleaveBlockFamilies.STARBLEACHED_TILES,
                 OperationStarcleaveBlockFamilies.STELLAR_TILES,
 
+                OperationStarcleaveBlockFamilies.BLESSED_CLOTH,
+                OperationStarcleaveBlockFamilies.BLESSED_CLOTH_PADDING,
+
                 OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_BLOCK,
                 OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_BRICKS,
                 OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_TILES,
@@ -95,9 +98,7 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
 
                 STELLAR_REPULSOR,
 
-                BLESSED_CLOTH_BLOCK,
                 BLESSED_CLOTH_CARPET,
-                BLESSED_CLOTH_PADDING,
                 BLESSED_CLOTH_CARPET_PADDING,
                 BLESSED_CLOTH_CURTAIN,
 

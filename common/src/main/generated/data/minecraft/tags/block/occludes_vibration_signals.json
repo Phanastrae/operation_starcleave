@@ -1,6 +1,10 @@
 {
   "values": [
     "operation_starcleave:blessed_cloth_block",
-    "operation_starcleave:blessed_cloth_padding"
+    "operation_starcleave:blessed_cloth_stairs",
+    "operation_starcleave:blessed_cloth_slab",
+    "operation_starcleave:blessed_cloth_padding",
+    "operation_starcleave:blessed_cloth_padding_stairs",
+    "operation_starcleave:blessed_cloth_padding_slab"
   ]
 }

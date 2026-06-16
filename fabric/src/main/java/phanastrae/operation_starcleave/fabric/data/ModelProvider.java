@@ -149,8 +149,9 @@ public class ModelProvider extends FabricModelProvider {
 
         registerStarbleachedPearlBlock(BMG, STARBLEACHED_PEARL_BLOCK);
 
-        registerClothBlocks(BMG, BLESSED_CLOTH_BLOCK, BLESSED_CLOTH_CARPET, BLESSED_CLOTH_CURTAIN);
-        registerClothBlocks(BMG, BLESSED_CLOTH_PADDING, BLESSED_CLOTH_CARPET_PADDING);
+        registerCarpet(BMG, BLESSED_CLOTH_BLOCK, BLESSED_CLOTH_CARPET);
+        registerCarpet(BMG, BLESSED_CLOTH_PADDING, BLESSED_CLOTH_CARPET_PADDING);
+        registerCurtain(BMG, BLESSED_CLOTH_BLOCK, BLESSED_CLOTH_CURTAIN);
 
         registerStellarFarmland(BMG, STELLAR_FARMLAND, STELLAR_SEDIMENT);
 
@@ -748,16 +749,12 @@ public class ModelProvider extends FabricModelProvider {
                 .accept(MultiVariantGenerator.multiVariant(block).with(createBooleanModelDispatch(StarbleachedPearlBlock.TRIGGERED, on, off)));
     }
 
-    private void registerClothBlocks(BlockModelGenerators BMG, Block fullBlock, Block carpet) {
-        BMG.createTrivialCube(fullBlock);
-
+    private void registerCarpet(BlockModelGenerators BMG, Block fullBlock, Block carpet) {
         ResourceLocation carpetModel = TexturedModel.CARPET.get(fullBlock).create(carpet, BMG.modelOutput);
         BMG.blockStateOutput.accept(createSimpleBlock(carpet, carpetModel));
     }
 
-    private void registerClothBlocks(BlockModelGenerators BMG, Block fullBlock, Block carpet, Block curtain) {
-        registerClothBlocks(BMG, fullBlock, carpet);
-
+    private void registerCurtain(BlockModelGenerators BMG, Block fullBlock, Block curtain) {
         TextureMapping textureMap = new TextureMapping().put(TextureSlot.PANE, TextureMapping.getBlockTexture(curtain)).put(TextureSlot.EDGE, TextureMapping.getBlockTexture(fullBlock));
 
         ResourceLocation postModel = ModelTemplates.STAINED_GLASS_PANE_POST.create(curtain, textureMap, BMG.modelOutput);

@@ -114,9 +114,15 @@ public class OperationStarcleaveItems {
     public static final Item STELLAR_REPULSOR = registerBlockItem((OperationStarcleaveBlocks.STELLAR_REPULSOR));
 
     public static final Item BLESSED_CLOTH_BLOCK = registerBlockItem(OperationStarcleaveBlocks.BLESSED_CLOTH_BLOCK);
+    public static final Item BLESSED_CLOTH_STAIRS = registerBlockItem(OperationStarcleaveBlocks.BLESSED_CLOTH_STAIRS);
+    public static final Item BLESSED_CLOTH_SLAB = registerBlockItem(OperationStarcleaveBlocks.BLESSED_CLOTH_SLAB);
     public static final Item BLESSED_CLOTH_CARPET = registerBlockItem(OperationStarcleaveBlocks.BLESSED_CLOTH_CARPET);
+
     public static final Item BLESSED_CLOTH_PADDING = registerBlockItem(OperationStarcleaveBlocks.BLESSED_CLOTH_PADDING);
+    public static final Item BLESSED_CLOTH_PADDING_STAIRS = registerBlockItem(OperationStarcleaveBlocks.BLESSED_CLOTH_PADDING_STAIRS);
+    public static final Item BLESSED_CLOTH_PADDING_SLAB = registerBlockItem(OperationStarcleaveBlocks.BLESSED_CLOTH_PADDING_SLAB);
     public static final Item BLESSED_CLOTH_CARPET_PADDING = registerBlockItem(OperationStarcleaveBlocks.BLESSED_CLOTH_CARPET_PADDING);
+
     public static final Item BLESSED_CLOTH_CURTAIN = registerBlockItem(OperationStarcleaveBlocks.BLESSED_CLOTH_CURTAIN);
 
     public static final Item BLESSED_BED = registerBlock(new BedItem(OperationStarcleaveBlocks.BLESSED_BED, properties().stacksTo(1).rarity(RARE)));

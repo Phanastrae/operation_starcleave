@@ -84,6 +84,16 @@ public class OperationStarcleaveBlockFamilies {
             .slab(OperationStarcleaveBlocks.STELLAR_TILE_SLAB)
             .getFamily();
 
+    public static final BlockFamily BLESSED_CLOTH = familyBuilder(OperationStarcleaveBlocks.BLESSED_CLOTH_BLOCK)
+            .stairs(OperationStarcleaveBlocks.BLESSED_CLOTH_STAIRS)
+            .slab(OperationStarcleaveBlocks.BLESSED_CLOTH_SLAB)
+            .getFamily();
+
+    public static final BlockFamily BLESSED_CLOTH_PADDING = familyBuilder(OperationStarcleaveBlocks.BLESSED_CLOTH_PADDING)
+            .stairs(OperationStarcleaveBlocks.BLESSED_CLOTH_PADDING_STAIRS)
+            .slab(OperationStarcleaveBlocks.BLESSED_CLOTH_PADDING_SLAB)
+            .getFamily();
+
     public static final BlockFamily STARFLAKED_BISMUTH_BLOCK = familyBuilder(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_BLOCK)
             .slab(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_SLAB)
             .polished(OperationStarcleaveBlocks.STARFLAKED_BISMUTH_BRICKS)

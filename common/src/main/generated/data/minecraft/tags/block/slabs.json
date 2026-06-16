@@ -11,6 +11,8 @@
     "operation_starcleave:cut_polished_fellcrust_slab",
     "operation_starcleave:starbleached_tile_slab",
     "operation_starcleave:stellar_tile_slab",
+    "operation_starcleave:blessed_cloth_slab",
+    "operation_starcleave:blessed_cloth_padding_slab",
     "operation_starcleave:starflaked_bismuth_slab",
     "operation_starcleave:starflaked_bismuth_brick_slab",
     "operation_starcleave:starflaked_bismuth_tile_slab",
