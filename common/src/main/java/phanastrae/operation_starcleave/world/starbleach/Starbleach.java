@@ -118,7 +118,7 @@ public class Starbleach {
                 }
             }
 
-            // update block
+            // update neighbouring blocks
             newState.updateNeighbourShapes(level, blockPos, 3);
             return true;
         } else {
