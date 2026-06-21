@@ -11,6 +11,7 @@ public class OperationStarcleaveBlockTags {
     public static final TagKey<Block> HOLY_MOSS_REPLACEABLE = of("holy_moss_replaceable");
     public static final TagKey<Block> STELLAR_MULCH_REPLACEABLE = of("stellar_mulch_replaceable");
     public static final TagKey<Block> ALLOWS_BISREED_PLANTING = of("allows_bisreed_planting");
+    public static final TagKey<Block> STARBLEACHED_SAPLING_PLANTABLE_ON = of("starbleached_sapling_plantable_on");
     public static final TagKey<Block> STARBLEACH_IMMUNE = of("starbleach_immune");
     public static final TagKey<Block> PHLOGISTIC_HYPERFLAMMABLES = of("phlogistic_hyperflammables");
     public static final TagKey<Block> NUCLEOSYNTHESEED_BLAST_IMMUNE = of("nucleosyntheseed_blast_immune");

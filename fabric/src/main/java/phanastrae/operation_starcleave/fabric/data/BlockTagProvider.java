@@ -331,6 +331,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
         getOrCreateTagBuilder(BlockTags.FLOWER_POTS)
                 .add(
+                        POTTED_STARBLEACHED_SAPLING,
                         POTTED_MULCHBORNE_TUFT,
                         POTTED_SHORT_HOLY_MOSS
                 );
@@ -349,6 +350,11 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 .add(
                         BUDDING_CELESTIAL_OPAL,
                         POLISHED_CELESTIAL_OPAL_PILLAR
+                );
+
+        getOrCreateTagBuilder(BlockTags.SAPLINGS)
+                .add(
+                        STARBLEACHED_SAPLING
                 );
 
         // conventional
@@ -393,7 +399,8 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         STELLAR_FARMLAND,
                         HOLY_MOSS,
                         STARBLEACHED_LEAVES,
-                        STARDUST_BLOCK
+                        STARDUST_BLOCK,
+                        STARBLEACHED_SAPLING
                 );
 
         getOrCreateTagBuilder(OperationStarcleaveBlockTags.HOLY_MOSS_REPLACEABLE)
@@ -414,6 +421,18 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         Blocks.SOUL_SAND,
                         Blocks.END_STONE,
                         Blocks.PRISMARINE,
+                        STELLAR_SEDIMENT,
+                        STELLAR_FARMLAND,
+                        STELLAR_MULCH,
+                        HOLY_MOSS,
+                        STARDUST_BLOCK
+                );
+
+        getOrCreateTagBuilder(OperationStarcleaveBlockTags.STARBLEACHED_SAPLING_PLANTABLE_ON)
+                .addOptionalTag(BlockTags.DIRT)
+                .add(
+                        Blocks.FARMLAND,
+
                         STELLAR_SEDIMENT,
                         STELLAR_FARMLAND,
                         STELLAR_MULCH,

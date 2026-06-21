@@ -94,6 +94,9 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                 STARBLEACHED_LEAVES,
 
                 IMBUED_STARBLEACHED_TILES,
+
+                STARBLEACHED_SAPLING,
+
                 STARBLEACHED_PEARL_BLOCK,
 
                 STELLAR_REPULSOR,

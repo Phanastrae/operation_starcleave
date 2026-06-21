@@ -10,6 +10,7 @@
     "operation_starcleave:stellar_farmland",
     "operation_starcleave:holy_moss",
     "operation_starcleave:starbleached_leaves",
-    "operation_starcleave:stardust_block"
+    "operation_starcleave:stardust_block",
+    "operation_starcleave:starbleached_sapling"
   ]
 }

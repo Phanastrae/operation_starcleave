@@ -437,6 +437,23 @@ public class OperationStarcleaveBlocks {
             )
     );
 
+    public static final Block STARBLEACHED_SAPLING = register(
+            "starbleached_sapling",
+            new StarbleachedSaplingBlock(properties()
+                    .mapColor(MapColor.COLOR_GRAY)
+                    .sound(SoundType.GRASS)
+                    .pushReaction(PushReaction.DESTROY)
+                    .lightLevel(constant(7))
+                    .noCollission()
+                    .instabreak()
+            )
+    );
+
+    public static final Block POTTED_STARBLEACHED_SAPLING = register(
+            "potted_starbleached_sapling",
+            flowerPot(STARBLEACHED_SAPLING, 7)
+    );
+
     public static final Block STARBLEACHED_PEARL_BLOCK = register(
             "starbleached_pearl_block",
             new StarbleachedPearlBlock(properties()

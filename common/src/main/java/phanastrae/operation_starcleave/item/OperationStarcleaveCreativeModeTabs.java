@@ -177,6 +177,8 @@ public class OperationStarcleaveCreativeModeTabs {
                 CHISELED_STARBLEACHED_TILES,
                 IMBUED_STARBLEACHED_TILES,
 
+                STARBLEACHED_SAPLING,
+
                 CELESTIAL_OPAL_BLOCK,
                 CELESTIAL_OPAL_STAIRS,
                 CELESTIAL_OPAL_SLAB,
@@ -460,6 +462,7 @@ public class OperationStarcleaveCreativeModeTabs {
                 NUCLEIC_FISSURELEAVES
         );
         helper.addAfter(Items.FLOWERING_AZALEA, NATURAL_BLOCKS,
+                STARBLEACHED_SAPLING,
                 NUCLEOSYNTHESEED
         );
         helper.addAfter(Items.HANGING_ROOTS, NATURAL_BLOCKS,

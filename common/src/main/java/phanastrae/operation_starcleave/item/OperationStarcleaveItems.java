@@ -106,6 +106,8 @@ public class OperationStarcleaveItems {
 
     public static final Item IMBUED_STARBLEACHED_TILES = registerBlockItem(OperationStarcleaveBlocks.IMBUED_STARBLEACHED_TILES);
 
+    public static final Item STARBLEACHED_SAPLING = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_SAPLING);
+
     public static final Item STARBLEACHED_PEARL_BLOCK = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_PEARL_BLOCK);
 
     public static final Item STELLAR_TILES = registerBlockItem(OperationStarcleaveBlocks.STELLAR_TILES);

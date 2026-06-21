@@ -7,6 +7,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Block;
@@ -116,6 +117,8 @@ public class Starbleach {
                 } else if (newState.is(OperationStarcleaveBlocks.STELLAR_MULCH)) {
                     level.setBlockAndUpdate(upPos, OperationStarcleaveBlocks.MULCHBORNE_TUFT.defaultBlockState());
                 }
+            } else if(upState.is(BlockTags.SAPLINGS) && newState.is(OperationStarcleaveBlockTags.STARBLEACHED_SAPLING_PLANTABLE_ON)) {
+                level.setBlockAndUpdate(upPos, OperationStarcleaveBlocks.STARBLEACHED_SAPLING.defaultBlockState());
             }
 
             // update neighbouring blocks

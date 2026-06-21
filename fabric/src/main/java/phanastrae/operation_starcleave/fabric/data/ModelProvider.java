@@ -137,6 +137,8 @@ public class ModelProvider extends FabricModelProvider {
         BMG.createCrossBlockWithDefaultItem(SHORT_HOLY_MOSS, BlockModelGenerators.TintState.NOT_TINTED);
         createPottedRoot(BMG, SHORT_HOLY_MOSS, POTTED_SHORT_HOLY_MOSS, TintState.NOT_TINTED);
 
+        BMG.createPlant(STARBLEACHED_SAPLING, POTTED_STARBLEACHED_SAPLING, TintState.NOT_TINTED);
+
         BMG.blockStateOutput.accept(createRotatedVariant(STELLAR_PATH, ModelLocationUtils.getModelLocation(STELLAR_PATH)));
         registerGrassLikeBlock(BMG, HOLY_MOSS, STELLAR_SEDIMENT);
         registerGrassLikeBlock(BMG, STELLAR_MULCH, STELLAR_SEDIMENT);

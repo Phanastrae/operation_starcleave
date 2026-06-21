@@ -374,6 +374,12 @@ public class RecipeProvider extends FabricRecipeProvider {
         );
 
         saveStarbleachRecipe(exporter,
+                ItemTags.SAPLINGS,
+                0.5F,
+                STARBLEACHED_SAPLING
+        );
+
+        saveStarbleachRecipe(exporter,
                 ItemTags.LOGS,
                 0.125F,
                 STARBLEACHED_LOG

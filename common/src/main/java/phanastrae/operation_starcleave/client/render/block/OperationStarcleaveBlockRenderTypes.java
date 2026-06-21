@@ -14,6 +14,9 @@ public class OperationStarcleaveBlockRenderTypes {
                 NUCLEIC_FISSURELEAVES
         );
         putBlocks(RenderType.cutout(),
+                STARBLEACHED_SAPLING,
+                POTTED_STARBLEACHED_SAPLING,
+
                 BISREEDS,
 
                 MULCHBORNE_TUFT,
