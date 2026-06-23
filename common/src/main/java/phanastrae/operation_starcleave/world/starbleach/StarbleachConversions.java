@@ -99,8 +99,12 @@ public class StarbleachConversions {
         );
         addConversion(StateMatchesPredicate.fromBlocks(NETHERRACK, SOUL_SAND, SOUL_SOIL, CRIMSON_NYLIUM, WARPED_NYLIUM), AIR);
         addConversion(
-                new StateMatchesPredicate.Builder(GRAVEL).addBlockTag(BlockTags.SAND).build(),
+                BlockTags.SAND,
                 STARDUST_BLOCK
+        );
+        addConversion(
+                GRAVEL,
+                ASTERUBBLE
         );
         addConversion(
                 new StateMatchesPredicate.Builder(CHORUS_PLANT, CHORUS_FLOWER).addBlockTag(BlockTags.LEAVES).addBlockTag(BlockTags.WART_BLOCKS).build(),

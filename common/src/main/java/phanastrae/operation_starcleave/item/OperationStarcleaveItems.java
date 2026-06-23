@@ -92,6 +92,8 @@ public class OperationStarcleaveItems {
     public static final Item CUT_POLISHED_FELLCRUST_STAIRS = registerBlockItem(OperationStarcleaveBlocks.CUT_POLISHED_FELLCRUST_STAIRS);
     public static final Item CUT_POLISHED_FELLCRUST_SLAB = registerBlockItem(OperationStarcleaveBlocks.CUT_POLISHED_FELLCRUST_SLAB);
 
+    public static final Item ASTERUBBLE = registerBlockItem(OperationStarcleaveBlocks.ASTERUBBLE);
+
     public static final Item STARBLEACHED_LOG = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_LOG);
     public static final Item STARBLEACHED_WOOD = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_WOOD);
 

@@ -15,6 +15,7 @@
       "required": false
     },
     "operation_starcleave:nucleosyntheseed",
+    "operation_starcleave:asterubble",
     "operation_starcleave:ouranic_bricks",
     "operation_starcleave:ouranic_pillar"
   ]

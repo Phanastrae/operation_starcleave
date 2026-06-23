@@ -422,6 +422,11 @@ public class RecipeProvider extends FabricRecipeProvider {
                 STELLAR_PATH
         );
         saveStarbleachRecipe(exporter,
+                Items.GRAVEL,
+                0.04F,
+                ASTERUBBLE
+        );
+        saveStarbleachRecipe(exporter,
                 Items.SAND,
                 0.01F,
                 STARDUST_BLOCK

@@ -218,6 +218,8 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
                         SMOOTH_FELLCRUST_PILLAR,
 
+                        ASTERUBBLE,
+
                         STARBLEACHED_LEAVES,
                         IMBUED_STARBLEACHED_TILES,
 
@@ -288,6 +290,8 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 .addOptionalTag(OperationStarcleaveBlockTags.NUCLEIC_FISSUREROOTS)
                 .add(
                         NUCLEOSYNTHESEED,
+
+                        ASTERUBBLE,
 
                         OURANIC_BRICKS,
                         OURANIC_PILLAR
@@ -399,6 +403,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         STELLAR_FARMLAND,
                         HOLY_MOSS,
                         STARBLEACHED_LEAVES,
+                        ASTERUBBLE,
                         STARDUST_BLOCK,
                         STARBLEACHED_SAPLING
                 );
@@ -425,6 +430,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         STELLAR_FARMLAND,
                         STELLAR_MULCH,
                         HOLY_MOSS,
+                        ASTERUBBLE,
                         STARDUST_BLOCK
                 );
 

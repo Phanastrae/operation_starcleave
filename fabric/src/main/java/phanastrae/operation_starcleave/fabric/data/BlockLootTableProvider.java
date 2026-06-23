@@ -85,6 +85,8 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
 
                 STELLAR_SEDIMENT,
 
+                ASTERUBBLE,
+
                 STARDUST_CLUSTER,
 
                 SMOOTH_FELLCRUST_PILLAR,

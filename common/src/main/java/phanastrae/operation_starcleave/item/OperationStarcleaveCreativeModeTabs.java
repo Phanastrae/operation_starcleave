@@ -164,6 +164,8 @@ public class OperationStarcleaveCreativeModeTabs {
                 CUT_POLISHED_FELLCRUST_STAIRS,
                 CUT_POLISHED_FELLCRUST_SLAB,
 
+                ASTERUBBLE,
+
                 STARBLEACHED_LOG,
                 STARBLEACHED_WOOD,
 
@@ -438,6 +440,7 @@ public class OperationStarcleaveCreativeModeTabs {
                 STELLAR_MULCH,
                 HOLY_MOSS,
                 STARDUST_BLOCK,
+                ASTERUBBLE,
                 FELLCRUST,
 
                 COAGULATED_PLASMA,

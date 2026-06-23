@@ -363,6 +363,17 @@ public class OperationStarcleaveBlocks {
             slabOf(CUT_POLISHED_FELLCRUST)
     );
 
+    public static final Block ASTERUBBLE = register(
+            "asterubble",
+            new Block(properties()
+                    .strength(4.0F, 9.0F)
+                    .mapColor(TERRACOTTA_BLUE)
+                    .sound(SoundType.DEEPSLATE)
+                    .instrument(SNARE)
+                    .requiresCorrectToolForDrops()
+            )
+    );
+
     public static final Block STARBLEACHED_LOG = register(
             "starbleached_log",
             new RotatedPillarBlock(properties()
