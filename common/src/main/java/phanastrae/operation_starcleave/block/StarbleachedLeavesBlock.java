@@ -3,11 +3,15 @@ package phanastrae.operation_starcleave.block;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.ParticleUtils;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FallingBlock;
@@ -22,6 +26,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.block.tag.OperationStarcleaveBlockTags;
+import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 
 public class StarbleachedLeavesBlock extends FallingBlock implements SimpleWaterloggedBlock {
     public static final MapCodec<StarbleachedLeavesBlock> CODEC = simpleCodec(StarbleachedLeavesBlock::new);
@@ -64,7 +69,6 @@ public class StarbleachedLeavesBlock extends FallingBlock implements SimpleWater
             BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos
     ) {
         if (state.getValue(WATERLOGGED)) {
-            // TODO what is this actually doing, if anything?
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
 
@@ -73,12 +77,12 @@ public class StarbleachedLeavesBlock extends FallingBlock implements SimpleWater
 
     @Override
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        if (getSupport(level, pos) < 4) {
+        if (!isSupported(level, pos)) {
             super.tick(state, level, pos, random);
         }
     }
 
-    public int getSupport(ServerLevel level, BlockPos pos) {
+    public boolean isSupported(Level level, BlockPos pos) {
         int support = 0;
         for (Direction direction : Direction.values()) {
             BlockState blockState = level.getBlockState(pos.offset(direction.getNormal()));
@@ -93,7 +97,7 @@ public class StarbleachedLeavesBlock extends FallingBlock implements SimpleWater
                 support += 1;
             }
         }
-        return support;
+        return support >= 4;
     }
 
     @Override
@@ -109,6 +113,23 @@ public class StarbleachedLeavesBlock extends FallingBlock implements SimpleWater
     @Override
     public int getDustColor(BlockState state, BlockGetter level, BlockPos pos) {
         return 0xEF9FCFFF;
+    }
+
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        if (random.nextInt(16) == 0 && !isSupported(level, pos)) {
+            if (isFree(level.getBlockState(pos.below()))) {
+                ParticleUtils.spawnParticleBelow(level, pos, random, new BlockParticleOption(ParticleTypes.FALLING_DUST, state));
+            }
+        }
+
+        if (random.nextInt(10) == 0) {
+            BlockPos belowPos = pos.below();
+            BlockState belowState = level.getBlockState(belowPos);
+            if (!isFaceFull(belowState.getCollisionShape(level, belowPos), Direction.UP)) {
+                ParticleUtils.spawnParticleBelow(level, pos, random, OperationStarcleaveParticleTypes.STARBLEACHED_LEAVES);
+            }
+        }
     }
 
     @Override
