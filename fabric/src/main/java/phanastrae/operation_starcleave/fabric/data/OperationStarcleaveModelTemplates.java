@@ -22,6 +22,11 @@ public class OperationStarcleaveModelTemplates {
     public static final ModelTemplate SIDED_WALL_TALL_SIDE = create("template_sided_wall_side_tall", "_side_tall", TextureSlot.BOTTOM, TextureSlot.TOP, TextureSlot.SIDE);
     public static final ModelTemplate SIDED_WALL_INVENTORY = create("sided_wall_inventory", "_inventory", TextureSlot.BOTTOM, TextureSlot.TOP, TextureSlot.SIDE, TextureSlot.WALL);
 
+    public static final ModelTemplate LEAF_LITTER_1 = create("template_untinted_leaf_litter_1", "_1", TextureSlot.TEXTURE);
+    public static final ModelTemplate LEAF_LITTER_2 = create("template_untinted_leaf_litter_2", "_2", TextureSlot.TEXTURE);
+    public static final ModelTemplate LEAF_LITTER_3 = create("template_untinted_leaf_litter_3", "_3", TextureSlot.TEXTURE);
+    public static final ModelTemplate LEAF_LITTER_4 = create("template_untinted_leaf_litter_4", "_4", TextureSlot.TEXTURE);
+
     private static final ModelTemplate[] TEMPLATE_CAULDRON_LEVELS = createCauldronArray();
 
     private static ModelTemplate create(String parent, TextureSlot... requiredTextureKeys) {

@@ -170,6 +170,8 @@ public class OperationStarcleaveCreativeModeTabs {
                 STARBLEACHED_WOOD,
 
                 STARBLEACHED_LEAVES,
+                STARBLEACHED_LEAF_LITTER,
+                STARBLEACHED_LEAF_BUNCH,
 
                 STARBLEACHED_TILES,
                 STARBLEACHED_TILE_STAIRS,
@@ -468,6 +470,9 @@ public class OperationStarcleaveCreativeModeTabs {
                 STARBLEACHED_SAPLING,
                 NUCLEOSYNTHESEED
         );
+        helper.addBefore(Items.SPORE_BLOSSOM, NATURAL_BLOCKS,
+                STARBLEACHED_LEAF_LITTER
+        );
         helper.addAfter(Items.HANGING_ROOTS, NATURAL_BLOCKS,
                 MULCHBORNE_TUFT,
                 SHORT_HOLY_MOSS
@@ -566,7 +571,8 @@ public class OperationStarcleaveCreativeModeTabs {
         helper.addAfter(Items.EXPERIENCE_BOTTLE, INGREDIENTS,
                 STARBLEACH_BOTTLE,
                 HOLY_STRANDS,
-                BLESSED_CLOTH
+                BLESSED_CLOTH,
+                STARBLEACHED_LEAF_BUNCH
         );
 
         // Spawn Eggs

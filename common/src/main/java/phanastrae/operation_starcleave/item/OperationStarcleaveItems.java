@@ -32,7 +32,7 @@ public class OperationStarcleaveItems {
     public static final Item STELLAR_PATH = registerBlockItem(OperationStarcleaveBlocks.STELLAR_PATH);
     public static final Item STELLAR_FARMLAND = registerBlockItem(OperationStarcleaveBlocks.STELLAR_FARMLAND);
 
-    public static final Item BISREED_ROOT = register("bisreed_root", new ItemNameBlockItem(OperationStarcleaveBlocks.BISREEDS, properties()));
+    public static final Item BISREED_ROOT = register("bisreed_root", blockItemOf(OperationStarcleaveBlocks.BISREEDS, true));
 
     public static final Item STELLAR_MULCH = registerBlockItem(OperationStarcleaveBlocks.STELLAR_MULCH);
     public static final Item MULCHBORNE_TUFT = registerBlockItem(OperationStarcleaveBlocks.MULCHBORNE_TUFT);
@@ -98,6 +98,7 @@ public class OperationStarcleaveItems {
     public static final Item STARBLEACHED_WOOD = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_WOOD);
 
     public static final Item STARBLEACHED_LEAVES = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_LEAVES);
+    public static final Item STARBLEACHED_LEAF_LITTER = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_LEAF_LITTER);
 
     public static final Item STARBLEACHED_TILES = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_TILES);
     public static final Item STARBLEACHED_TILE_STAIRS = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_TILE_STAIRS);
@@ -222,6 +223,8 @@ public class OperationStarcleaveItems {
     public static final Item HOLY_STRANDS = register("holy_strands", new Item(properties()));
     public static final Item BLESSED_CLOTH = register("blessed_cloth", new Item(properties()));
 
+    public static final Item STARBLEACHED_LEAF_BUNCH = register("starbleached_leaf_bunch", new Item(properties()));
+
     public static final Item STARBLEACHED_PEARL = register("starbleached_pearl", new StarbleachedPearlItem(properties().stacksTo(16)));
     public static final Item STARFRUIT = register("starfruit", new StarfruitItem(properties().food(OperationStarcleaveFoods.STARFRUIT)));
 
@@ -263,8 +266,16 @@ public class OperationStarcleaveItems {
     public static final Item HAMMERTAIL_GOLEM_SPAWN_EGG = register("hammertail_golem_spawn_egg", spawnEggItem(OperationStarcleaveEntityTypes.HAMMERTAIL_GOLEM, 0xAB469A, 0xDFFD66));
     public static final Item PREECHER_SPAWN_EGG = register("preecher_spawn_egg", spawnEggItem(OperationStarcleaveEntityTypes.PREECHER, 0x3AAEB0, 0xF7F78B));
 
+    private static BlockItem blockItemOf(Block block, boolean useSeparateItemName) {
+        if (useSeparateItemName) {
+            return new ItemNameBlockItem(block, properties());
+        } else {
+            return new BlockItem(block, properties());
+        }
+    }
+
     private static Item registerBlockItem(Block block) {
-        return registerBlock(new BlockItem(block, properties()));
+        return registerBlock(blockItemOf(block, false));
     }
 
     private static Item registerBlock(BlockItem item) {

@@ -152,6 +152,11 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         STARBLEACH_CAULDRON
                 );
 
+        getOrCreateTagBuilder(BlockTags.INSIDE_STEP_SOUND_BLOCKS)
+                .add(
+                        STARBLEACHED_LEAF_LITTER
+                );
+
         getOrCreateTagBuilder(BlockTags.COMBINATION_STEP_SOUND_BLOCKS)
                 .add(
                         BLESSED_CLOTH_CARPET,
@@ -309,7 +314,9 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         getOrCreateTagBuilder(BlockTags.REPLACEABLE_BY_TREES)
                 .add(
                         MULCHBORNE_TUFT,
-                        SHORT_HOLY_MOSS
+                        SHORT_HOLY_MOSS,
+
+                        STARBLEACHED_LEAF_LITTER
                 );
 
         getOrCreateTagBuilder(BlockTags.REPLACEABLE)
@@ -317,6 +324,9 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         STARDUST_CLUSTER,
                         MULCHBORNE_TUFT,
                         SHORT_HOLY_MOSS,
+
+                        STARBLEACHED_LEAF_LITTER,
+
                         PHLOGISTIC_FIRE
                 );
 

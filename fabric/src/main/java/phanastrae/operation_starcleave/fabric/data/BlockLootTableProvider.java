@@ -31,11 +31,13 @@ import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import phanastrae.operation_starcleave.block.BisreedBlock;
+import phanastrae.operation_starcleave.block.StarbleachedLeafLitterBlock;
 import phanastrae.operation_starcleave.data.OperationStarcleaveBlockFamilies;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 import static phanastrae.operation_starcleave.block.OperationStarcleaveBlocks.*;
 
@@ -212,6 +214,8 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
 
         addClusterDrops(registryLookup, CELESTIAL_OPAL_CLUSTER, OperationStarcleaveItems.CELESTIAL_OPAL_SHARD);
         addClusterDrops(registryLookup, CELESTIAL_OPAL_SPIRE, OperationStarcleaveItems.CELESTIAL_OPAL_SHARD);
+
+        this.add(STARBLEACHED_LEAF_LITTER, this.createSegmentedDrops(STARBLEACHED_LEAF_LITTER));
     }
 
     private void forEach(Consumer<Block> consumer, Block... list) {
@@ -256,6 +260,28 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                                 )
                 )
         );
+    }
+
+    public LootTable.Builder createSegmentedDrops(Block segmentedBlock) {
+        return LootTable.lootTable()
+                .withPool(
+                        LootPool.lootPool()
+                                .setRolls(ConstantValue.exactly(1.0F))
+                                .add(
+                                        this.applyExplosionDecay(
+                                                segmentedBlock,
+                                                LootItem.lootTableItem(segmentedBlock)
+                                                        .apply(
+                                                                IntStream.rangeClosed(1, 4).boxed().toList(),
+                                                                integer -> SetItemCountFunction.setCount(ConstantValue.exactly(integer))
+                                                                        .when(
+                                                                                LootItemBlockStatePropertyCondition.hasBlockStateProperties(segmentedBlock)
+                                                                                        .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(StarbleachedLeafLitterBlock.SEGMENT_AMOUNT, integer))
+                                                                        )
+                                                        )
+                                        )
+                                )
+                );
     }
 
     private void addLootForFamilies(BlockFamily... families) {

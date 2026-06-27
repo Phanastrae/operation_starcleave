@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.StairsShape;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.block.StarbleachCauldronBlock;
+import phanastrae.operation_starcleave.block.StarbleachedLeafLitterBlock;
 import phanastrae.operation_starcleave.block.StarbleachedPearlBlock;
 import phanastrae.operation_starcleave.data.OperationStarcleaveBlockFamilies;
 import phanastrae.operation_starcleave.fabric.mixin.datagen.accessor.BlockFamilyProviderAccessor;
@@ -190,6 +191,8 @@ public class ModelProvider extends FabricModelProvider {
         createFellcrustWall(BMG, FELLCRUST_WALL, FELLCRUST, TextureMapping.getBlockTexture(FELLCRUST, "_bottom"), true);
         createCutFellcrustStairs(BMG, CUT_FELLCRUST_STAIRS);
         createFellcrustWall(BMG, CUT_FELLCRUST_WALL, CUT_FELLCRUST, TextureMapping.getBlockTexture(CUT_POLISHED_FELLCRUST), false);
+
+        createStarbleachedLeafLitter(BMG, STARBLEACHED_LEAF_LITTER);
 
         // fluids
         BMG.createNonTemplateModelBlock(PETRICHORIC_PLASMA);
@@ -695,6 +698,51 @@ public class ModelProvider extends FabricModelProvider {
         BMG.delegateItemModel(wallBlock, inventoryLocation);
     }
 
+    public static void createStarbleachedLeafLitter(BlockModelGenerators BMG, Block block) {
+        BMG.createSimpleFlatItemModel(block);
+
+        ResourceLocation[] models = {
+                OperationStarcleaveModelTemplates.LEAF_LITTER_1.create(block, TextureMapping.defaultTexture(block), BMG.modelOutput),
+                OperationStarcleaveModelTemplates.LEAF_LITTER_2.create(block, TextureMapping.defaultTexture(block), BMG.modelOutput),
+                OperationStarcleaveModelTemplates.LEAF_LITTER_3.create(block, TextureMapping.defaultTexture(block), BMG.modelOutput),
+                OperationStarcleaveModelTemplates.LEAF_LITTER_4.create(block, TextureMapping.defaultTexture(block), BMG.modelOutput)
+        };
+
+        VariantProperties.Rotation[] rotations = {
+                VariantProperties.Rotation.R180,
+                VariantProperties.Rotation.R270,
+                VariantProperties.Rotation.R0,
+                VariantProperties.Rotation.R90
+        };
+
+        MultiPartGenerator multiPartGenerator = MultiPartGenerator.multiPart(block);
+        for (int segments = 1; segments <= 4; segments++) {
+            for (Direction direction : Direction.values()) {
+                int data2d = direction.get2DDataValue();
+                if (data2d == -1) continue;
+
+                Condition.TerminalCondition condition = Condition.condition();
+                if (segments == 2) {
+                    // also use the 2 model for 3 segments, where it's used together with the 3 model
+                    condition.term(StarbleachedLeafLitterBlock.SEGMENT_AMOUNT, 2, 3);
+                } else {
+                    condition.term(StarbleachedLeafLitterBlock.SEGMENT_AMOUNT, segments);
+                }
+                condition.term(BlockStateProperties.HORIZONTAL_FACING, direction);
+
+                multiPartGenerator = multiPartGenerator.with(
+                        condition,
+                        Variant.variant().with(VariantProperties.MODEL, models[segments - 1]).with(VariantProperties.Y_ROT, rotations[data2d])
+                );
+            }
+        }
+
+        BMG.blockStateOutput
+                .accept(
+                        multiPartGenerator
+                );
+    }
+
     private void forEach(Consumer<Block> consumer, Block... list) {
         for (Block block : list) {
             consumer.accept(block);
@@ -982,6 +1030,8 @@ public class ModelProvider extends FabricModelProvider {
 
                 OperationStarcleaveItems.HOLY_STRANDS,
                 OperationStarcleaveItems.BLESSED_CLOTH,
+
+                OperationStarcleaveItems.STARBLEACHED_LEAF_BUNCH,
 
                 OperationStarcleaveItems.HOLLOWED_SAC,
                 OperationStarcleaveItems.PHLOGISTON_SAC,

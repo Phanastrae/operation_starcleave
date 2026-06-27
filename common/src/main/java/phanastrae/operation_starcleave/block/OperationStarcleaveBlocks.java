@@ -407,6 +407,18 @@ public class OperationStarcleaveBlocks {
             )
     );
 
+    public static final Block STARBLEACHED_LEAF_LITTER = register(
+            "starbleached_leaf_litter",
+            new StarbleachedLeafLitterBlock(properties()
+                    .mapColor(COLOR_PINK)
+                    .sound(SoundType.PINK_PETALS) // leaf litter sounds do not exist on 1.21.1, so just use pink petal sounds
+                    .pushReaction(PushReaction.DESTROY)
+                    .lightLevel(state -> 4 + state.getValue(StarbleachedLeafLitterBlock.SEGMENT_AMOUNT))
+                    .replaceable()
+                    .noCollission()
+            )
+    );
+
     public static final Block STARBLEACHED_TILES = register(
             "starbleached_tiles",
             new Block(properties()
