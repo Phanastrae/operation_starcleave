@@ -24,6 +24,7 @@
     "common.entity.CombatRulesMixin",
     "common.entity.EnderManMixin",
     "common.entity.EntityMixin",
+    "common.entity.FallingBlockEntityMixin",
     "common.entity.LivingEntityMixin",
     "common.entity.PlayerMixin",
     "common.entity.ServerEntityMixin",
