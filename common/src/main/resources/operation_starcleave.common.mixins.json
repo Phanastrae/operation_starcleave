@@ -39,6 +39,7 @@
     "common.firmament.ServerGamePacketListenerImplMixin",
     "common.item.EnchantmentMixin",
     "common.item.ItemStackMixin",
+    "common.item.ShearsItemMixin",
     "common.legacy.ItemStackComponentizationFixMixin",
     "common.spawning.NaturalSpawnerMixin"
   ],

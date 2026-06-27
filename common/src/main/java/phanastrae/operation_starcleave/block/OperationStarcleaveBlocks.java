@@ -393,9 +393,9 @@ public class OperationStarcleaveBlocks {
     public static final Block STARBLEACHED_LEAVES = register(
             "starbleached_leaves",
             new StarbleachedLeavesBlock(properties()
-                    .strength(0.25F, 2F)
+                    .strength(0.3F, 2F)
                     .mapColor(COLOR_GRAY)
-                    .sound(SoundType.STONE)
+                    .sound(AZALEA_LEAVES)
                     .instrument(BASEDRUM)
                     .isSuffocating(NEVER)
                     .isViewBlocking(NEVER)

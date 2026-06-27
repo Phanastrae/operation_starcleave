@@ -225,7 +225,6 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
                         ASTERUBBLE,
 
-                        STARBLEACHED_LEAVES,
                         IMBUED_STARBLEACHED_TILES,
 
                         STARBLEACH_CAULDRON,

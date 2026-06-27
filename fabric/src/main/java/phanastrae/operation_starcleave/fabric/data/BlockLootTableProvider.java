@@ -24,10 +24,8 @@ import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
-import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
-import net.minecraft.world.level.storage.loot.predicates.MatchTool;
+import net.minecraft.world.level.storage.loot.predicates.*;
+import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import phanastrae.operation_starcleave.block.BisreedBlock;
@@ -95,7 +93,6 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
 
                 STARBLEACHED_LOG,
                 STARBLEACHED_WOOD,
-                STARBLEACHED_LEAVES,
 
                 IMBUED_STARBLEACHED_TILES,
 
@@ -158,6 +155,7 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
         add(STELLAR_FARMLAND, createSingleItemTableWithSilkTouch(STELLAR_MULCH, STELLAR_SEDIMENT));
         add(STARDUST_BLOCK, block -> createSingleItemTableWithSilkTouch(block, OperationStarcleaveItems.STARDUST_CLUSTER, UniformGenerator.between(1.0F, 4.0F)));
 
+        this.add(STARBLEACHED_LEAVES, block -> this.createStarbleachedLeavesDrops(block, STARBLEACHED_SAPLING, NORMAL_LEAVES_SAPLING_CHANCES));
         dropWithSilkTouchOrShears(NUCLEIC_FISSURELEAVES);
 
         dropWithShears(MULCHBORNE_TUFT);
@@ -242,6 +240,30 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
 
     private LootTable.Builder createSilkTouchOrShearsDrop(ItemLike item) {
         return lootTable().withPool(lootPool().setRolls(ConstantValue.exactly(1.0F)).when(hasShearsOrSilkTouch()).add(item(item)));
+    }
+
+    public LootTable.Builder createStarbleachedLeavesDrops(Block leavesBlock, Block saplingBlock, float... chances) {
+        HolderLookup.RegistryLookup<Enchantment> registryLookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
+        Holder<Enchantment> fortune = registryLookup.getOrThrow(Enchantments.FORTUNE);
+
+
+        return this.createSilkTouchOrShearsDispatchTable(
+                leavesBlock,
+                this.applyExplosionCondition(leavesBlock, LootItem.lootTableItem(saplingBlock))
+                        .when(BonusLevelTableCondition.bonusLevelFlatChance(registryLookup.getOrThrow(Enchantments.FORTUNE), chances))
+        ).withPool(
+                LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1.0F))
+                        .when(this.doesNotHaveShearsOrSilkTouch())
+                        .add(
+                                this.applyExplosionDecay(
+                                        leavesBlock,
+                                        LootItem.lootTableItem(OperationStarcleaveItems.STARBLEACHED_LEAF_BUNCH)
+                                                .apply(SetItemCountFunction.setCount(BinomialDistributionGenerator.binomial(1, 0.3333F)))
+                                                .apply(ApplyBonusCount.addBonusBinomialDistributionCount(fortune, 0.333F, 0))
+                                )
+                        )
+        );
     }
 
     private void addClusterDrops(HolderLookup.RegistryLookup<Enchantment> registryLookup, Block cluster, Item item) {
