@@ -87,8 +87,17 @@ public class EntityLootTableProvider extends SimpleFabricLootTableProvider {
                                 .setRolls(ConstantValue.exactly(1.0F))
                                 .add(
                                         LootItem.lootTableItem(HOLY_STRANDS)
-                                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 4.0F)))
-                                                .apply(EnchantedCountIncreaseFunction.lootingMultiplier(registries, UniformGenerator.between(1.0F, 2.0F)))
+                                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 6.0F)))
+                                                .apply(EnchantedCountIncreaseFunction.lootingMultiplier(registries, UniformGenerator.between(0.0F, 2.0F)))
+                                )
+                )
+                .withPool(
+                        LootPool.lootPool()
+                                .setRolls(ConstantValue.exactly(1.0F))
+                                .add(
+                                        LootItem.lootTableItem(STARBLEACHED_LEAF_BUNCH)
+                                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F)))
+                                                .apply(EnchantedCountIncreaseFunction.lootingMultiplier(registries, UniformGenerator.between(0.0F, 1.0F)))
                                 )
                 )
         );
