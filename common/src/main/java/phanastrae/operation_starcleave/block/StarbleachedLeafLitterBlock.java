@@ -44,10 +44,10 @@ public class StarbleachedLeafLitterBlock extends BushBlock {
     private ImmutableMap<BlockState, VoxelShape> createShapeMap() {
         // mix of the 1.21.1 and 26.1 vanilla functions for this
         VoxelShape[] segmentShapes = new VoxelShape[]{
-                Block.box(8.0, 0.0, 8.0, 16.0, 3.0, 16.0),
-                Block.box(0.0, 0.0, 8.0, 8.0, 3.0, 16.0),
-                Block.box(0.0, 0.0, 0.0, 8.0, 3.0, 8.0),
-                Block.box(8.0, 0.0, 0.0, 16.0, 3.0, 8.0)
+                Block.box(8.0, 0.0, 8.0, 16.0, 1.0, 16.0),
+                Block.box(0.0, 0.0, 8.0, 8.0, 1.0, 16.0),
+                Block.box(0.0, 0.0, 0.0, 8.0, 1.0, 8.0),
+                Block.box(8.0, 0.0, 0.0, 16.0, 1.0, 8.0)
         };
 
         return this.getShapeForEachState(state -> {
