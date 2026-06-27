@@ -45,6 +45,8 @@ public class RecipeProvider extends FabricRecipeProvider {
         simpleShapelessWithSuffix(exporter, RecipeCategory.MISC, CLEANSED_SINGUT_COIL, CLEANSED_SINGUTS, 2, "_from_coil");
         simpleShapelessWithSuffix(exporter, RecipeCategory.MISC, CLEANSED_SINGUT_BLOCK, CLEANSED_SINGUTS, 2, "_from_block");
 
+        simpleShapeless(exporter, RecipeCategory.MISC, STARBLEACHED_LEAVES, STARBLEACHED_LEAF_LITTER, 4);
+
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, SPLASH_STARBLEACH_BOTTLE, 5)
                 .requires(Items.GUNPOWDER)
                 .requires(STARBLEACH_BOTTLE, 5)
