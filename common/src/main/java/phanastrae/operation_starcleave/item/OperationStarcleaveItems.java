@@ -99,6 +99,7 @@ public class OperationStarcleaveItems {
 
     public static final Item STARBLEACHED_LEAVES = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_LEAVES);
     public static final Item STARBLEACHED_LEAF_LITTER = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_LEAF_LITTER);
+    public static final Item STARBLEACHED_LEAF_BUNCH_BLOCK = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_LEAF_BUNCH_BLOCK);
 
     public static final Item STARBLEACHED_TILES = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_TILES);
     public static final Item STARBLEACHED_TILE_STAIRS = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_TILE_STAIRS);

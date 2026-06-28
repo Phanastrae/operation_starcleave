@@ -63,6 +63,8 @@ public class RecipeProvider extends FabricRecipeProvider {
                 .save(exporter);
         // endregion
 
+        nineBlockStorageRecipes(exporter, RecipeCategory.MISC, STARBLEACHED_LEAF_BUNCH, RecipeCategory.BUILDING_BLOCKS, STARBLEACHED_LEAF_BUNCH_BLOCK);
+
         // region shaped crafting
         woodFromLogs(exporter, STARBLEACHED_WOOD, STARBLEACHED_LOG);
         woodFromLogs(exporter, NUCLEIC_FISSURERIND, NUCLEIC_FISSUREROOT);

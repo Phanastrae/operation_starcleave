@@ -419,6 +419,18 @@ public class OperationStarcleaveBlocks {
             )
     );
 
+    public static final Block STARBLEACHED_LEAF_BUNCH_BLOCK = register(
+            "starbleached_leaf_bunch_block",
+            new StarbleachedLeafBundleBlock(properties()
+                    .strength(0.9F, 3.5F)
+                    .mapColor(COLOR_PINK)
+                    .sound(AZALEA_LEAVES)
+                    .instrument(BASEDRUM)
+                    .lightLevel(constant(13))
+                    .requiresCorrectToolForDrops()
+            )
+    );
+
     public static final Block STARBLEACHED_TILES = register(
             "starbleached_tiles",
             new Block(properties()

@@ -210,6 +210,8 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         STARBLEACHED_LEAVES,
                         NUCLEIC_FISSURELEAVES,
 
+                        STARBLEACHED_LEAF_BUNCH_BLOCK,
+
                         MUCKY_SINGUT_COIL,
                         MUCKY_SINGUT_BLOCK,
                         CLEANSED_SINGUT_COIL,

@@ -172,6 +172,7 @@ public class OperationStarcleaveCreativeModeTabs {
                 STARBLEACHED_LEAVES,
                 STARBLEACHED_LEAF_LITTER,
                 STARBLEACHED_LEAF_BUNCH,
+                STARBLEACHED_LEAF_BUNCH_BLOCK,
 
                 STARBLEACHED_TILES,
                 STARBLEACHED_TILE_STAIRS,
@@ -370,7 +371,9 @@ public class OperationStarcleaveCreativeModeTabs {
                 BLESSED_CLOTH_PADDING_SLAB,
                 BLESSED_CLOTH_CARPET_PADDING,
 
-                BLESSED_CLOTH_CURTAIN
+                BLESSED_CLOTH_CURTAIN,
+
+                STARBLEACHED_LEAF_BUNCH_BLOCK
         );
         helper.addAfter(Items.WAXED_OXIDIZED_COPPER_BULB, BUILDING_BLOCKS,
                 STARFLAKED_BISMUTH_BLOCK,

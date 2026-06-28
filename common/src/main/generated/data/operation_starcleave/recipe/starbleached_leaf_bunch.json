@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "operation_starcleave:starbleached_leaf_bunch_block"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "id": "operation_starcleave:starbleached_leaf_bunch"
+  }
+}

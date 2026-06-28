@@ -99,6 +99,8 @@ public class ModelProvider extends FabricModelProvider {
         forEach(BMG::createTrivialCube,
                 ASTERUBBLE,
 
+                STARBLEACHED_LEAF_BUNCH_BLOCK,
+
                 IMBUED_STARBLEACHED_TILES,
                 NUCLEOSYNTHESEED,
                 PLASMA_ICE,
