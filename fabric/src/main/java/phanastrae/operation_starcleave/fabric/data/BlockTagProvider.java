@@ -234,6 +234,8 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
                         STELLAR_REPULSOR,
 
+                        HOLY_LEAF_PLATFORM,
+
                         COAGULATED_PLASMA,
                         PLASMA_ICE,
 

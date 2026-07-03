@@ -225,6 +225,19 @@ public class RecipeProvider extends FabricRecipeProvider {
                         has(OURANIC_CHIP)
                 )
                 .save(exporter);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, HOLY_LEAF_PLATFORM, 6)
+                .define('L', STARBLEACHED_LEAF_BUNCH)
+                .define('H', HOLY_STRANDS)
+                .define('S', STARBLEACHED_TILES)
+                .pattern("LLL")
+                .pattern("HHH")
+                .pattern("S S")
+                .unlockedBy(
+                        getHasName(STARBLEACHED_LEAF_BUNCH),
+                        has(STARBLEACHED_LEAF_BUNCH)
+                )
+                .save(exporter);
         // endregion
 
         // region smelting

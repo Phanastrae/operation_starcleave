@@ -26,6 +26,8 @@ public class OperationStarcleaveBlockRenderTypes {
                 SHORT_HOLY_MOSS,
                 POTTED_SHORT_HOLY_MOSS,
 
+                HOLY_LEAF_PLATFORM,
+
                 BLESSED_BED,
                 PHLOGISTIC_FIRE,
 

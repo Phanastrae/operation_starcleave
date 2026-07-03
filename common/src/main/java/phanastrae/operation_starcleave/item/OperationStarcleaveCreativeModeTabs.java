@@ -244,6 +244,8 @@ public class OperationStarcleaveCreativeModeTabs {
                 STARBLEACHED_PEARL_BLOCK,
                 STELLAR_REPULSOR,
 
+                HOLY_LEAF_PLATFORM,
+
                 HOLLOWED_SAC,
                 PHLOGISTON_SAC,
                 SUBCAELIC_PHLOGLIGHT,

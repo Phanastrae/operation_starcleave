@@ -9,6 +9,7 @@ import java.util.Optional;
 public class OperationStarcleaveModelTemplates {
     public static final TextureSlot LEFT = TextureSlot.create("left", TextureSlot.ALL);
     public static final TextureSlot RIGHT = TextureSlot.create("right", TextureSlot.ALL);
+    public static final TextureSlot INNER_BOTTOM = TextureSlot.create("inner_bottom", null);
 
     public static final ModelTemplate UNEVEN_CROSS = create("uneven_cross", TextureSlot.CROSS);
     public static final ModelTemplate UNEVEN_CROSS_MIRRORED = create("uneven_cross_mirrored", "_mirrored", TextureSlot.CROSS);
@@ -26,6 +27,10 @@ public class OperationStarcleaveModelTemplates {
     public static final ModelTemplate LEAF_LITTER_2 = create("template_untinted_leaf_litter_2", "_2", TextureSlot.TEXTURE);
     public static final ModelTemplate LEAF_LITTER_3 = create("template_untinted_leaf_litter_3", "_3", TextureSlot.TEXTURE);
     public static final ModelTemplate LEAF_LITTER_4 = create("template_untinted_leaf_litter_4", "_4", TextureSlot.TEXTURE);
+
+    public static final ModelTemplate PLATFORM_BOTTOM = create("template_platform_bottom", "_bottom", TextureSlot.BOTTOM, TextureSlot.SIDE, TextureSlot.TOP, INNER_BOTTOM, TextureSlot.INNER_TOP);
+    public static final ModelTemplate PLATFORM_TOP = create("template_platform_top", TextureSlot.BOTTOM, TextureSlot.SIDE, TextureSlot.TOP, INNER_BOTTOM, TextureSlot.INNER_TOP);
+    public static final ModelTemplate PLATFORM_DOUBLE = create("template_platform_double", "_double", TextureSlot.BOTTOM, TextureSlot.SIDE, TextureSlot.TOP, INNER_BOTTOM, TextureSlot.INNER_TOP);
 
     private static final ModelTemplate[] TEMPLATE_CAULDRON_LEVELS = createCauldronArray();
 

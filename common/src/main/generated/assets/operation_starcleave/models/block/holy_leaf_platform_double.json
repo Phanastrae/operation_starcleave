@@ -1,0 +1,10 @@
+{
+  "parent": "operation_starcleave:block/template_platform_double",
+  "textures": {
+    "bottom": "operation_starcleave:block/holy_leaf_platform_bottom",
+    "inner_bottom": "operation_starcleave:block/holy_leaf_platform_mesh_bottom",
+    "inner_top": "operation_starcleave:block/holy_leaf_platform_mesh_top",
+    "side": "operation_starcleave:block/holy_leaf_platform_side",
+    "top": "operation_starcleave:block/holy_leaf_platform_top"
+  }
+}

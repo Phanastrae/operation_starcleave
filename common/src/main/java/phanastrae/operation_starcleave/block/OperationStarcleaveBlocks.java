@@ -534,6 +534,22 @@ public class OperationStarcleaveBlocks {
             )
     );
 
+    public static final Block HOLY_LEAF_PLATFORM = register(
+            "holy_leaf_platform",
+            new PlatformBlock(properties()
+                    .strength(1.6F)
+                    .mapColor(COLOR_PINK)
+                    .instrument(GUITAR)
+                    .isSuffocating(NEVER)
+                    .isViewBlocking(NEVER)
+                    .isRedstoneConductor(NEVER)
+                    .isValidSpawn(SPAWN_NEVER)
+                    .lightLevel(constant(9))
+                    .dynamicShape()
+                    .noCollission()
+            )
+    );
+
     public static final Block BLESSED_CLOTH_BLOCK = register(
             "blessed_cloth_block",
             new BlessedClothBlock(properties()

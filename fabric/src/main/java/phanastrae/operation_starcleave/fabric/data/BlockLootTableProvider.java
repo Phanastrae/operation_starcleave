@@ -216,6 +216,8 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
         addClusterDrops(registryLookup, CELESTIAL_OPAL_SPIRE, OperationStarcleaveItems.CELESTIAL_OPAL_SHARD);
 
         this.add(STARBLEACHED_LEAF_LITTER, this.createSegmentedDrops(STARBLEACHED_LEAF_LITTER));
+
+        this.add(HOLY_LEAF_PLATFORM, createSlabItemTable(HOLY_LEAF_PLATFORM));
     }
 
     private void forEach(Consumer<Block> consumer, Block... list) {

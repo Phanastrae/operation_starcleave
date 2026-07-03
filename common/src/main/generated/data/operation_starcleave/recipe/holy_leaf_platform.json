@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "H": {
+      "item": "operation_starcleave:holy_strands"
+    },
+    "L": {
+      "item": "operation_starcleave:starbleached_leaf_bunch"
+    },
+    "S": {
+      "item": "operation_starcleave:starbleached_tiles"
+    }
+  },
+  "pattern": [
+    "LLL",
+    "HHH",
+    "S S"
+  ],
+  "result": {
+    "count": 6,
+    "id": "operation_starcleave:holy_leaf_platform"
+  }
+}

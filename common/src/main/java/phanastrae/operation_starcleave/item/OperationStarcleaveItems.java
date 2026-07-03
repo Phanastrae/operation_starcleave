@@ -119,6 +119,8 @@ public class OperationStarcleaveItems {
 
     public static final Item STELLAR_REPULSOR = registerBlockItem((OperationStarcleaveBlocks.STELLAR_REPULSOR));
 
+    public static final Item HOLY_LEAF_PLATFORM = registerBlockItem((OperationStarcleaveBlocks.HOLY_LEAF_PLATFORM));
+
     public static final Item BLESSED_CLOTH_BLOCK = registerBlockItem(OperationStarcleaveBlocks.BLESSED_CLOTH_BLOCK);
     public static final Item BLESSED_CLOTH_STAIRS = registerBlockItem(OperationStarcleaveBlocks.BLESSED_CLOTH_STAIRS);
     public static final Item BLESSED_CLOTH_SLAB = registerBlockItem(OperationStarcleaveBlocks.BLESSED_CLOTH_SLAB);

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_starbleached_leaf_bunch": {
+      "conditions": {
+        "items": [
+          {
+            "items": "operation_starcleave:starbleached_leaf_bunch"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "operation_starcleave:holy_leaf_platform"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_starbleached_leaf_bunch"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "operation_starcleave:holy_leaf_platform"
+    ]
+  }
+}

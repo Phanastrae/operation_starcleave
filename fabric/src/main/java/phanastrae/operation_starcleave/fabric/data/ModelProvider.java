@@ -196,6 +196,8 @@ public class ModelProvider extends FabricModelProvider {
 
         createStarbleachedLeafLitter(BMG, STARBLEACHED_LEAF_LITTER);
 
+        createPlatform(BMG, HOLY_LEAF_PLATFORM);
+
         // fluids
         BMG.createNonTemplateModelBlock(PETRICHORIC_PLASMA);
 
@@ -900,6 +902,21 @@ public class ModelProvider extends FabricModelProvider {
             );
         }
         BMG.blockStateOutput.accept(MultiVariantGenerator.multiVariant(block).with(map));
+    }
+
+    private static void createPlatform(BlockModelGenerators BMG, Block block) {
+        TextureMapping textureMapping = new TextureMapping()
+                .put(TextureSlot.BOTTOM, TextureMapping.getBlockTexture(block, "_bottom"))
+                .put(TextureSlot.SIDE, TextureMapping.getBlockTexture(block, "_side"))
+                .put(TextureSlot.TOP, TextureMapping.getBlockTexture(block, "_top"))
+                .put(OperationStarcleaveModelTemplates.INNER_BOTTOM, TextureMapping.getBlockTexture(block, "_mesh_bottom"))
+                .put(TextureSlot.INNER_TOP, TextureMapping.getBlockTexture(block, "_mesh_top"));
+
+        ResourceLocation bottomLocation = OperationStarcleaveModelTemplates.PLATFORM_BOTTOM.create(block, textureMapping, BMG.modelOutput);
+        ResourceLocation topLocation = OperationStarcleaveModelTemplates.PLATFORM_TOP.create(block, textureMapping, BMG.modelOutput);
+        ResourceLocation doubleLocation = OperationStarcleaveModelTemplates.PLATFORM_DOUBLE.create(block, textureMapping, BMG.modelOutput);
+
+        BMG.blockStateOutput.accept(createSlab(block, bottomLocation, topLocation, doubleLocation));
     }
 
     private static void createCropForSuffix(int stage, String extraSuffix, BlockModelGenerators BMG, Block block) {

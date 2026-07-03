@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "operation_starcleave:block/holy_leaf_platform_bottom"
+    },
+    "type=double": {
+      "model": "operation_starcleave:block/holy_leaf_platform_double"
+    },
+    "type=top": {
+      "model": "operation_starcleave:block/holy_leaf_platform"
+    }
+  }
+}
