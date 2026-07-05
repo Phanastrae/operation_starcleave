@@ -47,14 +47,6 @@ public class RecipeProvider extends FabricRecipeProvider {
 
         simpleShapeless(exporter, RecipeCategory.MISC, STARBLEACHED_LEAVES, STARBLEACHED_LEAF_LITTER, 4);
 
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, SPLASH_STARBLEACH_BOTTLE, 5)
-                .requires(Items.GUNPOWDER)
-                .requires(STARBLEACH_BOTTLE, 5)
-                .unlockedBy(
-                        getHasName(STARBLEACH_BOTTLE),
-                        has(STARBLEACH_BOTTLE))
-                .save(exporter);
-
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, BISMUTH_FLAKE, 6)
                 .requires(STARFLAKED_BISMUTH)
                 .unlockedBy(

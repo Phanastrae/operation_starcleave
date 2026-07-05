@@ -12,6 +12,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -24,7 +25,9 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.brewing.BrewingRecipe;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
@@ -110,6 +113,9 @@ public class OperationStarcleaveNeoForge {
     }
 
     public void setupGameBusEvents(IEventBus gameEventBus) {
+        // setup custom brewing recipes
+        gameEventBus.addListener(this::setupCustomBrewing);
+
         // world tick start
         gameEventBus.addListener(this::tickLevel);
 
@@ -268,6 +274,14 @@ public class OperationStarcleaveNeoForge {
 
     public void registerCauldronFluidContent(RegisterCauldronFluidContentEvent event) {
         event.register(OperationStarcleaveBlocks.STARBLEACH_CAULDRON, OperationStarcleaveFluids.STARBLEACH, FluidType.BUCKET_VOLUME * 7 / 4, StarbleachCauldronBlock.LEVEL_7);
+    }
+
+    public void setupCustomBrewing(RegisterBrewingRecipesEvent event) {
+        event.getBuilder().addRecipe(new BrewingRecipe(
+                Ingredient.of(OperationStarcleaveItems.STARBLEACH_BOTTLE),
+                Ingredient.of(Items.GUNPOWDER),
+                new ItemStack(OperationStarcleaveItems.SPLASH_STARBLEACH_BOTTLE)
+        ));
     }
 
     public void tickLevel(LevelTickEvent.Pre event) {
