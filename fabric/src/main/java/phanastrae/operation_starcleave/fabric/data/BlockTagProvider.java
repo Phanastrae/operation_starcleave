@@ -501,6 +501,11 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         BLESSED_CLOTH_CURTAIN
                 );
 
+        getOrCreateTagBuilder(OperationStarcleaveBlockTags.MINED_QUICKLY_BY_SHEARS)
+                .add(
+                        STARBLEACHED_LEAVES
+                );
+
         // block tags that are also item tags
         getOrCreateTagBuilder(OperationStarcleaveBlockTags.STARBLEACHED_LOGS)
                 .add(

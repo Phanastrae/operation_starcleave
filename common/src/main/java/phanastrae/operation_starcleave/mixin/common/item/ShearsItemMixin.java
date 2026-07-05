@@ -6,7 +6,7 @@ import net.minecraft.world.item.ShearsItem;
 import net.minecraft.world.item.component.Tool;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
+import phanastrae.operation_starcleave.block.tag.OperationStarcleaveBlockTags;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ public class ShearsItemMixin {
         List<Tool.Rule> ogList = (List<Tool.Rule>) original.call(e1, e2, e3, e4);
 
         List<Tool.Rule> newList = new ArrayList<>();
-        newList.add(Tool.Rule.minesAndDrops(List.of(OperationStarcleaveBlocks.STARBLEACHED_LEAVES), 15.0F));
+        newList.add(Tool.Rule.minesAndDrops(OperationStarcleaveBlockTags.MINED_QUICKLY_BY_SHEARS, 15.0F));
         newList.addAll(ogList);
 
         return (List<E>) List.copyOf(newList);
