@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "ingredients": [
+    {
+      "item": "operation_starcleave:starbleached_tiles"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "operation_starcleave:starbleached_button"
+  }
+}

@@ -78,6 +78,8 @@ public class OperationStarcleaveBlockFamilies {
             .slab(OperationStarcleaveBlocks.STARBLEACHED_TILE_SLAB)
             .wall(OperationStarcleaveBlocks.STARBLEACHED_TILE_WALL)
             .chiseled(OperationStarcleaveBlocks.CHISELED_STARBLEACHED_TILES)
+            .pressurePlate(OperationStarcleaveBlocks.STARBLEACHED_PRESSURE_PLATE)
+            .button(OperationStarcleaveBlocks.STARBLEACHED_BUTTON)
             .getFamily();
 
     public static final BlockFamily STELLAR_TILES = familyBuilder(OperationStarcleaveBlocks.STELLAR_TILES)

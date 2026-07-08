@@ -43,6 +43,8 @@
     "operation_starcleave:cut_polished_fellcrust_stairs",
     "operation_starcleave:starbleached_tiles",
     "operation_starcleave:chiseled_starbleached_tiles",
+    "operation_starcleave:starbleached_button",
+    "operation_starcleave:starbleached_pressure_plate",
     "operation_starcleave:starbleached_tile_slab",
     "operation_starcleave:starbleached_tile_stairs",
     "operation_starcleave:starbleached_tile_wall",

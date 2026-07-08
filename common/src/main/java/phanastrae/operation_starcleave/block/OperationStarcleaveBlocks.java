@@ -455,6 +455,33 @@ public class OperationStarcleaveBlocks {
             wallOf(STARBLEACHED_TILES)
     );
 
+    public static final Block STARBLEACHED_PRESSURE_PLATE = register(
+            "starbleached_pressure_plate",
+            new CustomPressurePlateBlock(
+                    OperationStarcleaveBlockSetTypes.STARBLEACHED,
+                    properties()
+                            .strength(0.5F)
+                            .mapColor(COLOR_GRAY)
+                            .instrument(NoteBlockInstrument.BASEDRUM)
+                            .pushReaction(PushReaction.DESTROY)
+                            .forceSolidOn()
+                            .requiresCorrectToolForDrops()
+                            .noCollission()
+            )
+    );
+
+    public static final Block STARBLEACHED_BUTTON = register(
+            "starbleached_button",
+            new CustomButtonBlock(
+                    OperationStarcleaveBlockSetTypes.STARBLEACHED,
+                    25, // midpoint of stone and wood
+                    properties()
+                            .strength(0.5F)
+                            .pushReaction(PushReaction.DESTROY)
+                            .noCollission()
+            )
+    );
+
     public static final Block CHISELED_STARBLEACHED_TILES = register(
             "chiseled_starbleached_tiles",
             new Block(legacyCopy(STARBLEACHED_TILES))

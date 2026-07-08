@@ -106,6 +106,9 @@ public class OperationStarcleaveItems {
     public static final Item STARBLEACHED_TILE_SLAB = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_TILE_SLAB);
     public static final Item STARBLEACHED_TILE_WALL = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_TILE_WALL);
 
+    public static final Item STARBLEACHED_PRESSURE_PLATE = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_PRESSURE_PLATE);
+    public static final Item STARBLEACHED_BUTTON = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_BUTTON);
+
     public static final Item CHISELED_STARBLEACHED_TILES = registerBlockItem(OperationStarcleaveBlocks.CHISELED_STARBLEACHED_TILES);
 
     public static final Item IMBUED_STARBLEACHED_TILES = registerBlockItem(OperationStarcleaveBlocks.IMBUED_STARBLEACHED_TILES);

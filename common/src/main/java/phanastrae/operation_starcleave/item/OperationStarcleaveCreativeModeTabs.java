@@ -179,6 +179,9 @@ public class OperationStarcleaveCreativeModeTabs {
                 STARBLEACHED_TILE_SLAB,
                 STARBLEACHED_TILE_WALL,
 
+                STARBLEACHED_PRESSURE_PLATE,
+                STARBLEACHED_BUTTON,
+
                 CHISELED_STARBLEACHED_TILES,
                 IMBUED_STARBLEACHED_TILES,
 
@@ -299,6 +302,9 @@ public class OperationStarcleaveCreativeModeTabs {
                 STARBLEACHED_TILE_STAIRS,
                 STARBLEACHED_TILE_SLAB,
                 STARBLEACHED_TILE_WALL,
+
+                STARBLEACHED_PRESSURE_PLATE,
+                STARBLEACHED_BUTTON,
 
                 CHISELED_STARBLEACHED_TILES,
                 IMBUED_STARBLEACHED_TILES,
