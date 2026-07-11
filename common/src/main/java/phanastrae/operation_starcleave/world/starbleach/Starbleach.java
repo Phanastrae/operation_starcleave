@@ -9,12 +9,10 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
@@ -115,37 +113,46 @@ public class Starbleach {
         BlockState newState = StarbleachConversions.getStarbleachResult(level, blockPos, blockState, random, starbleachTarget);
         if (newState != null) {
             convertBlock(level, blockPos, blockState, newState, particleCount);
-
-            // TODO make this less hardcoded
-            BlockPos upPos = blockPos.above();
-            BlockState upState = level.getBlockState(upPos);
-            if (upState.is(Blocks.SHORT_GRASS) || (upState.isAir() && random.nextInt(3) == 0)) {
-                if (newState.is(OperationStarcleaveBlocks.HOLY_MOSS)) {
-                    level.setBlockAndUpdate(upPos, OperationStarcleaveBlocks.SHORT_HOLY_MOSS.defaultBlockState());
-                } else if (newState.is(OperationStarcleaveBlocks.STELLAR_MULCH)) {
-                    level.setBlockAndUpdate(upPos, OperationStarcleaveBlocks.MULCHBORNE_TUFT.defaultBlockState());
-                }
-            } else if (upState.is(BlockTags.SAPLINGS) && newState.is(OperationStarcleaveBlockTags.STARBLEACHED_SAPLING_PLANTABLE_ON)) {
-                level.setBlockAndUpdate(upPos, OperationStarcleaveBlocks.STARBLEACHED_SAPLING.defaultBlockState());
-            }
-
-            // update neighbouring blocks
+            starbleachAttachedBlocks(level, random, blockPos, newState);
             newState.updateNeighbourShapes(level, blockPos, 3);
 
-            // place features
-            if ((newState.is(OperationStarcleaveBlocks.HOLY_MOSS) || newState.is(OperationStarcleaveBlocks.STELLAR_MULCH) || newState.is(OperationStarcleaveBlocks.STELLAR_SEDIMENT) || newState.is(OperationStarcleaveBlocks.STARDUST_BLOCK))
-                    && (random.nextInt(128) == 0)
-            ) {
-                tryPlaceAsterubbleBoulder(level, random, blockPos.above());
-            }
-
-            if (newState.is(OperationStarcleaveBlocks.ASTERUBBLE) && random.nextInt(20) == 0) {
-                tryPlaceAsterubbleBoulder(level, random, blockPos.above());
-            }
-
+            placeFeatures(level, random, blockPos, newState);
             return true;
         } else {
             return false;
+        }
+    }
+
+    public static void starbleachAttachedBlocks(ServerLevel level, RandomSource random, BlockPos blockPos, BlockState newState) {
+        for (Direction direction : Direction.values()) {
+            BlockPos adjPos = blockPos.offset(direction.getNormal());
+            BlockState adjState = level.getBlockState(adjPos);
+
+            BlockState newAdjState = StarbleachConversions.getStarbleachAttachedBlockResult(level, adjPos, adjState, random, newState, direction);
+            if (newAdjState != null) {
+                level.setBlockAndUpdate(adjPos, newAdjState);
+            }
+        }
+    }
+
+    public static void placeFeatures(ServerLevel level, RandomSource random, BlockPos blockPos, BlockState newState) {
+        BlockPos upPos = blockPos.above();
+        BlockState upState = level.getBlockState(upPos);
+
+        if (newState.is(OperationStarcleaveBlocks.HOLY_MOSS) && random.nextInt(3) == 0 && upState.isAir()) {
+            tryPlaceFeature(level, random, OperationStarcleaveConfiguredFeatures.HOLY_MOSS_VEGETATION, upPos);
+            return;
+        } else if (newState.is(OperationStarcleaveBlocks.STELLAR_MULCH) && random.nextInt(3) == 0 && upState.isAir()) {
+            tryPlaceFeature(level, random, OperationStarcleaveConfiguredFeatures.STELLAR_MULCH_VEGETATION, upPos);
+            return;
+        }
+
+        if ((newState.is(OperationStarcleaveBlocks.HOLY_MOSS) || newState.is(OperationStarcleaveBlocks.STELLAR_MULCH) || newState.is(OperationStarcleaveBlocks.STELLAR_SEDIMENT) || newState.is(OperationStarcleaveBlocks.STARDUST_BLOCK))
+                && (random.nextInt(128) == 0)
+        ) {
+            tryPlaceAsterubbleBoulder(level, random, upPos);
+        } else if (newState.is(OperationStarcleaveBlocks.ASTERUBBLE) && random.nextInt(20) == 0) {
+            tryPlaceAsterubbleBoulder(level, random, upPos);
         }
     }
 

@@ -9,10 +9,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.FarmBlock;
-import net.minecraft.world.level.block.SlabBlock;
-import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.SlabType;
@@ -20,6 +17,7 @@ import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvi
 import net.minecraft.world.level.levelgen.feature.stateproviders.SimpleStateProvider;
 import net.minecraft.world.level.levelgen.feature.stateproviders.WeightedStateProvider;
 import org.jetbrains.annotations.Nullable;
+import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.block.StarbleachCauldronBlock;
 import phanastrae.operation_starcleave.block.StellarFarmlandBlock;
 import phanastrae.operation_starcleave.block.tag.OperationStarcleaveBlockTags;
@@ -90,6 +88,51 @@ public class StarbleachConversions {
         return null;
     }
 
+    @Nullable
+    public static BlockState getStarbleachAttachedBlockResult(Level level, BlockPos blockPos, BlockState blockState, RandomSource random, BlockState supportState, Direction direction) {
+        if (blockState.is(OperationStarcleaveBlockTags.STARBLEACH_IMMUNE)) {
+            return null;
+        }
+
+        // TODO further improve this all too at some point
+        if (direction == Direction.UP) {
+            if (blockState.is(Blocks.SHORT_GRASS)) {
+                if (supportState.is(OperationStarcleaveBlocks.HOLY_MOSS)) {
+                    return OperationStarcleaveBlocks.SHORT_HOLY_MOSS.defaultBlockState();
+                } else if (supportState.is(OperationStarcleaveBlocks.STELLAR_MULCH)) {
+                    return OperationStarcleaveBlocks.MULCHBORNE_TUFT.defaultBlockState();
+                }
+            }
+
+            if (blockState.is(BlockTags.SAPLINGS) && supportState.is(OperationStarcleaveBlockTags.STARBLEACHED_SAPLING_PLANTABLE_ON)) {
+                return OperationStarcleaveBlocks.STARBLEACHED_SAPLING.defaultBlockState();
+            }
+        }
+
+        if (supportState.is(BUDDING_CELESTIAL_OPAL)) {
+            if (blockState.is(SMALL_AMETHYST_BUD)) {
+                return getAttachedCrystalBlockstate(blockState, SMALL_CELESTIAL_OPAL_BUD, direction);
+            } else if (blockState.is(MEDIUM_AMETHYST_BUD)) {
+                return getAttachedCrystalBlockstate(blockState, MEDIUM_CELESTIAL_OPAL_BUD, direction);
+            } else if (blockState.is(LARGE_AMETHYST_BUD)) {
+                return getAttachedCrystalBlockstate(blockState, LARGE_CELESTIAL_OPAL_BUD, direction);
+            } else if (blockState.is(AMETHYST_CLUSTER)) {
+                return getAttachedCrystalBlockstate(blockState, CELESTIAL_OPAL_CLUSTER, direction);
+            }
+        }
+
+        return null;
+    }
+
+    @Nullable
+    public static BlockState getAttachedCrystalBlockstate(BlockState oldState, Block block, Direction direction) {
+        if (oldState.getValue(AmethystClusterBlock.FACING) == direction) {
+            return block.withPropertiesOf(oldState);
+        } else {
+            return null;
+        }
+    }
+
     public static void init() {
         addConversion(StateMatchesPredicate.fromBlocks(PODZOL, MYCELIUM), STELLAR_MULCH);
         addConversion(GRASS_BLOCK, StarbleachConversions::getGrassySedimentState);
@@ -120,10 +163,6 @@ public class StarbleachConversions {
 
         addConversion(AMETHYST_BLOCK, CELESTIAL_OPAL_BLOCK);
         addConversion(BUDDING_AMETHYST, BUDDING_CELESTIAL_OPAL);
-        addCopyPropertiesConversion(SMALL_AMETHYST_BUD, SMALL_CELESTIAL_OPAL_BUD);
-        addCopyPropertiesConversion(MEDIUM_AMETHYST_BUD, MEDIUM_CELESTIAL_OPAL_BUD);
-        addCopyPropertiesConversion(LARGE_AMETHYST_BUD, LARGE_CELESTIAL_OPAL_BUD);
-        addCopyPropertiesConversion(AMETHYST_CLUSTER, CELESTIAL_OPAL_CLUSTER);
 
         addConversion(OperationStarcleaveBlockTags.SB_I_FELLCRUST, StarbleachConversions::getFellcrustState);
         addConversion(OperationStarcleaveBlockTags.SB_I_FELLCRUST_STAIRS, StarbleachConversions::getFellcrustStairsState);
