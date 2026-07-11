@@ -8,7 +8,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import phanastrae.operation_starcleave.data.worldgen.features.OperationStarcleaveVegetationFeatures;
+import phanastrae.operation_starcleave.data.worldgen.features.OperationStarcleaveConfiguredFeatures;
 import phanastrae.operation_starcleave.item.enchantment.OperationStarcleaveEnchantments;
 
 public class OperationStarcleaveDataGenerator implements DataGeneratorEntrypoint {
@@ -48,6 +48,6 @@ public class OperationStarcleaveDataGenerator implements DataGeneratorEntrypoint
     }
 
     private static void bootstrapConfiguredFeatures(BootstrapContext<ConfiguredFeature<?, ?>> context) {
-        OperationStarcleaveVegetationFeatures.bootstrap(context);
+        OperationStarcleaveConfiguredFeatures.bootstrap(context);
     }
 }

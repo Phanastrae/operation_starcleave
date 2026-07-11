@@ -1,0 +1,8 @@
+{
+  "type": "operation_starcleave:asterubble_boulder",
+  "config": {
+    "state": {
+      "Name": "operation_starcleave:asterubble"
+    }
+  }
+}

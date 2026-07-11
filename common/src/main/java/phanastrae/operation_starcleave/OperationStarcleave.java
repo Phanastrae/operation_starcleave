@@ -36,6 +36,7 @@ import phanastrae.operation_starcleave.recipe.OperationStarcleaveRecipeSerialize
 import phanastrae.operation_starcleave.recipe.OperationStarcleaveRecipeTypes;
 import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
 import phanastrae.operation_starcleave.world.OperationStarcleaveGameRules;
+import phanastrae.operation_starcleave.world.feature.OperationStarcleaveFeatures;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 import phanastrae.operation_starcleave.world.starbleach.StarbleachConversions;
 
@@ -91,6 +92,9 @@ public class OperationStarcleave {
         rla.addRegistryListener(BuiltInRegistries.RECIPE_TYPE, OperationStarcleaveRecipeTypes::init);
         // recipe serializers
         rla.addRegistryListener(BuiltInRegistries.RECIPE_SERIALIZER, OperationStarcleaveRecipeSerializers::init);
+
+        // features
+        rla.addRegistryListener(BuiltInRegistries.FEATURE, OperationStarcleaveFeatures::init);
     }
 
     public static void init() {

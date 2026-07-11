@@ -5,10 +5,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -17,9 +20,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.block.tag.OperationStarcleaveBlockTags;
+import phanastrae.operation_starcleave.data.worldgen.features.OperationStarcleaveConfiguredFeatures;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
 import phanastrae.operation_starcleave.entity.StarbleachChargeEntity;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
@@ -104,29 +110,63 @@ public class Starbleach {
     }
 
     public static boolean starbleachPos(ServerLevel level, BlockPos blockPos, BlockState blockState, StarbleachTarget starbleachTarget, int particleCount) {
-        BlockState newState = StarbleachConversions.getStarbleachResult(level, blockPos, blockState, level.random, starbleachTarget);
+        RandomSource random = level.random;
+
+        BlockState newState = StarbleachConversions.getStarbleachResult(level, blockPos, blockState, random, starbleachTarget);
         if (newState != null) {
             convertBlock(level, blockPos, blockState, newState, particleCount);
 
             // TODO make this less hardcoded
             BlockPos upPos = blockPos.above();
             BlockState upState = level.getBlockState(upPos);
-            if (upState.is(Blocks.SHORT_GRASS) || (upState.isAir() && level.random.nextInt(3) == 0)) {
+            if (upState.is(Blocks.SHORT_GRASS) || (upState.isAir() && random.nextInt(3) == 0)) {
                 if (newState.is(OperationStarcleaveBlocks.HOLY_MOSS)) {
                     level.setBlockAndUpdate(upPos, OperationStarcleaveBlocks.SHORT_HOLY_MOSS.defaultBlockState());
                 } else if (newState.is(OperationStarcleaveBlocks.STELLAR_MULCH)) {
                     level.setBlockAndUpdate(upPos, OperationStarcleaveBlocks.MULCHBORNE_TUFT.defaultBlockState());
                 }
-            } else if(upState.is(BlockTags.SAPLINGS) && newState.is(OperationStarcleaveBlockTags.STARBLEACHED_SAPLING_PLANTABLE_ON)) {
+            } else if (upState.is(BlockTags.SAPLINGS) && newState.is(OperationStarcleaveBlockTags.STARBLEACHED_SAPLING_PLANTABLE_ON)) {
                 level.setBlockAndUpdate(upPos, OperationStarcleaveBlocks.STARBLEACHED_SAPLING.defaultBlockState());
             }
 
             // update neighbouring blocks
             newState.updateNeighbourShapes(level, blockPos, 3);
+
+            // place features
+            if ((newState.is(OperationStarcleaveBlocks.HOLY_MOSS) || newState.is(OperationStarcleaveBlocks.STELLAR_MULCH) || newState.is(OperationStarcleaveBlocks.STELLAR_SEDIMENT) || newState.is(OperationStarcleaveBlocks.STARDUST_BLOCK))
+                    && (random.nextInt(128) == 0)
+            ) {
+                tryPlaceAsterubbleBoulder(level, random, blockPos.above());
+            }
+
+            if (newState.is(OperationStarcleaveBlocks.ASTERUBBLE) && random.nextInt(20) == 0) {
+                tryPlaceAsterubbleBoulder(level, random, blockPos.above());
+            }
+
             return true;
         } else {
             return false;
         }
+    }
+
+    public static void tryPlaceAsterubbleBoulder(ServerLevel level, RandomSource random, BlockPos pos) {
+        if (level.getBlockState(pos).canBeReplaced() && boxIsClear(level, AABB.encapsulatingFullBlocks(
+                pos.offset(5, 2, 5),
+                pos.offset(-5, -8, -5)))
+        ) {
+            tryPlaceFeature(level, random, OperationStarcleaveConfiguredFeatures.ASTERUBBLE_BOULDER, pos);
+        }
+    }
+
+    public static boolean boxIsClear(ServerLevel level, AABB aabb) {
+        return level.getEntitiesOfClass(Entity.class, aabb, e -> e.blocksBuilding).isEmpty();
+    }
+
+    public static void tryPlaceFeature(ServerLevel level, RandomSource random, ResourceKey<ConfiguredFeature<?, ?>> featureKey, BlockPos pos) {
+        level.registryAccess()
+                .registry(Registries.CONFIGURED_FEATURE)
+                .flatMap(feature -> feature.getHolder(featureKey))
+                .ifPresent(feature -> feature.value().place(level, level.getChunkSource().getGenerator(), random, pos));
     }
 
     public static boolean isStarbleached(BlockState blockState) {

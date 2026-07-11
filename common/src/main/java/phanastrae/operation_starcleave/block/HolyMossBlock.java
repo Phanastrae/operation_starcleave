@@ -11,7 +11,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.lighting.LightEngine;
-import phanastrae.operation_starcleave.data.worldgen.features.OperationStarcleaveVegetationFeatures;
+import phanastrae.operation_starcleave.data.worldgen.features.OperationStarcleaveConfiguredFeatures;
 
 public class HolyMossBlock extends StellarSedimentBlock {
     public static final MapCodec<StellarSedimentBlock> CODEC = simpleCodec(StellarSedimentBlock::new);
@@ -43,7 +43,7 @@ public class HolyMossBlock extends StellarSedimentBlock {
     public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state) {
         level.registryAccess()
                 .registry(Registries.CONFIGURED_FEATURE)
-                .flatMap(feature -> feature.getHolder(OperationStarcleaveVegetationFeatures.HOLY_MOSS_PATCH_BONEMEAL))
+                .flatMap(feature -> feature.getHolder(OperationStarcleaveConfiguredFeatures.HOLY_MOSS_PATCH_BONEMEAL))
                 .ifPresent(feature -> feature.value().place(level, level.getChunkSource().getGenerator(), random, pos.above()));
     }
 

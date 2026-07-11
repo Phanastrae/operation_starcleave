@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.VegetationPatchConfiguration;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
@@ -17,13 +18,16 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.block.tag.OperationStarcleaveBlockTags;
+import phanastrae.operation_starcleave.world.feature.OperationStarcleaveFeatures;
 
-public class OperationStarcleaveVegetationFeatures {
+public class OperationStarcleaveConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> HOLY_MOSS_VEGETATION = createKey("holy_moss_vegetation");
     public static final ResourceKey<ConfiguredFeature<?, ?>> HOLY_MOSS_PATCH_BONEMEAL = createKey("holy_moss_patch_bonemeal");
     public static final ResourceKey<ConfiguredFeature<?, ?>> STELLAR_MULCH_VEGETATION = createKey("stellar_mulch_vegetation");
     public static final ResourceKey<ConfiguredFeature<?, ?>> STELLAR_MULCH_PATCH_BONEMEAL = createKey("stellar_mulch_patch_bonemeal");
     public static final ResourceKey<ConfiguredFeature<?, ?>> SMALL_STELLAR_MULCH_PATCH_BONEMEAL = createKey("small_stellar_mulch_patch_bonemeal");
+
+    public static final ResourceKey<ConfiguredFeature<?, ?>> ASTERUBBLE_BOULDER = createKey("asterubble_boulder");
 
     public static ResourceKey<ConfiguredFeature<?, ?>> createKey(String name) {
         return ResourceKey.create(Registries.CONFIGURED_FEATURE, OperationStarcleave.id(name));
@@ -103,6 +107,13 @@ public class OperationStarcleaveVegetationFeatures {
                         ConstantInt.of(0),
                         0.75F
                 )
+        );
+
+        FeatureUtils.register(
+                context,
+                ASTERUBBLE_BOULDER,
+                OperationStarcleaveFeatures.ASTERUBBLE_BOULDER,
+                new BlockStateConfiguration(OperationStarcleaveBlocks.ASTERUBBLE.defaultBlockState())
         );
     }
 }

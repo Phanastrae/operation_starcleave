@@ -506,6 +506,20 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         STARBLEACHED_LEAVES
                 );
 
+        getOrCreateTagBuilder(OperationStarcleaveBlockTags.ASTERUBBLE_BOULDER_REPLACEABLE)
+                .addOptionalTag(BlockTags.DIRT)
+                .addOptionalTag(BlockTags.BASE_STONE_OVERWORLD)
+                .addOptionalTag(BlockTags.SAND)
+                .addOptionalTag(BlockTags.LEAVES)
+                .add(
+                        Blocks.GRAVEL,
+                        STELLAR_SEDIMENT,
+                        STELLAR_MULCH,
+                        HOLY_MOSS,
+                        STARDUST_BLOCK,
+                        STARBLEACHED_LEAVES
+                );
+
         // block tags that are also item tags
         getOrCreateTagBuilder(OperationStarcleaveBlockTags.STARBLEACHED_LOGS)
                 .add(

@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import phanastrae.operation_starcleave.data.worldgen.features.OperationStarcleaveVegetationFeatures;
+import phanastrae.operation_starcleave.data.worldgen.features.OperationStarcleaveConfiguredFeatures;
 
 public class StellarSedimentBlock extends Block implements BonemealableBlock {
     public static final MapCodec<StellarSedimentBlock> CODEC = simpleCodec(StellarSedimentBlock::new);
@@ -45,7 +45,7 @@ public class StellarSedimentBlock extends Block implements BonemealableBlock {
     public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state) {
         level.registryAccess()
                 .registry(Registries.CONFIGURED_FEATURE)
-                .flatMap(feature -> feature.getHolder(OperationStarcleaveVegetationFeatures.SMALL_STELLAR_MULCH_PATCH_BONEMEAL))
+                .flatMap(feature -> feature.getHolder(OperationStarcleaveConfiguredFeatures.SMALL_STELLAR_MULCH_PATCH_BONEMEAL))
                 .ifPresent(feature -> feature.value().place(level, level.getChunkSource().getGenerator(), random, pos.above()));
     }
 
