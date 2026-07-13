@@ -47,7 +47,8 @@ public class OperationStarcleaveConfiguredFeatures {
                 new SimpleBlockConfiguration(
                         new WeightedStateProvider(
                                 SimpleWeightedRandomList.<BlockState>builder()
-                                        .add(OperationStarcleaveBlocks.SHORT_HOLY_MOSS.defaultBlockState(), 91)
+                                        .add(OperationStarcleaveBlocks.SHORT_HOLY_MOSS.defaultBlockState(), 84)
+                                        .add(OperationStarcleaveBlocks.TALL_HOLY_MOSS.defaultBlockState(), 7)
                                         .add(OperationStarcleaveBlocks.GREAT_TREES_CARE.defaultBlockState(), 1)
                                         .add(OperationStarcleaveBlocks.RED_MOURNER.defaultBlockState(), 1)
                                         .add(OperationStarcleaveBlocks.ANGELCLAW.defaultBlockState(), 1)
