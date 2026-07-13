@@ -11,6 +11,7 @@ import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
@@ -110,6 +111,13 @@ public class StarbleachConversions {
 
             if (blockState.is(BlockTags.SMALL_FLOWERS) && supportState.is(OperationStarcleaveBlockTags.STARBLEACHED_SAPLING_PLANTABLE_ON)) {
                 return getRandomSmallStarbleachedFlower(random).defaultBlockState();
+            }
+
+            if (blockState.is(TALL_GRASS)) {
+                DoubleBlockHalf half = blockState.getValue(DoublePlantBlock.HALF);
+                if ((half == DoubleBlockHalf.LOWER && supportState.is(HOLY_MOSS)) || (half == DoubleBlockHalf.UPPER && supportState.is(TALL_HOLY_MOSS))) {
+                    return TALL_HOLY_MOSS.withPropertiesOf(blockState);
+                }
             }
         }
 

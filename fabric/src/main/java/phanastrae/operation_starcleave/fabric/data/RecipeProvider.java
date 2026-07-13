@@ -417,6 +417,11 @@ public class RecipeProvider extends FabricRecipeProvider {
                 0.1F,
                 SHORT_HOLY_MOSS
         );
+        saveStarbleachRecipe(exporter,
+                Items.TALL_GRASS,
+                0.2F,
+                TALL_HOLY_MOSS
+        );
 
         saveStarbleachRecipe(exporter,
                 ItemTags.LEAVES,

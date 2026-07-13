@@ -22,6 +22,7 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
+import phanastrae.operation_starcleave.block.ShortHolyMossBlock;
 import phanastrae.operation_starcleave.block.tag.OperationStarcleaveBlockTags;
 import phanastrae.operation_starcleave.data.worldgen.features.OperationStarcleaveConfiguredFeatures;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
@@ -116,6 +117,13 @@ public class Starbleach {
             starbleachAttachedBlocks(level, random, blockPos, newState);
             newState.updateNeighbourShapes(level, blockPos, 3);
 
+            // randomly bonemeal short holy moss
+            BlockPos upPos = blockPos.above();
+            BlockState upState = level.getBlockState(upPos);
+            if (upState.getBlock() instanceof ShortHolyMossBlock block && random.nextInt(14) == 0) {
+                block.performBonemeal(level, random, upPos, upState);
+            }
+
             placeFeatures(level, random, blockPos, newState);
             return true;
         } else {
@@ -125,11 +133,21 @@ public class Starbleach {
 
     public static void starbleachAttachedBlocks(ServerLevel level, RandomSource random, BlockPos blockPos, BlockState newState) {
         for (Direction direction : Direction.values()) {
-            BlockPos adjPos = blockPos.offset(direction.getNormal());
-            BlockState adjState = level.getBlockState(adjPos);
+            starbleachAttachedBlocks(level, random, blockPos, newState, direction);
+        }
+    }
 
-            BlockState newAdjState = StarbleachConversions.getStarbleachAttachedBlockResult(level, adjPos, adjState, random, newState, direction);
-            if (newAdjState != null) {
+    public static void starbleachAttachedBlocks(ServerLevel level, RandomSource random, BlockPos blockPos, BlockState newState, Direction direction) {
+        BlockPos adjPos = blockPos.offset(direction.getNormal());
+        BlockState adjState = level.getBlockState(adjPos);
+
+        BlockState newAdjState = StarbleachConversions.getStarbleachAttachedBlockResult(level, adjPos, adjState, random, newState, direction);
+        if (newAdjState != null) {
+            if (newAdjState.is(OperationStarcleaveBlocks.TALL_HOLY_MOSS)) {
+                level.setBlock(adjPos, newAdjState, 2 | 16);
+                starbleachAttachedBlocks(level, random, adjPos, newAdjState, direction);
+                newState.updateNeighbourShapes(level, blockPos, 3);
+            } else {
                 level.setBlockAndUpdate(adjPos, newAdjState);
             }
         }

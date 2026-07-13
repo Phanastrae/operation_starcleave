@@ -1,0 +1,11 @@
+{
+  "type": "operation_starcleave:item_starbleaching",
+  "ingredient": {
+    "item": "minecraft:tall_grass"
+  },
+  "result": {
+    "count": 1,
+    "id": "operation_starcleave:tall_holy_moss"
+  },
+  "starbleach_cost": 0.2
+}
