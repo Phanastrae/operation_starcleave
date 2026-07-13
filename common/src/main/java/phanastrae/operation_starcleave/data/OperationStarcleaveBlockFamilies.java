@@ -91,6 +91,9 @@ public class OperationStarcleaveBlockFamilies {
             .trapdoor(OperationStarcleaveBlocks.STARTOUCHED_TRAPDOOR)
             .pressurePlate(OperationStarcleaveBlocks.STARTOUCHED_PRESSURE_PLATE)
             .button(OperationStarcleaveBlocks.STARTOUCHED_BUTTON)
+            .sign(OperationStarcleaveBlocks.STARTOUCHED_SIGN, OperationStarcleaveBlocks.STARTOUCHED_WALL_SIGN)
+            .recipeGroupPrefix(RECIPE_GROUP_PREFIX_WOODEN)
+            .recipeUnlockedBy(RECIPE_UNLOCKED_BY_HAS_PLANKS)
             .getFamily();
 
     public static final BlockFamily STELLAR_TILES = familyBuilder(OperationStarcleaveBlocks.STELLAR_TILES)

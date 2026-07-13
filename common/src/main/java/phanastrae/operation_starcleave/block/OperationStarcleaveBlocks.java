@@ -624,7 +624,7 @@ public class OperationStarcleaveBlocks {
     );
     public static final Block STARTOUCHED_FENCE_GATE = register(
             "startouched_fence_gate",
-            fenceGateOf(OperationStarcleaveBlockSetTypes.STARTOUCHED_WOODSET, STARTOUCHED_PLANKS)
+            fenceGateOf(OperationStarcleaveWoodTypes.STARTOUCHED_WOODSET, STARTOUCHED_PLANKS)
     );
     public static final Block STARTOUCHED_DOOR = register(
             "startouched_door",
@@ -656,6 +656,58 @@ public class OperationStarcleaveBlocks {
                             .strength(0.5F)
                             .pushReaction(PushReaction.DESTROY)
                             .noCollission()
+            )
+    );
+    public static final Block STARTOUCHED_SIGN = register(
+            "startouched_sign",
+            new StandingSignBlock(
+                    OperationStarcleaveWoodTypes.STARTOUCHED_WOODSET,
+                    properties()
+                            .strength(1.0F)
+                            .mapColor(MapColor.TERRACOTTA_PINK)
+                            .instrument(NoteBlockInstrument.BASS)
+                            .forceSolidOn()
+                            .noCollission()
+            )
+    );
+    public static final Block STARTOUCHED_WALL_SIGN = register(
+            "startouched_wall_sign",
+            new WallSignBlock(
+                    OperationStarcleaveWoodTypes.STARTOUCHED_WOODSET,
+                    properties()
+                            .strength(1.0F)
+                            .mapColor(TERRACOTTA_PINK)
+                            .instrument(NoteBlockInstrument.BASS)
+                            .dropsLike(STARTOUCHED_SIGN)
+                            .forceSolidOn()
+                            .noCollission()
+                            .ignitedByLava()
+            )
+    );
+    public static final Block STARTOUCHED_HANGING_SIGN = register(
+            "startouched_hanging_sign",
+            new CeilingHangingSignBlock(
+                    OperationStarcleaveWoodTypes.STARTOUCHED_WOODSET,
+                    properties()
+                            .strength(1.0F)
+                            .mapColor(TERRACOTTA_PINK)
+                            .instrument(NoteBlockInstrument.BASS)
+                            .forceSolidOn()
+                            .noCollission()
+            )
+    );
+    public static final Block STARTOUCHED_WALL_HANGING_SIGN = register(
+            "startouched_wall_hanging_sign",
+            new WallHangingSignBlock(
+                    OperationStarcleaveWoodTypes.STARTOUCHED_WOODSET,
+                    properties()
+                            .strength(1.0F)
+                            .mapColor(TERRACOTTA_PINK)
+                            .instrument(NoteBlockInstrument.BASS)
+                            .dropsLike(STARTOUCHED_HANGING_SIGN)
+                            .forceSolidOn()
+                            .noCollission()
+                            .ignitedByLava()
             )
     );
 

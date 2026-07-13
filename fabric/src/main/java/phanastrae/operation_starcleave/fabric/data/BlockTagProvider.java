@@ -410,6 +410,26 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         STARTOUCHED_PLANKS
                 );
 
+        getOrCreateTagBuilder(BlockTags.STANDING_SIGNS)
+                .add(
+                        STARTOUCHED_SIGN
+                );
+
+        getOrCreateTagBuilder(BlockTags.WALL_SIGNS)
+                .add(
+                        STARTOUCHED_WALL_SIGN
+                );
+
+        getOrCreateTagBuilder(BlockTags.CEILING_HANGING_SIGNS)
+                .add(
+                        STARTOUCHED_HANGING_SIGN
+                );
+
+        getOrCreateTagBuilder(BlockTags.WALL_HANGING_SIGNS)
+                .add(
+                        STARTOUCHED_WALL_HANGING_SIGN
+                );
+
         // conventional
         getOrCreateTagBuilder(ConventionalBlockTags.STRIPPED_LOGS)
                 .add(

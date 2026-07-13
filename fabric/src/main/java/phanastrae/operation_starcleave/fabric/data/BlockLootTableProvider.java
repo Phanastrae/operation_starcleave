@@ -116,6 +116,8 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                 STARTOUCHED_LOG,
                 STARTOUCHED_WOOD,
 
+                STARTOUCHED_HANGING_SIGN,
+
                 STARBLEACHED_SAPLING,
 
                 STARBLEACHED_PEARL_BLOCK,

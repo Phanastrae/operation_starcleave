@@ -83,8 +83,8 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
         //this.copy(BlockTags.DIRT, ItemTags.DIRT);
         //this.copy(BlockTags.TERRACOTTA, ItemTags.TERRACOTTA);
         //this.copy(BlockTags.COMPLETES_FIND_TREE_TUTORIAL, ItemTags.COMPLETES_FIND_TREE_TUTORIAL);
-        //this.copy(BlockTags.STANDING_SIGNS, ItemTags.SIGNS);
-        //this.copy(BlockTags.CEILING_HANGING_SIGNS, ItemTags.HANGING_SIGNS);
+        this.copy(BlockTags.STANDING_SIGNS, ItemTags.SIGNS);
+        this.copy(BlockTags.CEILING_HANGING_SIGNS, ItemTags.HANGING_SIGNS);
 
         getOrCreateTagBuilder(ItemTags.NON_FLAMMABLE_WOOD)
                 .add(

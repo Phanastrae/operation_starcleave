@@ -16,6 +16,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -26,6 +27,7 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.brewing.BrewingRecipe;
+import net.neoforged.neoforge.event.BlockEntityTypeAddBlocksEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
@@ -110,6 +112,9 @@ public class OperationStarcleaveNeoForge {
 
         // register cauldron fluids
         modEventBus.addListener(this::registerCauldronFluidContent);
+
+        // add valid blocks for block entity types
+        modEventBus.addListener(this::addBlockEntityTypeBlocks);
     }
 
     public void setupGameBusEvents(IEventBus gameEventBus) {
@@ -274,6 +279,11 @@ public class OperationStarcleaveNeoForge {
 
     public void registerCauldronFluidContent(RegisterCauldronFluidContentEvent event) {
         event.register(OperationStarcleaveBlocks.STARBLEACH_CAULDRON, OperationStarcleaveFluids.STARBLEACH, FluidType.BUCKET_VOLUME * 7 / 4, StarbleachCauldronBlock.LEVEL_7);
+    }
+
+    public void addBlockEntityTypeBlocks(BlockEntityTypeAddBlocksEvent event) {
+        event.modify(BlockEntityType.SIGN, OperationStarcleaveBlocks.STARTOUCHED_SIGN, OperationStarcleaveBlocks.STARTOUCHED_WALL_SIGN);
+        event.modify(BlockEntityType.HANGING_SIGN, OperationStarcleaveBlocks.STARTOUCHED_HANGING_SIGN, OperationStarcleaveBlocks.STARTOUCHED_WALL_HANGING_SIGN);
     }
 
     public void setupCustomBrewing(RegisterBrewingRecipesEvent event) {

@@ -72,6 +72,8 @@ public class RecipeProvider extends FabricRecipeProvider {
         woodFromLogs(exporter, NUCLEIC_FISSURERIND, NUCLEIC_FISSUREROOT);
         woodFromLogs(exporter, STRIPED_NUCLEIC_FISSURERIND, STRIPED_NUCLEIC_FISSUREROOT);
 
+        hangingSign(exporter, STARTOUCHED_HANGING_SIGN, STARTOUCHED_LOG);
+
         twoByTwoPacker(exporter, RecipeCategory.MISC, BLESSED_CLOTH, HOLY_STRANDS);
         twoByTwoPacker(exporter, RecipeCategory.BUILDING_BLOCKS, BLESSED_CLOTH_BLOCK, BLESSED_CLOTH, 2);
         twoByTwoPacker(exporter, RecipeCategory.BUILDING_BLOCKS, BLESSED_CLOTH_PADDING, BLESSED_CLOTH_BLOCK, 4);

@@ -26,6 +26,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.block.OperationStarcleaveToolActions;
@@ -84,6 +85,9 @@ public class OperationStarcleaveFabric implements ModInitializer {
 
         // setup cauldron fluids
         setupCauldronFluids();
+
+        // add valid blocks for block entity types
+        addBlockEntityTypeBlocks();
 
 
         // world tick start
@@ -213,5 +217,12 @@ public class OperationStarcleaveFabric implements ModInitializer {
 
     public void setupCauldronFluids() {
         CauldronFluidContent.registerCauldron(OperationStarcleaveBlocks.STARBLEACH_CAULDRON, OperationStarcleaveFluids.STARBLEACH, FluidConstants.BUCKET / 4, StarbleachCauldronBlock.LEVEL_7);
+    }
+
+    public void addBlockEntityTypeBlocks() {
+        BlockEntityType.SIGN.addSupportedBlock(OperationStarcleaveBlocks.STARTOUCHED_SIGN);
+        BlockEntityType.SIGN.addSupportedBlock(OperationStarcleaveBlocks.STARTOUCHED_WALL_SIGN);
+        BlockEntityType.HANGING_SIGN.addSupportedBlock(OperationStarcleaveBlocks.STARTOUCHED_HANGING_SIGN);
+        BlockEntityType.HANGING_SIGN.addSupportedBlock(OperationStarcleaveBlocks.STARTOUCHED_WALL_HANGING_SIGN);
     }
 }

@@ -210,6 +210,9 @@ public class OperationStarcleaveCreativeModeTabs {
                 STARTOUCHED_PRESSURE_PLATE,
                 STARTOUCHED_BUTTON,
 
+                STARTOUCHED_SIGN,
+                STARTOUCHED_HANGING_SIGN,
+
                 STARBLEACHED_SAPLING,
 
                 CELESTIAL_OPAL_BLOCK,
@@ -549,6 +552,10 @@ public class OperationStarcleaveCreativeModeTabs {
         // Functional
         helper.addAfter(Items.PEARLESCENT_FROGLIGHT, FUNCTIONAL_BLOCKS,
                 SUBCAELIC_PHLOGLIGHT
+        );
+        helper.addAfter(Items.WARPED_HANGING_SIGN, FUNCTIONAL_BLOCKS,
+                STARTOUCHED_SIGN,
+                STARTOUCHED_HANGING_SIGN
         );
         helper.addAfter(Items.DRAGON_HEAD, FUNCTIONAL_BLOCKS,
                 NETHERITE_PUMPKIN

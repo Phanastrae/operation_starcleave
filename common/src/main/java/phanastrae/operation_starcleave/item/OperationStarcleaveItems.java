@@ -133,6 +133,8 @@ public class OperationStarcleaveItems {
     public static final Item STARTOUCHED_TRAPDOOR = registerBlockItem(OperationStarcleaveBlocks.STARTOUCHED_TRAPDOOR);
     public static final Item STARTOUCHED_PRESSURE_PLATE = registerBlockItem(OperationStarcleaveBlocks.STARTOUCHED_PRESSURE_PLATE);
     public static final Item STARTOUCHED_BUTTON = registerBlockItem(OperationStarcleaveBlocks.STARTOUCHED_BUTTON);
+    public static final Item STARTOUCHED_SIGN = register("startouched_sign", new SignItem(properties().stacksTo(16), OperationStarcleaveBlocks.STARTOUCHED_SIGN, OperationStarcleaveBlocks.STARTOUCHED_WALL_SIGN));
+    public static final Item STARTOUCHED_HANGING_SIGN = register("startouched_hanging_sign", new HangingSignItem(OperationStarcleaveBlocks.STARTOUCHED_HANGING_SIGN, OperationStarcleaveBlocks.STARTOUCHED_WALL_HANGING_SIGN, properties().stacksTo(16)));
 
     public static final Item STARBLEACHED_SAPLING = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_SAPLING);
 

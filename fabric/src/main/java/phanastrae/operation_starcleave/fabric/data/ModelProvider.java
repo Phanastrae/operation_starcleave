@@ -138,6 +138,8 @@ public class ModelProvider extends FabricModelProvider {
         BMG.woodProvider(NUCLEIC_FISSUREROOT).logWithHorizontal(NUCLEIC_FISSUREROOT).wood(NUCLEIC_FISSURERIND);
         BMG.woodProvider(STRIPED_NUCLEIC_FISSUREROOT).logWithHorizontal(STRIPED_NUCLEIC_FISSUREROOT).wood(STRIPED_NUCLEIC_FISSURERIND);
 
+        BMG.createHangingSign(STARTOUCHED_LOG, STARTOUCHED_HANGING_SIGN, STARTOUCHED_WALL_HANGING_SIGN);
+
         registerUnevenCross(BMG, MULCHBORNE_TUFT);
         createPottedRoot(BMG, MULCHBORNE_TUFT, POTTED_MULCHBORNE_TUFT, TintState.NOT_TINTED);
         BMG.createCrossBlockWithDefaultItem(SHORT_HOLY_MOSS, BlockModelGenerators.TintState.NOT_TINTED);

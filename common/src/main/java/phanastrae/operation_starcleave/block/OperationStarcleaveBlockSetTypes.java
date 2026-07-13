@@ -3,7 +3,6 @@ package phanastrae.operation_starcleave.block;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
-import net.minecraft.world.level.block.state.properties.WoodType;
 
 public class OperationStarcleaveBlockSetTypes {
     public static final BlockSetType STARBLEACHED =
@@ -43,5 +42,4 @@ public class OperationStarcleaveBlockSetTypes {
             );
 
     public static final BlockSetType STARTOUCHED = new BlockSetType("operation_starcleave:startouched");
-    public static final WoodType STARTOUCHED_WOODSET = new WoodType("operation_starcleave:startouched", STARTOUCHED);
 }
