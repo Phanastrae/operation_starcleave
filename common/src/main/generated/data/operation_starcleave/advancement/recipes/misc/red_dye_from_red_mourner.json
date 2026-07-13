@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_red_mourner": {
+      "conditions": {
+        "items": [
+          {
+            "items": "operation_starcleave:red_mourner"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "operation_starcleave:red_dye_from_red_mourner"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_red_mourner"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "operation_starcleave:red_dye_from_red_mourner"
+    ]
+  }
+}

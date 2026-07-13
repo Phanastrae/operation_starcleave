@@ -2,6 +2,13 @@
   "values": [
     "operation_starcleave:potted_starbleached_sapling",
     "operation_starcleave:potted_mulchborne_tuft",
-    "operation_starcleave:potted_short_holy_moss"
+    "operation_starcleave:potted_short_holy_moss",
+    "operation_starcleave:potted_great_trees_care",
+    "operation_starcleave:potted_red_mourner",
+    "operation_starcleave:potted_angelclaw",
+    "operation_starcleave:potted_eldrose",
+    "operation_starcleave:potted_witchglare",
+    "operation_starcleave:potted_blue_dreamer",
+    "operation_starcleave:potted_dragons_maw"
   ]
 }

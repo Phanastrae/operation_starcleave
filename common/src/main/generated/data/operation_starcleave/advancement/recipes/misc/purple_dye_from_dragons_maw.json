@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_dragons_maw": {
+      "conditions": {
+        "items": [
+          {
+            "items": "operation_starcleave:dragons_maw"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "operation_starcleave:purple_dye_from_dragons_maw"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_dragons_maw"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "operation_starcleave:purple_dye_from_dragons_maw"
+    ]
+  }
+}

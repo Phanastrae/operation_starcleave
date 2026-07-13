@@ -112,6 +112,14 @@ public class OperationStarcleaveCreativeModeTabs {
 
                 BLESSED_BED,
 
+                GREAT_TREES_CARE,
+                RED_MOURNER,
+                ANGELCLAW,
+                ELDROSE,
+                WITCHGLARE,
+                BLUE_DREAMER,
+                DRAGONS_MAW,
+
                 STARDUST_BLOCK,
                 STARDUST_CLUSTER,
 
@@ -480,6 +488,15 @@ public class OperationStarcleaveCreativeModeTabs {
         helper.addAfter(Items.FLOWERING_AZALEA, NATURAL_BLOCKS,
                 STARBLEACHED_SAPLING,
                 NUCLEOSYNTHESEED
+        );
+        helper.addAfter(Items.WITHER_ROSE, NATURAL_BLOCKS,
+                GREAT_TREES_CARE,
+                RED_MOURNER,
+                ANGELCLAW,
+                ELDROSE,
+                WITCHGLARE,
+                BLUE_DREAMER,
+                DRAGONS_MAW
         );
         helper.addBefore(Items.SPORE_BLOSSOM, NATURAL_BLOCKS,
                 STARBLEACHED_LEAF_LITTER

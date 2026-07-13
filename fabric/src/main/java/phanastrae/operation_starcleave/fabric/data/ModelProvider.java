@@ -144,6 +144,14 @@ public class ModelProvider extends FabricModelProvider {
 
         BMG.createPlant(STARBLEACHED_SAPLING, POTTED_STARBLEACHED_SAPLING, TintState.NOT_TINTED);
 
+        BMG.createPlant(GREAT_TREES_CARE, POTTED_GREAT_TREES_CARE, TintState.NOT_TINTED);
+        BMG.createPlant(RED_MOURNER, POTTED_RED_MOURNER, TintState.NOT_TINTED);
+        BMG.createPlant(ANGELCLAW, POTTED_ANGELCLAW, TintState.NOT_TINTED);
+        BMG.createPlant(ELDROSE, POTTED_ELDROSE, TintState.NOT_TINTED);
+        BMG.createPlant(WITCHGLARE, POTTED_WITCHGLARE, TintState.NOT_TINTED);
+        BMG.createPlant(BLUE_DREAMER, POTTED_BLUE_DREAMER, TintState.NOT_TINTED);
+        BMG.createPlant(DRAGONS_MAW, POTTED_DRAGONS_MAW, TintState.NOT_TINTED);
+
         BMG.blockStateOutput.accept(createRotatedVariant(STELLAR_PATH, ModelLocationUtils.getModelLocation(STELLAR_PATH)));
         registerGrassLikeBlock(BMG, HOLY_MOSS, STELLAR_SEDIMENT);
         registerGrassLikeBlock(BMG, STELLAR_MULCH, STELLAR_SEDIMENT);

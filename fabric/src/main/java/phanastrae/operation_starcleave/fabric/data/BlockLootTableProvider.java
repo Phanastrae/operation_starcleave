@@ -87,6 +87,14 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
 
                 ASTERUBBLE,
 
+                GREAT_TREES_CARE,
+                RED_MOURNER,
+                ANGELCLAW,
+                ELDROSE,
+                WITCHGLARE,
+                BLUE_DREAMER,
+                DRAGONS_MAW,
+
                 STARDUST_CLUSTER,
 
                 SMOOTH_FELLCRUST_PILLAR,
@@ -132,7 +140,15 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
 
         forEach(this::dropPottedContents,
                 POTTED_MULCHBORNE_TUFT,
-                POTTED_SHORT_HOLY_MOSS
+                POTTED_SHORT_HOLY_MOSS,
+
+                POTTED_GREAT_TREES_CARE,
+                POTTED_RED_MOURNER,
+                POTTED_ANGELCLAW,
+                POTTED_ELDROSE,
+                POTTED_WITCHGLARE,
+                POTTED_BLUE_DREAMER,
+                POTTED_DRAGONS_MAW
         );
 
         forEach(this::dropWhenSilkTouch,

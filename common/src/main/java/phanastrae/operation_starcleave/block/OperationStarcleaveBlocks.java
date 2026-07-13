@@ -3,10 +3,15 @@ package phanastrae.operation_starcleave.block;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ColorRGBA;
+import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.component.SuspiciousStewEffects;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -17,6 +22,7 @@ import net.minecraft.world.level.material.PushReaction;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.fluid.OperationStarcleaveFluids;
 
+import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -152,6 +158,69 @@ public class OperationStarcleaveBlocks {
     public static final Block POTTED_SHORT_HOLY_MOSS = register(
             "potted_short_holy_moss",
             flowerPot(SHORT_HOLY_MOSS, 13)
+    );
+
+    public static final Block GREAT_TREES_CARE = register(
+            "great_trees_care",
+            starbleachedFlower(MobEffects.REGENERATION, 14.0F, MobEffects.BLINDNESS, 21.0F, COLOR_PINK, 4)
+    );
+    public static final Block POTTED_GREAT_TREES_CARE = register(
+            "potted_great_trees_care",
+            flowerPot(GREAT_TREES_CARE, 4)
+    );
+
+    public static final Block RED_MOURNER = register(
+            "red_mourner",
+            starbleachedFlower(MobEffects.DAMAGE_BOOST, 14.0F, MobEffects.HARM, 0.05F, COLOR_RED, 5)
+    );
+    public static final Block POTTED_RED_MOURNER = register(
+            "potted_red_mourner",
+            flowerPot(RED_MOURNER, 5)
+    );
+
+    public static final Block ANGELCLAW = register(
+            "angelclaw",
+            starbleachedFlower(MobEffects.DIG_SPEED, 21.0F, MobEffects.MOVEMENT_SLOWDOWN, 28.0F, COLOR_ORANGE, 6)
+    );
+    public static final Block POTTED_ANGELCLAW = register(
+            "potted_angelclaw",
+            flowerPot(ANGELCLAW, 6)
+    );
+
+    public static final Block ELDROSE = register(
+            "eldrose",
+            starbleachedFlower(MobEffects.GLOWING, 28.0F, TERRACOTTA_YELLOW, 7)
+    );
+    public static final Block POTTED_ELDROSE = register(
+            "potted_eldrose",
+            flowerPot(ELDROSE, 7)
+    );
+
+    public static final Block WITCHGLARE = register(
+            "witchglare",
+            starbleachedFlower(MobEffects.NIGHT_VISION, 21.0F, MobEffects.POISON, 7.0F, COLOR_LIGHT_GREEN, 6)
+    );
+    public static final Block POTTED_WITCHGLARE = register(
+            "potted_witchglare",
+            flowerPot(WITCHGLARE, 6)
+    );
+
+    public static final Block BLUE_DREAMER = register(
+            "blue_dreamer",
+            starbleachedFlower(MobEffects.DAMAGE_RESISTANCE, 14.0F, MobEffects.WEAKNESS, 21.0F, COLOR_BLUE, 5)
+    );
+    public static final Block POTTED_BLUE_DREAMER = register(
+            "potted_blue_dreamer",
+            flowerPot(BLUE_DREAMER, 5)
+    );
+
+    public static final Block DRAGONS_MAW = register(
+            "dragons_maw",
+            starbleachedFlower(MobEffects.HEALTH_BOOST, 14.0F, MobEffects.HUNGER, 14.0F, COLOR_PURPLE, 4)
+    );
+    public static final Block POTTED_DRAGONS_MAW = register(
+            "potted_dragons_maw",
+            flowerPot(DRAGONS_MAW, 4)
     );
 
     public static final Block STARDUST_BLOCK = register(
@@ -1136,6 +1205,33 @@ public class OperationStarcleaveBlocks {
                 .strength(destroyTime, explosionResistance)
                 .isValidSpawn(SPAWN_NEVER)
                 .noOcclusion()
+        );
+    }
+
+    protected static Block starbleachedFlower(Holder<MobEffect> effect, float seconds, MapColor color, int lightLevel) {
+        return starbleachedFlower(new SuspiciousStewEffects(List.of(
+                new SuspiciousStewEffects.Entry(effect, Mth.floor(seconds * 20.0F))
+        )), color, lightLevel);
+    }
+
+    protected static Block starbleachedFlower(Holder<MobEffect> effect1, float seconds1, Holder<MobEffect> effect2, float seconds2, MapColor color, int lightLevel) {
+        return starbleachedFlower(new SuspiciousStewEffects(List.of(
+                new SuspiciousStewEffects.Entry(effect1, Mth.floor(seconds1 * 20.0F)),
+                new SuspiciousStewEffects.Entry(effect2, Mth.floor(seconds2 * 20.0F))
+        )), color, lightLevel);
+    }
+
+    protected static Block starbleachedFlower(SuspiciousStewEffects effects, MapColor color, int lightLevel) {
+        return new StarbleachedFlowerBlock(
+                effects,
+                properties()
+                        .mapColor(color)
+                        .sound(SoundType.GRASS)
+                        .offsetType(BlockBehaviour.OffsetType.XZ)
+                        .pushReaction(PushReaction.DESTROY)
+                        .lightLevel(constant(lightLevel))
+                        .noCollission()
+                        .instabreak()
         );
     }
 }

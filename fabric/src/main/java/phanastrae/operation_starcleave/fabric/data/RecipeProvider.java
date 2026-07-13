@@ -47,6 +47,14 @@ public class RecipeProvider extends FabricRecipeProvider {
 
         simpleShapeless(exporter, RecipeCategory.MISC, STARBLEACHED_LEAVES, STARBLEACHED_LEAF_LITTER, 4);
 
+        oneToOneConversionRecipe(exporter, Items.PINK_DYE, GREAT_TREES_CARE, "pink_dye");
+        oneToOneConversionRecipe(exporter, Items.RED_DYE, RED_MOURNER, "red_dye");
+        oneToOneConversionRecipe(exporter, Items.ORANGE_DYE, ANGELCLAW, "orange_dye");
+        oneToOneConversionRecipe(exporter, Items.LIGHT_GRAY_DYE, ELDROSE, "light_gray_dye");
+        oneToOneConversionRecipe(exporter, Items.LIME_DYE, WITCHGLARE, "lime_dye");
+        oneToOneConversionRecipe(exporter, Items.LIGHT_BLUE_DYE, BLUE_DREAMER, "light_blue_dye");
+        oneToOneConversionRecipe(exporter, Items.PURPLE_DYE, DRAGONS_MAW, "purple_dye");
+
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, BISMUTH_FLAKE, 6)
                 .requires(STARFLAKED_BISMUTH)
                 .unlockedBy(

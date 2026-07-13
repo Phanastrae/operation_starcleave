@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_eldrose": {
+      "conditions": {
+        "items": [
+          {
+            "items": "operation_starcleave:eldrose"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "operation_starcleave:light_gray_dye_from_eldrose"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_eldrose"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "operation_starcleave:light_gray_dye_from_eldrose"
+    ]
+  }
+}

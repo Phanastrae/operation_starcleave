@@ -346,11 +346,31 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         BISREEDS
                 );
 
+        getOrCreateTagBuilder(BlockTags.SMALL_FLOWERS)
+                .add(
+                        GREAT_TREES_CARE,
+                        RED_MOURNER,
+                        ANGELCLAW,
+                        ELDROSE,
+                        WITCHGLARE,
+                        BLUE_DREAMER,
+                        DRAGONS_MAW
+                );
+
         getOrCreateTagBuilder(BlockTags.FLOWER_POTS)
                 .add(
                         POTTED_STARBLEACHED_SAPLING,
+
                         POTTED_MULCHBORNE_TUFT,
-                        POTTED_SHORT_HOLY_MOSS
+                        POTTED_SHORT_HOLY_MOSS,
+
+                        POTTED_GREAT_TREES_CARE,
+                        POTTED_RED_MOURNER,
+                        POTTED_ANGELCLAW,
+                        POTTED_ELDROSE,
+                        POTTED_WITCHGLARE,
+                        POTTED_BLUE_DREAMER,
+                        POTTED_DRAGONS_MAW
                 );
 
         getOrCreateTagBuilder(BlockTags.DOORS)

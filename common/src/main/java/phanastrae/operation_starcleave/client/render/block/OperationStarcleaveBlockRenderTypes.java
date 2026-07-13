@@ -26,6 +26,21 @@ public class OperationStarcleaveBlockRenderTypes {
                 SHORT_HOLY_MOSS,
                 POTTED_SHORT_HOLY_MOSS,
 
+                GREAT_TREES_CARE,
+                POTTED_GREAT_TREES_CARE,
+                RED_MOURNER,
+                POTTED_RED_MOURNER,
+                ANGELCLAW,
+                POTTED_ANGELCLAW,
+                ELDROSE,
+                POTTED_ELDROSE,
+                WITCHGLARE,
+                POTTED_WITCHGLARE,
+                BLUE_DREAMER,
+                POTTED_BLUE_DREAMER,
+                DRAGONS_MAW,
+                POTTED_DRAGONS_MAW,
+
                 HOLY_LEAF_PLATFORM,
 
                 BLESSED_BED,

@@ -40,6 +40,14 @@ public class OperationStarcleaveItems {
     public static final Item HOLY_MOSS = registerBlockItem(OperationStarcleaveBlocks.HOLY_MOSS);
     public static final Item SHORT_HOLY_MOSS = registerBlockItem(OperationStarcleaveBlocks.SHORT_HOLY_MOSS);
 
+    public static final Item GREAT_TREES_CARE = registerBlockItem(OperationStarcleaveBlocks.GREAT_TREES_CARE);
+    public static final Item RED_MOURNER = registerBlockItem(OperationStarcleaveBlocks.RED_MOURNER);
+    public static final Item ANGELCLAW = registerBlockItem(OperationStarcleaveBlocks.ANGELCLAW);
+    public static final Item ELDROSE = registerBlockItem(OperationStarcleaveBlocks.ELDROSE);
+    public static final Item WITCHGLARE = registerBlockItem(OperationStarcleaveBlocks.WITCHGLARE);
+    public static final Item BLUE_DREAMER = registerBlockItem(OperationStarcleaveBlocks.BLUE_DREAMER);
+    public static final Item DRAGONS_MAW = registerBlockItem(OperationStarcleaveBlocks.DRAGONS_MAW);
+
     public static final Item STARDUST_BLOCK = registerBlockItem(OperationStarcleaveBlocks.STARDUST_BLOCK);
     public static final Item STARDUST_CLUSTER = registerBlockItem(OperationStarcleaveBlocks.STARDUST_CLUSTER);
 
