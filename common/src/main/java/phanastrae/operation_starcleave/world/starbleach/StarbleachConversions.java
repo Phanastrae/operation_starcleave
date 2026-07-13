@@ -107,6 +107,10 @@ public class StarbleachConversions {
             if (blockState.is(BlockTags.SAPLINGS) && supportState.is(OperationStarcleaveBlockTags.STARBLEACHED_SAPLING_PLANTABLE_ON)) {
                 return OperationStarcleaveBlocks.STARBLEACHED_SAPLING.defaultBlockState();
             }
+
+            if (blockState.is(BlockTags.SMALL_FLOWERS) && supportState.is(OperationStarcleaveBlockTags.STARBLEACHED_SAPLING_PLANTABLE_ON)) {
+                return getRandomSmallStarbleachedFlower(random).defaultBlockState();
+            }
         }
 
         if (supportState.is(BUDDING_CELESTIAL_OPAL)) {
@@ -122,6 +126,18 @@ public class StarbleachConversions {
         }
 
         return null;
+    }
+
+    public static Block getRandomSmallStarbleachedFlower(RandomSource random) {
+        return switch (random.nextInt(7)) {
+            case 0 -> GREAT_TREES_CARE;
+            case 1 -> RED_MOURNER;
+            case 2 -> ANGELCLAW;
+            case 4 -> WITCHGLARE;
+            case 5 -> BLUE_DREAMER;
+            case 6 -> DRAGONS_MAW;
+            default -> ELDROSE;
+        };
     }
 
     @Nullable

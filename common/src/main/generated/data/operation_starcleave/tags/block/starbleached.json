@@ -12,6 +12,13 @@
     "operation_starcleave:starbleached_leaves",
     "operation_starcleave:asterubble",
     "operation_starcleave:stardust_block",
-    "operation_starcleave:starbleached_sapling"
+    "operation_starcleave:starbleached_sapling",
+    "operation_starcleave:great_trees_care",
+    "operation_starcleave:red_mourner",
+    "operation_starcleave:angelclaw",
+    "operation_starcleave:eldrose",
+    "operation_starcleave:witchglare",
+    "operation_starcleave:blue_dreamer",
+    "operation_starcleave:dragons_maw"
   ]
 }

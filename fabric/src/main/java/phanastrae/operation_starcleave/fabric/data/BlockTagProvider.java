@@ -438,7 +438,14 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         STARBLEACHED_LEAVES,
                         ASTERUBBLE,
                         STARDUST_BLOCK,
-                        STARBLEACHED_SAPLING
+                        STARBLEACHED_SAPLING,
+                        GREAT_TREES_CARE,
+                        RED_MOURNER,
+                        ANGELCLAW,
+                        ELDROSE,
+                        WITCHGLARE,
+                        BLUE_DREAMER,
+                        DRAGONS_MAW
                 );
 
         getOrCreateTagBuilder(OperationStarcleaveBlockTags.HOLY_MOSS_REPLACEABLE)
