@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "operation_starcleave:block/tall_holy_moss_top"
+  }
+}

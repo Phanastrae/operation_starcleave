@@ -2,8 +2,11 @@ package phanastrae.operation_starcleave.fabric.data;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
+import net.minecraft.advancements.critereon.BlockPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.critereon.LocationPredicate;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -17,10 +20,13 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.state.properties.BedPart;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
@@ -181,14 +187,8 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
 
         this.add(STARFLAKED_BISMUTH_DOOR, this::createDoorTable);
 
-        add(SHORT_HOLY_MOSS, block -> createShearsDispatchTable(block,
-                        applyExplosionDecay(block,
-                                item(OperationStarcleaveItems.HOLY_STRANDS)
-                                        .apply(ApplyBonusCount.addUniformBonusCount(fortune, 4))
-                                        .when(LootItemRandomChanceCondition.randomChance(0.3F))
-                        )
-                )
-        );
+        this.add(SHORT_HOLY_MOSS, block -> this.createShortHolyMossDrops(block, fortune));
+        this.add(TALL_HOLY_MOSS, block -> this.createTallHolyMossDrops(block, SHORT_HOLY_MOSS, fortune));
 
         add(BLESSED_BED, block -> createSinglePropConditionTable(block, BedBlock.PART, BedPart.HEAD));
 
@@ -322,6 +322,67 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                                                                                         .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(StarbleachedLeafLitterBlock.SEGMENT_AMOUNT, integer))
                                                                         )
                                                         )
+                                        )
+                                )
+                );
+    }
+
+    public LootTable.Builder createShortHolyMossDrops(Block block, Holder<Enchantment> fortune) {
+        return this.createShearsDispatchTable(block,
+                this.applyExplosionDecay(block,
+                        item(OperationStarcleaveItems.HOLY_STRANDS)
+                                .when(LootItemRandomChanceCondition.randomChance(0.3F))
+                                .apply(ApplyBonusCount.addUniformBonusCount(fortune, 4))
+                )
+        );
+    }
+
+    public LootTable.Builder createTallHolyMossDrops(Block block, Block sheared, Holder<Enchantment> fortune) {
+        LootPoolEntryContainer.Builder<?> builder = item(sheared)
+                .apply(SetItemCountFunction.setCount(ConstantValue.exactly(2.0F)))
+                .when(HAS_SHEARS)
+                .otherwise(
+                        this.applyExplosionCondition(block, item(OperationStarcleaveItems.HOLY_STRANDS))
+                                .when(LootItemRandomChanceCondition.randomChance(0.6F))
+                                .apply(ApplyBonusCount.addUniformBonusCount(fortune, 4))
+                );
+
+        return LootTable.lootTable()
+                .withPool(
+                        LootPool.lootPool()
+                                .add(builder)
+                                .when(
+                                        LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
+                                                .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER))
+                                )
+                                .when(
+                                        LocationCheck.checkLocation(
+                                                LocationPredicate.Builder.location()
+                                                        .setBlock(
+                                                                BlockPredicate.Builder.block()
+                                                                        .of(block)
+                                                                        .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(DoublePlantBlock.HALF, DoubleBlockHalf.UPPER))
+                                                        ),
+                                                new BlockPos(0, 1, 0)
+                                        )
+                                )
+                )
+                .withPool(
+                        LootPool.lootPool()
+                                .add(builder)
+                                .when(
+                                        LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
+                                                .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(DoublePlantBlock.HALF, DoubleBlockHalf.UPPER))
+                                )
+                                .when(
+                                        LocationCheck.checkLocation(
+                                                LocationPredicate.Builder.location()
+                                                        .setBlock(
+                                                                BlockPredicate.Builder.block()
+                                                                        .of(block)
+                                                                        .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER))
+                                                        ),
+                                                new BlockPos(0, -1, 0)
                                         )
                                 )
                 );

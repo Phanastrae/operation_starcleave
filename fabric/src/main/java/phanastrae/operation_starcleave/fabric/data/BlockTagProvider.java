@@ -199,6 +199,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         NETHERITE_PUMPKIN,
                         MULCHBORNE_TUFT,
                         SHORT_HOLY_MOSS,
+                        TALL_HOLY_MOSS,
                         BISREEDS,
                         NUCLEOSYNTHESEED,
 
@@ -282,6 +283,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         NETHERITE_PUMPKIN,
                         MULCHBORNE_TUFT,
                         SHORT_HOLY_MOSS,
+                        TALL_HOLY_MOSS,
 
                         MUCKY_SINGUT_COIL,
                         MUCKY_SINGUT_BLOCK,
@@ -318,6 +320,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 .add(
                         MULCHBORNE_TUFT,
                         SHORT_HOLY_MOSS,
+                        TALL_HOLY_MOSS,
 
                         STARBLEACHED_LEAF_LITTER
                 );
@@ -327,6 +330,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         STARDUST_CLUSTER,
                         MULCHBORNE_TUFT,
                         SHORT_HOLY_MOSS,
+                        TALL_HOLY_MOSS,
 
                         STARBLEACHED_LEAF_LITTER,
 

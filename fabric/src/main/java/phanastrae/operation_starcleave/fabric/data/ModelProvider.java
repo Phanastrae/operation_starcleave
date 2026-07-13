@@ -141,6 +141,7 @@ public class ModelProvider extends FabricModelProvider {
         createPottedRoot(BMG, MULCHBORNE_TUFT, POTTED_MULCHBORNE_TUFT, TintState.NOT_TINTED);
         BMG.createCrossBlockWithDefaultItem(SHORT_HOLY_MOSS, BlockModelGenerators.TintState.NOT_TINTED);
         createPottedRoot(BMG, SHORT_HOLY_MOSS, POTTED_SHORT_HOLY_MOSS, TintState.NOT_TINTED);
+        BMG.createDoublePlant(TALL_HOLY_MOSS, TintState.NOT_TINTED);
 
         BMG.createPlant(STARBLEACHED_SAPLING, POTTED_STARBLEACHED_SAPLING, TintState.NOT_TINTED);
 

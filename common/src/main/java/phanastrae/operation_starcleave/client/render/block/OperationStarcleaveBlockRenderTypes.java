@@ -24,6 +24,7 @@ public class OperationStarcleaveBlockRenderTypes {
                 MULCHBORNE_TUFT,
                 POTTED_MULCHBORNE_TUFT,
                 SHORT_HOLY_MOSS,
+                TALL_HOLY_MOSS,
                 POTTED_SHORT_HOLY_MOSS,
 
                 GREAT_TREES_CARE,

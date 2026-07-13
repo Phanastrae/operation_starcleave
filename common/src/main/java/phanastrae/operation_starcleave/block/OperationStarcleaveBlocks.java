@@ -30,6 +30,7 @@ import java.util.function.ToIntFunction;
 
 import static net.minecraft.world.level.block.SoundType.*;
 import static net.minecraft.world.level.block.state.BlockBehaviour.OffsetType.XYZ;
+import static net.minecraft.world.level.block.state.BlockBehaviour.OffsetType.XZ;
 import static net.minecraft.world.level.block.state.properties.NoteBlockInstrument.*;
 import static net.minecraft.world.level.material.MapColor.*;
 import static net.minecraft.world.level.material.PushReaction.DESTROY;
@@ -148,6 +149,19 @@ public class OperationStarcleaveBlocks {
                     .mapColor(MapColor.SAND)
                     .sound(MOSS)
                     .offsetType(XYZ)
+                    .pushReaction(DESTROY)
+                    .lightLevel(constant(13))
+                    .replaceable()
+                    .noCollission()
+                    .instabreak()
+            )
+    );
+    public static final Block TALL_HOLY_MOSS = register(
+            "tall_holy_moss",
+            new DoubleHolyMossBlock(properties()
+                    .mapColor(MapColor.SAND)
+                    .sound(MOSS)
+                    .offsetType(XZ)
                     .pushReaction(DESTROY)
                     .lightLevel(constant(13))
                     .replaceable()

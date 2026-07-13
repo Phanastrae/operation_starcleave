@@ -94,6 +94,7 @@ public class OperationStarcleaveCreativeModeTabs {
 
                 HOLY_MOSS,
                 SHORT_HOLY_MOSS,
+                TALL_HOLY_MOSS,
 
                 HOLY_STRANDS,
                 BLESSED_CLOTH,
@@ -503,7 +504,8 @@ public class OperationStarcleaveCreativeModeTabs {
         );
         helper.addAfter(Items.HANGING_ROOTS, NATURAL_BLOCKS,
                 MULCHBORNE_TUFT,
-                SHORT_HOLY_MOSS
+                SHORT_HOLY_MOSS,
+                TALL_HOLY_MOSS
         );
         helper.addAfter(Items.NETHER_WART, NATURAL_BLOCKS,
                 BISREED_ROOT

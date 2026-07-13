@@ -39,6 +39,7 @@ public class OperationStarcleaveItems {
 
     public static final Item HOLY_MOSS = registerBlockItem(OperationStarcleaveBlocks.HOLY_MOSS);
     public static final Item SHORT_HOLY_MOSS = registerBlockItem(OperationStarcleaveBlocks.SHORT_HOLY_MOSS);
+    public static final Item TALL_HOLY_MOSS = registerBlock(new DoubleHighBlockItem(OperationStarcleaveBlocks.TALL_HOLY_MOSS, properties()));
 
     public static final Item GREAT_TREES_CARE = registerBlockItem(OperationStarcleaveBlocks.GREAT_TREES_CARE);
     public static final Item RED_MOURNER = registerBlockItem(OperationStarcleaveBlocks.RED_MOURNER);
