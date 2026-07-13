@@ -141,6 +141,7 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
         forEach(this::dropPottedContents,
                 POTTED_MULCHBORNE_TUFT,
                 POTTED_SHORT_HOLY_MOSS,
+                POTTED_STARBLEACHED_SAPLING,
 
                 POTTED_GREAT_TREES_CARE,
                 POTTED_RED_MOURNER,
