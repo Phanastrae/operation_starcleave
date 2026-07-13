@@ -58,6 +58,9 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 OperationStarcleaveBlockFamilies.OURANIC_CHIP_BLOCK,
                 OperationStarcleaveBlockFamilies.OURANIC_BRICKS
         );
+        addTagsForFamilies(true, false,
+                OperationStarcleaveBlockFamilies.STARTOUCHED_PLANKS
+        );
 
         addFamiliesToTag(BlockTags.MINEABLE_WITH_PICKAXE,
                 OperationStarcleaveBlockFamilies.STARDUST_BRICKS,
@@ -91,6 +94,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 OperationStarcleaveBlockFamilies.STELLAR_TILES
         );
         addFamiliesToTag(BlockTags.MINEABLE_WITH_AXE,
+                OperationStarcleaveBlockFamilies.STARTOUCHED_PLANKS,
                 OperationStarcleaveBlockFamilies.OURANIC_CHIP_BLOCK,
                 OperationStarcleaveBlockFamilies.OURANIC_BRICKS
         );
@@ -124,6 +128,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 );
 
         getOrCreateTagBuilder(BlockTags.LOGS)
+                .addOptionalTag(OperationStarcleaveBlockTags.STARTOUCHED_LOGS)
                 .addOptionalTag(OperationStarcleaveBlockTags.NUCLEIC_FISSUREROOTS);
 
         getOrCreateTagBuilder(BlockTags.LEAVES)
@@ -197,9 +202,11 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_AXE)
                 .add(
                         NETHERITE_PUMPKIN,
+
                         MULCHBORNE_TUFT,
                         SHORT_HOLY_MOSS,
                         TALL_HOLY_MOSS,
+
                         BISREEDS,
                         NUCLEOSYNTHESEED,
 
@@ -398,13 +405,20 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         STARBLEACHED_SAPLING
                 );
 
+        getOrCreateTagBuilder(BlockTags.PLANKS)
+                .add(
+                        STARTOUCHED_PLANKS
+                );
+
         // conventional
         getOrCreateTagBuilder(ConventionalBlockTags.STRIPPED_LOGS)
                 .add(
+                        STARTOUCHED_LOG,
                         STRIPED_NUCLEIC_FISSUREROOT
                 );
         getOrCreateTagBuilder(ConventionalBlockTags.STRIPPED_WOODS)
                 .add(
+                        STARTOUCHED_WOOD,
                         STRIPED_NUCLEIC_FISSURERIND
                 );
         getOrCreateTagBuilder(ConventionalBlockTags.BUDDING_BLOCKS)
@@ -431,8 +445,13 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
         // starcleave tags
         // block-only tags
+        addFamiliesToTag(OperationStarcleaveBlockTags.STARBLEACHED,
+                OperationStarcleaveBlockFamilies.STARTOUCHED_PLANKS
+        );
+
         getOrCreateTagBuilder(OperationStarcleaveBlockTags.STARBLEACHED)
                 .addOptionalTag(OperationStarcleaveBlockTags.STARBLEACHED_LOGS)
+                .addOptionalTag(OperationStarcleaveBlockTags.STARTOUCHED_LOGS)
                 .add(
                         STELLAR_SEDIMENT,
                         STELLAR_PATH,
@@ -556,6 +575,12 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 .add(
                         STARBLEACHED_LOG,
                         STARBLEACHED_WOOD
+                );
+
+        getOrCreateTagBuilder(OperationStarcleaveBlockTags.STARTOUCHED_LOGS)
+                .add(
+                        STARTOUCHED_LOG,
+                        STARTOUCHED_WOOD
                 );
 
         getOrCreateTagBuilder(OperationStarcleaveBlockTags.NUCLEIC_FISSUREROOTS)

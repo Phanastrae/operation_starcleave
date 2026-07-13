@@ -1,5 +1,6 @@
 {
   "values": [
-    "operation_starcleave:starbleached_pressure_plate"
+    "operation_starcleave:starbleached_pressure_plate",
+    "operation_starcleave:startouched_pressure_plate"
   ]
 }

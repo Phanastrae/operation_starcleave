@@ -22,6 +22,7 @@ public class OperationStarcleaveBlockTags {
 
     // block tags that are also item tags
     public static final TagKey<Block> STARBLEACHED_LOGS = of("starbleached_logs");
+    public static final TagKey<Block> STARTOUCHED_LOGS = of("startouched_logs");
     public static final TagKey<Block> NUCLEIC_FISSUREROOTS = of("nucleic_fissureroots");
 
     public static final TagKey<Block> SB_I_FELLCRUST = starbleachesInto("fellcrust");

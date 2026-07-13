@@ -1,6 +1,10 @@
 {
   "values": [
     {
+      "id": "#operation_starcleave:startouched_logs",
+      "required": false
+    },
+    {
       "id": "#operation_starcleave:nucleic_fissureroots",
       "required": false
     }

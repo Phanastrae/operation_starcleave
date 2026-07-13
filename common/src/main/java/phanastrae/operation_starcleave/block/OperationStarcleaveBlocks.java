@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import phanastrae.operation_starcleave.OperationStarcleave;
@@ -579,6 +580,82 @@ public class OperationStarcleaveBlocks {
                     .instrument(BASEDRUM)
                     .lightLevel(constant(15))
                     .requiresCorrectToolForDrops()
+            )
+    );
+
+    public static final Block STARTOUCHED_LOG = register(
+            "startouched_log",
+            new RotatedPillarBlock(
+                    properties().mapColor(TERRACOTTA_PINK)
+                            .instrument(BASS)
+                            .strength(3.0F)
+                            .sound(SoundType.WOOD)
+            )
+    );
+    public static final Block STARTOUCHED_WOOD = register(
+            "startouched_wood",
+            new RotatedPillarBlock(
+                    properties().mapColor(TERRACOTTA_PINK)
+                            .instrument(BASS)
+                            .strength(3.0F)
+                            .sound(SoundType.WOOD)
+            )
+    );
+    public static final Block STARTOUCHED_PLANKS = register(
+            "startouched_planks",
+            new Block(
+                    properties().mapColor(TERRACOTTA_PINK)
+                            .instrument(BASS)
+                            .strength(3.0F, 4.0F)
+                            .sound(SoundType.WOOD)
+            )
+    );
+    public static final Block STARTOUCHED_STAIRS = register(
+            "startouched_stairs",
+            stairsOf(STARTOUCHED_PLANKS)
+    );
+    public static final Block STARTOUCHED_SLAB = register(
+            "startouched_slab",
+            slabOf(STARTOUCHED_PLANKS)
+    );
+    public static final Block STARTOUCHED_FENCE = register(
+            "startouched_fence",
+            fenceOf(STARTOUCHED_PLANKS)
+    );
+    public static final Block STARTOUCHED_FENCE_GATE = register(
+            "startouched_fence_gate",
+            fenceGateOf(OperationStarcleaveBlockSetTypes.STARTOUCHED_WOODSET, STARTOUCHED_PLANKS)
+    );
+    public static final Block STARTOUCHED_DOOR = register(
+            "startouched_door",
+            doorOf(OperationStarcleaveBlockSetTypes.STARTOUCHED, STARTOUCHED_PLANKS, 4.0F, 4.0F)
+    );
+    public static final Block STARTOUCHED_TRAPDOOR = register(
+            "startouched_trapdoor",
+            trapdoorOf(OperationStarcleaveBlockSetTypes.STARTOUCHED, STARTOUCHED_PLANKS, 4.0F, 4.0F)
+    );
+    public static final Block STARTOUCHED_PRESSURE_PLATE = register(
+            "startouched_pressure_plate",
+            new CustomPressurePlateBlock(
+                    OperationStarcleaveBlockSetTypes.STARTOUCHED,
+                    properties()
+                            .strength(0.5F)
+                            .mapColor(TERRACOTTA_PINK)
+                            .instrument(BASS)
+                            .pushReaction(PushReaction.DESTROY)
+                            .forceSolidOn()
+                            .noCollission()
+            )
+    );
+    public static final Block STARTOUCHED_BUTTON = register(
+            "startouched_button",
+            new CustomButtonBlock(
+                    OperationStarcleaveBlockSetTypes.STARTOUCHED,
+                    30,
+                    properties()
+                            .strength(0.5F)
+                            .pushReaction(PushReaction.DESTROY)
+                            .noCollission()
             )
     );
 
@@ -1195,6 +1272,14 @@ public class OperationStarcleaveBlocks {
 
     protected static WallBlock wallOf(BlockBehaviour block) {
         return wallOf(block, WallBlock::new);
+    }
+
+    protected static FenceBlock fenceOf(BlockBehaviour block) {
+        return new FenceBlock(legacyCopy(block));
+    }
+
+    protected static FenceGateBlock fenceGateOf(WoodType woodType, BlockBehaviour block) {
+        return new FenceGateBlock(woodType, legacyCopy(block).forceSolidOn());
     }
 
     protected static Block flowerPot(Block potted, int lightLevel) {

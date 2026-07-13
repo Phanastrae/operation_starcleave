@@ -16,6 +16,9 @@ public class OperationStarcleaveBlockRenderTypes {
         putBlocks(RenderType.cutout(),
                 STARBLEACHED_LEAF_LITTER,
 
+                STARTOUCHED_DOOR,
+                STARTOUCHED_TRAPDOOR,
+
                 STARBLEACHED_SAPLING,
                 POTTED_STARBLEACHED_SAPLING,
 

@@ -65,6 +65,7 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                 OperationStarcleaveBlockFamilies.CUT_POLISHED_FELLCRUST,
 
                 OperationStarcleaveBlockFamilies.STARBLEACHED_TILES,
+                OperationStarcleaveBlockFamilies.STARTOUCHED_PLANKS,
                 OperationStarcleaveBlockFamilies.STELLAR_TILES,
 
                 OperationStarcleaveBlockFamilies.BLESSED_CLOTH,
@@ -111,6 +112,9 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                 STARBLEACHED_LEAF_BUNCH_BLOCK,
 
                 IMBUED_STARBLEACHED_TILES,
+
+                STARTOUCHED_LOG,
+                STARTOUCHED_WOOD,
 
                 STARBLEACHED_SAPLING,
 

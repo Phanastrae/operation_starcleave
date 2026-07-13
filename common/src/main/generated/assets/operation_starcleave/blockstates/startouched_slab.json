@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "operation_starcleave:block/startouched_slab"
+    },
+    "type=double": {
+      "model": "operation_starcleave:block/startouched_planks"
+    },
+    "type=top": {
+      "model": "operation_starcleave:block/startouched_slab_top"
+    }
+  }
+}

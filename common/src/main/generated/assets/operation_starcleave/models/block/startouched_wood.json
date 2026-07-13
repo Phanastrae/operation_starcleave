@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "operation_starcleave:block/startouched_log",
+    "side": "operation_starcleave:block/startouched_log"
+  }
+}

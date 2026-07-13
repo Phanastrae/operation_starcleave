@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_bottom_right_open",
+  "textures": {
+    "bottom": "operation_starcleave:block/startouched_door_bottom",
+    "top": "operation_starcleave:block/startouched_door_top"
+  }
+}

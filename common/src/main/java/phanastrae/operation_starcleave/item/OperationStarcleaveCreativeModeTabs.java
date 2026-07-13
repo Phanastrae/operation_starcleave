@@ -194,6 +194,22 @@ public class OperationStarcleaveCreativeModeTabs {
                 CHISELED_STARBLEACHED_TILES,
                 IMBUED_STARBLEACHED_TILES,
 
+                STARTOUCHED_LOG,
+                STARTOUCHED_WOOD,
+
+                STARTOUCHED_PLANKS,
+                STARTOUCHED_STAIRS,
+                STARTOUCHED_SLAB,
+
+                STARTOUCHED_FENCE,
+                STARTOUCHED_FENCE_GATE,
+
+                STARTOUCHED_DOOR,
+                STARTOUCHED_TRAPDOOR,
+
+                STARTOUCHED_PRESSURE_PLATE,
+                STARTOUCHED_BUTTON,
+
                 STARBLEACHED_SAPLING,
 
                 CELESTIAL_OPAL_BLOCK,
@@ -304,6 +320,22 @@ public class OperationStarcleaveCreativeModeTabs {
 
         // Building Blocks
         helper.addAfter(Items.WARPED_BUTTON, BUILDING_BLOCKS,
+                STARTOUCHED_LOG,
+                STARTOUCHED_WOOD,
+
+                STARTOUCHED_PLANKS,
+                STARTOUCHED_STAIRS,
+                STARTOUCHED_SLAB,
+
+                STARTOUCHED_FENCE,
+                STARTOUCHED_FENCE_GATE,
+
+                STARTOUCHED_DOOR,
+                STARTOUCHED_TRAPDOOR,
+
+                STARTOUCHED_PRESSURE_PLATE,
+                STARTOUCHED_BUTTON,
+
                 STARBLEACHED_LOG,
                 STARBLEACHED_WOOD,
 

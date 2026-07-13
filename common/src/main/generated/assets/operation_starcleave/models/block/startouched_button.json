@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/button",
+  "textures": {
+    "texture": "operation_starcleave:block/startouched_planks"
+  }
+}

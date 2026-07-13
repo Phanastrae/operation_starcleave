@@ -122,6 +122,18 @@ public class OperationStarcleaveItems {
 
     public static final Item IMBUED_STARBLEACHED_TILES = registerBlockItem(OperationStarcleaveBlocks.IMBUED_STARBLEACHED_TILES);
 
+    public static final Item STARTOUCHED_LOG = registerBlockItem(OperationStarcleaveBlocks.STARTOUCHED_LOG);
+    public static final Item STARTOUCHED_WOOD = registerBlockItem(OperationStarcleaveBlocks.STARTOUCHED_WOOD);
+    public static final Item STARTOUCHED_PLANKS = registerBlockItem(OperationStarcleaveBlocks.STARTOUCHED_PLANKS);
+    public static final Item STARTOUCHED_STAIRS = registerBlockItem(OperationStarcleaveBlocks.STARTOUCHED_STAIRS);
+    public static final Item STARTOUCHED_SLAB = registerBlockItem(OperationStarcleaveBlocks.STARTOUCHED_SLAB);
+    public static final Item STARTOUCHED_FENCE = registerBlockItem(OperationStarcleaveBlocks.STARTOUCHED_FENCE);
+    public static final Item STARTOUCHED_FENCE_GATE = registerBlockItem(OperationStarcleaveBlocks.STARTOUCHED_FENCE_GATE);
+    public static final Item STARTOUCHED_DOOR = registerBlock(new DoubleHighBlockItem(OperationStarcleaveBlocks.STARTOUCHED_DOOR, properties()));
+    public static final Item STARTOUCHED_TRAPDOOR = registerBlockItem(OperationStarcleaveBlocks.STARTOUCHED_TRAPDOOR);
+    public static final Item STARTOUCHED_PRESSURE_PLATE = registerBlockItem(OperationStarcleaveBlocks.STARTOUCHED_PRESSURE_PLATE);
+    public static final Item STARTOUCHED_BUTTON = registerBlockItem(OperationStarcleaveBlocks.STARTOUCHED_BUTTON);
+
     public static final Item STARBLEACHED_SAPLING = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_SAPLING);
 
     public static final Item STARBLEACHED_PEARL_BLOCK = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_PEARL_BLOCK);

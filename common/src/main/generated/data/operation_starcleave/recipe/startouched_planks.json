@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "planks",
+  "ingredients": [
+    {
+      "tag": "operation_starcleave:startouched_logs"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "id": "operation_starcleave:startouched_planks"
+  }
+}

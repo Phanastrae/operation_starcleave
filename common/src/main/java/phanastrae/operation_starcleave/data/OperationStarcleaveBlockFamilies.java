@@ -82,6 +82,17 @@ public class OperationStarcleaveBlockFamilies {
             .button(OperationStarcleaveBlocks.STARBLEACHED_BUTTON)
             .getFamily();
 
+    public static final BlockFamily STARTOUCHED_PLANKS = familyBuilder(OperationStarcleaveBlocks.STARTOUCHED_PLANKS)
+            .stairs(OperationStarcleaveBlocks.STARTOUCHED_STAIRS)
+            .slab(OperationStarcleaveBlocks.STARTOUCHED_SLAB)
+            .fence(OperationStarcleaveBlocks.STARTOUCHED_FENCE)
+            .fenceGate(OperationStarcleaveBlocks.STARTOUCHED_FENCE_GATE)
+            .door(OperationStarcleaveBlocks.STARTOUCHED_DOOR)
+            .trapdoor(OperationStarcleaveBlocks.STARTOUCHED_TRAPDOOR)
+            .pressurePlate(OperationStarcleaveBlocks.STARTOUCHED_PRESSURE_PLATE)
+            .button(OperationStarcleaveBlocks.STARTOUCHED_BUTTON)
+            .getFamily();
+
     public static final BlockFamily STELLAR_TILES = familyBuilder(OperationStarcleaveBlocks.STELLAR_TILES)
             .slab(OperationStarcleaveBlocks.STELLAR_TILE_SLAB)
             .getFamily();

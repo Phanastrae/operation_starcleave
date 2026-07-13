@@ -26,7 +26,7 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
         // vanilla
         this.copy(BlockTags.WOOL, ItemTags.WOOL);
-        //this.copy(BlockTags.PLANKS, ItemTags.PLANKS);
+        this.copy(BlockTags.PLANKS, ItemTags.PLANKS);
         //this.copy(BlockTags.STONE_BRICKS, ItemTags.STONE_BRICKS);
         this.copy(BlockTags.WOODEN_BUTTONS, ItemTags.WOODEN_BUTTONS);
         this.copy(BlockTags.STONE_BUTTONS, ItemTags.STONE_BUTTONS);
@@ -85,6 +85,12 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
         //this.copy(BlockTags.COMPLETES_FIND_TREE_TUTORIAL, ItemTags.COMPLETES_FIND_TREE_TUTORIAL);
         //this.copy(BlockTags.STANDING_SIGNS, ItemTags.SIGNS);
         //this.copy(BlockTags.CEILING_HANGING_SIGNS, ItemTags.HANGING_SIGNS);
+
+        getOrCreateTagBuilder(ItemTags.NON_FLAMMABLE_WOOD)
+                .add(
+                        STARTOUCHED_LOG,
+                        STARTOUCHED_WOOD
+                );
 
         // convention
         this.copy(ConventionalBlockTags.STRIPPED_LOGS, ConventionalItemTags.STRIPPED_LOGS);

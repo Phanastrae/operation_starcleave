@@ -16,6 +16,7 @@ public class OperationStarcleaveItemTags {
 
     // item tags that are also block tags
     public static final TagKey<Item> STARBLEACHED_LOGS = fromBlockTag(OperationStarcleaveBlockTags.STARBLEACHED_LOGS);
+    public static final TagKey<Item> STARTOUCHED_LOGS = fromBlockTag(OperationStarcleaveBlockTags.STARTOUCHED_LOGS);
     public static final TagKey<Item> NUCLEIC_FISSUREROOTS = fromBlockTag(OperationStarcleaveBlockTags.NUCLEIC_FISSUREROOTS);
 
     public static final TagKey<Item> SB_I_FELLCRUST = fromBlockTag(OperationStarcleaveBlockTags.SB_I_FELLCRUST);

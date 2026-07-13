@@ -39,6 +39,7 @@ public class RecipeProvider extends FabricRecipeProvider {
 
         // region shapeless crafting
         planksFromLog(exporter, STARBLEACHED_TILES, OperationStarcleaveItemTags.STARBLEACHED_LOGS, 4);
+        planksFromLog(exporter, STARTOUCHED_PLANKS, OperationStarcleaveItemTags.STARTOUCHED_LOGS, 4);
 
         simpleShapelessWithSuffix(exporter, RecipeCategory.MISC, MUCKY_SINGUT_COIL, MUCKY_SINGUTS, 2, "_from_coil");
         simpleShapelessWithSuffix(exporter, RecipeCategory.MISC, MUCKY_SINGUT_BLOCK, MUCKY_SINGUTS, 2, "_from_block");
@@ -67,6 +68,7 @@ public class RecipeProvider extends FabricRecipeProvider {
 
         // region shaped crafting
         woodFromLogs(exporter, STARBLEACHED_WOOD, STARBLEACHED_LOG);
+        woodFromLogs(exporter, STARTOUCHED_WOOD, STARTOUCHED_LOG);
         woodFromLogs(exporter, NUCLEIC_FISSURERIND, NUCLEIC_FISSUREROOT);
         woodFromLogs(exporter, STRIPED_NUCLEIC_FISSURERIND, STRIPED_NUCLEIC_FISSUREROOT);
 

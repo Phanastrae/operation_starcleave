@@ -134,6 +134,7 @@ public class ModelProvider extends FabricModelProvider {
         );
 
         BMG.woodProvider(STARBLEACHED_LOG).logWithHorizontal(STARBLEACHED_LOG).wood(STARBLEACHED_WOOD);
+        BMG.woodProvider(STARTOUCHED_LOG).logWithHorizontal(STARTOUCHED_LOG).wood(STARTOUCHED_WOOD);
         BMG.woodProvider(NUCLEIC_FISSUREROOT).logWithHorizontal(NUCLEIC_FISSUREROOT).wood(NUCLEIC_FISSURERIND);
         BMG.woodProvider(STRIPED_NUCLEIC_FISSUREROOT).logWithHorizontal(STRIPED_NUCLEIC_FISSUREROOT).wood(STRIPED_NUCLEIC_FISSURERIND);
 

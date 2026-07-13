@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "operation_starcleave:block/startouched_pressure_plate"
+    },
+    "powered=true": {
+      "model": "operation_starcleave:block/startouched_pressure_plate_down"
+    }
+  }
+}
