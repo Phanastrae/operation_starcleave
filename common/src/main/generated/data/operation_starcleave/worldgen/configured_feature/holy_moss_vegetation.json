@@ -2,10 +2,57 @@
   "type": "minecraft:simple_block",
   "config": {
     "to_place": {
-      "type": "minecraft:simple_state_provider",
-      "state": {
-        "Name": "operation_starcleave:short_holy_moss"
-      }
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
+        {
+          "data": {
+            "Name": "operation_starcleave:short_holy_moss"
+          },
+          "weight": 91
+        },
+        {
+          "data": {
+            "Name": "operation_starcleave:great_trees_care"
+          },
+          "weight": 1
+        },
+        {
+          "data": {
+            "Name": "operation_starcleave:red_mourner"
+          },
+          "weight": 1
+        },
+        {
+          "data": {
+            "Name": "operation_starcleave:angelclaw"
+          },
+          "weight": 1
+        },
+        {
+          "data": {
+            "Name": "operation_starcleave:eldrose"
+          },
+          "weight": 1
+        },
+        {
+          "data": {
+            "Name": "operation_starcleave:witchglare"
+          },
+          "weight": 1
+        },
+        {
+          "data": {
+            "Name": "operation_starcleave:blue_dreamer"
+          },
+          "weight": 1
+        },
+        {
+          "data": {
+            "Name": "operation_starcleave:dragons_maw"
+          },
+          "weight": 1
+        }
+      ]
     }
   }
 }

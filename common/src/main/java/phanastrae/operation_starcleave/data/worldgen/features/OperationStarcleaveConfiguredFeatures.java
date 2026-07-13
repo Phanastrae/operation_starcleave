@@ -6,13 +6,16 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.util.valueproviders.ConstantInt;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.VegetationPatchConfiguration;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+import net.minecraft.world.level.levelgen.feature.stateproviders.WeightedStateProvider;
 import net.minecraft.world.level.levelgen.placement.CaveSurface;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import phanastrae.operation_starcleave.OperationStarcleave;
@@ -42,7 +45,18 @@ public class OperationStarcleaveConfiguredFeatures {
                 HOLY_MOSS_VEGETATION,
                 Feature.SIMPLE_BLOCK,
                 new SimpleBlockConfiguration(
-                        BlockStateProvider.simple(OperationStarcleaveBlocks.SHORT_HOLY_MOSS)
+                        new WeightedStateProvider(
+                                SimpleWeightedRandomList.<BlockState>builder()
+                                        .add(OperationStarcleaveBlocks.SHORT_HOLY_MOSS.defaultBlockState(), 91)
+                                        .add(OperationStarcleaveBlocks.GREAT_TREES_CARE.defaultBlockState(), 1)
+                                        .add(OperationStarcleaveBlocks.RED_MOURNER.defaultBlockState(), 1)
+                                        .add(OperationStarcleaveBlocks.ANGELCLAW.defaultBlockState(), 1)
+                                        .add(OperationStarcleaveBlocks.ELDROSE.defaultBlockState(), 1)
+                                        .add(OperationStarcleaveBlocks.WITCHGLARE.defaultBlockState(), 1)
+                                        .add(OperationStarcleaveBlocks.BLUE_DREAMER.defaultBlockState(), 1)
+                                        .add(OperationStarcleaveBlocks.DRAGONS_MAW.defaultBlockState(), 1)
+                                        .build()
+                        )
                 )
         );
 
