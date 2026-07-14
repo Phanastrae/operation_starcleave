@@ -12,12 +12,12 @@ import phanastrae.operation_starcleave.entity.mob.*;
 import phanastrae.operation_starcleave.entity.projectile.*;
 import phanastrae.operation_starcleave.services.XPlatInterface;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
 public class OperationStarcleaveEntityTypes {
-    private static final Map<ResourceLocation, EntityType<? extends Entity>> UNREGISTERED_ENTITY_TYPES = new HashMap<>();
+    private static final Map<ResourceLocation, EntityType<? extends Entity>> UNREGISTERED_ENTITY_TYPES = new LinkedHashMap<>();
 
     public static final EntityType<StarcleaverGolemEntity> STARCLEAVER_GOLEM = register(id("starcleaver_golem"),
             createBuilder(StarcleaverGolemEntity::new, MobCategory.MISC)

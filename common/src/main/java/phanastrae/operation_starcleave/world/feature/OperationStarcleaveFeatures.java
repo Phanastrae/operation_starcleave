@@ -6,12 +6,12 @@ import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfi
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import phanastrae.operation_starcleave.OperationStarcleave;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
 public class OperationStarcleaveFeatures {
-    private static final Map<ResourceLocation, Feature<?>> UNREGISTERED_FEATURES = new HashMap<>();
+    private static final Map<ResourceLocation, Feature<?>> UNREGISTERED_FEATURES = new LinkedHashMap<>();
 
     public static final Feature<BlockStateConfiguration> ASTERUBBLE_BOULDER = register("asterubble_boulder", new AsterubbleBoulder(BlockStateConfiguration.CODEC));
 

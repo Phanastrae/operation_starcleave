@@ -5,13 +5,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.enchantment.effects.EnchantmentValueEffect;
 import phanastrae.operation_starcleave.OperationStarcleave;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.UnaryOperator;
 
 public class OperationStarcleaveEnchantmentEffectComponents {
-    private static final Map<ResourceLocation, DataComponentType<?>> UNREGISTERED_EFFECTS = new HashMap<>();
+    private static final Map<ResourceLocation, DataComponentType<?>> UNREGISTERED_EFFECTS = new LinkedHashMap<>();
 
     public static final DataComponentType<EnchantmentValueEffect> STORAGE_BONUS = register(
             "storage_bonus", builder -> builder.persistent(EnchantmentValueEffect.CODEC)
