@@ -119,6 +119,17 @@ public class StarbleachConversions {
                     return TALL_HOLY_MOSS.withPropertiesOf(blockState);
                 }
             }
+
+            if (blockState.is(BlockTags.WOODEN_PRESSURE_PLATES)) {
+                return STARTOUCHED_PRESSURE_PLATE.withPropertiesOf(blockState);
+            }
+
+            if (blockState.is(BlockTags.WOODEN_DOORS)) {
+                DoubleBlockHalf half = blockState.getValue(DoorBlock.HALF);
+                if (half == DoubleBlockHalf.LOWER || (half == DoubleBlockHalf.UPPER && supportState.is(STARTOUCHED_DOOR))) {
+                    return STARTOUCHED_DOOR.withPropertiesOf(blockState);
+                }
+            }
         }
 
         if (supportState.is(BUDDING_CELESTIAL_OPAL)) {
@@ -131,6 +142,10 @@ public class StarbleachConversions {
             } else if (blockState.is(AMETHYST_CLUSTER)) {
                 return getAttachedCrystalBlockstate(blockState, CELESTIAL_OPAL_CLUSTER, direction);
             }
+        }
+
+        if (blockState.is(BlockTags.WOODEN_BUTTONS) && blockState.getValue(ButtonBlock.FACING) == direction) {
+            return STARTOUCHED_BUTTON.withPropertiesOf(blockState);
         }
 
         return null;
@@ -201,6 +216,15 @@ public class StarbleachConversions {
         addCopyPropertiesConversion(OperationStarcleaveBlockTags.SB_I_SMOOTH_FELLCRUST_SLAB, SMOOTH_FELLCRUST_SLAB);
         addConversion(OperationStarcleaveBlockTags.SB_I_CUT_FELLCRUST, CUT_FELLCRUST);
         addCopyPropertiesConversion(OperationStarcleaveBlockTags.SB_I_CUT_FELLCRUST_SLAB, CUT_FELLCRUST_SLAB);
+
+        addCopyPropertiesConversion(STRIPPED_LOGS, STARTOUCHED_LOG);
+        addCopyPropertiesConversion(STRIPPED_WOODS, STARTOUCHED_WOOD);
+        addConversion(BlockTags.PLANKS, STARTOUCHED_PLANKS);
+        addCopyPropertiesConversion(BlockTags.WOODEN_STAIRS, STARTOUCHED_STAIRS);
+        addCopyPropertiesConversion(BlockTags.WOODEN_SLABS, STARTOUCHED_SLAB);
+        addCopyPropertiesConversion(BlockTags.WOODEN_FENCES, STARTOUCHED_FENCE);
+        addCopyPropertiesConversion(BlockTags.FENCE_GATES, STARTOUCHED_FENCE_GATE);
+        addCopyPropertiesConversion(BlockTags.WOODEN_TRAPDOORS, STARTOUCHED_TRAPDOOR);
     }
 
     private static void addConversion(StateConversion conversion) {

@@ -143,7 +143,7 @@ public class Starbleach {
 
         BlockState newAdjState = StarbleachConversions.getStarbleachAttachedBlockResult(level, adjPos, adjState, random, newState, direction);
         if (newAdjState != null) {
-            if (newAdjState.is(OperationStarcleaveBlocks.TALL_HOLY_MOSS)) {
+            if (newAdjState.is(OperationStarcleaveBlocks.TALL_HOLY_MOSS) || newAdjState.is(OperationStarcleaveBlocks.STARTOUCHED_DOOR)) {
                 level.setBlock(adjPos, newAdjState, 2 | 16);
                 starbleachAttachedBlocks(level, random, adjPos, newAdjState, direction);
                 newState.updateNeighbourShapes(level, blockPos, 3);

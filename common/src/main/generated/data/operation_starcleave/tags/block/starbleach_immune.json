@@ -1,5 +1,16 @@
 {
   "values": [
+    "operation_starcleave:startouched_planks",
+    "operation_starcleave:startouched_button",
+    "operation_starcleave:startouched_door",
+    "operation_starcleave:startouched_fence",
+    "operation_starcleave:startouched_fence_gate",
+    "operation_starcleave:startouched_pressure_plate",
+    "operation_starcleave:startouched_sign",
+    "operation_starcleave:startouched_slab",
+    "operation_starcleave:startouched_stairs",
+    "operation_starcleave:startouched_trapdoor",
+    "operation_starcleave:startouched_wall_sign",
     {
       "id": "#operation_starcleave:starbleached_logs",
       "required": false

@@ -1,0 +1,18 @@
+{
+  "type": "operation_starcleave:item_starbleaching",
+  "ingredient": {
+    "fabric:type": "fabric:difference",
+    "neoforge:ingredient_type": "neoforge:difference",
+    "base": {
+      "tag": "minecraft:wooden_slabs"
+    },
+    "subtracted": {
+      "item": "operation_starcleave:startouched_slab"
+    }
+  },
+  "result": {
+    "count": 1,
+    "id": "operation_starcleave:startouched_slab"
+  },
+  "starbleach_cost": 0.02
+}

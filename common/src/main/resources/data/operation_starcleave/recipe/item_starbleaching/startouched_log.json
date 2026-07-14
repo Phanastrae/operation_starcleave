@@ -1,0 +1,35 @@
+{
+  "type": "operation_starcleave:item_starbleaching",
+  "ingredient": {
+    "fabric:type": "fabric:difference",
+    "neoforge:ingredient_type": "neoforge:difference",
+    "base": {
+      "tag": "c:stripped_logs"
+    },
+    "subtracted": {
+      "fabric:type": "fabric:any",
+      "neoforge:ingredient_type": "neoforge:compound",
+      "children": [
+        {
+          "item": "operation_starcleave:startouched_log"
+        },
+        {
+          "tag": "operation_starcleave:starbleach_immune"
+        }
+      ],
+      "ingredients": [
+        {
+          "item": "operation_starcleave:startouched_log"
+        },
+        {
+          "tag": "operation_starcleave:starbleach_immune"
+        }
+      ]
+    }
+  },
+  "result": {
+    "count": 1,
+    "id": "operation_starcleave:startouched_log"
+  },
+  "starbleach_cost": 0.1
+}

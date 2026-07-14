@@ -5,10 +5,13 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBlockTags;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
-import org.jetbrains.annotations.Nullable;
-import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
+import net.minecraft.tags.TagBuilder;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import phanastrae.operation_starcleave.item.tag.OperationStarcleaveItemTags;
 
 import java.util.concurrent.CompletableFuture;
@@ -16,8 +19,11 @@ import java.util.concurrent.CompletableFuture;
 import static phanastrae.operation_starcleave.item.OperationStarcleaveItems.*;
 
 public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
-    public ItemTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> completableFuture, @Nullable FabricTagProvider.BlockTagProvider blockTagProvider) {
+    private final phanastrae.operation_starcleave.fabric.data.BlockTagProvider blockTagProvider;
+
+    public ItemTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> completableFuture, phanastrae.operation_starcleave.fabric.data.BlockTagProvider blockTagProvider) {
         super(output, completableFuture, blockTagProvider);
+        this.blockTagProvider = blockTagProvider;
     }
 
     @Override
@@ -83,8 +89,8 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
         //this.copy(BlockTags.DIRT, ItemTags.DIRT);
         //this.copy(BlockTags.TERRACOTTA, ItemTags.TERRACOTTA);
         //this.copy(BlockTags.COMPLETES_FIND_TREE_TUTORIAL, ItemTags.COMPLETES_FIND_TREE_TUTORIAL);
-        this.copy(BlockTags.STANDING_SIGNS, ItemTags.SIGNS);
-        this.copy(BlockTags.CEILING_HANGING_SIGNS, ItemTags.HANGING_SIGNS);
+        this.copySafe(BlockTags.STANDING_SIGNS, ItemTags.SIGNS);
+        this.copySafe(BlockTags.CEILING_HANGING_SIGNS, ItemTags.HANGING_SIGNS);
 
         getOrCreateTagBuilder(ItemTags.NON_FLAMMABLE_WOOD)
                 .add(
@@ -96,11 +102,11 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
         this.copy(ConventionalBlockTags.STRIPPED_LOGS, ConventionalItemTags.STRIPPED_LOGS);
         this.copy(ConventionalBlockTags.STRIPPED_WOODS, ConventionalItemTags.STRIPPED_WOODS);
         this.copy(ConventionalBlockTags.BUDDING_BLOCKS, ConventionalItemTags.BUDDING_BLOCKS);
-        // do not copy CLUSTERS as it contains a block without an item, do it manually instead
+        this.copySafe(ConventionalBlockTags.CLUSTERS, ConventionalItemTags.CLUSTERS);
         this.copy(ConventionalBlockTags.BUDS, ConventionalItemTags.BUDS);
 
         // starcleave
-        OperationStarcleaveItemTags.BLOCK_TAG_TO_ITEM_TAG_MAP.forEach(this::copy);
+        OperationStarcleaveItemTags.BLOCK_TAG_TO_ITEM_TAG_MAP.forEach(this::copySafe);
 
         // vanilla
         getOrCreateTagBuilder(ItemTags.VILLAGER_PLANTABLE_SEEDS)
@@ -119,12 +125,6 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
         );
 
         // convention
-        // add CLUSTERS manually as the block tag includes a block without an item
-        getOrCreateTagBuilder(ConventionalItemTags.CLUSTERS)
-                .add(
-                        OperationStarcleaveItems.CELESTIAL_OPAL_CLUSTER
-                );
-
         getOrCreateTagBuilder(ConventionalItemTags.FOODS)
                 .add(
                         STARFRUIT,
@@ -178,5 +178,16 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
                 .add(
                         BISMUTH_BLASTER
                 );
+    }
+
+    protected void copySafe(TagKey<Block> blockTag, TagKey<Item> itemTag) {
+        TagBuilder blockTagBuilder = this.blockTagProvider.getOrCreateRawBuilderPublic(blockTag);
+        TagBuilder itemTagBuilder = this.getOrCreateRawBuilder(itemTag);
+
+        blockTagBuilder.build().forEach(entry -> {
+            if (entry.verifyIfPresent(BuiltInRegistries.ITEM::containsKey, tag -> true)) {
+                itemTagBuilder.add(entry);
+            }
+        });
     }
 }

@@ -4,8 +4,10 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBlockTags;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.BlockFamily;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagBuilder;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -13,8 +15,8 @@ import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.block.tag.OperationStarcleaveBlockTags;
 import phanastrae.operation_starcleave.data.OperationStarcleaveBlockFamilies;
 
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -468,6 +470,9 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         addFamiliesToTag(OperationStarcleaveBlockTags.STARBLEACHED,
                 OperationStarcleaveBlockFamilies.STARTOUCHED_PLANKS
         );
+        addFamiliesToTag(OperationStarcleaveBlockTags.STARBLEACH_IMMUNE,
+                OperationStarcleaveBlockFamilies.STARTOUCHED_PLANKS
+        );
 
         getOrCreateTagBuilder(OperationStarcleaveBlockTags.STARBLEACHED)
                 .addOptionalTag(OperationStarcleaveBlockTags.STARBLEACHED_LOGS)
@@ -743,11 +748,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
         // family.getVariants() gives a HashMap, so sort it for consistent ordering
         Collection<Block> blocks = family.getVariants().values();
-        List<Block> blocksSorted = blocks.stream().sorted((b1, b2) -> {
-            char[] c1 = b1.getDescriptionId().toCharArray();
-            char[] c2 = b2.getDescriptionId().toCharArray();
-            return Arrays.compare(c1, c2);
-        }).toList();
+        List<Block> blocksSorted = blocks.stream().sorted(Comparator.comparing(BuiltInRegistries.BLOCK::getKey)).toList();
 
         builder.add(family.getBaseBlock());
         for (Block block : blocksSorted) {
@@ -755,4 +756,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         }
     }
 
+    public TagBuilder getOrCreateRawBuilderPublic(TagKey<Block> tag) {
+        return this.getOrCreateRawBuilder(tag);
+    }
 }

@@ -1,0 +1,18 @@
+{
+  "type": "operation_starcleave:item_starbleaching",
+  "ingredient": {
+    "fabric:type": "fabric:difference",
+    "neoforge:ingredient_type": "neoforge:difference",
+    "base": {
+      "tag": "minecraft:wooden_pressure_plates"
+    },
+    "subtracted": {
+      "item": "operation_starcleave:startouched_pressure_plate"
+    }
+  },
+  "result": {
+    "count": 1,
+    "id": "operation_starcleave:startouched_pressure_plate"
+  },
+  "starbleach_cost": 0.08
+}
