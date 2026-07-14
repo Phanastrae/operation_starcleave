@@ -531,10 +531,12 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
         getOrCreateTagBuilder(OperationStarcleaveBlockTags.STARBLEACH_IMMUNE)
                 .addOptionalTag(OperationStarcleaveBlockTags.STARBLEACHED_LOGS)
+                .addOptionalTag(OperationStarcleaveBlockTags.STARTOUCHED_LOGS)
                 .addOptionalTag(OperationStarcleaveBlockTags.NUCLEIC_FISSUREROOTS)
                 .add(
                         STARBLEACHED_LEAVES,
-                        NUCLEIC_FISSURELEAVES
+                        NUCLEIC_FISSURELEAVES,
+                        STARBLEACHED_SAPLING
                 );
 
         getOrCreateTagBuilder(OperationStarcleaveBlockTags.PHLOGISTIC_HYPERFLAMMABLES)

@@ -1,0 +1,41 @@
+{
+  "type": "operation_starcleave:item_starbleaching",
+  "ingredient": {
+    "fabric:type": "fabric:difference",
+    "neoforge:ingredient_type": "neoforge:difference",
+    "base": {
+      "tag": "minecraft:logs"
+    },
+    "subtracted": {
+      "fabric:type": "fabric:any",
+      "neoforge:ingredient_type": "neoforge:compound",
+      "children": [
+        {
+          "tag": "operation_starcleave:starbleach_immune"
+        },
+        {
+          "tag": "c:stripped_logs"
+        },
+        {
+          "tag": "c:stripped_woods"
+        }
+      ],
+      "ingredients": [
+        {
+          "tag": "operation_starcleave:starbleach_immune"
+        },
+        {
+          "tag": "c:stripped_logs"
+        },
+        {
+          "tag": "c:stripped_woods"
+        }
+      ]
+    }
+  },
+  "result": {
+    "count": 1,
+    "id": "operation_starcleave:starbleached_log"
+  },
+  "starbleach_cost": 0.125
+}

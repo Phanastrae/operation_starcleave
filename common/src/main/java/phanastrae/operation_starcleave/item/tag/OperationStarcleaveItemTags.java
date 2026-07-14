@@ -15,6 +15,8 @@ public class OperationStarcleaveItemTags {
     public static final Map<TagKey<Block>, TagKey<Item>> BLOCK_TAG_TO_ITEM_TAG_MAP = new HashMap<>();
 
     // item tags that are also block tags
+    public static final TagKey<Item> STARBLEACH_IMMUNE = fromBlockTag(OperationStarcleaveBlockTags.STARBLEACH_IMMUNE);
+
     public static final TagKey<Item> STARBLEACHED_LOGS = fromBlockTag(OperationStarcleaveBlockTags.STARBLEACHED_LOGS);
     public static final TagKey<Item> STARTOUCHED_LOGS = fromBlockTag(OperationStarcleaveBlockTags.STARTOUCHED_LOGS);
     public static final TagKey<Item> NUCLEIC_FISSUREROOTS = fromBlockTag(OperationStarcleaveBlockTags.NUCLEIC_FISSUREROOTS);

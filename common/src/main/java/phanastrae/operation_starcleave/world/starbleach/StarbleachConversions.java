@@ -166,7 +166,7 @@ public class StarbleachConversions {
         );
         addConversion(StateMatchesPredicate.fromBlocks(NETHERRACK, SOUL_SAND, SOUL_SOIL, CRIMSON_NYLIUM, WARPED_NYLIUM), AIR);
         addConversion(
-                BlockTags.SAND,
+                state -> state.is(BlockTags.SAND) && !state.is(SUSPICIOUS_SAND),
                 STARDUST_BLOCK
         );
         addConversion(
@@ -181,7 +181,10 @@ public class StarbleachConversions {
                         .build()
                 )
         );
-        addConversion(BlockTags.LOGS, StarbleachConversions::getLogState);
+        addConversion(
+                state -> state.is(BlockTags.LOGS) && !state.is(STRIPPED_LOGS) && !state.is(STRIPPED_WOODS),
+                StarbleachConversions::getLogState
+        );
         addConversion(FARMLAND, StarbleachConversions::getFarmlandState);
         addConversion(DIRT_PATH, STELLAR_PATH);
 
@@ -302,6 +305,8 @@ public class StarbleachConversions {
         return matches;
     }
 
+    // conventional stripped logs tag
+    public static final TagKey<Block> STRIPPED_LOGS = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("c", "stripped_logs"));
     // conventional stripped woods tag
     public static final TagKey<Block> STRIPPED_WOODS = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("c", "stripped_woods"));
 

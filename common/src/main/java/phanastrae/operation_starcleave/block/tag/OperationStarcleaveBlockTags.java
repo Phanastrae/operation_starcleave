@@ -12,7 +12,6 @@ public class OperationStarcleaveBlockTags {
     public static final TagKey<Block> STELLAR_MULCH_REPLACEABLE = of("stellar_mulch_replaceable");
     public static final TagKey<Block> ALLOWS_BISREED_PLANTING = of("allows_bisreed_planting");
     public static final TagKey<Block> STARBLEACHED_SAPLING_PLANTABLE_ON = of("starbleached_sapling_plantable_on");
-    public static final TagKey<Block> STARBLEACH_IMMUNE = of("starbleach_immune");
     public static final TagKey<Block> PHLOGISTIC_HYPERFLAMMABLES = of("phlogistic_hyperflammables");
     public static final TagKey<Block> NUCLEOSYNTHESEED_BLAST_IMMUNE = of("nucleosyntheseed_blast_immune");
     public static final TagKey<Block> ALSO_PRESERVES_LEAVES = of("also_preserves_leaves");
@@ -21,6 +20,8 @@ public class OperationStarcleaveBlockTags {
     public static final TagKey<Block> ASTERUBBLE_BOULDER_REPLACEABLE = of("asterubble_boulder_replaceable");
 
     // block tags that are also item tags
+    public static final TagKey<Block> STARBLEACH_IMMUNE = of("starbleach_immune");
+
     public static final TagKey<Block> STARBLEACHED_LOGS = of("starbleached_logs");
     public static final TagKey<Block> STARTOUCHED_LOGS = of("startouched_logs");
     public static final TagKey<Block> NUCLEIC_FISSUREROOTS = of("nucleic_fissureroots");

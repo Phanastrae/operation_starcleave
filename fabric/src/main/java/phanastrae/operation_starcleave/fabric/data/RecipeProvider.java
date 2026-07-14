@@ -395,17 +395,6 @@ public class RecipeProvider extends FabricRecipeProvider {
         );
 
         saveStarbleachRecipe(exporter,
-                ItemTags.SAPLINGS,
-                0.5F,
-                STARBLEACHED_SAPLING
-        );
-
-        saveStarbleachRecipe(exporter,
-                ItemTags.LOGS,
-                0.125F,
-                STARBLEACHED_LOG
-        );
-        saveStarbleachRecipe(exporter,
                 Items.GRASS_BLOCK,
                 0.125F,
                 HOLY_MOSS
@@ -428,11 +417,6 @@ public class RecipeProvider extends FabricRecipeProvider {
         );
 
         saveStarbleachRecipe(exporter,
-                ItemTags.LEAVES,
-                0.04F,
-                STARBLEACHED_LEAVES
-        );
-        saveStarbleachRecipe(exporter,
                 Items.DIRT,
                 0.04F,
                 STELLAR_SEDIMENT
@@ -451,11 +435,6 @@ public class RecipeProvider extends FabricRecipeProvider {
                 Items.GRAVEL,
                 0.04F,
                 ASTERUBBLE
-        );
-        saveStarbleachRecipe(exporter,
-                Items.SAND,
-                0.01F,
-                STARDUST_BLOCK
         );
 
         saveStarbleachRecipe(exporter,
