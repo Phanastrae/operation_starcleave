@@ -103,6 +103,11 @@ public class OperationStarcleaveItems {
 
     public static final Item ASTERUBBLE = registerBlockItem(OperationStarcleaveBlocks.ASTERUBBLE);
 
+    public static final Item SKYSHELL_BLOCK = registerBlockItem(OperationStarcleaveBlocks.SKYSHELL_BLOCK);
+    public static final Item SKYSHELL_STAIRS = registerBlockItem(OperationStarcleaveBlocks.SKYSHELL_STAIRS);
+    public static final Item SKYSHELL_SLAB = registerBlockItem(OperationStarcleaveBlocks.SKYSHELL_SLAB);
+    public static final Item SKYSHELL_WALL = registerBlockItem(OperationStarcleaveBlocks.SKYSHELL_WALL);
+
     public static final Item STARBLEACHED_LOG = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_LOG);
     public static final Item STARBLEACHED_WOOD = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_WOOD);
 
@@ -251,6 +256,8 @@ public class OperationStarcleaveItems {
 
     public static final Item HOLY_STRANDS = register("holy_strands", new Item(properties()));
     public static final Item BLESSED_CLOTH = register("blessed_cloth", new Item(properties()));
+
+    public static final Item SKYSHELL = register("skyshell", new Item(properties()));
 
     public static final Item STARBLEACHED_LEAF_BUNCH = register("starbleached_leaf_bunch", new Item(properties()));
 

@@ -1,0 +1,11 @@
+{
+  "type": "operation_starcleave:item_starbleaching",
+  "ingredient": {
+    "item": "minecraft:cobblestone_wall"
+  },
+  "result": {
+    "count": 1,
+    "id": "operation_starcleave:skyshell_wall"
+  },
+  "starbleach_cost": 0.04
+}

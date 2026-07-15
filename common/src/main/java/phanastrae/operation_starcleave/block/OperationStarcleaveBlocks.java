@@ -459,6 +459,28 @@ public class OperationStarcleaveBlocks {
             )
     );
 
+    public static final Block SKYSHELL_BLOCK = register(
+            "skyshell_block",
+            new Block(properties()
+                    .strength(0.5F)
+                    .mapColor(DyeColor.WHITE)
+                    .sound(DECORATED_POT)
+                    .instrument(XYLOPHONE)
+            )
+    );
+    public static final Block SKYSHELL_STAIRS = register(
+            "skyshell_stairs",
+            stairsOf(SKYSHELL_BLOCK)
+    );
+    public static final Block SKYSHELL_SLAB = register(
+            "skyshell_slab",
+            slabOf(SKYSHELL_BLOCK)
+    );
+    public static final Block SKYSHELL_WALL = register(
+            "skyshell_wall",
+            wallOf(SKYSHELL_BLOCK)
+    );
+
     public static final Block STARBLEACHED_LOG = register(
             "starbleached_log",
             new RotatedPillarBlock(properties()

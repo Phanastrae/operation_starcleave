@@ -73,6 +73,12 @@ public class OperationStarcleaveBlockFamilies {
             .slab(OperationStarcleaveBlocks.CUT_POLISHED_FELLCRUST_SLAB)
             .getFamily();
 
+    public static final BlockFamily SKYSHELL = familyBuilder(OperationStarcleaveBlocks.SKYSHELL_BLOCK)
+            .stairs(OperationStarcleaveBlocks.SKYSHELL_STAIRS)
+            .slab(OperationStarcleaveBlocks.SKYSHELL_SLAB)
+            .wall(OperationStarcleaveBlocks.SKYSHELL_WALL)
+            .getFamily();
+
     public static final BlockFamily STARBLEACHED_TILES = familyBuilder(OperationStarcleaveBlocks.STARBLEACHED_TILES)
             .stairs(OperationStarcleaveBlocks.STARBLEACHED_TILE_STAIRS)
             .slab(OperationStarcleaveBlocks.STARBLEACHED_TILE_SLAB)

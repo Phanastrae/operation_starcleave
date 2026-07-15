@@ -63,6 +63,7 @@ public class ModelProvider extends FabricModelProvider {
                             ModelTemplates.CUBE_BOTTOM_TOP
                     ).get(COBBLED_FELLCRUST)
             )
+            .put(SKYSHELL_BLOCK, TexturedModel.COLUMN_WITH_WALL.get(SKYSHELL_BLOCK))
             .build();
     public static final Set<Block> SKIP_FAMILY_MODEL_GENERATION = ImmutableSet.<Block>builder()
             .add(
@@ -1061,6 +1062,8 @@ public class ModelProvider extends FabricModelProvider {
 
                 OperationStarcleaveItems.HOLY_STRANDS,
                 OperationStarcleaveItems.BLESSED_CLOTH,
+
+                OperationStarcleaveItems.SKYSHELL,
 
                 OperationStarcleaveItems.STARBLEACHED_LEAF_BUNCH,
 

@@ -104,6 +104,8 @@ public class RecipeProvider extends FabricRecipeProvider {
 
         twoByTwoPacker(exporter, RecipeCategory.BUILDING_BLOCKS, OURANIC_CHIP_BLOCK, OURANIC_CHIP);
 
+        twoByTwoPacker(exporter, RecipeCategory.BUILDING_BLOCKS, SKYSHELL_BLOCK, SKYSHELL);
+
         eightCircle(exporter, MUCKY_SINGUT_COIL, MUCKY_SINGUTS, 4);
         twoByTwoPacker(exporter, RecipeCategory.BUILDING_BLOCKS, MUCKY_SINGUT_BLOCK, MUCKY_SINGUT_COIL, 4);
         eightCircle(exporter, CLEANSED_SINGUT_COIL, CLEANSED_SINGUTS, 4);
@@ -307,6 +309,11 @@ public class RecipeProvider extends FabricRecipeProvider {
         scBlocks(exporter, CUT_POLISHED_FELLCRUST_STAIRS, 1, CUT_POLISHED_FELLCRUST, POLISHED_FELLCRUST_BRICKS, POLISHED_FELLCRUST, COBBLED_FELLCRUST, FELLCRUST);
         scBlocks(exporter, CUT_POLISHED_FELLCRUST_SLAB, 2, CUT_POLISHED_FELLCRUST, POLISHED_FELLCRUST_BRICKS, POLISHED_FELLCRUST, COBBLED_FELLCRUST, FELLCRUST);
 
+        // skyshell
+        scBlocks(exporter, SKYSHELL_STAIRS, 1, SKYSHELL_BLOCK);
+        scBlocks(exporter, SKYSHELL_SLAB, 2, SKYSHELL_BLOCK);
+        scWalls(exporter, SKYSHELL_WALL, 1, SKYSHELL_BLOCK);
+
         // 1:1 wood:log recipe, slightly better than the normal 3:4 wood:log crafting recipe
         scBlocks(exporter, STARBLEACHED_WOOD, 1, STARBLEACHED_LOG);
         // starbleached tiles (from log/wood)
@@ -478,19 +485,16 @@ public class RecipeProvider extends FabricRecipeProvider {
                 0.04F,
                 FELLCRUST
         );
-
         saveStarbleachRecipe(exporter,
                 OperationStarcleaveItemTags.SB_I_FELLCRUST_STAIRS,
                 0.04F,
                 FELLCRUST_STAIRS
         );
-
         saveStarbleachRecipe(exporter,
                 OperationStarcleaveItemTags.SB_I_FELLCRUST_SLAB,
                 0.02F,
                 FELLCRUST_SLAB
         );
-
         saveStarbleachRecipe(exporter,
                 OperationStarcleaveItemTags.SB_I_FELLCRUST_WALL,
                 0.04F,
@@ -508,13 +512,11 @@ public class RecipeProvider extends FabricRecipeProvider {
                 0.04F,
                 SMOOTH_FELLCRUST
         );
-
         saveStarbleachRecipe(exporter,
                 OperationStarcleaveItemTags.SB_I_SMOOTH_FELLCRUST_STAIRS,
                 0.04F,
                 SMOOTH_FELLCRUST_STAIRS
         );
-
         saveStarbleachRecipe(exporter,
                 OperationStarcleaveItemTags.SB_I_SMOOTH_FELLCRUST_SLAB,
                 0.04F,
@@ -526,11 +528,31 @@ public class RecipeProvider extends FabricRecipeProvider {
                 0.04F,
                 CUT_FELLCRUST
         );
-
         saveStarbleachRecipe(exporter,
                 OperationStarcleaveItemTags.SB_I_CUT_FELLCRUST_SLAB,
                 0.04F,
                 CUT_FELLCRUST_SLAB
+        );
+
+        saveStarbleachRecipe(exporter,
+                Items.COBBLESTONE,
+                0.04F,
+                SKYSHELL_BLOCK
+        );
+        saveStarbleachRecipe(exporter,
+                Items.COBBLESTONE_STAIRS,
+                0.04F,
+                SKYSHELL_STAIRS
+        );
+        saveStarbleachRecipe(exporter,
+                Items.COBBLESTONE_SLAB,
+                0.02F,
+                SKYSHELL_SLAB
+        );
+        saveStarbleachRecipe(exporter,
+                Items.COBBLESTONE_WALL,
+                0.04F,
+                SKYSHELL_WALL
         );
         // endregion
     }

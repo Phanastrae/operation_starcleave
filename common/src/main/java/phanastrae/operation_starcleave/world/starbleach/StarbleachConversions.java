@@ -225,6 +225,11 @@ public class StarbleachConversions {
         addCopyPropertiesConversion(BlockTags.WOODEN_FENCES, STARTOUCHED_FENCE);
         addCopyPropertiesConversion(BlockTags.FENCE_GATES, STARTOUCHED_FENCE_GATE);
         addCopyPropertiesConversion(BlockTags.WOODEN_TRAPDOORS, STARTOUCHED_TRAPDOOR);
+
+        addConversion(COBBLESTONE, SKYSHELL_BLOCK);
+        addCopyPropertiesConversion(COBBLESTONE_STAIRS, SKYSHELL_STAIRS);
+        addCopyPropertiesConversion(COBBLESTONE_SLAB, SKYSHELL_SLAB);
+        addCopyPropertiesConversion(COBBLESTONE_WALL, SKYSHELL_WALL);
     }
 
     private static void addConversion(StateConversion conversion) {

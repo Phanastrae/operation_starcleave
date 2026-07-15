@@ -175,6 +175,13 @@ public class OperationStarcleaveCreativeModeTabs {
 
                 ASTERUBBLE,
 
+                SKYSHELL,
+
+                SKYSHELL_BLOCK,
+                SKYSHELL_STAIRS,
+                SKYSHELL_SLAB,
+                SKYSHELL_WALL,
+
                 STARBLEACHED_LOG,
                 STARBLEACHED_WOOD,
 
@@ -410,6 +417,11 @@ public class OperationStarcleaveCreativeModeTabs {
                 CUT_POLISHED_FELLCRUST_STAIRS,
                 CUT_POLISHED_FELLCRUST_SLAB,
 
+                SKYSHELL_BLOCK,
+                SKYSHELL_STAIRS,
+                SKYSHELL_SLAB,
+                SKYSHELL_WALL,
+
                 STELLAR_TILES,
                 STELLAR_TILE_SLAB,
 
@@ -641,6 +653,7 @@ public class OperationStarcleaveCreativeModeTabs {
                 STARBLEACH_BOTTLE,
                 HOLY_STRANDS,
                 BLESSED_CLOTH,
+                SKYSHELL,
                 STARBLEACHED_LEAF_BUNCH
         );
 

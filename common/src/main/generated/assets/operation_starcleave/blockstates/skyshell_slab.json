@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "operation_starcleave:block/skyshell_slab"
+    },
+    "type=double": {
+      "model": "operation_starcleave:block/skyshell_block"
+    },
+    "type=top": {
+      "model": "operation_starcleave:block/skyshell_slab_top"
+    }
+  }
+}

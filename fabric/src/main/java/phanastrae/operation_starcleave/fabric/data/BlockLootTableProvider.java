@@ -23,12 +23,14 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
+import net.minecraft.world.level.storage.loot.functions.LimitCount;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.*;
 import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
@@ -93,6 +95,9 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                 STELLAR_SEDIMENT,
 
                 ASTERUBBLE,
+
+                SKYSHELL_STAIRS,
+                SKYSHELL_WALL,
 
                 GREAT_TREES_CARE,
                 RED_MOURNER,
@@ -241,6 +246,22 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
         this.add(STARBLEACHED_LEAF_LITTER, this.createSegmentedDrops(STARBLEACHED_LEAF_LITTER));
 
         this.add(HOLY_LEAF_PLATFORM, createSlabItemTable(HOLY_LEAF_PLATFORM));
+
+        this.add(SKYSHELL_SLAB, createSlabItemTable(SKYSHELL_SLAB));
+
+        this.add(
+                SKYSHELL_BLOCK,
+                block -> this.createSilkTouchDispatchTable(
+                        block,
+                        this.applyExplosionDecay(
+                                block,
+                                LootItem.lootTableItem(OperationStarcleaveItems.SKYSHELL)
+                                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 4.0F)))
+                                        .apply(ApplyBonusCount.addUniformBonusCount(registryLookup.getOrThrow(Enchantments.FORTUNE)))
+                                        .apply(LimitCount.limitCount(IntRange.range(1, 4)))
+                        )
+                )
+        );
     }
 
     private void forEach(Consumer<Block> consumer, Block... list) {
