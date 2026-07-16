@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "operation_starcleave:asterubble"
+  },
+  "result": {
+    "count": 1,
+    "id": "operation_starcleave:asterubble_stairs"
+  }
+}

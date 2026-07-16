@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "operation_starcleave:block/asterubble_slab"
+    },
+    "type=double": {
+      "model": "operation_starcleave:block/asterubble"
+    },
+    "type=top": {
+      "model": "operation_starcleave:block/asterubble_slab_top"
+    }
+  }
+}

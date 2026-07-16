@@ -174,6 +174,9 @@ public class OperationStarcleaveCreativeModeTabs {
                 CUT_POLISHED_FELLCRUST_SLAB,
 
                 ASTERUBBLE,
+                ASTERUBBLE_STAIRS,
+                ASTERUBBLE_SLAB,
+                ASTERUBBLE_WALL,
 
                 SKYSHELL,
 
@@ -418,6 +421,11 @@ public class OperationStarcleaveCreativeModeTabs {
                 CUT_POLISHED_FELLCRUST,
                 CUT_POLISHED_FELLCRUST_STAIRS,
                 CUT_POLISHED_FELLCRUST_SLAB,
+
+                ASTERUBBLE,
+                ASTERUBBLE_STAIRS,
+                ASTERUBBLE_SLAB,
+                ASTERUBBLE_WALL,
 
                 SKYSHELL_BLOCK,
                 SKYSHELL_STAIRS,

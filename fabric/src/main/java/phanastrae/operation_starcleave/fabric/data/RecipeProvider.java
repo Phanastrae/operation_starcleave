@@ -309,6 +309,11 @@ public class RecipeProvider extends FabricRecipeProvider {
         scBlocks(exporter, CUT_POLISHED_FELLCRUST_STAIRS, 1, CUT_POLISHED_FELLCRUST, POLISHED_FELLCRUST_BRICKS, POLISHED_FELLCRUST, COBBLED_FELLCRUST, FELLCRUST);
         scBlocks(exporter, CUT_POLISHED_FELLCRUST_SLAB, 2, CUT_POLISHED_FELLCRUST, POLISHED_FELLCRUST_BRICKS, POLISHED_FELLCRUST, COBBLED_FELLCRUST, FELLCRUST);
 
+        // asterubble
+        scBlocks(exporter, ASTERUBBLE_STAIRS, 1, ASTERUBBLE);
+        scBlocks(exporter, ASTERUBBLE_SLAB, 2, ASTERUBBLE);
+        scWalls(exporter, ASTERUBBLE_WALL, 1, ASTERUBBLE);
+
         // skyshell
         scBlocks(exporter, SKYSHELL_STAIRS, 1, SKYSHELL_BLOCK);
         scBlocks(exporter, SKYSHELL_SLAB, 2, SKYSHELL_BLOCK);

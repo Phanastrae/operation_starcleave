@@ -462,6 +462,18 @@ public class OperationStarcleaveBlocks {
                     .requiresCorrectToolForDrops()
             )
     );
+    public static final Block ASTERUBBLE_STAIRS = register(
+            "asterubble_stairs",
+            stairsOf(ASTERUBBLE)
+    );
+    public static final Block ASTERUBBLE_SLAB = register(
+            "asterubble_slab",
+            slabOf(ASTERUBBLE)
+    );
+    public static final Block ASTERUBBLE_WALL = register(
+            "asterubble_wall",
+            wallOf(ASTERUBBLE)
+    );
 
     public static final Block SKYSHELL_BLOCK = register(
             "skyshell_block",

@@ -66,6 +66,8 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                 OperationStarcleaveBlockFamilies.POLISHED_FELLCRUST_BRICKS,
                 OperationStarcleaveBlockFamilies.CUT_POLISHED_FELLCRUST,
 
+                OperationStarcleaveBlockFamilies.ASTERUBBLE,
+
                 OperationStarcleaveBlockFamilies.STARBLEACHED_TILES,
                 OperationStarcleaveBlockFamilies.STARTOUCHED_PLANKS,
                 OperationStarcleaveBlockFamilies.STELLAR_TILES,
@@ -93,8 +95,6 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                 NETHERITE_PUMPKIN,
 
                 STELLAR_SEDIMENT,
-
-                ASTERUBBLE,
 
                 SKYSHELL_STAIRS,
                 SKYSHELL_WALL,

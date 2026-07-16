@@ -103,6 +103,9 @@ public class OperationStarcleaveItems {
     public static final Item CUT_POLISHED_FELLCRUST_SLAB = registerBlockItem(OperationStarcleaveBlocks.CUT_POLISHED_FELLCRUST_SLAB);
 
     public static final Item ASTERUBBLE = registerBlockItem(OperationStarcleaveBlocks.ASTERUBBLE);
+    public static final Item ASTERUBBLE_STAIRS = registerBlockItem(OperationStarcleaveBlocks.ASTERUBBLE_STAIRS);
+    public static final Item ASTERUBBLE_SLAB = registerBlockItem(OperationStarcleaveBlocks.ASTERUBBLE_SLAB);
+    public static final Item ASTERUBBLE_WALL = registerBlockItem(OperationStarcleaveBlocks.ASTERUBBLE_WALL);
 
     public static final Item SKYSHELL_BLOCK = registerBlockItem(OperationStarcleaveBlocks.SKYSHELL_BLOCK);
     public static final Item SKYSHELL_STAIRS = registerBlockItem(OperationStarcleaveBlocks.SKYSHELL_STAIRS);

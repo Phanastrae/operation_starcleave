@@ -11,6 +11,10 @@
     "operation_starcleave:startouched_stairs",
     "operation_starcleave:startouched_trapdoor",
     "operation_starcleave:startouched_wall_sign",
+    "operation_starcleave:asterubble",
+    "operation_starcleave:asterubble_slab",
+    "operation_starcleave:asterubble_stairs",
+    "operation_starcleave:asterubble_wall",
     {
       "id": "#operation_starcleave:starbleached_logs",
       "required": false
@@ -25,7 +29,6 @@
     "operation_starcleave:stellar_farmland",
     "operation_starcleave:holy_moss",
     "operation_starcleave:starbleached_leaves",
-    "operation_starcleave:asterubble",
     "operation_starcleave:stardust_block",
     "operation_starcleave:starbleached_sapling",
     "operation_starcleave:great_trees_care",

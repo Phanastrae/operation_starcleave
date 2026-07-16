@@ -42,6 +42,8 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 OperationStarcleaveBlockFamilies.POLISHED_FELLCRUST_BRICKS,
                 OperationStarcleaveBlockFamilies.CUT_POLISHED_FELLCRUST,
 
+                OperationStarcleaveBlockFamilies.ASTERUBBLE,
+
                 OperationStarcleaveBlockFamilies.SKYSHELL,
 
                 OperationStarcleaveBlockFamilies.STARBLEACHED_TILES,
@@ -78,6 +80,8 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 OperationStarcleaveBlockFamilies.POLISHED_FELLCRUST_BRICKS,
                 OperationStarcleaveBlockFamilies.CUT_POLISHED_FELLCRUST,
 
+                OperationStarcleaveBlockFamilies.ASTERUBBLE,
+
                 OperationStarcleaveBlockFamilies.SKYSHELL,
 
                 OperationStarcleaveBlockFamilies.STARBLEACHED_TILES,
@@ -111,6 +115,8 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_MOSAIC
         );
         addFamiliesToTag(BlockTags.NEEDS_IRON_TOOL,
+                OperationStarcleaveBlockFamilies.ASTERUBBLE,
+
                 OperationStarcleaveBlockFamilies.OURANIC_CHIP_BLOCK,
                 OperationStarcleaveBlockFamilies.OURANIC_BRICKS
         );
@@ -239,8 +245,6 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
                         SMOOTH_FELLCRUST_PILLAR,
 
-                        ASTERUBBLE,
-
                         IMBUED_STARBLEACHED_TILES,
 
                         STARBLEACH_CAULDRON,
@@ -313,8 +317,6 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 .addOptionalTag(OperationStarcleaveBlockTags.NUCLEIC_FISSUREROOTS)
                 .add(
                         NUCLEOSYNTHESEED,
-
-                        ASTERUBBLE,
 
                         OURANIC_BRICKS,
                         OURANIC_PILLAR
@@ -477,7 +479,8 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         // starcleave tags
         // block-only tags
         addFamiliesToTag(OperationStarcleaveBlockTags.STARBLEACHED,
-                OperationStarcleaveBlockFamilies.STARTOUCHED_PLANKS
+                OperationStarcleaveBlockFamilies.STARTOUCHED_PLANKS,
+                OperationStarcleaveBlockFamilies.ASTERUBBLE
         );
         addFamiliesToTag(OperationStarcleaveBlockTags.STARBLEACH_IMMUNE,
                 OperationStarcleaveBlockFamilies.STARTOUCHED_PLANKS
@@ -493,7 +496,6 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         STELLAR_FARMLAND,
                         HOLY_MOSS,
                         STARBLEACHED_LEAVES,
-                        ASTERUBBLE,
                         STARDUST_BLOCK,
                         STARBLEACHED_SAPLING,
                         GREAT_TREES_CARE,

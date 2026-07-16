@@ -73,6 +73,12 @@ public class OperationStarcleaveBlockFamilies {
             .slab(OperationStarcleaveBlocks.CUT_POLISHED_FELLCRUST_SLAB)
             .getFamily();
 
+    public static final BlockFamily ASTERUBBLE = familyBuilder(OperationStarcleaveBlocks.ASTERUBBLE)
+            .stairs(OperationStarcleaveBlocks.ASTERUBBLE_STAIRS)
+            .slab(OperationStarcleaveBlocks.ASTERUBBLE_SLAB)
+            .wall(OperationStarcleaveBlocks.ASTERUBBLE_WALL)
+            .getFamily();
+
     public static final BlockFamily SKYSHELL = familyBuilder(OperationStarcleaveBlocks.SKYSHELL_BLOCK)
             .stairs(OperationStarcleaveBlocks.SKYSHELL_STAIRS)
             .slab(OperationStarcleaveBlocks.SKYSHELL_SLAB)
