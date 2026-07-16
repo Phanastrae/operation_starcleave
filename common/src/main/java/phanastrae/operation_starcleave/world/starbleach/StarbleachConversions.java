@@ -130,6 +130,10 @@ public class StarbleachConversions {
                     return STARTOUCHED_DOOR.withPropertiesOf(blockState);
                 }
             }
+
+            if (blockState.is(OperationStarcleaveBlockTags.SB_I_STARTOUCHED_TORCH)) {
+                return STARTOUCHED_TORCH.withPropertiesOf(blockState);
+            }
         }
 
         if (supportState.is(BUDDING_CELESTIAL_OPAL)) {
@@ -146,6 +150,10 @@ public class StarbleachConversions {
 
         if (blockState.is(BlockTags.WOODEN_BUTTONS) && blockState.getValue(ButtonBlock.FACING) == direction) {
             return STARTOUCHED_BUTTON.withPropertiesOf(blockState);
+        }
+
+        if (blockState.is(OperationStarcleaveBlockTags.SB_I_STARTOUCHED_WALL_TORCH) && blockState.getValue(WallTorchBlock.FACING) == direction) {
+            return STARTOUCHED_WALL_TORCH.withPropertiesOf(blockState);
         }
 
         return null;

@@ -123,6 +123,8 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
 
                 STARTOUCHED_HANGING_SIGN,
 
+                STARTOUCHED_TORCH,
+
                 STARBLEACHED_SAPLING,
 
                 STARBLEACHED_PEARL_BLOCK,

@@ -11,7 +11,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "operation_starcleave:startouched_hanging_sign"
+          "name": "operation_starcleave:startouched_torch"
         }
       ],
       "rolls": 1.0

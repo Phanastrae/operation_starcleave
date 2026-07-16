@@ -554,6 +554,12 @@ public class RecipeProvider extends FabricRecipeProvider {
                 0.04F,
                 SKYSHELL_WALL
         );
+
+        saveStarbleachRecipe(exporter,
+                OperationStarcleaveItemTags.SB_I_STARTOUCHED_TORCH,
+                0.02F,
+                STARTOUCHED_TORCH
+        );
         // endregion
     }
 

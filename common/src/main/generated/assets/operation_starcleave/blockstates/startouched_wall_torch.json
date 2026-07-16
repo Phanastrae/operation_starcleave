@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "operation_starcleave:block/startouched_wall_torch"
+    },
+    "facing=north": {
+      "model": "operation_starcleave:block/startouched_wall_torch",
+      "y": 270
+    },
+    "facing=south": {
+      "model": "operation_starcleave:block/startouched_wall_torch",
+      "y": 90
+    },
+    "facing=west": {
+      "model": "operation_starcleave:block/startouched_wall_torch",
+      "y": 180
+    }
+  }
+}

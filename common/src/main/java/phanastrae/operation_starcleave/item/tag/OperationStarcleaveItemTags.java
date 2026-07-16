@@ -32,6 +32,8 @@ public class OperationStarcleaveItemTags {
     public static final TagKey<Item> SB_I_CUT_FELLCRUST = fromBlockTag(OperationStarcleaveBlockTags.SB_I_CUT_FELLCRUST);
     public static final TagKey<Item> SB_I_CUT_FELLCRUST_SLAB = fromBlockTag(OperationStarcleaveBlockTags.SB_I_CUT_FELLCRUST_SLAB);
 
+    public static final TagKey<Item> SB_I_STARTOUCHED_TORCH = fromBlockTag(OperationStarcleaveBlockTags.SB_I_STARTOUCHED_TORCH);
+
     // item-only tags
     public static final TagKey<Item> STOCKPILE_ENCHANTABLE = of("enchantable/stockpile");
 

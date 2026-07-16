@@ -436,6 +436,11 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         STARTOUCHED_WALL_HANGING_SIGN
                 );
 
+        getOrCreateTagBuilder(BlockTags.WALL_POST_OVERRIDE)
+                .add(
+                        STARTOUCHED_TORCH
+                );
+
         // conventional
         getOrCreateTagBuilder(ConventionalBlockTags.STRIPPED_LOGS)
                 .add(
@@ -601,6 +606,12 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         STARBLEACHED_LEAVES
                 );
 
+        getOrCreateTagBuilder(OperationStarcleaveBlockTags.SB_I_STARTOUCHED_WALL_TORCH)
+                .add(
+                        Blocks.WALL_TORCH,
+                        Blocks.SOUL_WALL_TORCH
+                );
+
         // block tags that are also item tags
         getOrCreateTagBuilder(OperationStarcleaveBlockTags.STARBLEACHED_LOGS)
                 .add(
@@ -680,6 +691,12 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 .add(
                         Blocks.CUT_SANDSTONE_SLAB,
                         Blocks.CUT_RED_SANDSTONE_SLAB
+                );
+
+        getOrCreateTagBuilder(OperationStarcleaveBlockTags.SB_I_STARTOUCHED_TORCH)
+                .add(
+                        Blocks.TORCH,
+                        Blocks.SOUL_TORCH
                 );
     }
 

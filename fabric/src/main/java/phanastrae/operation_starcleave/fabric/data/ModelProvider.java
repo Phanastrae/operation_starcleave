@@ -141,6 +141,8 @@ public class ModelProvider extends FabricModelProvider {
 
         BMG.createHangingSign(STARTOUCHED_LOG, STARTOUCHED_HANGING_SIGN, STARTOUCHED_WALL_HANGING_SIGN);
 
+        BMG.createNormalTorch(STARTOUCHED_TORCH, STARTOUCHED_WALL_TORCH);
+
         registerUnevenCross(BMG, MULCHBORNE_TUFT);
         createPottedRoot(BMG, MULCHBORNE_TUFT, POTTED_MULCHBORNE_TUFT, TintState.NOT_TINTED);
         BMG.createCrossBlockWithDefaultItem(SHORT_HOLY_MOSS, BlockModelGenerators.TintState.NOT_TINTED);

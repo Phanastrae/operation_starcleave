@@ -1,5 +1,6 @@
 package phanastrae.operation_starcleave.item;
 
+import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -140,6 +141,8 @@ public class OperationStarcleaveItems {
     public static final Item STARTOUCHED_BUTTON = registerBlockItem(OperationStarcleaveBlocks.STARTOUCHED_BUTTON);
     public static final Item STARTOUCHED_SIGN = register("startouched_sign", new SignItem(properties().stacksTo(16), OperationStarcleaveBlocks.STARTOUCHED_SIGN, OperationStarcleaveBlocks.STARTOUCHED_WALL_SIGN));
     public static final Item STARTOUCHED_HANGING_SIGN = register("startouched_hanging_sign", new HangingSignItem(OperationStarcleaveBlocks.STARTOUCHED_HANGING_SIGN, OperationStarcleaveBlocks.STARTOUCHED_WALL_HANGING_SIGN, properties().stacksTo(16)));
+
+    public static final Item STARTOUCHED_TORCH = registerBlock(new StandingAndWallBlockItem(OperationStarcleaveBlocks.STARTOUCHED_TORCH, OperationStarcleaveBlocks.STARTOUCHED_WALL_TORCH, new Item.Properties(), Direction.DOWN));
 
     public static final Item STARBLEACHED_SAPLING = registerBlockItem(OperationStarcleaveBlocks.STARBLEACHED_SAPLING);
 

@@ -220,6 +220,8 @@ public class OperationStarcleaveCreativeModeTabs {
                 STARTOUCHED_SIGN,
                 STARTOUCHED_HANGING_SIGN,
 
+                STARTOUCHED_TORCH,
+
                 STARBLEACHED_SAPLING,
 
                 CELESTIAL_OPAL_BLOCK,
@@ -562,6 +564,9 @@ public class OperationStarcleaveCreativeModeTabs {
         );
 
         // Functional
+        helper.addAfter(Items.SOUL_TORCH, FUNCTIONAL_BLOCKS,
+                STARTOUCHED_TORCH
+        );
         helper.addAfter(Items.PEARLESCENT_FROGLIGHT, FUNCTIONAL_BLOCKS,
                 SUBCAELIC_PHLOGLIGHT
         );

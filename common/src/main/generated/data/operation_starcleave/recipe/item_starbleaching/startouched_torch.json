@@ -1,0 +1,11 @@
+{
+  "type": "operation_starcleave:item_starbleaching",
+  "ingredient": {
+    "tag": "operation_starcleave:starbleaches_into/startouched_torch"
+  },
+  "result": {
+    "count": 1,
+    "id": "operation_starcleave:startouched_torch"
+  },
+  "starbleach_cost": 0.02
+}

@@ -20,6 +20,7 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.fluid.OperationStarcleaveFluids;
+import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -731,6 +732,32 @@ public class OperationStarcleaveBlocks {
                             .forceSolidOn()
                             .noCollission()
                             .ignitedByLava()
+            )
+    );
+
+    public static final Block STARTOUCHED_TORCH = register(
+            "startouched_torch",
+            new StartouchedTorchBlock(
+                    OperationStarcleaveParticleTypes.STARBLEACH_SWIRL,
+                    properties()
+                            .lightLevel(constant(14))
+                            .sound(SoundType.WOOD)
+                            .pushReaction(PushReaction.DESTROY)
+                            .noCollission()
+                            .instabreak()
+            )
+    );
+    public static final Block STARTOUCHED_WALL_TORCH = register(
+            "startouched_wall_torch",
+            new StartouchedWallTorchBlock(
+                    OperationStarcleaveParticleTypes.STARBLEACH_SWIRL,
+                    properties()
+                            .lightLevel(constant(14))
+                            .sound(SoundType.WOOD)
+                            .pushReaction(PushReaction.DESTROY)
+                            .dropsLike(STARTOUCHED_TORCH)
+                            .noCollission()
+                            .instabreak()
             )
     );
 

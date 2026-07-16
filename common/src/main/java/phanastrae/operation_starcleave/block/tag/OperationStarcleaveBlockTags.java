@@ -19,6 +19,8 @@ public class OperationStarcleaveBlockTags {
     public static final TagKey<Block> MINED_QUICKLY_BY_SHEARS = of("mined_quickly_by_shears");
     public static final TagKey<Block> ASTERUBBLE_BOULDER_REPLACEABLE = of("asterubble_boulder_replaceable");
 
+    public static final TagKey<Block> SB_I_STARTOUCHED_WALL_TORCH = starbleachesInto("startouched_wall_torch");
+
     // block tags that are also item tags
     public static final TagKey<Block> STARBLEACH_IMMUNE = of("starbleach_immune");
 
@@ -36,6 +38,8 @@ public class OperationStarcleaveBlockTags {
     public static final TagKey<Block> SB_I_SMOOTH_FELLCRUST_SLAB = starbleachesInto("smooth_fellcrust_slab");
     public static final TagKey<Block> SB_I_CUT_FELLCRUST = starbleachesInto("cut_fellcrust");
     public static final TagKey<Block> SB_I_CUT_FELLCRUST_SLAB = starbleachesInto("cut_fellcrust_slab");
+
+    public static final TagKey<Block> SB_I_STARTOUCHED_TORCH = starbleachesInto("startouched_torch");
 
     private static TagKey<Block> of(String id) {
         return TagKey.create(Registries.BLOCK, OperationStarcleave.id(id));

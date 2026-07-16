@@ -19,6 +19,9 @@ public class OperationStarcleaveBlockRenderTypes {
                 STARTOUCHED_DOOR,
                 STARTOUCHED_TRAPDOOR,
 
+                STARTOUCHED_TORCH,
+                STARTOUCHED_WALL_TORCH,
+
                 STARBLEACHED_SAPLING,
                 POTTED_STARBLEACHED_SAPLING,
 

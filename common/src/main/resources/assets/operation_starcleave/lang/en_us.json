@@ -161,6 +161,7 @@
   "block.operation_starcleave.startouched_sign": "Startouched Sign",
   "block.operation_starcleave.startouched_slab": "Startouched Slab",
   "block.operation_starcleave.startouched_stairs": "Startouched Stairs",
+  "block.operation_starcleave.startouched_torch": "Startouched Torch",
   "block.operation_starcleave.startouched_trapdoor": "Startouched Trapdoor",
   "block.operation_starcleave.startouched_wall_hanging_sign": "Startouched Wall Hanging Sign",
   "block.operation_starcleave.startouched_wall_sign": "Startouched Wall Sign",
@@ -342,6 +343,7 @@
   "tag.fluid.operation_starcleave.petrichoric_plasma": "Petrichoric Plasma",
   "tag.fluid.operation_starcleave.starbleach": "Starbleach",
 
+  "tag.item.operation_starcleave.starbleach_immune": "Starbleach Immune",
   "tag.item.operation_starcleave.starbleached_logs": "Starbleached Logs",
   "tag.item.operation_starcleave.starbleaches_into.chiseled_fellcrust": "Starbleaches into Chiseled Fellcrust",
   "tag.item.operation_starcleave.starbleaches_into.cut_fellcrust": "Starbleaches into Cut Fellcrust",
@@ -353,6 +355,7 @@
   "tag.item.operation_starcleave.starbleaches_into.smooth_fellcrust": "Starbleaches into Smooth Fellcrust",
   "tag.item.operation_starcleave.starbleaches_into.smooth_fellcrust_slab": "Starbleaches into Smooth Fellcrust Slab",
   "tag.item.operation_starcleave.starbleaches_into.smooth_fellcrust_stairs": "Starbleaches into Smooth Fellcrust Stairs",
+  "tag.item.operation_starcleave.starbleaches_into.startouched_torch": "Starbleaches into Startouched Torch",
   "tag.item.operation_starcleave.startouched_logs": "Startouched Logs",
   "tag.item.operation_starcleave.nucleic_fissureroots": "Nucleic Fissureroots",
   "tag.item.operation_starcleave.enchantable.stockpile": "Stockpile Enchantable"
