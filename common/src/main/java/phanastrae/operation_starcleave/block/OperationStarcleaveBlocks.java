@@ -2,6 +2,8 @@ package phanastrae.operation_starcleave.block;
 
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ColorRGBA;
 import net.minecraft.util.Mth;
@@ -20,6 +22,7 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.fluid.OperationStarcleaveFluids;
+import phanastrae.operation_starcleave.mixin.common.accessor.BlockBehaviourAccessor;
 import phanastrae.operation_starcleave.particle.OperationStarcleaveParticleTypes;
 
 import java.util.LinkedHashMap;
@@ -1327,6 +1330,14 @@ public class OperationStarcleaveBlocks {
     }
 
     private static <T extends Block> T register(ResourceLocation location, T block) {
+        // manually set drops to avoid isseus with dropsLike()
+        BlockBehaviourAccessor bbpa = (BlockBehaviourAccessor) block;
+        if (bbpa.operation_starcleave$getDrops() == null) {
+            // if another block uses dropsLike() to copy this block's drops, then it will trigger getDrops() on this block, which sets this block's drops to air since it is not yet registered
+            // we avoid this by just manually setting the drops immediately
+            bbpa.operation_starcleave$setDrops(ResourceKey.create(Registries.LOOT_TABLE, location.withPrefix("blocks/")));
+        }
+
         UNREGISTERED_BLOCKS.put(location, block);
         UNREGISTERED_BLOCK_LOCATIONS.put(block, location);
         return block;
