@@ -184,8 +184,12 @@ public class StarbleachConversions {
         addConversion(StateMatchesPredicate.fromBlocks(PODZOL, MYCELIUM), STELLAR_MULCH);
         addConversion(GRASS_BLOCK, StarbleachConversions::getGrassySedimentState);
         addConversion(
-                new StateMatchesPredicate.Builder(DIRT, COARSE_DIRT, ROOTED_DIRT, END_STONE).addBlockTag(BlockTags.BASE_STONE_OVERWORLD).build(),
+                new StateMatchesPredicate.Builder(DIRT, ROOTED_DIRT, END_STONE).addBlockTag(BlockTags.BASE_STONE_OVERWORLD).build(),
                 StarbleachConversions::getSedimentState
+        );
+        addConversion(
+                COARSE_DIRT,
+                STELLARUBBLE_MIX
         );
         addConversion(StateMatchesPredicate.fromBlocks(NETHERRACK, SOUL_SAND, SOUL_SOIL, CRIMSON_NYLIUM, WARPED_NYLIUM), AIR);
         addConversion(
@@ -320,6 +324,8 @@ public class StarbleachConversions {
             int nearbyMulch = countBlocksInArea(level, blockPos, 1, (state) -> state.is(STELLAR_MULCH));
             if (random.nextInt(1 + (9 - nearbyMulch) * (9 - nearbyMulch)) <= 30) {
                 return STELLAR_MULCH.defaultBlockState();
+            } else if (random.nextInt(7) == 0) {
+                return STELLARUBBLE_MIX.defaultBlockState();
             }
         }
 

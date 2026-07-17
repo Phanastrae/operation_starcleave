@@ -95,6 +95,7 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                 NETHERITE_PUMPKIN,
 
                 STELLAR_SEDIMENT,
+                STELLARUBBLE_MIX,
 
                 SKYSHELL_STAIRS,
                 SKYSHELL_WALL,

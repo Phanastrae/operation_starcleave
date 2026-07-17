@@ -169,6 +169,8 @@ public class Starbleach {
                 && (random.nextInt(128) == 0)
         ) {
             tryPlaceAsterubbleBoulder(level, random, upPos);
+        } else if (newState.is(OperationStarcleaveBlocks.STELLARUBBLE_MIX) && random.nextInt(80) == 0) {
+            tryPlaceAsterubbleBoulder(level, random, upPos);
         } else if (newState.is(OperationStarcleaveBlocks.ASTERUBBLE) && random.nextInt(20) == 0) {
             tryPlaceAsterubbleBoulder(level, random, upPos);
         }

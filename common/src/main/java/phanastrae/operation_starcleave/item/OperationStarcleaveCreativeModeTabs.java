@@ -54,6 +54,7 @@ public class OperationStarcleaveCreativeModeTabs {
                 SPLASH_STARBLEACH_BOTTLE,
 
                 STELLAR_SEDIMENT,
+                STELLARUBBLE_MIX,
                 STELLAR_PATH,
                 STELLAR_FARMLAND,
 
@@ -514,6 +515,7 @@ public class OperationStarcleaveCreativeModeTabs {
         // Natural
         helper.addAfter(Items.END_STONE, NATURAL_BLOCKS,
                 STELLAR_SEDIMENT,
+                STELLARUBBLE_MIX,
                 STELLAR_PATH,
                 STELLAR_FARMLAND,
                 STELLAR_MULCH,

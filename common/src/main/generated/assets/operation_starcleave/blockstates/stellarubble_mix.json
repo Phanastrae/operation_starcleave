@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "operation_starcleave:block/stellarubble_mix"
+      },
+      {
+        "model": "operation_starcleave:block/stellarubble_mix",
+        "y": 90
+      },
+      {
+        "model": "operation_starcleave:block/stellarubble_mix",
+        "y": 180
+      },
+      {
+        "model": "operation_starcleave:block/stellarubble_mix",
+        "y": 270
+      }
+    ]
+  }
+}

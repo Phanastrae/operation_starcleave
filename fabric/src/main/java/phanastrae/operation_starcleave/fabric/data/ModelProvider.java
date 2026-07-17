@@ -116,6 +116,7 @@ public class ModelProvider extends FabricModelProvider {
         forEach(BMG::createRotatedVariantBlock,
                 COAGULATED_PLASMA,
                 STELLAR_SEDIMENT,
+                STELLARUBBLE_MIX,
                 STARDUST_BLOCK,
                 PETRICHORIC_VAPOR
         );

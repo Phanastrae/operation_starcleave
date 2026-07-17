@@ -434,6 +434,11 @@ public class RecipeProvider extends FabricRecipeProvider {
                 STELLAR_SEDIMENT
         );
         saveStarbleachRecipe(exporter,
+                Items.COARSE_DIRT,
+                0.04F,
+                STELLARUBBLE_MIX
+        );
+        saveStarbleachRecipe(exporter,
                 Items.FARMLAND,
                 0.04F,
                 STELLAR_FARMLAND

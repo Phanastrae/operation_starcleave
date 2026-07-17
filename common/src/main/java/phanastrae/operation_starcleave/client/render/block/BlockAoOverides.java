@@ -18,6 +18,7 @@ public class BlockAoOverides {
     public static void init() {
         forEach(BlockAoOverides::addOverride,
                 STELLAR_SEDIMENT,
+                STELLARUBBLE_MIX,
                 STELLAR_PATH,
                 STELLAR_FARMLAND,
                 STELLAR_MULCH,

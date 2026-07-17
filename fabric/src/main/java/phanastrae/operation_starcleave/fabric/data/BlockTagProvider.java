@@ -277,6 +277,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_SHOVEL)
                 .add(
                         STELLAR_SEDIMENT,
+                        STELLARUBBLE_MIX,
                         STELLAR_PATH,
                         STELLAR_MULCH,
                         STELLAR_FARMLAND,
@@ -491,6 +492,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 .addOptionalTag(OperationStarcleaveBlockTags.STARTOUCHED_LOGS)
                 .add(
                         STELLAR_SEDIMENT,
+                        STELLARUBBLE_MIX,
                         STELLAR_PATH,
                         STELLAR_MULCH,
                         STELLAR_FARMLAND,
@@ -526,6 +528,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         Blocks.END_STONE,
                         Blocks.PRISMARINE,
                         STELLAR_SEDIMENT,
+                        STELLARUBBLE_MIX,
                         STELLAR_FARMLAND,
                         STELLAR_MULCH,
                         HOLY_MOSS,
@@ -602,6 +605,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 .add(
                         Blocks.GRAVEL,
                         STELLAR_SEDIMENT,
+                        STELLARUBBLE_MIX,
                         STELLAR_MULCH,
                         HOLY_MOSS,
                         STARDUST_BLOCK,

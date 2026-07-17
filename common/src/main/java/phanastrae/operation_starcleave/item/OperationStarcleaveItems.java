@@ -30,6 +30,7 @@ public class OperationStarcleaveItems {
     public static final Item NETHERITE_PUMPKIN = registerBlock(new NetheritePumpkinItem(OperationStarcleaveBlocks.NETHERITE_PUMPKIN, properties().rarity(Rarity.UNCOMMON).fireResistant()));
 
     public static final Item STELLAR_SEDIMENT = registerBlockItem(OperationStarcleaveBlocks.STELLAR_SEDIMENT);
+    public static final Item STELLARUBBLE_MIX = registerBlockItem(OperationStarcleaveBlocks.STELLARUBBLE_MIX);
     public static final Item STELLAR_PATH = registerBlockItem(OperationStarcleaveBlocks.STELLAR_PATH);
     public static final Item STELLAR_FARMLAND = registerBlockItem(OperationStarcleaveBlocks.STELLAR_FARMLAND);
 

@@ -71,6 +71,16 @@ public class OperationStarcleaveBlocks {
                     .lightLevel(constant(2))
             )
     );
+    public static final Block STELLARUBBLE_MIX = register(
+            "stellarubble_mix",
+            new StellarSedimentBlock(properties()
+                    .strength(2.5F, 5.0F)
+                    .mapColor(COLOR_LIGHT_BLUE)
+                    .sound(SoundType.SAND)
+                    .instrument(BASEDRUM)
+                    .lightLevel(constant(2))
+            )
+    );
     public static final Block STELLAR_PATH = register(
             "stellar_path",
             new StellarPathBlock(properties()
