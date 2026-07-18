@@ -21,6 +21,12 @@ public class BlockAoOverides {
                 STELLARUBBLE_MIX,
                 STELLAR_PATH,
                 STELLAR_FARMLAND,
+
+                STELLAR_BRICKS,
+                STELLAR_BRICK_STAIRS,
+                STELLAR_BRICK_SLAB,
+                STELLAR_BRICK_WALL,
+
                 STELLAR_MULCH,
                 HOLY_MOSS,
 

@@ -90,7 +90,7 @@ public class RecipeProvider extends FabricRecipeProvider {
                 .save(exporter);
 
         savePolished(STARDUST_BRICKS, STARDUST_BLOCK, exporter);
-        savePolished(STELLAR_TILES, STELLAR_SEDIMENT, exporter);
+        savePolished(STELLAR_BRICKS, STELLAR_SEDIMENT, exporter);
 
         carpet(exporter, BLESSED_CLOTH_CARPET, BLESSED_CLOTH_BLOCK);
         carpet(exporter, BLESSED_CLOTH_CARPET_PADDING, BLESSED_CLOTH_PADDING);
@@ -247,6 +247,10 @@ public class RecipeProvider extends FabricRecipeProvider {
         // endregion
 
         // region smelting
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(STELLAR_SEDIMENT), RecipeCategory.BUILDING_BLOCKS, STELLAR_TILES.asItem(), 0.1F, 200)
+                .unlockedBy(getHasName(STELLAR_SEDIMENT), has(STELLAR_SEDIMENT))
+                .save(exporter);
+
         SimpleCookingRecipeBuilder.smelting(Ingredient.of(FELLCRUST), RecipeCategory.BUILDING_BLOCKS, SMOOTH_FELLCRUST.asItem(), 0.1F, 200)
                 .unlockedBy(getHasName(FELLCRUST), has(FELLCRUST))
                 .save(exporter);
@@ -332,6 +336,11 @@ public class RecipeProvider extends FabricRecipeProvider {
         scBlocks(exporter, STARBLEACHED_TILE_SLAB, 2, STARBLEACHED_TILES);
         scWalls(exporter, STARBLEACHED_TILE_WALL, 1, STARBLEACHED_TILES);
         scBlocks(exporter, CHISELED_STARBLEACHED_TILES, 1, STARBLEACHED_TILES);
+
+        // stellar bricks
+        scBlocks(exporter, STELLAR_BRICK_STAIRS, 1, STELLAR_BRICKS);
+        scBlocks(exporter, STELLAR_BRICK_SLAB, 2, STELLAR_BRICKS);
+        scWalls(exporter, STELLAR_BRICK_WALL, 1, STELLAR_BRICKS);
 
         // stellar tiles
         scBlocks(exporter, STELLAR_TILE_SLAB, 2, STELLAR_TILES);

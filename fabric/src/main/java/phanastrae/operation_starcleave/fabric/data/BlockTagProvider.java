@@ -47,6 +47,8 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 OperationStarcleaveBlockFamilies.SKYSHELL,
 
                 OperationStarcleaveBlockFamilies.STARBLEACHED_TILES,
+
+                OperationStarcleaveBlockFamilies.STELLAR_BRICKS,
                 OperationStarcleaveBlockFamilies.STELLAR_TILES,
 
                 OperationStarcleaveBlockFamilies.BLESSED_CLOTH,
@@ -85,6 +87,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 OperationStarcleaveBlockFamilies.SKYSHELL,
 
                 OperationStarcleaveBlockFamilies.STARBLEACHED_TILES,
+
                 OperationStarcleaveBlockFamilies.STELLAR_TILES,
 
                 OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_BLOCK,
@@ -101,7 +104,8 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         );
         addFamiliesToTag(BlockTags.MINEABLE_WITH_SHOVEL,
                 OperationStarcleaveBlockFamilies.STARDUST_BRICKS,
-                OperationStarcleaveBlockFamilies.STELLAR_TILES
+
+                OperationStarcleaveBlockFamilies.STELLAR_BRICKS
         );
         addFamiliesToTag(BlockTags.MINEABLE_WITH_AXE,
                 OperationStarcleaveBlockFamilies.STARTOUCHED_PLANKS,

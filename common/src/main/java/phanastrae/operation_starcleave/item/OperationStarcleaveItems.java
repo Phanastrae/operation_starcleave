@@ -34,6 +34,11 @@ public class OperationStarcleaveItems {
     public static final Item STELLAR_PATH = registerBlockItem(OperationStarcleaveBlocks.STELLAR_PATH);
     public static final Item STELLAR_FARMLAND = registerBlockItem(OperationStarcleaveBlocks.STELLAR_FARMLAND);
 
+    public static final Item STELLAR_BRICKS = registerBlockItem(OperationStarcleaveBlocks.STELLAR_BRICKS);
+    public static final Item STELLAR_BRICK_STAIRS = registerBlockItem(OperationStarcleaveBlocks.STELLAR_BRICK_STAIRS);
+    public static final Item STELLAR_BRICK_SLAB = registerBlockItem(OperationStarcleaveBlocks.STELLAR_BRICK_SLAB);
+    public static final Item STELLAR_BRICK_WALL = registerBlockItem(OperationStarcleaveBlocks.STELLAR_BRICK_WALL);
+
     public static final Item BISREED_ROOT = register("bisreed_root", blockItemOf(OperationStarcleaveBlocks.BISREEDS, true));
 
     public static final Item STELLAR_MULCH = registerBlockItem(OperationStarcleaveBlocks.STELLAR_MULCH);

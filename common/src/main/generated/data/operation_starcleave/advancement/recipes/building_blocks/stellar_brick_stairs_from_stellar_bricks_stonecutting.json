@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_stellar_bricks": {
+      "conditions": {
+        "items": [
+          {
+            "items": "operation_starcleave:stellar_bricks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "operation_starcleave:stellar_brick_stairs_from_stellar_bricks_stonecutting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_stellar_bricks"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "operation_starcleave:stellar_brick_stairs_from_stellar_bricks_stonecutting"
+    ]
+  }
+}

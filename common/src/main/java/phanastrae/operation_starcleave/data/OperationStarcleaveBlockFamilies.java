@@ -112,6 +112,12 @@ public class OperationStarcleaveBlockFamilies {
             .slab(OperationStarcleaveBlocks.STELLAR_TILE_SLAB)
             .getFamily();
 
+    public static final BlockFamily STELLAR_BRICKS = familyBuilder(OperationStarcleaveBlocks.STELLAR_BRICKS)
+            .stairs(OperationStarcleaveBlocks.STELLAR_BRICK_STAIRS)
+            .slab(OperationStarcleaveBlocks.STELLAR_BRICK_SLAB)
+            .wall(OperationStarcleaveBlocks.STELLAR_BRICK_WALL)
+            .getFamily();
+
     public static final BlockFamily BLESSED_CLOTH = familyBuilder(OperationStarcleaveBlocks.BLESSED_CLOTH_BLOCK)
             .stairs(OperationStarcleaveBlocks.BLESSED_CLOTH_STAIRS)
             .slab(OperationStarcleaveBlocks.BLESSED_CLOTH_SLAB)

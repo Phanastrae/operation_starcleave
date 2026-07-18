@@ -70,6 +70,8 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
 
                 OperationStarcleaveBlockFamilies.STARBLEACHED_TILES,
                 OperationStarcleaveBlockFamilies.STARTOUCHED_PLANKS,
+
+                OperationStarcleaveBlockFamilies.STELLAR_BRICKS,
                 OperationStarcleaveBlockFamilies.STELLAR_TILES,
 
                 OperationStarcleaveBlockFamilies.BLESSED_CLOTH,

@@ -107,6 +107,29 @@ public class OperationStarcleaveBlocks {
             )
     );
 
+    public static final Block STELLAR_BRICKS = register(
+            "stellar_bricks",
+            new StellarSedimentBlock(properties()
+                    .strength(1.8F, 2.5F)
+                    .mapColor(COLOR_PURPLE)
+                    .sound(MUD_BRICKS)
+                    .instrument(BASEDRUM)
+                    .lightLevel(constant(2))
+            )
+    );
+    public static final Block STELLAR_BRICK_STAIRS = register(
+            "stellar_brick_stairs",
+            stairsOf(STELLAR_BRICKS)
+    );
+    public static final Block STELLAR_BRICK_SLAB = register(
+            "stellar_brick_slab",
+            slabOf(STELLAR_BRICKS)
+    );
+    public static final Block STELLAR_BRICK_WALL = register(
+            "stellar_brick_wall",
+            wallOf(STELLAR_BRICKS)
+    );
+
     public static final Block BISREEDS = register(
             "bisreeds",
             new BisreedBlock(properties()
@@ -830,6 +853,7 @@ public class OperationStarcleaveBlocks {
                     .sound(SoundType.DEEPSLATE)
                     .instrument(BASEDRUM)
                     .lightLevel(constant(2))
+                    .requiresCorrectToolForDrops()
             )
     );
     public static final Block STELLAR_TILE_SLAB = register(

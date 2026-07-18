@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "operation_starcleave:block/stellar_brick_slab"
+    },
+    "type=double": {
+      "model": "operation_starcleave:block/stellar_bricks"
+    },
+    "type=top": {
+      "model": "operation_starcleave:block/stellar_brick_slab_top"
+    }
+  }
+}

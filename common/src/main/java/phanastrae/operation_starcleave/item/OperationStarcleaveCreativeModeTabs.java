@@ -58,6 +58,11 @@ public class OperationStarcleaveCreativeModeTabs {
                 STELLAR_PATH,
                 STELLAR_FARMLAND,
 
+                STELLAR_BRICKS,
+                STELLAR_BRICK_STAIRS,
+                STELLAR_BRICK_SLAB,
+                STELLAR_BRICK_WALL,
+
                 BISREED_ROOT,
                 BISMUTH_FLAKE,
                 STARFLAKED_BISMUTH,
@@ -372,6 +377,11 @@ public class OperationStarcleaveCreativeModeTabs {
                 STRIPED_NUCLEIC_FISSURERIND
         );
         helper.addAfter(Items.PURPUR_SLAB, BUILDING_BLOCKS,
+                STELLAR_BRICKS,
+                STELLAR_BRICK_STAIRS,
+                STELLAR_BRICK_SLAB,
+                STELLAR_BRICK_WALL,
+                
                 STARDUST_BRICKS,
                 STARDUST_BRICK_STAIRS,
                 STARDUST_BRICK_SLAB,

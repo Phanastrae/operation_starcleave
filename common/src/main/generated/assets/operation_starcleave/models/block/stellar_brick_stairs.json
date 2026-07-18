@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "operation_starcleave:block/stellar_bricks",
+    "side": "operation_starcleave:block/stellar_bricks",
+    "top": "operation_starcleave:block/stellar_bricks"
+  }
+}
