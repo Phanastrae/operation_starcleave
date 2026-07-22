@@ -90,6 +90,20 @@
     "operation_starcleave:polished_celestial_opal_brick_slab",
     "operation_starcleave:polished_celestial_opal_brick_stairs",
     "operation_starcleave:polished_celestial_opal_brick_wall",
+    "operation_starcleave:bubblegloom",
+    "operation_starcleave:bubblegloom_slab",
+    "operation_starcleave:bubblegloom_stairs",
+    "operation_starcleave:bubblegloom_wall",
+    "operation_starcleave:polished_bubblegloom",
+    "operation_starcleave:polished_bubblegloom",
+    "operation_starcleave:cut_polished_bubblegloom",
+    "operation_starcleave:polished_bubblegloom_slab",
+    "operation_starcleave:polished_bubblegloom_stairs",
+    "operation_starcleave:polished_bubblegloom_wall",
+    "operation_starcleave:cut_polished_bubblegloom",
+    "operation_starcleave:cut_polished_bubblegloom_slab",
+    "operation_starcleave:cut_polished_bubblegloom_stairs",
+    "operation_starcleave:cut_polished_bubblegloom_wall",
     "operation_starcleave:ouranic_chip_block",
     "operation_starcleave:chiseled_ouranic_chip_block",
     "operation_starcleave:ouranic_bricks",
@@ -123,6 +137,7 @@
     "operation_starcleave:medium_celestial_opal_bud",
     "operation_starcleave:small_celestial_opal_bud",
     "operation_starcleave:polished_celestial_opal_pillar",
+    "operation_starcleave:polished_bubblegloom_pillar",
     "operation_starcleave:ouranic_pillar"
   ]
 }

@@ -1,0 +1,9 @@
+{
+  "parent": "operation_starcleave:block/template_sided_wall_side",
+  "textures": {
+    "bottom": "operation_starcleave:block/cut_polished_bubblegloom",
+    "side": "operation_starcleave:block/cut_polished_bubblegloom",
+    "wall": "operation_starcleave:block/cut_polished_bubblegloom",
+    "wall_top": "operation_starcleave:block/cut_polished_bubblegloom"
+  }
+}

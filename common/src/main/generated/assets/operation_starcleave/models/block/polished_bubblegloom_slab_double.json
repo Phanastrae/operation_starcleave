@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "operation_starcleave:block/polished_bubblegloom",
+    "side": "operation_starcleave:block/polished_bubblegloom_slab_side"
+  }
+}

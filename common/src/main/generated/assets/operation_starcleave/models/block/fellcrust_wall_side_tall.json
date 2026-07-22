@@ -3,6 +3,6 @@
   "textures": {
     "bottom": "operation_starcleave:block/fellcrust_bottom",
     "side": "operation_starcleave:block/fellcrust",
-    "top": "operation_starcleave:block/fellcrust_top"
+    "wall_top": "operation_starcleave:block/fellcrust_top"
   }
 }

@@ -252,6 +252,23 @@ public class OperationStarcleaveItems {
 
     public static final Item POLISHED_CELESTIAL_OPAL_PILLAR = registerBlockItem(OperationStarcleaveBlocks.POLISHED_CELESTIAL_OPAL_PILLAR);
 
+    public static final Item BUBBLEGLOOM = registerBlockItem(OperationStarcleaveBlocks.BUBBLEGLOOM);
+    public static final Item BUBBLEGLOOM_STAIRS = registerBlockItem(OperationStarcleaveBlocks.BUBBLEGLOOM_STAIRS);
+    public static final Item BUBBLEGLOOM_SLAB = registerBlockItem(OperationStarcleaveBlocks.BUBBLEGLOOM_SLAB);
+    public static final Item BUBBLEGLOOM_WALL = registerBlockItem(OperationStarcleaveBlocks.BUBBLEGLOOM_WALL);
+
+    public static final Item POLISHED_BUBBLEGLOOM = registerBlockItem(OperationStarcleaveBlocks.POLISHED_BUBBLEGLOOM);
+    public static final Item POLISHED_BUBBLEGLOOM_STAIRS = registerBlockItem(OperationStarcleaveBlocks.POLISHED_BUBBLEGLOOM_STAIRS);
+    public static final Item POLISHED_BUBBLEGLOOM_SLAB = registerBlockItem(OperationStarcleaveBlocks.POLISHED_BUBBLEGLOOM_SLAB);
+    public static final Item POLISHED_BUBBLEGLOOM_WALL = registerBlockItem(OperationStarcleaveBlocks.POLISHED_BUBBLEGLOOM_WALL);
+
+    public static final Item CUT_POLISHED_BUBBLEGLOOM = registerBlockItem(OperationStarcleaveBlocks.CUT_POLISHED_BUBBLEGLOOM);
+    public static final Item CUT_POLISHED_BUBBLEGLOOM_STAIRS = registerBlockItem(OperationStarcleaveBlocks.CUT_POLISHED_BUBBLEGLOOM_STAIRS);
+    public static final Item CUT_POLISHED_BUBBLEGLOOM_SLAB = registerBlockItem(OperationStarcleaveBlocks.CUT_POLISHED_BUBBLEGLOOM_SLAB);
+    public static final Item CUT_POLISHED_BUBBLEGLOOM_WALL = registerBlockItem(OperationStarcleaveBlocks.CUT_POLISHED_BUBBLEGLOOM_WALL);
+
+    public static final Item POLISHED_BUBBLEGLOOM_PILLAR = registerBlockItem(OperationStarcleaveBlocks.POLISHED_BUBBLEGLOOM_PILLAR);
+
     public static final Item CLEANSED_SINGUT_COIL = registerBlockItem(OperationStarcleaveBlocks.CLEANSED_SINGUT_COIL);
     public static final Item CLEANSED_SINGUT_BLOCK = registerBlockItem(OperationStarcleaveBlocks.CLEANSED_SINGUT_BLOCK);
     public static final Item MUCKY_SINGUT_COIL = registerBlockItem(OperationStarcleaveBlocks.MUCKY_SINGUT_COIL);

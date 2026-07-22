@@ -19,9 +19,24 @@
     "operation_starcleave:starflaked_bismuth_mosaic_slab",
     "operation_starcleave:starflaked_bismuth_mosaic_stairs",
     "operation_starcleave:starflaked_bismuth_mosaic_wall",
+    "operation_starcleave:bubblegloom",
+    "operation_starcleave:bubblegloom_slab",
+    "operation_starcleave:bubblegloom_stairs",
+    "operation_starcleave:bubblegloom_wall",
+    "operation_starcleave:polished_bubblegloom",
+    "operation_starcleave:polished_bubblegloom",
+    "operation_starcleave:cut_polished_bubblegloom",
+    "operation_starcleave:polished_bubblegloom_slab",
+    "operation_starcleave:polished_bubblegloom_stairs",
+    "operation_starcleave:polished_bubblegloom_wall",
+    "operation_starcleave:cut_polished_bubblegloom",
+    "operation_starcleave:cut_polished_bubblegloom_slab",
+    "operation_starcleave:cut_polished_bubblegloom_stairs",
+    "operation_starcleave:cut_polished_bubblegloom_wall",
     "operation_starcleave:coagulated_plasma",
     "operation_starcleave:starflaked_bismuth_pillar",
     "operation_starcleave:starflaked_bismuth_door",
-    "operation_starcleave:starflaked_bismuth_trapdoor"
+    "operation_starcleave:starflaked_bismuth_trapdoor",
+    "operation_starcleave:polished_bubblegloom_pillar"
   ]
 }

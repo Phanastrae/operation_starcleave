@@ -1,0 +1,7 @@
+{
+  "parent": "operation_starcleave:block/cube_column_matching_sides",
+  "textures": {
+    "end": "operation_starcleave:block/polished_bubblegloom_pillar_top",
+    "side": "operation_starcleave:block/polished_bubblegloom_pillar"
+  }
+}

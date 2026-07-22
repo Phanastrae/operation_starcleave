@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "operation_starcleave:block/cut_polished_bubblegloom_slab"
+    },
+    "type=double": {
+      "model": "operation_starcleave:block/cut_polished_bubblegloom"
+    },
+    "type=top": {
+      "model": "operation_starcleave:block/cut_polished_bubblegloom_slab_top"
+    }
+  }
+}

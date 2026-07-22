@@ -16,6 +16,9 @@
     "operation_starcleave:starflaked_bismuth_mosaic_wall",
     "operation_starcleave:celestial_opal_wall",
     "operation_starcleave:polished_celestial_opal_brick_wall",
+    "operation_starcleave:bubblegloom_wall",
+    "operation_starcleave:polished_bubblegloom_wall",
+    "operation_starcleave:cut_polished_bubblegloom_wall",
     "operation_starcleave:ouranic_chip_wall",
     "operation_starcleave:ouranic_brick_wall"
   ]

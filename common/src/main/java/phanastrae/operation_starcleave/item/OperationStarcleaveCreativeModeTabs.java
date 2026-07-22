@@ -258,6 +258,23 @@ public class OperationStarcleaveCreativeModeTabs {
 
                 POLISHED_CELESTIAL_OPAL_PILLAR,
 
+                BUBBLEGLOOM,
+                BUBBLEGLOOM_STAIRS,
+                BUBBLEGLOOM_SLAB,
+                BUBBLEGLOOM_WALL,
+
+                POLISHED_BUBBLEGLOOM,
+                POLISHED_BUBBLEGLOOM_STAIRS,
+                POLISHED_BUBBLEGLOOM_SLAB,
+                POLISHED_BUBBLEGLOOM_WALL,
+
+                CUT_POLISHED_BUBBLEGLOOM,
+                CUT_POLISHED_BUBBLEGLOOM_STAIRS,
+                CUT_POLISHED_BUBBLEGLOOM_SLAB,
+                CUT_POLISHED_BUBBLEGLOOM_WALL,
+
+                POLISHED_BUBBLEGLOOM_PILLAR,
+
                 NUCLEOSYNTHESEED,
                 NUCLEIC_FISSUREROOT,
                 NUCLEIC_FISSURERIND,
@@ -381,7 +398,7 @@ public class OperationStarcleaveCreativeModeTabs {
                 STELLAR_BRICK_STAIRS,
                 STELLAR_BRICK_SLAB,
                 STELLAR_BRICK_WALL,
-                
+
                 STARDUST_BRICKS,
                 STARDUST_BRICK_STAIRS,
                 STARDUST_BRICK_SLAB,
@@ -445,6 +462,23 @@ public class OperationStarcleaveCreativeModeTabs {
 
                 STELLAR_TILES,
                 STELLAR_TILE_SLAB,
+
+                BUBBLEGLOOM,
+                BUBBLEGLOOM_STAIRS,
+                BUBBLEGLOOM_SLAB,
+                BUBBLEGLOOM_WALL,
+
+                POLISHED_BUBBLEGLOOM,
+                POLISHED_BUBBLEGLOOM_STAIRS,
+                POLISHED_BUBBLEGLOOM_SLAB,
+                POLISHED_BUBBLEGLOOM_WALL,
+
+                CUT_POLISHED_BUBBLEGLOOM,
+                CUT_POLISHED_BUBBLEGLOOM_STAIRS,
+                CUT_POLISHED_BUBBLEGLOOM_SLAB,
+                CUT_POLISHED_BUBBLEGLOOM_WALL,
+
+                POLISHED_BUBBLEGLOOM_PILLAR,
 
                 BLESSED_CLOTH_BLOCK,
                 BLESSED_CLOTH_STAIRS,
@@ -533,6 +567,7 @@ public class OperationStarcleaveCreativeModeTabs {
                 STARDUST_BLOCK,
                 ASTERUBBLE,
                 FELLCRUST,
+                BUBBLEGLOOM,
 
                 COAGULATED_PLASMA,
                 PLASMA_ICE

@@ -71,7 +71,12 @@ public class ModelProvider extends FabricModelProvider {
                     FELLCRUST_STAIRS,
                     FELLCRUST_WALL,
                     CUT_FELLCRUST_STAIRS,
-                    CUT_FELLCRUST_WALL
+                    CUT_FELLCRUST_WALL,
+
+                    POLISHED_BUBBLEGLOOM_SLAB,
+                    POLISHED_BUBBLEGLOOM_STAIRS,
+                    POLISHED_BUBBLEGLOOM_WALL,
+                    CUT_POLISHED_BUBBLEGLOOM_WALL
             )
             .build();
 
@@ -212,6 +217,22 @@ public class ModelProvider extends FabricModelProvider {
 
         createPlatform(BMG, HOLY_LEAF_PLATFORM);
 
+        createSplitSlab(BMG, POLISHED_BUBBLEGLOOM_SLAB, POLISHED_BUBBLEGLOOM);
+        createBabelgloomStairs(BMG, POLISHED_BUBBLEGLOOM_STAIRS, POLISHED_BUBBLEGLOOM_SLAB, POLISHED_BUBBLEGLOOM);
+        createSidedWall(BMG, POLISHED_BUBBLEGLOOM_WALL, new TextureMapping()
+                .put(TextureSlot.SIDE, TextureMapping.getBlockTexture(POLISHED_BUBBLEGLOOM_SLAB, "_side"))
+                .put(TextureSlot.TOP, TextureMapping.getBlockTexture(POLISHED_BUBBLEGLOOM_WALL, "_top"))
+                .put(TextureSlot.BOTTOM, TextureMapping.getBlockTexture(POLISHED_BUBBLEGLOOM))
+                .put(TextureSlot.WALL, TextureMapping.getBlockTexture(POLISHED_BUBBLEGLOOM_SLAB, "_side"))
+                .put(OperationStarcleaveModelTemplates.WALL_TOP, TextureMapping.getBlockTexture(POLISHED_BUBBLEGLOOM)));
+        createSidedWall(BMG, CUT_POLISHED_BUBBLEGLOOM_WALL, new TextureMapping()
+                .put(TextureSlot.SIDE, TextureMapping.getBlockTexture(CUT_POLISHED_BUBBLEGLOOM))
+                .put(TextureSlot.TOP, TextureMapping.getBlockTexture(POLISHED_BUBBLEGLOOM_WALL, "_top"))
+                .put(TextureSlot.BOTTOM, TextureMapping.getBlockTexture(CUT_POLISHED_BUBBLEGLOOM))
+                .put(TextureSlot.WALL, TextureMapping.getBlockTexture(CUT_POLISHED_BUBBLEGLOOM))
+                .put(OperationStarcleaveModelTemplates.WALL_TOP, TextureMapping.getBlockTexture(CUT_POLISHED_BUBBLEGLOOM)));
+        BMG.createAxisAlignedPillarBlock(POLISHED_BUBBLEGLOOM_PILLAR, OperationStarcleaveTexturedModels.COLUMN_MATCHING_SIDES);
+
         // fluids
         BMG.createNonTemplateModelBlock(PETRICHORIC_PLASMA);
 
@@ -300,6 +321,35 @@ public class ModelProvider extends FabricModelProvider {
         ResourceLocation doubleLocation = modelTemplate.createWithOverride(slabBlock, "_double", textureMapping, BMG.modelOutput);
 
         BMG.blockStateOutput.accept(createSlab(slabBlock, bottomLocation, topLocation, doubleLocation));
+    }
+
+    private static void createBabelgloomStairs(BlockModelGenerators BMG, Block stairsBlock, Block slabBlock, Block block) {
+        TextureMapping textureMapping = new TextureMapping()
+                .put(TextureSlot.TOP, TextureMapping.getBlockTexture(block))
+                .put(TextureSlot.BOTTOM, TextureMapping.getBlockTexture(block))
+                .put(TextureSlot.FRONT, TextureMapping.getBlockTexture(slabBlock, "_side"))
+                .put(TextureSlot.BACK, TextureMapping.getBlockTexture(block))
+                .put(OperationStarcleaveModelTemplates.LEFT, TextureMapping.getBlockTexture(stairsBlock, "_left"))
+                .put(OperationStarcleaveModelTemplates.RIGHT, TextureMapping.getBlockTexture(stairsBlock, "_right"));
+
+        ResourceLocation bottomInnerLocation = OperationStarcleaveModelTemplates.SIDED_STAIRS_INNER.create(stairsBlock, textureMapping, BMG.modelOutput);
+        ResourceLocation bottomStraightLocation = OperationStarcleaveModelTemplates.SIDED_STAIRS_STRAIGHT.create(stairsBlock, textureMapping, BMG.modelOutput);
+        ResourceLocation bottomOuterLocation = OperationStarcleaveModelTemplates.SIDED_STAIRS_OUTER.create(stairsBlock, textureMapping, BMG.modelOutput);
+
+        TextureMapping topTextureMapping = new TextureMapping() // note that left/right are opposite of what would be expected
+                .put(TextureSlot.TOP, TextureMapping.getBlockTexture(block))
+                .put(TextureSlot.BOTTOM, TextureMapping.getBlockTexture(block))
+                .put(TextureSlot.FRONT, TextureMapping.getBlockTexture(slabBlock, "_side"))
+                .put(TextureSlot.BACK, TextureMapping.getBlockTexture(block))
+                .put(OperationStarcleaveModelTemplates.LEFT, TextureMapping.getBlockTexture(stairsBlock, "_right_upper"))
+                .put(OperationStarcleaveModelTemplates.RIGHT, TextureMapping.getBlockTexture(stairsBlock, "_left_upper"));
+
+        ResourceLocation topInnerLocation = OperationStarcleaveModelTemplates.SIDED_STAIRS_INNER.createWithSuffix(stairsBlock, "_upper", topTextureMapping, BMG.modelOutput);
+        ResourceLocation topStraightLocation = OperationStarcleaveModelTemplates.SIDED_STAIRS_STRAIGHT.createWithSuffix(stairsBlock, "_upper", topTextureMapping, BMG.modelOutput);
+        ResourceLocation topOuterLocation = OperationStarcleaveModelTemplates.SIDED_STAIRS_OUTER.createWithSuffix(stairsBlock, "_upper", topTextureMapping, BMG.modelOutput);
+
+        BMG.blockStateOutput.accept(createSplitStairs(stairsBlock, bottomInnerLocation, bottomStraightLocation, bottomOuterLocation, topInnerLocation, topStraightLocation, topOuterLocation));
+        BMG.delegateItemModel(stairsBlock, bottomStraightLocation);
     }
 
     private static void createFellcrustStairs(BlockModelGenerators BMG, Block stairsBlock) {
@@ -695,13 +745,13 @@ public class ModelProvider extends FabricModelProvider {
                 );
     }
 
-
     public void createFellcrustWall(BlockModelGenerators BMG, Block wallBlock, Block fullBlock, ResourceLocation bottomTexture, boolean useSeparateWallTexture) {
         TextureMapping textureMapping = new TextureMapping()
                 .put(TextureSlot.SIDE, TextureMapping.getBlockTexture(fullBlock))
                 .put(TextureSlot.TOP, TextureMapping.getBlockTexture(FELLCRUST, "_top"))
                 .put(TextureSlot.BOTTOM, bottomTexture)
-                .put(TextureSlot.WALL, TextureMapping.getBlockTexture(useSeparateWallTexture ? wallBlock : fullBlock));
+                .put(TextureSlot.WALL, TextureMapping.getBlockTexture(useSeparateWallTexture ? wallBlock : fullBlock))
+                .put(OperationStarcleaveModelTemplates.WALL_TOP, TextureMapping.getBlockTexture(FELLCRUST, "_top"));
 
         createSidedWall(BMG, wallBlock, textureMapping);
     }

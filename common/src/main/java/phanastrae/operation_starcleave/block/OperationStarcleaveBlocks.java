@@ -1343,6 +1343,68 @@ public class OperationStarcleaveBlocks {
             new GemstoneRotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(POLISHED_CELESTIAL_OPAL_BLOCK))
     );
 
+    public static final Block BUBBLEGLOOM = register(
+            "bubblegloom",
+            new Block(properties()
+                    .strength(2.0F)
+                    .mapColor(COLOR_PURPLE)
+                    .sound(AMETHYST)
+                    .lightLevel(constant(11))
+                    .requiresCorrectToolForDrops()
+            )
+    );
+    public static final Block BUBBLEGLOOM_STAIRS = register(
+            "bubblegloom_stairs",
+            stairsOf(BUBBLEGLOOM)
+    );
+    public static final Block BUBBLEGLOOM_SLAB = register(
+            "bubblegloom_slab",
+            slabOf(BUBBLEGLOOM)
+    );
+    public static final Block BUBBLEGLOOM_WALL = register(
+            "bubblegloom_wall",
+            wallOf(BUBBLEGLOOM)
+    );
+
+    public static final Block POLISHED_BUBBLEGLOOM = register(
+            "polished_bubblegloom",
+            new Block(BlockBehaviour.Properties.ofFullCopy(BUBBLEGLOOM).strength(2.3F))
+    );
+    public static final Block POLISHED_BUBBLEGLOOM_STAIRS = register(
+            "polished_bubblegloom_stairs",
+            stairsOf(POLISHED_BUBBLEGLOOM)
+    );
+    public static final Block POLISHED_BUBBLEGLOOM_SLAB = register(
+            "polished_bubblegloom_slab",
+            slabOf(POLISHED_BUBBLEGLOOM)
+    );
+    public static final Block POLISHED_BUBBLEGLOOM_WALL = register(
+            "polished_bubblegloom_wall",
+            wallOf(POLISHED_BUBBLEGLOOM)
+    );
+
+    public static final Block CUT_POLISHED_BUBBLEGLOOM = register(
+            "cut_polished_bubblegloom",
+            new Block(BlockBehaviour.Properties.ofFullCopy(POLISHED_BUBBLEGLOOM))
+    );
+    public static final Block CUT_POLISHED_BUBBLEGLOOM_STAIRS = register(
+            "cut_polished_bubblegloom_stairs",
+            stairsOf(CUT_POLISHED_BUBBLEGLOOM)
+    );
+    public static final Block CUT_POLISHED_BUBBLEGLOOM_SLAB = register(
+            "cut_polished_bubblegloom_slab",
+            slabOf(CUT_POLISHED_BUBBLEGLOOM)
+    );
+    public static final Block CUT_POLISHED_BUBBLEGLOOM_WALL = register(
+            "cut_polished_bubblegloom_wall",
+            wallOf(CUT_POLISHED_BUBBLEGLOOM)
+    );
+
+    public static final Block POLISHED_BUBBLEGLOOM_PILLAR = register(
+            "polished_bubblegloom_pillar",
+            new RotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(POLISHED_BUBBLEGLOOM))
+    );
+
     public static final Block MUCKY_SINGUT_COIL = register(
             "mucky_singut_coil",
             new RotatedPillarBlock(properties()

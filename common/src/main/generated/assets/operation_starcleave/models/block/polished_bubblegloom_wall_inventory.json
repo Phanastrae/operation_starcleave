@@ -1,0 +1,10 @@
+{
+  "parent": "operation_starcleave:block/sided_wall_inventory",
+  "textures": {
+    "bottom": "operation_starcleave:block/polished_bubblegloom",
+    "side": "operation_starcleave:block/polished_bubblegloom_slab_side",
+    "top": "operation_starcleave:block/polished_bubblegloom_wall_top",
+    "wall": "operation_starcleave:block/polished_bubblegloom_slab_side",
+    "wall_top": "operation_starcleave:block/polished_bubblegloom"
+  }
+}

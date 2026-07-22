@@ -86,6 +86,10 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                 OperationStarcleaveBlockFamilies.POLISHED_CELESTIAL_OPAL_BLOCK,
                 OperationStarcleaveBlockFamilies.POLISHED_CELESTIAL_OPAL_BRICKS,
 
+                OperationStarcleaveBlockFamilies.BUBBLEGLOOM,
+                OperationStarcleaveBlockFamilies.POLISHED_BUBBLEGLOOM,
+                OperationStarcleaveBlockFamilies.CUT_POLISHED_BUBBLEGLOOM,
+
                 OperationStarcleaveBlockFamilies.OURANIC_CHIP_BLOCK,
                 OperationStarcleaveBlockFamilies.OURANIC_BRICKS
         );
@@ -151,6 +155,8 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                 STARFLAKED_BISMUTH_TRAPDOOR,
 
                 POLISHED_CELESTIAL_OPAL_PILLAR,
+
+                POLISHED_BUBBLEGLOOM_PILLAR,
 
                 MUCKY_SINGUT_COIL,
                 MUCKY_SINGUT_BLOCK,

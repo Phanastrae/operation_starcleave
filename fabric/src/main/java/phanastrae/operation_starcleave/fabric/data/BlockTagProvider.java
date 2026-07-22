@@ -63,6 +63,10 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 OperationStarcleaveBlockFamilies.POLISHED_CELESTIAL_OPAL_BLOCK,
                 OperationStarcleaveBlockFamilies.POLISHED_CELESTIAL_OPAL_BRICKS,
 
+                OperationStarcleaveBlockFamilies.BUBBLEGLOOM,
+                OperationStarcleaveBlockFamilies.POLISHED_BUBBLEGLOOM,
+                OperationStarcleaveBlockFamilies.CUT_POLISHED_BUBBLEGLOOM,
+
                 OperationStarcleaveBlockFamilies.OURANIC_CHIP_BLOCK,
                 OperationStarcleaveBlockFamilies.OURANIC_BRICKS
         );
@@ -99,6 +103,10 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 OperationStarcleaveBlockFamilies.POLISHED_CELESTIAL_OPAL_BLOCK,
                 OperationStarcleaveBlockFamilies.POLISHED_CELESTIAL_OPAL_BRICKS,
 
+                OperationStarcleaveBlockFamilies.BUBBLEGLOOM,
+                OperationStarcleaveBlockFamilies.POLISHED_BUBBLEGLOOM,
+                OperationStarcleaveBlockFamilies.CUT_POLISHED_BUBBLEGLOOM,
+
                 OperationStarcleaveBlockFamilies.OURANIC_CHIP_BLOCK,
                 OperationStarcleaveBlockFamilies.OURANIC_BRICKS
         );
@@ -116,7 +124,11 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_BLOCK,
                 OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_BRICKS,
                 OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_TILES,
-                OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_MOSAIC
+                OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_MOSAIC,
+
+                OperationStarcleaveBlockFamilies.BUBBLEGLOOM,
+                OperationStarcleaveBlockFamilies.POLISHED_BUBBLEGLOOM,
+                OperationStarcleaveBlockFamilies.CUT_POLISHED_BUBBLEGLOOM
         );
         addFamiliesToTag(BlockTags.NEEDS_IRON_TOOL,
                 OperationStarcleaveBlockFamilies.ASTERUBBLE,
@@ -275,6 +287,8 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
                         POLISHED_CELESTIAL_OPAL_PILLAR,
 
+                        POLISHED_BUBBLEGLOOM_PILLAR,
+
                         OURANIC_PILLAR
                 );
 
@@ -333,7 +347,9 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
                         STARFLAKED_BISMUTH_PILLAR,
                         STARFLAKED_BISMUTH_DOOR,
-                        STARFLAKED_BISMUTH_TRAPDOOR
+                        STARFLAKED_BISMUTH_TRAPDOOR,
+
+                        POLISHED_BUBBLEGLOOM_PILLAR
                 );
 
         getOrCreateTagBuilder(BlockTags.REPLACEABLE_BY_TREES)

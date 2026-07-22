@@ -1,0 +1,8 @@
+{
+  "parent": "operation_starcleave:block/template_sided_wall_post",
+  "textures": {
+    "bottom": "operation_starcleave:block/polished_bubblegloom",
+    "side": "operation_starcleave:block/polished_bubblegloom_slab_side",
+    "top": "operation_starcleave:block/polished_bubblegloom_wall_top"
+  }
+}

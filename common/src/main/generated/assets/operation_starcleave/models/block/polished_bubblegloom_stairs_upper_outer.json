@@ -1,0 +1,11 @@
+{
+  "parent": "operation_starcleave:block/sided_outer_stairs",
+  "textures": {
+    "back": "operation_starcleave:block/polished_bubblegloom",
+    "bottom": "operation_starcleave:block/polished_bubblegloom",
+    "front": "operation_starcleave:block/polished_bubblegloom_slab_side",
+    "left": "operation_starcleave:block/polished_bubblegloom_stairs_right_upper",
+    "right": "operation_starcleave:block/polished_bubblegloom_stairs_left_upper",
+    "top": "operation_starcleave:block/polished_bubblegloom"
+  }
+}

@@ -98,6 +98,7 @@ public class RecipeProvider extends FabricRecipeProvider {
         twoByTwoPacker(exporter, RecipeCategory.BUILDING_BLOCKS, CELESTIAL_OPAL_BLOCK, CELESTIAL_OPAL_SHARD);
 
         savePillar(exporter, SMOOTH_FELLCRUST_PILLAR, SMOOTH_FELLCRUST);
+        savePillar(exporter, POLISHED_BUBBLEGLOOM_PILLAR, POLISHED_BUBBLEGLOOM);
         savePillar(exporter, STARFLAKED_BISMUTH_PILLAR, STARFLAKED_BISMUTH_BLOCK);
         savePillar(exporter, POLISHED_CELESTIAL_OPAL_PILLAR, POLISHED_CELESTIAL_OPAL_BLOCK);
         savePillar(exporter, OURANIC_PILLAR, OURANIC_CHIP_BLOCK);
@@ -344,6 +345,25 @@ public class RecipeProvider extends FabricRecipeProvider {
 
         // stellar tiles
         scBlocks(exporter, STELLAR_TILE_SLAB, 2, STELLAR_TILES);
+
+        // babelgloom
+        scBlocks(exporter, BUBBLEGLOOM_STAIRS, 1, BUBBLEGLOOM);
+        scBlocks(exporter, BUBBLEGLOOM_SLAB, 2, BUBBLEGLOOM);
+        scWalls(exporter, BUBBLEGLOOM_WALL, 1, BUBBLEGLOOM);
+
+        // polished babelgloom
+        scBlocks(exporter, POLISHED_BUBBLEGLOOM, 1, BUBBLEGLOOM);
+        scBlocks(exporter, POLISHED_BUBBLEGLOOM_STAIRS, 1, POLISHED_BUBBLEGLOOM, BUBBLEGLOOM);
+        scBlocks(exporter, POLISHED_BUBBLEGLOOM_SLAB, 2, POLISHED_BUBBLEGLOOM, BUBBLEGLOOM);
+        scWalls(exporter, POLISHED_BUBBLEGLOOM_WALL, 1, POLISHED_BUBBLEGLOOM, BUBBLEGLOOM);
+
+        scBlocks(exporter, POLISHED_BUBBLEGLOOM_PILLAR, 1, POLISHED_BUBBLEGLOOM, BUBBLEGLOOM);
+
+        // cut polished babelgloom
+        scBlocks(exporter, CUT_POLISHED_BUBBLEGLOOM, 1, POLISHED_BUBBLEGLOOM, BUBBLEGLOOM);
+        scBlocks(exporter, CUT_POLISHED_BUBBLEGLOOM_STAIRS, 1, CUT_POLISHED_BUBBLEGLOOM, POLISHED_BUBBLEGLOOM, BUBBLEGLOOM);
+        scBlocks(exporter, CUT_POLISHED_BUBBLEGLOOM_SLAB, 2, CUT_POLISHED_BUBBLEGLOOM, POLISHED_BUBBLEGLOOM, BUBBLEGLOOM);
+        scWalls(exporter, CUT_POLISHED_BUBBLEGLOOM_WALL, 1, CUT_POLISHED_BUBBLEGLOOM, POLISHED_BUBBLEGLOOM, BUBBLEGLOOM);
 
         // ouranic chip blocks
         scBlocks(exporter, OURANIC_CHIP_STAIRS, 1, OURANIC_CHIP_BLOCK);

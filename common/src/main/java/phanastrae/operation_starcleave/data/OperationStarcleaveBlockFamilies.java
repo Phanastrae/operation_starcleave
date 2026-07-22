@@ -175,6 +175,26 @@ public class OperationStarcleaveBlockFamilies {
             .wall(OperationStarcleaveBlocks.POLISHED_CELESTIAL_OPAL_BRICK_WALL)
             .getFamily();
 
+    public static final BlockFamily BUBBLEGLOOM = familyBuilder(OperationStarcleaveBlocks.BUBBLEGLOOM)
+            .stairs(OperationStarcleaveBlocks.BUBBLEGLOOM_STAIRS)
+            .slab(OperationStarcleaveBlocks.BUBBLEGLOOM_SLAB)
+            .wall(OperationStarcleaveBlocks.BUBBLEGLOOM_WALL)
+            .polished(OperationStarcleaveBlocks.POLISHED_BUBBLEGLOOM)
+            .getFamily();
+
+    public static final BlockFamily POLISHED_BUBBLEGLOOM = familyBuilder(OperationStarcleaveBlocks.POLISHED_BUBBLEGLOOM)
+            .stairs(OperationStarcleaveBlocks.POLISHED_BUBBLEGLOOM_STAIRS)
+            .slab(OperationStarcleaveBlocks.POLISHED_BUBBLEGLOOM_SLAB)
+            .wall(OperationStarcleaveBlocks.POLISHED_BUBBLEGLOOM_WALL)
+            .cut(OperationStarcleaveBlocks.CUT_POLISHED_BUBBLEGLOOM)
+            .getFamily();
+
+    public static final BlockFamily CUT_POLISHED_BUBBLEGLOOM = familyBuilder(OperationStarcleaveBlocks.CUT_POLISHED_BUBBLEGLOOM)
+            .stairs(OperationStarcleaveBlocks.CUT_POLISHED_BUBBLEGLOOM_STAIRS)
+            .slab(OperationStarcleaveBlocks.CUT_POLISHED_BUBBLEGLOOM_SLAB)
+            .wall(OperationStarcleaveBlocks.CUT_POLISHED_BUBBLEGLOOM_WALL)
+            .getFamily();
+
     public static final BlockFamily OURANIC_CHIP_BLOCK = familyBuilder(OperationStarcleaveBlocks.OURANIC_CHIP_BLOCK)
             .stairs(OperationStarcleaveBlocks.OURANIC_CHIP_STAIRS)
             .slab(OperationStarcleaveBlocks.OURANIC_CHIP_SLAB)

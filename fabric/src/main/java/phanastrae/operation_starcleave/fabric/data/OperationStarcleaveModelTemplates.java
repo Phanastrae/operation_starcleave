@@ -10,6 +10,7 @@ public class OperationStarcleaveModelTemplates {
     public static final TextureSlot LEFT = TextureSlot.create("left", TextureSlot.ALL);
     public static final TextureSlot RIGHT = TextureSlot.create("right", TextureSlot.ALL);
     public static final TextureSlot INNER_BOTTOM = TextureSlot.create("inner_bottom", null);
+    public static final TextureSlot WALL_TOP = TextureSlot.create("wall_top", TextureSlot.ALL);
 
     public static final ModelTemplate UNEVEN_CROSS = create("uneven_cross", TextureSlot.CROSS);
     public static final ModelTemplate UNEVEN_CROSS_MIRRORED = create("uneven_cross_mirrored", "_mirrored", TextureSlot.CROSS);
@@ -19,9 +20,9 @@ public class OperationStarcleaveModelTemplates {
     public static final ModelTemplate SIDED_STAIRS_OUTER = create("sided_outer_stairs", "_outer", TextureSlot.BOTTOM, TextureSlot.TOP, TextureSlot.FRONT, TextureSlot.BACK, LEFT, RIGHT); // include back slot for particles
 
     public static final ModelTemplate SIDED_WALL_POST = create("template_sided_wall_post", "_post", TextureSlot.BOTTOM, TextureSlot.TOP, TextureSlot.SIDE);
-    public static final ModelTemplate SIDED_WALL_LOW_SIDE = create("template_sided_wall_side", "_side", TextureSlot.BOTTOM, TextureSlot.TOP, TextureSlot.SIDE, TextureSlot.WALL);
-    public static final ModelTemplate SIDED_WALL_TALL_SIDE = create("template_sided_wall_side_tall", "_side_tall", TextureSlot.BOTTOM, TextureSlot.TOP, TextureSlot.SIDE);
-    public static final ModelTemplate SIDED_WALL_INVENTORY = create("sided_wall_inventory", "_inventory", TextureSlot.BOTTOM, TextureSlot.TOP, TextureSlot.SIDE, TextureSlot.WALL);
+    public static final ModelTemplate SIDED_WALL_LOW_SIDE = create("template_sided_wall_side", "_side", TextureSlot.BOTTOM, WALL_TOP, TextureSlot.SIDE, TextureSlot.WALL);
+    public static final ModelTemplate SIDED_WALL_TALL_SIDE = create("template_sided_wall_side_tall", "_side_tall", TextureSlot.BOTTOM, WALL_TOP, TextureSlot.SIDE);
+    public static final ModelTemplate SIDED_WALL_INVENTORY = create("sided_wall_inventory", "_inventory", TextureSlot.BOTTOM, TextureSlot.TOP, TextureSlot.SIDE, TextureSlot.WALL, WALL_TOP);
 
     public static final ModelTemplate LEAF_LITTER_1 = create("template_untinted_leaf_litter_1", "_1", TextureSlot.TEXTURE);
     public static final ModelTemplate LEAF_LITTER_2 = create("template_untinted_leaf_litter_2", "_2", TextureSlot.TEXTURE);
@@ -31,6 +32,8 @@ public class OperationStarcleaveModelTemplates {
     public static final ModelTemplate PLATFORM_BOTTOM = create("template_platform_bottom", "_bottom", TextureSlot.BOTTOM, TextureSlot.SIDE, TextureSlot.TOP, INNER_BOTTOM, TextureSlot.INNER_TOP);
     public static final ModelTemplate PLATFORM_TOP = create("template_platform_top", TextureSlot.BOTTOM, TextureSlot.SIDE, TextureSlot.TOP, INNER_BOTTOM, TextureSlot.INNER_TOP);
     public static final ModelTemplate PLATFORM_DOUBLE = create("template_platform_double", "_double", TextureSlot.BOTTOM, TextureSlot.SIDE, TextureSlot.TOP, INNER_BOTTOM, TextureSlot.INNER_TOP);
+
+    public static final ModelTemplate CUBE_COLUMN_MATCHING_SIDES = create("cube_column_matching_sides", TextureSlot.END, TextureSlot.SIDE);
 
     private static final ModelTemplate[] TEMPLATE_CAULDRON_LEVELS = createCauldronArray();
 

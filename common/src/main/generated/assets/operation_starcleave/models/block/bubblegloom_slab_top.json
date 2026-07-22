@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "operation_starcleave:block/bubblegloom",
+    "side": "operation_starcleave:block/bubblegloom",
+    "top": "operation_starcleave:block/bubblegloom"
+  }
+}
