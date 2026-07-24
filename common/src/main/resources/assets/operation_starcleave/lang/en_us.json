@@ -268,6 +268,7 @@
   "gamerule.operation_starcleave:doNucleosyntheseedGrowth": "Nucleosyntheseeds Grow Naturally",
   "gamerule.operation_starcleave:spawnFractureByproducts": "Fracturing Firmament spawns Nuclear Stormclouds",
 
+  "item.operation_starcleave.asterubble_pieces": "Asterubble Pieces",
   "item.operation_starcleave.bisblast_canister": "BisBlast Canister",
   "item.operation_starcleave.bismuth_blaster": "Bismuth Blaster",
   "item.operation_starcleave.bismuth_pegasus_armor": "Bismuth Pegasus Armor",

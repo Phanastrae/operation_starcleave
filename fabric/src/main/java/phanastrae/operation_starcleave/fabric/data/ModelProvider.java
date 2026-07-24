@@ -1115,6 +1115,7 @@ public class ModelProvider extends FabricModelProvider {
                 OperationStarcleaveItems.HOLY_STRANDS,
                 OperationStarcleaveItems.BLESSED_CLOTH,
 
+                OperationStarcleaveItems.ASTERUBBLE_PIECES,
                 OperationStarcleaveItems.SKYSHELL,
 
                 OperationStarcleaveItems.STARBLEACHED_LEAF_BUNCH,

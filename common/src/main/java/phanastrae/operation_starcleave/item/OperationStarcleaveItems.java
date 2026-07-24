@@ -288,6 +288,7 @@ public class OperationStarcleaveItems {
     public static final Item HOLY_STRANDS = register("holy_strands", new Item(properties()));
     public static final Item BLESSED_CLOTH = register("blessed_cloth", new Item(properties()));
 
+    public static final Item ASTERUBBLE_PIECES = register("asterubble_pieces", new Item(properties()));
     public static final Item SKYSHELL = register("skyshell", new Item(properties()));
 
     public static final Item STARBLEACHED_LEAF_BUNCH = register("starbleached_leaf_bunch", new Item(properties()));

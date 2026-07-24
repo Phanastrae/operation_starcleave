@@ -44,6 +44,8 @@
     "common.item.ItemStackMixin",
     "common.item.ShearsItemMixin",
     "common.legacy.ItemStackComponentizationFixMixin",
+    "common.loot.BlockBehaviourMixin",
+    "common.loot.LootContextParamSetsMixin",
     "common.spawning.NaturalSpawnerMixin"
   ],
   "client": [

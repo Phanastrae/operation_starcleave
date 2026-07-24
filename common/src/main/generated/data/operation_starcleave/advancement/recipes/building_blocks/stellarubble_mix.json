@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "operation_starcleave:fellcrust"
+        "recipe": "operation_starcleave:stellarubble_mix"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "operation_starcleave:fellcrust"
+      "operation_starcleave:stellarubble_mix"
     ]
   }
 }

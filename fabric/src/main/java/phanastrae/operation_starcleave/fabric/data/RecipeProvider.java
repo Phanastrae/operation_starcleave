@@ -133,6 +133,17 @@ public class RecipeProvider extends FabricRecipeProvider {
                         has(BISMUTH_FLAKE))
                 .save(exporter);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ASTERUBBLE)
+                .define('#', ASTERUBBLE_PIECES)
+                .pattern("###")
+                .pattern("# #")
+                .pattern("###")
+                .unlockedBy(
+                        getHasName(ASTERUBBLE_PIECES),
+                        has(ASTERUBBLE_PIECES)
+                )
+                .save(exporter);
+
         // complex shaped
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, BLESSED_BED)
                 .define('B', BLESSED_CLOTH)
@@ -247,6 +258,31 @@ public class RecipeProvider extends FabricRecipeProvider {
                         has(STARBLEACHED_LEAF_BUNCH)
                 )
                 .save(exporter);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, STELLARUBBLE_MIX, 2)
+                .define('A', ASTERUBBLE_PIECES)
+                .define('S', STELLAR_SEDIMENT)
+                .pattern(" A ")
+                .pattern("ASA")
+                .pattern(" A ")
+                .unlockedBy(
+                        getHasName(ASTERUBBLE_PIECES),
+                        has(ASTERUBBLE_PIECES)
+                )
+                .save(exporter);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, FELLCRUST, 4)
+                .define('A', ASTERUBBLE_PIECES)
+                .define('S', STARDUST_CLUSTER)
+                .define('B', Items.BASALT)
+                .pattern("SSS")
+                .pattern("ABA")
+                .pattern("AAA")
+                .unlockedBy(
+                        getHasName(ASTERUBBLE_PIECES),
+                        has(ASTERUBBLE_PIECES)
+                )
+                .save(exporter);
         // endregion
 
         // region smelting
@@ -260,7 +296,7 @@ public class RecipeProvider extends FabricRecipeProvider {
 
         SimpleCookingRecipeBuilder.smelting(Ingredient.of(COBBLED_FELLCRUST), RecipeCategory.BUILDING_BLOCKS, FELLCRUST.asItem(), 0.1F, 200)
                 .unlockedBy(getHasName(COBBLED_FELLCRUST), has(COBBLED_FELLCRUST))
-                .save(exporter);
+                .save(exporter, "fellcrust_from_smelting");
         // endregion
 
         // region stonecutting

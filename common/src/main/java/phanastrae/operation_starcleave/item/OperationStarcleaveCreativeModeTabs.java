@@ -180,6 +180,7 @@ public class OperationStarcleaveCreativeModeTabs {
                 CUT_POLISHED_FELLCRUST_STAIRS,
                 CUT_POLISHED_FELLCRUST_SLAB,
 
+                ASTERUBBLE_PIECES,
                 ASTERUBBLE,
                 ASTERUBBLE_STAIRS,
                 ASTERUBBLE_SLAB,
@@ -717,6 +718,7 @@ public class OperationStarcleaveCreativeModeTabs {
                 STARBLEACH_BOTTLE,
                 HOLY_STRANDS,
                 BLESSED_CLOTH,
+                ASTERUBBLE_PIECES,
                 SKYSHELL,
                 STARBLEACHED_LEAF_BUNCH
         );

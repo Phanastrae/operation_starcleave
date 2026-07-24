@@ -40,6 +40,7 @@ import phanastrae.operation_starcleave.block.BisreedBlock;
 import phanastrae.operation_starcleave.block.StarbleachedLeafLitterBlock;
 import phanastrae.operation_starcleave.data.OperationStarcleaveBlockFamilies;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
+import phanastrae.operation_starcleave.world.loot.BrokenByExplosionCondition;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
@@ -65,8 +66,6 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                 OperationStarcleaveBlockFamilies.POLISHED_FELLCRUST,
                 OperationStarcleaveBlockFamilies.POLISHED_FELLCRUST_BRICKS,
                 OperationStarcleaveBlockFamilies.CUT_POLISHED_FELLCRUST,
-
-                OperationStarcleaveBlockFamilies.ASTERUBBLE,
 
                 OperationStarcleaveBlockFamilies.STARBLEACHED_TILES,
                 OperationStarcleaveBlockFamilies.STARTOUCHED_PLANKS,
@@ -101,7 +100,9 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                 NETHERITE_PUMPKIN,
 
                 STELLAR_SEDIMENT,
-                STELLARUBBLE_MIX,
+
+                ASTERUBBLE_STAIRS,
+                ASTERUBBLE_WALL,
 
                 SKYSHELL_STAIRS,
                 SKYSHELL_WALL,
@@ -259,6 +260,7 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
 
         this.add(HOLY_LEAF_PLATFORM, createSlabItemTable(HOLY_LEAF_PLATFORM));
 
+        this.add(ASTERUBBLE_SLAB, createSlabItemTable(ASTERUBBLE_SLAB));
         this.add(SKYSHELL_SLAB, createSlabItemTable(SKYSHELL_SLAB));
 
         this.add(
@@ -272,6 +274,31 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                                         .apply(ApplyBonusCount.addUniformBonusCount(registryLookup.getOrThrow(Enchantments.FORTUNE)))
                                         .apply(LimitCount.limitCount(IntRange.range(1, 4)))
                         )
+                )
+        );
+
+        this.add(
+                STELLARUBBLE_MIX,
+                block -> this.createSilkTouchDispatchTable(
+                        block,
+                        this.applyExplosionDecay(
+                                block,
+                                LootItem.lootTableItem(OperationStarcleaveItems.ASTERUBBLE_PIECES)
+                                        .apply(ApplyBonusCount.addUniformBonusCount(registryLookup.getOrThrow(Enchantments.FORTUNE)))
+                                        .apply(LimitCount.limitCount(IntRange.range(1, 2)))
+                        )
+                )
+        );
+
+        this.add(
+                ASTERUBBLE,
+                block -> createSelfDropDispatchTable(
+                        block,
+                        BrokenByExplosionCondition.destroyedByExplosion().invert(),
+                        LootItem.lootTableItem(OperationStarcleaveItems.ASTERUBBLE_PIECES)
+                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(6.0F, 8.0F)))
+                                .apply(ApplyBonusCount.addUniformBonusCount(registryLookup.getOrThrow(Enchantments.FORTUNE)))
+                                .apply(LimitCount.limitCount(IntRange.range(6, 8)))
                 )
         );
     }

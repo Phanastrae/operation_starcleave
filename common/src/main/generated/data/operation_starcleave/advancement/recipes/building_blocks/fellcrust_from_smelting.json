@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_asterubble_pieces": {
+    "has_cobbled_fellcrust": {
       "conditions": {
         "items": [
           {
-            "items": "operation_starcleave:asterubble_pieces"
+            "items": "operation_starcleave:cobbled_fellcrust"
           }
         ]
       },
@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "operation_starcleave:fellcrust"
+        "recipe": "operation_starcleave:fellcrust_from_smelting"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,12 +21,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_asterubble_pieces"
+      "has_cobbled_fellcrust"
     ]
   ],
   "rewards": {
     "recipes": [
-      "operation_starcleave:fellcrust"
+      "operation_starcleave:fellcrust_from_smelting"
     ]
   }
 }

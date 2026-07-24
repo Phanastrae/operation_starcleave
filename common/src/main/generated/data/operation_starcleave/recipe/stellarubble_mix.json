@@ -5,20 +5,17 @@
     "A": {
       "item": "operation_starcleave:asterubble_pieces"
     },
-    "B": {
-      "item": "minecraft:basalt"
-    },
     "S": {
-      "item": "operation_starcleave:stardust_cluster"
+      "item": "operation_starcleave:stellar_sediment"
     }
   },
   "pattern": [
-    "SSS",
-    "ABA",
-    "AAA"
+    " A ",
+    "ASA",
+    " A "
   ],
   "result": {
-    "count": 4,
-    "id": "operation_starcleave:fellcrust"
+    "count": 2,
+    "id": "operation_starcleave:stellarubble_mix"
   }
 }

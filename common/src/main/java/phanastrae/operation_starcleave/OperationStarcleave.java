@@ -38,6 +38,7 @@ import phanastrae.operation_starcleave.sound.OperationStarcleaveSoundEvents;
 import phanastrae.operation_starcleave.world.OperationStarcleaveGameRules;
 import phanastrae.operation_starcleave.world.feature.OperationStarcleaveFeatures;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
+import phanastrae.operation_starcleave.world.loot.OperationStarcleaveLootItemConditions;
 import phanastrae.operation_starcleave.world.starbleach.StarbleachConversions;
 
 import java.util.function.BiConsumer;
@@ -52,6 +53,9 @@ public class OperationStarcleave {
     }
 
     public static void initRegistryEntries(RegistryListenerAdder rla) {
+        // loot item conditions
+        rla.addRegistryListener(BuiltInRegistries.LOOT_CONDITION_TYPE, OperationStarcleaveLootItemConditions::init);
+
         // sound events
         rla.addRegistryListener(BuiltInRegistries.SOUND_EVENT, OperationStarcleaveSoundEvents::init);
         rla.addHolderRegistryListener(BuiltInRegistries.SOUND_EVENT, OperationStarcleaveSoundEvents::initHolders);
