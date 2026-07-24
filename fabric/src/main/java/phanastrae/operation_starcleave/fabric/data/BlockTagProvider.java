@@ -187,7 +187,8 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
         getOrCreateTagBuilder(BlockTags.INSIDE_STEP_SOUND_BLOCKS)
                 .add(
-                        STARBLEACHED_LEAF_LITTER
+                        STARBLEACHED_LEAF_LITTER,
+                        STARCLOVERS
                 );
 
         getOrCreateTagBuilder(BlockTags.COMBINATION_STEP_SOUND_BLOCKS)
@@ -245,6 +246,8 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 .add(
                         STARBLEACHED_LEAVES,
                         NUCLEIC_FISSURELEAVES,
+
+                        STARCLOVERS,
 
                         STARBLEACHED_LEAF_BUNCH_BLOCK,
 
@@ -321,6 +324,8 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         SHORT_HOLY_MOSS,
                         TALL_HOLY_MOSS,
 
+                        STARCLOVERS,
+
                         MUCKY_SINGUT_COIL,
                         MUCKY_SINGUT_BLOCK,
                         CLEANSED_SINGUT_COIL,
@@ -395,6 +400,11 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         WITCHGLARE,
                         BLUE_DREAMER,
                         DRAGONS_MAW
+                );
+
+        getOrCreateTagBuilder(BlockTags.FLOWERS)
+                .add(
+                        STARCLOVERS
                 );
 
         getOrCreateTagBuilder(BlockTags.FLOWER_POTS)

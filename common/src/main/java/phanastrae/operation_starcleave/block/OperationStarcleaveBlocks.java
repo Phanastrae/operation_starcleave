@@ -276,6 +276,16 @@ public class OperationStarcleaveBlocks {
             flowerPot(DRAGONS_MAW, 4)
     );
 
+    public static final Block STARCLOVERS = register(
+            "starclovers",
+            new StarcloversBlock(properties()
+                    .mapColor(COLOR_MAGENTA)
+                    .sound(SoundType.PINK_PETALS)
+                    .pushReaction(PushReaction.DESTROY)
+                    .noCollission()
+            )
+    );
+
     public static final Block STARDUST_BLOCK = register(
             "stardust_block",
             new ColoredFallingBlock(new ColorRGBA(0xEF9FCFFF), properties()

@@ -126,6 +126,7 @@ public class OperationStarcleaveCreativeModeTabs {
                 WITCHGLARE,
                 BLUE_DREAMER,
                 DRAGONS_MAW,
+                STARCLOVERS,
 
                 STARDUST_BLOCK,
                 STARDUST_CLUSTER,
@@ -602,6 +603,9 @@ public class OperationStarcleaveCreativeModeTabs {
                 WITCHGLARE,
                 BLUE_DREAMER,
                 DRAGONS_MAW
+        );
+        helper.addAfter(Items.PINK_PETALS, NATURAL_BLOCKS,
+                STARCLOVERS
         );
         helper.addBefore(Items.SPORE_BLOSSOM, NATURAL_BLOCKS,
                 STARBLEACHED_LEAF_LITTER

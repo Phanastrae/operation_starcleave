@@ -213,6 +213,7 @@ public class ModelProvider extends FabricModelProvider {
         createCutFellcrustStairs(BMG, CUT_FELLCRUST_STAIRS);
         createFellcrustWall(BMG, CUT_FELLCRUST_WALL, CUT_FELLCRUST, TextureMapping.getBlockTexture(CUT_POLISHED_FELLCRUST), false);
 
+        BMG.createFlowerBed(STARCLOVERS);
         createStarbleachedLeafLitter(BMG, STARBLEACHED_LEAF_LITTER);
 
         createPlatform(BMG, HOLY_LEAF_PLATFORM);

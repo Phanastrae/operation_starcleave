@@ -1,5 +1,6 @@
 package phanastrae.operation_starcleave.data.worldgen.features;
 
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
@@ -8,6 +9,7 @@ import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.util.valueproviders.ConstantInt;
+import net.minecraft.world.level.block.PinkPetalsBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -40,25 +42,29 @@ public class OperationStarcleaveConfiguredFeatures {
         HolderGetter<ConfiguredFeature<?, ?>> featureLookup = context.lookup(Registries.CONFIGURED_FEATURE);
         HolderGetter<StructureProcessorList> processorLookup = context.lookup(Registries.PROCESSOR_LIST);
 
+        SimpleWeightedRandomList.Builder<BlockState> holyMossVegetationBuilder = SimpleWeightedRandomList.builder();
+        for (int i = 1; i <= 4; i++) {
+            for (Direction direction : Direction.Plane.HORIZONTAL) {
+                BlockState state = OperationStarcleaveBlocks.STARCLOVERS.defaultBlockState().setValue(PinkPetalsBlock.AMOUNT, i).setValue(PinkPetalsBlock.FACING, direction);
+                holyMossVegetationBuilder.add(state, 3);
+            }
+        }
+        holyMossVegetationBuilder
+                .add(OperationStarcleaveBlocks.SHORT_HOLY_MOSS.defaultBlockState(), 168)
+                .add(OperationStarcleaveBlocks.TALL_HOLY_MOSS.defaultBlockState(), 14)
+                .add(OperationStarcleaveBlocks.GREAT_TREES_CARE.defaultBlockState(), 2)
+                .add(OperationStarcleaveBlocks.RED_MOURNER.defaultBlockState(), 2)
+                .add(OperationStarcleaveBlocks.ANGELCLAW.defaultBlockState(), 2)
+                .add(OperationStarcleaveBlocks.ELDROSE.defaultBlockState(), 2)
+                .add(OperationStarcleaveBlocks.WITCHGLARE.defaultBlockState(), 2)
+                .add(OperationStarcleaveBlocks.BLUE_DREAMER.defaultBlockState(), 2)
+                .add(OperationStarcleaveBlocks.DRAGONS_MAW.defaultBlockState(), 2);
+
         FeatureUtils.register(
                 context,
                 HOLY_MOSS_VEGETATION,
                 Feature.SIMPLE_BLOCK,
-                new SimpleBlockConfiguration(
-                        new WeightedStateProvider(
-                                SimpleWeightedRandomList.<BlockState>builder()
-                                        .add(OperationStarcleaveBlocks.SHORT_HOLY_MOSS.defaultBlockState(), 84)
-                                        .add(OperationStarcleaveBlocks.TALL_HOLY_MOSS.defaultBlockState(), 7)
-                                        .add(OperationStarcleaveBlocks.GREAT_TREES_CARE.defaultBlockState(), 1)
-                                        .add(OperationStarcleaveBlocks.RED_MOURNER.defaultBlockState(), 1)
-                                        .add(OperationStarcleaveBlocks.ANGELCLAW.defaultBlockState(), 1)
-                                        .add(OperationStarcleaveBlocks.ELDROSE.defaultBlockState(), 1)
-                                        .add(OperationStarcleaveBlocks.WITCHGLARE.defaultBlockState(), 1)
-                                        .add(OperationStarcleaveBlocks.BLUE_DREAMER.defaultBlockState(), 1)
-                                        .add(OperationStarcleaveBlocks.DRAGONS_MAW.defaultBlockState(), 1)
-                                        .build()
-                        )
-                )
+                new SimpleBlockConfiguration(new WeightedStateProvider(holyMossVegetationBuilder.build()))
         );
 
         FeatureUtils.register(

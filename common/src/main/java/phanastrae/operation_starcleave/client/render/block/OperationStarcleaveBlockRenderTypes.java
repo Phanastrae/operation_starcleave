@@ -48,6 +48,8 @@ public class OperationStarcleaveBlockRenderTypes {
                 DRAGONS_MAW,
                 POTTED_DRAGONS_MAW,
 
+                STARCLOVERS,
+
                 HOLY_LEAF_PLATFORM,
 
                 BLESSED_BED,

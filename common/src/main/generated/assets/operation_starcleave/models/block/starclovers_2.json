@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/flowerbed_2",
+  "textures": {
+    "flowerbed": "operation_starcleave:block/starclovers",
+    "stem": "operation_starcleave:block/starclovers_stem"
+  }
+}

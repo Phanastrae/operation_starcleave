@@ -74,7 +74,7 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
         this.copy(BlockTags.BEDS, ItemTags.BEDS);
         this.copy(BlockTags.FENCES, ItemTags.FENCES);
         //this.copy(BlockTags.TALL_FLOWERS, ItemTags.TALL_FLOWERS);
-        //this.copy(BlockTags.FLOWERS, ItemTags.FLOWERS);
+        this.copy(BlockTags.FLOWERS, ItemTags.FLOWERS);
         //this.copy(BlockTags.SOUL_FIRE_BASE_BLOCKS, ItemTags.SOUL_FIRE_BASE_BLOCKS);
         //this.copy(BlockTags.CANDLES, ItemTags.CANDLES);
         this.copy(BlockTags.DAMPENS_VIBRATIONS, ItemTags.DAMPENS_VIBRATIONS);

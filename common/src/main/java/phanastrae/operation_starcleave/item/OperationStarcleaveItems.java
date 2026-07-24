@@ -56,6 +56,8 @@ public class OperationStarcleaveItems {
     public static final Item BLUE_DREAMER = registerBlockItem(OperationStarcleaveBlocks.BLUE_DREAMER);
     public static final Item DRAGONS_MAW = registerBlockItem(OperationStarcleaveBlocks.DRAGONS_MAW);
 
+    public static final Item STARCLOVERS = registerBlockItem(OperationStarcleaveBlocks.STARCLOVERS);
+
     public static final Item STARDUST_BLOCK = registerBlockItem(OperationStarcleaveBlocks.STARDUST_BLOCK);
     public static final Item STARDUST_CLUSTER = registerBlockItem(OperationStarcleaveBlocks.STARDUST_CLUSTER);
 
