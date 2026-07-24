@@ -601,6 +601,12 @@ public class RecipeProvider extends FabricRecipeProvider {
                 0.02F,
                 STARTOUCHED_TORCH
         );
+
+        saveStarbleachRecipe(exporter,
+                Items.PINK_PETALS,
+                0.01F,
+                STARCLOVERS
+        );
         // endregion
     }
 

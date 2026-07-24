@@ -113,6 +113,10 @@ public class StarbleachConversions {
                 return getRandomSmallStarbleachedFlower(random).defaultBlockState();
             }
 
+            if (blockState.is(PINK_PETALS) && supportState.is(OperationStarcleaveBlockTags.STARBLEACHED_SAPLING_PLANTABLE_ON)) {
+                return STARCLOVERS.withPropertiesOf(blockState);
+            }
+
             if (blockState.is(TALL_GRASS)) {
                 DoubleBlockHalf half = blockState.getValue(DoublePlantBlock.HALF);
                 if ((half == DoubleBlockHalf.LOWER && supportState.is(HOLY_MOSS)) || (half == DoubleBlockHalf.UPPER && supportState.is(TALL_HOLY_MOSS))) {
