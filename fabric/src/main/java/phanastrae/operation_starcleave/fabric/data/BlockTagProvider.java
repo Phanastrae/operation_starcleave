@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBlockTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.BlockFamily;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagBuilder;
@@ -12,6 +13,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.Nullable;
+import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.block.tag.OperationStarcleaveBlockTags;
 import phanastrae.operation_starcleave.data.OperationStarcleaveBlockFamilies;
 
@@ -29,7 +31,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
     }
 
     @Override
-    protected void addTags(HolderLookup.Provider arg) {
+    protected void addTags(HolderLookup.Provider lookupProvider) {
         addTagsForFamilies(false, true,
                 OperationStarcleaveBlockFamilies.STARDUST_BRICKS,
 
@@ -366,25 +368,11 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         STARBLEACHED_LEAF_LITTER
                 );
 
-        getOrCreateTagBuilder(BlockTags.REPLACEABLE)
-                .add(
-                        STARDUST_CLUSTER,
-                        MULCHBORNE_TUFT,
-                        SHORT_HOLY_MOSS,
-                        TALL_HOLY_MOSS,
-
-                        STARBLEACHED_LEAF_LITTER,
-
-                        PHLOGISTIC_FIRE
-                );
-
-        getOrCreateTagBuilder(BlockTags.ENCHANTMENT_POWER_TRANSMITTER)
-                .add(
-                        STARDUST_CLUSTER,
-                        MULCHBORNE_TUFT,
-                        SHORT_HOLY_MOSS,
-                        PHLOGISTIC_FIRE
-                );
+        HolderLookup.RegistryLookup<Block> blockReg = lookupProvider.lookupOrThrow(Registries.BLOCK);
+        FabricTagBuilder replaceableBuilder = getOrCreateTagBuilder(BlockTags.REPLACEABLE);
+        blockReg.filterElements(block -> block.defaultBlockState().canBeReplaced() && BuiltInRegistries.BLOCK.getKey(block).getNamespace().equals(OperationStarcleave.MOD_ID))
+                .listElementIds()
+                .forEach(replaceableBuilder::add);
 
         getOrCreateTagBuilder(BlockTags.MAINTAINS_FARMLAND)
                 .add(
