@@ -1,5 +1,6 @@
 package phanastrae.operation_starcleave.entity;
 
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -126,6 +127,7 @@ public class StarbleachChargeEntity extends Entity {
         double sqrt = Math.sqrt(Math.max(this.charge, 0));
         double random = 0.75 + 0.5 * this.random.nextFloat();
         int cap = (int) Math.max(1, 1.8 * sqrt * random);
+        List<Direction> directions = new ArrayList(List.of(Direction.values()));
         for (int i = 0; i < cap && this.charge > 0; i++) {
             Vec3i offset = this.getOffset();
             if (offset == null) {
@@ -140,7 +142,8 @@ public class StarbleachChargeEntity extends Entity {
             }
 
             if (didBleaching || Starbleach.isStarbleached(state) || this.candidateOffsets.isEmpty()) {
-                for (Direction direction : Direction.values()) {
+                Util.shuffle(directions, this.random);
+                for (Direction direction : directions) {
                     this.tryAddOffset(offset.offset(direction.getNormal()), getBias(state, direction, didBleaching));
                 }
             }
