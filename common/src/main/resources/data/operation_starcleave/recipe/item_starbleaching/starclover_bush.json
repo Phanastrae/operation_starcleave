@@ -7,24 +7,7 @@
       "tag": "minecraft:tall_flowers"
     },
     "subtracted": {
-      "fabric:type": "fabric:any",
-      "neoforge:ingredient_type": "neoforge:compound",
-      "children": [
-        {
-          "item": "minecraft:sunflower"
-        },
-        {
-          "tag": "operation_starcleave:starbleach_immune"
-        }
-      ],
-      "ingredients": [
-        {
-          "item": "minecraft:sunflower"
-        },
-        {
-          "tag": "operation_starcleave:starbleach_immune"
-        }
-      ]
+      "item": "minecraft:sunflower"
     }
   },
   "result": {

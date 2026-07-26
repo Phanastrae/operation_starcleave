@@ -3,6 +3,7 @@ package phanastrae.operation_starcleave.fabric.services;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.fabric.api.recipe.v1.ingredient.DefaultCustomIngredients;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.BlockPos;
@@ -11,6 +12,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import phanastrae.operation_starcleave.services.XPlatInterface;
@@ -63,5 +65,10 @@ public class XPlatFabric implements XPlatInterface {
     public int getBucketSize() {
         // droplets
         return 81000;
+    }
+
+    @Override
+    public Ingredient getDifference(Ingredient base, Ingredient subtracted) {
+        return DefaultCustomIngredients.difference(base, subtracted);
     }
 }

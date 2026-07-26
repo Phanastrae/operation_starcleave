@@ -1,11 +1,18 @@
 package phanastrae.operation_starcleave.block.tag;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import phanastrae.operation_starcleave.OperationStarcleave;
 
 public class OperationStarcleaveBlockTags {
+
+    // conventional stripped logs tag
+    public static final TagKey<Block> STRIPPED_LOGS = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("c", "stripped_logs"));
+    // conventional stripped woods tag
+    public static final TagKey<Block> STRIPPED_WOODS = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("c", "stripped_woods"));
+
     // block-only tags
     public static final TagKey<Block> STARBLEACHED = of("starbleached");
     public static final TagKey<Block> HOLY_MOSS_REPLACEABLE = of("holy_moss_replaceable");
@@ -23,6 +30,8 @@ public class OperationStarcleaveBlockTags {
 
     // block tags that are also item tags
     public static final TagKey<Block> STARBLEACH_IMMUNE = of("starbleach_immune");
+
+    public static final TagKey<Block> STRIPPED_LOGS_AND_WOODS = of("stripped_logs_and_woods");
 
     public static final TagKey<Block> STARBLEACHED_LOGS = of("starbleached_logs");
     public static final TagKey<Block> STARTOUCHED_LOGS = of("startouched_logs");

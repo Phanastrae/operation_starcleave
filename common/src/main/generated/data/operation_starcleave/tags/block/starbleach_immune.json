@@ -26,6 +26,8 @@
     "operation_starcleave:starbleached_leaves",
     "operation_starcleave:nucleic_fissureleaves",
     "operation_starcleave:starbleached_sapling",
+    "operation_starcleave:startouched_hanging_sign",
+    "operation_starcleave:startouched_wall_hanging_sign",
     "operation_starcleave:starclover_bush",
     "operation_starcleave:starflower"
   ]

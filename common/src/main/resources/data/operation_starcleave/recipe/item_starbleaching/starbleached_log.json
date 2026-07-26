@@ -7,30 +7,7 @@
       "tag": "minecraft:logs"
     },
     "subtracted": {
-      "fabric:type": "fabric:any",
-      "neoforge:ingredient_type": "neoforge:compound",
-      "children": [
-        {
-          "tag": "operation_starcleave:starbleach_immune"
-        },
-        {
-          "tag": "c:stripped_logs"
-        },
-        {
-          "tag": "c:stripped_woods"
-        }
-      ],
-      "ingredients": [
-        {
-          "tag": "operation_starcleave:starbleach_immune"
-        },
-        {
-          "tag": "c:stripped_logs"
-        },
-        {
-          "tag": "c:stripped_woods"
-        }
-      ]
+      "tag": "operation_starcleave:stripped_logs_and_woods"
     }
   },
   "result": {

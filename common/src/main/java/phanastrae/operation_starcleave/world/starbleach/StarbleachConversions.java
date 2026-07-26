@@ -2,8 +2,6 @@ package phanastrae.operation_starcleave.world.starbleach;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
@@ -227,7 +225,7 @@ public class StarbleachConversions {
                 )
         );
         addConversion(
-                state -> state.is(BlockTags.LOGS) && !state.is(STRIPPED_LOGS) && !state.is(STRIPPED_WOODS),
+                state -> state.is(BlockTags.LOGS) && !state.is(OperationStarcleaveBlockTags.STRIPPED_LOGS_AND_WOODS),
                 StarbleachConversions::getLogState
         );
         addConversion(FARMLAND, StarbleachConversions::getFarmlandState);
@@ -247,8 +245,8 @@ public class StarbleachConversions {
         addConversion(OperationStarcleaveBlockTags.SB_I_CUT_FELLCRUST, CUT_FELLCRUST);
         addCopyPropertiesConversion(OperationStarcleaveBlockTags.SB_I_CUT_FELLCRUST_SLAB, CUT_FELLCRUST_SLAB);
 
-        addCopyPropertiesConversion(STRIPPED_LOGS, STARTOUCHED_LOG);
-        addCopyPropertiesConversion(STRIPPED_WOODS, STARTOUCHED_WOOD);
+        addCopyPropertiesConversion(OperationStarcleaveBlockTags.STRIPPED_LOGS, STARTOUCHED_LOG);
+        addCopyPropertiesConversion(OperationStarcleaveBlockTags.STRIPPED_WOODS, STARTOUCHED_WOOD);
         addConversion(BlockTags.PLANKS, STARTOUCHED_PLANKS);
         addCopyPropertiesConversion(BlockTags.WOODEN_STAIRS, STARTOUCHED_STAIRS);
         addCopyPropertiesConversion(BlockTags.WOODEN_SLABS, STARTOUCHED_SLAB);
@@ -366,11 +364,6 @@ public class StarbleachConversions {
         return matches;
     }
 
-    // conventional stripped logs tag
-    public static final TagKey<Block> STRIPPED_LOGS = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("c", "stripped_logs"));
-    // conventional stripped woods tag
-    public static final TagKey<Block> STRIPPED_WOODS = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("c", "stripped_woods"));
-
     public static boolean isWoodNotLog(BlockState state) {
         // there is no tag for woods vs logs, but there is a tag for stripped_woods vs stripped_logs, so try stripping the block and check that instead
         // if block is not strippable, treat it like a log
@@ -378,7 +371,7 @@ public class StarbleachConversions {
         Map<Block, Block> strippables = AxeItemAccessor.getSTRIPPABLES();
         if (strippables.containsKey(block)) {
             Block stripped = strippables.get(block);
-            return stripped.defaultBlockState().is(STRIPPED_WOODS);
+            return stripped.defaultBlockState().is(OperationStarcleaveBlockTags.STRIPPED_WOODS);
         }
 
         return false;

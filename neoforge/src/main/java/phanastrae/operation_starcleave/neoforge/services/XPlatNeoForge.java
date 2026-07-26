@@ -6,11 +6,13 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.fml.ModList;
+import net.neoforged.neoforge.common.crafting.DifferenceIngredient;
 import net.neoforged.neoforge.network.PacketDistributor;
 import phanastrae.operation_starcleave.services.XPlatInterface;
 
@@ -48,7 +50,7 @@ public class XPlatNeoForge implements XPlatInterface {
 
     @Override
     public boolean canBurn(BlockState state) {
-        if(Blocks.FIRE instanceof FireBlock fireBlock) {
+        if (Blocks.FIRE instanceof FireBlock fireBlock) {
             return fireBlock.getIgniteOdds(state) > 0;
         } else {
             return false;
@@ -64,5 +66,10 @@ public class XPlatNeoForge implements XPlatInterface {
     public int getBucketSize() {
         // mb
         return 1000;
+    }
+
+    @Override
+    public Ingredient getDifference(Ingredient base, Ingredient subtracted) {
+        return DifferenceIngredient.of(base, subtracted);
     }
 }

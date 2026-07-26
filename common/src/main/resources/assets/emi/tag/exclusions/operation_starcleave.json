@@ -11,6 +11,7 @@
     "operation_starcleave:starbleaches_into/smooth_fellcrust_slab",
     "operation_starcleave:starbleaches_into/smooth_fellcrust_stairs",
     "operation_starcleave:starbleaches_into/startouched_torch",
-    "operation_starcleave:starbleach_immune"
+    "operation_starcleave:starbleach_immune",
+    "operation_starcleave:stripped_logs_and_woods"
   ]
 }

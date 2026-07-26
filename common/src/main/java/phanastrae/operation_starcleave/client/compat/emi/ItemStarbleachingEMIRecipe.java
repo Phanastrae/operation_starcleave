@@ -27,7 +27,7 @@ public class ItemStarbleachingEMIRecipe extends BasicEmiRecipe {
         this.chanceStarbleachCost = this.starbleachCost - this.minStarbleachCost;
 
         ItemStack outputStack = recipe.getOutputStack();
-        this.inputs.add(EmiIngredient.of(recipe.getIngredients().getFirst()));
+        this.inputs.add(EmiIngredient.of(recipe.getFinalIngredient()));
         this.outputs.add(EmiStack.of(outputStack));
 
         // for filling recipes, display cost in terms of fluid, instead of starbleach bottles

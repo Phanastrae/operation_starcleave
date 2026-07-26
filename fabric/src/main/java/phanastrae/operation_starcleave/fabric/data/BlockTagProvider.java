@@ -594,9 +594,16 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         NUCLEIC_FISSURELEAVES,
                         STARBLEACHED_SAPLING,
 
+                        STARTOUCHED_HANGING_SIGN,
+                        STARTOUCHED_WALL_HANGING_SIGN,
+
                         STARCLOVER_BUSH,
                         STARFLOWER
                 );
+
+        getOrCreateTagBuilder(OperationStarcleaveBlockTags.STRIPPED_LOGS_AND_WOODS)
+                .addOptionalTag(OperationStarcleaveBlockTags.STRIPPED_LOGS)
+                .addOptionalTag(OperationStarcleaveBlockTags.STRIPPED_WOODS);
 
         getOrCreateTagBuilder(OperationStarcleaveBlockTags.PHLOGISTIC_HYPERFLAMMABLES)
                 .addOptionalTag(OperationStarcleaveBlockTags.NUCLEIC_FISSUREROOTS)

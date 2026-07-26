@@ -1,0 +1,11 @@
+{
+  "type": "operation_starcleave:item_starbleaching",
+  "ingredient": {
+    "tag": "minecraft:fence_gates"
+  },
+  "result": {
+    "count": 1,
+    "id": "operation_starcleave:startouched_fence_gate"
+  },
+  "starbleach_cost": 0.08
+}

@@ -2,6 +2,7 @@ package phanastrae.operation_starcleave.fabric.data;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.BlockFamily;
@@ -633,6 +634,83 @@ public class RecipeProvider extends FabricRecipeProvider {
                 Items.COBBLESTONE_WALL,
                 0.04F,
                 SKYSHELL_WALL
+        );
+
+        saveStarbleachRecipe(exporter,
+                ItemTags.LEAVES,
+                0.04F,
+                STARBLEACHED_LEAVES
+        );
+        saveStarbleachRecipe(exporter,
+                ItemTags.SAPLINGS,
+                0.5F,
+                STARBLEACHED_SAPLING
+        );
+
+        saveStarbleachRecipe(exporter,
+                ItemTags.WOODEN_BUTTONS,
+                0.04F,
+                STARTOUCHED_BUTTON
+        );
+        saveStarbleachRecipe(exporter,
+                ItemTags.WOODEN_DOORS,
+                0.08F,
+                STARTOUCHED_DOOR
+        );
+        saveStarbleachRecipe(exporter,
+                ItemTags.WOODEN_FENCES,
+                0.053F,
+                STARTOUCHED_FENCE
+        );
+        saveStarbleachRecipe(exporter,
+                ItemTags.FENCE_GATES,
+                0.08F,
+                STARTOUCHED_FENCE_GATE
+        );
+        saveStarbleachRecipe(exporter,
+                ItemTags.HANGING_SIGNS,
+                0.1F,
+                STARTOUCHED_HANGING_SIGN
+        );
+        saveStarbleachRecipe(exporter,
+                ConventionalItemTags.STRIPPED_LOGS,
+                0.1F,
+                STARTOUCHED_LOG
+        );
+        saveStarbleachRecipe(exporter,
+                ConventionalItemTags.STRIPPED_WOODS,
+                0.1F,
+                STARTOUCHED_WOOD
+        );
+        saveStarbleachRecipe(exporter,
+                ItemTags.PLANKS,
+                0.04F,
+                STARTOUCHED_PLANKS
+        );
+        saveStarbleachRecipe(exporter,
+                ItemTags.WOODEN_PRESSURE_PLATES,
+                0.08F,
+                STARTOUCHED_PRESSURE_PLATE
+        );
+        saveStarbleachRecipe(exporter,
+                ItemTags.SIGNS,
+                0.08F,
+                STARTOUCHED_SIGN
+        );
+        saveStarbleachRecipe(exporter,
+                ItemTags.WOODEN_SLABS,
+                0.02F,
+                STARTOUCHED_SLAB
+        );
+        saveStarbleachRecipe(exporter,
+                ItemTags.WOODEN_STAIRS,
+                0.04F,
+                STARTOUCHED_STAIRS
+        );
+        saveStarbleachRecipe(exporter,
+                ItemTags.WOODEN_TRAPDOORS,
+                0.12F,
+                STARTOUCHED_TRAPDOOR
         );
 
         saveStarbleachRecipe(exporter,

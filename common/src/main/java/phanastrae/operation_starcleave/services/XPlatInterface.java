@@ -6,6 +6,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -29,4 +30,6 @@ public interface XPlatInterface {
     void sendToPlayersTrackingEntity(Entity entity, CustomPacketPayload payload);
 
     int getBucketSize();
+
+    Ingredient getDifference(Ingredient base, Ingredient subtracted);
 }

@@ -16,16 +16,27 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import phanastrae.operation_starcleave.item.OperationStarcleaveItems;
+import phanastrae.operation_starcleave.item.tag.OperationStarcleaveItemTags;
 import phanastrae.operation_starcleave.recipe.input.ItemStarbleachingRecipeInput;
+import phanastrae.operation_starcleave.services.XPlatInterface;
 
 public class ItemStarbleachingRecipe implements Recipe<ItemStarbleachingRecipeInput> {
     protected final Ingredient ingredient;
+    protected boolean bypassStarbleachImmunity;
+    protected final Ingredient finalIngredient;
     protected final float starbleachCost;
     protected final ItemStack result;
     protected final boolean isFillingRecipe;
 
     public ItemStarbleachingRecipe(Ingredient ingredient, float starbleachCost, ItemStack result, boolean isFillingRecipe) {
+        this(ingredient, false, starbleachCost, result, isFillingRecipe);
+    }
+
+    public ItemStarbleachingRecipe(Ingredient ingredient, boolean bypassStarbleachImmunity, float starbleachCost, ItemStack result, boolean isFillingRecipe) {
         this.ingredient = ingredient;
+        this.bypassStarbleachImmunity = bypassStarbleachImmunity;
+        this.finalIngredient = bypassStarbleachImmunity ? this.ingredient : XPlatInterface.INSTANCE.getDifference(ingredient, Ingredient.of(OperationStarcleaveItemTags.STARBLEACH_IMMUNE));
+
         this.starbleachCost = starbleachCost;
         this.result = result;
         this.isFillingRecipe = isFillingRecipe;
@@ -54,7 +65,7 @@ public class ItemStarbleachingRecipe implements Recipe<ItemStarbleachingRecipeIn
     @Override
     public boolean matches(ItemStarbleachingRecipeInput input, Level world) {
         ItemStack stack = input.getItem(0);
-        return ingredient.test(stack);
+        return this.finalIngredient.test(stack);
     }
 
     @Override
@@ -71,8 +82,12 @@ public class ItemStarbleachingRecipe implements Recipe<ItemStarbleachingRecipeIn
     @Override
     public NonNullList<Ingredient> getIngredients() {
         NonNullList<Ingredient> nonnulllist = NonNullList.create();
-        nonnulllist.add(this.ingredient);
+        nonnulllist.add(this.finalIngredient);
         return nonnulllist;
+    }
+
+    public Ingredient getFinalIngredient() {
+        return this.finalIngredient;
     }
 
     public ItemStack getOutputStack() {
@@ -113,7 +128,7 @@ public class ItemStarbleachingRecipe implements Recipe<ItemStarbleachingRecipeIn
     }
 
     public interface RecipeFactory<T extends ItemStarbleachingRecipe> {
-        T create(Ingredient ingredient, float starbleachCost, ItemStack result, boolean isFillingRecipe);
+        T create(Ingredient ingredient, boolean bypassStarbleachImmunity, float starbleachCost, ItemStack result, boolean isFillingRecipe);
     }
 
     public static class Serializer<T extends ItemStarbleachingRecipe> implements RecipeSerializer<T> {
@@ -126,6 +141,7 @@ public class ItemStarbleachingRecipe implements Recipe<ItemStarbleachingRecipeIn
             this.codec = RecordCodecBuilder.mapCodec(
                     instance -> instance.group(
                             Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(recipe -> recipe.ingredient),
+                            Codec.BOOL.optionalFieldOf("bypass_starbleach_immunity", false).forGetter(recipe -> recipe.bypassStarbleachImmunity),
                             Codec.FLOAT.optionalFieldOf("starbleach_cost", 1F).forGetter(recipe -> recipe.starbleachCost),
                             ItemStack.STRICT_CODEC.fieldOf("result").forGetter(recipe -> recipe.result),
                             Codec.BOOL.optionalFieldOf("is_filling_recipe", false).forGetter(recipe -> recipe.isFillingRecipe)
@@ -134,6 +150,8 @@ public class ItemStarbleachingRecipe implements Recipe<ItemStarbleachingRecipeIn
             this.packetCodec = StreamCodec.composite(
                     Ingredient.CONTENTS_STREAM_CODEC,
                     recipe -> recipe.ingredient,
+                    ByteBufCodecs.BOOL,
+                    recipe -> recipe.bypassStarbleachImmunity,
                     ByteBufCodecs.FLOAT,
                     recipe -> recipe.starbleachCost,
                     ItemStack.STREAM_CODEC,
