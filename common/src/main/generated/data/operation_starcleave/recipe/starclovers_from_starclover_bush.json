@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "operation_starcleave:starclover_bush"
+    }
+  ],
+  "result": {
+    "count": 5,
+    "id": "operation_starcleave:starclovers"
+  }
+}

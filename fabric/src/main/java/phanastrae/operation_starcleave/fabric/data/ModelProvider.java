@@ -216,6 +216,9 @@ public class ModelProvider extends FabricModelProvider {
         BMG.createFlowerBed(STARCLOVERS);
         createStarbleachedLeafLitter(BMG, STARBLEACHED_LEAF_LITTER);
 
+        BMG.createDoublePlant(STARCLOVER_BUSH, BlockModelGenerators.TintState.NOT_TINTED);
+        this.createStarflower(BMG, STARFLOWER);
+
         createPlatform(BMG, HOLY_LEAF_PLATFORM);
 
         createSplitSlab(BMG, POLISHED_BUBBLEGLOOM_SLAB, POLISHED_BUBBLEGLOOM);
@@ -810,6 +813,15 @@ public class ModelProvider extends FabricModelProvider {
                 .accept(
                         multiPartGenerator
                 );
+    }
+
+    private void createStarflower(BlockModelGenerators BMG, Block block) {
+        BMG.createSimpleFlatItemModel(block, "_front");
+        ResourceLocation topLocation = ModelLocationUtils.getModelLocation(block, "_top");
+        ResourceLocation bottomLocation = BMG.createSuffixedVariant(
+                block, "_bottom", BlockModelGenerators.TintState.NOT_TINTED.getCross(), TextureMapping::cross
+        );
+        BMG.createDoubleBlock(block, topLocation, bottomLocation);
     }
 
     private void forEach(Consumer<Block> consumer, Block... list) {

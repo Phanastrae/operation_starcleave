@@ -258,6 +258,11 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
         this.add(STARCLOVERS, this.createPetalsDrops(STARCLOVERS));
         this.add(STARBLEACHED_LEAF_LITTER, this.createSegmentedDrops(STARBLEACHED_LEAF_LITTER));
 
+        forEach(b -> this.add(b, block -> this.createSinglePropConditionTable(block, DoublePlantBlock.HALF, DoubleBlockHalf.LOWER)),
+                STARCLOVER_BUSH,
+                STARFLOWER
+        );
+
         this.add(HOLY_LEAF_PLATFORM, createSlabItemTable(HOLY_LEAF_PLATFORM));
 
         this.add(ASTERUBBLE_SLAB, createSlabItemTable(ASTERUBBLE_SLAB));

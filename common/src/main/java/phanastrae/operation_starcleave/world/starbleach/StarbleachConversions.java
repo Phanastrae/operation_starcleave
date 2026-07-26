@@ -138,6 +138,20 @@ public class StarbleachConversions {
             if (blockState.is(OperationStarcleaveBlockTags.SB_I_STARTOUCHED_TORCH)) {
                 return STARTOUCHED_TORCH.withPropertiesOf(blockState);
             }
+
+            if (blockState.is(BlockTags.TALL_FLOWERS) && !blockState.is(SUNFLOWER)) {
+                DoubleBlockHalf half = blockState.getValue(DoublePlantBlock.HALF);
+                if ((half == DoubleBlockHalf.LOWER && supportState.is(OperationStarcleaveBlockTags.STARBLEACHED_SAPLING_PLANTABLE_ON)) || (half == DoubleBlockHalf.UPPER && supportState.is(STARCLOVER_BUSH))) {
+                    return STARCLOVER_BUSH.withPropertiesOf(blockState);
+                }
+            }
+
+            if (blockState.is(SUNFLOWER)) {
+                DoubleBlockHalf half = blockState.getValue(DoublePlantBlock.HALF);
+                if ((half == DoubleBlockHalf.LOWER && supportState.is(OperationStarcleaveBlockTags.STARBLEACHED_SAPLING_PLANTABLE_ON)) || (half == DoubleBlockHalf.UPPER && supportState.is(STARFLOWER))) {
+                    return STARFLOWER.withPropertiesOf(blockState);
+                }
+            }
         }
 
         if (supportState.is(BUDDING_CELESTIAL_OPAL)) {

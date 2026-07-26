@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "operation_starcleave:block/starflower_bottom"
+    },
+    "half=upper": {
+      "model": "operation_starcleave:block/starflower_top"
+    }
+  }
+}

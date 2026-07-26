@@ -50,6 +50,9 @@ public class OperationStarcleaveBlockRenderTypes {
 
                 STARCLOVERS,
 
+                STARCLOVER_BUSH,
+                STARFLOWER,
+
                 HOLY_LEAF_PLATFORM,
 
                 BLESSED_BED,

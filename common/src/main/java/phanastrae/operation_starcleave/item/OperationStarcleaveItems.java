@@ -58,6 +58,9 @@ public class OperationStarcleaveItems {
 
     public static final Item STARCLOVERS = registerBlockItem(OperationStarcleaveBlocks.STARCLOVERS);
 
+    public static final Item STARCLOVER_BUSH = registerBlock(new DoubleHighBlockItem(OperationStarcleaveBlocks.STARCLOVER_BUSH, properties()));
+    public static final Item STARFLOWER = registerBlock(new DoubleHighBlockItem(OperationStarcleaveBlocks.STARFLOWER, properties()));
+
     public static final Item STARDUST_BLOCK = registerBlockItem(OperationStarcleaveBlocks.STARDUST_BLOCK);
     public static final Item STARDUST_CLUSTER = registerBlockItem(OperationStarcleaveBlocks.STARDUST_CLUSTER);
 

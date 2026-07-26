@@ -58,6 +58,9 @@ public class RecipeProvider extends FabricRecipeProvider {
 
         oneToOneConversionRecipe(exporter, Items.MAGENTA_DYE, STARCLOVERS, "magenta_dye");
 
+        oneToOneConversionRecipe(exporter, STARCLOVERS, STARCLOVER_BUSH, null, 5);
+        oneToOneConversionRecipe(exporter, Items.WHITE_DYE, STARFLOWER, "white_dye", 2);
+
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, BISMUTH_FLAKE, 6)
                 .requires(STARFLAKED_BISMUTH)
                 .unlockedBy(
@@ -642,6 +645,12 @@ public class RecipeProvider extends FabricRecipeProvider {
                 Items.PINK_PETALS,
                 0.01F,
                 STARCLOVERS
+        );
+
+        saveStarbleachRecipe(exporter,
+                Items.SUNFLOWER,
+                0.125F,
+                STARFLOWER
         );
         // endregion
     }

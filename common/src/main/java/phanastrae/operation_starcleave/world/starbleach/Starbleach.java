@@ -9,6 +9,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkPos;
@@ -143,7 +144,7 @@ public class Starbleach {
 
         BlockState newAdjState = StarbleachConversions.getStarbleachAttachedBlockResult(level, adjPos, adjState, random, newState, direction);
         if (newAdjState != null) {
-            if (newAdjState.is(OperationStarcleaveBlocks.TALL_HOLY_MOSS) || newAdjState.is(OperationStarcleaveBlocks.STARTOUCHED_DOOR)) {
+            if (newAdjState.is(OperationStarcleaveBlocks.TALL_HOLY_MOSS) || newAdjState.is(BlockTags.TALL_FLOWERS) || newAdjState.is(OperationStarcleaveBlocks.STARTOUCHED_DOOR)) {
                 level.setBlock(adjPos, newAdjState, 2 | 16);
                 starbleachAttachedBlocks(level, random, adjPos, newAdjState, direction);
                 newState.updateNeighbourShapes(level, blockPos, 3);

@@ -285,6 +285,31 @@ public class OperationStarcleaveBlocks {
                     .noCollission()
             )
     );
+    
+    public static final Block STARCLOVER_BUSH = register(
+            "starclover_bush",
+            new TallStarbleachedFlowerBlock(
+                    properties()
+                            .mapColor(COLOR_MAGENTA)
+                            .sound(SoundType.GRASS)
+                            .offsetType(BlockBehaviour.OffsetType.XZ)
+                            .pushReaction(PushReaction.DESTROY)
+                            .noCollission()
+                            .instabreak()
+            )
+    );
+    public static final Block STARFLOWER = register(
+            "starflower",
+            new TallStarbleachedFlowerBlock(
+                    properties()
+                            .mapColor(TERRACOTTA_WHITE)
+                            .sound(SoundType.GRASS)
+                            .offsetType(BlockBehaviour.OffsetType.XZ)
+                            .pushReaction(PushReaction.DESTROY)
+                            .noCollission()
+                            .instabreak()
+            )
+    );
 
     public static final Block STARDUST_BLOCK = register(
             "stardust_block",

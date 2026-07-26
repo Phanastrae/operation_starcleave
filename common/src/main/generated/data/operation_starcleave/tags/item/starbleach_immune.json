@@ -24,6 +24,8 @@
     },
     "operation_starcleave:starbleached_leaves",
     "operation_starcleave:nucleic_fissureleaves",
-    "operation_starcleave:starbleached_sapling"
+    "operation_starcleave:starbleached_sapling",
+    "operation_starcleave:starclover_bush",
+    "operation_starcleave:starflower"
   ]
 }

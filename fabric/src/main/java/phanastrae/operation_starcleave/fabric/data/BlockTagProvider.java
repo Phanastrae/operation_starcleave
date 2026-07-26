@@ -328,6 +328,9 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
                         STARCLOVERS,
 
+                        STARCLOVER_BUSH,
+                        STARFLOWER,
+
                         MUCKY_SINGUT_COIL,
                         MUCKY_SINGUT_BLOCK,
                         CLEANSED_SINGUT_COIL,
@@ -365,6 +368,9 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         SHORT_HOLY_MOSS,
                         TALL_HOLY_MOSS,
 
+                        STARCLOVER_BUSH,
+                        STARFLOWER,
+
                         STARBLEACHED_LEAF_LITTER
                 );
 
@@ -388,6 +394,12 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         WITCHGLARE,
                         BLUE_DREAMER,
                         DRAGONS_MAW
+                );
+
+        getOrCreateTagBuilder(BlockTags.TALL_FLOWERS)
+                .add(
+                        STARCLOVER_BUSH,
+                        STARFLOWER
                 );
 
         getOrCreateTagBuilder(BlockTags.FLOWERS)
@@ -515,16 +527,23 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         STELLAR_MULCH,
                         STELLAR_FARMLAND,
                         HOLY_MOSS,
+
                         STARBLEACHED_LEAVES,
+
                         STARDUST_BLOCK,
+
                         STARBLEACHED_SAPLING,
+
                         GREAT_TREES_CARE,
                         RED_MOURNER,
                         ANGELCLAW,
                         ELDROSE,
                         WITCHGLARE,
                         BLUE_DREAMER,
-                        DRAGONS_MAW
+                        DRAGONS_MAW,
+
+                        STARCLOVER_BUSH,
+                        STARFLOWER
                 );
 
         getOrCreateTagBuilder(OperationStarcleaveBlockTags.HOLY_MOSS_REPLACEABLE)
@@ -573,7 +592,10 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 .add(
                         STARBLEACHED_LEAVES,
                         NUCLEIC_FISSURELEAVES,
-                        STARBLEACHED_SAPLING
+                        STARBLEACHED_SAPLING,
+
+                        STARCLOVER_BUSH,
+                        STARFLOWER
                 );
 
         getOrCreateTagBuilder(OperationStarcleaveBlockTags.PHLOGISTIC_HYPERFLAMMABLES)
