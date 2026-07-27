@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "operation_starcleave:polished_celestial_opal_block"
+  },
+  "result": {
+    "count": 1,
+    "id": "operation_starcleave:polished_celestial_opal_brick_stairs"
+  }
+}

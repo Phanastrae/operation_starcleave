@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_starflaked_bismuth_tiles": {
+      "conditions": {
+        "items": [
+          {
+            "items": "operation_starcleave:starflaked_bismuth_tiles"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "operation_starcleave:starflaked_bismuth_mosaic_wall_from_starflaked_bismuth_tiles_stonecutting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_starflaked_bismuth_tiles"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "operation_starcleave:starflaked_bismuth_mosaic_wall_from_starflaked_bismuth_tiles_stonecutting"
+    ]
+  }
+}
