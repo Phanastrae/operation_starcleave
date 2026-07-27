@@ -130,13 +130,13 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
                 OperationStarcleaveBlockFamilies.BUBBLEGLOOM,
                 OperationStarcleaveBlockFamilies.POLISHED_BUBBLEGLOOM,
-                OperationStarcleaveBlockFamilies.CUT_POLISHED_BUBBLEGLOOM
-        );
-        addFamiliesToTag(BlockTags.NEEDS_IRON_TOOL,
-                OperationStarcleaveBlockFamilies.ASTERUBBLE,
+                OperationStarcleaveBlockFamilies.CUT_POLISHED_BUBBLEGLOOM,
 
                 OperationStarcleaveBlockFamilies.OURANIC_CHIP_BLOCK,
                 OperationStarcleaveBlockFamilies.OURANIC_BRICKS
+        );
+        addFamiliesToTag(BlockTags.NEEDS_IRON_TOOL,
+                OperationStarcleaveBlockFamilies.ASTERUBBLE
         );
         addFamiliesToTag(BlockTags.CRYSTAL_SOUND_BLOCKS,
                 OperationStarcleaveBlockFamilies.CELESTIAL_OPAL_BLOCK,
@@ -345,10 +345,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         getOrCreateTagBuilder(BlockTags.NEEDS_IRON_TOOL)
                 .addOptionalTag(OperationStarcleaveBlockTags.NUCLEIC_FISSUREROOTS)
                 .add(
-                        NUCLEOSYNTHESEED,
-
-                        OURANIC_BRICKS,
-                        OURANIC_PILLAR
+                        NUCLEOSYNTHESEED
                 );
 
         getOrCreateTagBuilder(BlockTags.NEEDS_STONE_TOOL)
@@ -359,7 +356,9 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         STARFLAKED_BISMUTH_DOOR,
                         STARFLAKED_BISMUTH_TRAPDOOR,
 
-                        POLISHED_BUBBLEGLOOM_PILLAR
+                        POLISHED_BUBBLEGLOOM_PILLAR,
+
+                        OURANIC_PILLAR
                 );
 
         getOrCreateTagBuilder(BlockTags.REPLACEABLE_BY_TREES)
