@@ -16,11 +16,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.data.OperationStarcleaveBlockFamilies;
 import phanastrae.operation_starcleave.item.tag.OperationStarcleaveItemTags;
 import phanastrae.operation_starcleave.recipe.ItemStarbleachingRecipe;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import static phanastrae.operation_starcleave.item.OperationStarcleaveItems.*;
@@ -304,165 +307,66 @@ public class RecipeProvider extends FabricRecipeProvider {
         // endregion
 
         // region stonecutting
-        // stardust bricks
-        scBlocks(exporter, STARDUST_BRICK_STAIRS, 1, STARDUST_BRICKS);
-        scBlocks(exporter, STARDUST_BRICK_SLAB, 2, STARDUST_BRICKS);
-        scWalls(exporter, STARDUST_BRICK_WALL, 1, STARDUST_BRICKS);
+        scFamily(exporter, OperationStarcleaveBlockFamilies.SKYSHELL);
+        scFamily(exporter, OperationStarcleaveBlockFamilies.ASTERUBBLE);
+        scFamily(exporter, OperationStarcleaveBlockFamilies.STARDUST_BRICKS);
 
-        // fellcrust
-        scBlocks(exporter, FELLCRUST_STAIRS, 1, FELLCRUST);
-        scBlocks(exporter, FELLCRUST_SLAB, 2, FELLCRUST);
-        scWalls(exporter, FELLCRUST_WALL, 1, FELLCRUST);
-        scBlocks(exporter, CHISELED_FELLCRUST, 1, FELLCRUST);
+        scFamily(exporter, OperationStarcleaveBlockFamilies.STELLAR_BRICKS);
+        scFamily(exporter, OperationStarcleaveBlockFamilies.STELLAR_TILES);
 
-        // cut fellcrust
-        scBlocks(exporter, CUT_FELLCRUST, 1, FELLCRUST);
-        scBlocks(exporter, CUT_FELLCRUST_STAIRS, 1, CUT_FELLCRUST, FELLCRUST);
-        scBlocks(exporter, CUT_FELLCRUST_SLAB, 2, CUT_FELLCRUST, FELLCRUST);
-        scWalls(exporter, CUT_FELLCRUST_WALL, 1, CUT_FELLCRUST, FELLCRUST);
-
-        // smooth fellcrust
-        scBlocks(exporter, SMOOTH_FELLCRUST_STAIRS, 1, SMOOTH_FELLCRUST);
-        scBlocks(exporter, SMOOTH_FELLCRUST_SLAB, 2, SMOOTH_FELLCRUST);
-        scWalls(exporter, SMOOTH_FELLCRUST_WALL, 1, SMOOTH_FELLCRUST);
-        scBlocks(exporter, CHISELED_SMOOTH_FELLCRUST, 1, SMOOTH_FELLCRUST);
-        scBlocks(exporter, SMOOTH_FELLCRUST_PILLAR, 1, SMOOTH_FELLCRUST);
-
-        // smooth fellcrust bricks
-        scBlocks(exporter, SMOOTH_FELLCRUST_BRICKS, 1, SMOOTH_FELLCRUST);
-        scBlocks(exporter, SMOOTH_FELLCRUST_BRICK_STAIRS, 1, SMOOTH_FELLCRUST_BRICKS, SMOOTH_FELLCRUST);
-        scBlocks(exporter, SMOOTH_FELLCRUST_BRICK_SLAB, 2, SMOOTH_FELLCRUST_BRICKS, SMOOTH_FELLCRUST);
-        scWalls(exporter, SMOOTH_FELLCRUST_BRICK_WALL, 1, SMOOTH_FELLCRUST_BRICKS, SMOOTH_FELLCRUST);
-
-        // cobbled fellcrust
-        scBlocks(exporter, COBBLED_FELLCRUST, 1, FELLCRUST);
-        scBlocks(exporter, COBBLED_FELLCRUST_STAIRS, 1, COBBLED_FELLCRUST, FELLCRUST);
-        scBlocks(exporter, COBBLED_FELLCRUST_SLAB, 2, COBBLED_FELLCRUST, FELLCRUST);
-        scWalls(exporter, COBBLED_FELLCRUST_WALL, 1, COBBLED_FELLCRUST, FELLCRUST);
-
-        // polished fellcrust
-        scBlocks(exporter, POLISHED_FELLCRUST, 1, COBBLED_FELLCRUST, FELLCRUST);
-        scBlocks(exporter, POLISHED_FELLCRUST_STAIRS, 1, POLISHED_FELLCRUST, COBBLED_FELLCRUST, FELLCRUST);
-        scBlocks(exporter, POLISHED_FELLCRUST_SLAB, 2, POLISHED_FELLCRUST, COBBLED_FELLCRUST, FELLCRUST);
-
-        // polished fellcrust bricks
-        scBlocks(exporter, POLISHED_FELLCRUST_BRICKS, 1, POLISHED_FELLCRUST, COBBLED_FELLCRUST, FELLCRUST);
-        scBlocks(exporter, POLISHED_FELLCRUST_BRICK_STAIRS, 1, POLISHED_FELLCRUST_BRICKS, POLISHED_FELLCRUST, COBBLED_FELLCRUST, FELLCRUST);
-        scBlocks(exporter, POLISHED_FELLCRUST_BRICK_SLAB, 2, POLISHED_FELLCRUST_BRICKS, POLISHED_FELLCRUST, COBBLED_FELLCRUST, FELLCRUST);
-        scWalls(exporter, POLISHED_FELLCRUST_BRICK_WALL, 1, POLISHED_FELLCRUST_BRICKS, POLISHED_FELLCRUST, COBBLED_FELLCRUST, FELLCRUST);
-
-        // cut polished fellcrust
-        scBlocks(exporter, CUT_POLISHED_FELLCRUST, 1, POLISHED_FELLCRUST_BRICKS, POLISHED_FELLCRUST, COBBLED_FELLCRUST, FELLCRUST);
-        scBlocks(exporter, CUT_POLISHED_FELLCRUST_STAIRS, 1, CUT_POLISHED_FELLCRUST, POLISHED_FELLCRUST_BRICKS, POLISHED_FELLCRUST, COBBLED_FELLCRUST, FELLCRUST);
-        scBlocks(exporter, CUT_POLISHED_FELLCRUST_SLAB, 2, CUT_POLISHED_FELLCRUST, POLISHED_FELLCRUST_BRICKS, POLISHED_FELLCRUST, COBBLED_FELLCRUST, FELLCRUST);
-
-        // asterubble
-        scBlocks(exporter, ASTERUBBLE_STAIRS, 1, ASTERUBBLE);
-        scBlocks(exporter, ASTERUBBLE_SLAB, 2, ASTERUBBLE);
-        scWalls(exporter, ASTERUBBLE_WALL, 1, ASTERUBBLE);
-
-        // skyshell
-        scBlocks(exporter, SKYSHELL_STAIRS, 1, SKYSHELL_BLOCK);
-        scBlocks(exporter, SKYSHELL_SLAB, 2, SKYSHELL_BLOCK);
-        scWalls(exporter, SKYSHELL_WALL, 1, SKYSHELL_BLOCK);
-
-        // 1:1 wood:log recipe, slightly better than the normal 3:4 wood:log crafting recipe
-        scBlocks(exporter, STARBLEACHED_WOOD, 1, STARBLEACHED_LOG);
-        // starbleached tiles (from log/wood)
-        scBlocks(exporter, STARBLEACHED_TILES, 4, STARBLEACHED_LOG, STARBLEACHED_WOOD);
-        scBlocks(exporter, STARBLEACHED_TILE_STAIRS, 4, STARBLEACHED_LOG, STARBLEACHED_WOOD);
-        scBlocks(exporter, STARBLEACHED_TILE_SLAB, 8, STARBLEACHED_LOG, STARBLEACHED_WOOD);
-        scWalls(exporter, STARBLEACHED_TILE_WALL, 4, STARBLEACHED_LOG, STARBLEACHED_WOOD);
-        scBlocks(exporter, CHISELED_STARBLEACHED_TILES, 4, STARBLEACHED_LOG, STARBLEACHED_WOOD);
-        // starbleached tiles
-        scBlocks(exporter, STARBLEACHED_TILE_STAIRS, 1, STARBLEACHED_TILES);
-        scBlocks(exporter, STARBLEACHED_TILE_SLAB, 2, STARBLEACHED_TILES);
-        scWalls(exporter, STARBLEACHED_TILE_WALL, 1, STARBLEACHED_TILES);
-        scBlocks(exporter, CHISELED_STARBLEACHED_TILES, 1, STARBLEACHED_TILES);
-
-        // stellar bricks
-        scBlocks(exporter, STELLAR_BRICK_STAIRS, 1, STELLAR_BRICKS);
-        scBlocks(exporter, STELLAR_BRICK_SLAB, 2, STELLAR_BRICKS);
-        scWalls(exporter, STELLAR_BRICK_WALL, 1, STELLAR_BRICKS);
-
-        // stellar tiles
-        scBlocks(exporter, STELLAR_TILE_SLAB, 2, STELLAR_TILES);
-
-        // babelgloom
-        scBlocks(exporter, BUBBLEGLOOM_STAIRS, 1, BUBBLEGLOOM);
-        scBlocks(exporter, BUBBLEGLOOM_SLAB, 2, BUBBLEGLOOM);
-        scWalls(exporter, BUBBLEGLOOM_WALL, 1, BUBBLEGLOOM);
-
-        // polished babelgloom
-        scBlocks(exporter, POLISHED_BUBBLEGLOOM, 1, BUBBLEGLOOM);
-        scBlocks(exporter, POLISHED_BUBBLEGLOOM_STAIRS, 1, POLISHED_BUBBLEGLOOM, BUBBLEGLOOM);
-        scBlocks(exporter, POLISHED_BUBBLEGLOOM_SLAB, 2, POLISHED_BUBBLEGLOOM, BUBBLEGLOOM);
-        scWalls(exporter, POLISHED_BUBBLEGLOOM_WALL, 1, POLISHED_BUBBLEGLOOM, BUBBLEGLOOM);
-
+        // bubblegloom
+        scSequentialFamilies(exporter,
+                OperationStarcleaveBlockFamilies.BUBBLEGLOOM,
+                OperationStarcleaveBlockFamilies.POLISHED_BUBBLEGLOOM,
+                OperationStarcleaveBlockFamilies.CUT_POLISHED_BUBBLEGLOOM
+        );
         scBlocks(exporter, POLISHED_BUBBLEGLOOM_PILLAR, 1, POLISHED_BUBBLEGLOOM, BUBBLEGLOOM);
 
-        // cut polished babelgloom
-        scBlocks(exporter, CUT_POLISHED_BUBBLEGLOOM, 1, POLISHED_BUBBLEGLOOM, BUBBLEGLOOM);
-        scBlocks(exporter, CUT_POLISHED_BUBBLEGLOOM_STAIRS, 1, CUT_POLISHED_BUBBLEGLOOM, POLISHED_BUBBLEGLOOM, BUBBLEGLOOM);
-        scBlocks(exporter, CUT_POLISHED_BUBBLEGLOOM_SLAB, 2, CUT_POLISHED_BUBBLEGLOOM, POLISHED_BUBBLEGLOOM, BUBBLEGLOOM);
-        scWalls(exporter, CUT_POLISHED_BUBBLEGLOOM_WALL, 1, CUT_POLISHED_BUBBLEGLOOM, POLISHED_BUBBLEGLOOM, BUBBLEGLOOM);
-
-        // ouranic chip blocks
-        scBlocks(exporter, OURANIC_CHIP_STAIRS, 1, OURANIC_CHIP_BLOCK);
-        scBlocks(exporter, OURANIC_CHIP_SLAB, 2, OURANIC_CHIP_BLOCK);
-        scWalls(exporter, OURANIC_CHIP_WALL, 1, OURANIC_CHIP_BLOCK);
-
-        scBlocks(exporter, CHISELED_OURANIC_CHIP_BLOCK, 1, OURANIC_CHIP_BLOCK);
+        // ouranic chip
+        scSequentialFamilies(exporter,
+                OperationStarcleaveBlockFamilies.OURANIC_CHIP_BLOCK,
+                OperationStarcleaveBlockFamilies.OURANIC_BRICKS
+        );
         scBlocks(exporter, OURANIC_PILLAR, 1, OURANIC_CHIP_BLOCK);
 
-        // ouranic bricks
-        scBlocks(exporter, OURANIC_BRICKS, 1, OURANIC_CHIP_BLOCK);
-
-        scBlocks(exporter, OURANIC_BRICK_STAIRS, 1, OURANIC_BRICKS, OURANIC_CHIP_BLOCK);
-        scBlocks(exporter, OURANIC_BRICK_SLAB, 2, OURANIC_BRICKS, OURANIC_CHIP_BLOCK);
-        scWalls(exporter, OURANIC_BRICK_WALL, 1, OURANIC_BRICKS, OURANIC_CHIP_BLOCK);
-
         // starflaked bismuth
-        scBlocks(exporter, STARFLAKED_BISMUTH_SLAB, 2, STARFLAKED_BISMUTH_BLOCK);
-        scBlocks(exporter, CHISELED_STARFLAKED_BISMUTH_BLOCK, 1, STARFLAKED_BISMUTH_BLOCK);
+        scSequentialFamilies(exporter,
+                OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_BLOCK,
+                OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_BRICKS,
+                OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_TILES,
+                OperationStarcleaveBlockFamilies.STARFLAKED_BISMUTH_MOSAIC
+        );
         scBlocks(exporter, STARFLAKED_BISMUTH_PILLAR, 1, STARFLAKED_BISMUTH_BLOCK);
 
-        // starflaked bismuth bricks
-        scBlocks(exporter, STARFLAKED_BISMUTH_BRICKS, 1, STARFLAKED_BISMUTH_BLOCK);
-        scBlocks(exporter, STARFLAKED_BISMUTH_BRICK_STAIRS, 1, STARFLAKED_BISMUTH_BRICKS, STARFLAKED_BISMUTH_BLOCK);
-        scBlocks(exporter, STARFLAKED_BISMUTH_BRICK_SLAB, 2, STARFLAKED_BISMUTH_BRICKS, STARFLAKED_BISMUTH_BLOCK);
-        scWalls(exporter, STARFLAKED_BISMUTH_BRICK_WALL, 1, STARFLAKED_BISMUTH_BRICKS, STARFLAKED_BISMUTH_BLOCK);
-        scBlocks(exporter, CHISELED_STARFLAKED_BISMUTH_BRICKS, 1, STARFLAKED_BISMUTH_BRICKS, STARFLAKED_BISMUTH_BLOCK);
-
-        // starflaked bismuth tiles
-        scBlocks(exporter, STARFLAKED_BISMUTH_TILES, 1, STARFLAKED_BISMUTH_BRICKS, STARFLAKED_BISMUTH_BLOCK);
-        scBlocks(exporter, STARFLAKED_BISMUTH_TILE_STAIRS, 1, STARFLAKED_BISMUTH_TILES, STARFLAKED_BISMUTH_BRICKS, STARFLAKED_BISMUTH_BLOCK);
-        scBlocks(exporter, STARFLAKED_BISMUTH_TILE_SLAB, 2, STARFLAKED_BISMUTH_TILES, STARFLAKED_BISMUTH_BRICKS, STARFLAKED_BISMUTH_BLOCK);
-        scWalls(exporter, STARFLAKED_BISMUTH_TILE_WALL, 1, STARFLAKED_BISMUTH_TILES, STARFLAKED_BISMUTH_BRICKS, STARFLAKED_BISMUTH_BLOCK);
-
-        // starflaked bismuth mosaic
-        scBlocks(exporter, STARFLAKED_BISMUTH_MOSAIC, 1, STARFLAKED_BISMUTH_TILES, STARFLAKED_BISMUTH_BRICKS, STARFLAKED_BISMUTH_BLOCK);
-        scBlocks(exporter, STARFLAKED_BISMUTH_MOSAIC_STAIRS, 1, STARFLAKED_BISMUTH_MOSAIC, STARFLAKED_BISMUTH_TILES, STARFLAKED_BISMUTH_BRICKS, STARFLAKED_BISMUTH_BLOCK);
-        scBlocks(exporter, STARFLAKED_BISMUTH_MOSAIC_SLAB, 2, STARFLAKED_BISMUTH_MOSAIC, STARFLAKED_BISMUTH_TILES, STARFLAKED_BISMUTH_BRICKS, STARFLAKED_BISMUTH_BLOCK);
-        scWalls(exporter, STARFLAKED_BISMUTH_MOSAIC_WALL, 1, STARFLAKED_BISMUTH_MOSAIC, STARFLAKED_BISMUTH_TILES, STARFLAKED_BISMUTH_BRICKS, STARFLAKED_BISMUTH_BLOCK);
-
         // celestial opal
-        scBlocks(exporter, CELESTIAL_OPAL_STAIRS, 1, CELESTIAL_OPAL_BLOCK);
-        scBlocks(exporter, CELESTIAL_OPAL_SLAB, 2, CELESTIAL_OPAL_BLOCK);
-        scWalls(exporter, CELESTIAL_OPAL_WALL, 1, CELESTIAL_OPAL_BLOCK);
-
-        // polished celestial opal
-        scBlocks(exporter, POLISHED_CELESTIAL_OPAL_BLOCK, 1, CELESTIAL_OPAL_BLOCK);
-        scBlocks(exporter, POLISHED_CELESTIAL_OPAL_STAIRS, 1, POLISHED_CELESTIAL_OPAL_BLOCK, CELESTIAL_OPAL_BLOCK);
-        scBlocks(exporter, POLISHED_CELESTIAL_OPAL_SLAB, 2, POLISHED_CELESTIAL_OPAL_BLOCK, CELESTIAL_OPAL_BLOCK);
+        scSequentialFamilies(exporter,
+                OperationStarcleaveBlockFamilies.CELESTIAL_OPAL_BLOCK,
+                OperationStarcleaveBlockFamilies.POLISHED_CELESTIAL_OPAL_BLOCK,
+                OperationStarcleaveBlockFamilies.POLISHED_CELESTIAL_OPAL_BRICKS
+        );
         scBlocks(exporter, POLISHED_CELESTIAL_OPAL_PILLAR, 1, POLISHED_CELESTIAL_OPAL_BLOCK, CELESTIAL_OPAL_BLOCK);
 
-        // polished celestial opal bricks
-        scBlocks(exporter, POLISHED_CELESTIAL_OPAL_BRICKS, 1, POLISHED_CELESTIAL_OPAL_BLOCK, CELESTIAL_OPAL_BLOCK);
-        scBlocks(exporter, POLISHED_CELESTIAL_OPAL_BRICK_STAIRS, 1, POLISHED_CELESTIAL_OPAL_BRICKS, POLISHED_CELESTIAL_OPAL_BLOCK, CELESTIAL_OPAL_BLOCK);
-        scBlocks(exporter, POLISHED_CELESTIAL_OPAL_BRICK_SLAB, 2, POLISHED_CELESTIAL_OPAL_BRICKS, POLISHED_CELESTIAL_OPAL_BLOCK, CELESTIAL_OPAL_BLOCK);
-        scWalls(exporter, POLISHED_CELESTIAL_OPAL_BRICK_WALL, 1, POLISHED_CELESTIAL_OPAL_BRICKS, POLISHED_CELESTIAL_OPAL_BLOCK, CELESTIAL_OPAL_BLOCK);
+        // fellcrust
+        scSequentialFamilies(exporter,
+                OperationStarcleaveBlockFamilies.FELLCRUST,
+                OperationStarcleaveBlockFamilies.COBBLED_FELLCRUST,
+                OperationStarcleaveBlockFamilies.POLISHED_FELLCRUST,
+                OperationStarcleaveBlockFamilies.POLISHED_FELLCRUST_BRICKS,
+                OperationStarcleaveBlockFamilies.CUT_POLISHED_FELLCRUST
+        );
 
+        scSequentialFamilies(exporter,
+                OperationStarcleaveBlockFamilies.SMOOTH_FELLCRUST,
+                OperationStarcleaveBlockFamilies.SMOOTH_FELLCRUST_BRICKS
+        );
+        scBlocks(exporter, SMOOTH_FELLCRUST_PILLAR, 1, SMOOTH_FELLCRUST);
+
+        scFamily(exporter, OperationStarcleaveBlockFamilies.CUT_FELLCRUST, FELLCRUST);
+
+        // starbleached wood/tiles
+        // 1:1 wood:log recipe, slightly better than the normal 3:4 wood:log crafting recipe
+        scBlocks(exporter, STARBLEACHED_WOOD, 1, STARBLEACHED_LOG);
+        scFamily(exporter, OperationStarcleaveBlockFamilies.STARBLEACHED_TILES, 4, STARBLEACHED_LOG, STARBLEACHED_WOOD);
         // endregion
 
         // region smithing
@@ -822,6 +726,45 @@ public class RecipeProvider extends FabricRecipeProvider {
                         getHasName(baseBlock),
                         has(baseBlock))
                 .save(exporter);
+    }
+
+    private static void scSequentialFamilies(RecipeOutput exporter, BlockFamily... families) {
+        List<Block> baseBlocks = new ArrayList<>();
+
+        for (BlockFamily family : families) {
+            scFamily(exporter, family, baseBlocks.toArray(new Block[0]));
+
+            baseBlocks.add(family.getBaseBlock());
+        }
+    }
+
+    private static void scFamily(RecipeOutput exporter, BlockFamily family, ItemLike... materials) {
+        scFamily(exporter, family, 1, materials);
+    }
+
+    private static void scFamily(RecipeOutput exporter, BlockFamily family, int multiplier, ItemLike... materials) {
+        Block baseBlock = family.getBaseBlock();
+        scBlocks(exporter, baseBlock, multiplier, materials);
+
+        scFamilyBlocks(exporter, family, 1, baseBlock);
+        scFamilyBlocks(exporter, family, multiplier, materials);
+    }
+
+    private static void scFamilyBlocks(RecipeOutput exporter, BlockFamily family, int multiplier, ItemLike... materials) {
+        for (BlockFamily.Variant variant : BlockFamily.Variant.values()) {
+            Block block = family.get(variant);
+            if (block != null) {
+                if (variant == BlockFamily.Variant.STAIRS) {
+                    scBlocks(exporter, block, multiplier, materials);
+                } else if (variant == BlockFamily.Variant.SLAB) {
+                    scBlocks(exporter, block, 2 * multiplier, materials);
+                } else if (variant == BlockFamily.Variant.WALL) {
+                    scWalls(exporter, block, multiplier, materials);
+                } else if (variant == BlockFamily.Variant.CHISELED) {
+                    scBlocks(exporter, block, multiplier, materials);
+                }
+            }
+        }
     }
 
     private static void scBlocks(RecipeOutput recipeOutput, ItemLike result, int amount, ItemLike... materials) {
