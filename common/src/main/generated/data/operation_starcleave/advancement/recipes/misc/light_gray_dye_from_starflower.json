@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "operation_starcleave:white_dye_from_starflower"
+        "recipe": "operation_starcleave:light_gray_dye_from_starflower"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "operation_starcleave:white_dye_from_starflower"
+      "operation_starcleave:light_gray_dye_from_starflower"
     ]
   }
 }

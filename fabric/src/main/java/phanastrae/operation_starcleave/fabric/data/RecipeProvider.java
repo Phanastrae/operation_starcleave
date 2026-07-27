@@ -60,7 +60,7 @@ public class RecipeProvider extends FabricRecipeProvider {
         oneToOneConversionRecipe(exporter, Items.MAGENTA_DYE, STARCLOVERS, "magenta_dye");
 
         oneToOneConversionRecipe(exporter, STARCLOVERS, STARCLOVER_BUSH, null, 5);
-        oneToOneConversionRecipe(exporter, Items.WHITE_DYE, STARFLOWER, "white_dye", 2);
+        oneToOneConversionRecipe(exporter, Items.LIGHT_GRAY_DYE, STARFLOWER, "light_gray_dye", 2);
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, BISMUTH_FLAKE, 6)
                 .requires(STARFLAKED_BISMUTH)
