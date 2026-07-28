@@ -71,27 +71,8 @@ public class OperationStarcleaveDispenserBehavior {
             }
         });
 
-        register(OperationStarcleaveBlocks.NETHERITE_PUMPKIN, new OptionalDispenseItemBehavior() {
-            @Override
-            protected ItemStack execute(BlockSource pointer, ItemStack stack) {
-                Level world = pointer.level();
-                BlockPos blockPos = pointer.pos().relative(pointer.state().getValue(DispenserBlock.FACING));
-                NetheritePumpkinBlock netheritePumpkinBlock = (NetheritePumpkinBlock) OperationStarcleaveBlocks.NETHERITE_PUMPKIN;
-                if (world.isEmptyBlock(blockPos) && netheritePumpkinBlock.canSpawnGolem(world, blockPos)) {
-                    if (!world.isClientSide) {
-                        world.setBlock(blockPos, netheritePumpkinBlock.defaultBlockState(), Block.UPDATE_ALL);
-                        world.gameEvent(null, GameEvent.BLOCK_PLACE, blockPos);
-                    }
-
-                    stack.shrink(1);
-                    this.setSuccess(true);
-                } else {
-                    this.setSuccess(ArmorItem.dispenseArmor(pointer, stack));
-                }
-
-                return stack;
-            }
-        });
+        registerNetheritePumpkin((NetheritePumpkinBlock) OperationStarcleaveBlocks.NETHERITE_PUMPKIN);
+        registerNetheritePumpkin((NetheritePumpkinBlock) OperationStarcleaveBlocks.NETHERITE_JACK_O_LANTERN);
 
         register(OperationStarcleaveItems.STARBLEACH_BOTTLE, new OptionalDispenseItemBehavior() {
             private ItemStack replace(BlockSource pointer, ItemStack oldStack, ItemStack newStack) {
@@ -144,5 +125,28 @@ public class OperationStarcleaveDispenserBehavior {
 
     public static void registerProjectileBehavior(ItemLike provider) {
         DispenserBlock.registerProjectileBehavior(provider);
+    }
+
+    protected static void registerNetheritePumpkin(NetheritePumpkinBlock netheritePumpkinBlock) {
+        register(netheritePumpkinBlock, new OptionalDispenseItemBehavior() {
+            @Override
+            protected ItemStack execute(BlockSource pointer, ItemStack stack) {
+                Level level = pointer.level();
+                BlockPos blockPos = pointer.pos().relative(pointer.state().getValue(DispenserBlock.FACING));
+                if (level.isEmptyBlock(blockPos) && netheritePumpkinBlock.canSpawnGolem(level, blockPos)) {
+                    if (!level.isClientSide) {
+                        level.setBlock(blockPos, netheritePumpkinBlock.defaultBlockState(), Block.UPDATE_ALL);
+                        level.gameEvent(null, GameEvent.BLOCK_PLACE, blockPos);
+                    }
+
+                    stack.shrink(1);
+                    this.setSuccess(true);
+                } else if (stack.getItem() instanceof Equipable) {
+                    this.setSuccess(ArmorItem.dispenseArmor(pointer, stack));
+                }
+
+                return stack;
+            }
+        });
     }
 }

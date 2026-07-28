@@ -171,7 +171,8 @@ public class ModelProvider extends FabricModelProvider {
 
         BMG.createCropBlock(BISREEDS, BlockStateProperties.AGE_3, 0, 1, 2, 3);
 
-        registerPumpkin(BMG, NETHERITE_PUMPKIN);
+        registerPumpkin(BMG, NETHERITE_PUMPKIN, NETHERITE_PUMPKIN);
+        registerPumpkin(BMG, NETHERITE_JACK_O_LANTERN, NETHERITE_PUMPKIN);
 
         registerStarbleachedPearlBlock(BMG, STARBLEACHED_PEARL_BLOCK);
 
@@ -870,8 +871,8 @@ public class ModelProvider extends FabricModelProvider {
                 .accept(MultiVariantGenerator.multiVariant(block, createRotatedVariants(modelId)));
     }
 
-    private void registerPumpkin(BlockModelGenerators BMG, Block block) {
-        TextureMapping textureMap = TextureMapping.column(block);
+    private void registerPumpkin(BlockModelGenerators BMG, Block block, Block basePumpkinBlock) {
+        TextureMapping textureMap = TextureMapping.column(basePumpkinBlock);
         BMG.createPumpkinVariant(block, textureMap);
     }
 

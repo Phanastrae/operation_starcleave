@@ -119,6 +119,7 @@
       "required": false
     },
     "operation_starcleave:netherite_pumpkin",
+    "operation_starcleave:netherite_jack_o_lantern",
     "operation_starcleave:smooth_fellcrust_pillar",
     "operation_starcleave:imbued_starbleached_tiles",
     "operation_starcleave:starbleach_cauldron",

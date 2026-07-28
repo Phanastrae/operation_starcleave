@@ -233,6 +233,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
         getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_AXE)
                 .add(
                         NETHERITE_PUMPKIN,
+                        NETHERITE_JACK_O_LANTERN,
 
                         MULCHBORNE_TUFT,
                         SHORT_HOLY_MOSS,
@@ -263,6 +264,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 .addOptionalTag(OperationStarcleaveBlockTags.STARBLEACHED_LOGS)
                 .add(
                         NETHERITE_PUMPKIN,
+                        NETHERITE_JACK_O_LANTERN,
 
                         SMOOTH_FELLCRUST_PILLAR,
 
@@ -321,7 +323,6 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
         getOrCreateTagBuilder(BlockTags.SWORD_EFFICIENT)
                 .add(
-                        NETHERITE_PUMPKIN,
                         MULCHBORNE_TUFT,
                         SHORT_HOLY_MOSS,
                         TALL_HOLY_MOSS,
@@ -339,7 +340,8 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
         getOrCreateTagBuilder(BlockTags.NEEDS_DIAMOND_TOOL)
                 .add(
-                        NETHERITE_PUMPKIN
+                        NETHERITE_PUMPKIN,
+                        NETHERITE_JACK_O_LANTERN
                 );
 
         getOrCreateTagBuilder(BlockTags.NEEDS_IRON_TOOL)

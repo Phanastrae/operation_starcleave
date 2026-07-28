@@ -48,6 +48,7 @@ public class OperationStarcleaveCreativeModeTabs {
         // Operation: Starcleave Tab
         helper.add(OPERATION_STARCLEAVE_RESOURCE_KEY,
                 NETHERITE_PUMPKIN,
+                NETHERITE_JACK_O_LANTERN,
                 STARCLEAVER_GOLEM_BUCKET,
 
                 STARBLEACH_BOTTLE,
@@ -643,7 +644,8 @@ public class OperationStarcleaveCreativeModeTabs {
                 STARTOUCHED_HANGING_SIGN
         );
         helper.addAfter(Items.DRAGON_HEAD, FUNCTIONAL_BLOCKS,
-                NETHERITE_PUMPKIN
+                NETHERITE_PUMPKIN,
+                NETHERITE_JACK_O_LANTERN
         );
         helper.add(FUNCTIONAL_BLOCKS,
                 STARDUST_CLUSTER,

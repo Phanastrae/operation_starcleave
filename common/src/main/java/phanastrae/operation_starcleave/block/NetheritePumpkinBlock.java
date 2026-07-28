@@ -14,7 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.EquipableCarvedPumpkinBlock;
+import net.minecraft.world.level.block.CarvedPumpkinBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import net.minecraft.world.level.block.state.pattern.BlockPattern;
@@ -29,7 +29,7 @@ import phanastrae.operation_starcleave.entity.mob.StarcleaverGolemEntity;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class NetheritePumpkinBlock extends EquipableCarvedPumpkinBlock {
+public class NetheritePumpkinBlock extends CarvedPumpkinBlock {
     public static final Component SMITHING_TEMPLATE_ITEM_TEXT = Component.translatable(
                     Util.makeDescriptionId("item", ResourceLocation.withDefaultNamespace("smithing_template.netherite_upgrade.applies_to.operation_starcleave.pumpkin"))
             )
@@ -42,7 +42,7 @@ public class NetheritePumpkinBlock extends EquipableCarvedPumpkinBlock {
     private BlockPattern starcleaverGolemDispenserPattern;
 
     private static final Predicate<BlockState> IS_NETHERITE_GOLEM_HEAD_PREDICATE = state -> state != null
-            && (state.is(OperationStarcleaveBlocks.NETHERITE_PUMPKIN));
+            && (state.is(OperationStarcleaveBlocks.NETHERITE_PUMPKIN) || state.is(OperationStarcleaveBlocks.NETHERITE_JACK_O_LANTERN));
 
 
     public NetheritePumpkinBlock(Properties settings) {

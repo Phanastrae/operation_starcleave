@@ -98,6 +98,7 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
 
         forEach(this::dropSelf,
                 NETHERITE_PUMPKIN,
+                NETHERITE_JACK_O_LANTERN,
 
                 STELLAR_SEDIMENT,
 

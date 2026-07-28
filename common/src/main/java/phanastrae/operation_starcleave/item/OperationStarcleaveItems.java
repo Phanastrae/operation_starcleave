@@ -28,6 +28,7 @@ public class OperationStarcleaveItems {
     public static final List<SpawnEggItem> SPAWN_EGGS = new ArrayList<>();
 
     public static final Item NETHERITE_PUMPKIN = registerBlock(new NetheritePumpkinItem(OperationStarcleaveBlocks.NETHERITE_PUMPKIN, properties().rarity(Rarity.UNCOMMON).fireResistant()));
+    public static final Item NETHERITE_JACK_O_LANTERN = registerBlock(new BlockItem(OperationStarcleaveBlocks.NETHERITE_JACK_O_LANTERN, properties().rarity(Rarity.UNCOMMON).fireResistant()));
 
     public static final Item STELLAR_SEDIMENT = registerBlockItem(OperationStarcleaveBlocks.STELLAR_SEDIMENT);
     public static final Item STELLARUBBLE_MIX = registerBlockItem(OperationStarcleaveBlocks.STELLARUBBLE_MIX);

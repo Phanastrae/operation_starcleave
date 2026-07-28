@@ -17,6 +17,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.data.OperationStarcleaveBlockFamilies;
 import phanastrae.operation_starcleave.item.tag.OperationStarcleaveItemTags;
@@ -288,6 +289,17 @@ public class RecipeProvider extends FabricRecipeProvider {
                 .unlockedBy(
                         getHasName(ASTERUBBLE_PIECES),
                         has(ASTERUBBLE_PIECES)
+                )
+                .save(exporter);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, NETHERITE_JACK_O_LANTERN)
+                .define('A', NETHERITE_PUMPKIN)
+                .define('B', Blocks.SOUL_TORCH)
+                .pattern("A")
+                .pattern("B")
+                .unlockedBy(
+                        getHasName(NETHERITE_PUMPKIN),
+                        has(NETHERITE_PUMPKIN)
                 )
                 .save(exporter);
         // endregion

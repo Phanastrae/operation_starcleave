@@ -51,13 +51,19 @@ public class OperationStarcleaveBlocks {
 
     public static final Block NETHERITE_PUMPKIN = register(
             "netherite_pumpkin",
-            new NetheritePumpkinBlock(properties()
+            new EquipableNetheritePumpkinBlock(properties()
                     .strength(10.0F, 1200.0F)
                     .mapColor(COLOR_BLACK)
                     .sound(NETHERITE_BLOCK)
                     .pushReaction(DESTROY)
                     .isValidSpawn(SPAWN_ALWAYS)
                     .requiresCorrectToolForDrops()
+            )
+    );
+    public static final Block NETHERITE_JACK_O_LANTERN = register(
+            "netherite_jack_o_lantern",
+            new NetheritePumpkinBlock(BlockBehaviour.Properties.ofFullCopy(NETHERITE_PUMPKIN)
+                    .lightLevel(constant(10))
             )
     );
 
@@ -285,7 +291,7 @@ public class OperationStarcleaveBlocks {
                     .noCollission()
             )
     );
-    
+
     public static final Block STARCLOVER_BUSH = register(
             "starclover_bush",
             new TallStarbleachedFlowerBlock(
