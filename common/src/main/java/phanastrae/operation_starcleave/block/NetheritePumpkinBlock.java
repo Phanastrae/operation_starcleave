@@ -1,13 +1,11 @@
 package phanastrae.operation_starcleave.block;
 
-import org.jetbrains.annotations.Nullable;
-import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
-import phanastrae.operation_starcleave.entity.mob.StarcleaverGolemEntity;
-
-import java.util.List;
-import java.util.function.Predicate;
+import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -24,8 +22,18 @@ import net.minecraft.world.level.block.state.pattern.BlockPatternBuilder;
 import net.minecraft.world.level.block.state.predicate.BlockStatePredicate;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
+import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
+import phanastrae.operation_starcleave.entity.mob.StarcleaverGolemEntity;
+
+import java.util.List;
+import java.util.function.Predicate;
 
 public class NetheritePumpkinBlock extends EquipableCarvedPumpkinBlock {
+    public static final Component SMITHING_TEMPLATE_ITEM_TEXT = Component.translatable(
+                    Util.makeDescriptionId("item", ResourceLocation.withDefaultNamespace("smithing_template.netherite_upgrade.applies_to.operation_starcleave.pumpkin"))
+            )
+            .withStyle(ChatFormatting.BLUE);
 
     @Nullable
     private BlockPattern starcleaverGolemPattern;
@@ -51,7 +59,7 @@ public class NetheritePumpkinBlock extends EquipableCarvedPumpkinBlock {
     public void trySpawnEntityNetherite(Level world, BlockPos pos) {
         BlockPattern.BlockPatternMatch result = this.getStarcleaverGolemPattern().find(world, pos);
         if (result != null) {
-            for(int i = 0; i < 3; i++) {
+            for (int i = 0; i < 3; i++) {
                 StarcleaverGolemEntity starcleaverGolemEntity = OperationStarcleaveEntityTypes.STARCLEAVER_GOLEM.create(world);
                 if (starcleaverGolemEntity != null) {
                     spawnGolemInWorld(world, result, starcleaverGolemEntity, result.getBlock(0, 1, 0).getPos());
@@ -59,9 +67,9 @@ public class NetheritePumpkinBlock extends EquipableCarvedPumpkinBlock {
                     Vec3 p = starcleaverGolemEntity.position().add(random.nextFloat() * 0.3 - 0.15, i * 0.2f, random.nextFloat() * 0.3 - 0.15);
                     starcleaverGolemEntity.setPosRaw(p.x, p.y, p.z);
                     List<Player> nearPlayers = world.getEntities(EntityType.PLAYER, AABB.unitCubeFromLowerCorner(starcleaverGolemEntity.position()).inflate(4), (e) -> true);
-                    if(nearPlayers != null && !nearPlayers.isEmpty()) {
+                    if (nearPlayers != null && !nearPlayers.isEmpty()) {
                         int r = random.nextInt(nearPlayers.size());
-                        if(r < nearPlayers.size()) {
+                        if (r < nearPlayers.size()) {
                             starcleaverGolemEntity.lookAt(nearPlayers.get(r), 180, 90);
                         }
                     }
@@ -72,10 +80,10 @@ public class NetheritePumpkinBlock extends EquipableCarvedPumpkinBlock {
 
     public static void spawnGolemInWorld(Level world, BlockPattern.BlockPatternMatch patternResult, Entity entity, BlockPos pos) {
         clearPatternBlocks(world, patternResult);
-        entity.moveTo((double)pos.getX() + 0.5, (double)pos.getY() + 0.05, (double)pos.getZ() + 0.5, 0.0F, 0.0F);
+        entity.moveTo((double) pos.getX() + 0.5, (double) pos.getY() + 0.05, (double) pos.getZ() + 0.5, 0.0F, 0.0F);
         world.addFreshEntity(entity);
 
-        for(ServerPlayer serverPlayerEntity : world.getEntitiesOfClass(ServerPlayer.class, entity.getBoundingBox().inflate(5.0))) {
+        for (ServerPlayer serverPlayerEntity : world.getEntitiesOfClass(ServerPlayer.class, entity.getBoundingBox().inflate(5.0))) {
             CriteriaTriggers.SUMMONED_ENTITY.trigger(serverPlayerEntity, entity);
         }
 

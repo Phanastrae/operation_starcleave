@@ -43,6 +43,7 @@
     "common.item.EnchantmentMixin",
     "common.item.ItemStackMixin",
     "common.item.ShearsItemMixin",
+    "common.item.SmithingTemplateItemMixin",
     "common.legacy.ItemStackComponentizationFixMixin",
     "common.loot.BlockBehaviourMixin",
     "common.loot.LootContextParamSetsMixin",
