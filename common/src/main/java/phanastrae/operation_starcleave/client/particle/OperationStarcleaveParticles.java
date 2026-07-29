@@ -15,6 +15,7 @@ public class OperationStarcleaveParticles {
         r.register(OperationStarcleaveParticleTypes.GLIMMER_SMOKE, GlimmerSmokeFactory::new);
         r.register(OperationStarcleaveParticleTypes.LARGE_GLIMMER_SMOKE, LargeGlimmerSmokeFactory::new);
         r.register(OperationStarcleaveParticleTypes.STARBLEACH_SWIRL, StarbleachSwirlParticle.Provider::new);
+        r.register(OperationStarcleaveParticleTypes.LARGE_STARBLEACH_SWIRL, LargeStarbleachSwirlParticle.Provider::new);
         r.register(OperationStarcleaveParticleTypes.STARBLEACHED_LEAVES, StarbleachedLeafParticle.Provider::new);
         r.register(OperationStarcleaveParticleTypes.PLASMA_DUST, PlasmaDustFactory::new);
         r.register(OperationStarcleaveParticleTypes.NUCLEAR_SMOKE, NuclearSmokeFactory::new);
