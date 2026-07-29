@@ -33,6 +33,7 @@ public class OperationStarcleaveConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> SMALL_STELLAR_MULCH_PATCH_BONEMEAL = createKey("small_stellar_mulch_patch_bonemeal");
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> ASTERUBBLE_BOULDER = createKey("asterubble_boulder");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> BIG_SKYSHELL = createKey("big_skyshell");
 
     public static ResourceKey<ConfiguredFeature<?, ?>> createKey(String name) {
         return ResourceKey.create(Registries.CONFIGURED_FEATURE, OperationStarcleave.id(name));
@@ -135,6 +136,13 @@ public class OperationStarcleaveConfiguredFeatures {
                 ASTERUBBLE_BOULDER,
                 OperationStarcleaveFeatures.ASTERUBBLE_BOULDER,
                 new BlockStateConfiguration(OperationStarcleaveBlocks.ASTERUBBLE.defaultBlockState())
+        );
+
+        FeatureUtils.register(
+                context,
+                BIG_SKYSHELL,
+                OperationStarcleaveFeatures.BIG_SKYSHELL,
+                new BlockStateConfiguration(OperationStarcleaveBlocks.SKYSHELL_BLOCK.defaultBlockState())
         );
     }
 }

@@ -660,6 +660,19 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         STARBLEACHED_LEAVES
                 );
 
+        getOrCreateTagBuilder(OperationStarcleaveBlockTags.BIG_SKYSHELL_REPLACEABLE)
+                .addOptionalTag(BlockTags.DIRT)
+                .addOptionalTag(BlockTags.BASE_STONE_OVERWORLD)
+                .addOptionalTag(BlockTags.SAND)
+                .addOptionalTag(BlockTags.LEAVES)
+                .add(
+                        STELLAR_SEDIMENT,
+                        STELLAR_MULCH,
+                        HOLY_MOSS,
+                        STARDUST_BLOCK,
+                        STARBLEACHED_LEAVES
+                );
+
         getOrCreateTagBuilder(OperationStarcleaveBlockTags.SB_I_STARTOUCHED_WALL_TORCH)
                 .add(
                         Blocks.WALL_TORCH,

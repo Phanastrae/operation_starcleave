@@ -1,0 +1,8 @@
+{
+  "type": "operation_starcleave:big_skyshell",
+  "config": {
+    "state": {
+      "Name": "operation_starcleave:skyshell_block"
+    }
+  }
+}

@@ -25,6 +25,7 @@ public class OperationStarcleaveBlockTags {
     public static final TagKey<Block> PREVENTS_ELYTRA_WALL_DAMAGE = of("prevents_elytra_wall_damage");
     public static final TagKey<Block> MINED_QUICKLY_BY_SHEARS = of("mined_quickly_by_shears");
     public static final TagKey<Block> ASTERUBBLE_BOULDER_REPLACEABLE = of("asterubble_boulder_replaceable");
+    public static final TagKey<Block> BIG_SKYSHELL_REPLACEABLE = of("big_skyshell_replaceable");
 
     public static final TagKey<Block> SB_I_STARTOUCHED_WALL_TORCH = starbleachesInto("startouched_wall_torch");
 

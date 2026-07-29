@@ -14,6 +14,7 @@ public class OperationStarcleaveFeatures {
     private static final Map<ResourceLocation, Feature<?>> UNREGISTERED_FEATURES = new LinkedHashMap<>();
 
     public static final Feature<BlockStateConfiguration> ASTERUBBLE_BOULDER = register("asterubble_boulder", new AsterubbleBoulder(BlockStateConfiguration.CODEC));
+    public static final Feature<BlockStateConfiguration> BIG_SKYSHELL = register("big_skyshell", new BigSkyshell(BlockStateConfiguration.CODEC));
 
     private static <C extends FeatureConfiguration> Feature<C> register(String key, Feature<C> feature) {
         return register(OperationStarcleave.id(key), feature);

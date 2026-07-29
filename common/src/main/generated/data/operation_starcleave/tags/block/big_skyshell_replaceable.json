@@ -1,0 +1,25 @@
+{
+  "values": [
+    {
+      "id": "#minecraft:dirt",
+      "required": false
+    },
+    {
+      "id": "#minecraft:base_stone_overworld",
+      "required": false
+    },
+    {
+      "id": "#minecraft:sand",
+      "required": false
+    },
+    {
+      "id": "#minecraft:leaves",
+      "required": false
+    },
+    "operation_starcleave:stellar_sediment",
+    "operation_starcleave:stellar_mulch",
+    "operation_starcleave:holy_moss",
+    "operation_starcleave:stardust_block",
+    "operation_starcleave:starbleached_leaves"
+  ]
+}

@@ -176,14 +176,31 @@ public class Starbleach {
                 && (random.nextInt(128) == 0)
         ) {
             tryPlaceAsterubbleBoulder(level, random, upPos);
+            return;
         } else if (newState.is(OperationStarcleaveBlocks.STELLARUBBLE_MIX) && random.nextInt(80) == 0) {
             tryPlaceAsterubbleBoulder(level, random, upPos);
+            return;
         } else if (newState.is(OperationStarcleaveBlocks.ASTERUBBLE) && random.nextInt(20) == 0) {
             tryPlaceAsterubbleBoulder(level, random, upPos);
+            return;
+        }
+
+        if (newState.is(OperationStarcleaveBlocks.HOLY_MOSS) && random.nextInt(128) == 0) {
+            tryPlaceBigSkyshell(level, random, upPos);
+        } else if (newState.is(OperationStarcleaveBlocks.STARDUST_BLOCK) && random.nextInt(96) == 0) {
+            tryPlaceBigSkyshell(level, random, upPos);
         }
     }
 
     public static void tryPlaceAsterubbleBoulder(ServerLevel level, RandomSource random, BlockPos pos) {
+        tryPlaceSimpleBlockFeature(level, random, pos, OperationStarcleaveConfiguredFeatures.ASTERUBBLE_BOULDER);
+    }
+
+    public static void tryPlaceBigSkyshell(ServerLevel level, RandomSource random, BlockPos pos) {
+        tryPlaceSimpleBlockFeature(level, random, pos, OperationStarcleaveConfiguredFeatures.BIG_SKYSHELL);
+    }
+
+    public static void tryPlaceSimpleBlockFeature(ServerLevel level, RandomSource random, BlockPos pos, ResourceKey<ConfiguredFeature<?, ?>> featureKey) {
         if (level.getBlockState(pos).canBeReplaced()) {
             SimpleStorage storage = new SimpleStorage();
             IntermediateWorldGenLevel intermediateLevel = new IntermediateWorldGenLevel(storage, level);
@@ -193,7 +210,7 @@ public class Starbleach {
                     level.registryAccess(),
                     level.getChunkSource().getGenerator(),
                     random,
-                    OperationStarcleaveConfiguredFeatures.ASTERUBBLE_BOULDER,
+                    featureKey,
                     pos
             );
 
