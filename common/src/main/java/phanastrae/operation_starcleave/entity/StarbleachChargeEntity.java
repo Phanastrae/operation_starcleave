@@ -136,7 +136,7 @@ public class StarbleachChargeEntity extends Entity {
             BlockPos pos = this.blockPosition().offset(offset);
 
             BlockState state = serverLevel.getBlockState(pos);
-            boolean didBleaching = Starbleach.starbleachPos(serverLevel, pos, state, Starbleach.StarbleachTarget.NO_FILLING, 30);
+            boolean didBleaching = Starbleach.starbleachPos(serverLevel, pos, state, Starbleach.StarbleachTarget.NO_FILLING, 3, 2);
             if (didBleaching) {
                 this.charge--;
             }

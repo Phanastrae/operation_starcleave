@@ -71,17 +71,17 @@ public class Starbleach {
                 if (damage >= 5) {
                     int topY = level.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z);
                     BlockPos targetPos = new BlockPos(x, topY - 1, z);
-                    starbleachWithSeeping(level, targetPos, starbleachTarget, 150, 20);
+                    starbleachWithSeeping(level, targetPos, starbleachTarget, 20);
                 }
             }
         }
     }
 
-    public static void starbleachWithSeeping(ServerLevel level, BlockPos blockPos, StarbleachTarget starbleachTarget, int particleCount, int starbleachCharge) {
+    public static void starbleachWithSeeping(ServerLevel level, BlockPos blockPos, StarbleachTarget starbleachTarget, int starbleachCharge) {
         BlockState blockState = level.getBlockState(blockPos);
 
         if (starbleachTarget.shouldFillCauldrons()) {
-            if (starbleachPos(level, blockPos, blockState, StarbleachTarget.ONLY_FILLING, particleCount)) {
+            if (starbleachPos(level, blockPos, blockState, StarbleachTarget.ONLY_FILLING, 15, 10)) {
                 return;
             }
         }
@@ -115,12 +115,12 @@ public class Starbleach {
         return charge;
     }
 
-    public static boolean starbleachPos(ServerLevel level, BlockPos blockPos, BlockState blockState, StarbleachTarget starbleachTarget, int particleCount) {
+    public static boolean starbleachPos(ServerLevel level, BlockPos blockPos, BlockState blockState, StarbleachTarget starbleachTarget, int glimmerCount, int swirlCount) {
         RandomSource random = level.random;
 
         BlockState newState = StarbleachConversions.getStarbleachResult(level, blockPos, blockState, random, starbleachTarget);
         if (newState != null) {
-            convertBlock(level, blockPos, blockState, newState, particleCount);
+            convertBlock(level, blockPos, blockState, newState, glimmerCount, swirlCount);
             starbleachAttachedBlocks(level, random, blockPos, newState);
             newState.updateNeighbourShapes(level, blockPos, 3);
 
@@ -214,6 +214,14 @@ public class Starbleach {
             // for other features, splitting this into a place step and an update step may be required
             // also for other features/structures, placing block entities and entities would be required
             storage.forEachBlock((p, state) -> level.setBlock(p, state, 3));
+
+            storage.forEachBlock((p, state) -> {
+                spawnParticles(level, p, 1, 2, random.nextInt(3) == 0 ? random.nextIntBetweenInclusive(1, 3) : 0);
+
+                if (random.nextInt(20) == 0) {
+                    level.playSeededSound(null, p.getX(), p.getY(), p.getZ(), OperationStarcleaveSoundEvents.STARBLEACH, SoundSource.BLOCKS, 0.1F, 1.6F + 0.4F * level.random.nextFloat(), level.random.nextLong());
+                }
+            });
         }
     }
 
@@ -270,17 +278,17 @@ public class Starbleach {
         return Optional.empty();
     }
 
-    public static void convertBlock(ServerLevel level, BlockPos blockPos, BlockState oldState, BlockState newState, int particleCount) {
+    public static void convertBlock(ServerLevel level, BlockPos blockPos, BlockState oldState, BlockState newState, int glimmerCount, int swirlCount) {
         level.setBlock(blockPos, newState, 2 | 16);
         if (newState.isAir()) {
             level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, blockPos, Block.getId(oldState));
             level.gameEvent(GameEvent.BLOCK_DESTROY, blockPos, GameEvent.Context.of(null, oldState));
         }
         level.playSeededSound(null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), OperationStarcleaveSoundEvents.STARBLEACH, SoundSource.BLOCKS, 0.1F, 1.6F + 0.4F * level.random.nextFloat(), level.random.nextLong());
-        spawnParticles(level, blockPos, particleCount);
+        spawnParticles(level, blockPos, glimmerCount, swirlCount, 0);
     }
 
-    public static void spawnParticles(ServerLevel level, BlockPos blockPos, int particleCount) {
+    public static void spawnParticles(ServerLevel level, BlockPos blockPos, int glimmerCount, int swirlCount, int largeSwirlCount) {
         for (Direction direction : Direction.values()) {
             Vec3i v = direction.getNormal();
             if (level.getBlockState(blockPos.offset(v)).canBeReplaced()) {
@@ -288,9 +296,15 @@ public class Starbleach {
                 double y = blockPos.getY() + 0.5 + 0.5 * v.getY();
                 double z = blockPos.getZ() + 0.5 + 0.5 * v.getZ();
 
-                // TODO adjust these counts perhaps to not just be arbitrary proportions of particleCount
-                spawnParticles(level, OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER, x, y, z, v, particleCount / 10, 0.05);
-                spawnParticles(level, OperationStarcleaveParticleTypes.STARBLEACH_SWIRL, x, y, z, v, particleCount / 15, 0.035);
+                if (glimmerCount > 0) {
+                    spawnParticles(level, OperationStarcleaveParticleTypes.FIRMAMENT_GLIMMER, x, y, z, v, glimmerCount, 0.05);
+                }
+                if (swirlCount > 0) {
+                    spawnParticles(level, OperationStarcleaveParticleTypes.STARBLEACH_SWIRL, x, y, z, v, swirlCount, 0.035);
+                }
+                if (largeSwirlCount > 0) {
+                    spawnParticles(level, OperationStarcleaveParticleTypes.LARGE_STARBLEACH_SWIRL, x, y, z, v, largeSwirlCount, 0.02);
+                }
             }
         }
     }
