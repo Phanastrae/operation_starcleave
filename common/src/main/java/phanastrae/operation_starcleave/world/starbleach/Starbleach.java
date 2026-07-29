@@ -3,6 +3,7 @@ package phanastrae.operation_starcleave.world.starbleach;
 import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.Registries;
@@ -12,10 +13,13 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -34,6 +38,8 @@ import phanastrae.operation_starcleave.world.OperationStarcleaveGameRules;
 import phanastrae.operation_starcleave.world.firmament.Firmament;
 import phanastrae.operation_starcleave.world.firmament.FirmamentRegion;
 import phanastrae.operation_starcleave.world.firmament.FirmamentSubRegion;
+import phanastrae.operation_starcleave.world.intermediate.IntermediateWorldGenLevel;
+import phanastrae.operation_starcleave.world.intermediate.SimpleStorage;
 
 import java.util.Optional;
 
@@ -178,23 +184,48 @@ public class Starbleach {
     }
 
     public static void tryPlaceAsterubbleBoulder(ServerLevel level, RandomSource random, BlockPos pos) {
-        if (level.getBlockState(pos).canBeReplaced() && boxIsClear(level, AABB.encapsulatingFullBlocks(
-                pos.offset(5, 2, 5),
-                pos.offset(-5, -8, -5)))
-        ) {
-            tryPlaceFeature(level, random, OperationStarcleaveConfiguredFeatures.ASTERUBBLE_BOULDER, pos);
+        if (level.getBlockState(pos).canBeReplaced()) {
+            SimpleStorage storage = new SimpleStorage();
+            IntermediateWorldGenLevel intermediateLevel = new IntermediateWorldGenLevel(storage, level);
+
+            tryPlaceFeature(
+                    intermediateLevel,
+                    level.registryAccess(),
+                    level.getChunkSource().getGenerator(),
+                    random,
+                    OperationStarcleaveConfiguredFeatures.ASTERUBBLE_BOULDER,
+                    pos
+            );
+
+            AABB bb = storage.getBlockBoundingBox();
+            if (bb != null) {
+                // don't place if building-blocking entities are inside the bounding box
+                if (!level.getEntitiesOfClass(Entity.class, bb, e -> e.blocksBuilding).isEmpty()) {
+                    return;
+                }
+                // don't place if players are close to the bounding box
+                AABB inflated = bb.inflate(2);
+                if (!level.getEntitiesOfClass(Player.class, inflated).isEmpty()) {
+                    return;
+                }
+            }
+
+            // for asterubble boulders, just place blocks directly
+            // for other features, splitting this into a place step and an update step may be required
+            // also for other features/structures, placing block entities and entities would be required
+            storage.forEachBlock((p, state) -> level.setBlock(p, state, 3));
         }
     }
 
-    public static boolean boxIsClear(ServerLevel level, AABB aabb) {
-        return level.getEntitiesOfClass(Entity.class, aabb, e -> e.blocksBuilding).isEmpty();
+    public static void tryPlaceFeature(ServerLevel level, RandomSource random, ResourceKey<ConfiguredFeature<?, ?>> featureKey, BlockPos pos) {
+        tryPlaceFeature(level, level.registryAccess(), level.getChunkSource().getGenerator(), random, featureKey, pos);
     }
 
-    public static void tryPlaceFeature(ServerLevel level, RandomSource random, ResourceKey<ConfiguredFeature<?, ?>> featureKey, BlockPos pos) {
-        level.registryAccess()
+    public static void tryPlaceFeature(WorldGenLevel level, RegistryAccess registryAccess, ChunkGenerator chunkGenerator, RandomSource random, ResourceKey<ConfiguredFeature<?, ?>> featureKey, BlockPos pos) {
+        registryAccess
                 .registry(Registries.CONFIGURED_FEATURE)
                 .flatMap(feature -> feature.getHolder(featureKey))
-                .ifPresent(feature -> feature.value().place(level, level.getChunkSource().getGenerator(), random, pos));
+                .ifPresent(feature -> feature.value().place(level, chunkGenerator, random, pos));
     }
 
     public static boolean isStarbleached(BlockState blockState) {
