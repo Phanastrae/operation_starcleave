@@ -205,7 +205,7 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
         add(STARDUST_BLOCK, block -> createSingleItemTableWithSilkTouch(block, OperationStarcleaveItems.STARDUST_CLUSTER, UniformGenerator.between(1.0F, 4.0F)));
 
         this.add(STARBLEACHED_LEAVES, block -> this.createStarbleachedLeavesDrops(block, STARBLEACHED_SAPLING, NORMAL_LEAVES_SAPLING_CHANCES));
-        dropWithSilkTouchOrShears(NUCLEIC_FISSURELEAVES);
+        this.add(NUCLEIC_FISSURELEAVES, this::createFissureleavesDrops);
 
         dropWithShears(MULCHBORNE_TUFT);
 
@@ -354,6 +354,27 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
                                         LootItem.lootTableItem(OperationStarcleaveItems.STARBLEACHED_LEAF_BUNCH)
                                                 .apply(SetItemCountFunction.setCount(BinomialDistributionGenerator.binomial(1, 0.3333F)))
                                                 .apply(ApplyBonusCount.addBonusBinomialDistributionCount(fortune, 0.333F, 0))
+                                )
+                        )
+        );
+    }
+
+    public LootTable.Builder createFissureleavesDrops(Block leavesBlock) {
+        HolderLookup.RegistryLookup<Enchantment> registryLookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
+        Holder<Enchantment> fortune = registryLookup.getOrThrow(Enchantments.FORTUNE);
+
+        return this.createSilkTouchOrShearsDrop(
+                leavesBlock
+        ).withPool(
+                LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1.0F))
+                        .when(this.doesNotHaveShearsOrSilkTouch())
+                        .add(
+                                this.applyExplosionDecay(
+                                        leavesBlock,
+                                        LootItem.lootTableItem(OperationStarcleaveItems.OURANIC_CHIP)
+                                                .apply(SetItemCountFunction.setCount(BinomialDistributionGenerator.binomial(1, 0.015F)))
+                                                .apply(ApplyBonusCount.addBonusBinomialDistributionCount(fortune, 0.005F, 0))
                                 )
                         )
         );
