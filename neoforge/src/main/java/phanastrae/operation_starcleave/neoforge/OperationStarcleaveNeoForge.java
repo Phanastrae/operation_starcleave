@@ -42,7 +42,6 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.neoforged.neoforge.registries.RegisterEvent;
-import org.apache.commons.lang3.tuple.Triple;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.block.OperationStarcleaveToolActions;
@@ -62,7 +61,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 @Mod(OperationStarcleave.MOD_ID)
 public class OperationStarcleaveNeoForge {
@@ -309,14 +307,15 @@ public class OperationStarcleaveNeoForge {
             Level level = context.getLevel();
             BlockPos pos = context.getClickedPos();
             BlockState state = level.getBlockState(pos);
-            for (Triple<Block, Predicate<UseOnContext>, BlockState> action : OperationStarcleaveToolActions.TILLABLES) {
-                Block block = action.getLeft();
-                Predicate<UseOnContext> predicate = action.getMiddle();
-                BlockState newState = action.getRight();
+            Block block = state.getBlock();
 
-                if (state.is(block) && predicate.test(context)) {
-                    event.setFinalState(newState);
-                    return;
+            if (OperationStarcleaveToolActions.TILLABLES.containsKey(block)) {
+                OperationStarcleaveToolActions.TillingAction action = OperationStarcleaveToolActions.TILLABLES.get(block);
+
+                if (action.getPredicate().test(context)) {
+                    if (action instanceof OperationStarcleaveToolActions.BasicTillingAction basicTillingAction) {
+                        event.setFinalState(basicTillingAction.getState());
+                    }
                 }
             }
         }

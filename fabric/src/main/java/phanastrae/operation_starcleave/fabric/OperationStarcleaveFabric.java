@@ -25,6 +25,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import phanastrae.operation_starcleave.OperationStarcleave;
@@ -41,6 +42,7 @@ import phanastrae.operation_starcleave.network.packet.OperationStarcleavePayload
 import java.util.Collection;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public class OperationStarcleaveFabric implements ModInitializer {
 
@@ -78,7 +80,12 @@ public class OperationStarcleaveFabric implements ModInitializer {
         OperationStarcleaveToolActions.STRIPPABLES.forEach(StrippableBlockRegistry::register);
 
         // setup tilling
-        OperationStarcleaveToolActions.TILLABLES.forEach(triple -> TillableBlockRegistry.register(triple.getLeft(), triple.getMiddle(), triple.getRight()));
+        OperationStarcleaveToolActions.TILLABLES.forEach((block, action) -> {
+            Predicate<UseOnContext> predicate = action.getPredicate();
+            if (action instanceof OperationStarcleaveToolActions.BasicTillingAction basicTillingAction) {
+                TillableBlockRegistry.register(block, predicate, basicTillingAction.getState());
+            }
+        });
 
         // setup fluid storages
         setupFluidStorages();

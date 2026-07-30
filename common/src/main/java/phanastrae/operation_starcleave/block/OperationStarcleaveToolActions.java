@@ -1,15 +1,12 @@
 package phanastrae.operation_starcleave.block;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import net.minecraft.core.Direction;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import org.apache.commons.lang3.tuple.Triple;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -27,11 +24,32 @@ public class OperationStarcleaveToolActions {
             .put(STELLAR_MULCH, STELLAR_PATH.defaultBlockState())
             .build();
 
-    public static final List<Triple<Block, Predicate<UseOnContext>, BlockState>> TILLABLES = createTillables();
+    public static final Map<Block, TillingAction> TILLABLES = new ImmutableMap.Builder<Block, TillingAction>()
+            .put(STELLAR_MULCH, new BasicTillingAction(HoeItem::onlyIfAirAbove, STELLAR_FARMLAND.defaultBlockState()))
+            .put(HOLY_MOSS, new BasicTillingAction(context -> context.getClickedFace() != Direction.DOWN, STELLAR_SEDIMENT.defaultBlockState()))
+            .build();
 
-    private static List<Triple<Block, Predicate<UseOnContext>, BlockState>> createTillables() {
-        List<Triple<Block, Predicate<UseOnContext>, BlockState>> list = new ArrayList<>();
-        list.add(Triple.of(OperationStarcleaveBlocks.STELLAR_MULCH, HoeItem::onlyIfAirAbove, OperationStarcleaveBlocks.STELLAR_FARMLAND.defaultBlockState()));
-        return ImmutableList.copyOf(list);
+    public static abstract class TillingAction {
+        public abstract Predicate<UseOnContext> getPredicate();
+    }
+
+    public static class BasicTillingAction extends TillingAction {
+
+        private final Predicate<UseOnContext> predicate;
+        private final BlockState state;
+
+        public BasicTillingAction(Predicate<UseOnContext> predicate, BlockState state) {
+            this.predicate = predicate;
+            this.state = state;
+        }
+
+        @Override
+        public Predicate<UseOnContext> getPredicate() {
+            return this.predicate;
+        }
+
+        public BlockState getState() {
+            return this.state;
+        }
     }
 }
