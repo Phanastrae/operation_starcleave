@@ -37,4 +37,9 @@ public class OperationStarcleaveFoods {
             .nutrition(5)
             .saturationModifier(1.0F)
             .build();
+
+    public static final FoodProperties OURANIC_CHIP = new FoodProperties.Builder()
+            .nutrition(2)
+            .saturationModifier(0.2F)
+            .build();
 }
