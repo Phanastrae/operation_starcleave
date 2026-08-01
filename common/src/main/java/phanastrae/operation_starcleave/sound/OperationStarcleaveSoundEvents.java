@@ -31,6 +31,8 @@ public class OperationStarcleaveSoundEvents {
 
     public static final SoundEvent REJUVENATOR_THROW = create("entity.firmament_rejuvenator.throw");
 
+    public static final SoundEvent COMET_CHARGE_THROW = create("entity.comet_charge.throw");
+
     public static final SoundEvent STARBLEACHED_PEARL_THROW = create("entity.starbleached_pearl.throw");
     public static final SoundEvent STARBLEACHED_PEARL_REPEL = create("entity.starbleached_pearl.repel");
 

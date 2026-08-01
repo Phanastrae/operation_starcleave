@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_asterubble_pieces": {
+      "conditions": {
+        "items": [
+          {
+            "items": "operation_starcleave:asterubble_pieces"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "operation_starcleave:comet_charge"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_asterubble_pieces"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "operation_starcleave:comet_charge"
+    ]
+  }
+}

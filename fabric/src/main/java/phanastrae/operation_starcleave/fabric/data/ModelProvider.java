@@ -1122,6 +1122,8 @@ public class ModelProvider extends FabricModelProvider {
                 OperationStarcleaveItems.STARBLEACH_BOTTLE,
                 OperationStarcleaveItems.SPLASH_STARBLEACH_BOTTLE,
 
+                OperationStarcleaveItems.COMET_CHARGE,
+
                 OperationStarcleaveItems.STARBLEACHED_PEARL,
                 OperationStarcleaveItems.STARFRUIT,
 

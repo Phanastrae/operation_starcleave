@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "A": {
+      "item": "operation_starcleave:asterubble_pieces"
+    },
+    "S": {
+      "item": "operation_starcleave:stardust_cluster"
+    }
+  },
+  "pattern": [
+    "SS",
+    " A"
+  ],
+  "result": {
+    "count": 1,
+    "id": "operation_starcleave:comet_charge"
+  }
+}

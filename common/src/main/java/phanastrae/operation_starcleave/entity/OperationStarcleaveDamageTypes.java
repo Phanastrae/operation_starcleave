@@ -8,9 +8,11 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.OperationStarcleave;
 import phanastrae.operation_starcleave.entity.projectile.BismuthBlastEntity;
+import phanastrae.operation_starcleave.entity.projectile.CometChargeEntity;
 import phanastrae.operation_starcleave.entity.projectile.PhlogisticSparkEntity;
 
 public class OperationStarcleaveDamageTypes {
@@ -23,6 +25,7 @@ public class OperationStarcleaveDamageTypes {
     public static ResourceKey<DamageType> BISMUTH_BLAST = create(id("bismuth_blast"));
     public static ResourceKey<DamageType> FALLING_MOB = create(id("falling_mob"));
     public static ResourceKey<DamageType> PLASMA = create(id("plasma"));
+    public static ResourceKey<DamageType> COMET_CHARGE = create(id("comet_charge"));
 
     public static DamageSource phlogisticSpark(Level level, PhlogisticSparkEntity phlogisticSpark, @Nullable Entity thrower) {
         return thrower == null ? source(level, UNATTRIBUTED_PHLOGISTIC_SPARK, phlogisticSpark) : source(level, PHLOGISTIC_SPARK, phlogisticSpark, thrower);
@@ -36,12 +39,20 @@ public class OperationStarcleaveDamageTypes {
         return source(level, FALLING_MOB, entity);
     }
 
+    public static DamageSource cometCharge(Level level, CometChargeEntity entity) {
+        return source(level, COMET_CHARGE, entity.position());
+    }
+
     public static DamageSource plasma(Level level) {
         return source(level, PLASMA);
     }
 
     public static DamageSource source(Level level, ResourceKey<DamageType> damageTypeKey) {
         return new DamageSource(getHolderOrThrow(level, damageTypeKey));
+    }
+
+    public static DamageSource source(Level level, ResourceKey<DamageType> damageTypeKey, Vec3 damageSourcePosition) {
+        return new DamageSource(getHolderOrThrow(level, damageTypeKey), damageSourcePosition);
     }
 
     private static DamageSource source(Level level, ResourceKey<DamageType> damageTypeKey, @Nullable Entity entity) {

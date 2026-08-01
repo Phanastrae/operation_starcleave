@@ -21,7 +21,8 @@ public class EntityTypeTagProvider extends FabricTagProvider.EntityTypeTagProvid
         getOrCreateTagBuilder(IMPACT_PROJECTILES)
                 .add(
                         PHLOGISTIC_SPARK,
-                        BISMUTH_BLAST
+                        BISMUTH_BLAST,
+                        COMET_CHARGE
                 );
 
         getOrCreateTagBuilder(FREEZE_IMMUNE_ENTITY_TYPES)

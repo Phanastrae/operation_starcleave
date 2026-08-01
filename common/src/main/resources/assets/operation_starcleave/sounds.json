@@ -141,6 +141,12 @@
       "note/bit"
     ]
   },
+  "entity.comet_charge.throw": {
+    "subtitle": "subtitles.operation_starcleave.entity.comet_charge.throw",
+    "sounds": [
+      "mob/breeze/shoot"
+    ]
+  },
   "entity.firmament_rejuvenator.throw": {
     "subtitle": "subtitles.operation_starcleave.entity.firmament_rejuvenator.throw",
     "sounds": [

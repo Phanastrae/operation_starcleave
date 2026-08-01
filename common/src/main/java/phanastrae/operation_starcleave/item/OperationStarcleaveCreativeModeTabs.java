@@ -305,6 +305,8 @@ public class OperationStarcleaveCreativeModeTabs {
 
                 OURANIC_PILLAR,
 
+                COMET_CHARGE,
+
                 STARBLEACHED_PEARL,
                 STARFRUIT,
 
@@ -680,6 +682,7 @@ public class OperationStarcleaveCreativeModeTabs {
                 LIMESLAGGED_BUCKET
         );
         helper.add(TOOLS_AND_UTILITIES,
+                COMET_CHARGE,
                 STARBLEACHED_PEARL,
                 HOLLOWED_SAC,
                 PHLOGISTON_SAC,

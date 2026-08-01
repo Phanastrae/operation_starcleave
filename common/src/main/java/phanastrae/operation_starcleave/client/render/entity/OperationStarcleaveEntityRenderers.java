@@ -25,6 +25,7 @@ public class OperationStarcleaveEntityRenderers {
         r.accept(OperationStarcleaveEntityTypes.PHLOGISTIC_SPARK, InvisibleRenderer::new);
         r.accept(OperationStarcleaveEntityTypes.NUCLEAR_STARDROP, InvisibleRenderer::new);
         r.accept(OperationStarcleaveEntityTypes.BISMUTH_BLAST, BismuthBlastEntityRenderer::new);
+        r.accept(OperationStarcleaveEntityTypes.COMET_CHARGE, CometChargeEntityRenderer::new);
 
         // misc
         r.accept(OperationStarcleaveEntityTypes.STARBLEACH_CHARGE, InvisibleRenderer::new);

@@ -24,6 +24,7 @@ public class OperationStarcleaveDispenserBehavior {
     public static void init() {
         registerProjectileBehavior(OperationStarcleaveItems.STARBLEACHED_PEARL);
         registerProjectileBehavior(OperationStarcleaveItems.SPLASH_STARBLEACH_BOTTLE);
+        registerProjectileBehavior(OperationStarcleaveItems.COMET_CHARGE);
         registerProjectileBehavior(OperationStarcleaveItems.FIRMAMENT_REJUVENATOR);
 
         DispenseItemBehavior fluidBucketBehaviour = new DefaultDispenseItemBehavior() {

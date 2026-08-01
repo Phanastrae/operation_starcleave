@@ -37,7 +37,8 @@ public class DamageTypeTagProvider extends FabricTagProvider<DamageType> {
         getOrCreateTagBuilder(IS_PROJECTILE)
                 .addOptional(UNATTRIBUTED_PHLOGISTIC_SPARK)
                 .addOptional(PHLOGISTIC_SPARK)
-                .addOptional(BISMUTH_BLAST);
+                .addOptional(BISMUTH_BLAST)
+                .addOptional(COMET_CHARGE);
 
         getOrCreateTagBuilder(IGNITES_ARMOR_STANDS)
                 .addOptional(IN_PHLOGISTIC_FIRE);
@@ -54,12 +55,14 @@ public class DamageTypeTagProvider extends FabricTagProvider<DamageType> {
 
         getOrCreateTagBuilder(ALWAYS_KILLS_ARMOR_STANDS)
                 .addOptional(PHLOGISTIC_SPARK)
-                .addOptional(BISMUTH_BLAST);
+                .addOptional(BISMUTH_BLAST)
+                .addOptional(COMET_CHARGE);
 
         getOrCreateTagBuilder(PANIC_CAUSES)
                 .addOptional(UNATTRIBUTED_PHLOGISTIC_SPARK)
                 .addOptional(PHLOGISTIC_SPARK)
-                .addOptional(BISMUTH_BLAST);
+                .addOptional(BISMUTH_BLAST)
+                .addOptional(COMET_CHARGE);
 
         getOrCreateTagBuilder(PANIC_ENVIRONMENTAL_CAUSES)
                 .addOptional(PLASMA);

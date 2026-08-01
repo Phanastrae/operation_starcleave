@@ -297,6 +297,8 @@ public class OperationStarcleaveItems {
 
     public static final Item STARBLEACHED_LEAF_BUNCH = register("starbleached_leaf_bunch", new Item(properties()));
 
+    public static final Item COMET_CHARGE = register("comet_charge", new CometChargeItem(properties().stacksTo(16)));
+
     public static final Item STARBLEACHED_PEARL = register("starbleached_pearl", new StarbleachedPearlItem(properties().stacksTo(16)));
     public static final Item STARFRUIT = register("starfruit", new StarfruitItem(properties().food(OperationStarcleaveFoods.STARFRUIT)));
 

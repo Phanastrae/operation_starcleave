@@ -29,6 +29,8 @@ public class OperationStarcleaveEntityModelLayers {
 
     public static final ModelLayerLocation BISMUTH_BLAST = createMainLayer("bismuth_blast");
 
+    public static final ModelLayerLocation COMET_CHARGE = createMainLayer("comet_charge");
+
     public static final ModelLayerLocation BLESSED_BED_HEAD = createMainLayer("blessed_bed_head");
     public static final ModelLayerLocation BLESSED_BED_FOOT = createMainLayer("blessed_bed_foot");
 
@@ -50,6 +52,7 @@ public class OperationStarcleaveEntityModelLayers {
 
         r.accept(PEGASUS_WINGS, PegasusWingsModel::getTexturedModelData);
 
+        r.accept(COMET_CHARGE, CometChargeEntityModel::createBodyLayer);
         r.accept(BISMUTH_BLAST, BismuthBlastEntityModel::getTexturedModelData);
 
         r.accept(BLESSED_BED_HEAD, BlessedBedBlockEntityRenderer::getHeadTexturedModelData);

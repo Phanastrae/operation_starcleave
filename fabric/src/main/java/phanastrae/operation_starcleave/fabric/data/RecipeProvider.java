@@ -302,6 +302,17 @@ public class RecipeProvider extends FabricRecipeProvider {
                         has(NETHERITE_PUMPKIN)
                 )
                 .save(exporter);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, COMET_CHARGE)
+                .define('S', STARDUST_CLUSTER)
+                .define('A', ASTERUBBLE_PIECES)
+                .pattern("SS")
+                .pattern(" A")
+                .unlockedBy(
+                        getHasName(ASTERUBBLE_PIECES),
+                        has(ASTERUBBLE_PIECES)
+                )
+                .save(exporter);
         // endregion
 
         // region smelting

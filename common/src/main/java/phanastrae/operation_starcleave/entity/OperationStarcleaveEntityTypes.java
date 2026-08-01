@@ -129,6 +129,13 @@ public class OperationStarcleaveEntityTypes {
                     .updateInterval(10)
     );
 
+    public static final EntityType<CometChargeEntity> COMET_CHARGE = register(id("comet_charge"),
+            EntityType.Builder.<CometChargeEntity>of(CometChargeEntity::new, MobCategory.MISC)
+                    .sized(0.6F, 0.6F)
+                    .clientTrackingRange(4)
+                    .updateInterval(10)
+    );
+
     public static void init(BiConsumer<ResourceLocation, EntityType<?>> r) {
         UNREGISTERED_ENTITY_TYPES.forEach(r);
         UNREGISTERED_ENTITY_TYPES.clear();
