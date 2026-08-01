@@ -21,32 +21,31 @@ public class StarbleachedPearlItem extends Item implements ProjectileItem {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
-        ItemStack itemStack = user.getItemInHand(hand);
-        world.playSound(
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        ItemStack itemStack = player.getItemInHand(hand);
+        if (!level.isClientSide) {
+            StarbleachedPearlEntity entity = new StarbleachedPearlEntity(level, player);
+            entity.setItem(itemStack);
+            entity.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 2.5F, 1.0F);
+            level.addFreshEntity(entity);
+        }
+
+        level.playSound(
                 null,
-                user.getX(),
-                user.getY(),
-                user.getZ(),
+                player.getX(),
+                player.getY(),
+                player.getZ(),
                 OperationStarcleaveSoundEvents.STARBLEACHED_PEARL_THROW,
                 SoundSource.NEUTRAL,
                 0.5F,
-                0.8F / (world.getRandom().nextFloat() * 0.4F + 0.8F)
+                0.8F / (level.getRandom().nextFloat() * 0.4F + 0.8F)
         );
-        user.getCooldowns().addCooldown(this, 10);
-        if (!world.isClientSide) {
-            StarbleachedPearlEntity entity = new StarbleachedPearlEntity(world, user);
-            entity.setItem(itemStack);
-            entity.shootFromRotation(user, user.getXRot(), user.getYRot(), 0.0F, 2.5F, 1.0F);
-            world.addFreshEntity(entity);
-        }
 
-        user.awardStat(Stats.ITEM_USED.get(this));
-        if (!user.getAbilities().instabuild) {
-            itemStack.shrink(1);
-        }
+        player.getCooldowns().addCooldown(this, 10);
+        player.awardStat(Stats.ITEM_USED.get(this));
+        itemStack.consume(1, player);
 
-        return InteractionResultHolder.sidedSuccess(itemStack, world.isClientSide());
+        return InteractionResultHolder.sidedSuccess(itemStack, level.isClientSide());
     }
 
     @Override

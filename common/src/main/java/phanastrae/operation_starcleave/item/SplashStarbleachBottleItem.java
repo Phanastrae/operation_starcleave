@@ -26,32 +26,30 @@ public class SplashStarbleachBottleItem extends Item implements ProjectileItem {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
-        world.playSound(
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        ItemStack itemStack = player.getItemInHand(hand);
+        if (!level.isClientSide) {
+            SplashStarbleachEntity entity = new SplashStarbleachEntity(level, player);
+            entity.setCanStarbleach(player.getAbilities().mayBuild);
+            entity.shootFromRotation(player, player.getXRot(), player.getYRot(), -20.0F, 0.75F, 1.0F);
+            level.addFreshEntity(entity);
+        }
+
+        level.playSound(
                 null,
-                user.getX(),
-                user.getY(),
-                user.getZ(),
+                player.getX(),
+                player.getY(),
+                player.getZ(),
                 SoundEvents.SPLASH_POTION_THROW,
                 SoundSource.PLAYERS,
                 0.5F,
-                0.4F / (world.getRandom().nextFloat() * 0.4F + 0.8F)
+                0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F)
         );
 
-        ItemStack itemStack = user.getItemInHand(hand);
-        if (!world.isClientSide) {
-            SplashStarbleachEntity entity = new SplashStarbleachEntity(world, user);
-            entity.setCanStarbleach(user.getAbilities().mayBuild);
-            entity.shootFromRotation(user, user.getXRot(), user.getYRot(), -20.0F, 0.75F, 1.0F);
-            world.addFreshEntity(entity);
-        }
+        player.awardStat(Stats.ITEM_USED.get(this));
+        itemStack.consume(1, player);
 
-        user.awardStat(Stats.ITEM_USED.get(this));
-        if (!user.getAbilities().instabuild) {
-            itemStack.shrink(1);
-        }
-
-        return InteractionResultHolder.sidedSuccess(itemStack, world.isClientSide());
+        return InteractionResultHolder.sidedSuccess(itemStack, level.isClientSide());
     }
 
     @Override
