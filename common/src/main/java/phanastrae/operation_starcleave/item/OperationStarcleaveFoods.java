@@ -28,13 +28,13 @@ public class OperationStarcleaveFoods {
             .build();
 
     public static final FoodProperties MUCKY_SINGUTS = new FoodProperties.Builder()
-            .nutrition(8)
+            .nutrition(3)
             .saturationModifier(0.1F)
-            .effect(new MobEffectInstance(MobEffects.WITHER, 200, 1), 1.0F)
-            .effect(new MobEffectInstance(MobEffects.BLINDNESS, 200, 0), 1.0F)
+            .effect(new MobEffectInstance(MobEffects.WITHER, 160, 0), 1.0F)
+            .effect(new MobEffectInstance(MobEffects.BLINDNESS, 160, 0), 1.0F)
             .build();
     public static final FoodProperties CLEANSED_SINGUTS = new FoodProperties.Builder()
-            .nutrition(5)
+            .nutrition(6)
             .saturationModifier(1.0F)
             .build();
 

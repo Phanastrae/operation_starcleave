@@ -421,17 +421,17 @@ public class RecipeProvider extends FabricRecipeProvider {
         );
         saveStarbleachRecipe(exporter,
                 MUCKY_SINGUTS,
-                1,
+                0.25F,
                 CLEANSED_SINGUTS
         );
         saveStarbleachRecipe(exporter,
                 MUCKY_SINGUT_COIL,
-                2,
+                0.5F,
                 CLEANSED_SINGUT_COIL
         );
         saveStarbleachRecipe(exporter,
                 MUCKY_SINGUT_BLOCK,
-                2,
+                0.5F,
                 CLEANSED_SINGUT_BLOCK
         );
 
