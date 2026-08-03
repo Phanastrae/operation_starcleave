@@ -217,6 +217,8 @@ public class OperationStarcleaveCreativeModeTabs {
                 CHISELED_STARBLEACHED_TILES,
                 IMBUED_STARBLEACHED_TILES,
 
+                SHELL_N_BLEACH_CRAFTING_TABLE,
+
                 STARTOUCHED_LOG,
                 STARTOUCHED_WOOD,
 
@@ -640,6 +642,9 @@ public class OperationStarcleaveCreativeModeTabs {
         );
         helper.addAfter(Items.PEARLESCENT_FROGLIGHT, FUNCTIONAL_BLOCKS,
                 SUBCAELIC_PHLOGLIGHT
+        );
+        helper.addAfter(Items.CRAFTING_TABLE, FUNCTIONAL_BLOCKS,
+                SHELL_N_BLEACH_CRAFTING_TABLE
         );
         helper.addAfter(Items.WARPED_HANGING_SIGN, FUNCTIONAL_BLOCKS,
                 STARTOUCHED_SIGN,

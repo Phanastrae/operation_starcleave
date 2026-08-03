@@ -127,6 +127,8 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider {
 
                 IMBUED_STARBLEACHED_TILES,
 
+                SHELL_N_BLEACH_CRAFTING_TABLE,
+
                 STARTOUCHED_LOG,
                 STARTOUCHED_WOOD,
 

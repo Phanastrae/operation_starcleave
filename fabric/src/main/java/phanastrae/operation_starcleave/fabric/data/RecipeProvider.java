@@ -313,6 +313,17 @@ public class RecipeProvider extends FabricRecipeProvider {
                         has(ASTERUBBLE_PIECES)
                 )
                 .save(exporter);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SHELL_N_BLEACH_CRAFTING_TABLE)
+                .define('S', SKYSHELL)
+                .define('B', STARBLEACHED_LOG)
+                .pattern("SS")
+                .pattern("BB")
+                .unlockedBy(
+                        getHasName(STARBLEACHED_LOG),
+                        has(STARBLEACHED_LOG)
+                )
+                .save(exporter);
         // endregion
 
         // region smelting

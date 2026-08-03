@@ -696,6 +696,18 @@ public class OperationStarcleaveBlocks {
             )
     );
 
+    public static final Block SHELL_N_BLEACH_CRAFTING_TABLE = register(
+            "shell_n_bleach_crafting_table",
+            new CustomCraftingTableBlock(
+                    properties()
+                            .strength(3.0F, 6.0F)
+                            .mapColor(DyeColor.WHITE)
+                            .sound(DECORATED_POT)
+                            .instrument(XYLOPHONE)
+                            .lightLevel(constant(8))
+            )
+    );
+
     public static final Block STARTOUCHED_LOG = register(
             "startouched_log",
             new RotatedPillarBlock(

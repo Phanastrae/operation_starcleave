@@ -270,6 +270,8 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
                         IMBUED_STARBLEACHED_TILES,
 
+                        SHELL_N_BLEACH_CRAFTING_TABLE,
+
                         STARBLEACH_CAULDRON,
                         STARBLEACHED_PEARL_BLOCK,
 
@@ -500,6 +502,10 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         LARGE_CELESTIAL_OPAL_BUD,
                         MEDIUM_CELESTIAL_OPAL_BUD,
                         SMALL_CELESTIAL_OPAL_BUD
+                );
+        getOrCreateTagBuilder(ConventionalBlockTags.PLAYER_WORKSTATIONS_CRAFTING_TABLES)
+                .add(
+                        SHELL_N_BLEACH_CRAFTING_TABLE
                 );
 
 

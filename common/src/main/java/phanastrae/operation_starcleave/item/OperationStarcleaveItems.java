@@ -143,6 +143,8 @@ public class OperationStarcleaveItems {
 
     public static final Item IMBUED_STARBLEACHED_TILES = registerBlockItem(OperationStarcleaveBlocks.IMBUED_STARBLEACHED_TILES);
 
+    public static final Item SHELL_N_BLEACH_CRAFTING_TABLE = registerBlockItem(OperationStarcleaveBlocks.SHELL_N_BLEACH_CRAFTING_TABLE);
+
     public static final Item STARTOUCHED_LOG = registerBlockItem(OperationStarcleaveBlocks.STARTOUCHED_LOG);
     public static final Item STARTOUCHED_WOOD = registerBlockItem(OperationStarcleaveBlocks.STARTOUCHED_WOOD);
     public static final Item STARTOUCHED_PLANKS = registerBlockItem(OperationStarcleaveBlocks.STARTOUCHED_PLANKS);

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "operation_starcleave:starbleached_log"
+    },
+    "S": {
+      "item": "operation_starcleave:skyshell"
+    }
+  },
+  "pattern": [
+    "SS",
+    "BB"
+  ],
+  "result": {
+    "count": 1,
+    "id": "operation_starcleave:shell_n_bleach_crafting_table"
+  }
+}

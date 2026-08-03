@@ -14,6 +14,7 @@
     "common.accessor.gamerules.GameRulesBooleanValueAccessor",
     "common.accessor.item.AxeItemAccessor",
     "common.accessor.item.ShovelItemAccessor",
+    "common.block.CraftingMenuMixin",
     "common.block.LeavesBlockMixin",
     "common.block.WoodTypeMixin",
     "common.block.stellar_farmland.AttachedStemBlockMixin",

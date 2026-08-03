@@ -104,6 +104,7 @@ public class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
         this.copy(ConventionalBlockTags.BUDDING_BLOCKS, ConventionalItemTags.BUDDING_BLOCKS);
         this.copySafe(ConventionalBlockTags.CLUSTERS, ConventionalItemTags.CLUSTERS);
         this.copy(ConventionalBlockTags.BUDS, ConventionalItemTags.BUDS);
+        this.copy(ConventionalBlockTags.PLAYER_WORKSTATIONS_CRAFTING_TABLES, ConventionalItemTags.PLAYER_WORKSTATIONS_CRAFTING_TABLES);
 
         // starcleave
         OperationStarcleaveItemTags.BLOCK_TAG_TO_ITEM_TAG_MAP.forEach(this::copySafe);

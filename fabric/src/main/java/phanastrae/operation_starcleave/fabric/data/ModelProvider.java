@@ -238,6 +238,12 @@ public class ModelProvider extends FabricModelProvider {
                 .put(OperationStarcleaveModelTemplates.WALL_TOP, TextureMapping.getBlockTexture(CUT_POLISHED_BUBBLEGLOOM)));
         BMG.createAxisAlignedPillarBlock(POLISHED_BUBBLEGLOOM_PILLAR, OperationStarcleaveTexturedModels.COLUMN_MATCHING_SIDES);
 
+        BMG.createCraftingTableLike(SHELL_N_BLEACH_CRAFTING_TABLE, STARBLEACHED_LOG,
+                (tableBlock, materialBlock) -> TextureMapping
+                        .craftingTable(tableBlock, materialBlock)
+                        .put(TextureSlot.DOWN, TextureMapping.getBlockTexture(materialBlock, "_top"))
+        );
+
         // fluids
         BMG.createNonTemplateModelBlock(PETRICHORIC_PLASMA);
 
