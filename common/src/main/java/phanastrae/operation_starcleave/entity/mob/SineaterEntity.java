@@ -36,6 +36,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 import phanastrae.operation_starcleave.block.OperationStarcleaveBlocks;
 import phanastrae.operation_starcleave.entity.OperationStarcleaveEntityTypes;
@@ -46,7 +47,10 @@ import java.util.EnumSet;
 import java.util.function.IntFunction;
 
 public class SineaterEntity extends PathfinderMob implements Enemy {
-    private static final EntityDataAccessor<Integer> DATA_VARIANT = SynchedEntityData.defineId(SineaterEntity.class, EntityDataSerializers.INT);
+    protected static final String KEY_TYPE = "sineater_type";
+    protected static final String KEY_COAT = "sineater_coat";
+    protected static final EntityDataAccessor<Integer> DATA_TYPE_VARIANT = SynchedEntityData.defineId(SineaterEntity.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Integer> DATA_COAT_VARIANT = SynchedEntityData.defineId(SineaterEntity.class, EntityDataSerializers.INT);
 
     public float prevSquishiness = 0F;
     public float squishiness = 0F;
@@ -69,7 +73,8 @@ public class SineaterEntity extends PathfinderMob implements Enemy {
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        builder.define(DATA_VARIANT, 0);
+        builder.define(DATA_TYPE_VARIANT, 0);
+        builder.define(DATA_COAT_VARIANT, 0);
     }
 
     @Override
@@ -90,33 +95,55 @@ public class SineaterEntity extends PathfinderMob implements Enemy {
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Variant", this.getVariant().getId());
+        compound.putInt(KEY_TYPE, this.getSineaterType().getId());
+        compound.putInt(KEY_COAT, this.getSineaterCoat().getId());
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        this.setVariant(Variant.byId(compound.getInt("Variant")));
+        this.setSineaterType(SineaterType.byId(compound.getInt(KEY_TYPE)));
+        this.setSineaterCoat(SineaterCoat.byId(compound.getInt(KEY_COAT)));
     }
 
     @Nullable
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData) {
-        this.setVariant(Variant.getSpawnVariant(level.getRandom()));
+        Pair<SineaterCoat, SineaterType> pair = getSpawnVariant(level.getRandom());
+        this.setSineaterCoat(pair.getLeft());
+        this.setSineaterType(pair.getRight());
         return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
     }
 
-    public Variant getVariant() {
-        return Variant.byId(this.entityData.get(DATA_VARIANT));
+    protected static Pair<SineaterCoat, SineaterType> getSpawnVariant(RandomSource random) {
+        if (random.nextInt(13) == 0) {
+            return Pair.of(SineaterCoat.PHANTASMAL, SineaterType.ELD);
+        } else if (random.nextInt(4) == 0) {
+            return Pair.of(SineaterCoat.SPECTRAL, SineaterType.STANDARD);
+        } else {
+            return Pair.of(SineaterCoat.GOLDEN, SineaterType.STANDARD);
+        }
     }
 
-    public void setVariant(Variant variant) {
-        this.entityData.set(DATA_VARIANT, variant.getId());
+    public SineaterCoat getSineaterCoat() {
+        return SineaterCoat.byId(this.entityData.get(DATA_COAT_VARIANT));
+    }
+
+    public void setSineaterCoat(SineaterCoat variant) {
+        this.entityData.set(DATA_COAT_VARIANT, variant.getId());
+    }
+
+    public SineaterType getSineaterType() {
+        return SineaterType.byId(this.entityData.get(DATA_TYPE_VARIANT));
+    }
+
+    public void setSineaterType(SineaterType variant) {
+        this.entityData.set(DATA_TYPE_VARIANT, variant.getId());
     }
 
     @Override
     public ResourceKey<LootTable> getDefaultLootTable() {
-        return switch (this.getVariant()) {
+        return switch (this.getSineaterCoat()) {
             case GOLDEN -> OperationStarcleaveLootTables.SINEATER_GOLDEN;
             case SPECTRAL -> OperationStarcleaveLootTables.SINEATER_SPECTRAL;
             case PHANTASMAL -> OperationStarcleaveLootTables.SINEATER_PHANTASMAL;
@@ -238,17 +265,17 @@ public class SineaterEntity extends PathfinderMob implements Enemy {
         return state.is(OperationStarcleaveBlocks.STELLAR_MULCH) ? 10.0F : state.is(OperationStarcleaveBlocks.HOLY_MOSS) ? 5.0F : 0.0F;
     }
 
-    public enum Variant implements StringRepresentable {
+    public enum SineaterCoat implements StringRepresentable {
         GOLDEN(0, "golden"),
         SPECTRAL(1, "spectral"),
         PHANTASMAL(2, "phantasmal");
 
-        private static final IntFunction<Variant> BY_ID = ByIdMap.continuous(Variant::getId, values(), ByIdMap.OutOfBoundsStrategy.ZERO);
-        public static final Codec<Variant> CODEC = StringRepresentable.fromEnum(Variant::values);
+        private static final IntFunction<SineaterCoat> BY_ID = ByIdMap.continuous(SineaterCoat::getId, values(), ByIdMap.OutOfBoundsStrategy.ZERO);
+        public static final Codec<SineaterCoat> CODEC = StringRepresentable.fromEnum(SineaterCoat::values);
         private final int id;
         private final String name;
 
-        Variant(int id, String name) {
+        SineaterCoat(int id, String name) {
             this.id = id;
             this.name = name;
         }
@@ -266,18 +293,40 @@ public class SineaterEntity extends PathfinderMob implements Enemy {
             return this.name;
         }
 
-        public static Variant byId(int id) {
+        public static SineaterCoat byId(int id) {
             return BY_ID.apply(id);
         }
+    }
 
-        private static Variant getSpawnVariant(RandomSource random) {
-            if (random.nextInt(13) == 0) {
-                return PHANTASMAL;
-            } else if (random.nextInt(4) == 0) {
-                return SPECTRAL;
-            } else {
-                return GOLDEN;
-            }
+    public enum SineaterType implements StringRepresentable {
+        STANDARD(0, "standard"),
+        ELD(1, "eld");
+
+        private static final IntFunction<SineaterType> BY_ID = ByIdMap.continuous(SineaterType::getId, values(), ByIdMap.OutOfBoundsStrategy.ZERO);
+        public static final Codec<SineaterType> CODEC = StringRepresentable.fromEnum(SineaterType::values);
+        private final int id;
+        private final String name;
+
+        SineaterType(int id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        public int getId() {
+            return this.id;
+        }
+
+        public String getName() {
+            return this.name;
+        }
+
+        @Override
+        public String getSerializedName() {
+            return this.name;
+        }
+
+        public static SineaterType byId(int id) {
+            return BY_ID.apply(id);
         }
     }
 
