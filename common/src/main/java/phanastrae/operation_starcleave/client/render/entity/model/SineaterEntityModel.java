@@ -94,6 +94,14 @@ public class SineaterEntityModel<T extends SineaterEntity> extends EntityModel<T
         this.wingLeft.xRot = wingXRot;
         this.wingRight.xRot = wingXRot;
 
+        float wingX = -12.0F - bodyScaleFactor * 12.0F;
+        this.wingLeft.x = -wingX;
+        this.wingRight.x = wingX;
+
+        float wingY = -24.0F + bodyScaleFactor * 24.0F;
+        this.wingLeft.y = wingY;
+        this.wingRight.y = wingY;
+
         float headScaleFactor = (float) Math.sin(ageInTicks / 5.0 + limbSwing * 0.1) * 0.09F;
         this.head.xScale = 1.0F + headScaleFactor;
         this.head.yScale = 1.0F + headScaleFactor;
